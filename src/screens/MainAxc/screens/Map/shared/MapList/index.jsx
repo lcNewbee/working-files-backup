@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { List, Map } from 'immutable';
 import SaveButton from 'shared/components/Button/SaveButton';

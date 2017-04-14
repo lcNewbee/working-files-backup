@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map, List } from 'immutable';

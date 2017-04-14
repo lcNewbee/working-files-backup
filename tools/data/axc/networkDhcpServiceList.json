@@ -13,7 +13,7 @@
         "name": "appool",
         "startIp": "192.168.118.1",
         "gateway": "192.168.0.1",
-        "netmask": "255.255.255.0",
+        "mask": "255.255.255.0",
         "mainDns": "8.8.8.8",
         "secondDns": "1",
         "releaseTime": "3000",
@@ -23,7 +23,7 @@
       },
       {
         "id": "2",
-        "name": "ds",
+        "name": "dsss",
         "startIp": "192.168.0.1",
         "endIp": "192.168.0.78",
         "gateway": "192.168.0.1",

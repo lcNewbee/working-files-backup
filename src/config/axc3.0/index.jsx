@@ -520,14 +520,6 @@ const routes = [
                     component: sOrbitTrace.Screen,
                   },
                   {
-                    id: 'alarmmap',
-                    path: '/main/group/map/alarmmap',
-                    formUrl: '/goform/group/map/alarmmap',
-                    fetchUrl: '/goform/group/map/alarmmap',
-                    text: __('Alarm Map'),
-                    component: sAlarmMap.Screen,
-                  },
-                  {
                     id: 'cientsTrace',
                     path: '/main/group/map/clients_trace',
                     text: __('Clients Statistics'),

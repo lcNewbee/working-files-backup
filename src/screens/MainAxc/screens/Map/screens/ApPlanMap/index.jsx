@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils, { dom, gps } from 'shared/utils';
 import classnames from 'classnames';
 import { connect } from 'react-redux';

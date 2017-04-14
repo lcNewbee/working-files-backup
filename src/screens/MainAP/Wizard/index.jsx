@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import validator from 'shared/validator';

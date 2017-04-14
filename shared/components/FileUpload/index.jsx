@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import Button from '../Button/Button';
 import InputFile from '../Form/File';

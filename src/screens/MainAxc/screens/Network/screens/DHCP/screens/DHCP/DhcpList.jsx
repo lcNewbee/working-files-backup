@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
@@ -135,7 +135,7 @@ export default class View extends React.Component {
     const startIp = $$curListItem.get('startIp');
     const mask = $$curListItem.get('mask');
     const gateway = $$curListItem.get('gateway');
-    let $$curList = store.getIn([route.id, 'data', 'list']);
+    let $$curList = store.getIn([store.get('curScreenId'), 'data', 'list']);
     let ret = '';
 
     if (actionType === 'add' || actionType === 'edit') {
@@ -150,18 +150,21 @@ export default class View extends React.Component {
           $$item => $$item.get('name') !== $$curListItem.get('name'),
         );
       }
-
+      console.log($$curList.toJS())
       if ($$curList.find(
-        $$item => validator.combine.noSameSegment(
-          startIp,
-          mask,
-          $$item.get('startIp'),
-          $$item.get('mask'),
-          {
-            ipLabel: '',
-            ip1Label: '',
-          },
-        ),
+        ($$item) => {
+          console.log($$item.toJS(), $$item.get('mask'));
+          return validator.combine.noSameSegment(
+            startIp,
+            mask,
+            $$item.get('startIp'),
+            $$item.get('mask'),
+            {
+              ipLabel: '',
+              ip1Label: '',
+            },
+          );
+        },
       )) {
         ret = __('Same %s item already exists', __('segment'));
       }

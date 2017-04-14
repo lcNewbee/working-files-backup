@@ -13,11 +13,11 @@ export default function renderRoutesTree(routes) {
 
   function renderRoute(route) {
     const key = route.id || route.path;
-    const routeRoutes = route.routes;
+    const subRoutes = route.routes;
     const RouteComponent = route.component;
     let retComponent = () => null;
 
-    if (routeRoutes) {
+    if (subRoutes) {
       if (RouteComponent) {
         retComponent = (
           <Route
@@ -29,24 +29,21 @@ export default function renderRoutesTree(routes) {
                 route={route}
                 {...rest}
               >
-                { match && renderRoutesTree(routeRoutes)}
+                { match && renderRoutesTree(subRoutes)}
               </RouteComponent>
             )}
           />
 
         );
       } else {
-        retComponent = renderRoutesTree(routeRoutes);
+        retComponent = renderRoutesTree(subRoutes);
       }
     } else if (RouteComponent) {
       retComponent = (
         <Route
-
           path={route.path}
           render={
-            (props) => {
-              return <RouteComponent {...props} route={route} />;
-            }
+            (props) => <RouteComponent {...props} route={route} />
           }
           key={key}
         />
@@ -77,56 +74,47 @@ export function renderRoutesList(routes) {
     return routeList;
   }
 
-  // 缓存执行结果
-  if (routes !== prevRoutes) {
-    routeList = [];
+  routeList = [];
 
-    routes.forEach(
-      (route) => {
-        const retNodes = [];
-        const sunRoutes = route.routes;
-        const curKey = route.id || route.path;
-        const indexPath = route.indexPath ||
-          (sunRoutes && sunRoutes[0] && sunRoutes[0].path);
+  routes.forEach(
+    (route) => {
+      const retNodes = [];
+      const subRoutes = route.routes;
+      const curKey = route.id || route.path;
+      const indexPath = route.indexPath ||
+        (subRoutes && subRoutes[0] && subRoutes[0].path);
 
-        if (indexPath) {
-          routeList.push(
-            <Route
-              key={`${curKey}Redirect`}
-              path={route.path}
-              render={() => (
-                <Redirect to={indexPath} />
-              )}
-              exact
-            />,
-          );
-        }
-
-        if (route.component) {
-          routeList.push(<Route
-            key={curKey}
+      if (indexPath) {
+        routeList.push(
+          <Route
+            key={`${curKey}Redirect`}
             path={route.path}
-            render={
-              routeProps => <route.component {...routeProps} route={route} />
-            }
-          />);
+            render={() => <Redirect to={indexPath} />}
+            exact
+          />,
+        );
+      }
 
-        // 如果无 component 又有子路由
-        } else if (sunRoutes.length > 0) {
-          routeList = routeList.concat(renderRoutesList(sunRoutes));
-        }
+      if (route.component) {
+        routeList.push(<Route
+          key={curKey}
+          path={route.path}
+          render={
+            routeProps => <route.component {...routeProps} route={route} />
+          }
+        />);
 
-        return retNodes;
-      },
-    );
+      // 如果无 component 又有子路由
+      } else if (subRoutes.length > 0) {
+        routeList = routeList.concat(renderRoutesList(subRoutes));
+      }
 
-    prevRoutes = routes;
-    prevRouteList = routeList;
+      return retNodes;
+    },
+  );
 
-  // 如果参数没变返回上次结果
-  } else {
-    routeList = prevRouteList;
-  }
+  prevRoutes = routes;
+  prevRouteList = routeList;
 
   return routeList;
 }
@@ -137,6 +125,4 @@ export function RouteSwitchs(props) {
 
   return <Switch>{routeList}</Switch>;
 }
-
-
 

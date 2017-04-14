@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { fromJS, Map } from 'immutable';
 import validator from 'shared/validator';

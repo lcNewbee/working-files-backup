@@ -1,5 +1,5 @@
 // V2.5版本的静态路由功能页面
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';

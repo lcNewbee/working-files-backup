@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import { Map, List, fromJS } from 'immutable';
 import utils from 'shared/utils';
 import { FormInput, Search } from 'shared/components/Form';

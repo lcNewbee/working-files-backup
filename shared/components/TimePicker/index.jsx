@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import PureRenderMixin from 'react-addons-pure-render-mixin';

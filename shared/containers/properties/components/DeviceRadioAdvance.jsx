@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import { Map, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { radioAdvance } from 'shared/config/axcRadio';

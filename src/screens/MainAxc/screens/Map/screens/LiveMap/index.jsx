@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
@@ -831,7 +831,7 @@ export default class LiveMap extends React.PureComponent {
               onChange={(data) => {
                 this.props.createModal({
                   type: 'confirm',
-                  text: __('切换实时地图类型，将清除所有已部署的AP数据，你确定要切换吗？'),
+                  text: __('Switching the live map type will clear all deployed AP data, are you sure you want to switch?'),
                   apply: () => {
                     this.props.updateScreenSettings({
                       liveMapType: data.value,

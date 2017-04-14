@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 // React 所有支持的 HTML Attributes

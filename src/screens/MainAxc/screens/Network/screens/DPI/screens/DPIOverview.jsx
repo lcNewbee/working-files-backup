@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import { fromJS, List, Map } from 'immutable';
 import { $$commonPieOption } from 'shared/config/axc';
 import EchartReact from 'shared/components/EchartReact';

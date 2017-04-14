@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import FormGroup from 'shared/components/Form/FormGroup';
 import { List } from 'immutable';

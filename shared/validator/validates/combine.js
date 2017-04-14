@@ -171,7 +171,9 @@ var combineVaildate = {
   },
 
   noSameSegment: function(ip, mask, ip1, mask1, msgOption) {
-
+    if (typeof mask1 === 'undefined' || typeof mask === 'undefined') {
+      return ;
+    }
     if (isSameNet(ip, ip1, mask, mask1)) {
       if (msgOption && msgOption.ipLabel && msgOption.ip2Label) {
         return __('%s and %s can not has same segment', msgOption.ipLabel, msgOption.ip2Label);

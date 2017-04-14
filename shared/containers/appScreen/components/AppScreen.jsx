@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import immutable, { List, Map } from 'immutable';
 import utils, { immutableUtils } from 'shared/utils';
 import { getActionable } from 'shared/axc';

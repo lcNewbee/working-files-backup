@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react'; import PropTypes from 'prop-types';
 import FormGroup from 'shared/components/Form/FormGroup';
 import FileUpload from 'shared/components/FileUpload';
 import { Button, SaveButton } from 'shared/components/Button';

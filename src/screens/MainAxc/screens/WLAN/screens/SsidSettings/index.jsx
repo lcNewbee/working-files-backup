@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react'; import PropTypes from 'prop-types';
 import utils, { immutableUtils } from 'shared/utils';
 import validator from 'shared/validator';
 import { connect } from 'react-redux';
