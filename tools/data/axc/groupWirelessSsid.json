@@ -1,0 +1,70 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id":"1",
+        "ssid": "Market1",
+        "remark": "Market 1",
+        "nasId": "ds",
+        "enabled": "0",
+        "hiddenSsid": "1",
+        "compulsoryAuth": "1",
+        "maxSsidUsers": "4095",
+        "maxBssUsers": "23",
+        "loadBalanceType": "1",
+        "storeForwardPattern": "local",
+        "encryption": "psk-mixed",
+        "password": "124567786",
+        "qosType": "ssid",
+        "ssidIsolation": "1",
+        "vlanId": "23",
+        "downstream": "128",
+        "upstream": "64"
+      },
+      {
+        "id":"2",
+        "ssid": "Market2",
+        "remark": "Market_2",
+        "vlanId": "223",
+        "nasId": "ds",
+        "enabled": "0",
+        "hiddenSsid": "1",
+        "compulsoryAuth": "1",
+        "maxSsidUsers": "4095",
+        "loadBalanceType": "1",
+        "ssidIsolation": "1",
+        "maxBssUsers": "22",
+        "storeForwardPattern": "local",
+        "encryption": "psk-mixed",
+        "password": "124567786",
+        "qosType": "ssid",
+        "downstream": "128",
+        "upstream": "64"
+      },
+      {
+        "id":"3",
+        "ssid": "Market3",
+        "remark": "Market floor three",
+        "vlanId": "22",
+        "nasId": "ds",
+        "enabled": "0",
+        "hiddenSsid": "1",
+        "compulsoryAuth": "1",
+        "maxSsidUsers": "4095",
+        "loadBalanceType": "1",
+        "maxBssUsers": "1",
+        "ssidIsolation": "1",
+        "storeForwardPattern": "local",
+        "encryption": "psk-mixed",
+        "password": "124567786",
+        "qosType": "user",
+        "downstream": "128",
+        "upstream": "64"
+      }
+    ]
+  }
+}
