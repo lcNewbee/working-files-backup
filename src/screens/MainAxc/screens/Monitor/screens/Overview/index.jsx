@@ -188,15 +188,24 @@ function getFlowUnit(val) {
 }
 
 function getFlowOption(serverData, timeType) {
+  let utilObj = {};
   const option = {
     color: [colors[0], colors[1]],
     tooltip: {
       trigger: 'axis',
-      formatter: params => `
-        ${params[0].name}<br />
-        ${params[0].seriesName}: ${flowRateFilter.transform(params[0].value)}<br />
-        ${params[1].seriesName}: ${flowRateFilter.transform(params[1].value)}
-      `,
+      formatter: (params) => {
+        let ret = `${params[0].name}<br />`;
+
+        if (params[0] && params[0].seriesName) {
+          ret += `${params[0].seriesName}: ${params[0].value} ${utilObj.label}<br />`;
+        }
+
+        if (params[1] && params[1].seriesName) {
+          ret += `${params[1].seriesName}: ${params[1].value} ${utilObj.label}`;
+        }
+
+        return ret;
+      },
     },
     legend: {
       data: ['AP', __('Wireless')],
@@ -269,7 +278,6 @@ function getFlowOption(serverData, timeType) {
   let $$dataList = serverData.getIn(['flowList']);
   let maxVal = 0;
   let maxVal1 = 0;
-  let utilObj = {};
 
   if (!$$dataList || !$$dataList.getIn([0, 'data']) || !$$dataList.getIn([1, 'data'])) {
     return null;
@@ -318,10 +326,10 @@ function getFlowOption(serverData, timeType) {
   option.yAxis[0].name = utilObj.label;
 
   option.series[0].data = $$dataList[0].data.map(
-    val => parseFloat(Number(val / utilObj.val).toFixed(12)),
+    val => parseFloat(Number(val / utilObj.val).toFixed(6)),
   );
   option.series[1].data = $$dataList[1].data.map(
-    val => parseFloat(Number(val / utilObj.val).toFixed(12)),
+    val => parseFloat(Number(val / utilObj.val).toFixed(6)),
   );
 
   return option;
