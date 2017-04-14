@@ -5,7 +5,6 @@ const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');
 const redux = require('redux');
 const appActions = require('shared/containers/app/actions');
-
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const RouteSwitchs = require('shared/components/Organism/RouterConfig').RouteSwitchs;

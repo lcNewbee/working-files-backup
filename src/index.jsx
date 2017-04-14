@@ -14,6 +14,7 @@ const AppContainer = require('react-hot-loader').AppContainer;
 const RouteSwitchs = require('shared/components/Organism/RouterConfig').RouteSwitchs;
 const prodConfig = require('./config/axc3.0').default;
 
+
 const HashRouter = ReactRouterDom.HashRouter;
 const mountNode = document.getElementById('app');
 
