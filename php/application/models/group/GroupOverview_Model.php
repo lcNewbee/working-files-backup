@@ -130,8 +130,11 @@ class GroupOverview_Model extends CI_Model {
         if($timeType === 'today' || $timeType === 'yesterday'){
             $tablename = 'data_flow_hour';
         }
-        $timewh = $this->get_start_end_time($timeType);              
+        $timewh = $this->get_start_end_time($timeType);                           
         $sqlstr = "select * from ".$tablename." where ApGroupId=".$groupid." and Timer>='".$timewh['start_date']."' and Timer <= '".$timewh['end_date']."'";
+        if($tablename === 'data_flow_day'){
+            $sqlstr .= " order by Timer desc";
+        }
         $querydata = $this->mysql->query($sqlstr);
 
         $apAry = array();
@@ -170,17 +173,18 @@ class GroupOverview_Model extends CI_Model {
                 case 'month': $default_day = 30;
                     break;
             }
+            //一下二个循环的顺序决定图中 显示效果
+            foreach($querydata->result_array() as $row){
+                array_push($apAry,$row['ApRxFlow']);
+                array_push($wireessAry,$row['RadioRxFlow']);
+                array_push($clientAry,$row['StaRxFlow']); 
+            } 
             $add_day = $default_day - count($querydata->result_array());
             for ($j = 0; $j < $add_day; $j++) {                
                 array_push($apAry,0);
                 array_push($wireessAry,0);
                 array_push($clientAry,0);                
-            }
-            foreach($querydata->result_array() as $row){
-                array_push($apAry,$row['ApRxFlow']);
-                array_push($wireessAry,$row['RadioRxFlow']);
-                array_push($clientAry,$row['StaRxFlow']); 
-            }            
+            }                                              
         }                     
         $arr = array(
             array('name'=>'ap','data'=>$apAry),
