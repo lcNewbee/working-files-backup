@@ -20,7 +20,7 @@ class MapOrbit_Model extends CI_Model {
         
 		$datalist = $this->get_sta_mac($build_id);
 		if(count($datalist['ap_mac']) > 0){
-			$sql = "select StaMac from sta_flow_sample where Timer>= '{$strtime}' and Timer<='{$endtime}' and ApGroupId={$groupid} and ApMac in({$datalist['where_in']}) group by StaMac";
+			$sql = "select StaMac from sta_flow_sample where Timer>= '{$strtime}' and Timer<='{$endtime}' and ApGroupId={$groupid} and ApMac in({$datalist['where_in']}) group by StaMac LIMIT 1";
 
 			$query = $this->mysql->query($sql);
 			foreach($query->result_array() as $row){
