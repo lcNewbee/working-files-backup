@@ -106,6 +106,8 @@ const defaultQuery = {
 
 export default class View extends React.Component {
   constructor(props) {
+    const locationQuery = utils.getQuery(props.location.search);
+
     super(props);
     this.curvePath = [];
     this.timeoutVal = [];
@@ -141,14 +143,23 @@ export default class View extends React.Component {
         'updateCanvas',
       ],
     );
+
+
+    utils.extend(defaultQuery, locationQuery);
   }
   componentWillMount() {
-    this.preScreenId = this.props.store.get('curScreenId');
+    const locationQuery = utils.getQuery(this.props.location.search);
+
     this.props.fetch('goform/group/map/building').then((json) => {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
       }
-      this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
+
+      if (typeof locationQuery.buildId === 'undefined') {
+        this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
+      } else {
+        this.onChangeBuilding(locationQuery.buildId, locationQuery);
+      }
     });
   }
 
@@ -179,15 +190,15 @@ export default class View extends React.Component {
   componentDidUpdate(prevProps) {
     if (typeof (this.canvasElem) === 'undefined') return;
     const store = this.props.store;
+    const preScreenId = prevProps.store.get('curScreenId');
     const curScreenId = store.get('curScreenId');
+    const locationQuery = utils.getQuery(this.props.location.search);
 
     /** *********hack: 暂时解决store中curScreenId更新不及时引起的bug**********/
 
-    if (this.preScreenId !== curScreenId) {
-      // console.log('In hack code', this.preScreenId, curScreenId);
-      this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
-      this.preScreenId = curScreenId;
-    }
+    // if (preScreenId !== curScreenId) {
+    //   this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
+    // }
     /** *********************hack over*************************************/
 
     // const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
@@ -223,7 +234,7 @@ export default class View extends React.Component {
     }), curScreenId);
   }
 
-  onChangeBuilding(id) {
+  onChangeBuilding(id, locationQuery) {
     this.props.changeScreenQuery(fromJS({ buildId: id }));
     this.setState({ buildId: id });
     this.props.fetch('goform/group/map/list', { buildId: id })
@@ -233,17 +244,24 @@ export default class View extends React.Component {
           this.mapList = fromJS(json.data.list);
         }
       }).then(() => {
-        this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+        if (locationQuery && typeof locationQuery.curMapId !== 'undefined') {
+          this.onChangeMapId(locationQuery.curMapId, locationQuery);
+        } else {
+          this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+        }
       });
   }
-  onChangeMapId(id) {
+  onChangeMapId(id, locationQuery) {
     const curScreenId = this.props.store.get('curScreenId');
+    const curMac = locationQuery && locationQuery.mac;
+
     Promise.resolve().then(() => {
       this.props.changeScreenQuery(fromJS({ curMapId: id }));
       this.setState({ curMapId: id });
     }).then(() => {
       this.props.fetchScreenData().then(() => {
-        const mac = this.props.store.getIn([curScreenId, 'query', 'mac']);
+        const mac = curMac || this.props.store.getIn([curScreenId, 'query', 'mac']);
+
         // 如果query参数有mac地址，则无需处理
         // 如果query参数没有mac，或mac为空，则后台返回第一条Mac的轨迹，需做特殊处理
         if (typeof (mac) === 'undefined' || mac === '') {

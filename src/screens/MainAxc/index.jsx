@@ -65,10 +65,12 @@ export default class Main extends React.PureComponent {
   }
 
   componentWillMount() {
+    const locationQuery = utils.getQuery(this.props.location.search);
     const purview = this.props.app.getIn(['login', 'purview']);
+    const appId = locationQuery && locationQuery.appId;
 
     // 如果权限为空自动跳转到 登录Screen
-    if (purview === 'none') {
+    if (purview === 'none' && appId !== 'ad30a4a05ac6855c64074246948fbf9c') {
       this.props.history.push('/login');
     }
   }

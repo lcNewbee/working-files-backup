@@ -126,7 +126,12 @@ export default class MainGroup extends React.Component {
     }
 
     // 获取当前组AP
-    this.props.fetchApGroup();
+    this.props.fetchApGroup()
+      .then(
+        () => {
+          this.initFromLocationQuery();
+        },
+      );
 
     // 获取未分组设备
     this.props.fetchGroupAps(-1);
@@ -140,19 +145,8 @@ export default class MainGroup extends React.Component {
     if (prevProps.route.path !== this.props.route.path) {
       this.autoRefreshData();
     }
-
-    // if (!prevProps.groupid && this.props.groupid) {
-    //   console.log(groupid);
-    // }
   }
-  // initFromLocationQuery() {
-  //   const locationQuery = utils.getQuery(this.props.location.search);
 
-  //   // 如果
-  //   if (typeof locationQuery.groupid !== 'undefined') {
-  //     this.onSelectManageGroup(locationQuery.groupid);
-  //   }
-  // }
   componentWillUnmount() {
     this.props.togglePropertyContainer(false);
     clearTimeout(this.autoRefreshTimer);
@@ -199,7 +193,7 @@ export default class MainGroup extends React.Component {
   }
 
   onSelectGroup(id, e) {
-    e.preventDefault();
+    // e.preventDefault();
     this.props.selectGroup(id);
   }
   onSelectManageGroup(id) {
@@ -326,6 +320,15 @@ export default class MainGroup extends React.Component {
         () => this.autoRefreshData(),
         rateInterval,
       );
+    }
+  }
+  initFromLocationQuery() {
+    const locationQuery = utils.getQuery(this.props.location.search);
+
+    // console.log('locat = ', locationQuery)
+    // 如果
+    if (typeof locationQuery.groupid !== 'undefined') {
+      this.onSelectGroup(locationQuery.groupid);
     }
   }
   /**
