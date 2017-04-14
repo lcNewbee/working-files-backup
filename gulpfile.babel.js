@@ -52,6 +52,7 @@ require('./tools/gulp/demo');
 require('./tools/gulp/bump');
 require('./tools/gulp/config');
 require('./tools/gulp/test');
+require('./tools/gulp/serve');
 
 // 发布
 require('./tools/gulp/pub');
@@ -105,6 +106,7 @@ gulp.task('open:src', shell.task([
 ], {
   env: { FORCE_COLOR: true },
 }));
+
 gulp.task('open:build', ['build'], shell.task(['babel-node tools/buildServer.js']));
 
 gulp.task('default', ['open:src']);

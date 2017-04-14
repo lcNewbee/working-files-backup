@@ -2,6 +2,7 @@
  * 公共库配置文件
  */
 require('immutable');
+require('prop-types');
 require('react');
 require('react-addons-css-transition-group');
 require('react-addons-pure-render-mixin');
@@ -9,9 +10,6 @@ require('react-addons-shallow-compare');
 require('react-dom');
 require('react-redux');
 require('react-router');
-require('react-select');
-require('react-dates');
-require('rc-time-picker');
 require('redux');
 require('redux-thunk');
 require('moment');

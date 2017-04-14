@@ -8,7 +8,7 @@ const appActions = require('shared/containers/app/actions');
 
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
-const RouteSwitchs = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
+const RouteSwitchs = require('shared/components/Organism/RouterConfig').RouteSwitchs;
 const prodConfig = require('./config/ASW3').default;
 
 const combineReducers = redux.combineReducers;

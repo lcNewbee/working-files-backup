@@ -83,12 +83,12 @@ module.exports = {
         context: __dirname,
       }
     }),
+    new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
+    new webpack.optimize.UglifyJsPlugin(),
     new webpack.DllPlugin({
       path: path.join(__dirname, "src/config/scripts", "[name]-manifest.json"),
       name: "[name]",
       context: 'dll'
     }),
-    new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
-    new webpack.optimize.UglifyJsPlugin(),
   ]
 };

@@ -3882,13 +3882,9 @@ https-browserify@0.0.1:
   version "0.0.1"
   resolved "http://registry.npm.taobao.org/https-browserify/download/https-browserify-0.0.1.tgz#3f91365cabe60b77ed0ebba24b454e3e09d95a82"
 
-iconv-lite@0.4.13:
+iconv-lite@0.4.13, iconv-lite@~0.4.13:
   version "0.4.13"
   resolved "http://registry.npm.taobao.org/iconv-lite/download/iconv-lite-0.4.13.tgz#1f88aba4ab0b1508e8312acc39345f36e992e2f2"
-
-iconv-lite@~0.4.13:
-  version "0.4.15"
-  resolved "http://registry.npm.taobao.org/iconv-lite/download/iconv-lite-0.4.15.tgz#fe265a218ac6a57cfe854927e9d04c19825eddeb"
 
 icss-replace-symbols@^1.0.2:
   version "1.0.2"
@@ -6385,7 +6381,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.0.0, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@~15.5.7:
+prop-types@^15.0.0, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
   version "15.5.8"
   resolved "http://registry.npm.taobao.org/prop-types/download/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
   dependencies:
