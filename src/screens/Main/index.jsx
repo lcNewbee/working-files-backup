@@ -21,7 +21,7 @@ export default class Main extends React.PureComponent {
     this.onLogout = this.onLogout.bind(this);
 
     document.onkeydown = function (e) {
-      if (e.keyCode == 116) {
+      if (e.keyCode === 116) {
         this.onRefresh(e);
       }
     }.bind(this);

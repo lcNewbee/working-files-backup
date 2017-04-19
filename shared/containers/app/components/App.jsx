@@ -1,6 +1,7 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import 'react-dom';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import ReduxToastr from 'react-redux-toastr';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
@@ -8,6 +9,7 @@ import stringUtils from 'shared/utils/lib/string';
 import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
 import matchPath from 'react-router/matchPath';
 import Router from 'react-router/Router';
+import { Prompt } from 'react-router';
 
 // ensure we're using the exact code for default root match
 const { computeMatch } = Router.prototype;
@@ -34,10 +36,10 @@ const matchRoutes = (routes, pathname, /* not public API*/branch = []) => {
 };
 
 const propTypes = {
+  $$modal: PropTypes.instanceOf(Map),
   closeModal: PropTypes.func,
   fetchProductInfo: PropTypes.func,
   updateRouter: PropTypes.func,
-  app: PropTypes.object,
   route: PropTypes.shape({
     routes: PropTypes.array,
     formUrl: PropTypes.string,
@@ -67,12 +69,27 @@ export default class App extends Component {
   componentDidMount() {
     this.updateRouter();
   }
-  componentDidUpdate(prevProps) {
-    // 更新路由
+  shouldComponentUpdate(nextProps) {
+    let ret = true;
+
+    // console.log(this.props.location.pathname, nextProps.location.pathname);
+    // // 如果是切换路径
+    // if (this.props.location.pathname !== nextProps.location.pathname) {
+    //   this.updateRouter();
+    //   //this.props.changeAppScreen();
+    //   ret = false;
+    // }
+
+    return ret;
+  }
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.location.pathname !== prevProps.location.pathname) {
       this.updateRouter();
+      //this.props.changeAppScreen();
+      //ret = false;
     }
   }
+
 
   onModalClose() {
     this.props.closeModal({
@@ -106,7 +123,8 @@ export default class App extends Component {
   }
 
   render() {
-    const { modal } = this.props.app.toJS();
+    const { $$modal } = this.props;
+    const modal = $$modal.toJS();
     const modelRole = modal.role;
     const isLoadingModal = modelRole === 'loading';
 

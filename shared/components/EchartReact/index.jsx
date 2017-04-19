@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import echarts from 'echarts/lib/echarts';
 
 /**
@@ -71,8 +72,10 @@ class ReactEchart extends React.Component {
 
   // cache size
   componentWillUpdate() {
-    this.offsetWidth = this.myRef.offsetWidth;
-    this.offsetHeight = this.myRef.offsetHeight;
+    if (this.myRef) {
+      this.offsetWidth = this.myRef.offsetWidth;
+      this.offsetHeight = this.myRef.offsetHeight;
+    }
   }
 
   // update

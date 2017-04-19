@@ -1,4 +1,5 @@
-import React, { Component } from 'react'; import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 

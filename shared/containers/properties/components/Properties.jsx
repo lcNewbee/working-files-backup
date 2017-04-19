@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Icon from 'shared/components/Icon';
 import { Map, List } from 'immutable';
 import { immutableUtils } from 'shared/utils';

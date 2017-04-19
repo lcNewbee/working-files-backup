@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Tab from 'shared/components/Tab';
 import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
 

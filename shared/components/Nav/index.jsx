@@ -1,4 +1,5 @@
-import React, { Component } from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { NavLink as Link } from 'react-router-dom';
 import { fromJS, Map, List } from 'immutable';
 import TabContainer from '../Organism/TabContainer';

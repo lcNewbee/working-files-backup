@@ -116,11 +116,11 @@ const sEndpointProtection =
 const sLiveMap = require('../../screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
-const sAlarmMap = require('../../screens/MainAxc/screens/Map/screens/AlarmMap');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
-const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
+
 
 // ndpi
 const sDPIOverview = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');

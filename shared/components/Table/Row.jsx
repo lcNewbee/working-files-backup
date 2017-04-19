@@ -1,4 +1,5 @@
-import React, { Component } from 'react'; import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 // import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Checkbox from 'shared/components/Form/Checkbox';
 import Icon from 'shared/components/Icon';

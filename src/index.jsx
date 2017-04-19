@@ -4,16 +4,17 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');
 const appActions = require('shared/containers/app/actions');
+const redux = require('redux');
 
 const thunkMiddleware = require('redux-thunk').default;
-const combineReducers = require('redux').combineReducers;
-const applyMiddleware = require('redux').applyMiddleware;
-const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
 const RouteSwitchs = require('shared/components/Organism/RouterConfig').RouteSwitchs;
-const prodConfig = require('./config/axcMonitor').default;
+const prodConfig = require('./config/axcIndiaBank').default;
 
+const combineReducers = redux.combineReducers;
+const applyMiddleware = redux.applyMiddleware;
+const createStore = redux.createStore;
 const HashRouter = ReactRouterDom.HashRouter;
 const mountNode = document.getElementById('app');
 
@@ -55,8 +56,8 @@ renderApp(prodConfig.routes);
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/axc4.0', () => {
-    const nextConfig = require('./config/axc4.0').default;
+  module.hot.accept('./config/axcIndiaBank', () => {
+    const nextConfig = require('./config/axcIndiaBank').default;
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,

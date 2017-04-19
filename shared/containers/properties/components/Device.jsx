@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Map, fromJS } from 'immutable';
 import Icon from 'shared/components/Icon';
 import { apStatus } from 'shared/config/axcAp';

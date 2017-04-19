@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import utils, { inputFormat as inputFormatUtil } from '../../../utils';
 
 const propTypes = {

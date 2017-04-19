@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Map, List } from 'immutable';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import utils from 'shared/utils';

@@ -4,11 +4,13 @@ import appReducer from './reducer';
 import App from './components/App';
 
 function mapStateToProps(state) {
+  const $$app = state.app;
   return {
-    app: state.app,
+    // app: state.app,
+    $$router: $$app.get('router'),
+    $$modal: $$app.get('modal'),
   };
 }
-
 
 // Export List
 export function createContainer(component) {
