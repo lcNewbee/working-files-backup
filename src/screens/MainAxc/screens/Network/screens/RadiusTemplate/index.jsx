@@ -40,9 +40,12 @@ const serverChoices = fromJS([
   {
     id: 'serverType',
     label: __('Server Type'),
-    className: 'cols col-4',
+    className: 'cols',
     defaultValue: 'remote',
-    display: 'block',
+    inputStyle: {
+      display: 'block',
+      minWidth: '240px',
+    },
     options: [
       {
         value: 'remote',

@@ -77,6 +77,7 @@ export default class View extends React.Component {
         'requestChunkPosition',
         'getModalTitle',
         'renderClientPosIcon',
+        'getCurLocation',
       ],
     );
   }
@@ -88,8 +89,24 @@ export default class View extends React.Component {
       }
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
     });
-  }
 
+  }
+  getCurLocation() {
+    const geolocation = new BMap.Geolocation();
+
+    clearTimeout(this.getCurLocationTimeout);
+    geolocation.getCurrentPosition(
+      (result) => {
+        if (result) {
+          console.log(result, result.point);
+        }
+
+        this.getCurLocationTimeout = setTimeout(() => {
+          this.getCurLocation();
+        }, 3000);
+      },
+    );
+  }
   shouldComponentUpdate(nextProps, nextState) {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
@@ -126,6 +143,7 @@ export default class View extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.timeInterval);
+    clearTimeout(this.getCurLocationTimeout);
   }
 
   onChangeBuilding(id) {
@@ -299,7 +317,7 @@ export default class View extends React.Component {
         const font = Math.min(Math.round((endX - startX) / 5, Math.round(endY - startY) / 5));
         ctx.fillStyle = 'blue';
         ctx.font = `bold ${font}px Courier New`;
-        ctx.fillText(index + 1, ((startX + endX) / 2) - Math.round(font / 2),
+        ctx.fillText(id, ((startX + endX) / 2) - Math.round(font / 2),
                     ((startY + endY) / 2) + Math.round(font / 2));
       }
     });
@@ -490,19 +508,7 @@ export default class View extends React.Component {
                 }}
                 title={item.get('mac')}
                 onClick={() => {
-                  /** *******************************************************************
-                  const curScreenId = this.props.store.get('curScreenId');
-                  const date = moment().format('YYYY-MM-DD');
-                  const fromTime = '00:00:00';
-                  const toTime = '23:59:59';
-                  const mac = item.get('mac');
-                  const { groupid, curMapId, buildId } = this.props.store.getIn([curScreenId, 'query']).toJS();
-                  const paraForOrbit = fromJS({
-                    groupid, curMapId, buildId, date, fromTime, toTime, mac,
-                  });
-                  this.props.changeScreenQuery({ paraForOrbit });
-                  **********************************************************************/
-                  window.location.href = '#/main/group/map/orbittrace';
+                  this.props.history.push(`/main/group/map/orbittrace?mac=${item.get('mac')}`);
                 }}
               />
             ));
@@ -584,7 +590,7 @@ export default class View extends React.Component {
         {...this.props}
         initOption={{
           isFetchInfinite: true,
-          fetchIntervalTime: 10000,
+          fetchIntervalTime: 2000,
           query: defaultQuery,
         }}
       >
