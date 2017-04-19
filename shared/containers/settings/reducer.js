@@ -43,7 +43,7 @@ export default function (state = defaultState, action) {
     case ACTION_TYPES.REQEUST_FETCH:
       return state.setIn([curSettingName, 'fetching'], true);
 
-    case ACTION_TYPES.RECIVE_FETCH:
+    case ACTION_TYPES.RECEIVE_FETCH:
 
       return state.setIn([action.name, 'fetching'], false)
         .setIn([action.name, 'updateAt'], action.updateAt)

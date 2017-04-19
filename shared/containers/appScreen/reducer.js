@@ -150,7 +150,7 @@ function activeListItem(state, curScreenName, action) {
     });
 }
 
-function reciveScreenData($$state, curScreenName, action) {
+function receiveScreenData($$state, curScreenName, action) {
   let $$ret = $$state;
   let $$selectedList = $$state.getIn([curScreenName, 'actionQuery', 'selectedList']);
 
@@ -186,14 +186,14 @@ export default function (state = defaultState, action) {
       .setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'))
       .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));
 
-    case ACTION_TYPES.REQEUST_FETCH_DATA:
+    case ACTION_TYPES.REQUEST_FETCH_DATA:
       return state.setIn([curScreenName, 'fetching'], true);
 
     case ACTION_TYPES.UPDATE_CUSTOM_PROPS:
       return state.mergeDeepIn([curScreenName, 'customProps'], action.payload);
 
-    case ACTION_TYPES.RECIVE_DATA:
-      return reciveScreenData(state, curScreenName, action);
+    case ACTION_TYPES.RECEIVE_DATA:
+      return receiveScreenData(state, curScreenName, action);
 
     // Screen Setting相关
     case ACTION_TYPES.UPDATE_SETTINGS:

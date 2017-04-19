@@ -7,8 +7,8 @@ export default {
 
   // Ajax Fetch
   CHANGE_QUERY: 'screen/CHANGE_QUERY',
-  REQEUST_FETCH_DATA: 'screen/REQEUST_FETCH_DATA',
-  RECIVE_DATA: 'screen/RECIVE_DATA',
+  REQUEST_FETCH_DATA: 'screen/REQUEST_FETCH_DATA',
+  RECEIVE_DATA: 'screen/RECEIVE_DATA',
 
   // Ajax Save
   CHANGE_ACTION_QUERY: 'screen/CHANGE_ACTION_QUERY',

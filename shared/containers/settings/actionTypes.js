@@ -7,7 +7,7 @@ export default {
 
   // Ajax
   REQEUST_FETCH: 'setting/REQEUST_FETCH',
-  RECIVE_FETCH: 'setting/RECIVE_FETCH',
+  RECEIVE_FETCH: 'setting/RECEIVE_FETCH',
 
   // ajax query
   CHANGE_QUERY: 'setting/CHANGE_QUERY',

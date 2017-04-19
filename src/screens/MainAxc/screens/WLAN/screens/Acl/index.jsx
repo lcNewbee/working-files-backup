@@ -93,7 +93,7 @@ const propTypes = {
   route: PropTypes.object.isRequired,
   changeScreenActionQuery: PropTypes.func.isRequired,
   fetch: PropTypes.func.isRequired,
-  reciveScreenData: PropTypes.func.isRequired,
+  receiveScreenData: PropTypes.func.isRequired,
   createModal: PropTypes.func.isRequired,
   fetchApGroup: PropTypes.func.isRequired,
   onListAction: PropTypes.func.isRequired,
@@ -229,7 +229,7 @@ export default class Blacklist extends React.Component {
       },
     );
 
-    this.props.reciveScreenData({
+    this.props.receiveScreenData({
       copyGroupBlacklist: $$copyGroupBlacklist,
     }, this.props.route.id);
 
@@ -270,7 +270,7 @@ export default class Blacklist extends React.Component {
     this.props.fetch(fetchUrl, queryData).then(
       (json) => {
         if (json && json.state && json.state.code === 2000) {
-          this.props.reciveScreenData({
+          this.props.receiveScreenData({
             copyGroupBlacklist: json.data,
           }, this.props.route.id);
         }

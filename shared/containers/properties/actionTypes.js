@@ -15,6 +15,6 @@ export default {
   CHANGE_PANEL_DATA: 'properties/CHANGE_PANEL_DATA',
 
   // 接收属性面板数据 Data（从服务器端获取的数据）
-  RC_PANEL_DATA: 'properties/RECIVECE_PANEL_DATA',
+  RC_PANEL_DATA: 'properties/RECEIVE_PANEL_DATA',
 };
 

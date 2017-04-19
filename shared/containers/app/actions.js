@@ -71,7 +71,7 @@ export function closeModal(data) {
 
 export function receiveFetchProductInfo(data) {
   return {
-    type: ACTION_TYPES.RECIVECE_PRODUCT_INFO,
+    type: ACTION_TYPES.RECEIVE_PRODUCT_INFO,
     data,
   };
 }
@@ -306,7 +306,7 @@ export function validateAll(formId, func) {
 
 export function resetVaildateMsg() {
   return {
-    type: ACTION_TYPES.RESET_VAILDATE_MSG,
+    type: ACTION_TYPES.RESET_VALIDATE_MSG,
   };
 }
 

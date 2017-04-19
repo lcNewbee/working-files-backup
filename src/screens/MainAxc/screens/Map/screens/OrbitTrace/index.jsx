@@ -165,7 +165,7 @@ const propTypes = {
   changeScreenQuery: PropTypes.func,
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
-  reciveScreenData: PropTypes.func,
+  receiveScreenData: PropTypes.func,
 };
 const defaultProps = {};
 const defaultQuery = {
@@ -298,7 +298,7 @@ export default class View extends React.Component {
     cancelAnimationFrame(this.drawAnimationFrame);
 
     // 清空数据，解决首次进入，在请求未返回之前使用历史数据绘图问题
-    this.props.reciveScreenData(fromJS({
+    this.props.receiveScreenData(fromJS({
       list: [],
       macList: [],
     }), curScreenId);
@@ -407,7 +407,7 @@ export default class View extends React.Component {
     this.naturalHeight = image.height;
   }
   handleChangeQuery(name, data) {
-    this.props.reciveScreenData(fromJS({
+    this.props.receiveScreenData(fromJS({
       list: [],
       macList: [],
     }));

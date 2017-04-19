@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
+// We
 const propTypes = {
   theme: PropTypes.oneOf(['default', 'primary', 'success', 'info', 'warning', 'danger']),
   striped: PropTypes.bool,
@@ -40,7 +41,7 @@ export default class Progress extends React.Component {
     const progressBarClassNames = classnames('a-progress-bar', {
       'a-progress-bar--striped': striped,
     });
-    const pecentValue = parseInt(((value / max) * 100), 10);
+    const percentValue = parseInt(((value / max) * 100), 10);
     const hasTextProgress = (
       <div className={`${className} a-progress-wrap`} >
         <progress
@@ -59,7 +60,7 @@ export default class Progress extends React.Component {
             <span
               className={progressBarClassNames}
               style={{
-                width: `${pecentValue}%`,
+                width: `${percentValue}%`,
               }}
             />
           </div>
@@ -89,7 +90,7 @@ export default class Progress extends React.Component {
           <span
             className={progressBarClassNames}
             style={{
-              width: `${pecentValue}%`,
+              width: `${percentValue}%`,
             }}
           />
         </div>

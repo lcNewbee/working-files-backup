@@ -9,7 +9,7 @@ export function reqeustFetchSettings() {
 
 export function reciveFetchSettings(data, name) {
   return {
-    type: ACTION_TYPES.RECIVE_FETCH,
+    type: ACTION_TYPES.RECEIVE_FETCH,
     updateAt: Date.now(),
     data,
     name,

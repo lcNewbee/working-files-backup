@@ -36,7 +36,7 @@ const propTypes = {
   saveFile: PropTypes.func,
   save: PropTypes.func,
   fetch: PropTypes.func,
-  reciveScreenData: PropTypes.func,
+  receiveScreenData: PropTypes.func,
   fetchScreenData: PropTypes.func,
 
   // AXC actons
@@ -511,7 +511,7 @@ export default class View extends React.PureComponent {
             save={this.props.save}
             fetch={this.props.fetch}
             saveFile={this.props.saveFile}
-            reciveScreenData={this.props.reciveScreenData}
+            receiveScreenData={this.props.receiveScreenData}
             visible={!curMapId}
           />
           {

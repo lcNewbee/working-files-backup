@@ -375,7 +375,7 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   fetch: PropTypes.func,
-  reciveScreenData: PropTypes.func,
+  receiveScreenData: PropTypes.func,
   createModal: PropTypes.func,
   onListAction: PropTypes.func,
 };
@@ -489,7 +489,7 @@ export default class View extends React.Component {
       },
     );
 
-    this.props.reciveScreenData({
+    this.props.receiveScreenData({
       copyGroupSsids: $$copyGroupSsid,
     }, this.props.route.id);
     this.props.changeScreenActionQuery({
@@ -515,7 +515,7 @@ export default class View extends React.Component {
       .then(
         (json) => {
           if (json && json.state && json.state.code === 2000) {
-            this.props.reciveScreenData({
+            this.props.receiveScreenData({
               copyGroupSsids: json.data,
             }, this.props.route.id);
           }

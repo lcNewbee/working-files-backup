@@ -60,7 +60,7 @@ const propTypes = {
   fetch: PropTypes.func,
   save: PropTypes.func,
   saveFile: PropTypes.func,
-  reciveScreenData: PropTypes.func,
+  receiveScreenData: PropTypes.func,
   createModal: PropTypes.func,
   validateAll: PropTypes.func,
   reportValidError: PropTypes.func,
@@ -159,7 +159,7 @@ export default class MapList extends React.PureComponent {
     }).then(
       (json) => {
         if (json && json.state && json.state.code === 2000) {
-          this.props.reciveScreenData({
+          this.props.receiveScreenData({
             maps: json.data,
           });
         }

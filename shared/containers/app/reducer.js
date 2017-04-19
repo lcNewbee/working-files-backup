@@ -130,7 +130,7 @@ export default function (state = defaultState, action) {
     case ACTION_TYPES.START_VALIDATE_ALL:
       return handleValidateAll(state, action);
 
-    case ACTION_TYPES.RESET_VAILDATE_MSG:
+    case ACTION_TYPES.RESET_VALIDATE_MSG:
       return state.set('invalid', fromJS({}));
 
     case ACTION_TYPES.REPORT_VALID_ERROR:
@@ -174,7 +174,7 @@ export default function (state = defaultState, action) {
     // 其他
     case ACTION_TYPES.REFRESH_ALL:
       return state.set('refreshAt', action.refreshAt);
-    case ACTION_TYPES.RECIVECE_PRODUCT_INFO:
+    case ACTION_TYPES.RECEIVE_PRODUCT_INFO:
       return receiveAcInfo(state, action);
 
     // 全局摸态框通知

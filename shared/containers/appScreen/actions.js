@@ -36,14 +36,14 @@ export function updateScreenCustomProps(payload) {
     payload,
   };
 }
-export function reqeustFetchScreenData() {
+export function requestFetchScreenData() {
   return {
-    type: ACTION_TYPES.REQEUST_FETCH_DATA,
+    type: ACTION_TYPES.REQUEST_FETCH_DATA,
   };
 }
-export function reciveScreenData(data, name) {
+export function receiveScreenData(data, name) {
   return {
-    type: ACTION_TYPES.RECIVE_DATA,
+    type: ACTION_TYPES.RECEIVE_DATA,
     payload: data,
     meta: {
       name,
@@ -68,7 +68,7 @@ export function fetchScreenData(option) {
     let query = globalState.screens.getIn([name, 'query']) || {};
 
     window.clearTimeout(refreshTimeout);
-    dispatch(reqeustFetchScreenData());
+    dispatch(requestFetchScreenData());
 
     if (query && query.toJS) {
       query = query.toJS();
@@ -89,9 +89,9 @@ export function fetchScreenData(option) {
     return dispatch(appActions.fetch(myUrl, query, ajaxOption))
       .then((json) => {
         if (json && json.state && json.state.code === 2000) {
-          dispatch(reciveScreenData(json.data, name));
+          dispatch(receiveScreenData(json.data, name));
         } else {
-          dispatch(reciveScreenData(null, name));
+          dispatch(receiveScreenData(null, name));
         }
 
         if (isFetchInfinite && curFetchIntervalTime > 0) {
