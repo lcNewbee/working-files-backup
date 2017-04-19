@@ -1,7 +1,7 @@
 import React from 'react'; import PropTypes from 'prop-types';
 import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { FormGroup, Icon, Modal } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
@@ -16,6 +16,8 @@ const propTypes = {
   changeScreenQuery: PropTypes.func,
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
+  validateOption: PropTypes.object,
+  validateAll: PropTypes.func,
 };
 const defaultProps = {};
 const defaultQuery = {
@@ -23,6 +25,18 @@ const defaultQuery = {
   curMapId: '',
   mac: '',
 };
+
+const validOptions = Map({
+  validText: validator({
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 64]',
+  }),
+  validMac: validator({
+    rules: 'mac',
+  }),
+  validNum: validator({
+    rules: 'num:[1, 1000]',
+  }),
+});
 
 export default class View extends React.Component {
   constructor(props) {
@@ -563,6 +577,7 @@ export default class View extends React.Component {
   render() {
     const myZoom = this.state.zoom;
     if (!this.mapList) return null;
+    const { validMac, validNum, validText } = this.props.validateOption;
 
     return (
       <AppScreen
@@ -685,30 +700,35 @@ export default class View extends React.Component {
             });
           }}
           onOk={() => {
-            const curScreenId = this.props.store.get('curScreenId');
-            this.props.save('goform/change_priority_settings', {
-              list: this.state.editGpsPos.toJS(),
-              buildId: this.state.buildId,
-              curMapId: this.state.curMapId,
-              groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
-            }).then((json) => {
-              if (json.state && json.state.code === 2000) {
-                this.setState({
-                  editGpsPos: fromJS([]),
-                  showEditModal: false,
+            this.props.validateAll('modalsettings').then((msg) => {
+              console.log('msg', msg);
+              if (msg.isEmpty()) {
+                const curScreenId = this.props.store.get('curScreenId');
+                this.props.save('goform/change_priority_settings', {
+                  list: this.state.editGpsPos.toJS(),
+                  buildId: this.state.buildId,
+                  curMapId: this.state.curMapId,
+                  groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
+                }).then((json) => {
+                  if (json.state && json.state.code === 2000) {
+                    this.setState({
+                      editGpsPos: fromJS([]),
+                      showEditModal: false,
+                    });
+                  }
+                }).then(() => {
+                  this.props.fetch('goform/alarm_map_chunk_pos', {
+                    buildId: this.state.buildId,
+                    curMapId: this.state.curMapId,
+                    groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
+                  }).then((json) => {
+                    if (json.state && json.state.code === 2000) {
+                      const posList = fromJS(json.data.list);
+                      this.setState({ posList });
+                    }
+                  });
                 });
               }
-            }).then(() => {
-              this.props.fetch('goform/alarm_map_chunk_pos', {
-                buildId: this.state.buildId,
-                curMapId: this.state.curMapId,
-                groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
-              }).then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  const posList = fromJS(json.data.list);
-                  this.setState({ posList });
-                }
-              });
             });
           }}
         >
@@ -732,7 +752,11 @@ export default class View extends React.Component {
           <FormGroup
             type="number"
             label={__('Gather Threshold')}
+            form="modalsettings"
             value={this.state.editGpsPos.getIn([this.state.onEditId, 'gather_threshold'])}
+            help={`${__('Range: ')}1 ~ 400`}
+            min="1"
+            max="400"
             onChange={(data) => {
               let editGpsPos = this.state.editGpsPos;
               const onEditId = this.state.onEditId;
@@ -743,6 +767,7 @@ export default class View extends React.Component {
           <FormGroup
             type="textarea"
             label={__('Description')}
+            form="modalsettings"
             value={this.state.editGpsPos.getIn([this.state.onEditId, 'describe'])}
             onChange={(data) => {
               let editGpsPos = this.state.editGpsPos;
@@ -782,4 +807,5 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
+  validator.mergeProps(validOptions),
 )(View);

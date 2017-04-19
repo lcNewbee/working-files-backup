@@ -46,3 +46,10 @@ export function changeVoipEnable(data) {
   };
 }
 
+export function changeVoipVlanId(data) {
+  return {
+    type: 'CHANGE_VOIP_VLAN_ID',
+    data,
+  };
+}
+

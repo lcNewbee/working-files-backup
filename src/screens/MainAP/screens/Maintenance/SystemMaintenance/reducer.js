@@ -4,6 +4,7 @@ import { fromJS } from 'immutable';
 const defaultState = fromJS({
   poeOut: '0',
   voipEnable: '0',
+  portVlanId: '1',
   progressBarInfo: {
     title: __('rebooting , please wait...'),
     time: 60,
@@ -40,6 +41,8 @@ export default function (state = defaultState, action) {
       return defaultState;
     case 'CHANGE_VOIP_ENABLE':
       return state.set('voipEnable', action.data);
+    case 'CHANGE_VOIP_VLAN_ID':
+      return state.set('portVlanId', action.data);
     default:
   }
   return state;

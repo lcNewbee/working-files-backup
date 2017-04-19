@@ -38,3 +38,6 @@ export { default as NotFound } from './NotFound';
 
 // ProgressBar
 export { default as ProgressBar } from './ProgressBar';
+
+// Notice
+export { default as Notice } from './Notice';

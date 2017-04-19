@@ -67,6 +67,7 @@ const sQinqSettings = require('../../screens/MainAxc/screens/Network/screens/VLA
 const sV3Interfaces = require('../../screens/MainAxc/screens/Network/screens/V3Interfaces');
 const sHostNetwork = require('../../screens/MainAxc/screens/Network/screens/HostNetwork');
 const sPortSettings = require('../../screens/MainAxc/screens/Network/screens/EthernetPort/PortSettings');
+const sPortStatics = require('../../screens/MainAxc/screens/Network/screens/EthernetPort/PortStatistics');
 const sPortMirring = require('../../screens/MainAxc/screens/Network/screens/EthernetPort/PortMirring');
 const sPortAggregation = require('../../screens/MainAxc/screens/Network/screens/EthernetPort/PortAggregation');
 const sDhcpList = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
@@ -348,6 +349,14 @@ const routes = [
                     text: __('Aggregation'),
                     icon: 'th',
                     component: sPortAggregation.Screen,
+                  },
+                  {
+                    id: 'ethernetPortStatistics',
+                    path: '/main/network/ethernetport/portstatistics',
+                    formUrl: 'goform/network/portstatistics',
+                    text: __('Statistics'),
+                    icon: 'th',
+                    component: sPortStatics.Screen,
                   },
                 ],
               },

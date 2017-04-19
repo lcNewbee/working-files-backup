@@ -3,12 +3,13 @@ import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { FormGroup, Icon, Button } from 'shared/components';
+import { FormGroup, Icon, Button, Notice } from 'shared/components';
 import moment from 'moment';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 import './orbitTrace.scss';
+
 
 // 默认画线帧数
 const DRAW_TIMES = 90;
@@ -43,6 +44,7 @@ function stationaryPoint(ctx, pathList) {
 
     pathList.forEach((point) => {
       ctx.beginPath();
+      // ctx.moveTo(point.x, point.y);
       ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
       // ctx.fill();
       ctx.stroke();
@@ -91,6 +93,7 @@ const propTypes = {
   store: PropTypes.object,
   changeScreenQuery: PropTypes.func,
   fetch: PropTypes.func,
+  createModal: PropTypes.func,
   fetchScreenData: PropTypes.func,
   reciveScreenData: PropTypes.func,
 };
@@ -121,6 +124,7 @@ export default class View extends React.Component {
       mapOffsetY: 0,
       mapWidth: 1,
       mapHeight: 1,
+      noticeFlag: -1,
     };
     utils.binds(this,
       [
@@ -141,6 +145,7 @@ export default class View extends React.Component {
         // 'drawCurvePath',
         'drawCurveAnimPath',
         'updateCanvas',
+        'onRequestMacData',
       ],
     );
 
@@ -161,6 +166,9 @@ export default class View extends React.Component {
         this.onChangeBuilding(locationQuery.buildId, locationQuery);
       }
     });
+
+    // MAC地址输入错误提示初始化，不显示（当this.preNoticeFlag和this.state.noticeFlag不相等的时候显示）
+    this.preNoticeFlag = this.state.noticeFlag;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -351,6 +359,19 @@ export default class View extends React.Component {
     // 修正最后一点在插值产生的偏移
     points[points.length - 1] = [ex, ey];
     return points;
+  }
+
+  onRequestMacData() {
+    const curScreenId = this.props.store.get('curScreenId');
+    const mac = this.props.store.getIn([curScreenId, 'query', 'mac']);
+    if (!(/^([0-9a-fA-F]{2}(:|-)){5}[0-9a-fA-F]{2}$/).test(mac)) {
+      this.setState({ noticeFlag: -1 * this.preNoticeFlag });
+    } else {
+      this.props.fetchScreenData();
+    }
+    setTimeout(() => {
+      this.preNoticeFlag = this.state.noticeFlag;
+    }, 100);
   }
 
   handleChangeQuery(name, data) {
@@ -706,7 +727,7 @@ export default class View extends React.Component {
             <Button
               className="fl"
               text={'GO'}
-              onClick={() => { this.props.fetchScreenData(); }}
+              onClick={() => { this.onRequestMacData(); }}
               style={{
                 position: 'absolute',
                 left: '212px',
@@ -745,6 +766,15 @@ export default class View extends React.Component {
             />
           </div>
         </div>
+        {
+          this.preNoticeFlag !== this.state.noticeFlag ? (
+            <Notice
+              show
+              width="300px"
+              text={__('Error: Invalid MAC Address！')}
+            />
+          ) : null
+        }
       </AppScreen>
     );
   }

@@ -38,9 +38,10 @@ const propTypes = {
   resetSelfState: PropTypes.func,
   changePoeOut: PropTypes.func,
   changeVoipEnable: PropTypes.func,
+  changeVoipVlanId: PropTypes.func,
 };
 
-const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
+const languageOptions = List(b28n.getOptions().supportLang).map(item => (
   {
     value: item,
     label: b28n.langMap[item] || 'English',
@@ -384,29 +385,47 @@ export default class SystemMaintenance extends Component {
               <div className="o-form__legend">
                 {__('VOIP')}
               </div>
-              <div className="clearfix">
-                <FormGroup
-                  type="switch"
-                  label={__('VOIP')}
-                  className="fl"
-                  options={[
-                    { label: __('Turn On'), value: '1' },
-                    { label: __('Turn Off'), value: '0' },
-                  ]}
-                  minWidth="80px"
-                  value={this.props.selfState.get('voipEnable')}
-                  onChange={(data) => {
-                    this.props.changeVoipEnable(data.value);
-                  }}
-                />
-                <SaveButton
-                  loading={this.props.app.get('saving')}
-                  onClick={() => {
-                    const query = { enable: this.props.selfState.get('voipEnable') };
-                    this.props.save('goform/set_voip', query);
-                  }}
-                />
-              </div>
+              <FormGroup
+                type="switch"
+                label={__('VOIP')}
+                options={[
+                  { label: __('Turn On'), value: '1' },
+                  { label: __('Turn Off'), value: '0' },
+                ]}
+                minWidth="80px"
+                value={this.props.selfState.get('voipEnable')}
+                onChange={(data) => {
+                  this.props.changeVoipEnable(data.value);
+                }}
+              />
+              {
+                this.props.selfState.get('voipEnable') === '1' ? (
+                  <FormGroup
+                    type="number"
+                    label={__('Port VLAN ID')}
+                    value={this.props.selfState.get('portVlanId')}
+                    onChange={(data) => {
+                      this.props.changeVoipVlanId(data.value);
+                    }}
+                    min="1"
+                    max="4094"
+                    help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
+                  />
+                ) : null
+              }
+              <SaveButton
+                loading={this.props.app.get('saving')}
+                onClick={() => {
+                  const query = {
+                    enable: this.props.selfState.get('voipEnable'),
+                    portVlanId: this.props.selfState.get('portVlanId'),
+                  };
+                  this.props.save('goform/set_voip', query);
+                }}
+                style={{
+                  marginLeft: '165px',
+                }}
+              />
             </div>
             ) : null
         }

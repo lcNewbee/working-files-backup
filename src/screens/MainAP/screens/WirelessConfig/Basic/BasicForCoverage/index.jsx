@@ -13,6 +13,8 @@ import * as selfActions from './actions';
 import reducer from './reducer';
 import countryMap from './country';
 
+const remarkTxt = require('shared/validator/validates/single').remarkTxt;
+
 import './index.scss';
 
 const propTypes = {
@@ -495,6 +497,23 @@ export default class Basic extends React.Component {
           const vapList = dataFromServer.get('vapList');
           dataToSave = dataToSave.set('vapList', vapList);
         } else if (validID === 'multiSsid') {
+          // 验证SSID是否合法
+          const vaplen = dataToSave.get('vapList').size;
+          let i = 0;
+          for (;i < vaplen; i++) {
+            const ssid = dataToSave.getIn(['vapList', i, 'ssid']);
+            const message = remarkTxt(ssid, "'\\\\");
+            if (message) {
+              this.props.createModal({
+                id: 'settings',
+                role: 'alert',
+                text: `${message} (SSID Index: ${i + 1})`,
+              });
+              break;
+            }
+          }
+          if (i < vaplen) return null; // 循环提前退出，说明验证不通过
+          // 保留修改的SSID，将后台传递的射频信息原封不动地赋值到将要保存的对象中，再发给后台
           dataFromServer = dataFromServer.delete('vapList');
           dataToSave = dataToSave.merge(dataFromServer);
         }

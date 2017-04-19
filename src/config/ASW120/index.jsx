@@ -103,7 +103,7 @@ const funConfig = {
   },
   systemmaintenance: {
     poeOutFun: false,
-    voipFun: false,             // VOIP功能
+    voipFun: true,             // VOIP功能
   },
 };
 

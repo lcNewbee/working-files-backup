@@ -1,0 +1,55 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "name": "eth0",
+        "txBytes": "1000",
+        "rxBytes": "1000",
+        "txPcks": "1000",
+        "rxPcks": "1000",
+        "rxUniPcks": "1000",
+        "rxMultiPcks": "1000",
+        "txMultiPcks": "1000",
+        "txUniPcks": "1000",
+        "txErrorPcks": "1000",
+        "rxErrorPcks": "1000",
+        "txDiscardPcks": "1000",
+        "rxDiscardPcks": "1000"
+      },
+      {
+        "name": "eth2",
+        "txBytes": "2000",
+        "rxBytes": "2000",
+        "txPcks": "2000",
+        "rxPcks": "2000",
+        "rxUniPcks": "2000",
+        "rxMultiPcks": "2000",
+        "txMultiPcks": "2000",
+        "txUniPcks": "2000",
+        "txErrorPcks": "2000",
+        "rxErrorPcks": "2000",
+        "txDiscardPcks": "2000",
+        "rxDiscardPcks": "2000"
+      },
+      {
+        "name": "eth2",
+        "txBytes": "3000",
+        "rxBytes": "3000",
+        "txPcks": "3000",
+        "rxPcks": "3000",
+        "rxUniPcks": "3000",
+        "rxMultiPcks": "3000",
+        "txMultiPcks": "3000",
+        "txUniPcks": "3000",
+        "txErrorPcks": "3000",
+        "rxErrorPcks": "3000",
+        "txDiscardPcks": "3000",
+        "rxDiscardPcks": "3000"
+      }
+    ]
+  }
+}

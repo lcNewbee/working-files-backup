@@ -1,6 +1,6 @@
 import React from 'react';
 import { fromJS } from 'immutable';
-import { AppScreen, FormInput, } from 'shared/components';
+import { FormInput, } from 'shared/components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';

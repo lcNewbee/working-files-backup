@@ -22,83 +22,44 @@ const listOptions = fromJS([
     notEditable: true,
   },
   {
-    id: 'exchangeMode',
-    text: __('Exchange Mode'),
-    formProps: {
-      type: 'select',
-      options: exchangeOptions,
-    },
+    id: 'txBytes',
+    text: __('TX Bytes'),
   },
   {
-    id: 'status',
-    text: __('Status'),
-    formProps: {
-      options: [
-        { label: __('ON'), value: '1' },
-        { label: __('OFF'), value: '0' },
-      ],
-      type: 'select',
-    },
+    id: 'rxBytes',
+    text: __('RX Bytes'),
   },
   {
-    id: 'rate',
-    text: __('Rate'),
-    formProps: {
-      options: [
-        { label: '1G', value: '1g' },
-        { label: '10G', value: '10g' },
-        { label: __('Auto'), value: 'auto' },
-      ],
-      type: 'select',
-    },
+    id: 'txPcks',
+    text: __('TX Pockets'),
   },
   {
-    id: 'workMode',
-    text: __('Working Mode'),
-    formProps: {
-      options: [
-        { label: __('Simplex'), value: 'simplex' },
-        { label: __('Duplex'), value: 'duplex' },
-        { label: __('Auto'), value: 'auto' },
-      ],
-      type: 'select',
-    },
+    id: 'txErrorPcks',
+    text: __('TX Error Pockets'),
   },
   {
-    id: 'maxPacket',
-    text: __('Max Transfer Packet'),
-    formProps: {
-      type: 'number',
-    },
+    id: 'txDiscardPcks',
+    text: __('TX Discard Pockets'),
   },
   {
-    id: 'nativeVlan',
-    text: __('Native VLAN'),
-    formProps: {
-      type: 'number',
-    },
+    id: 'rxPcks',
+    text: __('RX Pockets'),
   },
   {
-    id: 'vlanList',
-    text: __('VLAN List'),
-    formProps: {
-      type: 'text',
-    },
+    id: 'rxErrorPcks',
+    text: __('RX Error Pockets'),
   },
   {
-    id: 'description',
-    text: __('Description'),
-    formProps: {
-      type: 'textarea',
-    },
+    id: 'rxDiscardPcks',
+    text: __('RX Discard Pockets'),
   },
 ]);
 
 const customActionButton = [
   {
     actionName: 'reset',
-    text: __('Reset'),
-    icon: 'reply-all',
+    text: __('Clear'),
+    icon: 'rotate-left',
   },
 ];
 
@@ -139,7 +100,7 @@ export default class View extends React.Component {
         actionable
         deleteable={false}
         selectable
-        editable
+        editable={false}
         addable={false}
         actionBarButtons={customActionButton}
       >

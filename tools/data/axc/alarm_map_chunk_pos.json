@@ -14,7 +14,7 @@
         "level": "3",
         "id": "1",
         "describe": "aaa",
-        "gather_threshold": "300"
+        "gather_threshold": 300
       },
       {
         "sta_lat": 43.23123231,
@@ -24,7 +24,7 @@
         "level": "3",
         "id": "2",
         "describe": "aaa",
-        "gather_threshold": "400"
+        "gather_threshold": 400
       }
     ]
   }

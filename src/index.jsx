@@ -55,8 +55,8 @@ renderApp(prodConfig.routes);
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/axcMonitor', () => {
-    const nextConfig = require('./config/axcMonitor').default;
+  module.hot.accept('./config/axc4.0', () => {
+    const nextConfig = require('./config/axc4.0').default;
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,

@@ -1,6 +1,5 @@
 import React from 'react';
 import { fromJS, isList } from 'immutable';
-import { AppScreen } from 'shared/components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
