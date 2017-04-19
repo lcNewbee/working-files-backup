@@ -91,7 +91,7 @@ const sApList = require('../../screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/MainAxc/screens/Monitor/screens/SafeStatus');
 const sWirelessAcl = require('../../screens/MainAxc/screens/WLAN/screens/Acl');
 const sSsidSettings =
-    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
+    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings/IndiaBank');
 const sSmartRf =
     require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
 const sTimerPolicy =
@@ -104,6 +104,8 @@ const sEndpointProtection =
 const sLiveMap = require('../../screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
+const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 
@@ -275,6 +277,22 @@ const routes = [
                     formUrl: 'goform/group/map/apPlan',
                     component: sApPlanMap.Screen,
                     noNav: true,
+                  },
+                  {
+                    id: 'heatMap',
+                    path: '/main/group/map/heat_map',
+                    formUrl: 'goform/group/map/heatmap',
+                    fetchUrl: 'goform/group/map/heatmap',
+                    text: __('Heat Map'),
+                    component: sHeatMap.Screen,
+                  },
+                  {
+                    id: 'orbitTrace',
+                    path: '/main/group/map/orbittrace',
+                    formUrl: '/goform/group/map/orbittrace',
+                    fetchUrl: '/goform/group/map/orbittrace',
+                    text: __('Orbit Trace'),
+                    component: sOrbitTrace.Screen,
                   },
                   {
                     id: 'cientsTrace',
