@@ -79,7 +79,10 @@ export default class SystemMaintenance extends Component {
     });
     this.props.fetch('goform/get_voip_info').then((json) => {
       if (json.state && json.state.code === 2000) {
-        this.props.changeVoipEnable(json.data.enable);
+        const enable = json.data.enable ? json.data.enable : '0';
+        const portVlanId = json.data.portVlanId ? json.data.portVlanId : '1';
+        this.props.changeVoipEnable(enable);
+        this.props.changeVoipVlanId(portVlanId);
       }
     });
   }

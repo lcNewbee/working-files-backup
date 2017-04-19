@@ -10,7 +10,7 @@ const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
 const RouteSwitchs = require('shared/components/Organism/RouterConfig').RouteSwitchs;
-const prodConfig = require('./config/axcIndiaBank').default;
+const prodConfig = require('./config/axc4.0').default;
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;

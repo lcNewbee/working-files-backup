@@ -1,0 +1,10 @@
+{
+"state":{
+	"code":2000,
+	"msg":"success"
+},
+"data":{
+  "enable": "1",
+  "portVlanId": "2"
+}
+}
