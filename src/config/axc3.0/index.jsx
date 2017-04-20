@@ -79,7 +79,7 @@ const sNetworkRoutes = require('../../screens/MainAxc/screens/Network/screens/Ro
 const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
-const sRaduisTemplate =
+const sRadiusTemplate =
     require('../../screens/MainAxc/screens/Network/screens/RadiusTemplate');
 const sRadiusProxy =
     require('../../screens/MainAxc/screens/Network/screens/RadiusProxy');
@@ -297,66 +297,6 @@ const routes = [
                 formUrl: '/goform/network/port',
                 text: __('Ports'),
                 component: sNetworkPort.Screen,
-              }, {
-                id: 'networkRadius',
-                icon: 'clone',
-                path: '/main/network/radius',
-                text: __('Radius Setting'),
-                noTree: true,
-                component: SharedComponents.TabContainer,
-                routes: [
-                  {
-                    id: 'radiusTemplate',
-                    path: '/main/network/radius/template',
-                    formUrl: 'goform/network/radius/template',
-                    text: __('Radius Server'),
-                    component: sRaduisTemplate.Screen,
-                  },
-                  {
-                    id: 'radiusProxy',
-                    path: '/main/network/radius/proxy',
-                    formUrl: 'goform/network/radius/proxy',
-                    text: __('Radius Proxy'),
-                    component: sRadiusProxy.Screen,
-                  },
-                ],
-              }, {
-                id: 'networkAaa',
-                icon: 'lock',
-                path: '/main/network/aaa',
-                formUrl: 'goform/network/Aaa',
-                text: __('AAA'),
-                component: sNetworkAaa.Screen,
-              }, {
-                id: 'networkPortal',
-                icon: 'copy',
-                text: __('Portal Policy'),
-                noTree: true,
-                component: SharedComponents.TabContainer,
-                path: '/main/network/portal',
-                indexPath: '/main/network/portal/server',
-                routes: [
-                  {
-                    id: 'portalServer',
-                    path: '/main/network/portal/server',
-                    formUrl: 'goform/network/portal/server',
-                    text: __('Server'),
-                    component: sPortalServer.Screen,
-                  }, {
-                    id: 'portalRules',
-                    path: '/main/network/portal/rules',
-                    formUrl: 'goform/network/portal/rule',
-                    text: __('Rules'),
-                    component: sPortalRules.Screen,
-                  },
-                  {
-                    id: 'portalMac',
-                    path: '/main/network/portal/mac',
-                    formUrl: 'goform/network/portal/mac',
-                    text: __('White List'),
-                    component: sPortalMac.Screen,
-                  },
-                ],
               },
               {
                 id: 'dpi',
@@ -602,12 +542,107 @@ const routes = [
                 mode: 'cors',
                 text: __('Overview'),
                 component: sPortalOverview.Screen,
-              }, {
+              },
+              {
+                id: 'portalLogOnlineList',
+                icon: 'desktop',
+                path: '/main/portal/onlineList',
+                formUrl: 'goform/portal/log/onlineList',
+                text: __('Online List'),
+                component: sPortalOnlineList.Screen,
+              },
+              {
+                id: 'portalRadius',
+                path: '/main/portal/radius',
+                icon: 'podcast',
+                text: __('Radius'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                routes: [
+                  {
+                    id: 'radiusTemplate',
+                    path: '/main/portal/radius/template',
+                    formUrl: 'goform/network/radius/template',
+                    text: __('Radius Template'),
+                    component: sRadiusTemplate.Screen,
+                  },
+                  {
+                    id: 'portalRadiusNas',
+                    path: '/main/portal/radius/nas',
+                    formUrl: 'goform/portal/radius/nas',
+                    text: __('NAS List'),
+                    component: sPortalNas.Screen,
+                  },
+                  {
+                    id: 'radiusProxy',
+                    path: '/main/portal/radius/proxy',
+                    formUrl: 'goform/network/radius/proxy',
+                    text: __('Radius Proxy'),
+                    component: sRadiusProxy.Screen,
+                  },
+                ],
+              },
+              {
+                id: 'networkAaa',
+                icon: 'lock',
+                path: '/main/portal/aaa',
+                formUrl: 'goform/portal/Aaa',
+                text: __('AAA'),
+                component: sNetworkAaa.Screen,
+              },
+              {
+                id: 'networkPortal',
+                icon: 'copy',
+                text: __('Portal Policy'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                path: '/main/portal/portal',
+                indexPath: '/main/portal/portal/server',
+                routes: [
+                  {
+                    id: 'portalServer',
+                    path: '/main/portal/portal/server',
+                    formUrl: 'goform/network/portal/server',
+                    text: __('Server'),
+                    component: sPortalServer.Screen,
+                  }, {
+                    id: 'portalRules',
+                    path: '/main/portal/portal/rules',
+                    formUrl: 'goform/network/portal/rule',
+                    text: __('Rules'),
+                    component: sPortalRules.Screen,
+                  },
+                  {
+                    id: 'portalMac',
+                    path: '/main/portal/portal/mac',
+                    formUrl: 'goform/network/portal/mac',
+                    text: __('White List'),
+                    component: sPortalMac.Screen,
+                  },
+                  {
+                    id: 'portalAccessWeb',
+                    path: '/main/portal/portal/web',
+                    formUrl: 'goform/portal/access/web',
+                    text: __('Templates'),
+                    component: sPortalWeb.Screen,
+                  },
+                  {
+                    id: 'portalAccessDefaultWeb',
+                    path: '/main/portal/portal/defaultweb',
+                    formUrl: 'goform/portal/access/defaultweb',
+                    text: __('Template Settings'),
+                    component: sPortalDefaultWeb.Screen,
+                  },
+                ],
+              },
+              {
                 id: 'portalAccess',
                 isIndex: true,
                 path: '/main/portal/access',
                 icon: 'link',
                 text: __('Access Auth'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
                 indexPath: '/main/portal/access/config',
                 routes: [
                   {
@@ -617,99 +652,45 @@ const routes = [
                     text: __('Base'),
                     component: sPortalBase.Screen,
                   },
+
                   {
-                    id: 'portalAccessUrlParameter',
-                    path: '/main/portal/access/urlParameter',
-                    formUrl: 'goform/portal/access/urlParameter',
-                    text: __('URL Parameter'),
-                    component: sPortalUrlParams.Screen,
-                  }, {
-                    id: 'portalAccessWeb',
-                    path: '/main/portal/access/web',
-                    formUrl: 'goform/portal/access/web',
-                    text: __('Web Template'),
-                    component: sPortalWeb.Screen,
-                  }, {
-                    id: 'portalAccessDefaultWeb',
-                    path: '/main/portal/access/defaultweb',
-                    formUrl: 'goform/portal/access/defaultweb',
-                    text: __('Default Web'),
-                    component: sPortalDefaultWeb.Screen,
-                  }, {
                     id: 'portalWechat',
                     path: '/main/portal/access/weixin',
                     formUrl: 'goform/portal/access/weixin',
                     text: __('Wechat Auth'),
                     component: sPortalWeixin.Screen,
-                  }, {
+                  },
+                  {
                     id: 'portalFacebook',
                     path: '/main/portal/access/facebook',
                     formUrl: 'goform/portal/access/facebook',
                     text: __('Facebook Auth'),
                     component: sPortalFacebook.Screen,
-                  }, {
+                  },
+                  {
                     id: 'portaSMSGateWay',
                     path: '/main/portal/access/smsgateWay',
                     formUrl: 'goform/portal/access/smsgateWay',
                     text: __('SMS Gateway'),
                     component: sPortalSMSGateWay.Screen,
-                  }, {
-                    id: 'portalSMSLog',
-                    path: '/main/portal/access/portalsmslog',
-                    formUrl: 'goform/portal/access/portalsmslog',
-                    text: __('SMS Log'),
-                    component: sPortalSMSLog.Screen,
-                  }, {
+                  },
+                  {
                     id: 'portaSsidManagement',
                     path: '/main/portal/access/ssidmanagement',
                     formUrl: 'goform/portal/access/ssidmanagement',
                     text: __('SSID Management'),
                     component: sPortalSsid.Screen,
                   },
-                  {
-                    id: 'portalApSetting',
-                    path: '/main/portal/access/ap',
-                    formUrl: 'goform/portal/access/ap',
-                    text: __('AP Setting'),
-                    component: sPortalApSetting.Screen,
-                    noNav: true,
-                  },
                 ],
-              }, {
-                id: 'portalRadius',
-                path: '/main/portal/radius',
-                icon: 'podcast',
-                text: __('Radius Server'),
-                isIndex: true,
-                indexPath: '/main/portal/radius/nas',
-                routes: [
-                  {
-                    id: 'portalRadiusNas',
-                    path: '/main/portal/radius/nas',
-                    formUrl: 'goform/portal/radius/nas',
-                    text: __('NAS List'),
-                    component: sPortalNas.Screen,
-                  }, {
-                    id: 'portalRadiusOnlineList',
-                    path: '/main/portal/radius/online',
-                    formUrl: 'goform/portal/radius/online',
-                    text: __('Online List'),
-                    component: sPortalOnline.Screen,
-                  }, {
-                    id: 'portalRadiusConnectLogs',
-                    path: '/main/portal/radius/logs',
-                    formUrl: 'goform/portal/radius/logs',
-                    text: __('Connect Logs'),
-                    component: sPortalConnectLog.Screen,
-                  },
-                ],
-              }, {
+              },
+              {
                 id: 'portalAccount',
                 isIndex: true,
                 path: '/main/portal/account',
                 icon: 'user-o',
                 text: __('Access Account'),
-                indexPath: '/main/portal/account/list',
+                noTree: true,
+                component: SharedComponents.TabContainer,
                 routes: [
                   {
                     id: 'portalAccountAccountList',
@@ -718,13 +699,6 @@ const routes = [
                     text: __('Account List'),
                     isIndex: true,
                     component: sPortalAccountList.Screen,
-                  }, {
-                    id: 'portalAccountAccountListMac',
-                    path: '/main/portal/account/list/mac/:loginName',
-                    formUrl: 'goform/portal/account/accountListMac',
-                    text: __('Account List Mac'),
-                    component: sPortalAccountListMac.Screen,
-                    noNav: true,
                   },
                   {
                     id: 'portalAccountConnectRecord',
@@ -736,67 +710,12 @@ const routes = [
                 ],
               },
               {
-                id: 'portalMessage',
-                isIndex: true,
-                path: '/main/portal/message',
-                icon: 'envelope-o',
-                text: __('Message'),
-                indexPath: '/main/portal/message/send',
-                routes: [
-                  {
-                    id: 'portalSendMessage',
-                    path: '/main/portal/message/sendmessage',
-                    formUrl: 'goform/portal/message/sendmessage',
-                    text: __('Send Message'),
-                    component: sPortalSendMessage.Screen,
-                  }, {
-                    id: 'portalReceiveBox',
-                    path: '/main/portal/message/receive',
-                    formUrl: 'goform/portal/message/receive',
-                    text: __('Receive Box'),
-                    component: sPortalReceiveBox.Screen,
-                  }, {
-                    id: 'portalSendBox',
-                    path: '/main/portal/message/send',
-                    formUrl: 'goform/portal/message/send',
-                    text: __('Send Box'),
-                    component: sPortalSendBox.Screen,
-                  },
-                ],
-              },
-              {
-                id: 'portalLog',
-                isIndex: true,
-                path: '/main/portal/log',
-                icon: 'file-text-o',
-                text: __('Online Record Log'),
-                routes: [
-                  {
-                    id: 'portalLogLogList',
-                    path: '/main/portal/log/logList',
-                    formUrl: 'goform/portal/log/logList',
-                    text: __('Log List'),
-                    component: sPortalLogList.Screen,
-                  }, {
-                    id: 'portalLogOnlineList',
-                    path: '/main/portal/log/onlineList',
-                    formUrl: 'goform/portal/log/onlineList',
-                    text: __('Online List'),
-                    component: sPortalOnlineList.Screen,
-                  }, {
-                    id: 'portalLogOnlineRecordList',
-                    path: '/main/portal/log/onlineRecordList',
-                    formUrl: 'goform/portal/log/onlineRecordList',
-                    text: __('History Record List'),
-                    component: sPortalOnlineRecordList.Screen,
-                  },
-                ],
-              },
-              {
                 id: 'portalCard',
                 isIndex: true,
                 path: '/main/portal/card',
                 icon: 'vcard-o',
+                noTree: true,
+                component: SharedComponents.TabContainer,
                 text: __('Rechargeable Card'),
                 routes: [
                   {
@@ -811,6 +730,67 @@ const routes = [
                     formUrl: 'goform/portal/card/cardlist',
                     text: __('Card List'),
                     component: sPortalCardList.Screen,
+                  },
+                ],
+              },
+              {
+                id: 'portalMessage',
+                isIndex: true,
+                path: '/main/portal/message',
+                icon: 'envelope-o',
+                text: __('Message'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                routes: [
+                  {
+                    id: 'portalReceiveBox',
+                    path: '/main/portal/message/receive',
+                    formUrl: 'goform/portal/message/receive',
+                    text: __('Receive Box'),
+                    component: sPortalReceiveBox.Screen,
+                  }, {
+                    id: 'portalSendBox',
+                    path: '/main/portal/message/send',
+                    formUrl: 'goform/portal/message/send',
+                    text: __('Send Box'),
+                    component: sPortalSendBox.Screen,
+                  }, {
+                    id: 'portalSendMessage',
+                    path: '/main/portal/message/sendmessage',
+                    formUrl: 'goform/portal/message/sendmessage',
+                    text: __('Send Message'),
+                    component: sPortalSendMessage.Screen,
+                  },
+                ],
+              },
+              {
+                id: 'portalLog',
+                isIndex: true,
+                path: '/main/portal/log',
+                icon: 'file-text-o',
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                text: __('Logs'),
+                routes: [
+                  {
+                    id: 'portalLogLogList',
+                    path: '/main/portal/log/logList',
+                    formUrl: 'goform/portal/log/logList',
+                    text: __('Log List'),
+                    component: sPortalLogList.Screen,
+                  }, {
+                    id: 'portalLogOnlineRecordList',
+                    path: '/main/portal/log/onlineRecordList',
+                    formUrl: 'goform/portal/log/onlineRecordList',
+                    text: __('History Record List'),
+                    component: sPortalOnlineRecordList.Screen,
+                  },
+                  {
+                    id: 'portalSMSLog',
+                    path: '/main/portal/log/portalsmslog',
+                    formUrl: 'goform/portal/access/portalsmslog',
+                    text: __('SMS Log'),
+                    component: sPortalSMSLog.Screen,
                   },
                 ],
               },

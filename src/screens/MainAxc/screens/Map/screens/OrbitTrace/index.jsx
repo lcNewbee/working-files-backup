@@ -210,13 +210,11 @@ export default class View extends React.Component {
         'onMapMouseMove',
 
         'drawLinePath',
-        // 'drawCurvePath',
         'drawCurveAnimPath',
         'updateCanvas',
         'onRequestMacData',
       ],
     );
-
 
     utils.extend(defaultQuery, locationQuery);
   }
@@ -227,7 +225,6 @@ export default class View extends React.Component {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
       }
-
       if (typeof locationQuery.buildId === 'undefined') {
         this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
       } else {
@@ -273,20 +270,6 @@ export default class View extends React.Component {
 
     /** *********hack: 暂时解决store中curScreenId更新不及时引起的bug**********/
 
-    if (preScreenId !== curScreenId) {
-      this.props.fetch('goform/group/map/building').then((json) => {
-        if (json.state && json.state.code === 2000) {
-          this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
-        }
-
-        if (typeof locationQuery.buildId === 'undefined') {
-          this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
-        } else {
-          this.onChangeBuilding(locationQuery.buildId, locationQuery);
-        }
-      });
-     // this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
-    }
     // 只有单列表点改变时，才花canvas
     if ($$prevPathList !== $$pathList || !this.mapMouseDown) {
       this.drawMap($$pathList);
@@ -305,8 +288,9 @@ export default class View extends React.Component {
   }
 
   onChangeBuilding(id, locationQuery) {
-    this.props.changeScreenQuery(fromJS({ buildId: id }));
-    this.setState({ buildId: id });
+    this.props.changeScreenQuery({
+      buildId: id,
+    });
     this.props.fetch('goform/group/map/list', { buildId: id })
       .then((json) => {
         if (json.state && json.state.code === 2000) {
@@ -327,8 +311,9 @@ export default class View extends React.Component {
     const curMac = locationQuery && locationQuery.mac;
 
     Promise.resolve().then(() => {
-      this.props.changeScreenQuery(fromJS({ curMapId: id }));
-      this.setState({ curMapId: id });
+      this.props.changeScreenQuery({
+        curMapId: id,
+      });
     }).then(() => {
       this.props.fetchScreenData().then(() => {
         const mac = this.props.store.getIn([curScreenId, 'query', 'mac']) || curMac;
@@ -340,7 +325,9 @@ export default class View extends React.Component {
           // this.onChangeMac(firstMac);
           // 如果后台默认返回第一条Mac地址的数据，则使用下面的操作，否则使用上面的onChangeMac
           // 目的是减少一次数据请求
-          this.props.changeScreenQuery(fromJS({ mac: firstMac }));
+          this.props.changeScreenQuery(fromJS({
+            mac: firstMac,
+          }));
         }
       });
     });
@@ -486,7 +473,6 @@ export default class View extends React.Component {
     if (typeof (this.canvasElem) === 'undefined') return;
 
     // const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
-    const curMapId = this.state.curMapId;
     const mapList = this.mapList;
 
     // this.mapMouseDown用来检测是否是拖动引起的页面重绘，如果是，则坐标点位置没有变化无需重新计算
@@ -497,12 +483,16 @@ export default class View extends React.Component {
       if (!this.mapMouseDown) {
         // 画所有经过的静态点
         // 绘图只应该发生在数据改变时
-        this.updateCanvas($$pathList, mapList, curMapId);
+        this.updateCanvas($$pathList, mapList);
       }
     }
   }
-  updateCanvas($$pathList, mapList, curMapId) {
+  updateCanvas($$pathList, mapList) {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
     let arguLen = arguments.length;
+
 
     while (arguLen--) {
       if (typeof arguments[arguLen] === 'undefined') return null;
@@ -610,7 +600,7 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         initOption={{
-          query: defaultQuery,
+          //query: defaultQuery,
         }}
       >
         <div
@@ -624,7 +614,7 @@ export default class View extends React.Component {
             className="fl"
             label={__('Building')}
             options={this.buildOptions ? this.buildOptions.toJS() : []}
-            value={this.state.buildId}
+            value={$$screenQuery.get('buildId')}
             onChange={data => this.onChangeBuilding(data.value)}
           />
           <FormGroup
@@ -632,7 +622,7 @@ export default class View extends React.Component {
             className="fl"
             label={__('Map')}
             options={this.mapOptions ? this.mapOptions.toJS() : []}
-            value={this.state.curMapId}
+            value={$$screenQuery.get('curMapId')}
             onChange={data => this.onChangeMapId(data.value)}
           />
           <FormGroup
@@ -693,7 +683,7 @@ export default class View extends React.Component {
             minWidth: '850px',
           }}
         >
-          {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}
+          {this.renderCurMap(this.mapList, $$screenQuery.get('curMapId'), this.state.zoom)}
           <div className="o-map-zoom-bar">
             <Icon
               name="minus"

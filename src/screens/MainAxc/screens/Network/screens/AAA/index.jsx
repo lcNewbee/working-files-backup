@@ -34,27 +34,27 @@ const accessTypeSeletOptions = [
     label: __('802.1x'),
     disabled: true,
   },
-  {
-    value: 'lan-access',
-    label: __('LAN'),
-    disabled: true,
-  }, {
-    value: 'ppp-access',
-    label: __('PPP'),
-    disabled: true,
-  }, {
-    value: 'mac-access',
-    label: __('MAC'),
-    disabled: true,
-  },
+  // {
+  //   value: 'lan-access',
+  //   label: __('LAN'),
+  //   disabled: true,
+  // }, {
+  //   value: 'ppp-access',
+  //   label: __('PPP'),
+  //   disabled: true,
+  // }, {
+  //   value: 'mac-access',
+  //   label: __('MAC'),
+  //   disabled: true,
+  // },
 ];
 
 const authTypeSeletOptions = [
-  {
-    value: 'local',
-    label: `${__('Local')}`,
-    disabled: true,
-  },
+  // {
+  //   value: 'local',
+  //   label: `${__('Local')}`,
+  //   disabled: true,
+  // },
   {
     value: 'radius-scheme',
     label: `${__('Remote')}`,
@@ -110,7 +110,7 @@ const listOptions = fromJS([
       label: __('Radius Template'),
       required: true,
       type: 'select',
-      placeholder: __('Please Select ') + __('Radius Service'),
+      placeholder: __('Please Select ') + __('Radius Template'),
       options: [],
     },
   },

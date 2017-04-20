@@ -151,7 +151,7 @@ const settingsOptions = fromJS([
     id: 'web',
     required: true,
     fieldset: 'base_setting',
-    label: __('Web Template'),
+    label: __('Portal Template'),
     className: 'cols col-6',
     type: 'select',
     defaultValue: '0',
@@ -162,24 +162,24 @@ const settingsOptions = fromJS([
       },
     ],
   },
-  {
-    id: 'isPortalCheck',
-    required: true,
-    fieldset: 'base_setting',
-    className: 'cols col-6',
-    label: __('Portal Acc'),
-    type: 'select',
-    defaultValue: '1',
-    options: [
-      {
-        value: '0',
-        label: __('Closed'),
-      }, {
-        value: '1',
-        label: __('Open'),
-      },
-    ],
-  },
+  // {
+  //   id: 'isPortalCheck',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: __('Portal Acc'),
+  //   type: 'select',
+  //   defaultValue: '1',
+  //   options: [
+  //     {
+  //       value: '0',
+  //       label: __('Closed'),
+  //     }, {
+  //       value: '1',
+  //       label: __('Open'),
+  //     },
+  //   ],
+  // },
   // {
   //   id: 'isOut',
   //   required: true,

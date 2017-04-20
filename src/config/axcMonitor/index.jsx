@@ -1,5 +1,4 @@
 import b28n from 'shared/b28n';
-import NotFound from 'shared/components/NotFound';
 import stringUtils from 'shared/utils/lib/string';
 import moment from 'moment';
 import { reducer as toastrReducer } from 'react-redux-toastr';
@@ -945,7 +944,7 @@ const routes = [
           },
           {
             id: 'notFound',
-            component: NotFound,
+            component: SharedComponents.NotFound,
           },
         ],
       },
@@ -962,7 +961,7 @@ const routes = [
       },
       {
         id: 'notFound',
-        component: NotFound,
+        component: SharedComponents.NotFound,
       },
     ],
   },
