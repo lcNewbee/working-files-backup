@@ -65,6 +65,13 @@ export default function renderRoutesTree(routes) {
   );
 }
 
+/**
+ *
+ *
+ * @export
+ * @param {any} routes
+ * @returns
+ */
 export function renderRoutesList(routes) {
   let routeList = null;
 
@@ -114,13 +121,6 @@ export function renderRoutesList(routes) {
   return routeList;
 }
 
-export function renderRouteSwitches(props) {
-  const { routes } = props;
-  const routeList = renderRoutesList(routes);
-
-  return <Switch>{routeList}</Switch>;
-}
-
 /**
  * pure Component,只有当路由改变是才重新渲染
  *
@@ -135,7 +135,7 @@ const defaultProps = {
   routes: [],
 };
 
-export class RouteSwitches extends React.Component {
+export class RouteSwitches extends Component {
   componentWillMount() {
     this.routeList = renderRoutesList(this.props.routes);
   }

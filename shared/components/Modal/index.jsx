@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
+import b28n from 'shared/b28n';
 import utils from '../../utils';
 
 let curModelShowNum = 0;
@@ -100,8 +101,8 @@ const propTypes = {
 const defaultProps = {
   title: '',
   role: 'dialog',
-  okText: __('OK'),
-  cancelText: __('Cancel'),
+  okText: b28n.format('OK'),
+  cancelText: b28n.format('Cancel'),
   transitionEnter: true,
   transitionLeave: true,
   okButton: true,

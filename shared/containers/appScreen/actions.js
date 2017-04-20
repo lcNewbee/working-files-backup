@@ -5,17 +5,28 @@ import ACTION_TYPES from './actionTypes';
 let refreshTimeout = null;
 
 // Screen common actions
+export function addScreen(screenId) {
+  return {
+    type: ACTION_TYPES.ADD,
+    payload: {
+      id: screenId,
+    },
+  };
+}
 export function initScreen(option) {
   return {
     type: ACTION_TYPES.INIT,
     payload: option,
   };
 }
-export function leaveScreen() {
+export function leaveScreen(screenId) {
   window.clearTimeout(refreshTimeout);
 
   return {
     type: ACTION_TYPES.LEAVE,
+    meta: {
+      name: screenId,
+    },
   };
 }
 export function changeScreenQuery(payload) {

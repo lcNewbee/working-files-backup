@@ -2,6 +2,7 @@
  * Screen Actions
  */
 export default {
+  ADD: 'screen/ADD',
   INIT: 'screen/INIT',
   LEAVE: 'screen/LEAVE',
 

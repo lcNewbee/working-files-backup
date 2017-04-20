@@ -56,6 +56,7 @@ function initScreenState($$state, action) {
     $$myScreenState = $$myScreenState.mergeDeep(action.payload);
   }
 
+
   // 只有当 $$settingsData 为空时才合并默认Settings
   if (defaultSettingsData && $$settingsData.isEmpty()) {
     $$settingsData = $$settingsData.merge(defaultSettingsData);
@@ -168,7 +169,16 @@ function receiveScreenData($$state, curScreenName, action) {
     .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt)
     .setIn([curScreenName, 'actionQuery', 'selectedList'], $$selectedList);
 }
+function addScreen(state, action) {
+  let $$ret = state;
 
+  if (action.payload && action.payload.id) {
+    $$ret = state.set(action.payload.id, defaultItem)
+      .set('curScreenId', action.payload.id);
+  }
+
+  return $$ret;
+}
 export default function (state = defaultState, action) {
   const curScreenName = (action.meta && action.meta.name) || state.get('curScreenId');
   const defaultEditData = state.getIn([curScreenName, 'defaultEditData']) || fromJS({});
@@ -176,6 +186,8 @@ export default function (state = defaultState, action) {
   switch (action.type) {
 
     // Screen 全局action
+    case ACTION_TYPES.ADD:
+      return addScreen(state, action);
     case ACTION_TYPES.INIT:
       return initScreenState(state, action, curScreenName);
 

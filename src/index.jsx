@@ -9,7 +9,7 @@ const redux = require('redux');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
-const prodConfig = require('./config/axcIndiaBank').default;
+const prodConfig = require('./config/axc3.0').default;
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;
@@ -64,8 +64,8 @@ renderApp(prodConfig.routes);
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/axcIndiaBank', () => {
-    const nextConfig = require('./config/axcIndiaBank').default;
+  module.hot.accept('./config/axc3.0', () => {
+    const nextConfig = require('./config/axc3.0').default;
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,

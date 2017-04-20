@@ -175,7 +175,7 @@ export default class AppScreen extends React.Component {
   componentWillUnmount() {
     clearInterval(this.refreshTimer);
     if (this.props.leaveScreen) {
-      this.props.leaveScreen();
+      this.props.leaveScreen(this.props.route.id);
     }
   }
   refreshOptions(props) {

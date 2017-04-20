@@ -2,17 +2,25 @@ import { toastr } from 'react-redux-toastr';
 import ERROR_MSG_MAP from 'shared/config/serverError';
 import utils from 'shared/utils';
 import ACTION_TYPES from './actionTypes';
+import { addScreen } from '../appScreen/actions';
 
 const APP_CONFIG = {
   fetchInfo: '/goform/getAcInfo',
 };
 let refreshAllTimeout = null;
 
+
 export function updateRouter(payload) {
   return {
     type: ACTION_TYPES.UPDATE_ROUTER,
     payload,
   };
+}
+
+export function addAppScreen(id) {
+  return (dispatch) => {
+    dispatch(addScreen(id));
+  }
 }
 
 // 数据刷新

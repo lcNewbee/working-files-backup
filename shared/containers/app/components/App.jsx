@@ -91,10 +91,22 @@ export default class App extends Component {
     });
   }
   handleLocationChange(location) {
-    const routes = fromJS(matchRoutes(this.props.route.routes, location.pathname));
-    this.props.updateRouter({
-      routes,
-    });
+    const { route } = this.props;
+    let $$routes = null;
+    let curScreenId = 'base';
+    
+    // 只有当 screenId 改变时 才切换 路由
+    if (this.lastScreenId !== curScreenId) {
+      $$routes = fromJS(matchRoutes(this.props.route.routes, location.pathname));
+      curScreenId = $$routes.getIn([-1, 'id']);
+
+      this.props.updateRouter({
+        routes: $$routes,
+      });
+      this.props.addAppScreen(curScreenId);
+
+      this.lastScreenId = curScreenId;
+    }
   }
 
   renderHtmlBody() {

@@ -230,6 +230,9 @@
   "Sorting":"排序",
   "Recharge":"充值",
   "Recharge Choices":"充值卡类型",
+  "Templates": "模板",
+  "Template Settings": "模板设置",
+  "Radius Service": "Radius服务器",
 
   "Template ID":"模板ID",
   "Signature ID":"签名ID",
