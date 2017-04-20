@@ -1,0 +1,23 @@
+{
+
+"state":{
+	"code":2000,
+	"msg":"success"
+},
+"data":{
+	"portList":[
+		{
+			"name":"LAN1",
+			"enable":"-1",
+			"type": "trunk",
+			"vlanId": "1"
+		},
+		{
+			"name":"VOIP",
+			"enable":"1",
+			"type": "trunk",
+			"vlanId": "1"
+		}
+	]
+}
+}

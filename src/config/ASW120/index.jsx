@@ -30,7 +30,8 @@ const pLogin = require('../../screens/Login');
 const MainAP = require('../../screens/MainAP');
 // 网络设置
 // 子菜单
-const sNetworkSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettings');
+const sLanSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettingsDemo/LanSettings');
+const sPortSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettingsDemo/PortSettings');
 
 const pSystemStatus = require('../../screens/MainAP/screens/SystemStatus/MultiRadioOverview');
 const sSsidDetails = require('../../screens/MainAP/screens/SystemStatus/SsidDetails');
@@ -163,13 +164,22 @@ const routes = [{
       component: SharedComponents.TabContainer,
       routes: [
         {
-          id: 'networksettings',
+          id: 'lansettings',
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
-          path: '/main/networksettings/networksettings',
+          path: '/main/networksettings/lansettings',
           text: __('LAN Settings'),
           funConfig: funConfig.network,
-          component: sNetworkSettings.Screen,
+          component: sLanSettings.Screen,
+        },
+        {
+          id: 'portsettings',
+          formUrl: 'goform/get_port_vlan',
+          saveUrl: 'goform/set_port_vlan',
+          path: '/main/networksettings/portsettings',
+          text: __('Port Settings'),
+          funConfig: funConfig.network,
+          component: sPortSettings.Screen,
         },
       ],
     }, {
@@ -290,7 +300,8 @@ const reducers = {
   app: app.reducer,
   settings: settings.reducer,
   toastr: toastrReducer,
-  networksettings: sNetworkSettings.networksettings,
+  lansettings: sLanSettings.lansettings,
+  portsettings: sPortSettings.portsettings,
   systemstatus: pSystemStatus.systemstatus,
   ssiddetails: sSsidDetails.ssiddetails,
   clientsdetails: sClientsDetails.clientsdetails,
