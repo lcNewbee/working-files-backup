@@ -9,13 +9,13 @@ const redux = require('redux');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
-const RouteSwitchs = require('shared/components/Organism/RouterConfig').RouteSwitchs;
-const prodConfig = require('./config/axc4.0').default;
+const prodConfig = require('./config/axcIndiaBank').default;
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;
 const createStore = redux.createStore;
 const HashRouter = ReactRouterDom.HashRouter;
+const Route = ReactRouterDom.Route;
 const mountNode = document.getElementById('app');
 
 const remoteActionMiddleware = applyMiddleware(
@@ -38,13 +38,21 @@ if (prodConfig.appConfig) {
 }
 
 function renderApp(renderRoutes) {
+  const rootRoute = renderRoutes[0];
+  const RootContainer = rootRoute.component;
+
   // 主渲染入口
   ReactDOM.render(
     <AppContainer>
       <Provider store={stores}>
         <HashRouter>
-          <RouteSwitchs
-            routes={renderRoutes}
+          <Route
+            render={props => (
+              <RootContainer
+                {...props}
+                route={rootRoute}
+              />
+            )}
           />
         </HashRouter>
       </Provider>

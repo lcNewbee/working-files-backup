@@ -56,12 +56,22 @@ class WizardContainer extends React.Component {
     );
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.initStep !== nextProps.initStep ||
-        this.props.reinitAt !== nextProps.reinitAt) {
-      this.updateState({
+    const newState = {};
+    if (this.props.initStep !== nextProps.initStep || this.props.reinitAt !== nextProps.reinitAt) {
+      utilsCore.extend(newState, {
         currStep: nextProps.initStep,
         maxStep: nextProps.options.size,
       });
+    }
+
+    if (this.props.options !== nextProps.options) {
+      utilsCore.extend({
+        maxStep: this.props.options.size,
+      });
+    }
+
+    if (newState.keys().length > 0) {
+      this.setState(newState);
     }
   }
 

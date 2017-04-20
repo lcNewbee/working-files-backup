@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tab from 'shared/components/Tab';
-import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 
 const propTypes = {
   route: PropTypes.shape({
@@ -30,7 +30,7 @@ class TabContainer extends React.PureComponent {
         menus={route.routes}
         role="tab"
       >
-        <RouteSwitchs
+        <RouteSwitches
           routes={route.routes}
         />
         {this.props.children}

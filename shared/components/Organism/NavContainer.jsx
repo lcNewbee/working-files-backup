@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Nav from 'shared/components/Nav';
-import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 
 const propTypes = {
   route: PropTypes.shape({
@@ -29,7 +29,7 @@ class NavContainer extends React.PureComponent {
         </div>
 
         <div className="t-main__content">
-          <RouteSwitchs
+          <RouteSwitches
             routes={route.routes}
           />
         </div>

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Navbar from 'shared/components/Navbar';
-import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 import reducer from './reducer';
@@ -129,7 +129,7 @@ export default class MainAP extends React.PureComponent {
             menus={this.props.selfState.get('menus')}
           />
           <div className="t-main__content">
-            <RouteSwitchs
+            <RouteSwitches
               routes={this.props.route.routes}
             />
           </div>

@@ -13,7 +13,7 @@ import {
   actions as propertiesActions,
   Screen as PropertyPanel,
 } from 'shared/containers/properties';
-import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
 
@@ -273,7 +273,7 @@ export default class Main extends React.PureComponent {
             this.renderBreadcrumb()
           }
         </div>
-        <RouteSwitchs
+        <RouteSwitches
           routes={this.props.route.routes}
         />
         <PopOver

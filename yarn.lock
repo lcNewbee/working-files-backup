@@ -4100,9 +4100,11 @@ html-minifier@^3.2.3:
     relateurl "0.2.x"
     uglify-js "~2.8.22"
 
-html-webpack-include-assets-plugin@0.0.4:
-  version "0.0.4"
-  resolved "http://registry.npm.taobao.org/html-webpack-include-assets-plugin/download/html-webpack-include-assets-plugin-0.0.4.tgz#1bac01dd41d4105174d3d7fdaf861bbf87700419"
+html-webpack-include-assets-plugin@^0.0.5:
+  version "0.0.5"
+  resolved "http://registry.npm.taobao.org/html-webpack-include-assets-plugin/download/html-webpack-include-assets-plugin-0.0.5.tgz#ca38767d019189414c0e8cbaa0e8b32557031a8d"
+  dependencies:
+    minimatch "^3.0.3"
 
 html-webpack-plugin@^2.15.0:
   version "2.28.0"
@@ -6980,14 +6982,7 @@ react-router-dom@^4.1.1:
     prop-types "^15.5.4"
     react-router "^4.1.1"
 
-react-router-redux@next:
-  version "5.0.0-alpha.4"
-  resolved "http://registry.npm.taobao.org/react-router-redux/download/react-router-redux-5.0.0-alpha.4.tgz#0f64a8633ee78e14ee3eb96c6354ee134aa6ce4f"
-  dependencies:
-    history "^4.5.1"
-    react-router "^4.0.0"
-
-react-router@^4.0.0, react-router@^4.1.1:
+react-router@^4.1.1:
   version "4.1.1"
   resolved "http://registry.npm.taobao.org/react-router/download/react-router-4.1.1.tgz#d448f3b7c1b429a6fbb03395099949c606b1fe95"
   dependencies:

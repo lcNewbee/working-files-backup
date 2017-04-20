@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Switch from 'react-router/Switch';
 import Route from 'react-router/Route';
 import { Redirect } from 'react-router-dom';
-
-let prevRouteList = null;
-let prevRoutes = null;
 
 export default function renderRoutesTree(routes) {
   if (!routes) {
@@ -113,16 +111,49 @@ export function renderRoutesList(routes) {
     },
   );
 
-  prevRoutes = routes;
-  prevRouteList = routeList;
-
   return routeList;
 }
 
-export function RouteSwitchs(props) {
+export function renderRouteSwitches(props) {
   const { routes } = props;
   const routeList = renderRoutesList(routes);
 
   return <Switch>{routeList}</Switch>;
 }
+
+/**
+ * pure Component,只有当路由改变是才重新渲染
+ *
+ * @export
+ * @class RouteSwitches
+ * @extends {Component}
+ */
+const propTypes = {
+  routes: PropTypes.array,
+};
+const defaultProps = {
+  routes: [],
+};
+
+export class RouteSwitches extends React.Component {
+  componentWillMount() {
+    this.routeList = renderRoutesList(this.props.routes);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const nextRoutes = nextProps.routes;
+    const curRoutes = this.props.routes;
+
+    if (nextRoutes !== curRoutes || nextRoutes.length !== curRoutes.length) {
+      this.routeList = renderRoutesList(nextProps.routes);
+    }
+  }
+
+  render() {
+    return <Switch>{this.routeList}</Switch>;
+  }
+}
+
+RouteSwitches.propTypes = propTypes;
+RouteSwitches.defaultProps = defaultProps;
 

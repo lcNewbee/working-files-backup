@@ -5,11 +5,10 @@ import { fromJS, Map } from 'immutable';
 import ReduxToastr from 'react-redux-toastr';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
-import stringUtils from 'shared/utils/lib/string';
-import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
+import utils from 'shared/utils';
+import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import matchPath from 'react-router/matchPath';
 import Router from 'react-router/Router';
-import { Prompt } from 'react-router';
 
 // ensure we're using the exact code for default root match
 const { computeMatch } = Router.prototype;
@@ -40,12 +39,12 @@ const propTypes = {
   closeModal: PropTypes.func,
   fetchProductInfo: PropTypes.func,
   updateRouter: PropTypes.func,
+  history: PropTypes.shape({
+    listen: PropTypes.func,
+  }),
   route: PropTypes.shape({
     routes: PropTypes.array,
     formUrl: PropTypes.string,
-  }),
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
   }),
 };
 
@@ -56,40 +55,29 @@ const defaultProps = {
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.onModalClose = this.onModalClose.bind(this);
-    this.onModalApply = this.onModalApply.bind(this);
-    this.renderHtmlBody = this.renderHtmlBody.bind(this);
-    this.updateRouter = this.updateRouter.bind(this);
+    utils.binds(this, [
+      'onModalClose',
+      'onModalApply',
+      'renderHtmlBody',
+      'handleLocationChange',
+    ]);
   }
+
   componentWillMount() {
+    const { history, route } = this.props;
     if (this.props.fetchProductInfo && typeof (this.props.route.formUrl) !== 'undefined') {
       this.props.fetchProductInfo(this.props.route.formUrl);
     }
-  }
-  componentDidMount() {
-    this.updateRouter();
-  }
-  shouldComponentUpdate(nextProps) {
-    let ret = true;
+    this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
 
-    // console.log(this.props.location.pathname, nextProps.location.pathname);
-    // // 如果是切换路径
-    // if (this.props.location.pathname !== nextProps.location.pathname) {
-    //   this.updateRouter();
-    //   //this.props.changeAppScreen();
-    //   ret = false;
-    // }
-
-    return ret;
-  }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.location.pathname !== prevProps.location.pathname) {
-      this.updateRouter();
-      //this.props.changeAppScreen();
-      //ret = false;
+    if (route.indexPath) {
+      history.push(route.indexPath);
     }
   }
 
+  componentWillUnmount() {
+    if (this.unsubscribeFromHistory) this.unsubscribeFromHistory();
+  }
 
   onModalClose() {
     this.props.closeModal({
@@ -102,9 +90,8 @@ export default class App extends Component {
       status: 'ok',
     });
   }
-
-  updateRouter() {
-    const routes = fromJS(matchRoutes(this.props.route.routes, this.props.location.pathname));
+  handleLocationChange(location) {
+    const routes = fromJS(matchRoutes(this.props.route.routes, location.pathname));
     this.props.updateRouter({
       routes,
     });
@@ -115,10 +102,10 @@ export default class App extends Component {
     const bodyElem = document.getElementsByTagName('body')[0];
     if (route.path !== '/') {
       if (bodyElem.className.indexOf('fixed') === -1) {
-        bodyElem.className = stringUtils.addClassName(bodyElem.className, 'fixed');
+        bodyElem.className = utils.addClassName(bodyElem.className, 'fixed');
       }
     } else {
-      bodyElem.className = stringUtils.removeClassName(bodyElem.className, 'fixed');
+      bodyElem.className = utils.removeClassName(bodyElem.className, 'fixed');
     }
   }
 
@@ -132,7 +119,7 @@ export default class App extends Component {
 
     return (
       <div>
-        <RouteSwitchs
+        <RouteSwitches
           routes={this.props.route.routes}
         />
         <Modal

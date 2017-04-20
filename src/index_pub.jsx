@@ -7,8 +7,8 @@ const redux = require('redux');
 const appActions = require('shared/containers/app/actions');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
-const RouteSwitchs = require('shared/components/Organism/RouterConfig').RouteSwitchs;
-const prodConfig = require('./config/axc4.0').default;
+const RouteSwitches = require('shared/components/Organism/RouterConfig').RouteSwitches;
+const prodConfig = require('./config/axcIndiaBank').default;
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;
@@ -40,7 +40,7 @@ function renderApp(renderRoutes) {
   ReactDOM.render(
     <Provider store={stores}>
       <HashRouter>
-        <RouteSwitchs
+        <RouteSwitches
           routes={renderRoutes}
         />
       </HashRouter>

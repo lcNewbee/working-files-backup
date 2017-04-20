@@ -10,7 +10,7 @@ import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
-import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import { getActionable } from 'shared/axc';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as propertiesActions } from 'shared/containers/properties';
@@ -331,6 +331,20 @@ export default class MainGroup extends React.Component {
       this.onSelectGroup(locationQuery.groupid);
     }
   }
+  // initRouteDom() {
+  //   const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
+  //   let mainLeftMenus = this.props.route.routes;
+
+  //   // 如果当前是所有组，则隐藏组配置相关菜单
+  //   if (selectGroupId === ALL_GROUP_ID) {
+  //     mainLeftMenus = mainLeftMenus.slice(0, 3);
+  //   }
+
+  //   this.NavList = (
+
+  //   );
+  // }
+
   /**
    * 获取正在管理的AP组内AP列表
    * @memberOf MainGroup
@@ -1035,7 +1049,7 @@ export default class MainGroup extends React.Component {
         </div>
 
         <div className="t-main__content">
-          <RouteSwitchs
+          <RouteSwitches
             routes={this.props.route.routes}
           />
         </div>
