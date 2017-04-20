@@ -1,0 +1,69 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "id":"14",
+      "loginName":"aaa",
+      "password":"aaa",
+      "name":"\u63a5\u5165\u6d4b\u8bd5\u8d26\u6237aaa",
+      "gender":"1",
+      "phoneNumber":"17784196650",
+      "email":"LeeSon@vip.qq.com",
+      "description":"OpenPortal\u5b98\u65b9\u4ea4\u6d41\u7fa4:119688084",
+      "date":"2015-08-07 09:45:10",
+      "time":"14400000",
+      "octets":"104857600",
+      "state":"1",
+      "idnumber":"520103",
+      "address":"\u8d35\u5dde\u8d35\u9633",
+      "speed":"1",
+      "maclimit":"0",
+      "maclimitcount":"1",
+      "autologin":"0",
+      "ex1":"your name",
+      "ex2":"aaa",
+      "ex3":"",
+      "ex4":"",
+      "ex5":null,
+      "ex6":null,
+      "ex7":null,
+      "ex8":null,
+      "ex9":null,
+      "ex10":null
+    },{
+      "id":"1",
+      "loginName":"bbb",
+      "password":"bbb",
+      "name":"\u63a5\u5165\u6d4b\u8bd5\u8d26\u6237aaa",
+      "gender":"0",
+      "phoneNumber":"17784196650",
+      "email":"bbb@vip.qq.com",
+      "description":"OpenPortal\u5b98\u65b9\u4ea4\u6d41\u7fa4:119688084",
+      "date":"2015-08-07 09:45:10",
+      "time":"14400000",
+      "octets":"104857600",
+      "state":"2",
+      "idnumber":"520103",
+      "address":"\u8d35\u5dde\u8d35\u9633",
+      "speed":"1",
+      "maclimit":"0",
+      "maclimitcount":"1",
+      "autologin":"0",
+      "ex1":"your name",
+      "ex2":"aaa",
+      "ex3":"",
+      "ex4":"",
+      "ex5":null,
+      "ex6":null,
+      "ex7":null,
+      "ex8":null,
+      "ex9":null,
+      "ex10":null
+    }]
+  }
+}
+
+
