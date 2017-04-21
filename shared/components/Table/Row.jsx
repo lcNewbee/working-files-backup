@@ -61,7 +61,10 @@ class Row extends Component {
           return myOption ? (
             <MyCompeont
               key={`tableRow${myOption.id}`}
-              width={myOption.width}
+              style={{
+                width: myOption.width,
+                paddingLeft: myOption.paddingLeft,
+              }}
             >
               <span>{myOption.text || myOption.label}</span>
               {

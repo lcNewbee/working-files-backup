@@ -10,13 +10,15 @@
 			"name":"LAN1",
 			"enable":"-1",
 			"type": "trunk",
-			"vlanId": "1"
+			"vlanId": "1",
+      "members": [1, 100]
 		},
 		{
 			"name":"VOIP",
 			"enable":"1",
 			"type": "trunk",
-			"vlanId": "1"
+			"vlanId": "1",
+      "members": [100, 200]
 		}
 	]
 }

@@ -316,8 +316,13 @@ export default class QuickSetup extends React.Component {
     //   }
     // }
     if (data.currStep === 1 && data.targetStep === 2) {
+      // 修正ssid，将ssid首尾的空格去掉
+      const ssid = this.props.store.getIn(['curData', 'ssid']);
+      const text = ssid.replace(/(^\s*)|(\s*$)/g, '');
+      this.props.updateItemSettings({ ssid: text });
+      // 需要用户至少选择一个radio
       const radioOnEffect = this.props.store.getIn(['curData', 'radioOnEffect']).toJS();
-      if (!radioOnEffect.some(val => val === '1')) { // 需要用户选择，而且必须选择至少一个
+      if (!radioOnEffect.some(val => val === '1')) {
         return __('Please select at least one radio to apply the SSID');
       }
     }
@@ -729,7 +734,10 @@ export default class QuickSetup extends React.Component {
             label={__('SSID')}
             value={this.props.store.getIn(['curData', 'ssid'])}
             onChange={(data) => {
-              if (utils.getUtf8Length(data.value) <= 32) {
+              const ssid = this.props.store.getIn(['curData', 'ssid']);
+              const str = ssid.replace(/(^\s*)|(\s*$)/g, '');
+              if (str === '' && data.value === ' ') return null;
+              else if (utils.getUtf8Length(data.value) <= 32) {
                 this.props.updateItemSettings({ ssid: data.value });
               }
             }}

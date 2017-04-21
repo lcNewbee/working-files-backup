@@ -25,29 +25,60 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
+  save: PropTypes.func,
   fetch: PropTypes.func,
   selfState: PropTypes.instanceOf(Map),
   updateItemSettings: PropTypes.func,
-
+  createModal: PropTypes.func,
 };
 
 const defaultProps = {};
 
 export default class PortSettings extends React.Component {
-
   constructor(props) {
     super(props);
     this.renderEnableBtn = this.renderEnableBtn.bind(this);
     this.renderTypeSelector = this.renderTypeSelector.bind(this);
     this.renderVlanIdInput = this.renderVlanIdInput.bind(this);
+    this.renderMembersInput = this.renderMembersInput.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
   componentWillMount() {
-    this.props.fetch('goform/get_port_vlan').then((json) => {
+    const props = this.props;
+    props.initSettings({
+      settingId: props.route.id,
+      formUrl: props.route.formUrl,
+      saveUrl: props.route.saveUrl,
+      defaultData: {
+      },
+    });
+    props.fetch('goform/get_port_vlan').then((json) => {
       if (json.state && json.state.code === 2000) {
-        this.props.updateItemSettings(fromJS(json.data));
+        props.updateItemSettings(fromJS(json.data));
       }
     });
+  }
+
+  onSave() {
+    const portList = this.props.store.getIn(['curData', 'portList']);
+    let flag = true;
+    portList.every((item) => {
+      const startvlan = item.getIn(['members', '0']);
+      const endvlan = item.getIn(['members', '1']);
+      if (startvlan > endvlan) {
+        this.props.createModal({
+          role: 'alert',
+          text: __('Start member id should not be greater than the end! Check %s Members setting.', item.get('name')),
+        });
+        flag = false;
+        return false;
+      }
+      return true;
+    });
+    if (flag) {
+      this.props.save(this.props.route.saveUrl, { portList });
+    }
   }
 
   renderEnableBtn(val, item) {
@@ -57,15 +88,21 @@ export default class PortSettings extends React.Component {
           type="checkbox"
           checked={val === '1'}
           onChange={(data) => {
-            const portList = this.props.store.getIn(['curData', 'portList']);
+            let portList = this.props.store.getIn(['curData', 'portList']);
             const index = portList.indexOf(item);
-            portList.setIn([index, 'enable'], data.value);
+            portList = portList.setIn([index, 'enable'], data.value);
             this.props.updateItemSettings({ portList });
           }}
         />
       );
     }
-    return null;
+    return (
+      <FormInput
+        type="checkbox"
+        checked
+        disabled
+      />
+    );
   }
 
   renderTypeSelector(val, item) {
@@ -77,10 +114,11 @@ export default class PortSettings extends React.Component {
           { label: 'Trunk', value: 'trunk' },
           { label: 'Access', value: 'access' },
         ]}
+        size="min"
         onChange={(data) => {
-          const portList = this.props.store.getIn(['curData', 'portList']);
+          let portList = this.props.store.getIn(['curData', 'portList']);
           const index = portList.indexOf(item);
-          portList.setIn([index, 'type'], data.value);
+          portList = portList.setIn([index, 'type'], data.value);
           this.props.updateItemSettings({ portList });
         }}
       />
@@ -90,25 +128,62 @@ export default class PortSettings extends React.Component {
   renderVlanIdInput(val, item) {
     const type = item.get('type');
     return (
-      <span>
-        <span>
-          {
-            type === 'trunk' ? __('Untag ID') : __('Vlan ID')
-          }
-          <FormInput
-            type="number"
-            value={val}
-            min="1"
-            max="4094"
-            onChange={(data) => {
-              const portList = this.props.store.getIn(['curData', 'portList']);
-              const index = portList.indexOf(item);
-              portList.setIn([index, 'vlanId'], data.value);
-              this.props.updateItemSettings({ portList });
-            }}
-          />
+      <div>
+        <span
+          style={{
+            textAlign: 'right',
+            marginRight: '15px',
+            display: 'inline-block',
+            width: '50px',
+          }}
+        >
+          {type === 'trunk' ? __('Untag ID') : __('Vlan ID')}
         </span>
-      </span>
+        <FormInput
+          type="number"
+          value={val}
+          min="1"
+          max="4094"
+          onChange={(data) => {
+            let portList = this.props.store.getIn(['curData', 'portList']);
+            const index = portList.indexOf(item);
+            portList = portList.setIn([index, 'vlanId'], data.value);
+            this.props.updateItemSettings({ portList });
+          }}
+        />
+      </div>
+    );
+  }
+
+  renderMembersInput(val, item) {
+    return (
+      <div>
+        <FormInput
+          type="number"
+          value={val.get('0')}
+          min="1"
+          max="4094"
+          onChange={(data) => {
+            let portList = this.props.store.getIn(['curData', 'portList']);
+            const index = portList.indexOf(item);
+            portList = portList.setIn([index, 'members', '0'], data.value);
+            this.props.updateItemSettings({ portList });
+          }}
+        />
+        <span> - </span>
+        <FormInput
+          type="number"
+          value={val.get('1')}
+          min="1"
+          max="4094"
+          onChange={(data) => {
+            let portList = this.props.store.getIn(['curData', 'portList']);
+            const index = portList.indexOf(item);
+            portList = portList.setIn([index, 'members', '1'], data.value);
+            this.props.updateItemSettings({ portList });
+          }}
+        />
+      </div>
     );
   }
 
@@ -119,29 +194,52 @@ export default class PortSettings extends React.Component {
       {
         id: 'name',
         text: __('Name'),
+        width: '200px',
       },
       {
         id: 'enable',
         text: __('Enable'),
-        transform: val => that.renderEnableBtn(val),
+        transform: (val, item) => that.renderEnableBtn(val, item),
+        width: '200px',
       },
       {
         id: 'type',
         text: __('Type'),
-        transform: val => that.renderTypeSelector(val),
+        transform: (val, item) => that.renderTypeSelector(val, item),
+        width: '300px',
+        paddingLeft: '90px',
       },
       {
         id: 'vlanId',
         text: __('VLAN ID'),
         transform: (val, item) => that.renderVlanIdInput(val, item),
+        wdith: '200px',
+        paddingLeft: '30px',
+      },
+      {
+        id: 'members',
+        text: __('Members'),
+        transform: (val, item) => that.renderMembersInput(val, item),
+        wdith: '200px',
+        paddingLeft: '40px',
       },
     ]);
     return (
-      <div>
-        <Table
-          options={listOptions}
-          list={portList}
-        />
+      <div className="o-box">
+        <h3 className="o-box__cell">{__('Port Vlan Settings')}</h3>
+        <div className="o-box__cell">
+          <Table
+            options={listOptions}
+            list={portList}
+          />
+        </div>
+        <div className="o-box__cell">
+          <SaveButton
+            type="button"
+            loading={this.props.app.get('saving')}
+            onClick={this.onSave}
+          />
+        </div>
       </div>
     );
   }

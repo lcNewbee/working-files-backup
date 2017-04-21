@@ -250,7 +250,10 @@ export default class Basic extends React.Component {
                 disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={(data) => {
                   console.log('data.value.length', utils.getUtf8Length(data.value), data.value, data.value.length);
-                  if (utils.getUtf8Length(data.value) <= 32) {
+                  const ssid = item.get('ssid');
+                  const str = ssid.replace(/(^\s*)|(\s*$)/g, '');
+                  if (str === '' && data.value === ' ') return null;
+                  else if (utils.getUtf8Length(data.value) <= 32) {
                     this.onSsidItemChange(val, item, 'ssid', data.value);
                   }
                 }}
@@ -302,7 +305,7 @@ export default class Basic extends React.Component {
               <FormInput
                 type="number"
                 value={val}
-                max="1000"
+                max="512"
                 min="1"
                 defaultValue="64"
                 // disabled={pos === 0 || vlanEnable === '0'}
@@ -486,6 +489,7 @@ export default class Basic extends React.Component {
         const curSettingId = this.props.store.get('curSettingId');
         let dataToSave = this.props.store.getIn(['curData', 'radioList', radioId]);
         let dataFromServer = this.props.store.getIn([curSettingId, 'data', 'radioList', radioId]);
+
         // console.log('dataFromServer', dataFromServer.toJS());
         // 根据保存按钮，重新组织需要保存的数据（因为两部分数据是一个接口，所以要区分）
         if (validID === 'radioSettings') {
@@ -516,6 +520,13 @@ export default class Basic extends React.Component {
           // 保留修改的SSID，将后台传递的射频信息原封不动地赋值到将要保存的对象中，再发给后台
           dataFromServer = dataFromServer.delete('vapList');
           dataToSave = dataToSave.merge(dataFromServer);
+          // 修正ssid，将所有ssid的首尾空格去掉
+          const ssidList = dataToSave.get('vapList').map((item) => {
+            const ssid = item.get('ssid');
+            const text = ssid.replace(/(^\s*)|(\s*$)/g, '');
+            return item.set('ssid', text);
+          });
+          dataToSave = dataToSave.set('vapList', ssidList);
         }
         this.props.save('goform/set_wl_all', dataToSave.toJS()).then((json) => {
           if (json.state && json.state.code === 2000) {
@@ -1207,7 +1218,7 @@ export default class Basic extends React.Component {
                     <FormGroup
                       label={__('Max Clients')}
                       type="number"
-                      max={200}
+                      max={512}
                       min={1}
                       form="radioSettings"
                       value={curData.getIn(['radioList', radioId, 'maxRadioClients'])}
@@ -1270,6 +1281,9 @@ export default class Basic extends React.Component {
                                 form="radioSettings"
                                 value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
                                 onChange={(data) => {
+                                  const ssid = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList', '0', 'ssid']);
+                                  const str = ssid.replace(/(^\s*)|(\s*$)/g, '');
+                                  if (str === '' && data.value === ' ') return null;
                                   const radioList = curData.get('radioList')
                                         .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
                                   this.props.updateItemSettings({ radioList });
