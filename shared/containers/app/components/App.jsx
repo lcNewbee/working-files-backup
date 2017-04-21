@@ -6,39 +6,14 @@ import ReduxToastr from 'react-redux-toastr';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import utils from 'shared/utils';
-import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
-import matchPath from 'react-router/matchPath';
-import Router from 'react-router/Router';
-
-// ensure we're using the exact code for default root match
-const { computeMatch } = Router.prototype;
-
-const matchRoutes = (routes, pathname, /* not public API*/branch = []) => {
-  routes.some((route) => {
-    const match = route.path
-      ? matchPath(pathname, route)
-      : branch.length
-        ? branch[branch.length - 1].match // use parent match
-        : computeMatch(pathname); // use default "root" match
-    if (match) {
-      branch.push({ ...route, match });
-
-      if (route.routes) {
-        matchRoutes(route.routes, pathname, branch);
-      }
-    }
-
-    return match;
-  });
-
-  return branch;
-};
+import { RouteSwitches, matchRoutes } from 'shared/components/Organism/RouterConfig';
 
 const propTypes = {
   $$modal: PropTypes.instanceOf(Map),
   closeModal: PropTypes.func,
   fetchProductInfo: PropTypes.func,
   updateRouter: PropTypes.func,
+  addAppScreen: PropTypes.func,
   history: PropTypes.shape({
     listen: PropTypes.func,
   }),
@@ -91,12 +66,11 @@ export default class App extends Component {
     });
   }
   handleLocationChange(location) {
-    const { route } = this.props;
     let $$routes = null;
     let curScreenId = 'base';
-    
+
     // 只有当 screenId 改变时 才切换 路由
-    if (this.lastScreenId !== curScreenId) {
+    if (this.lastPathname !== location.pathname) {
       $$routes = fromJS(matchRoutes(this.props.route.routes, location.pathname));
       curScreenId = $$routes.getIn([-1, 'id']);
 
@@ -105,7 +79,7 @@ export default class App extends Component {
       });
       this.props.addAppScreen(curScreenId);
 
-      this.lastScreenId = curScreenId;
+      this.lastPathname = location.pathname;
     }
   }
 

@@ -70,7 +70,7 @@ class WizardContainer extends React.Component {
       });
     }
 
-    if (newState.keys().length > 0) {
+    if (Object.keys(newState).length > 0) {
       this.setState(newState);
     }
   }
