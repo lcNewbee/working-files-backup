@@ -14,6 +14,9 @@ const propTypes = {
   fetchProductInfo: PropTypes.func,
   updateRouter: PropTypes.func,
   addAppScreen: PropTypes.func,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }),
   history: PropTypes.shape({
     listen: PropTypes.func,
   }),
@@ -39,13 +42,13 @@ export default class App extends Component {
   }
 
   componentWillMount() {
-    const { history, route } = this.props;
+    const { history, route, location } = this.props;
     if (this.props.fetchProductInfo && typeof (this.props.route.formUrl) !== 'undefined') {
       this.props.fetchProductInfo(this.props.route.formUrl);
     }
     this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
 
-    if (route.indexPath) {
+    if (route.indexPath && location.pathname === route.path) {
       history.push(route.indexPath);
     }
   }
