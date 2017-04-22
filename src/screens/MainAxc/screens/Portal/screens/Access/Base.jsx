@@ -162,32 +162,32 @@ const settingsOptions = fromJS([
       },
     ],
   },
-  {
-    id: 'url',
-    label: __('URL After Authentication'),
-    type: 'text',
-    validator: validator({
-      rules: 'utf8Len:[0, 255]',
-    }),
-  },
   // {
-  //   id: 'isPortalCheck',
-  //   required: true,
-  //   fieldset: 'base_setting',
-  //   className: 'cols col-6',
-  //   label: __('Portal Acc'),
-  //   type: 'select',
-  //   defaultValue: '1',
-  //   options: [
-  //     {
-  //       value: '0',
-  //       label: __('Closed'),
-  //     }, {
-  //       value: '1',
-  //       label: __('Open'),
-  //     },
-  //   ],
+  //   id: 'url',
+  //   label: __('URL After Authentication'),
+  //   type: 'text',
+  //   validator: validator({
+  //     rules: 'utf8Len:[0, 255]',
+  //   }),
   // },
+  {
+    id: 'isPortalCheck',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: __('Portal Acc'),
+    type: 'select',
+    defaultValue: '1',
+    options: [
+      {
+        value: '0',
+        label: __('Closed'),
+      }, {
+        value: '1',
+        label: __('Open'),
+      },
+    ],
+  },
   // {
   //   id: 'isOut',
   //   required: true,
@@ -247,110 +247,110 @@ const settingsOptions = fromJS([
   //   type: 'text',
   //   help: __('second'),
   // },
-  // {
-  //   id: 'list',
-  //   type: 'list',
-  //   list: [
-  //     {
-  //       id: 'enable',
-  //       label: __('Initiate Mode'),
-  //       type: 'checkbox',
-  //       display: 'block',
-  //       onChange: (data) => {
-  //         const curIndex = data.index;
-  //         const retData = data;
-  //         if (retData.value === '1') {
-  //           // 接入认证
-  //           if (curIndex === 1) {
-  //             retData.mergeData = {
-  //               list: [
-  //                 {},
-  //                 {},
-  //                 { enable: '0' },
-  //               ],
-  //             };
-  //           // Radiu认证
-  //           } else if (curIndex === 2) {
-  //             retData.mergeData = {
-  //               list: [
-  //                 {},
-  //                 { enable: '0' },
-  //               ],
-  //             };
-  //           }
-  //         }
-  //         return retData;
-  //       },
-  //     }, {
-  //       id: 'type',
-  //       label: __('Authentication Types'),
-  //       options: [
-  //         {
-  //           value: '0',
-  //           label: __('One Key Auth'),
-  //         }, {
-  //           value: '1',
-  //           label: __('Access User Auth'),
-  //         }, {
-  //           value: '2',
-  //           label: __('Radius Auth'),
-  //         }, {
-  //           value: '3',
-  //           label: __('App Auth'),
-  //         }, {
-  //           value: '4',
-  //           label: __('Messages Auth'),
-  //         }, {
-  //           value: '5',
-  //           label: __('Wechat Auth'),
-  //         }, {
-  //           value: '6',
-  //           label: __('Public Platform Auth'),
-  //         }, {
-  //           value: '7',
-  //           label: __('Visitor Auth'),
-  //         }, {
-  //           value: '9',
-  //           label: __('Facebook Auth'),
-  //         },
-  //       ],
-  //       noForm: true,
-  //     }, {
-  //       id: 'username',
-  //       label: __('Public User Name'),
-  //       defaultValue: 'Empty Wanted',
-  //       type: 'text',
-  //       maxLength: '129',
-  //       validator: validator({
-  //         rules: 'utf8Len:[1, 128]',
-  //       }),
-  //     }, {
-  //       id: 'password',
-  //       label: __('Public Password'),
-  //       type: 'password',
-  //       maxLength: '128',
-  //       validator: validator({
-  //         rules: 'pwd',
-  //       }),
-  //     }, {
-  //       id: 'sessiontime',
-  //       label: __('Sesssion Time'),
-  //       type: 'number',
-  //       min: '0',
-  //       max: '99999',
-  //       validator: validator({
-  //         rules: 'num:[0,99999]',
-  //       }),
-  //     }, {
-  //       id: 'url',
-  //       label: __('URL After Authentication'),
-  //       type: 'text',
-  //       validator: validator({
-  //         rules: 'utf8Len:[0, 255]',
-  //       }),
-  //     },
-  //   ],
-  // },
+  {
+    id: 'list',
+    type: 'list',
+    list: [
+      {
+        id: 'enable',
+        label: __('Initiate Mode'),
+        type: 'checkbox',
+        display: 'block',
+        onChange: (data) => {
+          const curIndex = data.index;
+          const retData = data;
+          if (retData.value === '1') {
+            // 接入认证
+            if (curIndex === 1) {
+              retData.mergeData = {
+                list: [
+                  {},
+                  {},
+                  { enable: '0' },
+                ],
+              };
+            // Radiu认证
+            } else if (curIndex === 2) {
+              retData.mergeData = {
+                list: [
+                  {},
+                  { enable: '0' },
+                ],
+              };
+            }
+          }
+          return retData;
+        },
+      }, {
+        id: 'type',
+        label: __('Authentication Types'),
+        options: [
+          {
+            value: '0',
+            label: __('One Key Auth'),
+          }, {
+            value: '1',
+            label: __('Access User Auth'),
+          }, {
+            value: '2',
+            label: __('Radius Auth'),
+          }, {
+            value: '3',
+            label: __('App Auth'),
+          }, {
+            value: '4',
+            label: __('Messages Auth'),
+          }, {
+            value: '5',
+            label: __('Wechat Auth'),
+          }, {
+            value: '6',
+            label: __('Public Platform Auth'),
+          }, {
+            value: '7',
+            label: __('Visitor Auth'),
+          }, {
+            value: '9',
+            label: __('Facebook Auth'),
+          },
+        ],
+        noForm: true,
+      }, {
+        id: 'username',
+        label: __('Public User Name'),
+        defaultValue: 'Empty Wanted',
+        type: 'text',
+        maxLength: '129',
+        validator: validator({
+          rules: 'utf8Len:[1, 128]',
+        }),
+      }, {
+        id: 'password',
+        label: __('Public Password'),
+        type: 'password',
+        maxLength: '128',
+        validator: validator({
+          rules: 'pwd',
+        }),
+      }, {
+        id: 'sessiontime',
+        label: __('Sesssion Time'),
+        type: 'number',
+        min: '0',
+        max: '99999',
+        validator: validator({
+          rules: 'num:[0,99999]',
+        }),
+      }, {
+        id: 'url',
+        label: __('URL After Authentication'),
+        type: 'text',
+        validator: validator({
+          rules: 'utf8Len:[0, 255]',
+        }),
+      },
+    ],
+  },
 
 ]);
 
