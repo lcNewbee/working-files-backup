@@ -60,7 +60,6 @@ const listOptions = fromJS([
   }, {
     id: 'domain',
     text: __('Domain'),
-    noForm: true,
     formProps: {
       noAdd: true,
       type: 'text',

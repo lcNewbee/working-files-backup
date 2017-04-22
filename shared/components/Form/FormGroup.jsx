@@ -33,6 +33,7 @@ const propTypes = {
   style: PropTypes.object,
   inputStyle: PropTypes.object,
   children: PropTypes.node,
+  appendRender: PropTypes.func,
   'data-label': PropTypes.string,
   form: PropTypes.string,
   showLabel: PropTypes.bool,
@@ -191,7 +192,7 @@ class FormGroup extends React.Component {
     const {
       required, role, id, label, display, disabled, name, value, type,
     } = this.props;
-    const { style, help, children, errMsg, showLabel, className, ...restProps } = this.props;
+    const { style, help, children, errMsg, showLabel, className, appendRender, ...restProps } = this.props;
     const { check, checkClear } = this;
     let groupClassName = 'form-group';
 
@@ -271,7 +272,9 @@ class FormGroup extends React.Component {
               />
             )
           }
-
+          {
+            appendRender ? appendRender() : null
+          }
           {
             help ? <span className="help">{help}</span> : null
           }

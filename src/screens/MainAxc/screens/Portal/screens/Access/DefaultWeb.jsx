@@ -59,6 +59,20 @@ export default class View extends React.PureComponent {
                 disabled={!this.actionable}
               />
             </FormGroup>
+            <FormGroup label={__('预览')} >
+              <span>
+                <a className="tablelink" href={`http://${window.location.hostname}:8080/auth.jsp`} target="_blank">{__('Auth')}</a>
+                <a className="tablelink" href={`http://${window.location.hostname}:8080/ok.jsp`}  target="_blank">{__('Success')}</a>
+                <a className="tablelink" href={`http://${window.location.hostname}:8080/out.jsp`} target="_blank">{__('Exit')}</a>
+                <a
+                  className="tablelink"
+                  href={`http://${window.location.hostname}:8080/wx.jsp`}
+                  target="_blank"
+                >
+                  {__('Wechat')}
+                </a>
+              </span>
+            </FormGroup>
           </fieldset>
 
           <fieldset className="o-form__fieldset">

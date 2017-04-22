@@ -98,15 +98,6 @@ if (window.guiConfig.versionCode >= 20500) {
   $$radioAdvanceFormOptions = $$radioAdvanceFormOptions.concat(radioQos);
 }
 const listOptions = fromJS([
-  // {
-  //   id: 'devicename',
-  //   width: '180',
-  //   text: `${__('MAC Address')}/${__('Name')}`,
-  //   maxLength: '31',
-  //   transform(val, item) {
-  //     return item.get('devicename') || item.get('mac');
-  //   },
-  // },
   {
     id: 'devicename',
     width: '180',
@@ -143,7 +134,7 @@ const listOptions = fromJS([
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 
-      return `${upRate}/${downRate}`;
+      return `${upRate}↓/${downRate}↑`;
     },
   }, {
     id: 'operationhours',

@@ -351,6 +351,7 @@ const settingsOptions = fromJS([
   //     },
   //   ],
   // },
+
 ]);
 
 export default class View extends React.Component {

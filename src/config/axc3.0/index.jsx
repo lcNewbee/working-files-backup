@@ -172,8 +172,8 @@ const sPortalBase =
     require('../../screens/MainAxc/screens/Portal/screens/Access/Base');
 // const sPortalBas =
     // require('../../screens/MainAxc/screens/Portal/screens/Access/Bas');
-const sPortalUrlParams =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/UrlParams');
+// const sPortalUrlParams =
+//     require('../../screens/MainAxc/screens/Portal/screens/Access/UrlParams');
 const sPortalWeb =
     require('../../screens/MainAxc/screens/Portal/screens/Access/Web');
 const sPortalDefaultWeb =
