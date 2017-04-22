@@ -93,7 +93,19 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
     },
-  }, {
+  },
+  {
+    id: 'ssid',
+    text: _('SSID'),
+    formProps: {
+      type: 'text',
+      maxLength: '129',
+      validator: validator({
+        rules: 'utf8Len:[1, 128]',
+      }),
+    },
+  },
+  {
     id: 'des',
     text: _('Description'),
     noTable: true,
@@ -123,16 +135,6 @@ const listOptions = fromJS([
 
     },
   }, {
-    id: 'ssid',
-    text: _('SSID'),
-    formProps: {
-      type: 'text',
-      maxLength: '129',
-      validator: validator({
-        rules: 'utf8Len:[1, 128]',
-      }),
-    },
-  }, {
     id: 'apid',
     text: _('AP ID'),
     noForm: true,
@@ -155,7 +157,7 @@ export default class View extends React.Component {
       macOptions: fromJS([]),
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     getWebTemplate()
       .then((data) => {
         this.setState({
@@ -169,10 +171,12 @@ export default class View extends React.Component {
         });
       });
   }
+
   render() {
     const curListOptions = listOptions
       .setIn([4, 'options'], this.state.webTemplateOptions)
       .setIn([5, 'options'], this.state.macOptions);
+
     return (
       <AppScreen
         {...this.props}

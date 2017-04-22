@@ -118,17 +118,8 @@ const listOptions = fromJS([
       label: __('Equipment Type'),
       placeholder: __('Please Select ') + __('Equipment Type'),
     },
-  }, {
-    id: 'description',
-    text: __('Description'),
-    formProps: {
-      type: 'textarea',
-      maxLength: '256',
-      validator: validator({
-        rules: 'utf8Len:[1,255]',
-      }),
-    },
-  }, {
+  },
+  {
     id: 'ex1',
     text: __('is Delegated'),
     defaultValue: '0',
@@ -145,6 +136,17 @@ const listOptions = fromJS([
     formProps: {
       type: 'switch',
       required: true,
+    },
+  },
+  {
+    id: 'description',
+    text: __('Description'),
+    formProps: {
+      type: 'textarea',
+      maxLength: '256',
+      validator: validator({
+        rules: 'utf8Len:[1,255]',
+      }),
     },
   },
 ]);

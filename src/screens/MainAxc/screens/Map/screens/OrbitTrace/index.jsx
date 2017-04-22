@@ -169,9 +169,6 @@ const propTypes = {
 };
 const defaultProps = {};
 const defaultQuery = {
-  buildId: '',
-  curMapId: '',
-  mac: '',
   date: moment().format('YYYY-MM-DD'),
   fromTime: '00:00:00',
   toTime: '23:59:59',
@@ -600,7 +597,7 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         initOption={{
-          //query: defaultQuery,
+          query: defaultQuery,
         }}
       >
         <div

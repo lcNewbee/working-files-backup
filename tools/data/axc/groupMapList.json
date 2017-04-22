@@ -12,7 +12,7 @@
         "length": 120,
         "lat": 43.23123231,
         "lng": 123.2312323,
-        "backgroundImg": "images/map_bg1.jpg"
+        "backgroundImg": "images/map_bg.jpg"
       }, {
         "id": 2,
         "mapName": "Floor Two",

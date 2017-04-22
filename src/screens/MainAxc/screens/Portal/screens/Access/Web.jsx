@@ -51,6 +51,8 @@ const listOptions = fromJS([
     id: 'adv',
     text: __('Ads Page'),
     width: '120px',
+    noForm: true,
+    noTable: true,
     options: [
       {
         value: '1',
@@ -66,6 +68,8 @@ const listOptions = fromJS([
     id: 'countShow',
     text: __('Show Times'),
     defaultValue: '150',
+    noForm: true,
+    noTable: true,
     formProps: {
       type: 'number',
       min: '0',
@@ -78,6 +82,8 @@ const listOptions = fromJS([
     id: 'countAuth',
     text: __('Click Times'),
     defaultValue: '100',
+    noTable: true,
+    noForm: true,
     type: 'number',
     formProps: {
       min: '0',
@@ -200,7 +206,7 @@ export default class View extends React.Component {
         }}
         queryFormOptions={queryFormOptions}
         deleteable={
-          ($$item, index) => (index !== 0)
+          ($$item, index) => (index >= 6)
         }
       />
     );

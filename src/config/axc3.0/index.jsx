@@ -103,7 +103,7 @@ const sApList = require('../../screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/MainAxc/screens/Monitor/screens/SafeStatus');
 const sWirelessAcl = require('../../screens/MainAxc/screens/WLAN/screens/Acl');
 const sSsidSettings =
-    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
+    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings/index2.0');
 const sSmartRf =
     require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
 const sTimerPolicy =
@@ -570,7 +570,7 @@ const routes = [
                     id: 'portalRadiusNas',
                     path: '/main/portal/radius/nas',
                     formUrl: 'goform/portal/radius/nas',
-                    text: __('NAS List'),
+                    text: __('Local Server List'),
                     component: sPortalNas.Screen,
                   },
                   {
@@ -591,59 +591,13 @@ const routes = [
                 component: sNetworkAaa.Screen,
               },
               {
-                id: 'networkPortal',
-                icon: 'copy',
-                text: __('Portal Policy'),
-                noTree: true,
-                component: SharedComponents.TabContainer,
-                path: '/main/portal/portal',
-                indexPath: '/main/portal/portal/server',
-                routes: [
-                  {
-                    id: 'portalServer',
-                    path: '/main/portal/portal/server',
-                    formUrl: 'goform/network/portal/server',
-                    text: __('Server'),
-                    component: sPortalServer.Screen,
-                  }, {
-                    id: 'portalRules',
-                    path: '/main/portal/portal/rules',
-                    formUrl: 'goform/network/portal/rule',
-                    text: __('Rules'),
-                    component: sPortalRules.Screen,
-                  },
-                  {
-                    id: 'portalMac',
-                    path: '/main/portal/portal/mac',
-                    formUrl: 'goform/network/portal/mac',
-                    text: __('White List'),
-                    component: sPortalMac.Screen,
-                  },
-                  {
-                    id: 'portalAccessWeb',
-                    path: '/main/portal/portal/web',
-                    formUrl: 'goform/portal/access/web',
-                    text: __('Templates'),
-                    component: sPortalWeb.Screen,
-                  },
-                  {
-                    id: 'portalAccessDefaultWeb',
-                    path: '/main/portal/portal/defaultweb',
-                    formUrl: 'goform/portal/access/defaultweb',
-                    text: __('Template Settings'),
-                    component: sPortalDefaultWeb.Screen,
-                  },
-                ],
-              },
-              {
                 id: 'portalAccess',
                 isIndex: true,
                 path: '/main/portal/access',
                 icon: 'link',
-                text: __('Access Auth'),
+                text: __('Portal Server'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexPath: '/main/portal/access/config',
                 routes: [
                   {
                     id: 'portalAccessBase',
@@ -652,7 +606,13 @@ const routes = [
                     text: __('Base'),
                     component: sPortalBase.Screen,
                   },
-
+                  {
+                    id: 'portalSsidManagement',
+                    path: '/main/portal/access/ssidmanagement',
+                    formUrl: 'goform/portal/access/ssidmanagement',
+                    text: __('SSIDs'),
+                    component: sPortalSsid.Screen,
+                  },
                   {
                     id: 'portalWechat',
                     path: '/main/portal/access/weixin',
@@ -675,11 +635,49 @@ const routes = [
                     component: sPortalSMSGateWay.Screen,
                   },
                   {
-                    id: 'portaSsidManagement',
-                    path: '/main/portal/access/ssidmanagement',
-                    formUrl: 'goform/portal/access/ssidmanagement',
-                    text: __('SSID Management'),
-                    component: sPortalSsid.Screen,
+                    id: 'portalAccessWeb',
+                    path: '/main/portal/access/web',
+                    formUrl: 'goform/portal/access/web',
+                    text: __('Web Template'),
+                    component: sPortalWeb.Screen,
+                  },
+                  // {
+                  //   id: 'portalAccessDefaultWeb',
+                  //   path: '/main/portal/access/defaultweb',
+                  //   formUrl: 'goform/portal/access/defaultweb',
+                  //   text: __('Web Template'),
+                  //   component: sPortalDefaultWeb.Screen,
+                  // },
+                ],
+              },
+              {
+                id: 'networkPortal',
+                icon: 'copy',
+                text: __('Portal Policy'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                path: '/main/portal/portal',
+                routes: [
+                  {
+                    id: 'portalServer',
+                    path: '/main/portal/portal/server',
+                    formUrl: 'goform/network/portal/server',
+                    text: __('Portal Template'),
+                    component: sPortalServer.Screen,
+                  },
+                  {
+                    id: 'portalRules',
+                    path: '/main/portal/portal/rules',
+                    formUrl: 'goform/network/portal/rule',
+                    text: __('Rules'),
+                    component: sPortalRules.Screen,
+                  },
+                  {
+                    id: 'portalMac',
+                    path: '/main/portal/portal/mac',
+                    formUrl: 'goform/network/portal/mac',
+                    text: __('White List'),
+                    component: sPortalMac.Screen,
                   },
                 ],
               },

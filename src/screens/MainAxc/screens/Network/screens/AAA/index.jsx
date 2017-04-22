@@ -82,6 +82,16 @@ const listOptions = fromJS([
       }),
     },
   }, {
+    id: 'radius_template',
+    text: __('Radius Template'),
+    formProps: {
+      label: __('Radius Template'),
+      required: true,
+      type: 'select',
+      placeholder: __('Please Select ') + __('Radius Template'),
+      options: [],
+    },
+  }, {
     id: 'auth_accesstype',
     text: __('Access Type'),
     defaultValue: 'portal',
@@ -102,16 +112,6 @@ const listOptions = fromJS([
       required: true,
       type: 'switch',
       placeholder: __('Please Select ') + __('Rules Group'),
-    },
-  }, {
-    id: 'radius_template',
-    text: __('Radius Template'),
-    formProps: {
-      label: __('Radius Template'),
-      required: true,
-      type: 'select',
-      placeholder: __('Please Select ') + __('Radius Template'),
-      options: [],
     },
   },
 ]);
@@ -156,7 +156,7 @@ export default class View extends React.Component {
 
   render() {
     const myListOptions = listOptions.setIn(
-      [-1, 'formProps', 'options'],
+      [1, 'formProps', 'options'],
       this.state.radiusOptions,
     );
     return (

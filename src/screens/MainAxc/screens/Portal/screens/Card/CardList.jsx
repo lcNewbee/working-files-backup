@@ -191,6 +191,7 @@ const listOptions = fromJS([
     id: 'maclimit',
     text: __('Mac Limit'),
     noForm: true,
+    noTable: true,
     formProps: {
       type: 'select',
       required: true,
@@ -207,6 +208,7 @@ const listOptions = fromJS([
   }, {
     id: 'maclimitcount',
     noForm: true,
+    noTable: true,
     text: __('Mac Quantity'),
     formProps: {
       type: 'number',
@@ -238,6 +240,7 @@ const listOptions = fromJS([
     id: 'speed',
     text: __('Speed Limit'),
     noForm: true,
+    noTable: true,
     formProps: {
       type: 'select',
       required: true,

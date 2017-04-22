@@ -52,6 +52,7 @@ const listOptions = fromJS([
   }, {
     id: 'endDate',
     text: __('Offline Date'),
+    noTable: true,
     formProps: {
       type: 'text',
       required: true,

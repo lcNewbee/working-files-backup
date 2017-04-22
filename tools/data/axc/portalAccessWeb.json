@@ -13,13 +13,55 @@
       "nextPage":-1,
       "lastPage":1
       },
-    "list": [{
-      "id":"1",
-      "name":"default",
-      "countShow":"0",
-      "countAuth":"0",
-      "description":"decription",
-      "adv":"OpenPortal"
-    }]
+    "list": [
+      {
+        "id":"1",
+        "name":"One Key",
+        "countShow":"0",
+        "countAuth":"0",
+        "description":"One Key Auth",
+        "adv":"OpenPortal"
+      },
+      {
+        "id":"2",
+        "name":"Account",
+        "countShow":"0",
+        "countAuth":"0",
+        "description":"Account Auth",
+        "adv":"OpenPortal"
+      },
+      {
+        "id":"3",
+        "name":"Wechat",
+        "countShow":"0",
+        "countAuth":"0",
+        "description":"Wechat Auth",
+        "adv":"OpenPortal"
+      },
+      {
+        "id":"4",
+        "name":"Facebook",
+        "countShow":"0",
+        "countAuth":"0",
+        "description":"Facebook Auth",
+        "adv":"OpenPortal"
+      },
+      {
+        "id":"5",
+        "name":"SNS",
+        "countShow":"0",
+        "countAuth":"0",
+        "description":"SNS Auth",
+        "adv":"OpenPortal"
+      },
+      {
+        "id":"6",
+        "name":"ALL",
+        "countShow":"0",
+        "countAuth":"0",
+        "description":"One Key Auth,Account,Wechat,Facebook,SNS",
+        "adv":"OpenPortal"
+      }
+    ]
   }
 }

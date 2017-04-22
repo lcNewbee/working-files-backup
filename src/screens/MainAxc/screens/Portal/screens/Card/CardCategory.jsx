@@ -79,6 +79,8 @@ const listOptions = fromJS([
   }, {
     id: 'maclimit',
     text: __('Mac Limit'),
+    noForm: true,
+    noTable: true,
     formProps: {
       type: 'select',
       required: true,
@@ -95,6 +97,8 @@ const listOptions = fromJS([
   }, {
     id: 'maclimitcount',
     text: __('Mac Quantity'),
+    noForm: true,
+    noTable: true,
     formProps: {
       type: 'number',
       required: true,
@@ -107,6 +111,8 @@ const listOptions = fromJS([
   }, {
     id: 'autologin',
     text: __('Auto Login'),
+    noForm: true,
+    noTable: true,
     options: [
       {
         value: '0',
@@ -124,6 +130,8 @@ const listOptions = fromJS([
   }, {
     id: 'speed',
     text: __('Speed Limit'),
+    noForm: true,
+    noTable: true,
     formProps: {
       type: 'select',
       required: true,

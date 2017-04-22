@@ -9,6 +9,23 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
 const listOptions = fromJS([
+  // {
+  //   id: 'template_type',
+  //   label: __('Server Type'),
+  //   options: [
+  //     {
+  //       value: 'remote',
+  //       label: __('Remote Server'),
+  //     }, {
+  //       value: 'local',
+  //       label: __('Local Server'),
+  //     },
+  //   ],
+  //   formProps: {
+  //     type: 'switch',
+  //     required: true,
+  //   },
+  // },
   {
     id: 'template_name',
     label: __('Server Name'),
