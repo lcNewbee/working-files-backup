@@ -1,12 +1,12 @@
 <?php
-class NetworkAaa_Model extends CI_Model {
+class AaaServer_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('array');
 	}
 
-    function get_aaa_list() {
+    function get_list() {
         $result = null;
         $query=$this->db->select('domain_id,domain_name,attr_name,attr_value')
                         ->from('domain_params')

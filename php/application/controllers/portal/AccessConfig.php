@@ -25,7 +25,7 @@ class AccessConfig extends CI_Controller {
 		$result = null;
 		$actionType = element('action', $data);
 		switch($actionType) {
-            case 'setting' : $result = $this->AccessConfig_Model->edit_accesss($data);
+            case 'setting' : $result = $this->AccessConfig_Model->setting($data);
                 break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;

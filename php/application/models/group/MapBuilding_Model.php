@@ -5,36 +5,49 @@ class MapBuilding_Model extends CI_Model {
 		parent::__construct();
 		$this->load->database();
         $this->mysql = $this->load->database('mysqli', TRUE);  
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
 		$this->load->library('SqlPage');			
 	}
-    public function get_building_list($data) {   
-        $sqlpage = new SqlPage();        
-		$columns = 'id,lat,lng,address,name,mapnumber as mapNumber,marktype';
-		$tablenames = 'map_list';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);		
-        $datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);
+    public function get_building_list($data) {  
+        $parameter = array(
+            'db' => $this->db, 
+            'columns' => 'id,lat,lng,address,name,mapnumber as mapNumber,marktype', 
+            'tablenames' => 'map_list', 
+            'pageindex' => (int) element('page', $data, 1), 
+            'pagesize' => (int) element('size', $data, 20), 
+            'wheres' => "1=1", 
+            'joins' => array(), 
+            'order' => array()
+        );
+        if(isset($data['groupid'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND groupid={$data['groupid']}";
+        }
+        $datalist = help_data_page_all($parameter);
         $arr = array(
             'state' => array('code'=>2000,'msg'=>'ok'),
             'data' => array(
                 'settings'=> $this->get_map_type(),//地图api
-                'list' => $datalist['data']
+                'list' => $datalist['data'],
+                'sql' => $datalist['sqlcmd']
             )
         );    
-		return json_encode($arr);     
+		return json_encode($arr); 
     }
     public function add_building($data) {
-        $result = null;
+        if( $this->isName($data['groupid'], $data['name']) ){
+            return json_encode(json_no('name repeat!'));
+        }
+        $result = null;        
         $arr = array(
-            'lat' => (float)element('lat',$data),
-            'lng' => (float)element('lng',$data),
-            'address' => element('address',$data),
-            'name' => element('name',$data),
-            'mapnumber' => 1,
+            'groupid' => element('groupid', $data), 
+            'lat' => (float)element('lat', $data), 
+            'lng' => (float)element('lng', $data), 
+            'address' => element('address', $data), 
+            'name' => element('name', $data), 
+            'mapnumber' => 1, 
             'marktype' => 'building'
         );
-        if( $this->db->insert('map_list', $arr) ) {
+        if ($this->db->insert('map_list', $arr)) {
             $result = json_ok();
         }
         return json_encode($result);
@@ -94,6 +107,14 @@ class MapBuilding_Model extends CI_Model {
         $result = $result ? json_ok() : josn_no('config error');
         return json_encode($result);
     }
+
+    private function isName($groupid, $name) {
+        if( is_columns($this->db, 'name', 'map_list', "where groupid={$groupid} AND name='{$name}'") ){
+            return True;
+        }
+        return FALSE;
+    }
+
     //delete map_son_list
     public function del_son_list($id) {     
         $querydata = $this->db->query("select id,imgpath from map_son_list where id=".$id);

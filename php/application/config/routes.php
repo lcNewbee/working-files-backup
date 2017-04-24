@@ -62,7 +62,6 @@ $route['goform/network/dhcp/relay'] = 'network/networkDhcpRelay';
 $route['goform/network/nat'] = 'network/networkNat';
 $route['goform/network/route'] = 'network/networkRoute';
 $route['goform/network/aci'] = 'network/networkAci';
-$route['goform/network/Aaa'] = 'network/networkAaa';
 $route['goform/network/portal/server'] = 'network/networkPortalServer';
 $route['goform/network/portal/rule'] = 'network/networkPortalRules';
 $route['goform/network/portal/mac'] = 'network/networkPortalMac';
@@ -151,6 +150,7 @@ $route['goform/portal/access/portalsmslog'] = 'portal/AccessSmslog';
 $route['goform/portal/access/ssidmanagement'] = 'portal/AccessSsid';
 $route['goform/portal/access/ap'] = 'portal/AccessSsid/apmac';
 $route['goform/portal/access/facebook'] = 'portal/AccessFacebook';
+$route['goform/portal/Aaa'] = 'portal/AaaServer';
 
 
 

@@ -7,12 +7,8 @@ class MapBuilding extends CI_Controller {
 		$this->load->database();
         $this->load->model('group/MapBuilding_Model');
 	}
-	function fetch() {
-		$retdata = array(
-			'page' => (int)element('page', $_GET),
-			'size' => (int)element('size', $_GET,0)
-		);        
-        return $this->MapBuilding_Model->get_building_list($retdata);
+	function fetch() {		       
+        return $this->MapBuilding_Model->get_building_list($_GET);
 	} 
 	function onAction($data) {
 		$result = null;

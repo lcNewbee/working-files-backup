@@ -11,17 +11,19 @@ class MapOrbit_Model extends CI_Model {
         $macList = array();
 		if( empty($data['groupid']) || empty($data['curMapId']) ){			
 			return json_encode(json_no('Parameter error !'));
-		}                     
+		}   
+		if( $data['curMapId'] == "" || $data['curMapId'] == null || $data['curMapId'] = "undefined") {
+			return json_encode(json_no('Parameter error,  curMapId!'));
+		}
         $build_id = $data['curMapId'];//区域id
         $groupid = $data['groupid'];
-        $sta_mac = $data['mac'];    
+        $sta_mac = element('mac', $data, null);
         $strtime = $data['date'].' '.$data['fromTime'];
         $endtime = $data['date'].' '.$data['toTime'];
         
 		$datalist = $this->get_sta_mac($build_id);
 		if(count($datalist['ap_mac']) > 0){
 			$sql = "select StaMac from sta_flow_sample where Timer>= '{$strtime}' and Timer<='{$endtime}' and ApGroupId={$groupid} and ApMac in({$datalist['where_in']}) group by StaMac LIMIT 1";
-
 			$query = $this->mysql->query($sql);
 			foreach($query->result_array() as $row){
 				$macList[] = $row['StaMac'];

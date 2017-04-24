@@ -1,11 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class NetworkAaa extends CI_Controller {
+class AaaServer extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->database();
         $this->load->helper('array');
-        $this->load->model('network/NetworkAaa_Model');
+        $this->load->model('portal/AaaServer_Model');
     }
     public function index() {
         $result = null;
@@ -19,18 +19,18 @@ class NetworkAaa extends CI_Controller {
         }
     }
     function fetch(){
-        return $this->NetworkAaa_Model->get_aaa_list();
+        return $this->AaaServer_Model->get_list();
     }
     
     function onAction($data) {
         $result = null;
         $actionType = element('action', $data);
         switch($actionType) {
-            case 'add' : $result = $this->NetworkAaa_Model->add_aaa_template($data);
+            case 'add' : $result = $this->AaaServer_Model->add_aaa_template($data);
                 break;
-            case 'delete' : $result = $this->NetworkAaa_Model->del_aaa_template($data);
+            case 'delete' : $result = $this->AaaServer_Model->del_aaa_template($data);
                 break;
-            case 'edit' : $result = $this->NetworkAaa_Model->edit_aaa_template($data);
+            case 'edit' : $result = $this->AaaServer_Model->edit_aaa_template($data);
                 break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
