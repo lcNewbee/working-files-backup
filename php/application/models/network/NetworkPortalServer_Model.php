@@ -66,15 +66,16 @@ class NetworkPortalServer_Model extends CI_Model {
         $result = portal_edit_template_name(json_encode($temp_data));
         return $result;
     }
-    function getCgiParam($data) {
+    private function getCgiParam($data) {
         $retData = array(
-            'template_name'=>element('template_name', $data),
-            'auth_accesstype'=>element('address_type', $data),
-            'server_ipaddr'=>element('server_ipaddr', $data),
-            'server_port'=>element('server_port', $data),
-            'server_key'=>element('server_key', $data),
-            'server_url'=>element('server_url', $data),
-            'ac_ip'=>element('ac_ip', $data)
+            'template_name' => element('template_name', $data), 
+            'auth_domain' => element('auth_domain', $data), 
+            'auth_accesstype' => element('address_type', $data), 
+            'server_ipaddr' => element('server_ipaddr', $data), 
+            'server_port' => element('server_port', $data), 
+            'server_key' => element('server_key', $data), 
+            'server_url' => element('server_url', $data), 
+            'ac_ip' => element('ac_ip', $data)
         );
         return $retData;
     }

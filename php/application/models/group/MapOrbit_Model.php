@@ -12,7 +12,7 @@ class MapOrbit_Model extends CI_Model {
 		if( empty($data['groupid']) || empty($data['curMapId']) ){			
 			return json_encode(json_no('Parameter error !'));
 		}   
-		if( $data['curMapId'] == "" || $data['curMapId'] == null || $data['curMapId'] = "undefined") {
+		if( $data['curMapId'] == "" || $data['curMapId'] == null || $data['curMapId'] == "undefined") {
 			return json_encode(json_no('Parameter error,  curMapId!'));
 		}
         $build_id = $data['curMapId'];//区域id

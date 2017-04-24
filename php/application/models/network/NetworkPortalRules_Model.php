@@ -70,7 +70,7 @@ class NetworkPortalRules_Model extends CI_Model {
         $result = portal_del_template_attr(json_encode($temp_data));
         return $result;
     }
-    function getCgiParam($oriData) {
+    private function getCgiParam($oriData) {
         $retData = array(
             'template_name'=>(string)element('template_name', $oriData,''),
             'interface_bind'=>(string)element('interface_bind', $oriData,''),
@@ -78,7 +78,6 @@ class NetworkPortalRules_Model extends CI_Model {
             'auth_mode'=>(string)element('auth_mode', $oriData,''),
             'auth_ip'=>(string)element('auth_ip', $oriData,''),
             'auth_mask'=>(string)element('auth_mask', $oriData,''),
-            'auth_domain'=>(string)element('auth_domain', $oriData,''),
             'idle_test'=>(string)element('idle_test', $oriData,'')
         );
         return $retData;
