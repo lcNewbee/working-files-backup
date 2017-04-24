@@ -7,7 +7,7 @@ class NetworkPortalServer_Model extends CI_Model {
 	}
     function get_portalsev_list() {
         $result = null;
-		$query = $this->db->select('portal_id,portal_name,attr_name,attr_value')
+		$query = $this->db->select('portal_id,portal_name,attr_name,attr_value,portal_auth.id as aaa_id')
                             ->from('portal_server')
                             ->join('portal_auth', 'portal_auth.id=portal_server.portal_id')
                             ->join('portalserver_attr', 'portalserver_attr.id=portalserver_params.attr_id')
@@ -22,7 +22,7 @@ class NetworkPortalServer_Model extends CI_Model {
             "server_port" => "server_port",
             "server_key" => "server_key",
             "redirect_url" => "server_url",
-            "ac_ip" => "ac_ip",
+            "ac_ip" => "ac_ip"            
         );
 		//定义一个临时接口数组
 		$server_data = array();
@@ -30,6 +30,7 @@ class NetworkPortalServer_Model extends CI_Model {
 			$server_data[$v['portal_id']]['id'] = $v['portal_id'];
 			$server_data[$v['portal_id']]['template_name'] = $v['portal_name'];
 			$server_data[$v['portal_id']][$v['attr_name']] = $v['attr_value'];
+            $server_data[$v['portal_id']]['auth_domain'] = $this->getAuthDomain($v['aaa_id']);
 			foreach ($keyname as $k1 => $v1) {
 				if ($k1 == $v['attr_name']) {
 					unset($server_data[$v['portal_id']][$v['attr_name']]);
@@ -78,5 +79,15 @@ class NetworkPortalServer_Model extends CI_Model {
             'ac_ip' => element('ac_ip', $data)
         );
         return $retData;
+    }
+
+    private function getAuthDomain($id) {
+        //attr_id = 3 代表auth_domain
+        $sql = "SELECT `attr_value` FROM `portal_params` WHERE `portal_id`={$id} AND `attr_id`=3";
+        $obj = $this->db->query($sql)->row();
+        if(isset($obj->attr_value)){
+            return $obj->attr_value;
+        }
+        return '';
     }
 }
