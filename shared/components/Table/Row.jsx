@@ -59,6 +59,11 @@ class Row extends Component {
           }
 
           return myOption ? (
+            /* ******************************************************
+            width:调整表格项的宽度。
+            paddingLeft：调整表头标题的位置
+            marginLeft：调整表头标题的位置，相当于paddingLeft的负值
+            ********************************************************/
             <MyCompeont
               key={`tableRow${myOption.id}`}
               style={{
@@ -66,7 +71,11 @@ class Row extends Component {
                 paddingLeft: myOption.paddingLeft,
               }}
             >
-              <span>{myOption.text || myOption.label}</span>
+              <span
+                style={{ marginLeft: myOption.marginLeft }}
+              >
+                {myOption.text || myOption.label}
+              </span>
               {
                 myOption.sortable ? (
                   <Icon

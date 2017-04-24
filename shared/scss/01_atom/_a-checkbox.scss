@@ -44,10 +44,21 @@
       }
     }
 
-    &:checked {
+    &:not([disabled]):checked {
       & + label {
         padding-left: 15px;
         background-color: $g-brand-primary;
+
+        &::before {
+          color: #fff;
+        }
+      }
+    }
+
+    &[disabled]:checked {
+      & + label {
+        padding-left: 15px;
+        background-color: rgba(0, 147, 221, 0.5);
 
         &::before {
           color: #fff;

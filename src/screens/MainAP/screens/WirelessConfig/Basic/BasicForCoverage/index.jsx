@@ -218,7 +218,8 @@ export default class Basic extends React.Component {
         {
           id: 'enable',
           label: __('Enable'),
-          width: '300px',
+          width: '200px',
+          marginLeft: '3px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
@@ -229,9 +230,6 @@ export default class Basic extends React.Component {
                 checked={val === '1'}
                 disabled={flag}
                 onChange={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
-                style={{
-                  marginLeft: '-3px',
-                }}
               />
             );
           }.bind(this),
@@ -240,6 +238,7 @@ export default class Basic extends React.Component {
           id: 'ssid',
           label: __('SSID'),
           width: '250px',
+          paddingLeft: '60px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
@@ -249,7 +248,6 @@ export default class Basic extends React.Component {
                 value={val}
                 disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={(data) => {
-                  console.log('data.value.length', utils.getUtf8Length(data.value), data.value, data.value.length);
                   const ssid = item.get('ssid');
                   const str = ssid.replace(/(^\s*)|(\s*$)/g, '');
                   if (str === '' && data.value === ' ') return null;
@@ -258,7 +256,6 @@ export default class Basic extends React.Component {
                   }
                 }}
                 style={{
-                  marginLeft: '-60px',
                   height: '29px',
                 }}
               />
@@ -269,10 +266,8 @@ export default class Basic extends React.Component {
           id: 'vlanId',
           label: __('VLAN ID'),
           width: '250px',
+          paddingLeft: '30px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.store
-            //                 .getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <FormInput
                 type="number"
@@ -285,7 +280,6 @@ export default class Basic extends React.Component {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
                 }}
                 style={{
-                  marginLeft: '-30px',
                   height: '29px',
                   width: '100px',
                 }}
@@ -297,10 +291,8 @@ export default class Basic extends React.Component {
           id: 'maxClients',
           label: __('Max Clients'),
           width: '250px',
+          paddingLeft: '22px',
           transform: function (val, item) {
-            // if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
-            //   this.onSsidItemChange(val, item, 'maxClients', '64');
-            // } // 后台没传值，或值错误，则提供默认值
             return (
               <FormInput
                 type="number"
@@ -308,12 +300,10 @@ export default class Basic extends React.Component {
                 max="512"
                 min="1"
                 defaultValue="64"
-                // disabled={pos === 0 || vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'maxClients', data.value);
                 }}
                 style={{
-                  marginLeft: '-22px',
                   height: '29px',
                   width: '100px',
                 }}
@@ -325,16 +315,15 @@ export default class Basic extends React.Component {
           id: 'airTimeEnable',
           label: __('Airtime Fairness'),
           width: '250px',
+          paddingLeft: '-30px',
           transform: function (val, item) {
             return (
               <FormInput
                 type="checkbox"
                 checked={val === '1'}
-                // disabled={airTimeEnable === 0}
                 onChange={
                   () => this.onSsidItemChange(val, item, 'airTimeEnable', (val === '1' ? '0' : '1'))
                 }
-                style={{ marginLeft: '30px' }}
               />
             );
           }.bind(this),
@@ -348,7 +337,6 @@ export default class Basic extends React.Component {
               <FormInput
                 type="checkbox"
                 checked={val === '1'}
-                // disabled={pos === 0}
                 onChange={
                   () => this.onSsidItemChange(val, item, 'hideSsid', (val === '1' ? '0' : '1'))
                 }
@@ -360,16 +348,15 @@ export default class Basic extends React.Component {
           id: 'isolation',
           label: __('Client Isolation'),
           width: '200px',
+          marginLeft: '-20px',
           transform: function (val, item) {
             return (
               <FormInput
                 type="checkbox"
                 checked={val === '1'}
-                // disabled={pos === 0}
                 onChange={
                   () => this.onSsidItemChange(val, item, 'isolation', (val === '1' ? '0' : '1'))
                 }
-                style={{ marginLeft: '20px' }}
               />
             );
           }.bind(this),
@@ -394,6 +381,7 @@ export default class Basic extends React.Component {
           id: 'security',
           label: __('Security'),
           width: '200px',
+          paddingLeft: '8px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
@@ -417,24 +405,23 @@ export default class Basic extends React.Component {
           id: 'speedLimit',
           label: __('Speed Limit'),
           width: '200px',
+          marginLeft: '-8px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <div style={{ marginLeft: '7px' }}>
-                <Button
-                  text={__('Edit')}
-                  icon="pencil-square"
-                  size="sm"
-                  onClick={() => {
-                    const tableItemForSsid = fromJS({}).set('val', val)
-                          .set('item', item).set('isShow', '0')
-                          .set('pos', pos);
-                    this.props.changeShowSpeedLimitModal(true);
-                    this.props.changeTableItemForSsid(tableItemForSsid);
-                  }}
-                />
-              </div>
+              <Button
+                text={__('Edit')}
+                icon="pencil-square"
+                size="sm"
+                onClick={() => {
+                  const tableItemForSsid = fromJS({}).set('val', val)
+                        .set('item', item).set('isShow', '0')
+                        .set('pos', pos);
+                  this.props.changeShowSpeedLimitModal(true);
+                  this.props.changeTableItemForSsid(tableItemForSsid);
+                }}
+              />
             );
           }.bind(this),
         },
@@ -463,7 +450,6 @@ export default class Basic extends React.Component {
   }
 
   componentWillMount() {
-    // console.log(this.props.app.get('radioSelectOptions'));
     this.firstInAndRefresh();
   }
 
@@ -490,7 +476,6 @@ export default class Basic extends React.Component {
         let dataToSave = this.props.store.getIn(['curData', 'radioList', radioId]);
         let dataFromServer = this.props.store.getIn([curSettingId, 'data', 'radioList', radioId]);
 
-        // console.log('dataFromServer', dataFromServer.toJS());
         // 根据保存按钮，重新组织需要保存的数据（因为两部分数据是一个接口，所以要区分）
         if (validID === 'radioSettings') {
           const firstVap = dataToSave.getIn(['vapList', 0]);
@@ -693,7 +678,6 @@ export default class Basic extends React.Component {
     const curData = this.props.store.get('curData');
     const itemNum = curData.getIn(['radioList', radioId, 'vapList']).keyOf(item);
     const newItem = item.set(valId, newVal);
-    // console.log('item', item, newItem);
     const vapList = curData.getIn(['radioList', radioId, 'vapList']).set(itemNum, newItem);
     const radioList = this.props.store.getIn(['curData', 'radioList'])
                           .setIn([radioId, 'vapList'], vapList);
@@ -1980,7 +1964,6 @@ export default class Basic extends React.Component {
                     const vapList = curData.getIn(['radioList', radioId, 'vapList']).toJS();
                     const radioClientLimit = curData.getIn(['radioList', radioId, 'maxRadioClients']);
                     const len = curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? 1 : vapList.length;
-                    // console.log('len', curData.getIn([radioId, 'wirelessMode']));
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
                       if (!re.test(vapList[i].vlanId)) {
@@ -2181,7 +2164,6 @@ export default class Basic extends React.Component {
 
               const secur = securDefault.merge(currentSecur)
                             .set('mode', data.value).set('key', '');
-              // console.log('currentSecur', currentSecur.toJS(), secur.toJS());
               const newItem = tableItemForSsid.get('item').set('security', secur);
               const newItemForSsid = tableItemForSsid.set('item', newItem);
               this.props.changeTableItemForSsid(newItemForSsid);
@@ -2307,7 +2289,6 @@ Basic.propTypes = propTypes;
 Basic.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
-  // console.log('state.basic', state.basic);
   return {
     app: state.app,
     store: state.settings,
