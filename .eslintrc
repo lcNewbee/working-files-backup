@@ -1,77 +1,77 @@
 {
-  "extends": "airbnb",
-  "parser": "babel-eslint",
-  "plugins": [
-    "import"
-  ],
-  "env": {
-    "browser": true,
-    "node": true
-  },
-  "settings": {
-    "ecmascript": 6,
-    "import/resolver": {
-      "node": {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".es6"
+    "extends": "airbnb",
+    "parser": "babel-eslint",
+    "plugins": [
+        "import"
+    ],
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "settings": {
+        "ecmascript": 6,
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".es6"
+                ],
+                "paths": [
+                    "./"
+                ],
+                "moduleDirectory": [
+                    "node_modules",
+                    "shared"
+                ]
+            }
+        }
+    },
+    "globals": {
+        "window": true,
+        "document": true,
+        "Promise": true,
+        "fetch": true,
+        "_": true,
+        "__": true,
+        "GUI_CONFIG": true,
+        "guiConfig": true,
+        "sessionStorage": true,
+        "b28n": true,
+        "google": true,
+        "BMap": true
+    },
+    "rules": {
+        "new-cap": [
+            2,
+            {
+                // for Immutable
+                "capIsNewExceptions": [
+                    "List",
+                    "OrderedSet",
+                    "Range",
+                    "Map"
+                ]
+            }
         ],
-        "paths": [
-          "./"
+        // 避免在局部修改全局变量
+        "no-global-assign": [
+            "error",
+            {
+                "exceptions": [
+                    "Object"
+                ]
+            }
         ],
-        "moduleDirectory": [
-          "node_modules",
-          "shared"
-        ]
-      }
-    }
-  },
-  "globals": {
-    "window": true,
-    "document": true,
-    "Promise": true,
-    "fetch": true,
-    "_": true,
-    "__": true,
-    "GUI_CONFIG": true,
-    "guiConfig": true,
-    "sessionStorage": true,
-    "b28n": true,
-    "google": true,
-    "BMap": true,
-  },
-  "rules": {
-    "new-cap": [
-      2,
-      {
-        // for Immutable
-        "capIsNewExceptions": [
-          "List",
-          "OrderedSet",
-          "Range",
-          "Map"
-        ]
-      }
-    ],
-    // 避免在局部修改全局变量
-    "no-global-assign": [
-      "error",
-      {
-        "exceptions": [
-          "Object"
-        ]
-      }
-    ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": true
-      }
-    ],
-    "jsx-a11y/no-static-element-interactions": 0,
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": true
+            }
+        ],
+        "jsx-a11y/no-static-element-interactions": 0,
 
-    // 不需要验证默认属性
-    "react/require-default-props": 0
-  }
+        // 不需要验证默认属性
+        "react/require-default-props": 0
+    }
 }

@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const gulpLoadPlugins = require('gulp-load-plugins');
@@ -9,7 +7,6 @@ const shell = require('gulp-shell');
 
 const pkg = require('./package.json');
 
-const configReg = /'\.\/config\/([\w.]+)'/g;
 const $ = gulpLoadPlugins();
 const argv = minimist(process.argv.slice(2));
 const paths = {
@@ -41,9 +38,17 @@ const paths = {
   pubASC6: '../svn/ap_web/ASC6_web',
   pubASW120: '../svn/ap_web/ASW120_web',
 };
+
+// 默认值
 gulp.pkg = pkg;
 gulp.paths = paths;
 
+// 获取 App 名称
+
+// 从命令行的参数获取
+if (argv.n) {
+  gulp.appName = argv.n;
+}
 
 // 引入
 require('./tools/gulp/help');
@@ -61,22 +66,6 @@ require('./tools/gulp/pub');
 require('./tools/gulp/ap');
 require('./tools/gulp/ac');
 require('./tools/gulp/axc');
-
-// 获取 App 名称
-function getCurAppName() {
-  let str = '';
-
-  str = fs.readFileSync(path.resolve(__dirname, 'src/index.jsx'), 'utf-8');
-
-  return configReg.exec(str);
-}
-if (argv.n) {
-  gulp.appName = argv.n;
-} else if (getCurAppName()) {
-  gulp.appName = getCurAppName()[1];
-} else {
-  gulp.appName = 'axc';
-}
 
 // 删除
 gulp.task('clean', () => del([paths.build, paths.release]));

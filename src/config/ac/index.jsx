@@ -1,5 +1,4 @@
 import b28n from 'shared/b28n';
-import NotFound from 'shared/components/NotFound';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
 //

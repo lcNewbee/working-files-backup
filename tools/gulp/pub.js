@@ -17,7 +17,9 @@ gulp.task('pub:clean', () => {
     distPath = argv.d;
   }
 
-  return del([distPath], { force: true });
+  return del([distPath], {
+    force: true,
+  });
 });
 
 gulp.task('pub:build', (callback) => {
@@ -45,6 +47,7 @@ gulp.task('pub:copy', () => {
   if (argv.d) {
     distPath = argv.d;
   }
+
   if (argv.n) {
     name = argv.n;
   }
