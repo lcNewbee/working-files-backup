@@ -8,7 +8,6 @@ import validator from 'shared/validator';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
-let ret;
 const queryFormOptions = fromJS([
   {
     id: 'state',
@@ -125,7 +124,6 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-
     },
   }, {
     id: 'speed',
@@ -154,8 +152,46 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'num:[1,999999]',
       }),
+      help(val, data) {
+        const curState = data.get('state');
+        let ret = '';
+
+        switch (curState) {
+          case '0':
+            ret = __('Hours');
+            break;
+
+          case '1':
+            ret = __('Days');
+            break;
+
+          case '2':
+            ret = __('Months');
+            break;
+
+          case '3':
+            ret = __('Years');
+            break;
+
+          case '4':
+            if (val > 1024) {
+              ret = 'GB';
+            } else {
+              ret = 'MB';
+            }
+            break;
+
+          default:
+        }
+
+        return ret;
+      },
     },
+
+
     transform(val, data) {
+      let ret = '';
+
       if (data.get('state') === '0') {
         ret = `${val}h`;
       } else if (data.get('state') === '1') {

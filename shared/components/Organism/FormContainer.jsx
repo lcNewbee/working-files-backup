@@ -309,6 +309,11 @@ class FormContainer extends React.Component {
       isShow = myProps.visible($$data);
     }
 
+    // 处理显示前提条件
+    if (typeof $$option.get('help') === 'function') {
+      myProps.help = $$option.get('help')(myProps.value, $$data);
+    }
+
     // 如果是不可操作的
     if (!actionable) {
       myProps.disabled = true;

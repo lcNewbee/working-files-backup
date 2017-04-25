@@ -49,6 +49,7 @@ const listOptions = fromJS([
   }, {
     id: 'appsecret',
     text: __('Password'),
+    noTable: true,
     formProps: {
       maxLength: '128',
       type: 'password',
@@ -57,7 +58,8 @@ const listOptions = fromJS([
         rules: 'pwd',
       }),
     },
-  }, {
+  },
+  {
     id: 'smstemplate',
     text: __('Template ID'),
     formProps: {
