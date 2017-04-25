@@ -35,12 +35,12 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
-  saveSettings: PropTypes.func,
+  // saveSettings: PropTypes.func,
   fetch: PropTypes.func,
   createModal: PropTypes.func,
 
   leaveSettingsScreen: PropTypes.func,
-  leaveScreen: PropTypes.func,
+  // leaveScreen: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
   productInfo: PropTypes.instanceOf(Map),
   selfState: PropTypes.instanceOf(Map),
@@ -85,10 +85,9 @@ const validOptions = Map({
 export default class Advance extends React.Component {
   constructor(prop) {
     super(prop);
-    this.onSave = this.onSave.bind(this);
-    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
-    this.changeFormValue = this.changeFormValue.bind(this);
-    this.makeRateSetOptions = this.makeRateSetOptions.bind(this);
+    utils.binds(this, [
+      'onSave', 'firstInAndRefresh', 'changeFormValue', 'makeRateSetOptions',
+    ]);
   }
 
   componentWillMount() {
@@ -181,16 +180,19 @@ export default class Advance extends React.Component {
   }
 
   render() {
-    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const { radioId /* , radioType */ } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId])) return null;
     const {
-      sensEnable, distance, sensThreshold, rtsEnable, rts, autoAdjust,
-      led1Threshold, led2Threshold, led3Threshold, led4Threshold, beaconInterval,
-      dtimInterval, segmentThresh, ampdu, fiveFirst, multiToUnicast, tgmpSnoop,
-      multiMonitor, probeRqstForbid, timeFairness, beamforming, rateSet, rssiEnable,
-      rssi, airTimeEnable, fairAlgthm,
+      sensEnable, distance, sensThreshold, rtsEnable, rts, autoAdjust, led1Threshold, led2Threshold,
+      led3Threshold, led4Threshold, beaconInterval, dtimInterval, segmentThresh, ampdu, rateSet,
+      rssiEnable, rssi, airTimeEnable, fairAlgthm,
+      // fiveFirst, multiToUnicast, tgmpSnoop, multiMonitor,
+      // probeRqstForbid, timeFairness, beamforming,
     } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-    const { validLed1, validLed2, validLed3, validLed4, validSens, validBeacon, validDtim, validSegment, validAmpdu, validRts } = this.props.validateOption;
+    const {
+      validLed1, validLed2, validLed3, validLed4, validSens,
+      validBeacon, validDtim, validSegment, validAmpdu, validRts,
+    } = this.props.validateOption;
     const funConfig = this.props.route.funConfig;
     return (
       <div className="advanceWrap">

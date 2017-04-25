@@ -95,6 +95,21 @@ export default class View extends React.PureComponent {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const store = this.props.store;
+    const curScreenId = store.get('curScreenId');
+    if (store.getIn([curScreenId, 'data']) !== nextProps.store.getIn([curScreenId, 'data'])) {
+      return true;
+    }
+    if (!fromJS(this.state).equals(fromJS(nextState))) {
+      return true;
+    }
+    if (store.getIn([curScreenId, 'query']) !== nextProps.store.getIn([curScreenId, 'query'])) {
+      return true;
+    }
+    return false;
+  }
+
   componentDidUpdate() {
     this.removeShowerDiv();
     Promise.resolve().then(() => {
@@ -232,7 +247,7 @@ export default class View extends React.PureComponent {
   }
 
   renderCurMap(list, curMapId, myZoom) {
-    // console.log('renderCurMap');
+    console.log('renderCurMap');
     const curItem = list.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
     this.getNaturalWidthAndHeight(imgUrl);
@@ -317,6 +332,7 @@ export default class View extends React.PureComponent {
   }
 
   render() {
+    console.log('rendering');
     const myZoom = this.state.zoom;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');

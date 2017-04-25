@@ -57,6 +57,7 @@ const propTypes = {
   changeTransferData: PropTypes.func,
   changeShowMacHelpInfo: PropTypes.func,
   changeApMacInput: PropTypes.func,
+  reciveFetchSettings: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -190,29 +191,18 @@ export default class Basic extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onSave = this.onSave.bind(this);
-    this.onHideSsidboxClick = this.onHideSsidboxClick.bind(this);
-    this.onStopScanClick = this.onStopScanClick.bind(this);
-    this.onScanBtnClick = this.onScanBtnClick.bind(this);
-    this.onModalOkBtnClick = this.onModalOkBtnClick.bind(this);
-    this.onModalCloseBtnClick = this.onModalCloseBtnClick.bind(this);
-    this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
-    this.onChengeWirelessMode = this.onChengeWirelessMode.bind(this);
-    this.noErrorThisPage = this.noErrorThisPage.bind(this);
-    this.onCloseCountrySelectModal = this.onCloseCountrySelectModal.bind(this);
-    this.makeChannelOptions = this.makeChannelOptions.bind(this);
-    this.onSecurityModeChange = this.onSecurityModeChange.bind(this);
-    this.onAddNewSsidItem = this.onAddNewSsidItem.bind(this);
-    this.onDeleteBtnClick = this.onDeleteBtnClick.bind(this);
-    this.onSsidItemChange = this.onSsidItemChange.bind(this);
-    this.fetchFullPageData = this.fetchFullPageData.bind(this);
-    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
-    this.onChangeRadio = this.onChangeRadio.bind(this);
-    this.makeSsidTableOptions = this.makeSsidTableOptions.bind(this);
-    this.saveCountrySelectModal = this.saveCountrySelectModal.bind(this);
-    this.radioSettingsHeadClassName = this.radioSettingsHeadClassName.bind(this);
-    this.getChannelListAndPowerRange = this.getChannelListAndPowerRange.bind(this);
-    this.sortMacOrder = this.sortMacOrder.bind(this);
+    utils.binds(this, [
+      'onSave', 'onHideSsidboxClick', 'onStopScanClick', 'onScanBtnClick',
+      'onModalOkBtnClick', 'onModalCloseBtnClick', 'onSelectScanResultItem',
+      'onChengeWirelessMode', 'noErrorThisPage', 'onCloseCountrySelectModal',
+      'makeChannelOptions', 'onSecurityModeChange', 'onAddNewSsidItem',
+      'onDeleteBtnClick', 'onSsidItemChange', 'fetchFullPageData',
+      'firstInAndRefresh', 'onChangeRadio', 'makeSsidTableOptions',
+      'saveCountrySelectModal', 'saveCountrySelectModal', 'radioSettingsHeadClassName',
+      'radioSettingsHeadClassName', 'getChannelListAndPowerRange', 'sortMacOrder',
+      'renderEnableBtn', 'renderSsidInput', 'renderVlanIdInput', 'renderMaxClientsInput',
+      'renderCheckboxBtn', 'renderSecurityBtn', 'renderSpeedLimitBtn', 'renderDeleteBtn',
+    ]);
     this.state = {
       ssidTableFullMemberOptions: fromJS([
         {
@@ -220,230 +210,74 @@ export default class Basic extends React.Component {
           label: __('Enable'),
           width: '200px',
           marginLeft: '3px',
-          transform: function (val, item) {
-            const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
-            const flag = (pos === 0);
-            return (
-              <FormInput
-                type="checkbox"
-                checked={val === '1'}
-                disabled={flag}
-                onChange={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderEnableBtn(val, item),
         },
         {
           id: 'ssid',
           label: __('SSID'),
           width: '250px',
           paddingLeft: '60px',
-          transform: function (val, item) {
-            const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
-            return (
-              <FormInput
-                type="text"
-                value={val}
-                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
-                onChange={(data) => {
-                  const ssid = item.get('ssid');
-                  const str = ssid.replace(/(^\s*)|(\s*$)/g, '');
-                  if (str === '' && data.value === ' ') return null;
-                  else if (utils.getUtf8Length(data.value) <= 32) {
-                    this.onSsidItemChange(val, item, 'ssid', data.value);
-                  }
-                }}
-                style={{
-                  height: '29px',
-                }}
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderSsidInput(val, item),
         },
         {
           id: 'vlanId',
           label: __('VLAN ID'),
           width: '250px',
           paddingLeft: '30px',
-          transform: function (val, item) {
-            return (
-              <FormInput
-                type="number"
-                value={val}
-                min="1"
-                max="4094"
-                defaultValue="1"
-                disabled={vlanEnable === '0'}
-                onChange={(data) => {
-                  this.onSsidItemChange(val, item, 'vlanId', data.value);
-                }}
-                style={{
-                  height: '29px',
-                  width: '100px',
-                }}
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderVlanIdInput(val, item),
         },
         {
           id: 'maxClients',
           label: __('Max Clients'),
           width: '250px',
           paddingLeft: '22px',
-          transform: function (val, item) {
-            return (
-              <FormInput
-                type="number"
-                value={val}
-                max="512"
-                min="1"
-                defaultValue="64"
-                onChange={(data) => {
-                  this.onSsidItemChange(val, item, 'maxClients', data.value);
-                }}
-                style={{
-                  height: '29px',
-                  width: '100px',
-                }}
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderMaxClientsInput(val, item),
         },
         {
           id: 'airTimeEnable',
           label: __('Airtime Fairness'),
           width: '250px',
           paddingLeft: '-30px',
-          transform: function (val, item) {
-            return (
-              <FormInput
-                type="checkbox"
-                checked={val === '1'}
-                onChange={
-                  () => this.onSsidItemChange(val, item, 'airTimeEnable', (val === '1' ? '0' : '1'))
-                }
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderCheckboxBtn(val, item, 'airTimeEnable'),
         },
         {
           id: 'hideSsid',
           label: __('Hide'),
           width: '200px',
-          transform: function (val, item) {
-            return (
-              <FormInput
-                type="checkbox"
-                checked={val === '1'}
-                onChange={
-                  () => this.onSsidItemChange(val, item, 'hideSsid', (val === '1' ? '0' : '1'))
-                }
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderCheckboxBtn(val, item, 'hideSsid'),
         },
         {
           id: 'isolation',
           label: __('Client Isolation'),
           width: '200px',
           marginLeft: '-20px',
-          transform: function (val, item) {
-            return (
-              <FormInput
-                type="checkbox"
-                checked={val === '1'}
-                onChange={
-                  () => this.onSsidItemChange(val, item, 'isolation', (val === '1' ? '0' : '1'))
-                }
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderCheckboxBtn(val, item, 'isolation'),
         },
         {
           id: 'portalEnable',
           label: __('Portal'),
           width: '200px',
-          transform: function (val, item) {
-            return (
-              <FormInput
-                type="checkbox"
-                checked={val === '1'}
-                onChange={
-                  () => this.onSsidItemChange(val, item, 'portalEnable', (val === '1' ? '0' : '1'))
-                }
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderCheckboxBtn(val, item, 'portalEnable'),
         },
         {
           id: 'security',
           label: __('Security'),
           width: '200px',
           paddingLeft: '8px',
-          transform: function (val, item) {
-            const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
-            return (
-              <Button
-                text={__('Edit')}
-                icon="pencil-square"
-                size="sm"
-                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
-                onClick={() => {
-                  const tableItemForSsid = fromJS({}).set('val', val)
-                        .set('item', item).set('isShow', '1')
-                        .set('pos', pos);
-                  this.props.changeTableItemForSsid(tableItemForSsid);
-                }}
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderSecurityBtn(val, item),
         },
         {
           id: 'speedLimit',
           label: __('Speed Limit'),
           width: '200px',
           marginLeft: '-8px',
-          transform: function (val, item) {
-            const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
-            return (
-              <Button
-                text={__('Edit')}
-                icon="pencil-square"
-                size="sm"
-                onClick={() => {
-                  const tableItemForSsid = fromJS({}).set('val', val)
-                        .set('item', item).set('isShow', '0')
-                        .set('pos', pos);
-                  this.props.changeShowSpeedLimitModal(true);
-                  this.props.changeTableItemForSsid(tableItemForSsid);
-                }}
-              />
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderSpeedLimitBtn(val, item),
         },
         {
           id: 'delete',
           label: __('Delete'),
           width: '200px',
-          transform: function (val, item) {
-            const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
-            return (
-              <div style={{ marginLeft: '-12px' }}>
-                <Button
-                  text={__('Delete')}
-                  icon="times"
-                  size="sm"
-                  disabled={pos === 0}
-                  onClick={() => this.onDeleteBtnClick(item)}
-                />
-              </div>
-            );
-          }.bind(this),
+          transform: (val, item) => this.renderDeleteBtn(val, item),
         },
       ]),
     };
@@ -856,6 +690,147 @@ export default class Basic extends React.Component {
     return radioSettingsClass;
   }
 
+  renderEnableBtn(val, item) {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
+    const flag = (pos === 0);
+    return (
+      <FormInput
+        type="checkbox"
+        checked={val === '1'}
+        disabled={flag}
+        onChange={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
+      />
+    );
+  }
+
+  renderSsidInput(val, item) {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
+    return (
+      <FormInput
+        type="text"
+        value={val}
+        disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+        onChange={(data) => {
+          const ssid = item.get('ssid');
+          const str = ssid.replace(/(^\s*)|(\s*$)/g, '');
+          if (str === '' && data.value === ' ') return null;
+          else if (utils.getUtf8Length(data.value) <= 32) {
+            this.onSsidItemChange(val, item, 'ssid', data.value);
+          }
+        }}
+        style={{
+          height: '29px',
+        }}
+      />
+    );
+  }
+
+  renderVlanIdInput(val, item) {
+    return (
+      <FormInput
+        type="number"
+        value={val}
+        min="1"
+        max="4094"
+        defaultValue="1"
+        disabled={vlanEnable === '0'}
+        onChange={(data) => {
+          this.onSsidItemChange(val, item, 'vlanId', data.value);
+        }}
+        style={{
+          height: '29px',
+          width: '100px',
+        }}
+      />
+    );
+  }
+
+  renderMaxClientsInput(val, item) {
+    return (
+      <FormInput
+        type="number"
+        value={val}
+        max="512"
+        min="1"
+        defaultValue="64"
+        onChange={(data) => {
+          this.onSsidItemChange(val, item, 'maxClients', data.value);
+        }}
+        style={{
+          height: '29px',
+          width: '100px',
+        }}
+      />
+    );
+  }
+
+  renderCheckboxBtn(val, item, type) {
+    return (
+      <FormInput
+        type="checkbox"
+        checked={val === '1'}
+        onChange={
+          () => this.onSsidItemChange(val, item, type, (val === '1' ? '0' : '1'))
+        }
+      />
+    );
+  }
+
+  renderSecurityBtn(val, item) {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
+    return (
+      <Button
+        text={__('Edit')}
+        icon="pencil-square"
+        size="sm"
+        disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+        onClick={() => {
+          const tableItemForSsid = fromJS({}).set('val', val)
+                .set('item', item).set('isShow', '1')
+                .set('pos', pos);
+          this.props.changeTableItemForSsid(tableItemForSsid);
+        }}
+      />
+    );
+  }
+
+  renderSpeedLimitBtn(val, item) {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
+    return (
+      <Button
+        text={__('Edit')}
+        icon="pencil-square"
+        size="sm"
+        onClick={() => {
+          const tableItemForSsid = fromJS({}).set('val', val)
+                .set('item', item).set('isShow', '0')
+                .set('pos', pos);
+          this.props.changeShowSpeedLimitModal(true);
+          this.props.changeTableItemForSsid(tableItemForSsid);
+        }}
+      />
+    );
+  }
+
+  renderDeleteBtn(val, item) {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
+    return (
+      <div style={{ marginLeft: '-12px' }}>
+        <Button
+          text={__('Delete')}
+          icon="times"
+          size="sm"
+          disabled={pos === 0}
+          onClick={() => this.onDeleteBtnClick(item)}
+        />
+      </div>
+    );
+  }
   render() {
     const modalOptions = fromJS([
       {
@@ -924,7 +899,8 @@ export default class Basic extends React.Component {
     const apMac = curData.getIn(['radioList', radioId, 'vapList', '0', 'apMac']);
     const apMacList = curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacList']) || fromJS([]);
     // const keysFromRoute = funConfig.ssidTableKeys;
-    const radioModeOptionsFor5g = funConfig.radioModeOptionsFor5g ? funConfig.radioModeOptionsFor5g : defaultRadioModeOptionsFor5g;
+    const radioModeOptionsFor5g = funConfig.radioModeOptionsFor5g ? funConfig.radioModeOptionsFor5g
+                                                                  : defaultRadioModeOptionsFor5g;
     if (this.props.store.get('curSettingId') === 'base') {
       return null;
     }
@@ -1445,70 +1421,6 @@ export default class Basic extends React.Component {
                         ) : null
                       }
                     </div>
-                    {/* // station模式下，对端AP的mac地址输入框
-                      (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
-                        <div>
-                          <FormGroup
-                            label={__('Lock To AP')}
-                            type="checkbox"
-                            checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
-                            onChange={(data) => {
-                              const radioList = curData.get('radioList')
-                                              .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
-                              this.props.updateItemSettings({ radioList });
-                            }}
-                          />
-                          {
-                            curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
-                              <FormGroup
-                                label={__('Peer Mac')}
-                                form="radioSettings"
-                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMac'])}
-                                onChange={(data) => {
-                                  const radioList = curData.get('radioList')
-                                                  .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
-                                  this.props.updateItemSettings({ radioList });
-                                }}
-                                placeholder={__('not necessary')}
-                                {...staApmac}
-                              />
-                            ) : null
-                          }
-                        </div>
-                      ) : null
-                    }
-                    {/* // station模式下，对端AP的mac地址输入框
-                      (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
-                        <div>
-                          <FormGroup
-                            label={__('Lock To AP')}
-                            type="checkbox"
-                            checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
-                            onChange={(data) => {
-                              const radioList = curData.get('radioList')
-                                              .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
-                              this.props.updateItemSettings({ radioList });
-                            }}
-                          />
-                          {
-                            curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
-                              <FormGroup
-                                label={__('Peer Mac')}
-                                form="radioSettings"
-                                value={apMac}
-                                onChange={(data) => {
-                                  const radioList = curData.get('radioList')
-                                                  .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
-                                  this.props.updateItemSettings({ radioList });
-                                }}
-                                placeholder={__('not necessary')}
-                                {...staApmac}
-                              />
-                            ) : null
-                          }
-                        </div>
-                      ) : null
-                    */}
 
                     { // station模式，lock to ap功能根据lockType值判断是否是华润定制
                       (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && curData.get('lockType') === '0') ? (

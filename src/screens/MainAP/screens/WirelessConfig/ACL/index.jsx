@@ -17,15 +17,15 @@ const propTypes = {
   route: PropTypes.object,
   initSettings: PropTypes.func,
   save: PropTypes.func,
-  fetchSettings: PropTypes.func,
-  saveSettings: PropTypes.func,
+  // fetchSettings: PropTypes.func,
+  // saveSettings: PropTypes.func,
   app: PropTypes.instanceOf(Map),
   selfState: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
   updateItemSettings: PropTypes.func,
-  changeTextAreaValue: PropTypes.func,
-  onMacClick: PropTypes.func,
-  maclist: PropTypes.instanceOf(List),
+  // changeTextAreaValue: PropTypes.func,
+  // onMacClick: PropTypes.func,
+  // maclist: PropTypes.instanceOf(List),
   macStatus: PropTypes.instanceOf(List),
   initMacstatus: PropTypes.func,
   updateMacStatus: PropTypes.func,
@@ -33,7 +33,7 @@ const propTypes = {
   macInput: PropTypes.instanceOf(Map),
   changePreLenInMacInput: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
-  leaveScreen: PropTypes.func,
+  // leaveScreen: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
   createModal: PropTypes.func,
   changeSelectedSsid: PropTypes.func,
@@ -63,11 +63,10 @@ export default class ACL extends React.Component {
 
   constructor(props) {
     super(props);
-    this.updateAclMacList = this.updateAclMacList.bind(this);
-    this.onMacInputChange = this.onMacInputChange.bind(this);
-    this.onAddMacToLocalList = this.onAddMacToLocalList.bind(this);
-    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
-    this.switchToNewRadioPage = this.switchToNewRadioPage.bind(this);
+    utils.binds(this, [
+      'updateAclMacList', 'onMacInputChange', 'onAddMacToLocalList',
+      'firstInAndRefresh', 'switchToNewRadioPage',
+    ]);
   }
 
   componentWillMount() {
@@ -246,7 +245,7 @@ export default class ACL extends React.Component {
   render() {
     const store = this.props.store;
     const selectedSsid = this.props.selectedSsid;
-    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const { radioId /* , radioType */ } = this.props.selfState.get('currRadioConfig').toJS();
     let maclist = store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'macList']);
     if (maclist === undefined) return null;
     maclist = maclist.toJS();
