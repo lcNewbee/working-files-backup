@@ -35,12 +35,15 @@ class NetworkDhcpRelay_Model extends CI_Model {
     function set_dhcp_relay($data) {
         $result = null;
         $cgiary = array(
-            'switch' => $data['relay_enable'] = 1 ? "on" : "off",
+            'switch' => $data['relay_enable'] == '1' ? "on" : "off",
             'server_name' => (string)element('dhcp_server',$data,''),
             'reserver_server' => (string)element('referral_server',$data,''),
             'op82_sbu1' => (string)element('option82_1',$data,''),
             'op82_sbu2' => (string)element('option82_2',$data,'')
         );
+        echo '<pre>';
+        print_r($cgiary);
+        echo '</pre>';
         $result = dhcprelay_msg_from_web(json_encode($cgiary));
         //log
         $cgiObj = json_decode($result);			
