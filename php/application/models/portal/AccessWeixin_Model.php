@@ -45,7 +45,8 @@ class AccessWeixin_Model extends CI_Model {
             'shopId' => element('shopId',$data),
             'appId' => element('appId',$data),
             'secretKey' => element('secretKey',$data),
-            'domain' => element('domain',$data,$default_domain['0']['domain']),
+            //'domain' => element('domain',$data,$default_domain['0']['domain']),
+            'domain' => 'http://'.$data['basip'].':8080',
             'outTime' => element('outTime',$data,$default_outTime['0']['outTime'])
         );
         return $arr;
