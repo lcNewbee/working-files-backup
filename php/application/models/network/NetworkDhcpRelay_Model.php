@@ -41,9 +41,6 @@ class NetworkDhcpRelay_Model extends CI_Model {
             'op82_sbu1' => (string)element('option82_1',$data,''),
             'op82_sbu2' => (string)element('option82_2',$data,'')
         );
-        echo '<pre>';
-        print_r($cgiary);
-        echo '</pre>';
         $result = dhcprelay_msg_from_web(json_encode($cgiary));
         //log
         $cgiObj = json_decode($result);			
