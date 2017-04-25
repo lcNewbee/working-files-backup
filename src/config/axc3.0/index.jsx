@@ -646,7 +646,7 @@ const routes = [
                 id: 'networkAaa',
                 icon: 'lock',
                 path: '/main/portal/aaa',
-                formUrl: 'goform/portal/Aaa',
+                formUrl: 'goform/network/Aaa',
                 text: __('AAA'),
                 component: sNetworkAaa.Screen,
               },
