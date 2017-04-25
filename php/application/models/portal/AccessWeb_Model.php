@@ -34,34 +34,17 @@ class AccessWeb_Model extends CI_Model {
         );       
         return json_encode($arr);
     }
-    function do_upload(){
-        $config['upload_path'] = '/var/conf/portalserver';
-        $config['overwrite']=true;  
-        $config['max_size'] = 0;
-        $config['allowed_types'] = 'zip';
-        $config['file_name'] = 'portal_web_tmp.zip';
-
-        $this->load->library('upload', $config);
-        if (!$this->upload->do_upload('file')) {
-            $error = array('error' => $this->upload->display_errors());
-            $result = array(
-                'state'=>array(
-                    'code'=>4000,
-                    'msg'=>$error
-                )
-            );
-        }else {
-            $data = array('upload_data' => $this->upload->data());
-            $result = array(
-                'state'=>array(
-                    'code'=>2000,
-                    'msg'=>'OK'
-                ),
-                'data'=>$data
-            );
-        }
-        return $result;
-    }
+    function get_web_page(){
+        $result = null;
+        $query = $this->portalsql->query('select id,name from adv_adv');
+        $arr = array(
+            'state'=>array('code'=>2000,'msg'=>'ok'),
+            'data'=>array(
+                'list'=>$query->result_array()
+            )
+        );        
+        return json_encode($arr);
+    }    
     function Add($data) {
         $result = FALSE;
         //1.上传
@@ -104,7 +87,7 @@ class AccessWeb_Model extends CI_Model {
             $result = $this->portalsql->delete('portal_web');
             //delete file						
             if($result) {
-                $this->deldir('/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$row['id']);
+                $this->delDir('/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$row['id']);
                 //unlink('/var/conf/portalserver/portal_web_tmp.zip');				
             }
         }     
@@ -141,43 +124,60 @@ class AccessWeb_Model extends CI_Model {
         $result = $result ? json_ok() : json_no('update error');
         return json_encode($result);
     }
-    function getPram($data){
+    private function do_upload(){
+        $config['upload_path'] = '/var/conf/portalserver';
+        $config['overwrite']=true;  
+        $config['max_size'] = 0;
+        $config['allowed_types'] = 'zip';
+        $config['file_name'] = 'portal_web_tmp.zip';
+
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('file')) {
+            $error = array('error' => $this->upload->display_errors());
+            $result = array(
+                'state'=>array(
+                    'code'=>4000,
+                    'msg'=>$error
+                )
+            );
+        }else {
+            $data = array('upload_data' => $this->upload->data());
+            $result = array(
+                'state'=>array(
+                    'code'=>2000,
+                    'msg'=>'OK'
+                ),
+                'data'=>$data
+            );
+        }
+        return $result;
+    }
+    private function getPram($data){
         $arr = array(
-            'name' => element('name',$data),
-            'description' => element('description',$data),
-            'countShow' => element('countShow',$data),
-            'countAuth' => element('countAuth',$data),
-            'adv' => element('adv',$data,'0')
+            'name' => element('name', $data), 
+            'description' => element('description', $data, ''), 
+            'countShow' => element('countShow', $data, 0), 
+            'countAuth' => element('countAuth', $data, 0), 
+            'adv' => element('adv', $data, 0)
         );
         return $arr;
-    }
-    function get_web_page(){
-        $result = null;
-        $query = $this->portalsql->query('select id,name from adv_adv');
-        $arr = array(
-            'state'=>array('code'=>2000,'msg'=>'ok'),
-            'data'=>array(
-                'list'=>$query->result_array()
-            )
-        );        
-        return json_encode($arr);
-    }
-    function deldir($dir) {
+    }    
+    private function delDir($dir) {
         //先删除目录下的文件：
-        $dh=opendir($dir);
-        while ($file=readdir($dh)) {
-            if($file!="." && $file!="..") {
-                $fullpath=$dir."/".$file;
-                if(!is_dir($fullpath)) {
+        $dh = opendir($dir);
+        while ($file = readdir($dh)) {
+            if ($file != "." && $file != "..") {
+                $fullpath = $dir . "/" . $file;
+                if (!is_dir($fullpath)) {
                     unlink($fullpath);
                 } else {
-                    $this->deldir($fullpath);
+                    $this->delDir($fullpath);
                 }
             }
-        }        
+        }
         closedir($dh);
         //删除当前文件夹：
-        if(rmdir($dir)) {
+        if (rmdir($dir)) {
             return true;
         } else {
             return false;
