@@ -13,7 +13,7 @@ class Overview_Model extends CI_Model {
 		$arr['data'] = array(
             'authInterface' => $countdata['authInterface'],
             'operationRecords' => $queryd->result_array(), 
-            'outlineCount' => $countdata['outlineCount'], 
+            'outlineCount' => $countdata['outlineCount'] < 0 ? 0 : $countdata['outlineCount'], 
             'onlineCount' => $countdata['onlineCount'], 
             'accCount' => $countdata['accCount'], 
             'lockCount' => $countdata['lockCount'], 
