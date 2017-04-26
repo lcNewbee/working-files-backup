@@ -103,7 +103,7 @@ const sApList = require('../../screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/MainAxc/screens/Monitor/screens/SafeStatus');
 const sWirelessAcl = require('../../screens/MainAxc/screens/WLAN/screens/Acl');
 const sSsidSettings =
-    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings/index2.0');
+    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
 const sSmartRf =
     require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
 const sTimerPolicy =
@@ -686,7 +686,7 @@ const routes = [
                 isIndex: true,
                 path: '/main/portal/account',
                 icon: 'user-o',
-                text: __('Access Account'),
+                text: __('User Accounts'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 routes: [
@@ -694,7 +694,7 @@ const routes = [
                     id: 'portalAccountAccountList',
                     path: '/main/portal/account/list/index',
                     formUrl: 'goform/portal/account/accountList',
-                    text: __('Account List'),
+                    text: __('User Account List'),
                     isIndex: true,
                     component: sPortalAccountList.Screen,
                   },
@@ -702,7 +702,7 @@ const routes = [
                     id: 'portalAccountConnectRecord',
                     path: '/main/portal/account/connectRecord',
                     formUrl: 'goform/portal/account/connectRecord',
-                    text: __('Connect Record'),
+                    text: __('Client Usage Logs'),
                     component: sPortalConnectRecord.Screen,
                   },
                 ],
@@ -714,19 +714,19 @@ const routes = [
                 icon: 'vcard-o',
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                text: __('Rechargeable Card'),
+                text: __('Recharge Vouchers'),
                 routes: [
                   {
                     id: 'sPortalCardCategory',
                     path: '/main/portal/card/cardcategory',
                     formUrl: 'goform/portal/card/cardcategory',
-                    text: __('Card Category'),
+                    text: __('Vouchers'),
                     component: sPortalCardCategory.Screen,
                   }, {
                     id: 'portalCardCardList',
                     path: '/main/portal/card/cardlist',
                     formUrl: 'goform/portal/card/cardlist',
-                    text: __('Card List'),
+                    text: __('Vouchers List'),
                     component: sPortalCardList.Screen,
                   },
                 ],

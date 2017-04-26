@@ -76,20 +76,20 @@ const queryFormOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Hour Card'),
+        label: __('Hour Voucher'),
       }, {
         value: '1',
-        label: __('Day Card'),
+        label: __('Day Voucher'),
       },
       {
         value: '2',
-        label: __('Month Card'),
+        label: __('Month Voucher'),
       }, {
         value: '3',
-        label: __('Year Card'),
+        label: __('Year Voucher'),
       }, {
         value: '4',
-        label: __('Traffic Card'),
+        label: __('Traffic Voucher'),
       },
     ],
     saveOnChange: true,
@@ -142,7 +142,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'categoryName',
-    text: __('Category Name'),
+    text: __('Voucher Name'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -150,7 +150,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'categoryType',
-    text: __('Category Type'),
+    text: __('Voucher Type'),
     noForm: true,
     formProps: {
       type: 'select',
@@ -159,25 +159,25 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Hour Card'),
+        label: __('Hour Voucher'),
       }, {
         value: '1',
-        label: __('Day Card'),
+        label: __('Day Voucher'),
       },
       {
         value: '2',
-        label: __('Month Card'),
+        label: __('Month Voucher'),
       }, {
         value: '3',
-        label: __('Year Card'),
+        label: __('Year Voucher'),
       }, {
         value: '4',
-        label: __('Traffic Card'),
+        label: __('Traffic Voucher'),
       },
     ],
   }, {
     id: 'cardCount',
-    text: __('Card Number'),
+    text: __('Voucher Number'),
     noTable: true,
     formProps: {
       type: 'number',
@@ -189,7 +189,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'maclimit',
-    text: __('Mac Limit'),
+    text: __('MAC Limit'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -286,7 +286,7 @@ const listOptions = fromJS([
         label: __('Unpayed'),
       }, {
         value: '0',
-        label: __('New Card'),
+        label: __('New Voucher'),
       }, {
         value: '1',
         label: __('Sold'),
@@ -329,7 +329,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'money',
-    text: __('Price'),
+    text: __('Voucher Cost'),
     formProps: {
       type: 'text',
       required: true,
@@ -460,19 +460,19 @@ export default class View extends React.Component {
         let x;
         switch (type) {
           case 0:
-            x = __('Hour Card');
+            x = __('Hour Voucher');
             break;
           case 1:
-            x = __('Day Card');
+            x = __('Day Voucher');
             break;
           case 2:
-            x = __('Month Card');
+            x = __('Month Voucher');
             break;
           case 3:
-            x = __('Year Card');
+            x = __('Year Voucher');
             break;
           default:
-            x = __('Year Card');
+            x = __('Year Voucher');
         }
         if ($$data.get('state') === '0') {
           return (
@@ -488,7 +488,7 @@ export default class View extends React.Component {
                 });
                 this.props.updateCurEditListItem({
                   id: $$data.get('id'),
-                  title: __('CD Key of Recharge Card '),
+                  title: __('CD Key of Recharge Voucher '),
                   description: __('Recharge Name:') + $$data.get('name') + __('; ') + __('CD Key:') + $$data.get('cdKey') + __('; ') + __('Category Type:') + x,
                 });
               }}
@@ -496,7 +496,7 @@ export default class View extends React.Component {
         }
         return (
           <Button
-            text={__('Card Sold Out')}
+            text={__('Voucher Sold Out')}
             key="sendoutActionButton"
             icon="mail-forward"
           />);

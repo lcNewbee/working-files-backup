@@ -9,7 +9,10 @@ import { actions as screenActions, AppScreen } from 'shared/containers/appScreen
 import { actions as appActions } from 'shared/containers/app';
 
 function getWebTemplate() {
-  return utils.fetch('goform/portal/access/web')
+  return utils.fetch('goform/portal/access/web', {
+    size: 9999,
+    page: 1,
+  })
     .then(json => (
       {
         options: json.data.list.map(
@@ -22,9 +25,38 @@ function getWebTemplate() {
     ),
   );
 }
-
+function getBasIP() {
+  return utils.fetch('goform/portal/access/config')
+    .then(json => (
+      {
+        basip: json.data.settings.bas_ip,
+      }
+    ),
+  );
+}
+function getAllGroupSSID() {
+  return utils.fetch('goform/group/ssidSetting', {
+    groupid: -100,
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.ssid,
+            label: item.ssid,
+          }),
+        ),
+      }
+    ),
+  );
+}
 function getApMac() {
-  return utils.fetch('goform/portal/access/ap')
+  return utils.fetch('goform/portal/access/ap', {
+    size: 9999,
+    page: 1,
+  })
     .then(json => (
       {
         options: json.data.list.map(
@@ -62,10 +94,11 @@ const listOptions = fromJS([
   }, {
     id: 'address',
     text: _('Address'),
+    noTable: true,
+    noForm: true,
     formProps: {
       type: 'text',
       maxLength: '256',
-      required: true,
       validator: validator({
         rules: 'utf8Len:[1, 255]',
       }),
@@ -73,9 +106,10 @@ const listOptions = fromJS([
   }, {
     id: 'basip',
     text: _('BAS'),
+    noTable: true,
+    noForm: true,
     formProps: {
       type: 'text',
-      required: true,
       validator: validator({
         rules: 'ip',
       }),
@@ -98,7 +132,7 @@ const listOptions = fromJS([
     id: 'ssid',
     text: _('SSID'),
     formProps: {
-      type: 'text',
+      type: 'select',
       maxLength: '129',
       validator: validator({
         rules: 'utf8Len:[1, 128]',
@@ -110,7 +144,6 @@ const listOptions = fromJS([
     text: _('Description'),
     noTable: true,
     formProps: {
-      required: true,
       type: 'textarea',
       maxLength: '257',
       validator: validator({
@@ -155,6 +188,8 @@ export default class View extends React.Component {
     this.state = {
       webTemplateOptions: fromJS([]),
       macOptions: fromJS([]),
+      ssidOptions: fromJS([]),
+      basip: '',
     };
   }
   componentDidMount() {
@@ -170,12 +205,26 @@ export default class View extends React.Component {
           macOptions: fromJS(data.options),
         });
       });
+    getAllGroupSSID()     
+      .then((data) => {
+        this.setState({
+          ssidOptions: fromJS(data.options),
+        });
+      });
+    getBasIP()
+      .then((data) => {
+        this.setState({
+          basip: fromJS(data.basip),
+        });
+      });
   }
 
   render() {
     const curListOptions = listOptions
+      .setIn([3, 'formProps', 'defaultValue'], this.state.basip)
       .setIn([4, 'options'], this.state.webTemplateOptions)
-      .setIn([5, 'options'], this.state.macOptions);
+      .setIn([5, 'options'], this.state.macOptions)
+      .setIn([6, 'options'], this.state.ssidOptions);
 
     return (
       <AppScreen

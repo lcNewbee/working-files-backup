@@ -181,6 +181,9 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
+        deleteable={
+          ($$item, index) => (index !== 0)
+        }
         actionable
         selectable
         searchable

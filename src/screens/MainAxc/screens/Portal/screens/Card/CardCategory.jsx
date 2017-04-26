@@ -16,20 +16,20 @@ const queryFormOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Hour Card'),
+        label: __('Hour Voucher'),
       }, {
         value: '1',
-        label: __('Day Card'),
+        label: __('Day Voucher'),
       },
       {
         value: '2',
-        label: __('Month Card'),
+        label: __('Month Voucher'),
       }, {
         value: '3',
-        label: __('Year Card'),
+        label: __('Year Voucher'),
       }, {
         value: '4',
-        label: __('Traffic Card'),
+        label: __('Traffic Voucher'),
       },
     ],
     saveOnChange: true,
@@ -51,7 +51,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'state',
-    text: __('Type'),
+    text: __('Voucher Type'),
     formProps: {
       type: 'select',
       required: true,
@@ -59,20 +59,20 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Hour Card'),
+        label: __('Hour Voucher'),
       }, {
         value: '1',
-        label: __('Day Card'),
+        label: __('Day Voucher'),
       },
       {
         value: '2',
-        label: __('Month Card'),
+        label: __('Month Voucher'),
       }, {
         value: '3',
-        label: __('Year Card'),
+        label: __('Year Voucher'),
       }, {
         value: '4',
-        label: __('Traffic Card'),
+        label: __('Traffic Voucher'),
       },
     ],
   }, {
@@ -127,7 +127,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'speed',
-    text: __('Speed Limit'),
+    text: __('Bandwidth limit'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -143,7 +143,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'time',
-    text: __('Count'),
+    text: __('Voucher Value'),
     formProps: {
       type: 'number',
       required: true,
@@ -211,7 +211,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'money',
-    text: __('Price'),
+    text: __('Voucher Cost'),
     formProps: {
       type: 'number',
       required: true,

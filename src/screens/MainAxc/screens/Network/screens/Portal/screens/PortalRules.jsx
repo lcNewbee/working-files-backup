@@ -42,23 +42,6 @@ function getPortalServerList() {
   );
 }
 
-function getAAADomainName() {
-  return utils.fetch('goform/network/Aaa')
-    .then(json => (
-      {
-        options: json.data.list.filter(
-          item => item,
-        ).map(
-          item => ({
-            value: item.domain_name,
-            label: item.domain_name,
-          }),
-        ),
-      }
-    ),
-  );
-}
-
 const listOptions = fromJS([
   {
     id: 'interface_bind',
@@ -127,14 +110,6 @@ const listOptions = fromJS([
         return data.get('auth_mode') === '2';
       },
     },
-  }, {
-    id: 'auth_domain',
-    text: __('AAA Strategy'),
-    defaultValue: '',
-    formProps: {
-      type: 'select',
-      required: true,
-    },
   },
   {
     id: 'idle_test',
@@ -158,7 +133,6 @@ export default class View extends React.Component {
     this.state = {
       portOptions: fromJS([]),
       portalServerOption: fromJS([]),
-      AAADomainNameOption: fromJS([]),
     };
   }
   componentWillMount() {
@@ -173,12 +147,6 @@ export default class View extends React.Component {
       .then((data) => {
         this.setState({
           portalServerOption: fromJS(data.options),
-        });
-      });
-    getAAADomainName()
-      .then((data) => {
-        this.setState({
-          AAADomainNameOption: fromJS(data.options),
         });
       });
   }
@@ -223,10 +191,6 @@ export default class View extends React.Component {
 
           case 'template_name':
             return $$item.set('options', myPortalServerOption);
-
-          case 'auth_domain':
-            return $$item.set('options', this.state.AAADomainNameOption);
-
           default:
             return $$item;
         }

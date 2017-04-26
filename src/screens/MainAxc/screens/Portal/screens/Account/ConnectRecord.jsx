@@ -14,7 +14,7 @@ const flowFilter = utils.filter('flowRate');
 const listOptions = fromJS([
   {
     id: 'ip',
-    text: __('IP'),
+    text: __('User IP'),
     formProps: {
       type: 'text',
       required: true,
@@ -24,7 +24,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'basip',
-    text: __('Bas IP'),
+    text: __('Portal Server IP'),
     formProps: {
       type: 'text',
       required: true,
@@ -34,7 +34,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mac',
-    text: __('Mac'),
+    text: __('User MAC Address'),
     type: 'text',
     formProps: {
       required: true,
@@ -76,7 +76,7 @@ const listOptions = fromJS([
   // },
   {
     id: 'outs',
-    text: __('Down Traffic'),
+    text: __('Downlink Traffic'),
     formProps: {
       required: true,
     },
@@ -85,7 +85,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ins',
-    text: __('Up Traffic'),
+    text: __('Uplink Traffic'),
     formProps: {
       required: true,
     },
@@ -101,7 +101,7 @@ const listOptions = fromJS([
   // },
   {
     id: 'ex2',
-    text: __('Reason'),
+    text: __('Status'),
     formProps: {
       required: true,
       maxLength: 257,

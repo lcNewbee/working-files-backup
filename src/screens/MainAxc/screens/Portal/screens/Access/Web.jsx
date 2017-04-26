@@ -4,35 +4,35 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import './web.scss';
+import { getActionable } from 'shared/axc';
+import SaveButton from 'shared/components/Button/SaveButton';
+import { Button } from 'shared/components/Button';
 
-const queryFormOptions = fromJS([
-  {
-    id: 'adv',
-    type: 'select',
-    label: __('Ads Page'),
-    options: [
-      {
-        value: '1',
-        label: 'OpenPortal',
-      },
-    ],
-    saveOnChange: true,
-  },
-]);
-
+// const queryFormOptions = fromJS([
+//   {
+//     id: 'adv',
+//     type: 'select',
+//     label: __('Ads Page'),
+//     options: [
+//       {
+//         value: '1',
+//         label: 'OpenPortal',
+//       },
+//     ],
+//     saveOnChange: true,
+//   },
+// ]);
 const listOptions = fromJS([
   {
     id: 'id',
     text: __('ID'),
     width: '120px',
     noTable: true,
-    noForm: true,
     formProps: {
-      type: 'text',
+      type: 'hidden',
       required: true,
     },
   }, {
@@ -115,7 +115,7 @@ const listOptions = fromJS([
     id: '__actions__',
     text: __('Actions'),
     noForm: true,
-    transform(val, $$item) {
+    /*transform(val, $$item) {
       return (
         <span>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/auth.jsp`} target="_blank">{__('Auth')}</a>
@@ -130,13 +130,16 @@ const listOptions = fromJS([
           </a>
         </span>
       );
-    },
+    },*/
   },
 ]);
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
+  route: PropTypes.object,
+  createModal: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -145,17 +148,24 @@ export default class View extends React.Component {
 
     utils.binds(this, [
       'getAdsPage',
+      'onBackup',
     ]);
+    this.actionable = getActionable(props);
     this.state = {
       advSelectPlaceholder: __('Loading'),
       advIsloading: true,
       advOptions: [],
     };
   }
+
   componentWillMount() {
     this.getAdsPage();
   }
-
+  onBackup($$data) {
+    if (this.actionable) {
+      window.location.href = `goform/portal/access/download/?id=${$$data.get('id')}`;
+    }
+  }
   getAdsPage() {
     this.props.fetch('goform/portal/access/web/webPage', {
       page: 1,
@@ -182,29 +192,54 @@ export default class View extends React.Component {
     );
   }
   render() {
-    const { advOptions, advIsloading, advSelectPlaceholder } = this.state;
-    const myEditFormOptions = listOptions.mergeIn(
-      [2, 'formProps'], {
-        isLoading: advIsloading,
-        options: advOptions,
-        placeholder: advSelectPlaceholder,
-      },
-    );
+    // const { advOptions, advIsloading, advSelectPlaceholder } = this.state;
+    // const myEditFormOptions = listOptions.mergeIn(
+    //   [2, 'formProps'], {
+    //     isLoading: advIsloading,
+    //     options: advOptions,
+    //     placeholder: advSelectPlaceholder,
+    //   },
+    // );
+    const curListOptions = listOptions.setIn([-1, 'transform'], (val, $$data) => (
+        <span>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/auth.jsp`} target="_blank">{__('Auth')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
+          <a
+            className="tablelink"
+            href={`http://${window.location.hostname}:8080/${$$data.get('id')}/wx.jsp`}
+            target="_blank"
+          >
+            {__('Wechat')}
+          </a>
+          <SaveButton
+            type="button"
+            icon="download"
+            text={__('')}
+            theme="default"
+            onClick={
+              () => (this.onBackup($$data))
+            }
+            disabled={!this.actionable}
+          />
+        </span>
+    ));
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
+        listOptions={curListOptions}
         editFormOption={{
           hasFile: true,
         }}
         noTitle
         actionable
-        selectable
+        selectable={
+          ($$item, index) => (index >= 6)
+        }
         searchable
         searchProps={{
           placeholder: `${__('Name')}`,
         }}
-        queryFormOptions={queryFormOptions}
         deleteable={
           ($$item, index) => (index >= 6)
         }

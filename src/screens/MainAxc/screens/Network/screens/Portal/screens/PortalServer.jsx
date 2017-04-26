@@ -8,6 +8,24 @@ import { bindActionCreators } from 'redux';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
+
+function getAAADomainName() {
+  return utils.fetch('goform/portal/Aaa', {
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.domain_name,
+            label: item.domain_name,
+          }),
+        ),
+      }
+    ),
+  );
+}
 const listOptions = fromJS([
   // {
   //   id: 'template_type',
@@ -123,6 +141,14 @@ const listOptions = fromJS([
         rules: 'ip',
       }),
     },
+  }, {
+    id: 'auth_domain',
+    text: __('AAA Strategy'),
+    defaultValue: '',
+    formProps: {
+      type: 'select',
+      required: true,
+    },
   },
 ]);
 
@@ -130,17 +156,31 @@ const propTypes = {};
 const defaultProps = {};
 
 export default class View extends React.Component {
-
-  componentWillUnmount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      AAADomainNameOption: fromJS([]),
+    };
   }
-
+  componentWillMount() {
+    getAAADomainName()
+      .then((data) => {
+        this.setState({
+          AAADomainNameOption: fromJS(data.options),
+        });
+      });
+  }
   render() {
+    const curListOptions = listOptions.setIn([6, 'options'], this.state.AAADomainNameOption);
     return (
       <AppScreen
         {...this.props}
         listKey="template_name"
-        listOptions={listOptions}
+        listOptions={curListOptions}
         maxListSize="16"
+        deleteable={
+          ($$item, index) => (index !== 0)
+        }
         actionable
         selectable
         noTitle

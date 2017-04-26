@@ -48,7 +48,7 @@ const queryFormOptions = fromJS([
   {
     id: 'state',
     type: 'select',
-    label: __('Acc Type'),
+    label: __('VoucherType'),
     options: [
       {
         value: '0',
@@ -75,21 +75,21 @@ const queryFormOptions = fromJS([
 const listOptions = fromJS([
   {
     id: 'loginName',
-    text: __('Login Name'),
+    text: __('Username'),
   }, {
     id: 'date',
-    text: __('Expired Date'),
+    text: __('Expiration'),
     noForm: true,
   }, {
     id: 'time',
-    text: __('Left Time'),
+    text: __('Time Balance'),
     noForm: true,
     transform(val) {
       return uptimeFilter.transform(val / 1000);
     },
   }, {
     id: 'octets',
-    text: __('Left Traffic'),
+    text: __('Traffic Balance'),
     noForm: true,
     transform(val) {
       return flowFilter.transform(val);
@@ -111,7 +111,7 @@ const listOptions = fromJS([
   }, {
     id: 'state',
     type: 'text',
-    text: __('Type'),
+    text: __('Voucher Type'),
     options: [
       {
         value: '0',
@@ -134,7 +134,7 @@ const listOptions = fromJS([
     defaultValue: '0',
   }, {
     id: 'maclimit',
-    text: __('Mac Limit'),
+    text: __('MAC Limit'),
     options: [
       {
         value: '0',
@@ -147,10 +147,10 @@ const listOptions = fromJS([
     defaultValue: '0',
   }, {
     id: 'maclimitcount',
-    text: __('Mac Quantity'),
+    text: __('MAC Quantity'),
   }, {
     id: 'autologin',
-    text: __('Auto Login'),
+    text: __('Auto Re-login'),
     options: [
       {
         value: '0',
@@ -257,7 +257,7 @@ const listOptions = fromJS([
     transform(val, $$item) {
       return (
         <span>
-          <a href={`/index.html#/main/portal/account/list/mac/${$$item.get('loginName')}`} className="tablelink">{__('Mac Management')}</a>
+          <a href={`/index.html#/main/portal/account/list/mac/${$$item.get('loginName')}`} className="tablelink">{__('MAC Management')}</a>
         </span>
       );
     },
@@ -266,7 +266,7 @@ const listOptions = fromJS([
 export const baseSetting = fromJS([
   {
     id: 'loginName',
-    label: __('Login Name'),
+    label: __('Username'),
     className: 'cols col-6',
     type: 'text',
     required: true,
@@ -286,29 +286,9 @@ export const baseSetting = fromJS([
       rules: 'utf8Len:[1,128]',
     }),
   }, {
-    id: 'ex1',
-    label: __('Question'),
-    className: 'cols col-6',
-    noTable: true,
-    type: 'text',
-    maxLength: '129',
-    validator: validator({
-      rules: 'utf8Len:[1,128]',
-    }),
-  }, {
-    id: 'ex2',
-    label: __('Answer'),
-    className: 'cols col-6',
-    noTable: true,
-    type: 'text',
-    maxLength: '129',
-    validator: validator({
-      rules: 'utf8Len:[1,128]',
-    }),
-  }, {
     id: 'state',
-    label: __('Type'),
-    className: 'cols col-12',
+    label: __('Voucher Type'),
+    className: 'cols col-6',
     options: [
       {
         value: '0',
@@ -332,27 +312,9 @@ export const baseSetting = fromJS([
     type: 'select',
     required: true,
     placeholder: __('Please Select ') + __('Type'),
-
-  }, {
-    id: 'maclimit',
-    label: __('Mac Limit'),
-    className: 'cols col-6',
-    options: [
-      {
-        value: '0',
-        label: __('Closed'),
-      }, {
-        value: '1',
-        label: __('Open'),
-      },
-    ],
-    defaultValue: '0',
-    type: 'select',
-    required: true,
-    placeholder: __('Please Select ') + __('Mac Limit'),
   }, {
     id: 'maclimitcount',
-    label: __('Mac Quantity'),
+    label: __('Device limit'),
     className: 'cols col-6',
     type: 'number',
     min: '0',
@@ -362,8 +324,8 @@ export const baseSetting = fromJS([
     }),
     required: true,
   }, {
-    id: 'autologin',
-    label: __('Auto Login'),
+    id: 'maclimit',
+    label: __('Multi Device Login'),
     className: 'cols col-6',
     options: [
       {
@@ -375,10 +337,25 @@ export const baseSetting = fromJS([
       },
     ],
     defaultValue: '0',
-    type: 'select',
+    type: 'checkbox',
     required: true,
-    placeholder: __('Auto Login') + __('Auto Login'),
-
+    // placeholder: __('Please Select ') + __('MAC Limit'),
+  }, {
+    id: 'autologin',
+    label: __('Auto Re-login'),
+    className: 'cols col-6',
+    options: [
+      {
+        value: '0',
+        label: __('Closed'),
+      }, {
+        value: '1',
+        label: __('Open'),
+      },
+    ],
+    defaultValue: '0',
+    type: 'checkbox',
+    required: true,
   }, {
     id: 'speed',
     label: __('Speed Limit'),
@@ -417,6 +394,45 @@ export const baseSetting = fromJS([
       rules: 'num:[0,999999]',
     }),
     required: true,
+  }, {
+    id: 'ex1',
+    label: __('Question'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'select',
+    maxLength: '129',
+    options: [
+      {
+        value: '0',
+        label: __("When is your father's birthday?"),
+      }, {
+        value: '1',
+        label: __("What's your mother's name?"),
+      },
+      {
+        value: '2',
+        label: __('When did you graduate from primary school?'),
+      }, {
+        value: '3',
+        label: __("What's your pet's name?"),
+      }, {
+        value: '4',
+        label: __("What's your favorite sport?"),
+      },
+    ],
+    validator: validator({
+      rules: 'utf8Len:[1,128]',
+    }),
+  }, {
+    id: 'ex2',
+    label: __('Answer'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+    maxLength: '129',
+    validator: validator({
+      rules: 'utf8Len:[1,128]',
+    }),
   },
 ]);
 
@@ -425,6 +441,7 @@ export const advancedSetting = fromJS([
     id: 'name',
     label: __('Name'),
     noTable: true,
+    noForm: true,
     className: 'cols col-12',
     type: 'text',
     maxLength: '32',
@@ -451,7 +468,7 @@ export const advancedSetting = fromJS([
 
   }, {
     id: 'idnumber',
-    label: __('ID No.'),
+    label: __('ID Document Number'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
@@ -491,7 +508,7 @@ export const advancedSetting = fromJS([
     }),
   }, {
     id: 'description',
-    label: __('Detail Information'),
+    label: __('Details'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
@@ -504,7 +521,7 @@ export const advancedSetting = fromJS([
 const rechargeOptions = fromJS([
   {
     id: 'loginName',
-    label: __('Login Name'),
+    label: __('Username'),
     form: 'recharge',
     type: 'text',
     disabled: true,
@@ -564,7 +581,7 @@ const rechargeOptions = fromJS([
     },
   }, {
     id: 'maclimit',
-    label: __('Mac Limit'),
+    label: __('MAC Limit'),
     form: 'recharge',
     disabled: true,
     type: 'select',
@@ -583,7 +600,7 @@ const rechargeOptions = fromJS([
     ],
   }, {
     id: 'maclimitcount',
-    label: __('Mac Quantity'),
+    label: __('MAC Quantity'),
     disabled: true,
     form: 'recharge',
     type: 'number',
@@ -597,7 +614,7 @@ const rechargeOptions = fromJS([
     }),
   }, {
     id: 'autologin',
-    label: __('Auto Login'),
+    label: __('Auto Re-login'),
     disabled: true,
     visible(data) {
       return data.get('name') !== undefined;
@@ -823,7 +840,7 @@ export default class View extends React.Component {
                 marginRight: '5px',
               }}
             />
-            {__('Base Settings')}
+            {__('General Settings')}
           </h3>
         </div>
         {
@@ -916,7 +933,7 @@ export default class View extends React.Component {
         queryFormOptions={queryFormOptions}
         searchable
         searchProps={{
-          placeholder: `${__('Login Name')}`,
+          placeholder: `${__('Username')}`,
         }}
       />
     );

@@ -11,6 +11,55 @@ import { actions as screenActions, AppScreen } from 'shared/containers/appScreen
 import { actions as appActions } from 'shared/containers/app';
 import * as productActions from '../../../../reducer';
 
+
+function getPortalTemplateName() {
+  return utils.fetch('goform/network/portal/server', {
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.template_name,
+            label: item.template_name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
+function getWebTemplateName() {
+  return utils.fetch('goform/portal/access/web', {
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
+function getSSIDWebTemplate() {
+  return utils.fetch('goform/portal/access/ssidmanagement', {
+    size: 9999,
+    page: 1,
+  }).then((json) => {
+    if (json.state && json.state.code === 2000) {
+      return fromJS(json.data.list);
+    }
+    return fromJS([]);
+  });
+}
+
 const msg = {
   upSpeed: __('Up Speed'),
   downSpeed: __('Down Speed'),
@@ -340,28 +389,62 @@ const listOptions = fromJS([
     },
   },
   {
+    id: 'accessControl',
+    text: __('Access Control'),
+    defaultValue: 'none',
+    options: [
+      {
+        value: 'none',
+        label: __('None'),
+      }, {
+        value: 'portal',
+        label: __('Portal'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+      visible($$data) {
+        const curRepaet = $$data.get('encryption');
+        return curRepaet !== '802.1x';
+      },
+    },
+  },
+  {
+    id: 'portalTemplate',
+    text: __('Portal Template'),
+    formProps: {
+      type: 'select',
+      visible($$data) {
+        const accessControl = $$data.get('accessControl');
+        const encryption = $$data.get('encryption');
+        return accessControl === 'portal' && encryption !== '802.1x';
+      },
+    },
+  },
+  {
+    id: 'auth',
+    text: __('Authetication'),
+    formProps: {
+      type: 'select',
+      visible($$data) {
+        const portalTemplate = $$data.get('portalTemplate');
+        const accessControl = $$data.get('accessControl');
+        const encryption = $$data.get('encryption');
+        return portalTemplate === 'default' && accessControl === 'portal' && encryption !== '802.1x';
+      },
+    },
+  },
+  {
     id: 'mandatorydomain',
     text: __('AAA Policy'),
-    defaultValue: '',
+    defaultValue: 'default',
     noTable: true,
     formProps: {
       type: 'select',
-      options: [],
-      // onChange(data) {
-      //   const retData = data;
-
-      //   if (retData.type === '8021x-access') {
-      //     retData.mergeData = {
-      //       encryption: '802.1x',
-      //     };
-      //   } else {
-      //     retData.mergeData = {
-      //       encryption: 'none',
-      //     };
-      //   }
-
-      //   return retData;
-      // },
+      visible($$data) {
+        const encryption = $$data.get('encryption');
+        return encryption === '802.1x';
+      },
     },
   },
 ]);
@@ -375,6 +458,7 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   fetch: PropTypes.func,
+  save: PropTypes.func,
   receiveScreenData: PropTypes.func,
   createModal: PropTypes.func,
   onListAction: PropTypes.func,
@@ -398,13 +482,37 @@ export default class View extends React.Component {
       'renderCopySsid',
       'onSelectCopySsid',
       'fetchMandatoryDomainList',
+      'onBeforeSave',
+      'onBeforeSync',
     ]);
     this.state = {
       updateListOptions: false,
+      WebTemplateNameOptions: fromJS([]),
+      portalServerTemplateNameOptions: fromJS([]),
+      ssidWebTemplateInformation: fromJS([]),
     };
-
     // 对特定版本处理
     this.listOptions = listOptions;
+  }
+  componentWillMount() {
+    getWebTemplateName()
+      .then((data) => {
+        this.setState({
+          WebTemplateNameOptions: fromJS(data.options),
+        });
+      });
+    getPortalTemplateName()
+      .then((data) => {
+        this.setState({
+          portalServerTemplateNameOptions: fromJS(data.options),
+        });
+      });
+    getSSIDWebTemplate()
+      .then(($$data) => {
+        this.setState({
+          ssidWebTemplateInformation: $$data,
+        });
+      });
   }
   componentDidMount() {
     this.props.changeScreenActionQuery({
@@ -417,10 +525,8 @@ export default class View extends React.Component {
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$copyGroupSsids = $$myScreenStore.getIn(['data', 'copyGroupSsids']);
-
     if (type === 'copy') {
       let $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
-
       $$copySelectedList = $$copySelectedList.map(
         index => $$copyGroupSsids.getIn(['list', index, 'ssid']),
       );
@@ -496,7 +602,27 @@ export default class View extends React.Component {
       copySelectedList: $$copySelectedList,
     });
   }
-
+  // onBeforeSync($$actionQuery, $$curListItem) {
+  //   if ($$actionQuery.get('action') === 'add' && $$curListItem.get('portalTemplate') === 'default' && $$curListItem.get('auth') !== undefined) {
+  //     this.props.save('goform/system/ap/version', $$actionQuery.merge($$curListItem).toJS())
+  //       .then((json) => {
+  //         const state = json && json.state;
+  //         if (state.code === 2000) {
+  //           this.props.save('goform/portal/access/ssidmanagement', {
+  //             name: `${$$curListItem.get('ssid')}${$$curListItem.get('auth')}`,
+  //             ssid: $$curListItem.get('ssid'),
+  //             web: $$curListItem.get('auth'),
+  //           }).then(
+  //               () => {
+  //                 if (json && json.state && json.state.code === 2000) {
+  //                   this.props.receiveScreenData();
+  //                 }
+  //               },
+  //             );
+  //         }
+  //       });
+  //   }
+  // }
   getCurrData(name) {
     return this.props.store.getIn([this.props.route.id, 'curListItem', name]);
   }
@@ -523,7 +649,7 @@ export default class View extends React.Component {
       );
   }
   fetchMandatoryDomainList() {
-    this.props.fetch('goform/network/Aaa', {
+    this.props.fetch('goform/portal/Aaa', {
       page: 1,
       size: 500,
     })
@@ -730,10 +856,13 @@ export default class View extends React.Component {
     const { store, route } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const isCopySsid = actionQuery.get('action') === 'copy';
+    const curListOptions = this.listOptions
+      .setIn([16, 'options'], this.state.portalServerTemplateNameOptions)
+      .setIn([17, 'options'], this.state.WebTemplateNameOptions);
     return (
       <AppScreen
         {...this.props}
-        listOptions={this.listOptions}
+        listOptions={curListOptions}
         listKey="allKeys"
         actionBarChildren={this.renderActionBar()}
         initOption={{

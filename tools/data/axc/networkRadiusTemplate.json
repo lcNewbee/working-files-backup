@@ -6,7 +6,7 @@
   "data": {
     "list": [{
       "id": 1,
-      "template_name": "test",
+      "template_name": "default",
       "nasip": "123.123.122.1",
       "authpri_ipaddr": "1.1.1.1",
       "authpri_port": "222",

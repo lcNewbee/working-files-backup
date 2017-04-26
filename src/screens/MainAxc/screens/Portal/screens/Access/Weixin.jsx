@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
@@ -60,8 +59,11 @@ const listOptions = fromJS([
   }, {
     id: 'domain',
     text: __('Domain'),
+    noTable: true,
+    noForm: true,
     formProps: {
       noAdd: true,
+      notEditable: true,
       type: 'text',
       maxLength: '129',
       required: true,
@@ -73,7 +75,10 @@ const listOptions = fromJS([
     id: 'outTime',
     text: __('Out Time'),
     help: __('Second'),
+    noTable: true,
+    noForm: true,
     formProps: {
+      notEditable: true,
       help: __('Second'),
       noAdd: true,
       min: '0',

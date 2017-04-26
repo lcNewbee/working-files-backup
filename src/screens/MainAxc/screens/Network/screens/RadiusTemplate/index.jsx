@@ -815,6 +815,9 @@ export default class View extends React.Component {
         modalChildren={this.renderCustomModal()}
         listKey="template_name"
         maxListSize="16"
+        deleteable={
+          ($$item, index) => (index !== 0)
+        }
         selectable
         actionable
       />

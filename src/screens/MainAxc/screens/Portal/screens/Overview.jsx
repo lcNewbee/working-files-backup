@@ -54,8 +54,8 @@ function getOnlineOption(serverData) {
   return ret;
 }
 function getApStatusOption(serverData) {
-  const lockText = __('Locked');
-  const unlockText = __('Unlocked');
+  const lockText = __('Unavailability');
+  const unlockText = __('Normal');
   const lockCount = serverData.get('lockCount') || 0;
   const unlockCount = serverData.get('trueCount') || 0;
   const ret = $$commonPieOption.mergeDeep({
@@ -65,7 +65,7 @@ function getApStatusOption(serverData) {
       x: '60%',
     },
     title: {
-      text: __('Lock Status'),
+      text: __('User Status'),
       subtext: `${lockCount} / ${unlockCount}`,
     },
     series: [

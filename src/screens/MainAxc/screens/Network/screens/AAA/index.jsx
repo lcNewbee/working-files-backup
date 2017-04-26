@@ -164,6 +164,9 @@ export default class View extends React.Component {
         {...this.props}
         listKey="domain_name"
         listOptions={myListOptions}
+        deleteable={
+          ($$item, index) => (index !== 0)
+        }
         maxListSize="16"
         actionable
         selectable
