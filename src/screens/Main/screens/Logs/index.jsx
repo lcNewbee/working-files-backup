@@ -26,7 +26,7 @@ const logsTableOptions = fromJS([
     id: 'type',
     text: __('Type'),
     width: '180',
-    transform (val, item) {
+    transform(val) {
       const typeMap = {
         ap: __('DEVICES'),
         client: __('CLIENTS'),
@@ -42,11 +42,10 @@ const logsTableOptions = fromJS([
   }, {
     id: 'loginfo',
     text: __('Describe'),
-    transform (val, item) {
+    transform(val, item) {
       let ret = __(utils.toCamel(item.get('logaction')));
-      let logType = item.get('type');
       let groupname;
-      let statusMap = {
+      const statusMap = {
         0: __('start'),
         1: __('success'),
         2: __('failed'),
