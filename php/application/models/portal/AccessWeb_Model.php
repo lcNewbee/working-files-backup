@@ -4,7 +4,7 @@ class AccessWeb_Model extends CI_Model {
         parent::__construct();
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $this->load->helper(array('array', 'db_operation'));
-        $this->load->library('PHPZip');        	
+        $this->load->library('PHPZip');
     }
     function get_list($data) {           
         $parameter = array(
@@ -124,6 +124,51 @@ class AccessWeb_Model extends CI_Model {
         $result = $result ? json_ok() : json_no('update error');
         return json_encode($result);
     }
+    function web_download($data) {
+        $filesum = element('id', $data, 1);                
+        $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$filesum.'/';
+        if($filesum == 1){
+            $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/';
+        }
+        $path = '/var/conf/portal_web_tmp';//需压缩的目录（文件夹）        
+        $filename = "/var/conf/portal_web_tmp.zip"; //最终生成的文件名（含路径）
+        
+        //1.清空
+		if(is_dir($path)){
+			system('rm -rf ' . $path);
+			mkdir($path,0777,true);
+        }else{
+			mkdir($path,0777,true);
+		} 
+        //2.复制
+        if(!is_dir($copyPath)){
+            echo json_encode(json_no('File does not exist ',4000));
+            return;
+        }
+        copy($copyPath.'auth.jsp',$path.'/auth.jsp');
+        copy($copyPath.'ok.jsp',$path.'/ok.jsp');
+        copy($copyPath.'out.jsp',$path.'/out.jsp');
+        $this->copyDir($copyPath.'dist',$path.'/dist');//复制文件夹下所有 
+        $this->copyDir($copyPath.'weixin',$path.'/weixin');
+        copy($copyPath.'wx.jsp',$path.'/wx.jsp');
+        copy($copyPath.'wxpc.jsp',$path.'/wxpc.jsp');
+        copy($copyPath.'APIauth.jsp',$path.'/APIauth.jsp');
+        copy($copyPath.'APIok.jsp',$path.'/APIok.jsp');
+        copy($copyPath.'APIout.jsp',$path.'/APIout.jsp');
+        copy($copyPath.'APIwx.jsp',$path.'/APIwx.jsp');
+        copy($copyPath.'APIwxpc.jsp',$path.'/APIwxpc.jsp');
+        copy($copyPath.'error.html',$path.'/error.html');
+        copy($copyPath.'info.jsp',$path.'/info.jsp');
+        copy($copyPath.'OL.jsp',$path.'/OL.jsp');
+        copy($copyPath.'wifidogAuth.jsp',$path.'/wifidogAuth.jsp');
+        copy($copyPath.'wifidogOk.jsp',$path.'/wifidogOk.jsp');
+        copy($copyPath.'wifidogOut.jsp',$path.'/wifidogOut.jsp');
+        copy($copyPath.'wifidogWx.jsp',$path.'/wifidogWx.jsp'); 
+         
+        $zip = new PHPZip();
+        //3.压缩并下载 
+        $zip->Zip_CompressDownload($path,$filename);
+    }
     private function do_upload(){
         $config['upload_path'] = '/var/conf/portalserver';
         $config['overwrite']=true;  
@@ -183,4 +228,24 @@ class AccessWeb_Model extends CI_Model {
             return false;
         }
     }
+    /**
+     * 复制文件夹及下所有文件
+     * @src 要复制的文件夹
+     * @dst 目标文件
+    */
+    private function copyDir($src, $dst) {
+        $dir = opendir($src);
+        @mkdir($dst);
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    $this->copyDir($src . '/' . $file, $dst . '/' . $file);                    
+                    continue;
+                } else {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
+    }  
 }

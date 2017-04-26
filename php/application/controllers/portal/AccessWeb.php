@@ -6,7 +6,7 @@ class AccessWeb extends CI_Controller {
 		$this->load->helper('array');
         $this->load->model('portal/AccessWeb_Model');
 	}
-    public function index() {
+    function index() {
 		$result = null;
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
@@ -17,12 +17,11 @@ class AccessWeb extends CI_Controller {
 			echo $result;
 		}
 	}
-	function webPage(){
-		echo $this->AccessWeb_Model->get_web_page();
-	}
+	
 	function fetch() {
 		return $this->AccessWeb_Model->get_list($_GET);
 	}
+
 	function onAction($data) {
 		if (!$data) {
             $data = $_POST;
@@ -42,4 +41,12 @@ class AccessWeb extends CI_Controller {
 		return $result;
 	}
 	
+	function webPage(){
+		echo $this->AccessWeb_Model->get_web_page();
+	}
+
+	function download() {             
+        $this->AccessWeb_Model->web_download($_GET);
+    }
+
 }
