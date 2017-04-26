@@ -162,7 +162,7 @@ const defaultProps = {
   routes: [],
 };
 
-class RouteSwitches extends Component {
+export class RouteSwitches extends Component {
   componentWillMount() {
     this.routeList = renderRoutesList(this.props.routes);
   }
@@ -183,7 +183,4 @@ class RouteSwitches extends Component {
 
 RouteSwitches.propTypes = propTypes;
 RouteSwitches.defaultProps = defaultProps;
-
-export RouteSwitches
-
 
