@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const propTypes = {
@@ -19,11 +19,10 @@ const defaultProps = {
   overlay: true,
 };
 
-class PopOver extends Component {
+class PopOver extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClose = this.onClose.bind(this);
     this.renderContent = this.renderContent.bind(this);
   }

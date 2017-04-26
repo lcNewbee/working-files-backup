@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import * as actions from './actions';
-import reducer from './reducer';
+import { fromJS } from 'immutable';
+import utils from 'shared/utils';
 import Button from 'shared/components/Button/Button';
-import { Search, FormGroup, Checkbox } from 'shared/components/Form';
 import Switchs from 'shared/components/Switchs';
 import Table from 'shared/components/Table';
+import PureComponent from 'shared/components/Base/PureComponent';
+
+import * as actions from './actions';
+import reducer from './reducer';
 
 const msg = {
   TITIE: __('Reports'),
@@ -30,36 +31,45 @@ const typeArr = [
 ];
 
 // 原生的 react 页面
-export const Statistics = React.createClass({
+export class Statistics extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  mixins: [PureRenderMixin],
+    utils.binds(this, [
+      'onTimeSwitch',
+      'onGenerateReport',
+      'onDownloadReport',
+      'onEmailReport',
+      'onDeleteReport',
+    ]);
+  }
 
   componentWillMount() {
     this.props.fetchReportInfo();
-  },
+  }
 
   // 函数定义
   onTimeSwitch(data) {
     this.props.changeTimeRangeInfo(data.value);
-  },
+  }
 
   onGenerateReport() {
     this.props.createReport();// 通过connect传递成为statistics的属性,定义在action中
-  },
+  }
 
   onDownloadReport(num) {
     this.props.downloadReport(num);
-  },
+  }
 
   // 点击邮件按钮的操作
   onEmailReport(num) {
     this.props.emailReport(num);
-  },
+  }
 
   // 点击删除按钮的操作
   onDeleteReport(num) {
     this.props.deleteReport(num);
-  },
+  }
 
   render() {
     const reportsTableOptions = fromJS([
@@ -67,9 +77,9 @@ export const Statistics = React.createClass({
         id: 'id',
         text: __('No.'),
       }, {
-          id: 'createAt',
-          text: __('Create Time'),
-        }, {
+        id: 'createAt',
+        text: __('Create Time'),
+      }, {
         id: 'startdate',
         text: __('Report start time'),
       }, {
@@ -78,7 +88,7 @@ export const Statistics = React.createClass({
       }, {
         id: 'operate',
         text: __('Action'),
-        transform: function (val, item) {
+        transform: (val, item) => {
           let curId = item.get('id');
 
           return (
@@ -100,7 +110,7 @@ export const Statistics = React.createClass({
               />
             </div>
           );
-        }.bind(this),
+        },
       },
     ]);
 
@@ -128,8 +138,8 @@ export const Statistics = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 function mapStateToProps(state) { // state是整个应用的state？如何知道？
   let myState = state.statistics;

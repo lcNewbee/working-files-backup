@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import Input from './atom/Input';
 
 const propTypes = {
@@ -17,11 +17,10 @@ const defaultProps = {
   max: '',
 };
 
-class NumberInput extends React.Component {
+class NumberInput extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onNumberChange = this.onNumberChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
   }

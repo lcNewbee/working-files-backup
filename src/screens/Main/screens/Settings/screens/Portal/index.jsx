@@ -4,12 +4,12 @@ import urls from 'shared/config/urls';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
 import { FormGroup } from 'shared/components/Form';
 import Select from 'shared/components/Select';
 import { Button, SaveButton } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
+import PureComponent from 'shared/components/Base/PureComponent';
 import * as myActions from './actions';
 import myReducer from './reducer';
 import './index.scss';
@@ -49,31 +49,41 @@ const propTypes = {
   groups: PropTypes.instanceOf(List),
 };
 
-export const Portal = React.createClass({
-  mixins: [PureRenderMixin],
+export class Portal extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  getInitialState() {
-    return {
+    utils.binds(this, [
+      'onUpdateSettings',
+      'onSave',
+      'onChangeImage',
+      'restImageStatus',
+      'imageUploading',
+      'onUploadImage',
+      'getCurrData',
+    ]);
+
+    this.state = {
       imageStatus1: 'default',
       imageStatus2: 'default',
       imageStatus3: 'default',
       activeIndex: 0,
     };
-  },
+  }
 
   componentWillMount() {
     this.props.fetchPortalSettings();
-  },
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchPortalSettings();
     }
-  },
+  }
 
   componentWillUnmount() {
     this.props.resetVaildateMsg();
-  },
+  }
 
   onUpdateSettings(name) {
     return function (data) {
@@ -82,7 +92,7 @@ export const Portal = React.createClass({
       settings[name] = data.value;
       this.props.changePortalSettings(settings);
     }.bind(this);
-  },
+  }
 
   onSave() {
     this.props.validateAll()
@@ -91,7 +101,7 @@ export const Portal = React.createClass({
           this.props.setPortal();
         }
       });
-  },
+  }
 
   onChangeImage(i) {
     return function (e) {
@@ -123,7 +133,7 @@ export const Portal = React.createClass({
       data['imageStatus' + i] = 'selected';
       this.setState(utils.extend({}, this.state, data));
     }.bind(this);
-  },
+  }
 
   restImageStatus(i) {
     let input = document.getElementById('filename' + i);
@@ -132,14 +142,14 @@ export const Portal = React.createClass({
     data['imageStatus' + i] = 'default';
     this.setState(utils.extend({}, this.state, data));
     input.value = '';
-  },
+  }
 
   imageUploading(i) {
     let data = {};
 
     data['imageStatus' + i] = 'loading';
     this.setState(utils.extend({}, this.state, data));
-  },
+  }
 
   onUploadImage(i) {
     const that = this;
@@ -195,13 +205,13 @@ export const Portal = React.createClass({
         that.props.fetchPortalSettings();
       }
     };
-  },
+  }
 
   getCurrData(name, defaultVal) {
     const myDefault = defaultVal || '';
 
     return this.props.store.getIn(['data', 'curr', name]) || myDefault;
-  },
+  }
 
   render() {
     const { getCurrData } = this;
@@ -498,15 +508,13 @@ export const Portal = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 Portal.propTypes = propTypes;
 
 // React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
-  let myState = state.portal;
-
   return {
     store: state.portal,
     app: state.app,
@@ -516,7 +524,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    myActions
+    myActions,
   ), dispatch);
 }
 

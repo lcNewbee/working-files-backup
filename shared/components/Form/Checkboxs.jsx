@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { List, fromJS } from 'immutable';
 import Checkbox from './Checkbox';
+import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
@@ -20,11 +20,10 @@ const defaultProps = {
   maxChecked: 99,
 };
 
-class Checkboxs extends React.Component {
+class Checkboxs extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
     this.valueArrState = [];
   }

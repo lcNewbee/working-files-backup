@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-
 import 'react-select/scss/default.scss';
 import './_index.scss';
+import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
   isAsync: PropTypes.bool,
@@ -21,11 +20,10 @@ const defaultProps = {
   placeholder: __('Please Select '),
 };
 
-class MySelect extends React.Component {
+class MySelect extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 

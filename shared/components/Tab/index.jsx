@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { fromJS } from 'immutable';
 import { NavLink as Link } from 'react-router-dom';
+import PureComponent from '../Base/PureComponent';
 import Icon from '../Icon';
 import './_index.scss';
 
@@ -15,17 +15,7 @@ const defaultProps = {
   menus: [],
 };
 
-class Tabs extends Component {
-  constructor(props) {
-    super(props);
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  onSelectTab() {
-
-  }
-
+class Tabs extends PureComponent {
   render() {
     const { menus } = this.props;
     return (

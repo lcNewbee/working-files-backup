@@ -1,13 +1,13 @@
 import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
-import { fromJS, Map, List } from 'immutable';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import { SaveButton } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
+import PureComponent from 'shared/components/Base/PureComponent';
 import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
@@ -29,10 +29,15 @@ const encryptionOptions = [
 ];
 
 const propTypes = {
-  fetchDeviceGroups: PropTypes.func,
-  fetching: PropTypes.bool,
-  data: PropTypes.instanceOf(Map),
-  groups: PropTypes.instanceOf(List),
+  changeGuestGroup: PropTypes.func,
+  fetchGuestSettings: PropTypes.func,
+  setGuest: PropTypes.func,
+  changeGuestSettings: PropTypes.func,
+  validateAll: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
+  validateOption: PropTypes.object,
+  store: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
 };
 
 const validOptions = Map({
@@ -54,37 +59,46 @@ const validOptions = Map({
   }),
 });
 
-export const Guest = React.createClass({
-  mixins: [PureRenderMixin],
+export class Guest extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  propTypes,
+    utils.binds(this, [
+      'onUpdate',
+      'onChangeGroup',
+      'onChangeEncryption',
+      'onSave',
+      'getCurrData',
+      'getGroupOptions',
+    ]);
+  }
 
   componentWillMount() {
     this.props.fetchGuestSettings();
-  },
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchGuestSettings();
     }
-  },
+  }
 
   componentWillUnmount() {
     this.props.resetVaildateMsg();
-  },
+  }
 
   onUpdate(name) {
-    return function (data) {
+    return (data) => {
       const settings = {};
 
       settings[name] = data.value;
       this.props.changeGuestSettings(settings);
-    }.bind(this);
-  },
+    };
+  }
 
   onChangeGroup(item) {
     this.props.changeGuestGroup(item.value);
-  },
+  }
 
   onChangeEncryption(item) {
     const data = {
@@ -92,7 +106,7 @@ export const Guest = React.createClass({
     };
 
     this.props.changeGuestSettings(data);
-  },
+  }
 
   onSave() {
     this.props.validateAll()
@@ -101,19 +115,19 @@ export const Guest = React.createClass({
           this.props.setGuest();
         }
       });
-  },
+  }
 
   getCurrData(name, defaultVal) {
     const myDefault = defaultVal || '';
 
     return this.props.store.getIn(['data', 'curr', name]) || myDefault;
-  },
+  }
 
   getGroupOptions() {
     return this.props.store
       .getIn(['data', 'list'])
-      .map(function (item, i) {
-        let groupname = item.get('groupname');
+      .map((item) => {
+        const groupname = item.get('groupname');
         let label = groupname;
 
         if (groupname === 'Default') {
@@ -125,7 +139,7 @@ export const Guest = React.createClass({
         };
       })
       .toJS();
-  },
+  }
 
   render() {
     const groupOptions = this.getGroupOptions();
@@ -135,7 +149,7 @@ export const Guest = React.createClass({
 
     let settngClassName = 'none';
 
-    if (getCurrData('enable') == '1') {
+    if (getCurrData('enable') === '1') {
       settngClassName = '';
     }
 
@@ -293,11 +307,13 @@ export const Guest = React.createClass({
         </FormGroup>
       </div>
     );
-  },
-});
+  }
+}
+
+Guest.propTypes = propTypes;
 
 function mapStateToProps(state) {
-  let myState = state.guest;
+  const myState = state.guest;
 
   return {
     store: myState,
@@ -309,14 +325,14 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     { fetchDeviceGroups },
     appActions,
-    myActions
+    myActions,
   ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(Guest);
 
 export const reducer = myReducer;

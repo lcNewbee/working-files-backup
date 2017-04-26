@@ -1,17 +1,17 @@
 import React from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import validator from 'shared/validator';
 import Table from 'shared/components/Table';
 import {
-  Search, FormGroup, Button, Select, Modal, Switchs,
+  Search, FormGroup, Button, Select, Modal, Switchs, PureComponent,
 } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 import reducer from './reducer';
+
 
 // css
 import './_index.scss';
@@ -66,28 +66,50 @@ const selectOptions = [
 ];
 
 // 原生的 react 页面
-export const Device = React.createClass({
-  mixins: [PureRenderMixin],
+export class Device extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    utils.binds(this, [
+      'onAction',
+      'onChangeSearchText',
+      'onChangeType',
+      'onChangeTableSize',
+      'onPageChange',
+      'onChangeDevicesQuery',
+      'onResetDevice',
+      'onRebootDevice',
+      'onUpgradeDevice',
+      'onLocateDevice',
+      'onSaveDeviceNetWork',
+      'getDevicesTableOptions',
+      'showEditNetwork',
+      'onChangeDeviceNetwork',
+      'combine',
+      'handleSearch',
+      'handleAction',
+    ]);
+  }
 
   componentWillMount() {
     this.handleSearch();
-  },
+  }
   // 加载后如果app的refreshAt属性有更新则从后台抓取数据
   // 什么时候执行这个函数？
   componentDidUpdate(prevProps) {
     if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
-  },
+  }
   // 离开页面时执行？
   componentWillUnmount() {
     this.props.resetVaildateMsg();
     this.props.leaveDevicesScreen();
-  },
+  }
   // 从后台抓取数据
   handleSearch() {
     this.props.fetchDevices();
-  },
+  }
 
   /**
    * action: reboot | reset | locate
@@ -101,33 +123,33 @@ export const Device = React.createClass({
     };
 
     this.props.saveDevicesAction(data);
-  },
+  }
 
   // on Query changed
   onChangeSearchText(val) {
     this.props.changeDevicesQuery({
       search: val,
     });
-  },
+  }
   onChangeTableSize(option) {
     this.props.changeDevicesQuery({
       size: option.value,
       page: 1,
     });
     this.handleSearch();
-  },
+  }
   onChangeDevicesQuery(data) {
     this.props.changeDevicesQuery({
       devicetype: data.value,
     });
     this.handleSearch();
-  },
+  }
   onPageChange(i) {
     this.props.changeDevicesQuery({
       page: i,
     });
     this.handleSearch();
-  },
+  }
 
   /**
    *
@@ -143,7 +165,7 @@ export const Device = React.createClass({
         this.handleAction(mac, 'reset');
       }.bind(this),
     });
-  },
+  }
   onRebootDevice(mac) {
     let msg_text = __('Are you sure reboot device: %s?', mac);
 
@@ -155,7 +177,7 @@ export const Device = React.createClass({
         this.handleAction(mac, 'reboot');
       }.bind(this),
     });
-  },
+  }
   onLocateDevice(mac, isLocating) {
     let actionType = 'location';
 
@@ -163,7 +185,7 @@ export const Device = React.createClass({
       actionType = 'unlocation';
     }
     this.handleAction(mac, actionType);
-  },
+  }
   onUpgradeDevice(mac) {
     let msg_text = __('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
 
@@ -175,14 +197,14 @@ export const Device = React.createClass({
         this.handleAction(mac, 'upgrade');
       }.bind(this),
     });
-  },
+  }
 
   // onEdit
   showEditNetwork(mac) {
     return function (e) {
       this.props.fetchDeviceNetwork(mac);
     }.bind(this);
-  },
+  }
   onChangeDeviceNetwork(name) {
     return function (data) {
       let editObj = {};
@@ -190,7 +212,7 @@ export const Device = React.createClass({
       editObj[name] = data.value;
       this.props.changeDeviceNetwork(editObj);
     }.bind(this);
-  },
+  }
 
   // 组合验证
   combine() {
@@ -206,10 +228,9 @@ export const Device = React.createClass({
     }
 
     return ret;
-  },
+  }
 
   onSaveDeviceNetWork() {
-
     this.props.validateAll()
       .then((invalid) => {
         const combineResult = this.combine();
@@ -249,7 +270,7 @@ export const Device = React.createClass({
           }
         }
       });
-  },
+  }
 
   getDevicesTableOptions() {
     const noControl = this.props.app.get('noControl');
@@ -402,7 +423,7 @@ export const Device = React.createClass({
     }
 
     return ret;
-  },
+  }
 
   render() {
     const devicesTableOptions = this.getDevicesTableOptions();
@@ -531,8 +552,8 @@ export const Device = React.createClass({
         </Modal>
       </div>
     );
-  },
-});
+  }
+}
 
 function mapStateToProps(state) {
   return {
@@ -544,7 +565,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
   ), dispatch);
 }
 

@@ -1,18 +1,13 @@
+// 为了兼容 React 没有 PureComponent组件的版本
 import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import shallowCompare from 'react-addons-shallow-compare';
 
-export default class PureComponent extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
-  binds(...methods) {
-    methods.forEach((method) => {
-      if (typeof this[method] === 'function') {
-        this[method] = this[method].bind(this);
-      }
-    });
+class BasePureComponent extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
   }
 }
+
+const PureComponent = React.PureComponent || BasePureComponent;
+
+export default PureComponent;

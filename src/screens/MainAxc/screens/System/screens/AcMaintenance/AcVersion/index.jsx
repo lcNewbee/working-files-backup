@@ -2,13 +2,12 @@ import React, { PropTypes, PureComponent } from 'react';
 import { fromJS, Map } from 'immutable';
 import utils from 'shared/utils';
 import WizardContainer from 'shared/components/Organism/WizardContainer';
-import DropzoneComponent from 'react-dropzone-component';
+import DropzoneComponent from 'react-dropzone-component/dist/react-dropzone';
 import FormGroup from 'shared/components/Form/FormGroup';
 import 'dropzone/dist/min/dropzone.min.css';
 
 import './_style.scss';
 
-const _ = window._;
 const msg = {
   password: __('Password'),
   versionUses: __('Version Description'),
@@ -185,8 +184,8 @@ export default class AcVersion extends PureComponent {
           filename: '',
         });
       },
-      error: (file) => {
-      },
+      // error: (file) => {
+      // },
       processing: null,
       uploadprogress: null,
       sending: null,

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import FormInput from './FormInput';
 
 function isValidateMyForm(validateAt, myForm) {
@@ -97,11 +97,10 @@ function isNotSelectValue(option) {
   return ret;
 }
 
-class FormGroup extends React.Component {
+class FormGroup extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.check = this.check.bind(this);
     this.checkClear = this.checkClear.bind(this);
     this.clearValidError = this.clearValidError.bind(this);

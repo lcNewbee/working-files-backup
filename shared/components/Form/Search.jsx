@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import Icon from '../Icon';
 import Input from './atom/Input';
 import utils from '../../utils';
@@ -18,11 +18,10 @@ const defaultProps = {
   onSearch: utils.emptyFunc,
 };
 
-class Search extends React.Component {
+class Search extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
       'onChange',
       'handleKeyUp',

@@ -4,6 +4,7 @@ import { NavLink as Link } from 'react-router-dom';
 import { fromJS, Map, List } from 'immutable';
 import TabContainer from '../Organism/TabContainer';
 import Icon from '../Icon';
+import PureComponent from '../Base/PureComponent';
 
 /**
  * DSAD
@@ -90,11 +91,10 @@ const defaultProps = {
   isTree: false,
   role: 'menu',
 };
-class Nav extends React.PureComponent {
+class Nav extends PureComponent {
   constructor(props) {
     super(props);
 
-    // this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSelectItem = this.onSelectItem.bind(this);
     this.onToggleBranch = this.onToggleBranch.bind(this);
 

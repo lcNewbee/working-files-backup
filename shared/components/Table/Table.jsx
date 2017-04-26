@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fromJS, List } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import utils from '../../utils';
 import Pagination from '../Pagination';
 import Icon from '../Icon';
@@ -28,11 +28,10 @@ const defaultProps = {
   list: fromJS([]),
 };
 
-class Table extends Component {
+class Table extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
       'onRowSelect',
       'onRowClick',

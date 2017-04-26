@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map, fromJS } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
 import FormContainer from 'shared/components/Organism/FormContainer';
+import PureComponent from 'shared/components/Base/PureComponent';
 
 const formOptions = fromJS([
   {
@@ -44,11 +44,10 @@ const propTypes = {
 
 const defaultProps = {
 };
-class Panel extends React.Component {
+class Panel extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSave = this.onSave.bind(this);
   }
   onSave() {

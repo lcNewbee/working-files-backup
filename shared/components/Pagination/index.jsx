@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 
 import './index.scss';
 
@@ -18,11 +18,10 @@ const defaultProps = {
   currPage: 1,
 };
 
-class Pagination extends Component {
+class Pagination extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onGoPage = this.onGoPage.bind(this);
     this.onPrev = this.onPrev.bind(this);
     this.onNext = this.onNext.bind(this);

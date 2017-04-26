@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, fromJS } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import utils from 'shared/utils';
 
 const propTypes = {
@@ -23,11 +23,10 @@ const defaultProps = {
   readOnly: false,
 };
 
-class Switchs extends React.Component {
+class Switchs extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClick = this.onClick.bind(this);
   }
 

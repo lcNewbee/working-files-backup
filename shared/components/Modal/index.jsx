@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
 import b28n from 'shared/b28n';
 import utils from '../../utils';
+import PureComponent from '../Base/PureComponent';
 
 let curModelShowNum = 0;
 let backdropTimeout = null;
@@ -111,11 +111,10 @@ const defaultProps = {
   customBackdrop: false,
 };
 
-class Modal extends Component {
+class Modal extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onOk = this.onOk.bind(this);
     this.state = {

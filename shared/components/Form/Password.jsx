@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import Icon from '../Icon';
 import Input from './atom/Input';
 
@@ -24,7 +24,7 @@ const inputStyle = {
   width: '100%',
 };
 
-class Password extends React.Component {
+class Password extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -33,7 +33,6 @@ class Password extends React.Component {
       isFocus: !!props.autoFocus,
     };
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
     this.seePassword = this.seePassword.bind(this);
   }

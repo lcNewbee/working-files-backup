@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import utilsCore from 'shared/utils/lib/core';
 
@@ -39,11 +39,10 @@ const defaultProps = {
   onBeforeStep: utilsCore.emptyFunc,
 };
 
-class WizardContainer extends React.Component {
+class WizardContainer extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
       currStep: props.initStep,
       maxStep: props.options.size,

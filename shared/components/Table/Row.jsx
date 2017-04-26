@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Checkbox from 'shared/components/Form/Checkbox';
 import Icon from 'shared/components/Icon';
 import utilsCore from 'shared/utils/lib/core';
@@ -43,7 +42,10 @@ class Row extends Component {
     });
   }
   render() {
-    const { isTh, options, selected, selectable, curSelectable, item, index, ...restProps } = this.props;
+    const {
+      isTh, options, selected, selectable, curSelectable,
+      item, index, ...restProps
+    } = this.props;
     let rowChilren = null;
     let MyCompeont = 'td';
 

@@ -1,5 +1,4 @@
 // Base
-export { default as BaseComonent } from './Base/BaseComonent';
 export { default as PureComponent } from './Base/PureComponent';
 
 // Atom

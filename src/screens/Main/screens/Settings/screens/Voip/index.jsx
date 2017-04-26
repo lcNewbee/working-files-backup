@@ -3,11 +3,11 @@ import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
 import { FormGroup } from 'shared/components/Form';
 import { SaveButton } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
+import PureComponent from 'shared/components/Base/PureComponent';
 import * as myActions from './actions';
 import myReducer from './reducer';
 
@@ -37,24 +37,33 @@ const propTypes = {
 
 const validOptions = Map({});
 
-export const Voip = React.createClass({
-  mixins: [PureRenderMixin],
+export class Voip extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  propTypes,
+    utils.binds(this, [
+      'onUpdate',
+      'onChangeGroup',
+      'onChangeEncryption',
+      'onSave',
+      'getCurrData',
+      'getGroupOptions',
+    ]);
+  }
 
   componentWillMount() {
     this.props.fetchVoipSettings();
-  },
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchVoipSettings();
     }
-  },
+  }
 
   componentWillUnmount() {
     this.props.resetVaildateMsg();
-  },
+  }
 
   onUpdate(name) {
     return function (data) {
@@ -63,11 +72,11 @@ export const Voip = React.createClass({
       settings[name] = data.value;
       this.props.changeVoipSettings(settings);
     }.bind(this);
-  },
+  }
 
   onChangeGroup(item) {
     this.props.changeVoipGroup(item.value);
-  },
+  }
 
   onChangeEncryption(item) {
     const data = {
@@ -75,7 +84,7 @@ export const Voip = React.createClass({
     };
 
     this.props.changeVoipSettings(data);
-  },
+  }
 
   onSave() {
     this.props.validateAll()
@@ -84,11 +93,11 @@ export const Voip = React.createClass({
           this.props.setVoip();
         }
       });
-  },
+  }
 
   getCurrData(name) {
     return this.props.store.getIn(['data', 'curr', name]);
-  },
+  }
 
   getGroupOptions() {
     return this.props.store
@@ -106,18 +115,12 @@ export const Voip = React.createClass({
         };
       })
       .toJS();
-  },
+  }
 
   render() {
     const groupOptions = this.getGroupOptions();
     const getCurrData = this.getCurrData;
     const noControl = this.props.app.get('noControl');
-
-    let settngClassName = 'none';
-
-    if (getCurrData('enable') == '1') {
-      settngClassName = '';
-    }
 
     return (
       <div>
@@ -154,8 +157,10 @@ export const Voip = React.createClass({
         </FormGroup>
       </div>
     );
-  },
-});
+  }
+}
+
+Voip.propTypes = propTypes;
 
 function mapStateToProps(state) {
   const myState = state.voip;

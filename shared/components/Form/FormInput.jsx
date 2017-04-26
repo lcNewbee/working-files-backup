@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import moment from 'moment';
+import PureComponent from '../Base/PureComponent';
 import Select from '../Select';
 import Checkbox from './Checkbox';
 import Password from './Password';
@@ -59,13 +59,12 @@ const defaultProps = {
   dataFormat: null,
 };
 
-class FormInput extends React.Component {
+class FormInput extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       focusedInput: null,
     };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 
     utils.binds(this, [
       'onBlur',

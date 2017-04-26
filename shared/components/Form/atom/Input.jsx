@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../../Base/PureComponent';
+
 
 // React 所有支持的 HTML Attributes
 const supportAttr = `accept,acceptCharset,accessKey,action,allowFullScreen,allowTransparency,alt,
@@ -37,13 +38,7 @@ const defaultProps = {
   isFocus: false,
 };
 
-class Input extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
+class Input extends PureComponent {
   componentDidUpdate() {
     if (this.props.isFocus) {
       this.myRef.focus();

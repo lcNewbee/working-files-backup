@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import utils from 'utils';
 import { Map, List, fromJS } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import FormGroup from '../Form/FormGroup';
 import SaveButton from '../Button/SaveButton';
 import Table from '../Table/';
@@ -54,11 +54,9 @@ const defaultProps = {
   savedText: __('Applied'),
 };
 
-class FormContainer extends React.Component {
+class FormContainer extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 
     utils.binds(this, [
       'onSave',

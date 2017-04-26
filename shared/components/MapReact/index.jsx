@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import utils from 'shared/utils';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
   apiKey: PropTypes.string,
@@ -15,11 +15,10 @@ const defaultProps = {
   role: 'menu',
 };
 
-class MapReact extends Component {
+class MapReact extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.state = {
       isMapLoaded: false,
     };

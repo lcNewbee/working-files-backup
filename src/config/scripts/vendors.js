@@ -5,7 +5,6 @@ require('immutable');
 require('prop-types');
 require('react');
 require('react-addons-css-transition-group');
-require('react-addons-pure-render-mixin');
 require('react-addons-shallow-compare');
 require('react-dom');
 require('react-redux');

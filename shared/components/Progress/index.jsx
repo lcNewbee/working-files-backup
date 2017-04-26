@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 
 // We
 const propTypes = {
@@ -21,14 +21,12 @@ const defaultProps = {
   unit: '%',
 };
 
-export default class Progress extends React.Component {
-  constructor(props) {
-    super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
-
+export default class Progress extends PureComponent {
   render() {
-    const { className, theme, striped, value, max, animated, showText, unit, ...restProps } = this.props;
+    const {
+      className, theme, striped, value, max, animated, showText, unit,
+      ...restProps
+    } = this.props;
     const progressClassNames = classnames('a-progress', {
       'a-progress--success': theme === 'success',
       'a-progress--info': theme === 'info',

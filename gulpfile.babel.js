@@ -22,6 +22,7 @@ const paths = {
   pubAxc: '../axc_r1/web/web',
   pubAxcR1: '../axc_r1/web/web',
   pubAxcIndia: '../axc_branch_india/ac/apps/web/web',
+  pubAxcMonitor: '../axc_monitor/apps/web/web',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: './webpack.config.dev.js',
   pubWebpack: './webpack.config.production.js',

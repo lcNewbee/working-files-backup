@@ -44,7 +44,7 @@
       }
     }
 
-    &:not([disabled]):checked {
+    &:checked {
       & + label {
         padding-left: 15px;
         background-color: $g-brand-primary;
@@ -103,7 +103,6 @@
   }
 
   &.a-checkbox--square {
-
     input[type=checkbox] {
       & + label {
         text-align: center;

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Map, fromJS } from 'immutable';
 import utils from 'shared/utils';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { radioBase, $$phymodeOptopns } from 'shared/config/axcRadio';
 import FormContainer from 'shared/components/Organism/FormContainer';
+import PureComponent from 'shared/components/Base/PureComponent';
 
 import {
   FormGroup,
@@ -42,11 +42,10 @@ const propTypes = {
 
 const defaultProps = {
 };
-class DeviceSystem extends React.Component {
+class DeviceSystem extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
       'fetchChannelOptions',
       'onSave',

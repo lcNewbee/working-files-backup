@@ -108,7 +108,7 @@
     "react-addons-shallow-compare": "^15.4.2",
     "react-dates": "^10.1.1",
     "react-dom": "^15.3.2",
-    "react-dropzone-component": "^1.2.0",
+    "react-dropzone-component": "^2.0.0",
     "react-hot-loader": "^3.0.0-beta.6",
     "react-redux": "^5.0.1",
     "react-redux-toastr": "^6.2.4",

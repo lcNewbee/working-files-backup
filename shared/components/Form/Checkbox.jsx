@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import Input from './atom/Input';
 
 const propTypes = {
@@ -20,12 +20,10 @@ const defaultProps = {
   offValue: 0,
 };
 
-class Checkbox extends React.Component {
+class Checkbox extends PureComponent {
   constructor(props) {
     const { id } = props;
     super(props);
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 
     if (!id) {
       this.id = `checkbox_${Math.random()}`;

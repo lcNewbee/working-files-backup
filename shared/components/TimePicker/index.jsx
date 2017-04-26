@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import 'rc-time-picker/assets/index.css';
+import PureComponent from '../Base/PureComponent';
 import './_index.scss';
 
 const propTypes = {
@@ -18,12 +18,7 @@ const defaultProps = {
   placeholder: __('Please Select '),
 };
 
-class MyTimePicker extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
+class MyTimePicker extends PureComponent {
 
   render() {
     const { showSecond, value, formatter } = this.props;

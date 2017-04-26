@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map, fromJS } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { radioAdvance } from 'shared/config/axcRadio';
-import {
-  FormGroup,
-} from 'shared/components/Form';
+import FormGroup from 'shared/components/Form/FormGroup';
+import PureComponent from 'shared/components/Base/PureComponent';
 import FormContainer from 'shared/components/Organism/FormContainer';
 
 const propTypes = {
@@ -35,11 +33,10 @@ const formOptions = radioAdvance.map(
   },
 );
 
-class DeviceSystem extends React.Component {
+class DeviceSystem extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.getCurData = this.getCurData.bind(this);
     this.onChangeRadio = this.onChangeRadio.bind(this);
     this.initFormOptions = this.initFormOptions.bind(this);

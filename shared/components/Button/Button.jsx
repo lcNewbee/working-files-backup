@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import Icon from '../Icon';
 import utils from '../../utils';
+
+// Styles
 import '../../scss/01_atom/_a-button.scss';
 
 const propTypes = {
@@ -25,11 +27,10 @@ const defaultProps = {
   type: 'button',
 };
 
-class Button extends React.Component {
+class Button extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, ['onClick']);
   }
 

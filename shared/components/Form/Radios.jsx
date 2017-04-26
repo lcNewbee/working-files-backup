@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import Input from './atom/Input';
 
 const propTypes = {
@@ -18,12 +18,8 @@ const defaultProps = {
   type: 'radio',
 };
 
-class Radios extends React.Component {
-  constructor(props) {
-    super(props);
+class Radios extends PureComponent {
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-  }
   render() {
     const { options, size, theme, className, style, text, ...restProps } = this.props;
     let { value, id } = this.props;

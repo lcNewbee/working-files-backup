@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 
@@ -10,6 +9,7 @@ import Button from 'shared/components/Button/Button';
 import { Search } from 'shared/components/Form';
 import Select from 'shared/components/Select';
 import Switchs from 'shared/components/Switchs';
+import PureComponent from 'shared/components/Base/PureComponent';
 
 // custom
 import * as actions from './actions';
@@ -95,7 +95,7 @@ const clientsTableOptions = fromJS([
     filter: 'connectTime',
   }, {
     id: 'op',
-    width: '220',
+    width: 220,
     text: __('Actions'),
   },
 ]);
@@ -129,42 +129,35 @@ const styles = {
 };
 
 // 原生的 react 页面
-export const Clients = React.createClass({
-  mixins: [PureRenderMixin],
+export class Clients extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    utils.binds(this, [
+      'onAction',
+      'onChangeSearchText',
+      'onChangeType',
+      'onChangeTableSize',
+      'onPageChange',
+      'handleSearch',
+      'handleChangeQuery',
+      'handleActions',
+    ]);
+  }
 
   componentWillMount() {
     this.handleSearch();
-  },
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
-  },
+  }
 
   componentWillUnmount() {
     this.props.leaveClientsScreen();
-  },
-
-  handleSearch() {
-    this.props.fetchClients();
-  },
-
-  handleChangeQuery(data, needSearch) {
-    this.props.changeClientsQuery(data);
-
-    if (needSearch) {
-      this.handleSearch();
-    }
-  },
-
-  handleActions(actionQuery, needSave) {
-    this.props.changeClientActionQuery(actionQuery);
-
-    if (needSave) {
-      this.props.saveClientsAction();
-    }
-  },
+  }
 
   onAction(mac, action, wirelessType) {
     const subData = {
@@ -179,32 +172,52 @@ export const Clients = React.createClass({
     }
 
     this.handleActions(subData, true);
-  },
+  }
 
   onChangeSearchText(val, e) {
     this.handleChangeQuery({
       search: val,
     });
-  },
+  }
 
   onChangeType(data) {
     this.handleChangeQuery({
       type: data.value,
     }, true);
-  },
+  }
 
   onChangeTableSize(data) {
     this.handleChangeQuery({
       size: data.value,
       page: 1,
     }, true);
-  },
+  }
 
   onPageChange(i) {
     this.handleChangeQuery({
       page: i,
     }, true);
-  },
+  }
+
+  handleSearch() {
+    this.props.fetchClients();
+  }
+
+  handleChangeQuery(data, needSearch) {
+    this.props.changeClientsQuery(data);
+
+    if (needSearch) {
+      this.handleSearch();
+    }
+  }
+
+  handleActions(actionQuery, needSave) {
+    this.props.changeClientActionQuery(actionQuery);
+
+    if (needSave) {
+      this.props.saveClientsAction();
+    }
+  }
 
   render() {
     const noControl = this.props.app.get('noControl');
@@ -359,8 +372,8 @@ export const Clients = React.createClass({
 
       </div>
     );
-  },
-});
+  }
+}
 
 function mapStateToProps(state) {
   const myState = state.clients;
@@ -379,7 +392,7 @@ function mapStateToProps(state) {
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  actions
+  actions,
 )(Clients);
 
 export const clients = reducer;

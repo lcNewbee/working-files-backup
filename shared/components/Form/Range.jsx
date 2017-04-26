@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from '../Base/PureComponent';
 import Input from './atom/Input';
 import NumberInput from './NumberInput';
 
@@ -20,11 +20,10 @@ const defaultProps = {
   min: 1,
 };
 
-class Checkbox extends React.Component {
+class Checkbox extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onRangeChange = this.onRangeChange.bind(this);
   }
   onRangeChange(e, value) {
