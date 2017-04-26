@@ -30,12 +30,12 @@ const tableOptions = fromJS([
   }, {
     id: 'protect',
     text: __('Protection Measures'),
-    width: '160',
+    width: 160,
   },
   // {
   //   id: 'jump',
   //   text: __('Jump to Security Events'),
-  //   width: '160',
+  //   width: 160,
   // },
 ]);
 

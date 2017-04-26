@@ -28,7 +28,7 @@ const listOptions = fromJS([
   {
     id: 'mac',
     text: __('MAC'),
-    width: '180',
+    width: 180,
     formProps: {
       required: true,
     },

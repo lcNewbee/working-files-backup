@@ -12,7 +12,7 @@ const listOptions = fromJS([
   {
     id: 'username',
     text: __('User Name'),
-    width: '200',
+    width: 200,
   }, {
     id: 'curApp',
     text: __('Current App'),

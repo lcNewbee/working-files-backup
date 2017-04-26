@@ -12,7 +12,7 @@ const flowListOptions = fromJS([
   {
     id: 'appName',
     text: __('App Name'),
-    width: '200',
+    width: 200,
   }, {
     id: 'number',
     text: __('User Numbers'),

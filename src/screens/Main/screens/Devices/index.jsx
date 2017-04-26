@@ -365,7 +365,7 @@ export class Device extends PureComponent {
         }, {
           id: 'op',
           text: __('Actions'),
-          width: '360',
+          width: 360,
           transform: function (val, item) {
             let deviceMac = item.get('mac');
             let deviceStatus = item.get('status');

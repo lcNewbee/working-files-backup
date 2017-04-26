@@ -8,6 +8,7 @@ import './_index.scss';
 
 const propTypes = {
   menus: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  onChange: PropTypes.func,
   children: PropTypes.any,
 };
 
@@ -16,6 +17,15 @@ const defaultProps = {
 };
 
 class Tabs extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.onSelectTab = this.onSelectTab.bind(this);
+  }
+  onSelectTab(path, index) {
+    if (this.props.onChange) {
+      this.props.onChange(path, index);
+    }
+  }
   render() {
     const { menus } = this.props;
     return (
@@ -30,7 +40,7 @@ class Tabs extends PureComponent {
                   <Link
                     to={path}
                     activeClassName="active"
-                    onClick={(e) => this.onSelectTab(path, e)}
+                    onClick={() => this.onSelectTab(path, i)}
                   >
                     {
                       icon ? <Icon name={icon} /> : null

@@ -13,7 +13,7 @@ const listOptions = fromJS([
   {
     id: 'stamac',
     label: __('Client'),
-    width: '200',
+    width: 200,
   }, {
     id: 'starttime',
     label: __('Occurrence Time'),

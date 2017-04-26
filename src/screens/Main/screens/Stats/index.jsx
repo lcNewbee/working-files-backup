@@ -313,7 +313,7 @@ export class Status extends React.PureComponent {
         id: 'connecttime',
         text: __('Connect Time'),
         filter: 'connectTime',
-        width: '160',
+        width: 160,
       },
     ]);
 

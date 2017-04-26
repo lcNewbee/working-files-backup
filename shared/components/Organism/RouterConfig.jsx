@@ -96,8 +96,8 @@ export default function renderRoutesTree(routes) {
  *
  *
  * @export
- * @param {any} routes
- * @returns
+ * @param {any} routes Array of routes
+ * @returns Route component array
  */
 export function renderRoutesList(routes) {
   let routeList = null;
@@ -162,7 +162,7 @@ const defaultProps = {
   routes: [],
 };
 
-export class RouteSwitches extends Component {
+class RouteSwitches extends Component {
   componentWillMount() {
     this.routeList = renderRoutesList(this.props.routes);
   }
@@ -183,4 +183,7 @@ export class RouteSwitches extends Component {
 
 RouteSwitches.propTypes = propTypes;
 RouteSwitches.defaultProps = defaultProps;
+
+export RouteSwitches
+
 

@@ -85,7 +85,7 @@ const screenOptions = fromJS([
     id: 'policy_type',
     label: __('Repeat'),
     options: policyTypeOptions,
-    width: '120',
+    width: 120,
     defaultValue: 'Mon&Tue&Wed&Thu&Fri&Sat&Sun',
     transform(val) {
       const oldVal = val;
@@ -141,7 +141,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'policy_times',
-    width: '130',
+    width: 130,
     text: __('Time'),
     transform(val, $$data) {
       const type = $$data.get('policy_type');
@@ -156,7 +156,7 @@ const screenOptions = fromJS([
     noForm: true,
   }, {
     id: 'policy_date',
-    width: '130',
+    width: 130,
     text: __('Date'),
     noTable: true,
     defaultValue: moment().format('YYYY-MM-DD'),

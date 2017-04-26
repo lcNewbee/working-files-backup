@@ -9,14 +9,14 @@ import { actions as appActions } from 'shared/containers/app';
 const settingsFormOptions = fromJS([
   {
     id: 'enable',
-    width: '60',
+    width: 60,
     label: __('Enable'),
     type: 'checkbox',
     dataType: 'number',
     value: '1',
   }, {
     id: 'apopermode',
-    width: '120',
+    width: 120,
     label: __('AP Work Mode'),
     options: [
       {

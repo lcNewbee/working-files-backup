@@ -1,8 +1,6 @@
 import React from 'react';
 // import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
-// import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
 import reducer from './reducer';
 

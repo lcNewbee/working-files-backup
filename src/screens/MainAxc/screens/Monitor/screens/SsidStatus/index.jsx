@@ -42,7 +42,7 @@ const ssidListOptions = fromJS([
   {
     id: 'ssid',
     text: 'SSID',
-    width: '180',
+    width: 180,
 
   }, {
     id: 'enabled',
@@ -50,11 +50,11 @@ const ssidListOptions = fromJS([
     options: checkboxOptions,
   }, {
     id: 'onlineNumber',
-    width: '140',
+    width: 140,
     text: __('Online Numbers'),
   }, {
     id: 'apNumber',
-    width: '140',
+    width: 140,
     text: __('AP Number'),
   }, {
     id: 'bandwidth',

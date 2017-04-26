@@ -100,7 +100,7 @@ if (window.guiConfig.versionCode >= 20500) {
 const listOptions = fromJS([
   {
     id: 'devicename',
-    width: '180',
+    width: 180,
     text: __('Name'),
     maxLength: '31',
     validator: validator({
@@ -108,11 +108,11 @@ const listOptions = fromJS([
     }),
   }, {
     id: 'ip',
-    width: '160',
+    width: 160,
     text: __('IP Address'),
   }, {
     id: 'mac',
-    width: '160',
+    width: 160,
     text: __('MAC Address'),
   }, {
     id: 'status',
@@ -124,11 +124,11 @@ const listOptions = fromJS([
     text: __('AP Model'),
   }, {
     id: 'connectedNumbers',
-    width: '80',
+    width: 80,
     text: __('Clients'),
   }, {
     id: 'bandwidth',
-    width: '80',
+    width: 80,
     text: __('Data'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
@@ -139,7 +139,7 @@ const listOptions = fromJS([
   }, {
     id: 'operationhours',
     text: __('Uptime'),
-    width: '80',
+    width: 80,
     filter: 'connectTime',
   },
 ]);

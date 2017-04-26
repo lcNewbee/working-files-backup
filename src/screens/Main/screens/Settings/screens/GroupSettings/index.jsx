@@ -3,13 +3,13 @@ import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import Button from 'shared/components/Button/Button';
 import { actions as appActions } from 'shared/containers/app';
+import PureComponent from 'shared/components/Base/PureComponent';
 import * as actions from './actions';
 import reducer from './reducer';
 
@@ -34,13 +34,31 @@ const validOptions = Map({
 });
 
 // 原生的 react 页面
-export const GroupSettings = React.createClass({
-  mixins: [PureRenderMixin],
+export class GroupSettings extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    utils.binds(this, [
+      'getEditVal',
+      'onSelectDevice',
+
+      'onAddGroup',
+      'onEditGroup',
+      'onDeleteGroup',
+      'onChangeGroupSettings',
+      'onSaveDeviceGroup',
+      'createLookFunc',
+      'onCloseEditDialog',
+
+      'getGroupTableOptions',
+      'getDevicesTableOptions',
+    ]);
+  }
 
   componentWillMount() {
     this.props.fetchDeviceGroups();
     this.props.fetchGroupDevices();
-  },
+  }
 
   componentDidUpdate(prevProps) {
     let modalStatus = this.props.app.getIn(['modal', 'status']);
@@ -49,11 +67,11 @@ export const GroupSettings = React.createClass({
       this.props.fetchDeviceGroups();
       this.props.fetchGroupDevices();
     }
-  },
+  }
 
   componentWillUnmount() {
     this.props.resetVaildateMsg();
-  },
+  }
 
   getEditVal(key) {
     let ret = '';
@@ -62,7 +80,7 @@ export const GroupSettings = React.createClass({
       ret = this.props.edit.get(key);
     }
     return ret;
-  },
+  }
 
   onSelectDevice(e) {
     const elem = e.target;
@@ -73,15 +91,15 @@ export const GroupSettings = React.createClass({
     } else {
       this.props.selectDevice(mac, true);
     }
-  },
+  }
 
   onAddGroup() {
     this.props.addDeviceGroup();
-  },
+  }
 
   onEditGroup(groupname) {
     this.props.editDeviceGroup(groupname);
-  },
+  }
 
   onDeleteGroup(groupname) {
     let comfri_text = __('Are you sure delete group: %s?', groupname);
@@ -95,7 +113,7 @@ export const GroupSettings = React.createClass({
         this.props.deleteDeviceGroup(groupname);
       }.bind(this),
     });
-  },
+  }
 
   onChangeGroupSettings(name) {
     return function (data) {
@@ -104,7 +122,7 @@ export const GroupSettings = React.createClass({
       editObj[name] = data.value;
       this.props.changeEditGroup(editObj);
     }.bind(this);
-  },
+  }
 
   onSaveDeviceGroup() {
     if (this.props.actionType === 'look') {
@@ -136,18 +154,18 @@ export const GroupSettings = React.createClass({
           }
         }
       });
-  },
+  }
 
   createLookFunc(groupname) {
     return () => {
       this.props.lookGroupDevices(groupname);
     };
-  },
+  }
 
   onCloseEditDialog() {
     this.props.resetVaildateMsg();
     this.props.removeEditDeviceGroup();
-  },
+  }
 
   getGroupTableOptions() {
     let ret = fromJS([
@@ -169,7 +187,7 @@ export const GroupSettings = React.createClass({
     }, {
       id: 'op',
       text: msg.action,
-      width: '240',
+      width: 240,
       transform: function (val, item) {
         if (item.get('groupname') === 'Default') {
           return (<Button
@@ -214,7 +232,7 @@ export const GroupSettings = React.createClass({
     }
 
     return ret;
-  },
+  }
 
   getDevicesTableOptions() {
     let ret = fromJS([{
@@ -242,7 +260,7 @@ export const GroupSettings = React.createClass({
       }, {
         id: 'op',
         text: __('Select'),
-        width: '50',
+        width: 50,
         transform: function (val, item) {
           let deviceMac;
           let selectedDevices = this.props.edit.get('devices');
@@ -267,7 +285,7 @@ export const GroupSettings = React.createClass({
       ret = ret.delete(-1);
     }
     return ret;
-  },
+  }
 
   render() {
     const { groupname, remarks } = this.props.validateOption;
@@ -361,12 +379,12 @@ export const GroupSettings = React.createClass({
         </Modal>
       </div>
     );
-  },
-});
+  }
+}
 
 // React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
-  let myState = state.groupSettings;
+  const myState = state.groupSettings;
 
   return {
     fetching: myState.get('fetching'),
@@ -382,7 +400,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
   ), dispatch);
 }
 
@@ -390,7 +408,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(GroupSettings);
 
 export const settings = reducer;

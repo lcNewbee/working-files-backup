@@ -156,7 +156,7 @@ export default class LiveMap extends React.PureComponent {
       this.listTableOptions = listTableOptions.push(fromJS({
         id: 'actions',
         text: __('Actions'),
-        width: '180',
+        width: 180,
         transform: (val, $$item, index) => (
           <div className="action-btns">
             <Button

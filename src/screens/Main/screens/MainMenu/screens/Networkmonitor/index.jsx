@@ -1,7 +1,7 @@
 import React from 'react'; import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fromJS, List } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PureComponent from 'shared/components/Base/PureComponent';
 import * as actions from './actions';
 import reducer from './reducer';
 
@@ -27,11 +27,9 @@ const defaultProps = {
 
 };
 
-export default class Networkmonitor extends React.Component {
+export default class Networkmonitor extends PureComponent {
   constructor() {
     super();
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
   componentWillMount() {

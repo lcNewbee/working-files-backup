@@ -15,7 +15,7 @@ import { actions as appActions } from 'shared/containers/app';
 const listOptions = fromJS([
   {
     id: 'userType',
-    width: '160',
+    width: 160,
     text: __('User Type'),
     defaultValue: 1,
     options: [
@@ -37,7 +37,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'purview',
-    width: '160',
+    width: 160,
     text: __('Purview'),
     defaultValue: '',
     options: purviewOptions,
@@ -61,7 +61,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'userName',
-    width: '200',
+    width: 200,
     text: __('User Name'),
     defaultValue: '',
     formProps: {

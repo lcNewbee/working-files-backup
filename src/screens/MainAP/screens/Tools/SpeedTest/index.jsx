@@ -217,7 +217,7 @@ export default class SpeedTest extends React.Component {
       {
         id: 'action',
         text: __('Select'),
-        width: '50',
+        width: 50,
         transform: function (val, item) {
           return (
             <FormInput
