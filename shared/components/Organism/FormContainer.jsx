@@ -332,7 +332,8 @@ class FormContainer extends PureComponent {
   renderFormGroupList($$option) {
     let $$data = this.props.data;
     const formGroupListId = $$option.get('id');
-    let $$optionsList = $$option.get('list');
+    let $$optionsList = $$option.get('options');
+    let $$curList = $$data.get(formGroupListId);
     let ret = null;
 
     if ($$data) {
@@ -341,7 +342,7 @@ class FormContainer extends PureComponent {
       }
     }
 
-    if ($$data.get(formGroupListId)) {
+    if ($$curList) {
       $$optionsList = $$optionsList.map(
         ($$item) => {
           let retNode = $$item;
@@ -362,10 +363,14 @@ class FormContainer extends PureComponent {
           return retNode;
         },
       );
+
+      if (typeof $$option.get('itemVisible') === 'function') {
+        $$curList = $$curList.filter($$option.get('itemVisible'));
+      }
       ret = (
         <Table
           options={$$optionsList}
-          list={$$data.get(formGroupListId).delete(2).delete(2).delete(4).delete(4)}
+          list={$$curList}
         />
       );
     }

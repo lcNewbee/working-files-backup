@@ -163,7 +163,13 @@ const settingsOptions = fromJS([
   }, {
     id: 'list',
     type: 'list',
-    list: [
+    className: 'table--base',
+    itemVisible: ($$item) => {
+      const curId = $$item.get('id');
+
+      return '3,4,7,8'.indexOf(curId) === -1;
+    },
+    options: [
       {
         id: 'type',
         label: __('Authentication Types'),
@@ -197,6 +203,9 @@ const settingsOptions = fromJS([
             label: __('Facebook Auth'),
           },
         ],
+        style: {
+          textAlign: 'right',
+        },
         noForm: true,
       }, {
         id: 'url',

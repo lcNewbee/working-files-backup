@@ -33,6 +33,7 @@ class Row extends Component {
     super(props);
     utilsCore.binds(this, [
       'onSelect',
+      'renderThList',
     ]);
   }
   onSelect(index_, e) {
@@ -41,18 +42,11 @@ class Row extends Component {
       selected: e.target.checked,
     });
   }
-  render() {
-    const {
-      isTh, options, selected, selectable, curSelectable,
-      item, index, ...restProps
-    } = this.props;
-    let rowChilren = null;
-    let MyCompeont = 'td';
 
-    // 渲染表格头部 th
-    if (isTh) {
-      MyCompeont = 'th';
-      rowChilren = options.map(
+  renderThList() {
+    const { options } = this.props;
+
+    return options.map(
         ($$curThOption) => {
           let myOption = $$curThOption;
 
@@ -66,7 +60,7 @@ class Row extends Component {
             paddingLeft：调整表头标题的位置
             marginLeft：调整表头标题的位置，相当于paddingLeft的负值
             ********************************************************/
-            <MyCompeont
+            <th
               key={`tableRow${myOption.id}`}
               style={{
                 width: myOption.width,
@@ -90,14 +84,16 @@ class Row extends Component {
                   />
                 ) : null
               }
-            </MyCompeont>
+            </th>
           ) : null;
         },
       );
+  }
 
-    // item存在时，渲染 tbody 内容 td
-    } else if (item) {
-      rowChilren = options.map(
+  renderTdList() {
+    const { item, index, options } = this.props;
+
+    return options.map(
         ($$curTdOption) => {
           const id = $$curTdOption.get('id');
           const filterObj = $$curTdOption.get('filterObj');
@@ -151,12 +147,15 @@ class Row extends Component {
                 currValArr = currItemArr.map(
                   ($$currItem) => {
                     let retVal = '';
+                    let curRender = null;
 
                     if ($$currItem) {
-                      // 如果是 map 对象
+                      // 如果是 Imutable map 对象
                       if (typeof $$currItem.get === 'function') {
-                        if (typeof $$currItem.get('render') === 'function') {
-                          retVal = $$currItem.get('render')();
+                        curRender = $$currItem.get('render');
+
+                        if (typeof curRender === 'function') {
+                          retVal = curRender();
                         } else {
                           retVal = $$currItem.get('label');
                         }
@@ -203,15 +202,33 @@ class Row extends Component {
           const title = typeof (getTitle) === 'function' ? getTitle(currVal, item, index) : null;
 
           return (
-            <MyCompeont
+            <td
               key={thisKey}
               title={title}
             >
               { currVal }
-            </MyCompeont>
+            </td>
           );
         },
       );
+  }
+
+  render() {
+    const {
+      isTh, options, selected, selectable, curSelectable,
+      item, index, ...restProps
+    } = this.props;
+    let rowChilren = null;
+    let MyCompeont = 'td';
+
+    // 渲染表格头部 th
+    if (isTh) {
+      MyCompeont = 'th';
+      rowChilren = this.renderThList();
+
+    // item存在时，渲染 tbody 内容 td
+    } else if (item) {
+      rowChilren = this.renderTdList();
     }
 
     // 添加选择列
