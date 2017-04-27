@@ -156,15 +156,10 @@ export default class ProtoInfo extends React.Component {
       }, {
         id: 'userNum',
         text: __('User Number'),
-        render: function (val, item) {
+        render: (val, item) => {
           return (
             <span
-              style={{
-                width: '100%',
-                color: 'blue',
-                cursor: 'pointer',
-                display: 'inline-block',
-              }}
+              className="link-text"
               title={__('Click for details')}
               onClick={() => {
                 // 找到traffic在options中的位置，然后改变traffic的text属性
@@ -188,7 +183,7 @@ export default class ProtoInfo extends React.Component {
               {val || '0'}
             </span>
           );
-        }.bind(this),
+        },
       }, {
         id: 'curRate',
         text: __('Current Rate'),

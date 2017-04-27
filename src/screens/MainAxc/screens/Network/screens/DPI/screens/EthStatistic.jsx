@@ -388,12 +388,7 @@ export default class EthStatistic extends React.Component {
         render: function (val, item) {
           return (
             <span
-              style={{
-                width: '100%',
-                color: 'blue',
-                cursor: 'pointer',
-                display: 'inline-block',
-              }}
+              className="link-text"
               title={__('Click for details')}
               onClick={() => {
                 const ethList = store.getIn([curScreenId, 'data', 'list']);
