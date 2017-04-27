@@ -358,7 +358,7 @@ const cardCategoryOptions = fromJS([
     validator: validator({
       rules: 'num:[1,999999]',
     }),
-    transform(val, data) {
+    render(val, data) {
       if (data.get('state') === '0') {
         ret = `${val}h`;
       } else if (data.get('state') === '1') {
@@ -985,7 +985,7 @@ export default class View extends React.Component {
       }, {
         id: 'upstream/downstream',
         text: __('UP/Down Traffic'),
-        transform(val, item) {
+        render(val, item) {
           const upRate = flowRateFilter.transform(item.get('upstream'));
           const downRate = flowRateFilter.transform(item.get('downstream'));
 
@@ -1605,7 +1605,7 @@ export default class View extends React.Component {
         min: '0',
         max: '99999999',
         required: true,
-        transform(val) {
+        render(val) {
           return onlinetimeFilter.transform(val);
         },
       }, {
@@ -1620,7 +1620,7 @@ export default class View extends React.Component {
           rules: 'num:[0,99999999]',
         }),
         required: true,
-        transform(val) {
+        render(val) {
           return onlinetimeFilter.transform(val);
         },
       }, {
@@ -1635,7 +1635,7 @@ export default class View extends React.Component {
           rules: 'num:[0,99999999]',
         }),
         required: true,
-        transform(val) {
+        render(val) {
           return onlinetimeFilter.transform(val);
         },
       }, {
@@ -2788,7 +2788,7 @@ export default class View extends React.Component {
         validator: validator({
           rules: 'num:[0,10]',
         }),
-        transform(val) {
+        render(val) {
           ret = `${val}m`;
           return ret;
         },

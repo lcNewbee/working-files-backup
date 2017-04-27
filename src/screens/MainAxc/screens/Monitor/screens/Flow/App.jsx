@@ -19,7 +19,7 @@ const flowListOptions = fromJS([
   }, {
     id: 'bandwidth',
     text: __('Up/Down Speed'),
-    transform(val, item) {
+    render(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 

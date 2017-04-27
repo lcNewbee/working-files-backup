@@ -513,8 +513,8 @@ class AppScreenList extends React.PureComponent {
     let actionsOption = null;
     let btnsNum = 0;
     let btnList = List([]);
-    let transformFunc = null;
-    let hasTransformFunc = false;
+    let renderFunc = null;
+    let hasRenderFunc = false;
 
     this.listTableOptions = tableOptions;
 
@@ -529,8 +529,8 @@ class AppScreenList extends React.PureComponent {
       }
 
       if (actionsOption) {
-        transformFunc = actionsOption.get('transform');
-        hasTransformFunc = utils.isFunc(transformFunc);
+        renderFunc = actionsOption.get('render');
+        hasRenderFunc = utils.isFunc(renderFunc);
 
         btnList = actionsOption.get('actions');
 
@@ -548,7 +548,7 @@ class AppScreenList extends React.PureComponent {
             text: __('Actions'),
           }));
         }
-        this.listTableOptions = this.listTableOptions.setIn([-1, 'transform'],
+        this.listTableOptions = this.listTableOptions.setIn([-1, 'render'],
           (val, $$item, index) => {
             let editableResult = editable;
             let deleteableResult = deleteable;
@@ -561,7 +561,7 @@ class AppScreenList extends React.PureComponent {
               deleteableResult = deleteable($$item, index);
             }
 
-            if (hasTransformFunc) {
+            if (hasRenderFunc) {
               btnsNum = 'auto';
             }
 
@@ -624,7 +624,7 @@ class AppScreenList extends React.PureComponent {
                   }) : null
                 }
                 {
-                  hasTransformFunc ? transformFunc(val, $$item, index) : null
+                  hasRenderFunc ? renderFunc(val, $$item, index) : null
                 }
               </div>
             );
@@ -643,7 +643,7 @@ class AppScreenList extends React.PureComponent {
           let $$retItem = $$item;
 
           if ($$retItem.get('type') === 'switch') {
-            $$retItem = $$retItem.set('transform', (val, $$data, index) => (
+            $$retItem = $$retItem.set('render', (val, $$data, index) => (
               <FormInput
                 type="checkbox"
                 name={$$item.get('id')}

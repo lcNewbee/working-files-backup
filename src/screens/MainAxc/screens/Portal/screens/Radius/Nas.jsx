@@ -63,7 +63,7 @@ const listOptions = fromJS([
       max: '99999999',
       required: true,
     },
-    transform(val) {
+    render(val) {
       return onlinetimeFilter.transform(val);
     },
   }, {
@@ -80,7 +80,7 @@ const listOptions = fromJS([
       }),
       required: true,
     },
-    transform(val) {
+    render(val) {
       return onlinetimeFilter.transform(val);
     },
   }, {
@@ -97,7 +97,7 @@ const listOptions = fromJS([
       }),
       required: true,
     },
-    transform(val) {
+    render(val) {
       return onlinetimeFilter.transform(val);
     },
   }, {

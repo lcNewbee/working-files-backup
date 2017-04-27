@@ -34,7 +34,7 @@ const interfaceOptions = fromJS([
   {
     id: 'name',
     text: __('Name'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -44,7 +44,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'mac',
     text: __('MAC'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -54,7 +54,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'txBytes',
     text: __('Tx Data'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -64,7 +64,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'rxBytes',
     text: __('Rx Data'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -74,7 +74,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'txPackets',
     text: __('Tx Packets'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -84,7 +84,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'rxPackets',
     text: __('Rx Packets'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -94,7 +94,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'txErrorPackets',
     text: __('Tx Errors'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -104,7 +104,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'rxErrorPackets',
     text: __('Rx Errors'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -114,7 +114,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'status',
     text: __('Status'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -126,7 +126,7 @@ const interfaceOptions = fromJS([
 //   {
 //     id: 'name',
 //     text: __('Name'),
-//     transform(val, item) {
+//     render(val, item) {
 //       const ssid = item.get('ssid');
 //       if (val === '') {
 //         return `--(${ssid})`;
@@ -137,7 +137,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'mac',
 //     text: __('MAC'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -147,7 +147,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'txBytes',
 //     text: __('Tx Bytes'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -157,7 +157,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'rxBytes',
 //     text: __('Rx Bytes'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -167,7 +167,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'txPackets',
 //     text: __('Tx Packets'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -177,7 +177,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'rxPackets',
 //     text: __('Rx Packets'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -187,7 +187,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'txErrorPackets',
 //     text: __('Tx Error'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -197,7 +197,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'rxErrorPackets',
 //     text: __('Rx Error'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -207,7 +207,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'ccq',
 //     text: __('CCQ'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -627,7 +627,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'deviceName',
     //     text: __('Device Name'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -637,7 +637,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'ssid',
     //     text: __('Owner SSID'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -647,7 +647,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'signal',
     //     text: __('Signal(dBm)'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -657,7 +657,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'noise',
     //     text: __('Noise(dBm)'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -667,7 +667,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'txRate',
     //     text: __('Tx Rate'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -677,7 +677,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'rxRate',
     //     text: __('Rx Rate'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -687,7 +687,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'txBytes',
     //     text: __('Tx Bytes'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -697,7 +697,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'rxBytes',
     //     text: __('Rx Bytes'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -707,7 +707,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'txPackets',
     //     text: __('Tx Packets'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -717,7 +717,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'rxPackets',
     //     text: __('Rx Packets'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -727,7 +727,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'connectTime',
     //     text: __('Connect Time'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -737,7 +737,7 @@ export default class SystemStatus extends React.Component {
     //   {
     //     id: 'ipAddr',
     //     text: __('IP'),
-    //     transform(val) {
+    //     render(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
     //       }
@@ -749,7 +749,7 @@ export default class SystemStatus extends React.Component {
       {
         id: 'status',
         text: __('Connection Status'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -758,7 +758,7 @@ export default class SystemStatus extends React.Component {
       }, {
         id: 'connectTime',
         text: __('Connect Time'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -767,7 +767,7 @@ export default class SystemStatus extends React.Component {
       }, {
         id: 'txrate',
         text: __('Tx Rate'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -776,7 +776,7 @@ export default class SystemStatus extends React.Component {
       }, {
         id: 'rxrate',
         text: __('Rx Rate'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -785,7 +785,7 @@ export default class SystemStatus extends React.Component {
       }, {
         id: 'mac',
         text: __('Peer MAC'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }

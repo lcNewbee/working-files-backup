@@ -201,7 +201,7 @@ export default class SystemLogs extends Component {
         id: 'id',
         text: __('No.'),
         width: '100px',
-        transform: () => (
+        render: () => (
           <FormInput
             type="plain-text"
             value={this.generateLogNo()}
@@ -212,7 +212,7 @@ export default class SystemLogs extends Component {
         id: 'time',
         text: __('Time'),
         width: '200px',
-        transform: val => (
+        render: val => (
           <FormInput
             type="plain-text"
             value={val}

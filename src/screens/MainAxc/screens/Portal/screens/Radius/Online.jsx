@@ -31,7 +31,7 @@ const listOptions = fromJS([
   {
     id: 'sessionTime',
     text: _('Session Time'),
-    transform(val) {
+    render(val) {
       return onlinetimeFilter.transform(val);
     },
   },
@@ -47,13 +47,13 @@ const listOptions = fromJS([
   }, {
     id: 'costTime',
     text: __('Online Time'),
-    transform(val) {
+    render(val) {
       return onlinetimeFilter.transform(val);
     },
   }, {
     id: 'inS',
     text: __('Up Traffic'),
-    transform(val) {
+    render(val) {
       s = val;
       if (s === undefined) {
         ret = '';
@@ -70,7 +70,7 @@ const listOptions = fromJS([
   }, {
     id: 'outS',
     text: __('Down Traffic'),
-    transform(val) {
+    render(val) {
       s = val;
       if (s === undefined) {
         ret = '';
@@ -87,7 +87,7 @@ const listOptions = fromJS([
   }, {
     id: 'costOctets',
     text: __('Used Traffic'),
-    transform(val) {
+    render(val) {
       s = val;
       if (s === undefined) {
         ret = '';

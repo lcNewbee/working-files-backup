@@ -293,7 +293,7 @@ export class Status extends React.PureComponent {
       {
         id: 'hostname',
         text: __('Name'),
-        transform(val, item) {
+        render(val, item) {
           return val || item.get('macaddress');
         },
       }, {
@@ -305,7 +305,7 @@ export class Status extends React.PureComponent {
       }, {
         id: 'softversion',
         text: __('UP/Down'),
-        transform(val, item) {
+        render(val, item) {
           return flowRateKbFilter.transform(item.get('upstream')) +
               ' / ' + flowRateKbFilter.transform(item.get('downstream'));
         },
@@ -325,7 +325,7 @@ export class Status extends React.PureComponent {
       {
         id: 'devicename',
         text: __('Name'),
-        transform(val, item) {
+        render(val, item) {
           return val || item.get('macaddress');
         },
       }, {
@@ -337,7 +337,7 @@ export class Status extends React.PureComponent {
       }, {
         id: 'up/down flow',
         text: __('UP/Down'),
-        transform(val, item) {
+        render(val, item) {
           return flowRateFilter.transform(item.get('upstream')) + ' / ' +
               flowRateFilter.transform(item.get('downstream'));
         },
@@ -352,7 +352,7 @@ export class Status extends React.PureComponent {
       {
         id: 'devicename',
         text: __('Name'),
-        transform(val, item) {
+        render(val, item) {
           return val || item.get('mac');
         },
       }, {
@@ -364,7 +364,7 @@ export class Status extends React.PureComponent {
       }, {
         id: 'channel',
         text: __('Channel'),
-        transform(val, item) {
+        render(val, item) {
           let ret = val;
 
           if (val == 0) {

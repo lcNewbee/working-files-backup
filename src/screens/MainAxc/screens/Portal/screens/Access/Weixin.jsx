@@ -89,7 +89,7 @@ const listOptions = fromJS([
       }),
       required: true,
     },
-    transform(val) {
+    render(val) {
       return uptimeFilter.transform(val);
     },
   }, {

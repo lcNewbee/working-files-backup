@@ -67,7 +67,7 @@ const listOptions = fromJS([
   {
     id: 'portId',
     text: __('Port ID'),
-    transform(item) {
+    render(item) {
       const arr = item ? item.split(',') : [];
       let str = '';
       const length = arr.length;

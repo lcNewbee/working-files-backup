@@ -15,7 +15,7 @@ const listOptions = fromJS([
   // {
   //   id: 'devicename',
   //   text: __('Name'),
-  //   transform(val, item) {
+  //   render(val, item) {
   //     return item.get('devicename') || item.get('mac');
   //   },
   //   validator: validator({

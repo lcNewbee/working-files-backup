@@ -114,7 +114,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       // 大于一天
       if (val >= 360) {
         ret = `${parseInt(val / 360, 10)}d${val % 360}h`;
@@ -157,7 +157,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       s = val;
       if (s === undefined) {
         ret = '';
@@ -177,7 +177,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       s = val;
       if (s === undefined) {
         ret = '';
@@ -197,7 +197,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       s = val;
       if (s === undefined) {
         ret = '';

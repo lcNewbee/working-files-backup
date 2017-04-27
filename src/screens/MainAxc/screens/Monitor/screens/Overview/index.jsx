@@ -361,7 +361,7 @@ export default class GroupOverview extends React.Component {
       fromJS({
         id: '__actions__',
         text: __('Actions'),
-        transform: (val, $$data) => {
+        render: (val, $$data) => {
           const isCounter = $$data.get('isCounter');
           let btnText = _('Counter This AP');
 

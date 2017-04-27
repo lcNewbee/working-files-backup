@@ -551,7 +551,7 @@ export default class QuickSetup extends React.Component {
       {
         id: 'operate',
         text: __('Select'),
-        transform: function (val, item) {
+        render: function (val, item) {
           return (
             <FormInput
               type="radio"
@@ -572,7 +572,7 @@ export default class QuickSetup extends React.Component {
       {
         id: 'security',
         text: __('Security Mode'),
-        transform(val) {
+        render(val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
           else if (mode === 'wpa2') return 'WPA2-PSK';

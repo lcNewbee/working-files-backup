@@ -325,7 +325,7 @@ export default class OpenPortalBase extends React.Component {
   render() {
     const curListOptions = listOptions
       .setIn([1, 'options'], this.state.userNameOptions)
-      .setIn([-1, 'transform'], (val, $$data) => (
+      .setIn([-1, 'render'], (val, $$data) => (
         <span>
           <Button
             text={__('View Message')}

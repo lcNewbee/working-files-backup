@@ -69,7 +69,7 @@ const vapInterfaceOptions = fromJS([
   {
     id: 'name',
     text: __('Name'),
-    transform(val, item) {
+    render(val, item) {
       const ssid = item.get('ssid');
       if (val === '') {
         return `--(${ssid})`;
@@ -81,7 +81,7 @@ const vapInterfaceOptions = fromJS([
     id: 'mac',
     text: __('MAC'),
     sortable: true,
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -98,7 +98,7 @@ const vapInterfaceOptions = fromJS([
       if (aVal - bVal < 0) return 1;
       return -1;
     },
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -115,7 +115,7 @@ const vapInterfaceOptions = fromJS([
       if (aVal - bVal < 0) return 1;
       return -1;
     },
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -125,7 +125,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'txPackets',
     text: __('Tx Packets'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -135,7 +135,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'rxPackets',
     text: __('Rx Packets'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -145,7 +145,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'txErrorPackets',
     text: __('Tx Errors'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -155,7 +155,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'rxErrorPackets',
     text: __('Rx Errors'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -165,7 +165,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'ccq',
     text: __('CCQ'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -254,7 +254,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'deviceName',
         text: __('Device Name'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -265,7 +265,7 @@ export default class RadioDetails extends React.Component {
         id: 'ssid',
         text: __('Owner SSID'),
         sortable: true,
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -275,7 +275,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'signal',
         text: __('Signal(dBm)'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -285,7 +285,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'noise',
         text: __('Noise(dBm)'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -295,7 +295,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'txRate',
         text: __('Tx Rate'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -305,7 +305,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'rxRate',
         text: __('Rx Rate'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -322,7 +322,7 @@ export default class RadioDetails extends React.Component {
           return -1;
         },
         sortable: true,
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -339,7 +339,7 @@ export default class RadioDetails extends React.Component {
           return -1;
         },
         sortable: true,
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -349,7 +349,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'txPackets',
         text: __('Tx Packets'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -359,7 +359,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'rxPackets',
         text: __('Rx Packets'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -369,7 +369,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'connectTime',
         text: __('Connect Time'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -380,7 +380,7 @@ export default class RadioDetails extends React.Component {
         id: 'ipAddr',
         text: __('IP'),
         sortable: true,
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -390,7 +390,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'block',
         text: __('Block'),
-        transform(val, item) {
+        render(val, item) {
           return (
             val ? (
               <span>{__('offline')}</span>

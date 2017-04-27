@@ -87,7 +87,7 @@ const userModalOptions = fromJS([
   // {
   //   id: 'osType',
   //   text: __('OS Type'),
-  //   transform(val) {
+  //   render(val) {
   //     if (val === '' || val === undefined) {
   //       return '--';
   //     }
@@ -97,7 +97,7 @@ const userModalOptions = fromJS([
   {
     id: 'application',
     text: __('Applications'),
-    transform(val) {
+    render(val) {
       if (typeof (val) === 'undefined' || val.size === 0) return '--';
       const len = val.size;
       const n1 = len / 10;
@@ -116,7 +116,7 @@ const userModalOptions = fromJS([
   }, {
     id: 'curRate',
     text: __('Current Rate'),
-    transform(val) {
+    render(val) {
       return `${flowRateFilter.transform(val)}/s`;
     },
   }, {
@@ -385,7 +385,7 @@ export default class EthStatistic extends React.Component {
       }, {
         id: 'userNum',
         text: __('User Number'),
-        transform: function (val, item) {
+        render: function (val, item) {
           return (
             <span
               style={{
@@ -421,7 +421,7 @@ export default class EthStatistic extends React.Component {
       }, {
         id: 'application',
         text: __('Applications'),
-        transform(val) {
+        render(val) {
           if (typeof (val) === 'undefined' || val.size === 0) return '--';
           const len = val.size;
           const n1 = len / 10;
@@ -440,7 +440,7 @@ export default class EthStatistic extends React.Component {
       }, {
         id: 'curRate',
         text: __('Current Rate'),
-        transform(val) {
+        render(val) {
           return `${flowRateFilter.transform(val)}/s`;
         },
       },
@@ -449,7 +449,7 @@ export default class EthStatistic extends React.Component {
         text: __('Active Status'),
         actionName: 'active',
         type: 'switch',
-        transform: function(val, item) {
+        render: function(val, item) {
           return (
             <FormInput
               type="checkbox"

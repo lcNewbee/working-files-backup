@@ -33,7 +33,7 @@ const vapInterfaceOptions = fromJS([
   {
     id: 'name',
     text: __('Name'),
-    transform(val, item) {
+    render(val, item) {
       const ssid = item.get('ssid');
       if (val === '') {
         return `--(${ssid})`;
@@ -44,7 +44,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'mac',
     text: __('MAC'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -54,7 +54,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'txBytes',
     text: __('Tx Data'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -64,7 +64,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'rxBytes',
     text: __('Rx Data'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -74,7 +74,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'txPackets',
     text: __('Tx Packets'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -84,7 +84,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'rxPackets',
     text: __('Rx Packets'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -94,7 +94,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'txErrorPackets',
     text: __('Tx Errors'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -104,7 +104,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'rxErrorPackets',
     text: __('Rx Errors'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -114,7 +114,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'ccq',
     text: __('CCQ'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }

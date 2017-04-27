@@ -134,7 +134,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'deviceName',
         text: __('Device Name'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -144,7 +144,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'ssid',
         text: __('Owner SSID'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -154,7 +154,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'signal',
         text: __('Signal(dBm)'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -164,7 +164,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'noise',
         text: __('Noise(dBm)'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -174,7 +174,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'txRate',
         text: __('Tx Rate'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -184,7 +184,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'rxRate',
         text: __('Rx Rate'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -194,7 +194,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'txBytes',
         text: __('Tx Data'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -204,7 +204,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'rxBytes',
         text: __('Rx Data'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -214,7 +214,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'txPackets',
         text: __('Tx Packets'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -224,7 +224,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'rxPackets',
         text: __('Rx Packets'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -234,7 +234,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'connectTime',
         text: __('Connect Time'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -244,7 +244,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'ipAddr',
         text: __('IP'),
-        transform(val) {
+        render(val) {
           if (val === '' || val === undefined) {
             return '--';
           }
@@ -254,7 +254,7 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'block',
         text: __('Block'),
-        transform(val, item) {
+        render(val, item) {
           return (
             val ? (
               <span>{__('offline')}</span>

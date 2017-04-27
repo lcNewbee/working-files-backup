@@ -597,7 +597,7 @@ export default class MainGroup extends React.Component {
       {
         id: 'devicename',
         text: __('Name'),
-        transform(val, $$data) {
+        render(val, $$data) {
           return val || $$data.get('mac');
         },
       }, {

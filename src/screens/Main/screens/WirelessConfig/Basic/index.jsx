@@ -469,7 +469,7 @@ export default class Basic extends React.Component {
       {
         id: 'operate',
         text: __('Select'),
-        transform: function (val, item) {
+        render: function (val, item) {
           return (
             <FormInput
               type="radio"
@@ -490,7 +490,7 @@ export default class Basic extends React.Component {
       {
         id: 'security',
         text: __('Security Mode'),
-        transform: function (val) {
+        render: function (val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
           else if (mode === 'wpa2') return 'WPA2-PSK';
@@ -525,7 +525,7 @@ export default class Basic extends React.Component {
         id: 'enable',
         label: __('Enable'),
         width: '200px',
-        transform: function (val, item) {
+        render: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <input
@@ -542,7 +542,7 @@ export default class Basic extends React.Component {
         id: 'ssid',
         label: __('SSID'),
         width: '250px',
-        transform: function (val, item) {
+        render: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <FormInput
@@ -562,7 +562,7 @@ export default class Basic extends React.Component {
         id: 'vlanId',
         label: __('Vlan ID'),
         width: '250px',
-        transform: function (val, item) {
+        render: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <FormInput
@@ -582,7 +582,7 @@ export default class Basic extends React.Component {
         id: 'hideSsid',
         label: __('Hide'),
         width: '200px',
-        transform: function (val, item) {
+        render: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <input
@@ -601,7 +601,7 @@ export default class Basic extends React.Component {
         id: 'isolation',
         label: __('Client Isolation'),
         width: '200px',
-        transform: function (val, item) {
+        render: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <input
@@ -620,7 +620,7 @@ export default class Basic extends React.Component {
         id: 'security',
         label: __('Security Edit'),
         width: '200px',
-        transform: function (val, item) {
+        render: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <div style={{ marginLeft: '-3px' }}>
@@ -644,7 +644,7 @@ export default class Basic extends React.Component {
         id: 'delete',
         label: __('Delete'),
         width: '200px',
-        transform: function (val, item) {
+        render: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <div style={{ marginLeft: '-12px' }}>

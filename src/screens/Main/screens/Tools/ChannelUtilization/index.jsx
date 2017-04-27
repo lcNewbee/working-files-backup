@@ -63,7 +63,7 @@ export default class ChannelUtilization extends React.Component {
       {
         id: 'title',
         text: __('Channel'),
-        transform() {
+        render() {
           return __('Utilization');
         },
       },

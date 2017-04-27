@@ -88,7 +88,7 @@ export class Statistics extends PureComponent {
       }, {
         id: 'operate',
         text: __('Action'),
-        transform: (val, item) => {
+        render: (val, item) => {
           let curId = item.get('id');
 
           return (

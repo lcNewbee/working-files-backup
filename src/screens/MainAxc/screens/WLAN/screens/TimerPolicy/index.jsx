@@ -87,7 +87,7 @@ const screenOptions = fromJS([
     options: policyTypeOptions,
     width: 120,
     defaultValue: 'Mon&Tue&Wed&Thu&Fri&Sat&Sun',
-    transform(val) {
+    render(val) {
       const oldVal = val;
       let ret = oldVal || '';
 
@@ -143,7 +143,7 @@ const screenOptions = fromJS([
     id: 'policy_times',
     width: 130,
     text: __('Time'),
-    transform(val, $$data) {
+    render(val, $$data) {
       const type = $$data.get('policy_type');
       let ret = val || ' ';
 

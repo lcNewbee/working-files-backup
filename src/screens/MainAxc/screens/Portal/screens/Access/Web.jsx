@@ -200,7 +200,7 @@ export default class View extends React.Component {
     //     placeholder: advSelectPlaceholder,
     //   },
     // );
-    const curListOptions = listOptions.setIn([-1, 'transform'], (val, $$data) => (
+    const curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
         <span>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/auth.jsp`} target="_blank">{__('Auth')}</a>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>

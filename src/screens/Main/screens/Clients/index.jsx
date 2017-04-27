@@ -21,7 +21,7 @@ const clientsTableOptions = fromJS([
   {
     id: 'devicename',
     text: __('MAC Address') + '/' + __('Name'),
-    transform(val, item) {
+    render(val, item) {
       return item.get('devicename') || item.get('mac');
     },
   }, {
@@ -33,13 +33,13 @@ const clientsTableOptions = fromJS([
   }, {
     id: 'connectap',
     text: __('Associated AP'),
-    transform(val, item) {
+    render(val, item) {
       return item.get('connectap') || item.get('apmac');
     },
   }, {
     id: 'bandwidth',
     text: __('Up/Down Flow'),
-    transform(val, item) {
+    render(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 
@@ -48,7 +48,7 @@ const clientsTableOptions = fromJS([
   }, {
     id: 'rssi',
     text: __('RSSI'),
-    transform(val, item) {
+    render(val, item) {
       const intVal = parseInt(val, 10);
       let classNames = 'Icon Icon-block Icon-wifi';
 
@@ -76,7 +76,7 @@ const clientsTableOptions = fromJS([
   // {
   //   id: 'authtype',
   //   text: __('Authentication'),
-  //   transform(val, item) {
+  //   render(val, item) {
   //     var ret = val;
 
   //     if(val == '0') {
@@ -222,7 +222,7 @@ export class Clients extends PureComponent {
   render() {
     const noControl = this.props.app.get('noControl');
     // 添加操作项
-    let options = clientsTableOptions.setIn([-1, 'transform'],
+    let options = clientsTableOptions.setIn([-1, 'render'],
       function (val, item) {
         const mac = item.get('mac');
         const status = item.get('status');
@@ -270,7 +270,7 @@ export class Clients extends PureComponent {
       {
         id: 'devicename',
         text: __('MAC Address') + '/' + __('Name'),
-        transform(val, item) {
+        render(val, item) {
           return item.get('devicename') || item.get('mac');
         },
       }, {
@@ -279,7 +279,7 @@ export class Clients extends PureComponent {
       }, {
         id: 'wirelessType',
         text: __('Type'),
-        transform(val, item) {
+        render(val, item) {
           const typeMap = {
             main: __('Main SSID'),
             guest: __('Guest SSID'),
@@ -293,7 +293,7 @@ export class Clients extends PureComponent {
       }, {
         id: 'bandwidth',
         text: __('Up/Down Speed'),
-        transform(val, item) {
+        render(val, item) {
           const upRate = flowRateFilter.transform(item.get('upstream'));
           const downRate = flowRateFilter.transform(item.get('downstream'));
 
@@ -305,7 +305,7 @@ export class Clients extends PureComponent {
       }, {
         id: 'op',
         text: __('Actions'),
-        transform: function (val, item) {
+        render: function (val, item) {
           const deviceMac = item.get('mac');
           const status = item.get('status');
           const isLock = item.get('islock') === 'lock' ? true : false;

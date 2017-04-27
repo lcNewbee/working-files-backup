@@ -15,7 +15,7 @@ const tableOptions = fromJS([
   {
     id: 'attackmac',
     text: __('Attacker MAC'),
-    transform(val, item) {
+    render(val, item) {
       return val || item.get('macaddress');
     },
   }, {

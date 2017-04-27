@@ -130,7 +130,7 @@ const listOptions = fromJS([
     id: 'bandwidth',
     width: 80,
     text: __('Data'),
-    transform(val, item) {
+    render(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 
@@ -380,7 +380,7 @@ export default class View extends React.Component {
     );
   }
   render() {
-    const myListOptions = listOptions.setIn([0, 'transform'], (val, $$item) => {
+    const myListOptions = listOptions.setIn([0, 'render'], (val, $$item) => {
       const mac = $$item.get('mac');
       const statusVal = $$item.get('status');
       let ret = (

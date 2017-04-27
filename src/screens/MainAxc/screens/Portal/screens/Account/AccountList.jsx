@@ -84,14 +84,14 @@ const listOptions = fromJS([
     id: 'time',
     text: __('Time Balance'),
     noForm: true,
-    transform(val) {
+    render(val) {
       return uptimeFilter.transform(val / 1000);
     },
   }, {
     id: 'octets',
     text: __('Traffic Balance'),
     noForm: true,
-    transform(val) {
+    render(val) {
       return flowFilter.transform(val);
     },
   }, {
@@ -254,7 +254,7 @@ const listOptions = fromJS([
   }, {
     id: '__actions__',
     text: __('Actions'),
-    transform(val, $$item) {
+    render(val, $$item) {
       return (
         <span>
           <a href={`/index.html#/main/portal/account/list/mac/${$$item.get('loginName')}`} className="tablelink">{__('MAC Management')}</a>
@@ -902,7 +902,7 @@ export default class View extends React.Component {
   }
   render() {
     const curListOptions = listOptions
-          .setIn([-1, 'transform'], (val, $$data) => (
+          .setIn([-1, 'render'], (val, $$data) => (
             <span>
               <Button
                 text={__('Recharge')}

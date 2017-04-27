@@ -90,7 +90,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       return onlinetimeFilter.transform(val / 1000);
     },
   }, {
@@ -99,7 +99,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       return `${flowFilter.transform(val)}`;
     },
   }, {
@@ -108,7 +108,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       return `${flowFilter.transform(val)}`;
     },
   }, {
@@ -117,7 +117,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       return `${flowFilter.transform(val)}`;
     },
   }, {

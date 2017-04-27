@@ -20,7 +20,7 @@ const listOptions = fromJS([
   {
     id: 'devicename',
     text: __('Client'),
-    transform(val, item) {
+    render(val, item) {
       return item.get('devicename') || item.get('mac');
     },
     validator: validator({
@@ -46,13 +46,13 @@ const listOptions = fromJS([
   }, {
     id: 'connectap',
     text: __('Associated AP'),
-    transform(val, item) {
+    render(val, item) {
       return item.get('connectap') || item.get('apmac');
     },
   }, {
     id: 'bandwidth',
     text: __('Data'),
-    transform(val, item) {
+    render(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 
@@ -61,7 +61,7 @@ const listOptions = fromJS([
   }, {
     id: 'rssi',
     text: __('RSSI'),
-    transform(val, item) {
+    render(val, item) {
       const intVal = parseInt(val, 10);
       let classNames = 'Icon Icon-block Icon-wifi';
 
@@ -170,7 +170,7 @@ export default class Clients extends React.Component {
 
     //
     } else {
-      this.listOptions = listOptions.setIn([-1, 'transform'],
+      this.listOptions = listOptions.setIn([-1, 'render'],
         (val, item) => {
           const mac = item.get('mac');
           const isLock = item.get('islock') === 'lock';

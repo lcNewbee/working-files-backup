@@ -455,7 +455,7 @@ export default class View extends React.Component {
   render() {
     const curListOptions = listOptions
       .setIn([2, 'options'], this.state.categoryTypeOptions)
-      .setIn([-1, 'transform'], (val, $$data) => {
+      .setIn([-1, 'render'], (val, $$data) => {
         const type = $$data.get('categoryType');
         let x;
         switch (type) {

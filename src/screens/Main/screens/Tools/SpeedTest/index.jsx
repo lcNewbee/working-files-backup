@@ -218,7 +218,7 @@ export default class SpeedTest extends React.Component {
         id: 'action',
         text: __('Select'),
         width: 50,
-        transform: function (val, item) {
+        render: function (val, item) {
           return (
             <FormInput
               type="radio"

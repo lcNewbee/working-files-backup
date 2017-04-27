@@ -102,7 +102,7 @@ export default class View extends React.Component {
       {
         id: 'srcPortRange',
         text: __('Source Port'),
-        transform: (val, item) => {
+        render: (val, item) => {
           const srcStartPort = item.get('srcStartPort');
           const srcEndPort = item.get('srcEndPort');
           return `${srcStartPort} - ${srcEndPort}`;
@@ -133,7 +133,7 @@ export default class View extends React.Component {
       {
         id: 'destPortRange',
         text: __('Destination Port'),
-        transform: (val, item) => {
+        render: (val, item) => {
           const destStartPort = item.get('srcStartPort');
           const destEndPort = item.get('srcEndPort');
           return `${destStartPort} - ${destEndPort}`;

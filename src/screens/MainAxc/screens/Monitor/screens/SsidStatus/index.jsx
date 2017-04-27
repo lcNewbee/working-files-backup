@@ -60,7 +60,7 @@ const ssidListOptions = fromJS([
   }, {
     id: 'bandwidth',
     text: __('UP/Down Traffic'),
-    transform(val, item) {
+    render(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 

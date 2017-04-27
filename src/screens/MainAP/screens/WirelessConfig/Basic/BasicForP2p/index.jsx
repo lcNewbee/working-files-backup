@@ -247,7 +247,7 @@ export default class Basic extends React.Component {
           id: 'enable',
           label: __('Enable'),
           width: '300px',
-          transform: function (val, item) {
+          render: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             const flag = pos === 0;
@@ -268,7 +268,7 @@ export default class Basic extends React.Component {
           id: 'ssid',
           label: __('SSID'),
           width: '250px',
-          transform: function (val, item) {
+          render: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
@@ -293,7 +293,7 @@ export default class Basic extends React.Component {
           id: 'vlanId',
           label: __('VLAN ID'),
           width: '250px',
-          transform: function (val, item) {
+          render: function (val, item) {
             // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
@@ -317,7 +317,7 @@ export default class Basic extends React.Component {
           id: 'maxClients',
           label: __('Max Clients'),
           width: '250px',
-          transform: function (val, item) {
+          render: function (val, item) {
             if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
               this.onSsidItemChange(val, item, 'maxClients', '64');
             } // 后台没传值，或值错误，则提供默认值
@@ -343,7 +343,7 @@ export default class Basic extends React.Component {
           id: 'airTimeEnable',
           label: __('Airtime Fairness'),
           width: '250px',
-          transform: function (val, item) {
+          render: function (val, item) {
             return (
               <FormInput
                 type="checkbox"
@@ -361,7 +361,7 @@ export default class Basic extends React.Component {
           id: 'hideSsid',
           label: __('Hide'),
           width: '200px',
-          transform: function (val, item) {
+          render: function (val, item) {
             return (
               <FormInput
                 type="checkbox"
@@ -378,7 +378,7 @@ export default class Basic extends React.Component {
           id: 'isolation',
           label: __('Client Isolation'),
           width: '200px',
-          transform: function (val, item) {
+          render: function (val, item) {
             return (
               <FormInput
                 type="checkbox"
@@ -396,7 +396,7 @@ export default class Basic extends React.Component {
           id: 'portalEnable',
           label: __('Portal'),
           width: '200px',
-          transform: function (val, item) {
+          render: function (val, item) {
             return (
               <FormInput
                 type="checkbox"
@@ -412,7 +412,7 @@ export default class Basic extends React.Component {
           id: 'security',
           label: __('Security Edit'),
           width: '200px',
-          transform: function (val, item) {
+          render: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
@@ -437,7 +437,7 @@ export default class Basic extends React.Component {
           id: 'speedLimit',
           label: __('Speed Limit'),
           width: '200px',
-          transform: function (val, item) {
+          render: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
@@ -462,7 +462,7 @@ export default class Basic extends React.Component {
           id: 'delete',
           label: __('Delete'),
           width: '200px',
-          transform: function (val, item) {
+          render: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
@@ -859,7 +859,7 @@ export default class Basic extends React.Component {
       {
         id: 'operate',
         text: __('Select'),
-        transform: function (val, item) {
+        render: function (val, item) {
           return (
             <FormInput
               type="radio"
@@ -880,7 +880,7 @@ export default class Basic extends React.Component {
       {
         id: 'security',
         text: __('Security Mode'),
-        transform(val) {
+        render(val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
           else if (mode === 'wpa2') return 'WPA2-PSK';

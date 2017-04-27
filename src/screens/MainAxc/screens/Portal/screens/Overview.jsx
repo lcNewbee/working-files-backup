@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import utils from 'shared/utils';
-import { Map, fromJS } from 'immutable';
+import { Map } from 'immutable';
 import EchartReact from 'shared/components/EchartReact';
 import Table from 'shared/components/Table';
 
@@ -15,7 +15,7 @@ const recordOptions = [
   {
     id: 'recDate',
     text: __('Time'),
-    transform(timeStr) {
+    render(timeStr) {
       return moment(timeStr).format('YYYY-MM-DD');
     },
   }, {

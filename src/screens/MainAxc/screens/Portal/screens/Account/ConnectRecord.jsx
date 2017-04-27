@@ -64,7 +64,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       return uptimeFilter.transform(val / 1000);
     },
   },   // {
@@ -80,7 +80,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       return `${flowFilter.transform(val)}`;
     },
   }, {
@@ -89,7 +89,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
-    transform(val) {
+    render(val) {
       return `${flowFilter.transform(val)}`;
     },
   }, //  {

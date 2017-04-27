@@ -113,7 +113,7 @@ class Row extends Component {
           }
 
           // 如果没有自定义渲染函数，依据配置渲染
-          if (!$$curTdOption.get('transform')) {
+          if (!$$curTdOption.get('render')) {
             if (currVal !== undefined) {
               // options 则需要渲染 value 对应的 label 值
               if ($$curTdOption.get('options') && $$curTdOption.get('options').size > 0) {
@@ -195,7 +195,7 @@ class Row extends Component {
 
           // 使用自定义渲染函数
           } else {
-            currVal = $$curTdOption.get('transform')(currVal, item, index);
+            currVal = $$curTdOption.get('render')(currVal, item, index);
           }
 
           // 当鼠标停留在列表上，该项是否显示悬浮提示框，如果该列需要，则在options中添加getTitle函数，函数返回的字符串则作为提示内容

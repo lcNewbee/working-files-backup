@@ -107,6 +107,7 @@ export default class AppScreen extends React.Component {
     super(props);
     utils.binds(this, [
       'refreshOptions',
+      'fetchAppScreenData',
     ]);
 
     // init listOptions
@@ -156,15 +157,7 @@ export default class AppScreen extends React.Component {
     this.actionable = getActionable(this.props);
   }
   componentDidMount() {
-    if (this.props.fetchScreenData) {
-      this.fetchAppScreenData().then(
-        () => {
-          this.setState({
-            loading: false,
-          });
-        },
-      );
-    }
+    this.fetchAppScreenData();
   }
   componentWillReceiveProps(nextProps) {
     const { store } = this.props;
@@ -220,25 +213,29 @@ export default class AppScreen extends React.Component {
     }
   }
   fetchAppScreenData() {
-    let ret = new Promise();
+    const loaded = () => {
+      this.setState({
+        loading: false,
+      });
+    };
 
-    // 默认非组管理界面，直接获取数据
-    if (this.props.groupid === 'not') {
-      ret = this.props.fetchScreenData();
+    if (this.props.fetchScreenData) {
+      // 默认非组管理界面，直接获取数据
+      if (this.props.groupid === 'not') {
+        this.props.fetchScreenData().then(loaded);
 
-    // 组管理界面，需要获取当前组id才能获取数据
-    } else if (this.props.groupid !== '') {
-      ret = this.props.fetchScreenData();
+      // 组管理界面，需要获取当前组id才能获取数据
+      } else if (this.props.groupid !== '') {
+        this.props.fetchScreenData().then(loaded);
+      }
+
+      if (this.props.refreshInterval) {
+        this.refreshTimer = setInterval(
+          () => this.props.fetchScreenData(),
+          this.props.refreshInterval,
+        );
+      }
     }
-
-    if (this.props.refreshInterval) {
-      this.refreshTimer = setInterval(
-        () => this.props.fetchScreenData(),
-        this.props.refreshInterval,
-      );
-    }
-
-    return ret;
   }
   refreshOptions(props) {
     const { route, listOptions } = props;

@@ -210,74 +210,74 @@ export default class Basic extends React.Component {
           label: __('Enable'),
           width: '200px',
           marginLeft: '3px',
-          transform: (val, item) => this.renderEnableBtn(val, item),
+          render: (val, item) => this.renderEnableBtn(val, item),
         },
         {
           id: 'ssid',
           label: __('SSID'),
           width: '250px',
           paddingLeft: '60px',
-          transform: (val, item) => this.renderSsidInput(val, item),
+          render: (val, item) => this.renderSsidInput(val, item),
         },
         {
           id: 'vlanId',
           label: __('VLAN ID'),
           width: '250px',
           paddingLeft: '30px',
-          transform: (val, item) => this.renderVlanIdInput(val, item),
+          render: (val, item) => this.renderVlanIdInput(val, item),
         },
         {
           id: 'maxClients',
           label: __('Max Clients'),
           width: '250px',
           paddingLeft: '22px',
-          transform: (val, item) => this.renderMaxClientsInput(val, item),
+          render: (val, item) => this.renderMaxClientsInput(val, item),
         },
         {
           id: 'airTimeEnable',
           label: __('Airtime Fairness'),
           width: '250px',
           paddingLeft: '-30px',
-          transform: (val, item) => this.renderCheckboxBtn(val, item, 'airTimeEnable'),
+          render: (val, item) => this.renderCheckboxBtn(val, item, 'airTimeEnable'),
         },
         {
           id: 'hideSsid',
           label: __('Hide'),
           width: '200px',
-          transform: (val, item) => this.renderCheckboxBtn(val, item, 'hideSsid'),
+          render: (val, item) => this.renderCheckboxBtn(val, item, 'hideSsid'),
         },
         {
           id: 'isolation',
           label: __('Client Isolation'),
           width: '200px',
           marginLeft: '-20px',
-          transform: (val, item) => this.renderCheckboxBtn(val, item, 'isolation'),
+          render: (val, item) => this.renderCheckboxBtn(val, item, 'isolation'),
         },
         {
           id: 'portalEnable',
           label: __('Portal'),
           width: '200px',
-          transform: (val, item) => this.renderCheckboxBtn(val, item, 'portalEnable'),
+          render: (val, item) => this.renderCheckboxBtn(val, item, 'portalEnable'),
         },
         {
           id: 'security',
           label: __('Security'),
           width: '200px',
           paddingLeft: '8px',
-          transform: (val, item) => this.renderSecurityBtn(val, item),
+          render: (val, item) => this.renderSecurityBtn(val, item),
         },
         {
           id: 'speedLimit',
           label: __('Speed Limit'),
           width: '200px',
           marginLeft: '-8px',
-          transform: (val, item) => this.renderSpeedLimitBtn(val, item),
+          render: (val, item) => this.renderSpeedLimitBtn(val, item),
         },
         {
           id: 'delete',
           label: __('Delete'),
           width: '200px',
-          transform: (val, item) => this.renderDeleteBtn(val, item),
+          render: (val, item) => this.renderDeleteBtn(val, item),
         },
       ]),
     };
@@ -836,7 +836,7 @@ export default class Basic extends React.Component {
       {
         id: 'operate',
         text: __('Select'),
-        transform: function (val, item) {
+        render: function (val, item) {
           return (
             <FormInput
               type="radio"
@@ -857,7 +857,7 @@ export default class Basic extends React.Component {
       {
         id: 'security',
         text: __('Security Mode'),
-        transform(val) {
+        render(val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
           else if (mode === 'wpa2') return 'WPA2-PSK';

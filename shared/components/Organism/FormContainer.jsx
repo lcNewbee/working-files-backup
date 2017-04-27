@@ -348,7 +348,7 @@ class FormContainer extends PureComponent {
 
           if (!$$item.get('noForm')) {
             retNode = $$item.set(
-              'transform',
+              'render',
               (val, $$listData, index) => this.renderFormGroup(
                 $$item.merge({
                   __index__: index,

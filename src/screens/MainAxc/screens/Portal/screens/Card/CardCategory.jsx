@@ -189,7 +189,7 @@ const listOptions = fromJS([
     },
 
 
-    transform(val, data) {
+    render(val, data) {
       let ret = '';
 
       if (data.get('state') === '0') {

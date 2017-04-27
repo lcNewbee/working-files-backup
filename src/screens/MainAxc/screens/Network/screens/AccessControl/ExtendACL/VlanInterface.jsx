@@ -96,7 +96,7 @@ export default class View extends React.Component {
         type: 'select',
         text: __('ACL Group'),
         options: this.aclGroupListOptions,
-        transform: function (val) {
+        render: function (val) {
           const optionItem = this.aclGroupListOptions.find(item => item.get('value') === val);
           return optionItem ? optionItem.get('label') : '';
         }.bind(this),

@@ -281,7 +281,7 @@ export class Device extends PureComponent {
         {
           id: 'devicename',
           text: __('MAC Address') + '/' + __('Name'),
-          transform (val, item) {
+          render (val, item) {
               let deviceMac = item.get('mac');
 
               return val || deviceMac;
@@ -307,7 +307,7 @@ export class Device extends PureComponent {
         {
           id: 'devicename',
           text: __('MAC Address') + '/' + __('Name'),
-          transform: function (val, item) {
+          render: function (val, item) {
             let deviceMac = item.get('mac');
             let name = item.get('devicename') || deviceMac;
             let deviceStatus = item.get('status');
@@ -330,7 +330,7 @@ export class Device extends PureComponent {
         }, {
           id: 'ip',
           text: __('IP Address'),
-          transform: function (val, item) {
+          render: function (val, item) {
             let deviceMac = item.get('mac');
             let deviceStatus = item.get('status');
 
@@ -366,7 +366,7 @@ export class Device extends PureComponent {
           id: 'op',
           text: __('Actions'),
           width: 360,
-          transform: function (val, item) {
+          render: function (val, item) {
             let deviceMac = item.get('mac');
             let deviceStatus = item.get('status');
             let isLocating = item.get('locatestatus') === 'location';

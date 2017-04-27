@@ -186,7 +186,7 @@ export default class SystemLogs extends Component {
       {
         id: 'id',
         text: __('No.'),
-        transform: function () {
+        render: function () {
           return this.props.selfState.get('startNoForEveryPage') + n++;
         }.bind(this),
         width: '80px',

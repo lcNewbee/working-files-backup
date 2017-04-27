@@ -172,7 +172,7 @@ export class GroupSettings extends PureComponent {
       {
         id: 'groupname',
         text: msg.groupname,
-        transform (val) {
+        render (val) {
         if (val === 'Default') {
           val = __('Ungrouped Devices');
         }
@@ -188,7 +188,7 @@ export class GroupSettings extends PureComponent {
       id: 'op',
       text: msg.action,
       width: 240,
-      transform: function (val, item) {
+      render: function (val, item) {
         if (item.get('groupname') === 'Default') {
           return (<Button
             icon="eye"
@@ -238,7 +238,7 @@ export class GroupSettings extends PureComponent {
     let ret = fromJS([{
       id: 'devicename',
       text: __('MAC Address') + '/' + __('Name'),
-      transform (val, item) {
+      render (val, item) {
           return item.get('devicename') || item.get('mac');
         },
     }, {
@@ -251,7 +251,7 @@ export class GroupSettings extends PureComponent {
       }, {
         id: 'groupname',
         text: __('Current Group'),
-        transform (val) {
+        render (val) {
           if (val === 'Default') {
             val = __('Ungrouped Devices');
           }
@@ -261,7 +261,7 @@ export class GroupSettings extends PureComponent {
         id: 'op',
         text: __('Select'),
         width: 50,
-        transform: function (val, item) {
+        render: function (val, item) {
           let deviceMac;
           let selectedDevices = this.props.edit.get('devices');
 

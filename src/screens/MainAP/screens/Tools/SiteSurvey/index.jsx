@@ -43,7 +43,7 @@ const siteScanResultOptions = fromJS([
   {
     id: 'security',
     text: __('Security'),
-    transform(val) {
+    render(val) {
       return val.get('mode');
     },
   },

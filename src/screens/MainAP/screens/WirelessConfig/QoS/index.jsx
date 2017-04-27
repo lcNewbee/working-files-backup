@@ -25,7 +25,7 @@ const wapEdcaOptions = fromJS([
   {
     id: 'AIFS',
     text: 'AIFS',
-    transform: (val) => (
+    render: (val) => (
       <div
         style={{ marginLeft: '-200px',
                 marginTop: '8px',
@@ -43,7 +43,7 @@ const wapEdcaOptions = fromJS([
   {
     id: 'cwMin',
     text: 'cwMin',
-    transform: (val) => (
+    render: (val) => (
       <div
         style={{ marginLeft: '-200px',
                 marginTop: '8px',
@@ -61,7 +61,7 @@ const wapEdcaOptions = fromJS([
   {
     id: 'cwMax',
     text: 'cwMax',
-    transform: (val) => (
+    render: (val) => (
       <div
         style={{ marginLeft: '-200px',
                 marginTop: '8px',
@@ -79,7 +79,7 @@ const wapEdcaOptions = fromJS([
   {
     id: 'Max.Burst',
     text: 'Max.Burst',
-    transform: (val) => (
+    render: (val) => (
       <div
         style={{ marginLeft: '-200px',
                 marginTop: '8px',

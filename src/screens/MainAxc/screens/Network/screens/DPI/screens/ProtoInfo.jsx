@@ -64,7 +64,7 @@ const userModalOptions = fromJS([
   // {
   //   id: 'osType',
   //   text: __('OS Type'),
-  //   transform(val) {
+  //   render(val) {
   //     if (val === '' || val === undefined) {
   //       return '--';
   //     }
@@ -74,7 +74,7 @@ const userModalOptions = fromJS([
   {
     id: 'curRate',
     text: __('Current Rate'),
-    transform(val) {
+    render(val) {
       return `${flowRateFilter.transform(val)}/s`;
     },
   }, {
@@ -156,7 +156,7 @@ export default class ProtoInfo extends React.Component {
       }, {
         id: 'userNum',
         text: __('User Number'),
-        transform: function (val, item) {
+        render: function (val, item) {
           return (
             <span
               style={{
@@ -192,7 +192,7 @@ export default class ProtoInfo extends React.Component {
       }, {
         id: 'curRate',
         text: __('Current Rate'),
-        transform(val) {
+        render(val) {
           return `${flowRateFilter.transform(val)}/s`;
         },
       }, {

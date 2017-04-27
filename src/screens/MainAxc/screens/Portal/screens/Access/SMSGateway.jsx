@@ -195,7 +195,7 @@ const listOptions = fromJS([
         rules: 'num:[0,10]',
       }),
     },
-    transform(val) {
+    render(val) {
       ret = `${val}m`;
       return ret;
     },

@@ -157,7 +157,7 @@ export default class LiveMap extends React.PureComponent {
         id: 'actions',
         text: __('Actions'),
         width: 180,
-        transform: (val, $$item, index) => (
+        render: (val, $$item, index) => (
           <div className="action-btns">
             <Button
               icon="edit"

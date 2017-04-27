@@ -241,7 +241,7 @@ const listOptions = fromJS([
   // {
   //   id: 'osType',
   //   text: __('OS Type'),
-  //   transform(val) {
+  //   render(val) {
   //     if (val === '' || val === undefined) {
   //       return '--';
   //     }
@@ -251,7 +251,7 @@ const listOptions = fromJS([
   {
     id: 'application',
     text: __('Applications'),
-    transform(val) {
+    render(val) {
       if (typeof (val) === 'undefined' || val.size === 0) return '--';
       const len = val.size;
       const n1 = len / 10;
@@ -270,7 +270,7 @@ const listOptions = fromJS([
   }, {
     id: 'curRate',
     text: __('Current Rate'),
-    transform(val) {
+    render(val) {
       return `${flowRateFilter.transform(val)}/s`;
     },
   }, {

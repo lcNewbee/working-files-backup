@@ -37,7 +37,7 @@ const interfaceOptions = fromJS([
   {
     id: 'name',
     text: __('Name'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -47,7 +47,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'mac',
     text: __('MAC'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -57,7 +57,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'txBytes',
     text: __('Tx Data'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -67,7 +67,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'rxBytes',
     text: __('Rx Data'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -77,7 +77,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'txPackets',
     text: __('Tx Packets'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -87,7 +87,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'rxPackets',
     text: __('Rx Packets'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -97,7 +97,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'txErrorPackets',
     text: __('Tx Errors'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -107,7 +107,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'rxErrorPackets',
     text: __('Rx Errors'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -117,7 +117,7 @@ const interfaceOptions = fromJS([
   }, {
     id: 'status',
     text: __('Status'),
-    transform(val) {
+    render(val) {
       if (val === '') {
         return '--';
       }
@@ -129,7 +129,7 @@ const interfaceOptions = fromJS([
 //   {
 //     id: 'name',
 //     text: __('Name'),
-//     transform(val, item) {
+//     render(val, item) {
 //       const ssid = item.get('ssid');
 //       if (val === '') {
 //         return `--(${ssid})`;
@@ -140,7 +140,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'mac',
 //     text: __('MAC'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -150,7 +150,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'txBytes',
 //     text: __('Tx Bytes'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -160,7 +160,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'rxBytes',
 //     text: __('Rx Bytes'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -170,7 +170,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'txPackets',
 //     text: __('Tx Packets'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -180,7 +180,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'rxPackets',
 //     text: __('Rx Packets'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -190,7 +190,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'txErrorPackets',
 //     text: __('Tx Error'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -200,7 +200,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'rxErrorPackets',
 //     text: __('Rx Error'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
@@ -210,7 +210,7 @@ const interfaceOptions = fromJS([
 //   }, {
 //     id: 'ccq',
 //     text: __('CCQ'),
-//     transform(val) {
+//     render(val) {
 //       if (val === '') {
 //         return '--';
 //       }
