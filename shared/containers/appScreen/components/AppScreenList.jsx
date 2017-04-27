@@ -108,6 +108,7 @@ const defaultProps = {
   onAfterSync: utils.emptyFunc,
   createModal: (option) => {
     if (option && option.text) {
+      /* eslint-disable no-alert */
       alert(option.text);
     }
   },

@@ -22,7 +22,6 @@ const loadingStyle = {
 const propTypes = {
   app: PropTypes.instanceOf(Map).isRequired,
   store: PropTypes.instanceOf(Map).isRequired,
-  loading: PropTypes.bool,
   noTitle: PropTypes.bool,
   children: PropTypes.node,
   title: PropTypes.string,
@@ -56,7 +55,6 @@ const defaultProps = {
   onAfterSync: emptyFunc,
   noTitle: true,
   groupid: 'not',
-  loading: true,
 
   // AppScreenList Option
 

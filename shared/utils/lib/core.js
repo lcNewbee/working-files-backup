@@ -6,10 +6,9 @@ var utils = {};
 function warning(msg) {
   /* eslint-disable no-console */
   if (console && typeof console.error === 'function') {
-    console.error(msg);
+    console.error('Warning: ', msg);
   }
 
-  /* eslint-enable no-console */
   try {
     // This error was thrown as a convenience so that if you enable
     // "break on all exceptions" in your console,

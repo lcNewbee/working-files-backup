@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +10,22 @@ import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 
+const propTypes = {
+  refreshAll: PropTypes.func,
+  changeLoginStatus: PropTypes.func,
+  route: PropTypes.object,
+  history: PropTypes.object,
+  location: PropTypes.object,
+  routes: PropTypes.array,
+
+  // immutable data
+  app: PropTypes.instanceOf(Map),
+};
+
+const defaultProps = {
+  Component: 'button',
+  role: 'default',
+};
 
 export default class Main extends React.PureComponent {
   constructor(props) {
@@ -20,11 +37,11 @@ export default class Main extends React.PureComponent {
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
 
-    document.onkeydown = function (e) {
+    document.onkeydown = (e) => {
       if (e.keyCode === 116) {
         this.onRefresh(e);
       }
-    }.bind(this);
+    };
   }
 
   onRefresh(e) {
@@ -35,7 +52,7 @@ export default class Main extends React.PureComponent {
   onLogout(e) {
     e.preventDefault();
     this.props.changeLoginStatus('0');
-    window.location.hash = '#';
+    this.props.history.push('/login');
   }
 
   showUserPopOver() {
@@ -52,10 +69,10 @@ export default class Main extends React.PureComponent {
           version={version}
         >
           <div className="aside">
-            <a href="#" className="as-control" onClick={this.onRefresh}>
+            <button href="#" className="as-control" onClick={this.onRefresh}>
               <Icon name="refresh" className="icon" />
               <span>{__('REFRESH')}</span>
-            </a>
+            </button>
             <div className="user" onClick={this.showUserPopOver}>
               <Icon name="user-secret" className="icon-user" />
               <Icon
@@ -93,7 +110,7 @@ export default class Main extends React.PureComponent {
                     />
                     {__('CHANGE PASSWORD')}
                   </a>
-                  <a className="sign-out" href="#" onClick={this.onLogout}>
+                  <a className="sign-out" href="#/login" onClick={this.onLogout}>
                     <Icon
                       name="sign-out"
                     />
@@ -101,18 +118,21 @@ export default class Main extends React.PureComponent {
                   </a>
                 </div>
               </div>
-              <div className="o-pop-over__overlay"></div>
+              <div className="o-pop-over__overlay" />
             </div>
           ) : null
         }
 
         {
-          saving ? <div className="body-backdrop"></div> : null
+          saving ? <div className="body-backdrop" /> : null
         }
       </div>
     );
   }
 }
+
+Main.propTypes = propTypes;
+Main.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {

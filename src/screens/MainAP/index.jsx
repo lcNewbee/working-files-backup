@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -17,6 +18,7 @@ const propTypes = {
   fetch: PropTypes.func,
   refreshAll: PropTypes.func,
   route: PropTypes.object,
+  location: PropTypes.object,
   changeLoginStatus: PropTypes.func,
   setDeviceRadioList: PropTypes.func,
   setRadioSelectOptions: PropTypes.func,
@@ -27,7 +29,7 @@ const propTypes = {
 function makeRadioSelectOptions(list) {
   const len = list.length;
   let radioSelectOptions = fromJS([]);
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i += 1) {
     const item = fromJS({
       label: list[i].name,
       value: list[i].radioId,
@@ -45,11 +47,11 @@ export default class MainAP extends React.PureComponent {
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);
-    document.onkeydown = function (e) {
+    document.onkeydown = (e) => {
       if (e.keyCode === 116) {
         this.onRefresh(e);
       }
-    }.bind(this);
+    };
   }
 
   componentWillMount() {
@@ -148,7 +150,7 @@ export default class MainAP extends React.PureComponent {
                     />
                     {__('CHANGE PASSWORD')}
                   </a>
-                  <a className="sign-out" href="#" onClick={this.onLogout}>
+                  <a className="sign-out" href="#/" onClick={this.onLogout}>
                     <Icon
                       name="sign-out"
                     />
@@ -156,12 +158,12 @@ export default class MainAP extends React.PureComponent {
                   </a>
                 </div>
               </div>
-              <div className="o-pop-over__overlay"></div>
+              <div className="o-pop-over__overlay" />
             </div>
           ) : null
         }
         {
-          saving ? <div className="body-backdrop"></div> : null
+          saving ? <div className="body-backdrop" /> : null
         }
       </div>
     );

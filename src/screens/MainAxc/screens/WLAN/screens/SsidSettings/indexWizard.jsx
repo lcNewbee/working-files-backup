@@ -1515,8 +1515,7 @@ export default class View extends React.Component {
         type: 'select',
         disabled: true,
         required: true,
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -1526,8 +1525,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isCreateNewRadiusServer')}
             />
-          );
-        },
+          ),
       },
     ]);
     // 本地radius服务器配置
@@ -1552,8 +1550,7 @@ export default class View extends React.Component {
         validator: validator({
           rules: 'ip',
         }),
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -1563,8 +1560,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isCreateNewLocalRadiusServer')}
             />
-          );
-        },
+          ),
       },
     ]);
 
@@ -1691,8 +1687,7 @@ export default class View extends React.Component {
         type: 'select',
         required: true,
         disabled: true,
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -1702,8 +1697,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isCreateNewPortalServer')}
             />
-          );
-        },
+          ),
       },
     ]);
 
@@ -2125,8 +2119,7 @@ export default class View extends React.Component {
         label: __('Login Name'),
         required: true,
         type: 'select',
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -2136,8 +2129,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isCreateNewPortalAccount')}
             />
-          );
-        },
+          ),
       },
     ]);
     const rechargeOptions = fromJS([
@@ -2147,8 +2139,7 @@ export default class View extends React.Component {
         form: 'recharge',
         required: true,
         type: 'select',
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -2158,8 +2149,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isCreateCardCategory')}
             />
-          );
-        },
+          ),
       },
     ]);
     const wechatOptions = fromJS([
@@ -2169,8 +2159,7 @@ export default class View extends React.Component {
         form: 'recharge',
         required: true,
         type: 'select',
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -2180,8 +2169,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isCreateNewWechat')}
             />
-          );
-        },
+          ),
       },
     ]);
     const { store, app } = this.props;
@@ -2203,7 +2191,7 @@ export default class View extends React.Component {
 
     return (
       <div className="o-box row">
-        <div className="o-box__cell rows" style={{color: '#fff',background: '#333'}}>
+        <div className="o-box__cell rows" style={{ color: '#fff', background: '#333' }}>
           <div className="cols col-3">{__('Type')}</div>
           <div className="cols col-4">{__('Sesstion Time')}</div>
           <div className="cols col-4">{__('Redirect URL After Auth')}</div>
@@ -2317,7 +2305,7 @@ export default class View extends React.Component {
                   marginTop: '20px',
                 }}
               >
-              <div className="account">
+                <div className="account">
                 <h3>Account</h3>
                 <div>
                   <FormContainer
@@ -2355,10 +2343,12 @@ export default class View extends React.Component {
                   }
                 </div>
               </div>
-              <div className="recharge">
-                <h3 style={{
+                <div className="recharge">
+                <h3
+style={{
                   marginTop: '20px',
-                }}>Recharge</h3>
+                }}
+                >Recharge</h3>
                 <div>
                   <FormContainer
                     id="rechargeForm"
@@ -2614,8 +2604,7 @@ export default class View extends React.Component {
         label: __('Name'),
         required: true,
         type: 'select',
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -2625,8 +2614,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isConfigNewSNS')}
             />
-          );
-        },
+          ),
       },
     ]);
     const configNewSNSOptions = fromJS([
@@ -2856,8 +2844,7 @@ export default class View extends React.Component {
         label: __('Login Name'),
         required: true,
         type: 'select',
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -2867,8 +2854,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isCreateNewPortalAccount')}
             />
-          );
-        },
+          ),
       },
     ]);
     const { store, app } = this.props;
@@ -2934,8 +2920,7 @@ export default class View extends React.Component {
         form: 'recharge',
         required: true,
         type: 'select',
-        appendRender: () => {
-          return (
+        appendRender: () => (
             <Button
               type="button"
               text={__('New')}
@@ -2945,8 +2930,7 @@ export default class View extends React.Component {
               theme="primary"
               onClick={() => this.toggleBox('isCreateCardCategory')}
             />
-          );
-        },
+          ),
       },
     ]);
     const { store, app } = this.props;

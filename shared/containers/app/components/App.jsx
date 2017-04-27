@@ -39,6 +39,9 @@ export default class App extends Component {
       'renderHtmlBody',
       'handleLocationChange',
     ]);
+
+    this.lastPathname = '';
+    this.handleLocationChange(props.location);
   }
 
   componentWillMount() {
@@ -87,9 +90,9 @@ export default class App extends Component {
   }
 
   renderHtmlBody() {
-    const { route } = this.props;
+    const { location } = this.props;
     const bodyElem = document.getElementsByTagName('body')[0];
-    if (route.path !== '/') {
+    if (location.pathname !== '/login') {
       if (bodyElem.className.indexOf('fixed') === -1) {
         bodyElem.className = utils.addClassName(bodyElem.className, 'fixed');
       }

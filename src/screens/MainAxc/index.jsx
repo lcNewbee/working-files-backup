@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -78,10 +79,12 @@ export default class Main extends React.PureComponent {
     clearTimeout(this.onRefreshTimeout);
   }
 
-  onRefresh() {
+  onRefresh(e) {
+    e.preventDefault();
     this.props.refreshAll();
   }
-  onLogout() {
+  onLogout(e) {
+    e.preventDefault();
     this.props.changeLoginStatus('0');
     this.onHiddenPopOver();
     this.props.history.push('/login');
@@ -134,7 +137,7 @@ export default class Main extends React.PureComponent {
                 />
                 {__('Change Password')}
               </a>
-              <a className="sign-out" href="#/" onClick={this.onLogout}>
+              <a className="sign-out" onClick={this.onLogout}>
                 <Icon
                   name="sign-out"
                 />
