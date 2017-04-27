@@ -12,7 +12,7 @@ const queryFormOptions = fromJS([
   {
     id: 'state',
     type: 'select',
-    label: __('Type'),
+    label: __('Voucher Type'),
     options: [
       {
         value: '0',

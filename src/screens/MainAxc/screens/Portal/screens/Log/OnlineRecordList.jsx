@@ -50,23 +50,11 @@ const queryFormOptions = fromJS([
         value: '1',
         label: __('Access User Auth'),
       }, {
-        value: '2',
-        label: __('Radius Auth'),
-      }, {
-        value: '3',
-        label: __('App Auth'),
-      }, {
         value: '4',
-        label: __('Messages Auth'),
+        label: __('SNS Auth'),
       }, {
         value: '5',
         label: __('Wechat Auth'),
-      }, {
-        value: '6',
-        label: __('Public Platform Auth'),
-      }, {
-        value: '7',
-        label: __('Visitor Auth'),
       }, {
         value: '9',
         label: __('Facebook Auth'),
@@ -88,7 +76,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'basip',
-    text: __('Bas IP'),
+    text: __('Portal Server IP'),
     type: 'text',
     formProps: {
       required: true,
@@ -157,7 +145,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'ins',
-    text: __('Up Traffic'),
+    text: __('Uplink Traffic'),
     formProps: {
       required: true,
     },
@@ -166,7 +154,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'outs',
-    text: __('Down Traffic'),
+    text: __('Downlink Traffic'),
     formProps: {
       required: true,
     },

@@ -73,7 +73,7 @@ const authServer = fromJS([
     }),
   }, {
     id: 'nasip',
-    label: __('Nas IP'),
+    label: __('NAS IP'),
     form: 'authServer',
     type: 'text',
     required: true,
@@ -86,7 +86,7 @@ const authServer = fromJS([
     },
   }, {
     id: 'nasip',
-    label: __('Nas IP'),
+    label: __('NAS IP'),
     form: 'authServer',
     type: 'select',
     required: true,
@@ -505,7 +505,7 @@ const listOptions = fromJS([
   },
   {
     id: 'nasip',
-    label: __('Nas IP'),
+    label: __('NAS IP'),
     required: true,
   },
   {

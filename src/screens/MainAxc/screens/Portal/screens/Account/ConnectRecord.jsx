@@ -148,7 +148,7 @@ export default class OpenPortalBase extends React.Component {
         editable={false}
         searchable
         searchProps={{
-          placeholder: `${__('IP')}`,
+          placeholder: `${__('IP')}/${__('MAC')}/${__('Portal Server IP')}`,
         }}
       />
     );

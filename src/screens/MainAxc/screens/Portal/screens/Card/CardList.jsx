@@ -45,7 +45,7 @@ const queryFormOptions = fromJS([
   {
     id: 'payType',
     type: 'select',
-    label: __('Recharge Type'),
+    label: __('Acc Type'),
     options: [
       {
         value: '0',
@@ -72,7 +72,7 @@ const queryFormOptions = fromJS([
   }, {
     id: 'categoryType',
     type: 'select',
-    label: __('Category Type'),
+    label: __('Voucher Type'),
     options: [
       {
         value: '0',
@@ -111,7 +111,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'payType',
-    text: __('Recharge Type'),
+    text: __('Acc Type'),
     width: '120px',
     noForm: true,
     formProps: {
@@ -262,7 +262,7 @@ const listOptions = fromJS([
   },
   {
     id: 'payTime',
-    text: __('Count'),
+    text: __('Voucher Value'),
     noForm: true,
     formProps: {
       type: 'number',
@@ -488,7 +488,7 @@ export default class View extends React.Component {
                 });
                 this.props.updateCurEditListItem({
                   id: $$data.get('id'),
-                  title: __('CD Key of Recharge Voucher '),
+                  title: __('CD Key of Recharge Voucher'),
                   description: __('Recharge Name:') + $$data.get('name') + __('; ') + __('CD Key:') + $$data.get('cdKey') + __('; ') + __('Category Type:') + x,
                 });
               }}

@@ -48,7 +48,7 @@ const queryFormOptions = fromJS([
   {
     id: 'state',
     type: 'select',
-    label: __('VoucherType'),
+    label: __('Voucher Type'),
     options: [
       {
         value: '0',
@@ -134,7 +134,7 @@ const listOptions = fromJS([
     defaultValue: '0',
   }, {
     id: 'maclimit',
-    text: __('MAC Limit'),
+    text: __('Multi Device Login'),
     options: [
       {
         value: '0',
@@ -148,6 +148,7 @@ const listOptions = fromJS([
   }, {
     id: 'maclimitcount',
     text: __('MAC Quantity'),
+    noTable: true,
   }, {
     id: 'autologin',
     text: __('Auto Re-login'),

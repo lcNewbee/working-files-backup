@@ -153,7 +153,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'ins',
-    text: __('Up Traffic'),
+    text: __('Uplink Traffic'),
     formProps: {
       required: true,
     },
@@ -173,7 +173,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'outs',
-    text: __('Down Traffic'),
+    text: __('Downlink Traffic'),
     formProps: {
       required: true,
     },
