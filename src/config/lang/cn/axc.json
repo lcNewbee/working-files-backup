@@ -753,5 +753,6 @@
   "Clients ": "客户端应用分析",
   "Ports ": "端口数据分析",
   "Protocols ": "协议信息",
+  "NDPI Disabled": "NDPI已禁用",
   "Application Analyze": "应用识别"
 }

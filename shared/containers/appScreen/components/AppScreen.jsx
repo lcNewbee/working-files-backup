@@ -3,14 +3,26 @@ import PropTypes from 'prop-types';
 import immutable, { List, Map } from 'immutable';
 import utils, { immutableUtils } from 'shared/utils';
 import { getActionable } from 'shared/axc';
+import Icon from 'shared/components/Icon';
 import AppScreenList from './AppScreenList';
 import AppScreenSettings from './AppScreenSettings';
 
 function emptyFunc() {}
 
+const loadingStyle = {
+  position: 'absolute',
+  top: '40%',
+  marginTop: '-12px',
+  marginLeft: '-12px',
+  left: '50%',
+  fontSize: '24px',
+  color: '#0093DD',
+};
+
 const propTypes = {
   app: PropTypes.instanceOf(Map).isRequired,
   store: PropTypes.instanceOf(Map).isRequired,
+  loading: PropTypes.bool,
   noTitle: PropTypes.bool,
   children: PropTypes.node,
   title: PropTypes.string,
@@ -44,6 +56,7 @@ const defaultProps = {
   onAfterSync: emptyFunc,
   noTitle: true,
   groupid: 'not',
+  loading: true,
 
   // AppScreenList Option
 
@@ -57,7 +70,26 @@ const defaultProps = {
 
   settingsFormOptions: List([]),
 };
+function getLoadingStatus(props) {
+  const { loading } = props;
+  const $$store = props.store;
+  const myScreenId = $$store.get('curScreenId');
+  const $$myScreenStore = $$store.get(myScreenId);
+  const $$myScreenDataList = $$myScreenStore.get('list');
+  const $$myScreenDataSettings = $$myScreenStore.get('settings');
+  let ret = loading;
 
+  if (typeof loading === 'undefined') {
+    ret = true;
+
+    if ($$myScreenStore.get('data').size >= 2 ||
+      ($$myScreenDataList.isEmpty() && $$myScreenDataSettings.isEmpty())) {
+      ret = false;
+    }
+  }
+
+  return ret;
+}
 export default class AppScreen extends React.Component {
   constructor(props) {
     const {
@@ -73,6 +105,9 @@ export default class AppScreen extends React.Component {
     }, props.initOption);
 
     super(props);
+    utils.binds(this, [
+      'refreshOptions',
+    ]);
 
     // init listOptions
     this.refreshOptions(props);
@@ -112,9 +147,9 @@ export default class AppScreen extends React.Component {
     this.initOption = initOption;
     this.selectedList = [];
 
-    utils.binds(this, [
-      'onSaveSettings',
-    ]);
+    this.state = {
+      loading: getLoadingStatus(props),
+    };
   }
   componentWillMount() {
     this.props.initScreen(this.initOption);
@@ -122,23 +157,29 @@ export default class AppScreen extends React.Component {
   }
   componentDidMount() {
     if (this.props.fetchScreenData) {
-      // 默认非组管理界面，直接获取数据
-      if (this.props.groupid === 'not') {
-        this.props.fetchScreenData();
-
-      // 组管理界面，需要获取当前组id才能获取数据
-      } else if (this.props.groupid !== '') {
-        this.props.fetchScreenData();
-      }
-
-      if (this.props.refreshInterval) {
-        this.refreshTimer = setInterval(
-          () => this.props.fetchScreenData(),
-          this.props.refreshInterval,
-        );
-      }
+      this.fetchAppScreenData().then(
+        () => {
+          this.setState({
+            loading: false,
+          });
+        },
+      );
     }
   }
+  componentWillReceiveProps(nextProps) {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$curScreenLoading = store.getIn([myScreenId, 'loading']);
+    const $$nextScreenLoading = store.get([myScreenId, 'loading']);
+
+    // 更新加载状态
+    if ($$curScreenLoading !== $$nextScreenLoading) {
+      this.setState({
+        loading: getLoadingStatus(nextProps),
+      });
+    }
+  }
+
   componentWillUpdate(nextProps) {
     const nextListOptions = nextProps.listOptions;
     const nextSettingOptions = nextProps.settingsFormOptions;
@@ -177,6 +218,27 @@ export default class AppScreen extends React.Component {
     if (this.props.leaveScreen) {
       this.props.leaveScreen(this.props.route.id);
     }
+  }
+  fetchAppScreenData() {
+    let ret = new Promise();
+
+    // 默认非组管理界面，直接获取数据
+    if (this.props.groupid === 'not') {
+      ret = this.props.fetchScreenData();
+
+    // 组管理界面，需要获取当前组id才能获取数据
+    } else if (this.props.groupid !== '') {
+      ret = this.props.fetchScreenData();
+    }
+
+    if (this.props.refreshInterval) {
+      this.refreshTimer = setInterval(
+        () => this.props.fetchScreenData(),
+        this.props.refreshInterval,
+      );
+    }
+
+    return ret;
   }
   refreshOptions(props) {
     const { route, listOptions } = props;
@@ -254,7 +316,13 @@ export default class AppScreen extends React.Component {
         {
           this.props.children
         }
-
+        {
+          this.state.loading ? (
+            <div style={loadingStyle}>
+              <Icon name="spinner" spin />
+            </div>
+          ) : null
+        }
       </div>
     );
   }
