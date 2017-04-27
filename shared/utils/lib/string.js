@@ -1,5 +1,6 @@
 var str = {};
 
+
 function getText(val) {
   var ret = '';
 

@@ -19,7 +19,6 @@ const defaultProps = {
 };
 
 class MyTimePicker extends PureComponent {
-
   render() {
     const { showSecond, value, formatter } = this.props;
     const ThisComponent = TimePicker;

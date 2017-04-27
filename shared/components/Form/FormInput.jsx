@@ -34,7 +34,6 @@ const propTypes = {
     'switch', 'plain-text', 'date-range', 'checkboxs',
   ]),
   dataType: PropTypes.oneOf(['string', 'number', 'ip', 'mac']),
-  dataFormat: PropTypes.object,
   check: PropTypes.func,
   checkClear: PropTypes.func,
   checkClearValue: PropTypes.func,
@@ -306,7 +305,7 @@ class FormInput extends PureComponent {
 
   render() {
     const {
-      Component, type, className, size, value, ...restProps
+      Component, type, className, size, value,
     } = this.props;
     const inpputType = this.props.type;
     const inputProps = utils.extend({}, this.props);

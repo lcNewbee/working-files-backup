@@ -80,6 +80,31 @@ describe('utils core', () => {
     //   expect(Object.keys(target).join(''), letters);
     // });
   });
+
+  describe('#warning', () => {
+    let sandbox;
+    beforeEach(() => {
+      // create a sandbox
+      sandbox = sinon.sandbox.create();
+
+      // stub some console methods
+      sandbox.stub(console, 'error');
+    });
+
+    afterEach(() => {
+      // restore the environment as it was before
+      sandbox.restore();
+    });
+
+    const warning = core.warning;
+
+    it('should console error when msg not empty', () => {
+      const errorMsg = 'should console error when msg not empty';
+      warning(errorMsg);
+      sinon.assert.calledOnce(console.error);
+      sinon.assert.calledWithExactly(console.error, errorMsg);
+    });
+  });
   describe('#isArray()', () => {
     it('should return true when call with array', () => {
       expect(core.isArray([])).toBe(true);
@@ -100,7 +125,7 @@ describe('utils core', () => {
 
       // stub some console methods
       sandbox.stub(console, 'log');
-      sandbox.stub(console, 'warn');
+      sandbox.stub(console, 'error');
     });
 
     afterEach(() => {
@@ -128,8 +153,8 @@ describe('utils core', () => {
     it('should call console.error when no param', () => {
       const errorMsg = 'utils.binds should call with object target and array keys';
       core.binds();
-      sinon.assert.calledOnce(console.warn);
-      sinon.assert.calledWithExactly(console.warn, errorMsg);
+      sinon.assert.calledOnce(console.error);
+      sinon.assert.calledWithExactly(console.error, errorMsg);
     });
     it('should console.error when param keys is not array', () => {
       const errorMsg = 'utils.binds should call with object target and array keys';
@@ -138,8 +163,8 @@ describe('utils core', () => {
       core.binds({}, null);
       core.binds({}, 1222);
       core.binds({}, 'ds');
-      sinon.assert.callCount(console.warn, 4);
-      sinon.assert.calledWithExactly(console.warn, errorMsg);
+      sinon.assert.callCount(console.error, 4);
+      sinon.assert.calledWithExactly(console.error, errorMsg);
     });
   });
 

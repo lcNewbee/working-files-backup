@@ -5,11 +5,6 @@ import PureComponent from '../Base/PureComponent';
 import './index.scss';
 
 const propTypes = {
-  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  total: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  currPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  lastPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  nextPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onPageChange: PropTypes.func,
   page: PropTypes.object,
 };
@@ -100,7 +95,7 @@ class Pagination extends PureComponent {
 
     endPage = endPage > totalPage ? totalPage : endPage;
 
-    for (i = startPage; i <= endPage; i++) {
+    for (i = startPage; i <= endPage; i += 1) {
       key = `pager_${i}`;
 
       if (+currPage !== i) {

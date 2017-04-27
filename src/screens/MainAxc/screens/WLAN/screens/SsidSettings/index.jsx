@@ -864,6 +864,7 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={curListOptions}
         listKey="allKeys"
+        maxListSize="16"
         actionBarChildren={this.renderActionBar()}
         initOption={{
           actionQuery: {

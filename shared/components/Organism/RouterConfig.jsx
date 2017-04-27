@@ -68,7 +68,7 @@ export default function renderRoutesTree(routes) {
         <Route
           path={route.path}
           render={
-            (props) => <RouteComponent {...props} route={route} />
+            props => <RouteComponent {...props} route={route} />
           }
           key={key}
         />

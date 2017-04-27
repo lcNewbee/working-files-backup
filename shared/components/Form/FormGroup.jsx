@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
 import PureComponent from '../Base/PureComponent';
 import FormInput from './FormInput';
 
@@ -37,6 +38,7 @@ const propTypes = {
   'data-label': PropTypes.string,
   form: PropTypes.string,
   showLabel: PropTypes.bool,
+  multi: PropTypes.bool,
   options: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.object,
@@ -110,7 +112,7 @@ class FormGroup extends PureComponent {
     const curValue = this.props.value;
 
     if (curValue === undefined && nextValue !== curValue) {
-      console.warn(`Formgroup ${this.props.id} switch between uncontrolled and controlled`);
+      invariant(true, `Formgroup ${this.props.id} switch between uncontrolled and controlled`);
     }
   }
 
@@ -124,7 +126,6 @@ class FormGroup extends PureComponent {
         if (prevProps.value !== value) {
           this.checkClear();
         } else if (prevProps.validateAt !== validateAt) {
-
           if (this.myRef.offsetWidth > 0 &&
               isValidateMyForm(validateAt, form)) {
             this.check();
@@ -138,7 +139,7 @@ class FormGroup extends PureComponent {
 
   // 验证不确定的错误
   check() {
-    const { name, label, value, required, options, type, multi, } = this.props;
+    const { name, label, value, required, options, type, multi } = this.props;
     let checkResult;
 
     // 空字符串验证, 或者值 不在 options 列表中
@@ -191,7 +192,9 @@ class FormGroup extends PureComponent {
     const {
       required, role, id, label, display, disabled, name, value, type,
     } = this.props;
-    const { style, help, children, errMsg, showLabel, className, appendRender, ...restProps } = this.props;
+    const { style, help, children, errMsg, showLabel,
+      className, appendRender, ...restProps
+    } = this.props;
     const { check, checkClear } = this;
     let groupClassName = 'form-group';
 

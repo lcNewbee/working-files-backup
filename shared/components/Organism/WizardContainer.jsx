@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
-import PureComponent from '../Base/PureComponent';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import utilsCore from 'shared/utils/lib/core';
+import PureComponent from '../Base/PureComponent';
 
 import {
   Button, SaveButton,

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
@@ -71,7 +72,12 @@ const apNumberIndex = ssidListOptions.findIndex(
   $$item => $$item.get('id') === 'apNumber',
 );
 
-const propTypes = {};
+const propTypes = {
+  groupid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+};
 const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {

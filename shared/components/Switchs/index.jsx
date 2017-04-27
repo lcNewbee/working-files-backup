@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, fromJS } from 'immutable';
-import PureComponent from '../Base/PureComponent';
 import utils from 'shared/utils';
+import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -94,7 +94,7 @@ class Switchs extends PureComponent {
               val = item.get('value');
               label = item.get('label');
               thisKey = item.get('id') || item.get('name') || '';
-              curDisabled = disabled || item.get('disabled')
+              curDisabled = disabled || item.get('disabled');
             } else {
               val = `${i}`;
               label = item;

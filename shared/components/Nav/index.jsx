@@ -100,14 +100,6 @@ class Nav extends PureComponent {
 
     this.state = {};
   }
-  componentDidMount() {
-    if (this.defaultOpen) {
-      this.setState({
-        [this.defaultOpen]: !this.state[this.defaultOpen],
-      });
-      this.defaultOpen = '';
-    }
-  }
 
   onSelectItem(path, e) {
     if (this.props.onChange) {

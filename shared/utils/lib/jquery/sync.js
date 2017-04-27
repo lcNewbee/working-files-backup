@@ -1,5 +1,7 @@
 'use strict';
 
+var warning = require('../core').warning;
+
 var sync = {
 
   // 默认或吧URL 中的search参数传回给后台
@@ -13,7 +15,7 @@ var sync = {
       data: $.extend({}, utils.getQueryObj(), data),
       contentType: 'application/json',
       error: function(xhttp, status, err) {
-        console.log('Ajax Error = ' + err);
+        warning('Ajax Error = ' + err);
       }
     };
     _options.data.client = _options.data.client || {};
@@ -34,7 +36,7 @@ var sync = {
       dataType: 'json',
       data: $.extend({}, utils.getQueryObj(), data),
       error: function(xhttp, status, err) {
-        console.log('Ajax Error = ' + err);
+        warning('Ajax Error = ' + err);
       }
     };
 

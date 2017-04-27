@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import PureComponent from '../Base/PureComponent';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
   isShow: PropTypes.bool,
@@ -54,7 +54,7 @@ class PopOver extends PureComponent {
   }
 
   render() {
-    const { transitionLeave, transitionEnter, isShow, overlay } = this.props;
+    const { transitionLeave, transitionEnter, isShow } = this.props;
 
     return (
       <ReactCSSTransitionGroup

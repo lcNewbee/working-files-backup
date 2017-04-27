@@ -19,7 +19,6 @@ const defaultProps = {
 };
 
 class Radios extends PureComponent {
-
   render() {
     const { options, size, theme, className, style, text, ...restProps } = this.props;
     let { value, id } = this.props;

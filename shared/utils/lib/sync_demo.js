@@ -1,5 +1,6 @@
 var query = require('./query');
 var str = require('./string');
+var warning = require('./core').warning;
 var loadedScripts = [];
 
 function checkStatus(response) {
@@ -28,7 +29,7 @@ function parseJSON(response) {
 
 function handleServerError(json) {
   if (!json.state || (json.state && json.state.code !== 2000)) {
-    console.error('State code not 2000', json.state);
+    warning('State code not 2000', json.state);
   }
   return json;
 }
@@ -77,7 +78,7 @@ var sync = {
         if (typeof errorCallback === 'function') {
           errorCallback(error)
         }
-        console.error('request failed', error)
+        warning('request failed', error)
       });
   },
 
@@ -119,7 +120,7 @@ var sync = {
         if (typeof errorCallback === 'function') {
           errorCallback(error)
         }
-        console.error('request failed', error)
+        warning('request failed', error)
       });
   },
 

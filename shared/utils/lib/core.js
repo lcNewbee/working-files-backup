@@ -2,11 +2,28 @@
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var utils = {};
 
+
+function warning(msg) {
+  /* eslint-disable no-console */
+  if (console && typeof console.error === 'function') {
+    console.error(msg);
+  }
+
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(msg)
+  /* eslint-disable no-empty */
+  } catch (e) { }
+}
+
 function toObject(val, callerMsg) {
   var showCallerMsg = callerMsg || (this && this.caller) || '';
 
   if (val === null || val === undefined) {
-    console.warn(showCallerMsg + ' should not be null or undefined');
+    warning(showCallerMsg + ' should not be null or undefined');
   }
 
   return Object(val);
@@ -225,7 +242,7 @@ utils.extend({
     var ret = parseInt(val || '0', 10);
 
     if (isNaN(ret)) {
-      console.warn(funcName + ' expected be called with number or number string,'+
+      warning(funcName + ' expected be called with number or number string,'+
           ' actual is ' + valType + 'and value = ' + val);
     }
 
@@ -236,7 +253,7 @@ utils.extend({
     var valType = typeof val;
 
     if(valType !== 'string') {
-      console.warn(funcName + ' expected be called with string, actual is ' + valType + ' and value = ' + val);
+      warning(funcName + ' expected be called with string, actual is ' + valType + ' and value = ' + val);
     }
 
     return val;
@@ -248,7 +265,7 @@ utils.extend({
     var func;
 
     if (typeof target !== 'object' || !utils.isArray(keys)) {
-      console.warn('utils.binds should call with object target and array keys');
+      warning('utils.binds should call with object target and array keys');
       return ;
     }
 
@@ -276,7 +293,8 @@ utils.extend({
     return uuid;
   },
 
-  emptyFunc: function(){}
+  emptyFunc: function(){},
+  warning: warning
 });
 
 (function () {

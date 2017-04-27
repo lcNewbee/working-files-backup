@@ -1,9 +1,10 @@
 var query = require('./query');
+var core = require('./core');
 var loadedScripts = [];
 
 function checkStatus(response) {
   if (!response.ok) {
-    console.error('Response Status not ok: ', response.statusText);
+    core.warning('Response Status not ok: ', response.statusText);
   }
   return response;
 }
@@ -14,7 +15,7 @@ function parseJSON(response) {
   try {
     ret = response.json();
   } catch(err) {
-    console.error('JSON parse error: ', err);
+    core.warning('JSON parse error: ', err);
     ret = err;
   }
 
@@ -23,7 +24,7 @@ function parseJSON(response) {
 
 function handleServerError(json) {
   if (!json.state || (json.state && json.state.code !== 2000)) {
-    console.error('State code not 2000', json.state);
+    core.warning('State code not 2000', json.state);
   }
   return json;
 }
