@@ -23,7 +23,7 @@ const listOptions = fromJS([
     text: __('User IP'),
   }, {
     id: 'callingStationId',
-    text: __('Mac'),
+    text: __('MAC'),
   }, {
     id: 'name',
     text: _('Name'),

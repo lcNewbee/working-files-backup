@@ -123,7 +123,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'apmac',
-    text: _('AP Mac'),
+    text: _('AP MAC'),
     formProps: {
       type: 'select',
     },

@@ -36,7 +36,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'callingstationid',
-    text: __('Mac'),
+    text: __('MAC'),
     formProps: {
       required: true,
     },

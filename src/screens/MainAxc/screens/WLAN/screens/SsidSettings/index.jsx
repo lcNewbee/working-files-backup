@@ -430,7 +430,7 @@ const listOptions = fromJS([
         const portalTemplate = $$data.get('portalTemplate');
         const accessControl = $$data.get('accessControl');
         const encryption = $$data.get('encryption');
-        return portalTemplate === 'default' && accessControl === 'portal' && encryption !== '802.1x';
+        return portalTemplate === 'local' && accessControl === 'portal' && encryption !== '802.1x';
       },
     },
   },
@@ -603,7 +603,7 @@ export default class View extends React.Component {
     });
   }
   onBeforeSync($$actionQuery, $$curListItem) {
-    if ($$actionQuery.get('action') === 'add' && $$curListItem.get('portalTemplate') === 'default' && $$curListItem.get('auth') !== undefined) {
+    if ($$actionQuery.get('action') === 'add' && $$curListItem.get('portalTemplate') === 'local' && $$curListItem.get('auth') !== undefined) {
       this.props.save('goform/system/ap/version', $$actionQuery.merge($$curListItem).toJS())
         .then((json) => {
           const state = json && json.state;

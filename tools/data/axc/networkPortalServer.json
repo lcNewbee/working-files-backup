@@ -7,7 +7,7 @@
     "list": [
       {
         "id": 1,
-        "template_name":"default",
+        "template_name":"local",
         "address_type": "1",
         "server_ipaddr":"192.189.2.2",
         "server_port":"324",

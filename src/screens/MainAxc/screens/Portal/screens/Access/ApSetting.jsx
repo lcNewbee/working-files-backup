@@ -53,7 +53,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mac',
-    text: __('Mac'),
+    text: __('MAC'),
     formProps: {
       type: 'number',
       required: true,

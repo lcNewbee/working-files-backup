@@ -77,7 +77,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'maclimit',
-    text: __('Mac Limit'),
+    text: __('MAC Limit'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -95,7 +95,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'maclimitcount',
-    text: __('Mac Quantity'),
+    text: __('MAC Quantity'),
     noForm: true,
     noTable: true,
     formProps: {

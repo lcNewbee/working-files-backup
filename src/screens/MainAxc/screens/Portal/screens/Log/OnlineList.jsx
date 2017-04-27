@@ -91,7 +91,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mac',
-    text: __('Mac'),
+    text: __('MAC'),
     type: 'text',
     formProps: {
       required: true,
@@ -227,7 +227,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'apmac',
-    text: __('AP Mac'),
+    text: __('AP MAC'),
     formProps: {
       required: true,
     },

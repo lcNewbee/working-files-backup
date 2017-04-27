@@ -209,7 +209,7 @@ const listOptions = fromJS([
     id: 'maclimitcount',
     noForm: true,
     noTable: true,
-    text: __('Mac Quantity'),
+    text: __('MAC Quantity'),
     formProps: {
       type: 'number',
       required: true,
