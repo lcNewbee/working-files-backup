@@ -362,11 +362,10 @@ class FormContainer extends PureComponent {
           return retNode;
         },
       );
-
       ret = (
         <Table
           options={$$optionsList}
-          list={$$data.get(formGroupListId)}
+          list={$$data.get(formGroupListId).delete(2).delete(2).delete(4).delete(4)}
         />
       );
     }
