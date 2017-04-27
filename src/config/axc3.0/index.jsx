@@ -602,7 +602,7 @@ const routes = [
                     id: 'portalSsidManagement',
                     path: '/main/portal/access/ssidmanagement',
                     formUrl: 'goform/portal/access/ssidmanagement',
-                    text: __('SSIDs'),
+                    text: __('SSID'),
                     component: sPortalSsid.Screen,
                   },
                   {
@@ -646,7 +646,7 @@ const routes = [
                 id: 'networkAaa',
                 icon: 'lock',
                 path: '/main/portal/aaa',
-                formUrl: 'goform/network/Aaa',
+                formUrl: 'goform/portal/Aaa',
                 text: __('AAA'),
                 component: sNetworkAaa.Screen,
               },

@@ -3,7 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { Button, Modal} from 'shared/components';
+
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import validator from 'shared/validator';
@@ -17,6 +17,7 @@ const propTypes = {
 const defaultProps = {
   test: 0,
 };
+
 const settingsOptions = fromJS([
   {
     id: 'bas_ip',
@@ -160,11 +161,127 @@ const settingsOptions = fromJS([
         label: __('Default Web'),
       },
     ],
-  }, {
+  },
+  // {
+  //   id: 'url',
+  //   label: __('URL After Authentication'),
+  //   type: 'text',
+  //   validator: validator({
+  //     rules: 'utf8Len:[0, 255]',
+  //   }),
+  // },
+  {
+    id: 'isPortalCheck',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: __('Portal Acc'),
+    type: 'select',
+    defaultValue: '1',
+    options: [
+      {
+        value: '0',
+        label: __('Closed'),
+      }, {
+        value: '1',
+        label: __('Open'),
+      },
+    ],
+  },
+  // {
+  //   id: 'isOut',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: __('Enviroment Deployment'),
+  //   type: 'select',
+  //   options: [
+  //     {
+  //       value: '0',
+  //       label: __('Inside Network Deployment'),
+  //     }, {
+  //       value: '1',
+  //       label: __('Outside Network Deployment'),
+  //     },
+  //   ],
+  // }, {
+  //   id: 'isComputer',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: __('Computer Auth'),
+  //   type: 'select',
+  //   options: [
+  //     {
+  //       value: '0',
+  //       label: __('Allowed'),
+  //     }, {
+  //       value: '1',
+  //       label: __('Forbidden'),
+  //     },
+  //   ],
+  //   defaultValue: '0',
+  // }, {
+  //   id: 'lateAuth',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: __('Late Auth'),
+  //   type: 'select',
+  //   options: [
+  //     {
+  //       value: '0',
+  //       label: __('Closed'),
+  //     }, {
+  //       value: '1',
+  //       label: __('Open'),
+  //     },
+  //   ],
+  //   defaultValue: '0',
+  // }, {
+  //   id: 'lateAuthTime',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: __('Late Authtime'),
+  //   type: 'text',
+  //   help: __('second'),
+  // },
+  {
     id: 'list',
     type: 'list',
     list: [
       {
+        id: 'enable',
+        label: __('Initiate Mode'),
+        type: 'checkbox',
+        display: 'block',
+        onChange: (data) => {
+          const curIndex = data.index;
+          const retData = data;
+          if (retData.value === '1') {
+            // 接入认证
+            if (curIndex === 1) {
+              retData.mergeData = {
+                list: [
+                  {},
+                  {},
+                  { enable: '0' },
+                ],
+              };
+            // Radiu认证
+            } else if (curIndex === 2) {
+              retData.mergeData = {
+                list: [
+                  {},
+                  { enable: '0' },
+                ],
+              };
+            }
+          }
+          return retData;
+        },
+      }, {
         id: 'type',
         label: __('Authentication Types'),
         options: [
@@ -199,36 +316,42 @@ const settingsOptions = fromJS([
         ],
         noForm: true,
       }, {
-        id: 'url',
-        label: __('Redirect URL after Authetication'),
+        id: 'username',
+        label: __('Public User Name'),
+        defaultValue: 'Empty Wanted',
         type: 'text',
+        maxLength: '129',
         validator: validator({
-          rules: 'utf8Len:[0, 255]',
+          rules: 'utf8Len:[1, 128]',
+        }),
+      }, {
+        id: 'password',
+        label: __('Public Password'),
+        type: 'password',
+        maxLength: '128',
+        validator: validator({
+          rules: 'pwd',
         }),
       }, {
         id: 'sessiontime',
-        label: __('Limit Online Time after Authetication'),
-        help: __('minutes(0 means no limitation)'),
+        label: __('Sesssion Time'),
         type: 'number',
         min: '0',
         max: '99999',
         validator: validator({
           rules: 'num:[0,99999]',
         }),
+      }, {
+        id: 'url',
+        label: __('URL After Authentication'),
+        type: 'text',
+        validator: validator({
+          rules: 'utf8Len:[0, 255]',
+        }),
       },
     ],
   },
-]);
 
-const oneKeyURLOption = fromJS([
-  {
-    id: 'oneKey_URL',
-    label: __('URL After Authentication'),
-    type: 'text',
-    validator: validator({
-      rules: 'utf8Len:[0, 255]',
-    }),
-  },
 ]);
 
 export default class View extends React.Component {
@@ -238,21 +361,7 @@ export default class View extends React.Component {
       'onBeforeSync',
     ]);
   }
-
-  onOneKeyURLModal() {
-    this.setState({
-      customModal: true,
-    });
-  }
   render() {
-    const { store } = this.props;
-    const myScreenId = store.get('curScreenId');
-    const $$myScreenStore = store.get(myScreenId);
-    const $$settingListData = $$myScreenStore.getIn(['curSettings', 'list']);
-    if ($$settingListData !== undefined) {
-      console.log($$settingListData.delete(8).toJS());
-    }
-
     return (
       <AppScreen
         {...this.props}

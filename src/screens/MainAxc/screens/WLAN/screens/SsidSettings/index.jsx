@@ -602,27 +602,27 @@ export default class View extends React.Component {
       copySelectedList: $$copySelectedList,
     });
   }
-  // onBeforeSync($$actionQuery, $$curListItem) {
-  //   if ($$actionQuery.get('action') === 'add' && $$curListItem.get('portalTemplate') === 'default' && $$curListItem.get('auth') !== undefined) {
-  //     this.props.save('goform/system/ap/version', $$actionQuery.merge($$curListItem).toJS())
-  //       .then((json) => {
-  //         const state = json && json.state;
-  //         if (state.code === 2000) {
-  //           this.props.save('goform/portal/access/ssidmanagement', {
-  //             name: `${$$curListItem.get('ssid')}${$$curListItem.get('auth')}`,
-  //             ssid: $$curListItem.get('ssid'),
-  //             web: $$curListItem.get('auth'),
-  //           }).then(
-  //               () => {
-  //                 if (json && json.state && json.state.code === 2000) {
-  //                   this.props.receiveScreenData();
-  //                 }
-  //               },
-  //             );
-  //         }
-  //       });
-  //   }
-  // }
+  onBeforeSync($$actionQuery, $$curListItem) {
+    if ($$actionQuery.get('action') === 'add' && $$curListItem.get('portalTemplate') === 'default' && $$curListItem.get('auth') !== undefined) {
+      this.props.save('goform/system/ap/version', $$actionQuery.merge($$curListItem).toJS())
+        .then((json) => {
+          const state = json && json.state;
+          if (state.code === 2000) {
+            this.props.save('goform/portal/access/ssidmanagement', {
+              name: `${$$curListItem.get('ssid')}${$$curListItem.get('auth')}`,
+              ssid: $$curListItem.get('ssid'),
+              web: $$curListItem.get('auth'),
+            }).then(
+                () => {
+                  if (json && json.state && json.state.code === 2000) {
+                    this.props.receiveScreenData();
+                  }
+                },
+              );
+          }
+        });
+    }
+  }
   getCurrData(name) {
     return this.props.store.getIn([this.props.route.id, 'curListItem', name]);
   }

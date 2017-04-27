@@ -24,16 +24,106 @@
       "isdebug": "1",
       "lateAuth": "0",
       "lateAuthTime": "10",
-      "oneKey_redirect":"www.baidu.com", 
-      "oneKey_allowTime":"0",
-      "accessUser_redirect":"www.baidu.com", 
-      "accessUser_allowTime":"0",
-      "SNS_redirect":"www.baidu.com",
-      "SNS_allowTime":"0",
-      "wechat_redirect":"www.baidu.com", 
-      "wechat_allowTime":"0",
-      "facebook_redirect":"www.baidu.com", 
-      "facebook_allowTime":"0"
+      "list": [
+        {
+          "id": "1",
+          "enable": "1",
+          "basid": "0",
+          "type": "0",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "2",
+          "enable": "1",
+          "basid": "0",
+          "type": "1",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "3",
+          "enable": "1",
+          "basid": "0",
+          "type": "2",
+          "username": null,
+          "password": null,
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "4",
+          "enable": "1",
+          "basid": "0",
+          "type": "3",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "5",
+          "basid": "0",
+          "enable": "1",
+          "type": "4",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "6",
+          "basid": "0",
+          "type": "5",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "7",
+          "basid": "0",
+          "enable": "1",
+          "type": "6",
+          "username": "username",
+          "password": "",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "8",
+          "basid": "0",
+          "enable": "1",
+          "type": "7",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "9",
+          "basid": "0",
+          "enable": "1",
+          "type": "9",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        }
+      ]
     }
-  }  
+  }
 }
