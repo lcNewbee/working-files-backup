@@ -134,7 +134,7 @@ const listOptions = fromJS([
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 
-      return `${upRate}↓/${downRate}↑`;
+      return `${upRate}↑/${downRate}↓`;
     },
   }, {
     id: 'operationhours',

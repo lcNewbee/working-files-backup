@@ -50,7 +50,7 @@ function DeviceOverview(props) {
       </dl>
       <dl className="o-description-list-row">
         <dt>{__('Data')}</dt>
-        <dd>{flowRateFilter.transform(info.get('upstream'))}/{flowRateFilter.transform(info.get('downstream'))}</dd>
+        <dd>{flowRateFilter.transform(info.get('upstream'))}↑/{flowRateFilter.transform(info.get('downstream'))}↓</dd>
       </dl>
     </div>
   );
