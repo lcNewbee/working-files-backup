@@ -55,7 +55,6 @@ class ApRadio_Model extends CI_Model {
     function set_apradio($data) {
         $result = null;
         $arr = array();
-        $arr['radioId'] = $this->get_radio_id($data['groupid']);
         foreach($data as $k=>$v) {
             if($k === 'selectedList' || $k === 'action'){
                 continue;
@@ -67,37 +66,29 @@ class ApRadio_Model extends CI_Model {
         $ok_num = 0;
         foreach($get_all_mac as $res ) {
             $arr['mac'] = $res;
-            $cgidata = axc_set_apradio(json_encode($arr));
-            //l				og
-            $cgiObj = json_decode($cgidata);
-            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-                $ok_num++;
-                $logary = array(
-                    'type'=>'Setting',
-                    'operator'=>element('username',$_SESSION,''),
-                    'operationCommand'=>"Setting Radio ".$arr['mac'],
-                    'operationResult'=>'ok',
-                    'description'=>json_encode($arr)
-                );
-                Log_Record($this->db,$logary);
-            }
+            //每次下发4个（固定）
+            for($i = 1; $i <= 4; $i++){
+                $arr['radioId'] = $i; 
+                $cgidata = axc_set_apradio(json_encode($arr));
+                //log
+                $cgiObj = json_decode($cgidata);
+                if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+                    $ok_num++;
+                    $logary = array(
+                        'type'=>'Setting',
+                        'operator'=>element('username',$_SESSION,''),
+                        'operationCommand'=>"Setting Radio ".$arr['mac'],
+                        'operationResult'=>'ok',
+                        'description'=>json_encode($arr)
+                    );
+                    Log_Record($this->db,$logary);
+                }
+            }                    
         }
         $result = json_encode(json_ok($ok_num));
         return $result;
     }
-    function get_radio_id($groupid) {
-		$result = 0;
-		$queryObj = $this->db->select('radio_tmp_id')
-							->from('ap_group')
-							->where('id',$groupid)
-							->get()->row();
-
-		if(is_object($queryObj)) {
-			$result = $queryObj->radio_tmp_id;
-		}
-		return $result;
-	}
-
+    
     function set_general($data) {
         $result = null;
         $result = axc_set_general(json_encode($data));
