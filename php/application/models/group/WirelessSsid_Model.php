@@ -4,6 +4,7 @@ class WirelessSsid_Model extends CI_Model {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
+        $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $this->load->helper(array('array', 'my_customfun_helper'));
         $this->load->library('SqlPage');
     }
@@ -69,36 +70,36 @@ class WirelessSsid_Model extends CI_Model {
         } else {
             $arr = array('groupid' => (int)element('groupid', $retdata));
             $result = axc_get_wireless_ssid(json_encode($arr));
+            $cgiary = json_decode($result,true);            
+            $list = array();
+            if(is_array($cgiary) && $cgiary['state']['code'] == 2000){                
+                foreach($cgiary['data']['list'] as $row) {
+                    $sql = "SELECT * FROM `portal_ssid` WHERE `ssid`='{$row['ssid']}' AND `apmac`=''";                    
+                    $query = $this->portalsql->query($sql)->result_array();                    
+                    if(count($query) > 0){
+                        $row['accessControl'] = 'portal';
+                        $row['auth'] = $query[0]['web'];
+                        $row['portalTemplate'] = 'local';
+                    }
+                    $list[] = $row;
+                }
+            }
+            $cgiary['data']['list'] = $list;
+            return json_encode($cgiary);
         }
         return $result;
-    }
-    function getCgiParam($oriData) {
-        $ret = array(
-            'groupid' => (int)element('groupid', $oriData),
-            'ssid' => element('ssid', $oriData),
-            'remark' => element('remark', $oriData),
-            'vlanid' => (int)element('vlanId', $oriData, 0),
-            'enabled' => (int)element('enabled', $oriData),
-            'maxBssUsers' => (int)element('maxBssUsers', $oriData),
-            'loadBalanceType' => (int)element('loadBalanceType', $oriData),
-            'hiddenSsid' => (int)element('hiddenSsid', $oriData),
-            'mandatorydomain' => element('mandatorydomain', $oriData),
-            'storeForwardPattern' => element('storeForwardPattern', $oriData),
-            'upstream' => (int)element('upstream', $oriData),
-            'downstream' => (int)element('downstream', $oriData),
-            'encryption' => element('encryption', $oriData),
-            'password' => element('password', $oriData, ''),
-            'ssidisolate' => (int)element('ssidisolate', $oriData, ''),
-            'greenap' => (int)element('greenap', $oriData, '')
-        );
-        return $ret;
-    }
+    }    
     public function add_ssid($data) {
         $result = null;
         $temp_data = $this->getCgiParam($data);
+        $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $result = axc_add_wireless_ssid(json_encode($temp_data));
         $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+            //绑定portal
+            if($data['accessControl'] === 'portal') {
+                $this->binPortalTemplate($data['auth'], $data['ssid']);
+            }            
             //log
             $logary = array(
                 'type'=>'Add',
@@ -168,7 +169,7 @@ class WirelessSsid_Model extends CI_Model {
         }
         return $result;
     }
-    public  function unbind_ssid($data) {
+    public function unbind_ssid($data) {
         $result = null;
         $temp_data = $this->getCgiParam($data);
         $result = axc_unbind_wireless_ssid(json_encode($temp_data));
@@ -212,4 +213,48 @@ class WirelessSsid_Model extends CI_Model {
         }
         return json_encode(json_ok());
     }
+
+    private function getCgiParam($oriData) {
+        $ret = array(
+            'groupid' => (int)element('groupid', $oriData),
+            'ssid' => element('ssid', $oriData),
+            'remark' => element('remark', $oriData),
+            'vlanid' => (int)element('vlanId', $oriData, 0),
+            'enabled' => (int)element('enabled', $oriData),
+            'maxBssUsers' => (int)element('maxBssUsers', $oriData),
+            'loadBalanceType' => (int)element('loadBalanceType', $oriData),
+            'hiddenSsid' => (int)element('hiddenSsid', $oriData),
+            'mandatorydomain' => "local",//element('mandatorydomain', $oriData),
+            'storeForwardPattern' => element('storeForwardPattern', $oriData),
+            'upstream' => (int)element('upstream', $oriData),
+            'downstream' => (int)element('downstream', $oriData),
+            'encryption' => element('encryption', $oriData),
+            'password' => element('password', $oriData, ''),
+            'ssidisolate' => (int)element('ssidisolate', $oriData, ''),
+            'greenap' => (int)element('greenap', $oriData, '')
+        );
+        return $ret;
+    }
+
+    /**
+     * 绑定portal模板
+     * @web_template 网页模板
+     * @ssid 
+    */
+    private function binPortalTemplate($web_template, $ssid) {
+        $name = $ssid . '_' .$web_template;
+        $arr = array(
+            'name'=> $name,
+            'address'=>'',//地址
+            'basip'=> $_SERVER['SERVER_ADDR'],
+            'web'=>$web_template,//页面模版
+            'des'=>'',//描述
+            'ssid'=> $ssid,
+            'apmac'=> ''
+        );        
+        if($this->portalsql->insert('portal_ssid',$arr)){
+            return True;
+        }
+        return FALSE;               
+    }    
 }
