@@ -643,14 +643,6 @@ const routes = [
                 ],
               },
               {
-                id: 'networkAaa',
-                icon: 'lock',
-                path: '/main/portal/aaa',
-                formUrl: 'goform/portal/Aaa',
-                text: __('AAA'),
-                component: sNetworkAaa.Screen,
-              },
-              {
                 id: 'networkPortal',
                 icon: 'copy',
                 text: __('Portal Policy'),
@@ -680,6 +672,14 @@ const routes = [
                     component: sPortalMac.Screen,
                   },
                 ],
+              },
+              {
+                id: 'networkAaa',
+                icon: 'lock',
+                path: '/main/portal/aaa',
+                formUrl: 'goform/portal/Aaa',
+                text: __('AAA'),
+                component: sNetworkAaa.Screen,
               },
               {
                 id: 'portalAccount',
