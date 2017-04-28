@@ -7,6 +7,7 @@ class SystemMaintenance extends CI_Controller {
         $this->load->database();
         $this->load->helper('file');
         $this->load->helper(array('array', 'my_customfun_helper'));
+        $this->load->library('PHPZip');
     }
     function fetch() {
         $retdata = array(
@@ -76,11 +77,29 @@ class SystemMaintenance extends CI_Controller {
         //copy('/var/run/config.db','/var/conf/config.db');
         // exec('cp /var/run/config.db /var/conf/config.db');
 
-        //download
-        $this->load->helper('download');
-        $data = file_get_contents("/var/conf/config.db");
-        $name = 'config.db';
-        force_download($name, $data);
+        //打包
+        if( is_dir('/var/conf/images') ){
+            //1.创建config文件夹
+            if(!is_dir('/var/conf/config')){
+                mkdir('/var/conf/config',0777,true);
+            }                        
+            //2.将需要备份的文件放到config 文件夹中
+            copy('/var/conf/config.db', '/var/conf/config/config.db');
+            system('cp -r /var/conf/images/* /var/conf/config');
+            //3.打包
+            $path = '/var/conf/config';//需压缩的目录（文件夹）        
+            $filename = "/var/conf/config.zip"; //最终生成的文件名（含路径）                        
+            $zip = new PHPZip();            
+            //$zip->Zip_CompressDownload($path,$filename);
+            $zip->Zip_Compress($path,$filename);
+            //4.清除中间文件
+            system('rm -rf /var/conf/config');
+            //5.下载
+            $this->load->helper('download');
+            $data = file_get_contents($filename);
+            $name = 'backup.zip';
+            force_download($name, $data);
+        }
     }
     public function saveConfig() {
         $logary = array(
@@ -116,8 +135,26 @@ class SystemMaintenance extends CI_Controller {
 
         if(isset($_POST['suffix'])) {
             //从文件恢复
+            //1.上传
             $result = $this->do_upload();
-            if ($result['state']['code'] === 2000){
+            if ($result['state']['code'] === 2000){                
+                //2.解压
+                if(file_exists('/var/conf/restore_config.zip')){                                        
+                    mkdir('/var/conf/restore_config',0777,true);             
+                    $zip = new PHPZip();
+                    $pathfile = "/var/conf/restore_config.zip"; //需解压的文件
+                    $targetpath = "/var/conf/restore_config";//解压地址                                                                   
+                    if($zip->Zip_Decompression($pathfile,$targetpath)){
+                       //解压完成
+                       if(file_exists('/var/conf/restore_config/config.db')){
+                           //移动config.db 到/var/conf下
+                           system('mv /var/conf/restore_config/config.db /var/conf/config.db');
+                           //移动所有 到/var/conf/images下
+                           system('mv /var/conf/restore_config/* /var/conf/images/');
+                       }
+                    } 
+                    system('rm -rf /var/conf/restore_config');
+                }
                 exec('/sbin/reboot');
             } else{
                 $result = json_encode($result);
@@ -137,13 +174,13 @@ class SystemMaintenance extends CI_Controller {
         return $result;
     }
     //上传
-    public function do_upload() {
+    private function do_upload() {
         $result = null;
         $config['upload_path'] = '/var/conf';
         $config['allowed_types'] = '*';
         $config['overwrite'] = true;
         $config['max_size'] = 0;
-        $config['file_name'] = 'config.db';
+        $config['file_name'] = 'restore_config.zip';
 
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('filename')) {

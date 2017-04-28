@@ -19,6 +19,8 @@ class AonnectRecord_Model extends CI_Model {
 		); 		
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND ip LIKE '%".$data['search']."%'";
+            $parameter['wheres'] = $parameter['wheres'] . " OR basip LIKE '%".$data['search']."%'";
+            $parameter['wheres'] = $parameter['wheres'] . " OR mac LIKE '%".$data['search']."%'";
         }
 		$datalist = help_data_page_all($parameter);
 		$arr = array(

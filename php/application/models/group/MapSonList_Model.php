@@ -117,13 +117,18 @@ class MapSonList_Model extends CI_Model {
     function Add($data){             
         //1. 检查存放地图的文件夹是否存在，否则创建 并且让软连接
         if( !is_dir('/usr/web/images/mapimg') ) {
+            //mkdir('/usr/web/images/mapimg',0777,true);
             if( !is_dir('/var/conf/images') ){
                 //创建并赋予权限
-                mkdir('/var/conf/images');
-                chmod('/var/conf/images',0777);
+                 mkdir('/var/conf/images',0777,true);                            
+                 exec('ln -s /var/conf/images/ /usr/web/images/mapimg');
             }
             //软连接
-            exec('ln -s /var/conf/images/ /usr/web/images/mapimg');
+            //检测软连接是否已经存在
+            if(!exec("ls -l /usr/web/images/mapimg  | awk   '$10==\"->\"{print $11}'") === '/var/conf/images/'){
+                //不存在则创建
+                exec('ln -s /var/conf/images/ /usr/web/images/mapimg');                
+            }            
         }
         //2. 上传
         $result = $this->do_upload();
