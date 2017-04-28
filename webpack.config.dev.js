@@ -40,6 +40,8 @@ let config = {
     index: [
        // necessary for hot reloading with IE:
       'eventsource-polyfill',
+      'es6-promise/auto',
+      'isomorphic-fetch',
       'react-hot-loader/patch',
       'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
 

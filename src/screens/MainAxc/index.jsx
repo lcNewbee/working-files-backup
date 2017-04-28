@@ -40,7 +40,6 @@ const defaultProps = {
   Component: 'button',
   role: 'default',
 };
-
 export default class Main extends React.PureComponent {
   constructor(props) {
     super(props);

@@ -1,5 +1,3 @@
-require('es6-promise/auto');
-
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');
@@ -65,6 +63,7 @@ renderApp(prodConfig.routes);
 // Enable hot reload by react-hot-loader
 if (module.hot) {
   module.hot.accept('./config/axc3.0', () => {
+    /* eslint-disable global-require */
     const nextConfig = require('./config/axc3.0').default;
 
     stores.replaceReducer(combineReducers({

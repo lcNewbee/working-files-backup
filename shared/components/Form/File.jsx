@@ -24,6 +24,7 @@ const propTypes = {
   onChange: PropTypes.func,
   onRef: PropTypes.func,
   disabled: PropTypes.bool,
+  accept: PropTypes.string,
 };
 
 const defaultProps = {
@@ -38,17 +39,46 @@ class File extends PureComponent {
     utils.binds(this, [
       'onChange',
       'resetInput',
+      'onAlert',
     ]);
     this.state = {
       showText: transformShowText(props.value),
     };
   }
 
+  onAlert(msg) {
+    const createModal = this.props.createModal;
+
+    if (createModal) {
+      createModal({
+        id: 'admin',
+        role: 'alert',
+        text: msg,
+      });
+    } else {
+      alert(msg);
+    }
+  }
+
   onChange(e) {
     const val = e.target.value;
+    const { accept, onChange } = this.props;
+    const thisElem = e.target;
+    const filePath = thisElem.value;
+    const extension = utils.getExtension(filePath);
 
-    if (this.props.onChange) {
-      this.props.onChange(e, val);
+    this.ext = extension;
+
+    // 验证可接受的文件类型
+    if (accept && accept.indexOf(extension) === -1) {
+      e.preventDefault();
+      this.onAlert(__('Select file extension range: %s', accept));
+
+      return;
+    }
+
+    if (onChange) {
+      onChange(e, val);
     }
     this.setState({
       showText: transformShowText(val),

@@ -99,8 +99,20 @@ export function fetchScreenData(option) {
 
     return dispatch(appActions.fetch(myUrl, query, ajaxOption))
       .then((json) => {
+        const curPage = json && json.data && json.data.page;
+
         if (json && json.state && json.state.code === 2000) {
-          dispatch(receiveScreenData(json.data, name));
+          // 如果请求的页码大于返回数据的总页数，请求最后页
+          if (curPage && curPage.totalPage < query.page) {
+            dispatch(changeScreenQuery({
+              page: curPage.totalPage,
+            }));
+            dispatch(fetchScreenData());
+
+          // 正常接收数据
+          } else {
+            dispatch(receiveScreenData(json.data, name));
+          }
         } else {
           dispatch(receiveScreenData(null, name));
         }

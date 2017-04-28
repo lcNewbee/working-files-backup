@@ -38,6 +38,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'file',
       required: true,
+      accept: '.bin',
       validator: validator({}),
     },
   }, {

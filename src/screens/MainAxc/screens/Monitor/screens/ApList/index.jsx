@@ -180,7 +180,6 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       defaultSettingsData: {
         first5g: 1,
@@ -429,7 +428,7 @@ export default class View extends React.Component {
         actionable
         searchable
         searchProps={{
-          placeholder: `${__('Name')}/MAC`
+          placeholder: `${__('Name')}/MAC`,
         }}
       />
     );

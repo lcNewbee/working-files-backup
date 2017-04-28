@@ -7,7 +7,7 @@ import Icon from 'shared/components/Icon';
 import AppScreenList from './AppScreenList';
 import AppScreenSettings from './AppScreenSettings';
 
-function emptyFunc() {}
+function emptyFunc() { }
 
 const loadingStyle = {
   position: 'absolute',
@@ -113,7 +113,7 @@ export default class AppScreen extends React.Component {
 
     // init Settings Form
     this.defaultSettingsData = defaultSettingsData ||
-        immutableUtils.getDefaultData(settingsFormOptions);
+      immutableUtils.getDefaultData(settingsFormOptions);
     this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
     if (this.defaultSettingsData) {
       initOption.defaultSettingsData = utils.extend(
@@ -222,7 +222,7 @@ export default class AppScreen extends React.Component {
       if (this.props.groupid === 'not') {
         this.props.fetchScreenData().then(loaded);
 
-      // 组管理界面，需要获取当前组id才能获取数据
+        // 组管理界面，需要获取当前组id才能获取数据
       } else if (this.props.groupid !== '') {
         this.props.fetchScreenData().then(loaded);
       }
