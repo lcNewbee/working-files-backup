@@ -25,6 +25,7 @@ const propTypes = {
   onRef: PropTypes.func,
   disabled: PropTypes.bool,
   accept: PropTypes.string,
+  createModal: PropTypes.func,
 };
 
 const defaultProps = {
