@@ -4,50 +4,28 @@ class SystemApVersion_Model extends CI_Model {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
-        $this->load->helper(array('array','my_customfun_helper'));
+        $this->load->helper(array('array','db_operation'));
     }
-    function get_apversion_list() {
-        $result = null;
-        $query = $this->db->select('id,model,subversion,fm_name,upd_path,active')
-                          ->from('ap_firmware')
-                          ->get()
-                          ->result_array();
-        $keys = array(
-            'id' => 'id',
-            'model' => 'model',
-            'subversion' => 'softVersion',
-            'fm_name' => 'fileName',
-            'upd_path' => 'uploadPath',
-            'active' => 'active'
-        );
-        $newArray = array();
-        foreach ($query as $key => $val) {
-            $newArray[$key] = array();
-            foreach ($val as $k => $v) {
-                $newArray[$key][$keys[$k]] = $v;
-            }
-        }
-        $page = array(
-            "start" => (int)element('start', $_GET, 1) ,
-            "size" => (int)element('size', $_GET, 20) ,
-            "currPage" => (int)element('currPage', $_GET, 1) ,
-            "totalPage" => (int)element('totalPage', $_GET, 1) ,
-            "total" => (int)element('total', $_GET, 11) ,
-            "pageCount" => (int)element('pageCount', $_GET, 11) ,
-            "nextPage" => (int)element('nextPage', $_GET, -1) ,
-            "lastPage" => (int)element('lastPage', $_GET, 1)
-        );
-        $result = array(
-            'state' => array(
-                'code' => 2000,
-                'msg' => 'OK'
-            ) ,
-            'data' => array(
-                'page' => $page,
-                'list' => $newArray
-            )
-        );
-        return $result;
+    function get_list($data) {
+        $parameter = array(
+			'db' => $this->db, 
+			'columns' => 'id,model,subversion as softVersion,fm_name as fileName,upd_path as uploadPath,active', 
+			'tablenames' => 'ap_firmware', 
+			'pageindex' => (int) element('page', $data, 1), 
+			'pagesize' => (int) element('size', $data, 20), 
+			'wheres' => "1=1", 
+			'joins' => array(), 
+			'order' => array(array('id','ASC'))
+		); 		        
+		$datalist = help_data_page_all($parameter);
+		$arr = array(
+			'state'=>array('code'=>2000,'msg'=>'ok'),
+			'data'=>array(
+				'page'=>$datalist['page'],
+				'list' => $datalist['data']
+			)
+		);       
+		return $arr;        
     }
     function do_upload() {
         $config['upload_path'] = '/etc/Ap_ver';

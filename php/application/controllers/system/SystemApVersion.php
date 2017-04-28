@@ -5,7 +5,7 @@ class SystemApVersion extends CI_Controller {
 		parent::__construct();
         $this->load->library('session');
 		$this->load->database();
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array'));
         $this->load->model('system/SystemApVersion_Model');
 	}
     public function index(){
@@ -20,7 +20,7 @@ class SystemApVersion extends CI_Controller {
         }
     }
     function fetch(){
-        return $this->SystemApVersion_Model->get_apversion_list();
+        return $this->SystemApVersion_Model->get_list($_GET);
     }    
     function onAction($data) {
         if (!$data) {
