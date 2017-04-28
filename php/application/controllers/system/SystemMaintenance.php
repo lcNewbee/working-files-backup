@@ -150,6 +150,9 @@ class SystemMaintenance extends CI_Controller {
                            //移动config.db 到/var/conf下
                            system('mv /var/conf/restore_config/config.db /var/conf/config.db');
                            //移动所有 到/var/conf/images下
+                           if(!is_dir('/var/conf/images')) {
+                               mkdir('/var/conf/images',0777,true);
+                           }
                            system('mv /var/conf/restore_config/* /var/conf/images/');
                        }
                     } 
