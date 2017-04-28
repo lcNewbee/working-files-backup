@@ -438,7 +438,6 @@ const listOptions = fromJS([
     id: 'mandatorydomain',
     text: __('AAA Policy'),
     defaultValue: 'default',
-    noTable: true,
     formProps: {
       type: 'select',
       visible($$data) {

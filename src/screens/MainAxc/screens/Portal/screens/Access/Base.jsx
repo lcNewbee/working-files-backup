@@ -254,14 +254,6 @@ export default class View extends React.Component {
     });
   }
   render() {
-    const { store } = this.props;
-    const myScreenId = store.get('curScreenId');
-    const $$myScreenStore = store.get(myScreenId);
-    const $$settingListData = $$myScreenStore.getIn(['curSettings', 'list']);
-    if ($$settingListData !== undefined) {
-      console.log($$settingListData.delete(8).toJS());
-    }
-
     return (
       <AppScreen
         {...this.props}
