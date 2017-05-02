@@ -25,7 +25,8 @@ class MapPoint extends CI_Controller {
 
 		switch($actionType) {
       case 'add':
-        shell_exec('/usr/bin/sta_input.sh ' . $mac . ' ' . $lng . ' ' . $lat);
+        shell_exec('killall -9 sta_input.sh');
+        shell_exec('/usr/bin/sta_input.sh ' . $mac . ' ' . $lng . ' ' . $lat . '  > /dev/null 2>&1 &');
         break;
 
       case 'stop':
