@@ -72,34 +72,37 @@ class SystemMaintenance extends CI_Controller {
             'operationResult'=>'ok',
             'description'=>""
         );
-        Log_Record($this->db,$logary);
+        Log_Record($this->db,$logary);		
         //系统备份
         //copy('/var/run/config.db','/var/conf/config.db');
         // exec('cp /var/run/config.db /var/conf/config.db');
-
-        //打包
-        if( is_dir('/var/conf/images') ){
-            //1.创建config文件夹
-            if(!is_dir('/var/conf/config')){
-                mkdir('/var/conf/config',0777,true);
-            }                        
-            //2.将需要备份的文件放到config 文件夹中
-            copy('/var/conf/config.db', '/var/conf/config/config.db');
-            system('cp -r /var/conf/images/* /var/conf/config');
-            //3.打包
-            $path = '/var/conf/config';//需压缩的目录（文件夹）        
-            $filename = "/var/conf/config.zip"; //最终生成的文件名（含路径）                        
-            $zip = new PHPZip();            
-            //$zip->Zip_CompressDownload($path,$filename);
-            $zip->Zip_Compress($path,$filename);
-            //4.清除中间文件
-            system('rm -rf /var/conf/config');
-            //5.下载
-            $this->load->helper('download');
-            $data = file_get_contents($filename);
-            $name = 'backup.zip';
-            force_download($name, $data);
-        }
+		//1.检测images文件夹，和config 文件夹没有则创建
+		if(!is_dir('/var/conf/images')){
+			mkdir('/var/conf/images', 0777, true);
+		}
+		if(!is_dir('/var/conf/config')){
+			mkdir('/var/conf/config', 0777, true);
+		}
+		//2.将需要备份的文件放到config 文件夹中
+		//检测是有备份文件，否则再次备份一次
+		if(!is_file('/var/conf/config.db')){
+			exec('cp /var/run/config.db /var/conf/config.db');
+		}
+		copy('/var/conf/config.db', '/var/conf/config/config.db');
+		system('cp -r /var/conf/images/* /var/conf/config');
+		//3.打包
+		$path = '/var/conf/config';//需压缩的目录（文件夹）        
+		$filename = "/var/conf/config.zip"; //最终生成的文件名（含路径）                        
+		$zip = new PHPZip();            
+		//$zip->Zip_CompressDownload($path,$filename);
+		$zip->Zip_Compress($path,$filename);
+		//4.清除中间文件
+		system('rm -rf /var/conf/config');
+		//5.下载
+		$this->load->helper('download');
+		$data = file_get_contents($filename);
+		$name = 'backup.zip';
+		force_download($name, $data);
     }
     public function saveConfig() {
         $logary = array(
