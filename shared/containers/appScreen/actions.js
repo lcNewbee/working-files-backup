@@ -5,11 +5,12 @@ import ACTION_TYPES from './actionTypes';
 let refreshTimeout = null;
 
 // Screen common actions
-export function addScreen(screenId) {
+export function addScreen(screenId, route) {
   return {
     type: ACTION_TYPES.ADD,
     payload: {
       id: screenId,
+      route,
     },
   };
 }

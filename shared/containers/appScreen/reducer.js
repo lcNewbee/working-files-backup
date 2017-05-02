@@ -175,6 +175,13 @@ function addScreen(state, action) {
   if (action.payload && action.payload.id) {
     $$ret = state.set(action.payload.id, defaultItem)
       .set('curScreenId', action.payload.id);
+
+    if (action.payload.route) {
+      $$ret = $$ret.mergeIn(
+        [action.payload.id],
+        fromJS(action.payload.route).delete('routes'),
+      );
+    }
   }
 
   return $$ret;

@@ -17,11 +17,7 @@ export function updateRouter(payload) {
   };
 }
 
-export function addAppScreen(id) {
-  return (dispatch) => {
-    dispatch(addScreen(id));
-  }
-}
+export const addAppScreen = addScreen;
 
 // 数据刷新
 function doRefresh() {

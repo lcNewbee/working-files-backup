@@ -83,7 +83,7 @@ export default class App extends Component {
       this.props.updateRouter({
         routes: $$routes,
       });
-      this.props.addAppScreen(curScreenId);
+      this.props.addAppScreen(curScreenId, $$routes.get(-1));
 
       this.lastPathname = location.pathname;
     }

@@ -1,5 +1,5 @@
 import React from 'react'; import PropTypes from 'prop-types';
-import utils, { immutableUtils, gps, dom } from 'shared/utils';
+import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -161,6 +161,20 @@ export default class View extends React.PureComponent {
     }
   }
 
+  getNaturalWidthAndHeight(url) {
+    const image = new Image();
+    image.src = url;
+    this.naturalWidth = image.width;
+    this.naturalHeight = image.height;
+  }
+  removeShowerDiv() {
+    const showers = document.querySelectorAll('.observeShower');
+    const len = showers.length;
+    for (let i = len; i;) {
+      this.mapContent.removeChild(showers[--i]);
+    }
+  }
+
   bindCanvasEvent() {
     const doc = window.document;
     const canvas = doc.querySelectorAll('.heatmap-canvas')[0];
@@ -220,6 +234,8 @@ export default class View extends React.PureComponent {
       showDiv.innerHTML = mapType === 'number' ? `${__('Total User')}: ${observeValue}` : `${__('Total Times')}: ${observeValue}`;
       this.mapContent.appendChild(showDiv);
     });
+
+    return blankCanvas;
   }
 
   removeHeatMap() {
@@ -232,24 +248,7 @@ export default class View extends React.PureComponent {
     }
   }
 
-  getNaturalWidthAndHeight(url) {
-    const image = new Image();
-    image.src = url;
-    this.naturalWidth = image.width;
-    this.naturalHeight = image.height;
-  }
-
-  removeShowerDiv() {
-    const showers = document.querySelectorAll('.observeShower');
-    const len = showers.length;
-    for (let i = len; i;) {
-      this.mapContent.removeChild(showers[--i]);
-    }
-  }
-
-
   renderCurMap(list, curMapId, myZoom) {
-    console.log('renderCurMap');
     const curItem = list.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
     this.getNaturalWidthAndHeight(imgUrl);
@@ -334,7 +333,6 @@ export default class View extends React.PureComponent {
   }
 
   render() {
-    console.log('rendering');
     const myZoom = this.state.zoom;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');

@@ -18,28 +18,28 @@
         "id": "1",
         "type": "wireless",
         "devicename": "iPhone",
-        "description": "192.168.5.123",
+        "description": "xiaomin",
         "mac": "12:22:33:44:55:66"
       },
       {
         "id": "2",
         "type": "guest",
         "devicename": "gruis",
-        "description": "192.168.5.32",
+        "description": "xiaohuan",
         "mac": "12:22:33:44:55:65"
       },
       {
         "id": "3",
         "type": "guest",
         "devicename": "windy ihone",
-        "description": "192.168.5.32",
+        "description": "xiaolan",
         "mac": "12:22:33:44:55:65"
       },
       {
         "id": "4",
         "type": "guest",
         "devicename": "android-1",
-        "description": "192.168.5.32",
+        "description": "xiaoduo",
         "mac": "12:22:33:44:55:65"
       }
     ]

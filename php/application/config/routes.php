@@ -101,8 +101,7 @@ $route['goform/group/map/clients_trace'] = 'group/mapClients';
 $route['goform/group/map/heatmap'] = 'group/mapHeat';
 $route['goform/group/map/orbittrace'] = 'group/mapOrbit';
 $route['goform/group/map/dubious'] = 'group/mapDubious';
-
-
+$route['goform/group/map/point'] = 'group/mapPoint';
 $route['goform/alarm_map_chunk_pos'] = 'group/mapAreaInfo';
 $route['goform/change_priority_settings'] = 'group/mapAreaInfo/settings';
 $route['goform/group/map/alarmmap'] = 'group/mapArea';

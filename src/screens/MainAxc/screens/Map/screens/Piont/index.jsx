@@ -3,21 +3,19 @@ import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { FormGroup, Icon, Modal } from 'shared/components';
+import { FormGroup, Icon, Button } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
-import { actions as propertiesActions } from 'shared/containers/properties';
 import validator from 'shared/validator';
-import './orbitTrace.scss';
+import '../AlarmMap/orbitTrace.scss';
 
 const propTypes = {
-  save: PropTypes.func,
   store: PropTypes.object,
+  $$screenStore: PropTypes.instanceOf(Map),
   changeScreenQuery: PropTypes.func,
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
-  validateOption: PropTypes.object,
-  validateAll: PropTypes.func,
+  save: PropTypes.func,
 };
 const defaultProps = {};
 const defaultQuery = {
@@ -25,6 +23,7 @@ const defaultQuery = {
   curMapId: '',
   mac: '',
 };
+const $$emptyList = fromJS([]);
 
 const validOptions = Map({
   validText: validator({
@@ -44,17 +43,17 @@ export default class View extends React.Component {
     this.mapMouseDown = false;
     this.colorArr = ['rgba(255, 255, 255, 0)', 'rgba(93, 61, 72, .4)', 'rgba(171, 43, 87, .4)', 'rgba(245, 6, 88, .4)'];
     this.state = {
-      pixelPos: fromJS([]),
-      mapList: fromJS([]),
-      editGpsPos: fromJS([]),
-      posList: fromJS([]),
-      clientPos: fromJS([]),
+      pixelPos: $$emptyList,
+      mapList: $$emptyList,
+      editGpsPos: $$emptyList,
+      posList: $$emptyList,
+      clientPos: $$emptyList,
       zoom: 100,
       mapOffsetX: 0,
       mapOffsetY: 0,
       mapWidth: 1,
       mapHeight: 1,
-      colorSwitch: true,
+      colorSwitch: false,
       showId: true,
       editable: false,
       showEditModal: false,
@@ -66,6 +65,7 @@ export default class View extends React.Component {
         'renderCurMap',
         'onChangeBuilding',
         'onChangeMapId',
+        'onChangeMac',
         'onMapMouseUp',
         'onMapMouseDown',
         'onMapMouseMove',
@@ -77,17 +77,41 @@ export default class View extends React.Component {
         'requestChunkPosition',
         'getModalTitle',
         'renderClientPosIcon',
+        'getCurLocation',
+        'onAddClientPos',
+        'onClearPoint',
+        'onStopPoint',
       ],
     );
+    this.$$dubiousOptions = $$emptyList;
+    this.mapOptions = $$emptyList;
+    this.buildOptions = $$emptyList;
   }
   componentWillMount() {
+    const { $$screenStore } = this.props;
     this.preScreenId = this.props.store.get('curScreenId');
+
+    // 获取建筑列表
     this.props.fetch('goform/group/map/building').then((json) => {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
       }
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
     });
+
+    // 获取可疑人员列表
+    this.props.fetch('/goform/group/map/dubious', $$screenStore.get('query').toJS())
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          this.$$dubiousOptions = fromJS(json.data.list).map(
+            item => fromJS({
+              label: `${item.get('mac')} (${item.get('description')})`,
+              value: item.get('mac'),
+            }),
+          );
+        }
+        this.onChangeMac(this.$$dubiousOptions.getIn([0, 'value']));
+      });
   }
   shouldComponentUpdate(nextProps, nextState) {
     const store = this.props.store;
@@ -106,14 +130,7 @@ export default class View extends React.Component {
 
   componentDidUpdate() {
     if (typeof (this.canvasElem) === 'undefined') return;
-    const store = this.props.store;
-    const curScreenId = store.get('curScreenId');
 
-    /** *********hack: 暂时解决store中curScreenId更新不及时引起的bug**********/
-    if (this.preScreenId !== curScreenId) {
-      this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
-      this.preScreenId = curScreenId;
-    }
     /** *********************hack over*************************************/
     if (!this.mapMouseDown) {
       this.chunkPosFromGeoToPixel(); // 计算像素坐标点
@@ -127,19 +144,74 @@ export default class View extends React.Component {
     clearInterval(this.timeInterval);
     clearTimeout(this.getCurLocationTimeout);
   }
+  onAddClientPos(ev) {
+    const mapOffset = utils.dom.getAbsPoint(this.mapContent);
+    const offsetX = ev.clientX - mapOffset.x;
+    const offsetY = ev.clientY - mapOffset.y;
+    const curOffset = {
+      x: (offsetX * 100) / this.mapContent.offsetWidth,
+      y: (offsetY * 100) / this.mapContent.offsetHeight,
+    };
+    const curMapId = this.state.curMapId;
+    const $$mapList = this.mapList;
+    const curItem = $$mapList.find(item => item.get('id') === curMapId).toJS();
+    const gpsPoint = gps.getGpsPointFromOffset(curOffset, curItem);
 
+    ev.preventDefault();
+    clearTimeout(this.saveTimeout);
+
+    this.saveTimeout = setTimeout(() => {
+      this.props.save('goform/group/map/point', {
+        action: 'add',
+        mac: this.state.curDubiouMac,
+        lng: gpsPoint.lng,
+        lat: gpsPoint.lat,
+      }).then(() => {
+        this.props.fetchScreenData();
+      });
+    }, 100);
+  }
+  onClearPoint() {
+    clearTimeout(this.saveTimeout);
+
+    this.saveTimeout = setTimeout(() => {
+      this.props.save('goform/group/map/point', {
+        action: 'clear',
+        mac: this.state.curDubiouMac,
+      }).then(() => {
+        this.props.fetchScreenData();
+      });
+    }, 100);
+  }
+  onStopPoint() {
+    clearTimeout(this.saveTimeout);
+
+    this.saveTimeout = setTimeout(() => {
+      this.props.save('goform/group/map/point', {
+        action: 'stop',
+        mac: this.state.curDubiouMac,
+      }).then(() => {
+        this.props.fetchScreenData();
+      });
+    }, 100);
+  }
   onChangeBuilding(id) {
-    this.props.changeScreenQuery(fromJS({ buildId: id }));
-    this.setState({ buildId: id });
-    this.props.fetch('goform/group/map/list', { buildId: id })
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.mapOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mapName'), value: item.get('id') }));
-            this.mapList = fromJS(json.data.list);
-          }
-        }).then(() => {
-          this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
-        });
+    Promise.resolve().then(() => {
+      this.props.changeScreenQuery(fromJS({ buildId: id }));
+      this.setState({ buildId: id });
+    }).then(
+      () => {
+        this.props.fetch('goform/group/map/list', { buildId: id })
+          .then((json) => {
+            if (json.state && json.state.code === 2000) {
+              this.mapOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mapName'), value: item.get('id') }));
+              this.mapList = fromJS(json.data.list);
+            }
+          }).then(() => {
+            this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+          });
+      },
+    );
   }
 
   onChangeMapId(id) {
@@ -168,6 +240,9 @@ export default class View extends React.Component {
   onChangeMac(value) {
     Promise.resolve().then(() => {
       this.props.changeScreenQuery(fromJS({ mac: value }));
+      this.setState({
+        curDubiouMac: value,
+      });
     }).then(() => {
       this.props.fetchScreenData();
     });
@@ -202,29 +277,55 @@ export default class View extends React.Component {
     this.naturalHeight = image.height;
   }
 
-  requestChunkPosition() {
-    const curScreenId = this.props.store.get('curScreenId');
-    this.setState({ posList: fromJS([]) });
-    this.props.fetch('goform/alarm_map_chunk_pos', {
-      buildId: this.state.buildId,
-      curMapId: this.state.curMapId,
-      groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
-    }).then((json) => {
-      if (json.state && json.state.code === 2000) {
-        const posList = fromJS(json.data.list);
-        this.setState({
-          posList,
-          editable: false,
-        });
-      }
-    });
+  getModalTitle() {
+    const posList = this.state.posList;
+    const onEditId = this.state.onEditId;
+    if (typeof posList === 'undefined' || posList.isEmpty()) return null;
+    return `${__('Edit')}: ${onEditId + 1}`;
   }
-
   generateMacOptions() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
-    const macList = store.getIn([curScreenId, 'data', 'macList']) || fromJS([]);
+    const macList = store.getIn([curScreenId, 'data', 'macList']) || $$emptyList;
     return macList.toJS().map(mac => ({ value: mac, label: mac }));
+  }
+
+  // 标记坐标点和显示告警动画
+  markClientPosOnMap() {
+    const pixelPos = this.state.pixelPos;
+    const curScreenId = this.props.store.get('curScreenId');
+    const clientList = this.props.store.getIn([curScreenId, 'data', 'list']);
+    const curMapId = this.state.curMapId;
+    const mapList = this.mapList;
+    const curItem = mapList.find(item => item.get('id') === curMapId);
+    if (typeof pixelPos === 'undefined' || pixelPos.isEmpty()) return null;
+    if (typeof curItem === 'undefined') return null;
+    // 计算像素坐标点
+    const clientPos = clientList.map((item) => {
+      const ret = gps.getOffsetFromGpsPoint(item.toJS(), curItem.toJS());
+      const x = Math.floor((ret.x * this.state.mapWidth) / 100);
+      const y = Math.floor((ret.y * this.state.mapHeight) / 100);
+      return fromJS({ x, y, mac: item.get('mac') });
+    });
+    this.setState({ clientPos });
+
+    // 找出需要告警的区域
+    let chunks = $$emptyList;
+    clientPos.forEach((item) => {
+      const posX = item.get('x');
+      const posY = item.get('y');
+      const area = pixelPos.find((chunk) => {
+        const { endX, startX, endY, startY, level } = chunk.toJS();
+        return (posX >= startX && posX < endX && posY >= startY && posY < endY && level !== '0');
+      });
+      if (typeof area !== 'undefined' && !chunks.includes(area)) chunks = chunks.push(area);
+    });
+    // 告警动画
+    const alarmCtx = this.alarmCanvas.getContext('2d');
+    const staPos = pixelPos.get(0).toJS();
+    alarmCtx.clearRect(staPos.startX, staPos.startY, this.state.mapWidth, this.state.mapHeight);
+
+    return alarmCtx;
   }
 
   // 将分块经纬度坐标转化为像素坐标,参数posList为immutable类型
@@ -269,6 +370,8 @@ export default class View extends React.Component {
       return fromJS({ startX, startY, endX, endY, level, id, describe, index });
     });
     this.setState({ pixelPos });
+
+    return pixelPos;
   }
 
   // 利用转化后的坐标信息绘制网格线
@@ -278,7 +381,7 @@ export default class View extends React.Component {
     const colorArr = this.colorArr;
     ctx.clearRect(0, 0, this.state.mapWidth, this.state.mapHeight);
     pixelPos.forEach((item) => {
-      const { startX, startY, endX, endY, id, index, level } = item.toJS();
+      const { startX, startY, endX, endY, id, level } = item.toJS();
       // 绘制网格和网格着色
       ctx.beginPath();
       ctx.moveTo(startX, startY);
@@ -303,90 +406,27 @@ export default class View extends React.Component {
                     ((startY + endY) / 2) + Math.round(font / 2));
       }
     });
+
+    return pixelPos;
   }
 
-  // 标记坐标点和显示告警动画
-  markClientPosOnMap(ctx) {
-    const pixelPos = this.state.pixelPos;
+  requestChunkPosition() {
     const curScreenId = this.props.store.get('curScreenId');
-    const clientList = this.props.store.getIn([curScreenId, 'data', 'list']);
-    const curMapId = this.state.curMapId;
-    const mapList = this.mapList;
-    const curItem = mapList.find(item => item.get('id') === curMapId);
-    if (typeof pixelPos === 'undefined' || pixelPos.isEmpty()) return null;
-    if (typeof curItem === 'undefined') return null;
-    // 计算像素坐标点
-    const clientPos = clientList.map((item) => {
-      const ret = gps.getOffsetFromGpsPoint(item.toJS(), curItem.toJS());
-      const x = Math.floor((ret.x * this.state.mapWidth) / 100);
-      const y = Math.floor((ret.y * this.state.mapHeight) / 100);
-      return fromJS({ x, y, mac: item.get('mac') });
-    });
-    this.setState({ clientPos });
-    // 在图上画出坐标点
-    // this.state.clientPos.forEach((item) => {
-    //   ctx.beginPath();
-    //   ctx.arc(item.get('x'), item.get('y'), 5, 0, 2 * Math.PI);
-    //   ctx.fillStyle = 'green';
-    //   ctx.fill();
-    // });
-
-    // 找出需要告警的区域
-    let chunks = fromJS([]);
-    clientPos.forEach((item) => {
-      const posX = item.get('x');
-      const posY = item.get('y');
-      const area = pixelPos.find((chunk) => {
-        const { endX, startX, endY, startY, level } = chunk.toJS();
-        return (posX >= startX && posX < endX && posY >= startY && posY < endY && level !== '0');
-      });
-      if (typeof area !== 'undefined' && !chunks.includes(area)) chunks = chunks.push(area);
-    });
-    // 告警动画
-    let startOpacity = 1;
-    let step = -0.2;
-    const lineWidth = 4 * (this.state.zoom / 100);
-    const alarmCtx = this.alarmCanvas.getContext('2d');
-    const staPos = pixelPos.get(0).toJS();
-    alarmCtx.clearRect(staPos.startX, staPos.startY, this.state.mapWidth, this.state.mapHeight);
-    clearInterval(this.timeInterval);
-    this.timeInterval = window.setInterval(() => {
-      startOpacity += step;
-      if (startOpacity <= 0) {
-        startOpacity = 0;
-        step = Math.abs(step);
-      } else if (startOpacity >= 1) {
-        startOpacity = 1;
-        step = -Math.abs(step);
+    this.setState({ posList: $$emptyList });
+    this.props.fetch('goform/alarm_map_chunk_pos', {
+      buildId: this.state.buildId,
+      curMapId: this.state.curMapId,
+      groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
+    }).then((json) => {
+      if (json.state && json.state.code === 2000) {
+        const posList = fromJS(json.data.list);
+        this.setState({
+          posList,
+          editable: false,
+        });
       }
-
-      // console.log('startOpacity', startOpacity);
-      alarmCtx.strokeStyle = `rgba(255, 0, 0, ${startOpacity})`;
-      alarmCtx.lineWidth = lineWidth;
-      chunks.forEach((chunk) => {
-        const startX = chunk.get('startX');
-        const startY = chunk.get('startY');
-        const endX = chunk.get('endX');
-        const endY = chunk.get('endY');
-        alarmCtx.clearRect(startX, startY, endX - startX, endY - startY);
-        alarmCtx.beginPath();
-        alarmCtx.moveTo(startX + (lineWidth / 2), startY + (lineWidth / 2));
-        alarmCtx.lineTo(endX - (lineWidth / 2), startY + (lineWidth / 2));
-        alarmCtx.lineTo(endX - (lineWidth / 2), endY - (lineWidth / 2));
-        alarmCtx.lineTo(startX + (lineWidth / 2), endY - (lineWidth / 2));
-        alarmCtx.closePath();
-        alarmCtx.stroke();
-      });
-    }, 100);
+    });
   }
-
-  getModalTitle() {
-    const posList = this.state.posList;
-    const onEditId = this.state.onEditId;
-    if (typeof posList === 'undefined' || posList.isEmpty()) return null;
-    return `${__('Edit')}: ${onEditId + 1}`;
-  }
-
   renderEditLayor() {
     const editable = this.state.editable;
     const myZoom = this.state.zoom;
@@ -455,6 +495,8 @@ export default class View extends React.Component {
 
   renderClientPosIcon() {
     const myZoom = this.state.zoom;
+    const fontsize = Math.round((24 * this.state.zoom) / 100);
+
     return (
       <div
         className="o-map-container"
@@ -469,13 +511,11 @@ export default class View extends React.Component {
         onMouseDown={this.onMapMouseDown}
         onMouseUp={this.onMapMouseUp}
         onMouseMove={this.onMapMouseMove}
+        onClick={this.onAddClientPos}
       >
         {
-          (() => {
-            // console.log('this.state.pixelPos', this.state.pixelPos);
-            if (this.state.clientPos.isEmpty()) return null;
-            const fontsize = Math.round((24 * this.state.zoom) / 100);
-            const nodeList = this.state.clientPos.map(item => (
+          this.state.clientPos.isEmpty() ? null : (
+            this.state.clientPos.map(item => (
               <Icon
                 name="map-pin"
                 className="client"
@@ -489,13 +529,9 @@ export default class View extends React.Component {
                   fontSize: `${fontsize}px`,
                 }}
                 title={item.get('mac')}
-                onClick={() => {
-                  this.props.history.push(`/main/group/map/orbittrace?mac=${item.get('mac')}`);
-                }}
               />
-            ));
-            return nodeList.toJS();
-          })()
+            ))
+          )
         }
       </div>
     );
@@ -565,13 +601,12 @@ export default class View extends React.Component {
   render() {
     const myZoom = this.state.zoom;
     if (!this.mapList) return null;
-    const { validMac, validNum, validText } = this.props.validateOption;
 
     return (
       <AppScreen
         {...this.props}
         initOption={{
-          isFetchInfinite: true,
+          isFetchInfinite: false,
           fetchIntervalTime: 2000,
           query: defaultQuery,
         }}
@@ -598,28 +633,14 @@ export default class View extends React.Component {
             value={this.state.curMapId}
             onChange={data => this.onChangeMapId(data.value)}
           />
-          {
-            /** ***************************************************
-             <FormGroup
-              type="select"
-              className="fl"
-              label={__('Client')}
-              options={this.generateMacOptions()}
-              value={store.getIn([curScreenId, 'query', 'mac'])}
-              onChange={data => this.onChangeMac(data.value)}
-              searchable
-            />
-             ******************************************************/
-          }
           <FormGroup
-            type="checkbox"
+            type="select"
             className="fl"
-            label={__('Show Priority')}
-            checked={this.state.colorSwitch}
+            label={__('可疑客户端')}
+            options={this.$$dubiousOptions.toJS()}
+            value={this.state.curDubiouMac}
             onChange={(data) => {
-              this.setState({
-                colorSwitch: data.value === '1',
-              });
+              this.onChangeMac(data.value);
             }}
           />
           <FormGroup
@@ -633,17 +654,23 @@ export default class View extends React.Component {
               });
             }}
           />
-          <FormGroup
-            type="checkbox"
-            className="fl"
-            label={__('Priority Editable')}
-            checked={this.state.editable}
-            onChange={(data) => {
-              this.setState({
-                editable: data.value === '1',
-              });
+          <Button
+            text={_('停止打点')}
+            theme="primary"
+            icon="stop"
+            onClick={this.onStopPoint}
+            style={{
+              marginRight: '16px',
             }}
           />
+
+          <Button
+            text={_('清除所以点')}
+            theme="warning"
+            icon="trash"
+            onClick={this.onClearPoint}
+          />
+
         </div>
         <div
           className="o-map-warp"
@@ -677,94 +704,6 @@ export default class View extends React.Component {
           {this.renderClientPosIcon()}
           {this.renderEditLayor()}
         </div>
-        <Modal
-          draggable
-          isShow={this.state.showEditModal}
-          title={this.getModalTitle()}
-          onClose={() => {
-            this.setState({
-              editGpsPos: fromJS([]),
-              showEditModal: false,
-            });
-          }}
-          onOk={() => {
-            this.props.validateAll('modalsettings').then((msg) => {
-              console.log('msg', msg);
-              if (msg.isEmpty()) {
-                const curScreenId = this.props.store.get('curScreenId');
-                this.props.save('goform/change_priority_settings', {
-                  list: this.state.editGpsPos.toJS(),
-                  buildId: this.state.buildId,
-                  curMapId: this.state.curMapId,
-                  groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
-                }).then((json) => {
-                  if (json.state && json.state.code === 2000) {
-                    this.setState({
-                      editGpsPos: fromJS([]),
-                      showEditModal: false,
-                    });
-                  }
-                }).then(() => {
-                  this.props.fetch('goform/alarm_map_chunk_pos', {
-                    buildId: this.state.buildId,
-                    curMapId: this.state.curMapId,
-                    groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
-                  }).then((json) => {
-                    if (json.state && json.state.code === 2000) {
-                      const posList = fromJS(json.data.list);
-                      this.setState({ posList });
-                    }
-                  });
-                });
-              }
-            });
-          }}
-        >
-          <FormGroup
-            type="select"
-            label={__('Priority')}
-            value={this.state.editGpsPos.getIn([this.state.onEditId, 'level'])}
-            options={[
-              { value: '0', label: '0' },
-              { value: '1', label: '1' },
-              { value: '2', label: '2' },
-              { value: '3', label: '3' },
-            ]}
-            onChange={(data) => {
-              let editGpsPos = this.state.editGpsPos;
-              const onEditId = this.state.onEditId;
-              editGpsPos = editGpsPos.setIn([onEditId, 'level'], data.value);
-              this.setState({ editGpsPos });
-            }}
-          />
-          <FormGroup
-            type="number"
-            label={__('Gather Threshold')}
-            form="modalsettings"
-            value={this.state.editGpsPos.getIn([this.state.onEditId, 'gather_threshold'])}
-            help={`${__('Range: ')}1 ~ 400`}
-            min="1"
-            max="400"
-            onChange={(data) => {
-              let editGpsPos = this.state.editGpsPos;
-              const onEditId = this.state.onEditId;
-              editGpsPos = editGpsPos.setIn([onEditId, 'gather_threshold'], data.value);
-              this.setState({ editGpsPos });
-            }}
-          />
-          <FormGroup
-            type="textarea"
-            label={__('Description')}
-            form="modalsettings"
-            value={this.state.editGpsPos.getIn([this.state.onEditId, 'describe'])}
-            onChange={(data) => {
-              let editGpsPos = this.state.editGpsPos;
-              const onEditId = this.state.onEditId;
-              editGpsPos = editGpsPos.setIn([onEditId, 'describe'], data.value);
-              this.setState({ editGpsPos });
-            }}
-          />
-        </Modal>
       </AppScreen>
     );
   }
@@ -774,10 +713,13 @@ View.propTypes = propTypes;
 View.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
+  const $$screens = state.screens;
+  const curScreenId = $$screens.get('curScreenId');
+
   return {
     app: state.app,
     store: state.screens,
-    // product: state.product,
+    $$screenStore: $$screens.get(curScreenId),
     groupid: state.product.getIn(['group', 'selected', 'id']),
     // isShowPanel: state.properties.get('isShowPanel'),
   };
@@ -787,7 +729,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     screenActions,
-    propertiesActions,
   ), dispatch);
 }
 

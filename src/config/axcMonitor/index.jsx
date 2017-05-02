@@ -108,7 +108,7 @@ const sAlarmMap = require('../../screens/MainAxc/screens/Map/screens/AlarmMap');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
-
+const sMapPiont = require('../../screens/MainAxc/screens/Map/screens/Piont');
 
 /**
  * 系统管理
@@ -331,6 +331,13 @@ const routes = [
                     component: sOrbitTrace.Screen,
                   },
                   {
+                    id: 'point',
+                    path: '/main/group/map/point',
+                    noNav: true,
+                    formUrl: '/goform/group/map/alarmmap',
+                    component: sMapPiont.Screen,
+                  },
+                  {
                     id: 'dubiousClient',
                     path: '/main/group/map/dubious',
                     formUrl: '/goform/group/map/dubious',
@@ -540,6 +547,7 @@ const routes = [
         mainPath: '/main/group/monitor/overview',
         component: sLogin.Screen,
       },
+
       {
         id: 'notFound',
         component: SharedComponents.NotFound,
