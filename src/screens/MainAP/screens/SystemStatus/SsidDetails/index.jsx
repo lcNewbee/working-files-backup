@@ -10,8 +10,6 @@ import { actions as appActions } from 'shared/containers/app';
 import * as selfActions from './actions';
 import reducer from './reducer';
 
-let intervalAction;
-let timeoutAction;
 const flowRateFilter = utils.filter('flowRate');
 
 const propTypes = {
@@ -151,8 +149,8 @@ export default class SsidDetails extends React.Component {
   }
 
   componentWillMount() {
-    clearInterval(intervalAction);
-    clearTimeout(timeoutAction);
+    clearInterval(this.intervalAction);
+    clearTimeout(this.timeoutAction);
     this.props.initSettings({
       settingId: this.props.route.id,
       fetchUrl: this.props.route.fetchUrl,
@@ -164,21 +162,21 @@ export default class SsidDetails extends React.Component {
     }).then(() => {
       this.refreshData();
     });
-    intervalAction = setInterval(() => { this.refreshData(); }, 10000);
+    this.intervalAction = setInterval(() => { this.refreshData(); }, 10000);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
-      clearInterval(intervalAction);
-      clearTimeout(timeoutAction);
+      clearInterval(this.intervalAction);
+      clearTimeout(this.timeoutAction);
       this.refreshData();
-      intervalAction = setInterval(this.refreshData, 10000);
+      this.intervalAction = setInterval(this.refreshData, 10000);
     }
   }
 
   componentWillUnmount() {
-    clearInterval(intervalAction);
-    clearTimeout(timeoutAction);
+    clearInterval(this.intervalAction);
+    clearTimeout(this.timeoutAction);
   }
 
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
@@ -195,7 +193,7 @@ export default class SsidDetails extends React.Component {
       const radioNum = this.props.product.get('deviceRadioList').size;
       for (let i = 0; i < radioNum; i++) {
         const staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
-                          .map(item => item.set('block', false));
+                          .map((item, j) => item.set('block', false).set('num', j + 1));
         const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([i, 'staList'], staList);
         this.props.updateItemSettings({ radioList });
       }
@@ -212,7 +210,7 @@ export default class SsidDetails extends React.Component {
   }
 
   render() {
-    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const { radioId /* , radioType */ } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId, 'staList'])) return null;
     const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const tableList = vapList.map((item, i) => {

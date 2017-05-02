@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Table from 'shared/components/Table';
 import Button from 'shared/components/Button/Button';
 import Icon from 'shared/components/Icon';
-import FormGroup from 'shared/components/Form/FormGroup';
 import { fromJS, Map } from 'immutable';
 import utils from 'shared/utils';
 import { actions as sharedActions } from 'shared/containers/settings';
@@ -12,8 +11,6 @@ import { actions as appActions } from 'shared/containers/app';
 import * as selfActions from './actions';
 import reducer from './reducer';
 
-let intervalAction;
-let timeoutAction;
 const flowRateFilter = utils.filter('flowRate');
 
 const propTypes = {
@@ -51,19 +48,19 @@ function changeUptimeToReadable(time) {
   return timeStr;
 }
 
-function wirelessModeShowStyle(wirelessMode) {
-  let ret = '';
-  switch (wirelessMode) {
-    case 'sta':
-      ret = 'Station'; break;
-    case 'repeater':
-      ret = 'Repeater'; break;
-    case 'ap':
-      ret = 'AP'; break;
-    default:
-  }
-  return ret;
-}
+// function wirelessModeShowStyle(wirelessMode) {
+//   let ret = '';
+//   switch (wirelessMode) {
+//     case 'sta':
+//       ret = 'Station'; break;
+//     case 'repeater':
+//       ret = 'Repeater'; break;
+//     case 'ap':
+//       ret = 'AP'; break;
+//     default:
+//   }
+//   return ret;
+// }
 
 const vapInterfaceOptions = fromJS([
   {
@@ -177,14 +174,12 @@ const vapInterfaceOptions = fromJS([
 export default class RadioDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.onChangeRadio = this.onChangeRadio.bind(this);
-    this.updateBlockStatus = this.updateBlockStatus.bind(this);
-    this.refreshData = this.refreshData.bind(this);
+    utils.binds(this, ['onChangeRadio', 'updateBlockStatus', 'refreshData']);
   }
 
   componentWillMount() {
-    clearInterval(intervalAction);
-    clearTimeout(timeoutAction);
+    clearInterval(this.intervalAction);
+    clearTimeout(this.timeoutAction);
     this.props.initSettings({
       settingId: this.props.route.id,
       fetchUrl: this.props.route.fetchUrl,
@@ -196,21 +191,21 @@ export default class RadioDetails extends React.Component {
     }).then(() => {
       this.refreshData();
     });
-    intervalAction = setInterval(() => { this.refreshData(); }, 10000);
+    this.intervalAction = setInterval(() => { this.refreshData(); }, 10000);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
-      clearInterval(intervalAction);
-      clearTimeout(timeoutAction);
+      clearInterval(this.intervalAction);
+      clearTimeout(this.timeoutAction);
       this.refreshData();
-      intervalAction = setInterval(this.refreshData, 10000);
+      this.intervalAction = setInterval(this.refreshData, 10000);
     }
   }
 
   componentWillUnmount() {
-    clearInterval(intervalAction);
-    clearTimeout(timeoutAction);
+    clearInterval(this.intervalAction);
+    clearTimeout(this.timeoutAction);
   }
 
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
@@ -227,7 +222,7 @@ export default class RadioDetails extends React.Component {
       const radioNum = this.props.product.get('deviceRadioList').size;
       for (let i = 0; i < radioNum; i++) {
         const staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
-                          .map(item => item.set('block', false));
+                          .map((item, j) => item.set('block', false).set('num', j + 1));
         const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([i, 'staList'], staList);
         this.props.updateItemSettings({ radioList });
       }
@@ -410,10 +405,10 @@ export default class RadioDetails extends React.Component {
                   that.props.save('goform/kick_user_offline', query).then((json) => {
                     if (json.state && json.state.code === 2000) {
                       that.updateBlockStatus(item);
-                      clearInterval(intervalAction);
-                      clearTimeout(timeoutAction);
-                      timeoutAction = setTimeout(() => { // 停止10秒再刷新，留足时间让用户下线
-                        intervalAction = setInterval(that.refreshData, 10000);
+                      clearInterval(this.intervalAction);
+                      clearTimeout(this.timeoutAction);
+                      this.timeoutAction = setTimeout(() => { // 停止10秒再刷新，留足时间让用户下线
+                        this.intervalAction = setInterval(that.refreshData, 10000);
                       }, 10000);
                     }
                   });
@@ -424,9 +419,8 @@ export default class RadioDetails extends React.Component {
         },
       },
     ]);
-    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const { radioId /* , radioType */ } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId, 'staList'])) return null;
-    // const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList']).toJS();
     // const radioList = this.props.store.getIn(['curData', 'radioList']);
     const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
@@ -443,70 +437,6 @@ export default class RadioDetails extends React.Component {
             window.location.href = '#/main/status/overview';
           }}
         />
-        <div className="row">
-          {/*
-            <div className="o-box__cell">
-              <h3>{`${__('Radio')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}</h3>
-            </div>
-            <div className="o-box__cell">
-              <div className="cols col-6">
-                <FormGroup
-                  label={__('Wireless Mode :')}
-                  type="plain-text"
-                  value={wirelessModeShowStyle(radioList.getIn([radioId, 'wirelessMode']))}
-                />
-                <FormGroup
-                  label={__('Protocol :')}
-                  type="plain-text"
-                  value={radioList.getIn([radioId, 'radioMode'])}
-                />
-                <FormGroup
-                  label={__('Channel/Frequency :')}
-                  type="plain-text"
-                  value={`${radioList.getIn([radioId, 'channel'])}/${radioList.getIn([radioId, 'frequency'])}`}
-                />
-                <FormGroup
-                  label={__('Channel Width :')}
-                  type="plain-text"
-                  value={radioList.getIn([radioId, 'channelWidth'])}
-                />
-              </div>
-              <div className="cols col-6">
-                <FormGroup
-                  label={__('Distance :')}
-                  type="plain-text"
-                  value={radioList.getIn([radioId, 'distance'])}
-                  help="km"
-                />
-                <FormGroup
-                  label={__('Tx Power :')}
-                  type="plain-text"
-                  value={radioList.getIn([radioId, 'txPower'])}
-                  help="dBm"
-                />
-                <FormGroup
-                  label={__('Signal :')}
-                  type="plain-text"
-                  value={radioList.getIn([radioId, 'signal'])}
-                  help="dBm"
-                />
-                <FormGroup
-                  label={__('Noise :')}
-                  type="plain-text"
-                  value={radioList.getIn([radioId, 'noise'])}
-                  help="dBm"
-                />
-                <FormGroup
-                  label={__('Channel Utilization :')}
-                  type="plain-text"
-                  value={radioList.getIn([radioId, 'chutil'])}
-                />
-              </div>
-            </div>
-          */}
-
-        </div>
-
         <div className="o-box__cell">
           <h3>
             {`${__('Wireless Interfaces')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}

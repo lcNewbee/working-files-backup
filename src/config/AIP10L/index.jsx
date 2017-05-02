@@ -85,7 +85,7 @@ const funConfig = {
       'delete',
       'maxClients',
       // 'airTimeEnable',
-      'speedLimit',
+      // 'speedLimit',
       // 'portalEnable',         // portal功能开关
     ],
     portalFun: false,

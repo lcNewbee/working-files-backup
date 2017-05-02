@@ -83,6 +83,7 @@ export default class View extends React.PureComponent {
   }
 
   componentWillMount() {
+    // console.log('this.props.store', this.props.store.get('curScreenId'));
     this.props.fetch('goform/group/map/building').then((json) => {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
@@ -157,14 +158,6 @@ export default class View extends React.PureComponent {
       });
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
-    }
-  }
-
-  removeShowerDiv() {
-    const showers = document.querySelectorAll('.observeShower');
-    const len = showers.length;
-    for (let i = len; i;) {
-      this.mapContent.removeChild(showers[--i]);
     }
   }
 
@@ -245,6 +238,15 @@ export default class View extends React.PureComponent {
     this.naturalWidth = image.width;
     this.naturalHeight = image.height;
   }
+
+  removeShowerDiv() {
+    const showers = document.querySelectorAll('.observeShower');
+    const len = showers.length;
+    for (let i = len; i;) {
+      this.mapContent.removeChild(showers[--i]);
+    }
+  }
+
 
   renderCurMap(list, curMapId, myZoom) {
     console.log('renderCurMap');

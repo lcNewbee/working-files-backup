@@ -9,6 +9,6 @@ export default class WirelessConfig extends Component {
       >
         {this.props.children}
       </Tab>
-    )
+    );
   }
 }

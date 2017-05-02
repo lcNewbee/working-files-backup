@@ -335,12 +335,12 @@ export default class View extends React.Component {
 
   onMapMouseUp() {
     this.mapMouseDown = false;
-    if (this.posXBeforeMove !== this.state.mapOffsetX ||
-      this.posYBeforeMove !== this.state.mapOffsetY) {
-      // console.log('onmapmouseup', this.posXBeforeMove, this.state.mapOffsetX);
-      const ctx = this.canvasElem.getContext('2d');
-      this.drawCurveAnimPath(ctx, this.curvePath);
-    }
+    // if (this.posXBeforeMove !== this.state.mapOffsetX ||
+    //   this.posYBeforeMove !== this.state.mapOffsetY) {
+    //   // console.log('onmapmouseup', this.posXBeforeMove, this.state.mapOffsetX);
+    //   const ctx = this.canvasElem.getContext('2d');
+    //   this.drawCurveAnimPath(ctx, this.curvePath);
+    // }
   }
   onMapMouseDown(e) {
     // console.log('onmapmousedown running');

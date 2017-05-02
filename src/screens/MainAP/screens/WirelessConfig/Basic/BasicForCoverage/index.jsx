@@ -197,7 +197,7 @@ export default class Basic extends React.Component {
       'onChengeWirelessMode', 'noErrorThisPage', 'onCloseCountrySelectModal',
       'makeChannelOptions', 'onSecurityModeChange', 'onAddNewSsidItem',
       'onDeleteBtnClick', 'onSsidItemChange', 'fetchFullPageData',
-      'firstInAndRefresh', 'onChangeRadio', 'makeSsidTableOptions',
+      'firstInAndRefresh', 'onChangeRadio', 'makeSsidTableOptions', 'renderOperateRadio',
       'saveCountrySelectModal', 'saveCountrySelectModal', 'radioSettingsHeadClassName',
       'radioSettingsHeadClassName', 'getChannelListAndPowerRange', 'sortMacOrder',
       'renderEnableBtn', 'renderSsidInput', 'renderVlanIdInput', 'renderMaxClientsInput',
@@ -831,20 +831,24 @@ export default class Basic extends React.Component {
       </div>
     );
   }
+
+  renderOperateRadio(val, item) {
+    return (
+      <FormInput
+        type="radio"
+        name="selectScanItem"
+        onChange={() => this.onSelectScanResultItem(item)}
+      />
+    );
+  }
+
   render() {
+    const that = this;
     const modalOptions = fromJS([
       {
         id: 'operate',
         text: __('Select'),
-        render: function (val, item) {
-          return (
-            <FormInput
-              type="radio"
-              name="selectScanItem"
-              onChange={() => this.onSelectScanResultItem(item)}
-            />
-          );
-        }.bind(this),
+        transform: (val, item) => that.renderOperateRadio(val, item),
       },
       {
         id: 'mac',
@@ -1003,9 +1007,7 @@ export default class Basic extends React.Component {
             <div className="o-box__cell">
               <div
                 className="cols col-5"
-                style={{
-                  overflow: 'visible',
-                }}
+                style={{ overflow: 'visible' }}
               >
                 <FormGroup
                   type="checkbox"
@@ -1061,7 +1063,7 @@ export default class Basic extends React.Component {
                 >
                   <h3>{__('User Protocol')}</h3>
                   <span>
-                    {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                    {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio\'s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                   </span>
                   <FormGroup
                     type="radio"
@@ -1109,8 +1111,7 @@ export default class Basic extends React.Component {
                       options={channelWidthOptions.slice(0, 3)}
                       value={curData.getIn(['radioList', radioId, 'channelWidth'])}
                       onChange={(data) => {
-                        const radioList = curData.get('radioList')
-                                          .setIn([radioId, 'channelWidth'], data.value);
+                        const radioList = curData.get('radioList').setIn([radioId, 'channelWidth'], data.value);
                         Promise.resolve().then(() => {
                           this.props.updateItemSettings({ radioList });
                         }).then(() => {
@@ -1879,11 +1880,11 @@ export default class Basic extends React.Component {
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
                       if (!re.test(vapList[i].vlanId)) {
-                        error = __('Vlan ID must be positive interger !');
+                        error = __('VLAN ID must be positive interger !');
                         break;
                       }
                       if (vapList[i].vlanId < 1 || vapList[i].vlanId > 4094) {
-                        error = __('Vlan ID number out of range ! (1 ~ 4094)');
+                        error = __('VLAN ID number out of range ! (1 ~ 4094)');
                         break;
                       }
                       if (vapList[i].ssid === '') {

@@ -2,7 +2,7 @@ import React from 'react'; import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { FormGroup, Button, EchartReact, FormInput } from 'shared/components';
+import { EchartReact, FormInput } from 'shared/components';
 import Table from 'shared/components/Table';
 import utils from 'shared/utils';
 import { actions as sharedActions } from 'shared/containers/settings';
@@ -25,13 +25,12 @@ const propTypes = {
   changeCurrRadioConfig: PropTypes.func,
   changeCustomSettingsForChart: PropTypes.func,
 
-  updateItemSettings: PropTypes.func,
+  // updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   app: PropTypes.instanceOf(Map),
   changeFirstRefresh: PropTypes.func,
   changeServerData: PropTypes.func,
 };
-let a;
 const defaultProps = {};
 const interfaceOptions = fromJS([
   {
@@ -125,99 +124,7 @@ const interfaceOptions = fromJS([
     },
   },
 ]);
-// const vapInterfaceOptions = fromJS([
-//   {
-//     id: 'name',
-//     text: __('Name'),
-//     render(val, item) {
-//       const ssid = item.get('ssid');
-//       if (val === '') {
-//         return `--(${ssid})`;
-//       }
-//       return `${val}(${ssid })`;
-//     },
-//     width: '152px',
-//   }, {
-//     id: 'mac',
-//     text: __('MAC'),
-//     render(val) {
-//       if (val === '') {
-//         return '--';
-//       }
-//       return val;
-//     },
-//     width: '152px',
-//   }, {
-//     id: 'txBytes',
-//     text: __('Tx Bytes'),
-//     render(val) {
-//       if (val === '') {
-//         return '--';
-//       }
-//       return flowRateFilter.transform(val);
-//     },
-//     width: '144px',
-//   }, {
-//     id: 'rxBytes',
-//     text: __('Rx Bytes'),
-//     render(val) {
-//       if (val === '') {
-//         return '--';
-//       }
-//       return flowRateFilter.transform(val);
-//     },
-//     width: '144px',
-//   }, {
-//     id: 'txPackets',
-//     text: __('Tx Packets'),
-//     render(val) {
-//       if (val === '') {
-//         return '--';
-//       }
-//       return val;
-//     },
-//     width: '144px',
-//   }, {
-//     id: 'rxPackets',
-//     text: __('Rx Packets'),
-//     render(val) {
-//       if (val === '') {
-//         return '--';
-//       }
-//       return val;
-//     },
-//     width: '144px',
-//   }, {
-//     id: 'txErrorPackets',
-//     text: __('Tx Error'),
-//     render(val) {
-//       if (val === '') {
-//         return '--';
-//       }
-//       return val;
-//     },
-//     width: '144px',
-//   }, {
-//     id: 'rxErrorPackets',
-//     text: __('Rx Error'),
-//     render(val) {
-//       if (val === '') {
-//         return '--';
-//       }
-//       return val;
-//     },
-//     width: '144px',
-//   }, {
-//     id: 'ccq',
-//     text: __('CCQ'),
-//     render(val) {
-//       if (val === '') {
-//         return '--';
-//       }
-//       return val;
-//     },
-//   },
-// ]);
+
 function changeUptimeToReadable(time) {
   let timeStr = '';
   const t = parseInt(time, 10);
@@ -313,24 +220,6 @@ function getTopTenFlowClientsOption(serverData) {
     ],
   };
 
-  // if (List.isList(dataList)) {
-  //   dataList = dataList.map((item) => {
-  //     let name;
-  //     const userName = item.get('name');
-  //     if (!userName || userName === '') {
-  //       name = item.get('mac');  // 如果没有name，则使用mac代替
-  //     } else if (userName.length >= 13) {
-  //       name = `${userName.substr(0, 10)}...`; // 如果名称太长则后面显示省略号
-  //     } else if (userName.length < 13) {
-  //       name = userName; // 有名称，且长度合法
-  //     }
-  //     return item.set('name', `${name}: ${flowRateFilter.transform(item.get('value'))}`)
-  //               .set('value', `${Number(item.get('value'))}`)
-  //               .delete('mac'); // 删除数据中的mac变量
-  //   });
-  //   ret.legend.data = dataList.map(item => `${item.get('name')}`).toJS();
-  //   ret.series[0].data = dataList.toJS();
-  // }
   if (List.isList(dataList)) {
     dataList = dataList.map((item) => {
       let name;
@@ -437,14 +326,13 @@ export default class SystemStatus extends React.Component {
   constructor(props) {
     super(props);
     // this.changeUptimeToReadable = this.changeUptimeToReadable.bind(this);
-    this.onChangeRadio = this.onChangeRadio.bind(this);
-    this.prepareChartData = this.prepareChartData.bind(this);
-    this.getCpuAndMemPercentOption = this.getCpuAndMemPercentOption.bind(this);
-    this.getStaPeerFlowOption = this.getStaPeerFlowOption.bind(this);
+    utils.binds(this, [
+      'onChangeRadio', 'prepareChartData', 'getCpuAndMemPercentOption', 'getStaPeerFlowOption',
+    ]);
   }
 
   componentWillMount() {
-    clearInterval(a);
+    clearInterval(this.timeInterval);
     // 必须要有初始化，因为要在settings中插入一个由该页面id命名的对象
     this.props.initSettings({
       settingId: this.props.route.id,
@@ -462,40 +350,29 @@ export default class SystemStatus extends React.Component {
       }
     });
     this.onChangeRadio({ value: '0' });
-    a = setInterval(() => {
+    this.timeInterval = setInterval(() => {
       this.props.fetchSettings().then(() => {
         this.prepareChartData();
       });
     }, 10000);
   }
 
-
-  // componentDidMount() {
-  //   console.log(this.props.product.getIn(['deviceRadioList', 0]));
-  //   this.props.changeCurrRadioConfig(this.props.product.getIn(['deviceRadioList', 0]));
-  // }
-
   componentDidUpdate(prevProps) {
-    // console.log('app.refreshAt', this.props.app.get('refreshAt'));
-    // console.log('prevProps.app.refreshAt', prevProps.app.get('refreshAt'));
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
-      // console.log('refresh');
-      clearInterval(a);
+      clearInterval(this.timeInterval);
       this.props.fetchSettings();
       this.onChangeRadio({ value: '0' });
-      a = setInterval(this.props.fetchSettings, 10000);
+      this.timeInterval = setInterval(this.props.fetchSettings, 10000);
     }
   }
 
   componentWillUnmount() {
-    // console.log('interval', a);
-    clearInterval(a);
+    clearInterval(this.timeInterval);
     this.props.leaveSettingsScreen();
     this.props.changeFirstRefresh(true);
   }
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
     const radioType = this.props.product.getIn(['deviceRadioList', data.value, 'radioType']);
-    // console.log('radioType', radioType);
     const config = fromJS({
       radioId: data.value,
       radioType,
@@ -649,7 +526,7 @@ export default class SystemStatus extends React.Component {
 
   prepareChartData() { // { ssidFlowDir, top10ClientFlowDir }为流量方向，'upload','download'
     const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
-    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const { radioId /* , radioType */ } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId]) ||
         !this.props.store.getIn(['curData', 'sysStatus'])) return null;
     const { cpuInfo, memTotal, memFree } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
@@ -703,21 +580,22 @@ export default class SystemStatus extends React.Component {
           mac: item.get('mac'),
         }));
       }
-      // console.log('top10FlowClients', top10FlowClients);
       return top10FlowClients;
     }
     const { ssidFlowDir, top10ClientFlowDir } = this.props.selfState.get('customSettingsForChart').toJS();
     const flowPerSsid = getFlowPerSsidList(ssidFlowDir);
     const top10FlowClients = getTop10FlowClientsList(top10ClientFlowDir);
-    this.props.changeServerData(fromJS({ cpuInfo, memFree, memTotal, flowPerSsid, top10FlowClients }));
+    this.props.changeServerData(fromJS({
+      cpuInfo, memFree, memTotal, flowPerSsid, top10FlowClients,
+    }));
   }
 
   render() {
-    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const { radioId /* , radioType */} = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId])
         || !this.props.store.getIn(['curData', 'sysStatus'])) return null;
     const {
-      deviceModel, deviceName, version, uptime, systemTime, networkMode, systemMac,
+      /* deviceModel, deviceName, */ version, uptime, systemTime, networkMode, systemMac,
     } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
     const interfaces = this.props.store.getIn(['curData', 'interfaces']);
     const { wirelessMode, staList, enable } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
@@ -968,7 +846,9 @@ export default class SystemStatus extends React.Component {
                     value={this.props.selfState.getIn(['customSettingsForChart', 'top10ClientFlowDir'])}
                     onChange={(data) => {
                       Promise.resolve().then(() => {
-                        this.props.changeCustomSettingsForChart(fromJS({ top10ClientFlowDir: data.value }));
+                        this.props.changeCustomSettingsForChart(fromJS({
+                          top10ClientFlowDir: data.value,
+                        }));
                       }).then(() => {
                         if (this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1') {
                           this.prepareChartData();
@@ -1087,7 +967,9 @@ export default class SystemStatus extends React.Component {
                             value={this.props.selfState.getIn(['customSettingsForChart', 'ssidFlowDir'])}
                             onChange={(data) => {
                               Promise.resolve().then(() => {
-                                this.props.changeCustomSettingsForChart(fromJS({ ssidFlowDir: data.value }));
+                                this.props.changeCustomSettingsForChart(fromJS({
+                                  ssidFlowDir: data.value,
+                                }));
                               }).then(() => {
                                 if (this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1') {
                                   this.prepareChartData();
