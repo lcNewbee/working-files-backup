@@ -188,7 +188,7 @@ const settingsOptions = fromJS([
             label: __('App Auth'),
           }, {
             value: '4',
-            label: __('Messages Auth'),
+            label: __('SNS Auth'),
           }, {
             value: '5',
             label: __('Wechat Auth'),

@@ -414,6 +414,7 @@ const listOptions = fromJS([
     text: __('Portal Template'),
     formProps: {
       type: 'select',
+      required: true,
       visible($$data) {
         const accessControl = $$data.get('accessControl');
         const encryption = $$data.get('encryption');
@@ -426,6 +427,7 @@ const listOptions = fromJS([
     text: __('Authetication'),
     formProps: {
       type: 'select',
+      required: true,
       visible($$data) {
         const portalTemplate = $$data.get('portalTemplate');
         const accessControl = $$data.get('accessControl');
@@ -440,6 +442,7 @@ const listOptions = fromJS([
     defaultValue: 'local',
     formProps: {
       type: 'select',
+      required: true,
       visible($$data) {
         const encryption = $$data.get('encryption');
         return encryption === '802.1x';
