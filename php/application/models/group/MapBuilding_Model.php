@@ -27,8 +27,7 @@ class MapBuilding_Model extends CI_Model {
             'state' => array('code'=>2000,'msg'=>'ok'),
             'data' => array(
                 'settings'=> $this->get_map_type(),//地图api
-                'list' => $datalist['data'],
-                'sql' => $datalist['sqlcmd']
+                'list' => $datalist['data']
             )
         );    
 		return json_encode($arr); 
