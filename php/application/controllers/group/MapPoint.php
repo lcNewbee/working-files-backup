@@ -29,11 +29,11 @@ class MapPoint extends CI_Controller {
         shell_exec('/usr/bin/sta_input.sh ' . $mac . ' ' . $lng . ' ' . $lat . '  > /dev/null 2>&1 &');
         break;
 
-      case 'stop':
+      case 'clear':
         shell_exec('/usr/bin/sta_clear.sh ' . $mac);
         break;
 
-      case 'clear':
+      case 'stop':
         shell_exec('killall -9 sta_input.sh');
         break;
 

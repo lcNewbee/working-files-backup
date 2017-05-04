@@ -76,7 +76,7 @@ const sMainAxc = require('../../screens/MainAxc');
 /**
  * 网络设置
  */
-// const sNetworkVlan = require('../../screens/MainAxc/screens/Network/screens/VLAN');
+const cNetwork = require('../../screens/MainAxc/containers/Network');
 const sInterfaces = require('../../screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
 const sNetworkRoutes = require('../../screens/MainAxc/screens/Network/screens/Routes');

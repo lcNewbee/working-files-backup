@@ -8,6 +8,9 @@ const defaultState = fromJS({
     // 'vlanAsider' 'groupAsider' 'topMenu'
     name: 'topMenu',
   },
+  nav: {
+    show: true,
+  },
 
   // 弹出框配置，
   modal: {
@@ -220,10 +223,19 @@ function rcModelList(state, action) {
     .setIn(['model', 'options'], modalOptions);
 }
 
+function toggleNavState(state) {
+  const curNavState = state.getIn(['nav', 'show']);
+
+  return state.setIn(['nav', 'show'], !curNavState);
+}
+
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'TOGGLE_MAIN_POP_OVER':
       return togglePopOverState(state, action.option);
+
+    case 'main/TOGGLE_MAIN_NAV':
+      return toggleNavState(state);
 
     // Modal 操作相关
     case 'SHOW_MAIN_MODAL':

@@ -61,7 +61,7 @@ const sMainAxc = require('../../screens/MainAxc');
 /**
  * 网络设置
  */
-// const sNetworkVlan = require('../../screens/MainAxc/screens/Network/screens/VLAN');
+const cNetwork = require('../../screens/MainAxc/containers/Network');
 const sVlanSettings = require('../../screens/MainAxc/screens/Network/screens/VLAN/VlanSettings');
 const sQinqSettings = require('../../screens/MainAxc/screens/Network/screens/VLAN/QinqSettings');
 const sV3Interfaces = require('../../screens/MainAxc/screens/Network/screens/V3Interfaces');
@@ -170,6 +170,7 @@ const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 /**
  * 系统管理
  */
+const cSystem = require('../../screens/MainAxc/containers/System');
 const sSystemStatus =
     require('../../screens/MainAxc/screens/System/screens/SystemStatus');
 const sSystemAdmin =
@@ -200,6 +201,9 @@ const sNetworkTimeProtocol =
     require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
 /**
+ * AAA 接入，认证，计费
+ */
+const cAAA = require('../../screens/MainAxc/containers/AAA');/**
  * Portal
  */
 const sPortalOverview =
@@ -283,7 +287,7 @@ const routes = [
         routes: [
           {
             path: '/main/network',
-            component: SharedComponents.NavContainer,
+            component: cNetwork.Screen,
             icon: 'sphere',
             text: __('Network '),
             routes: [
@@ -1001,7 +1005,7 @@ const routes = [
             path: '/main/portal',
             icon: 'road',
             text: __('Hotspot'),
-            component: SharedComponents.NavContainer,
+            component: cAAA.Screen,
             indexPath: '/main/portal/overview',
             routes: [
               {
@@ -1231,7 +1235,7 @@ const routes = [
             path: '/main/system',
             icon: 'cogs',
             text: __('System '),
-            component: SharedComponents.NavContainer,
+            component: cSystem.Screen,
             indexPath: '/main/system/status',
             routes: [
               {

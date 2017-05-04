@@ -655,9 +655,8 @@ export default class View extends React.Component {
             }}
           />
           <Button
-            text={_('停止打点')}
+            text={_('停止')}
             theme="primary"
-            icon="stop"
             onClick={this.onStopPoint}
             style={{
               marginRight: '16px',
@@ -665,9 +664,8 @@ export default class View extends React.Component {
           />
 
           <Button
-            text={_('清除所以点')}
+            text={_('清除')}
             theme="warning"
-            icon="trash"
             onClick={this.onClearPoint}
           />
 

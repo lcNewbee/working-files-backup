@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Nav from 'shared/components/Nav';
+import Icon from 'shared/components/Icon';
 import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 
 const propTypes = {
@@ -26,8 +27,15 @@ class NavContainer extends React.PureComponent {
             onChange={this.onClickNav}
             isTree
           />
-        </div>
 
+        </div>
+        <div
+          className="t-main__nav-toggle"
+        >
+          <Icon
+            name="caret-left"
+          />
+        </div>
         <div className="t-main__content">
           <RouteSwitches
             routes={route.routes}

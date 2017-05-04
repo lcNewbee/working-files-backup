@@ -36,6 +36,7 @@ const propTypes = {
   updateGroupAddDevice: PropTypes.func,
   resetGroupAddDevice: PropTypes.func,
   selectManageGroupAp: PropTypes.func,
+  toggleMainNav: PropTypes.func,
   route: PropTypes.shape({
     routes: PropTypes.array,
     path: PropTypes.string,
@@ -1047,7 +1048,9 @@ export default class MainGroup extends React.Component {
             isTree
           />
         </div>
-
+        <div className="t-main__nav-toggle" onClick={this.props.toggleMainNav} >
+          <Icon name="caret-left" />
+        </div>
         <div className="t-main__content">
           <RouteSwitches
             routes={this.props.route.routes}

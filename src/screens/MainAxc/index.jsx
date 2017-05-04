@@ -201,17 +201,20 @@ export default class Main extends React.PureComponent {
 
   render() {
     const { version } = this.props.app.toJS();
-    const { popOver } = this.props.product.toJS();
+    const { popOver, nav } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
+    const isMainNavShow = nav.show;
     let mainClassName = 't-main t-main--axc';
     let isMainLeftShow = false;
     let isMainRightShow = isShowPanel;
+
 
     isMainLeftShow = popOver.isShow && (popOver.name === 'vlanAsider' || popOver.name === 'groupAsider');
     isMainRightShow = isShowPanel;
     mainClassName = classNamesUtils(mainClassName, {
       'main--open-left': isMainLeftShow,
       'is-main-right-open': isMainRightShow,
+      'is-main-nav-hidden': !isMainNavShow,
     });
     return (
       <div className={mainClassName}>

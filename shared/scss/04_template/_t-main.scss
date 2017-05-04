@@ -69,19 +69,20 @@ body {
       top: $g-navbar-height;
       left: $t-main-top-menu-size;
       width: $t-main-nav-size;
+      max-width: $t-main-nav-size;
       background-color: #141a23;
       color: #fff;
       z-index: 1502;
       overflow: hidden;
       overflow-y: auto;
-      transition: overflow-y .2s ease-in-out;
+      transition: max-width .2s ease-in-out, overflow-y .2s ease-in-out;
 
       @include scrollbar();
 
       .m-menu--open {
         border-bottom: 1px solid #1d2531;
       }
-       
+
       .m-menu__link {
         background-color: #141a23;
         transition: background-color .2s ease-in-out;
@@ -117,6 +118,29 @@ body {
         }
       }
     }
+    .t-main__nav-toggle {
+      position: absolute;
+      left: 252px;
+      top: 50%;
+      padding: 26px 3px;
+      padding-left: 2px;
+      color: #ababab;
+      font-size: 14px;
+      background-color: #141a23;
+      border-bottom-right-radius: 20px;
+      border-top-right-radius: 20px;
+      cursor: pointer;
+      z-index: 1;
+
+      .icon {
+        transition: transform .2s ease-in-out;
+      }
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
     .t-main__asider-top {
       margin-top: 60px;
       max-height: 0;
@@ -171,7 +195,7 @@ body {
       top: $g-navbar-height + $g-main-bar-height;
       bottom: 0;
       left: $sidebar-width + $t-main-top-menu-size;
-      width: calc(100vw - 15.75rem);
+      width: 100vw;
       max-width: calc(100vw - 15.75rem);
       padding-top: 2px;
     }
@@ -228,10 +252,40 @@ body {
     }
     .o-menu-bar {
       left: $t-main-top-menu-size + $sidebar-width;
+      transition: left .2s ease-in-out;
     }
     &.is-main-right-open {
       .t-main__content {
         max-width: calc(100vw - 617px);
+      }
+    }
+    &.is-main-nav-hidden {
+      .t-main__nav {
+        max-width: 0;
+      }
+      .t-main__nav-toggle {
+        left: $t-main-top-menu-size;
+
+        .icon {
+          transform: rotate(180deg);
+        }
+      }
+      .o-menu-bar {
+        left: $t-main-top-menu-size;
+      }
+      .t-main__asider-top {
+        > header {
+          position: absolute;
+        }
+      }
+      .t-main__content {
+        left: $t-main-top-menu-size;
+        max-width: calc(100vw - 76px);
+      }
+      &.is-main-right-open {
+        .t-main__content {
+          max-width: calc(100vw - 441px);
+        }
       }
     }
   }

@@ -72,6 +72,7 @@ const sMainAxc = require('../../screens/MainAxc');
 /**
  * 网络设置
  */
+const cNetwork = require('../../screens/MainAxc/containers/Network');
 const sInterfaces = require('../../screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
 const sDhcpRelay = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
@@ -133,6 +134,7 @@ const sDPISettings = require('../../screens/MainAxc/screens/Network/screens/DPI/
 /**
  * 系统管理
  */
+const cSystem = require('../../screens/MainAxc/containers/System');
 const sSystemStatus =
     require('../../screens/MainAxc/screens/System/screens/SystemStatus');
 const sSystemAdmin =
@@ -164,8 +166,9 @@ const sNetworkTimeProtocol =
 
 
 /**
- * Portal
+ * AAA 接入，认证，计费
  */
+const cAAA = require('../../screens/MainAxc/containers/AAA');
 const sPortalOverview =
     require('../../screens/MainAxc/screens/Portal/screens/Overview');
 const sPortalBase =
@@ -176,8 +179,6 @@ const sPortalBase =
 //     require('../../screens/MainAxc/screens/Portal/screens/Access/UrlParams');
 const sPortalWeb =
     require('../../screens/MainAxc/screens/Portal/screens/Access/Web');
-const sPortalDefaultWeb =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
 const sPortalWeixin =
     require('../../screens/MainAxc/screens/Portal/screens/Access/Weixin');
 const sPortalFacebook =
@@ -242,7 +243,7 @@ const routes = [
             path: '/main/network',
             icon: 'sphere',
             text: __('Network '),
-            component: SharedComponents.NavContainer,
+            component: cNetwork.Screen,
             indexPath: '/main/network/interface',
             routes: [
               {
@@ -531,7 +532,7 @@ const routes = [
             path: '/main/portal',
             icon: 'road',
             text: __('Hotspot'),
-            component: SharedComponents.NavContainer,
+            component: cAAA.Screen,
             indexPath: '/main/portal/overview',
             routes: [
               {
@@ -799,7 +800,7 @@ const routes = [
             path: '/main/system',
             icon: 'cogs',
             text: __('System '),
-            component: SharedComponents.NavContainer,
+            component: cSystem.Screen,
             indexPath: '/main/system/status',
             routes: [
               {

@@ -74,6 +74,7 @@ const sMainAxc = require('../../screens/MainAxc');
 /**
  * 网络设置
  */
+const cNetwork = require('../../screens/MainAxc/containers/Network');
 // const sNetworkVlan = require('../../screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/MainAxc/screens/Network/screens/Interfaces');
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
@@ -112,6 +113,7 @@ const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens
 /**
  * 系统管理
  */
+const cSystem = require('../../screens/MainAxc/containers/System');
 const sSystemStatus =
     require('../../screens/MainAxc/screens/System/screens/SystemStatus');
 const sSystemAdmin =
@@ -156,7 +158,7 @@ const routes = [
         routes: [
           {
             path: '/main/network',
-            component: SharedComponents.NavContainer,
+            component: cNetwork.Screen,
             icon: 'sphere',
             text: __('Network '),
             routes: [
@@ -363,7 +365,7 @@ const routes = [
           },
           {
             path: '/main/system',
-            component: SharedComponents.NavContainer,
+            component: cSystem.Screen,
             icon: 'cogs',
             text: __('System '),
             routes: [

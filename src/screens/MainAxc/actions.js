@@ -15,6 +15,12 @@ export function showMainModal(option) {
   };
 }
 
+export function toggleMainNav() {
+  return {
+    type: 'main/TOGGLE_MAIN_NAV',
+  };
+}
+
 export function showPrevMainModal() {
   return {
     type: 'SHOW_PREV_MAIN_MODAL',

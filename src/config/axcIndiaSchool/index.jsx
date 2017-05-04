@@ -74,6 +74,7 @@ const sMainAxc = require('../../screens/MainAxc');
 /**
  * 网络设置
  */
+const cNetwork = require('../../screens/MainAxc/containers/Network');
 const sInterfaces = require('../../screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
 const sDhcpRelay = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
@@ -136,6 +137,7 @@ const sProtoInfo =
 /**
  * 系统管理
  */
+const cSystem = require('../../screens/MainAxc/containers/System');
 const sSystemStatus =
     require('../../screens/MainAxc/screens/System/screens/SystemStatus');
 const sSystemAdmin =
@@ -177,7 +179,7 @@ const routes = [
             path: '/main/network',
             icon: 'sphere',
             text: __('Network '),
-            component: SharedComponents.NavContainer,
+            component: cNetwork.Screen,
             indexPath: '/main/network/interface',
             routes: [
               {
@@ -504,7 +506,7 @@ const routes = [
             path: '/main/system',
             icon: 'cogs',
             text: __('System '),
-            component: SharedComponents.NavContainer,
+            component: cSystem.Screen,
             indexPath: '/main/system/status',
             routes: [
               {
