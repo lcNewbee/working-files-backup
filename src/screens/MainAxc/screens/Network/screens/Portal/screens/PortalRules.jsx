@@ -196,7 +196,7 @@ export default class View extends React.Component {
         }
       },
     );
-
+    // deleteable 和 editable 如果返回index, index为O，强制转换为了false, 所以会导致第一条记录也不能显示删除和编辑按钮（参看AppScreenList）。
     return (
       <AppScreen
         {...this.props}
@@ -204,6 +204,12 @@ export default class View extends React.Component {
         listKey="template_name"
         listOptions={curListOptions}
         maxListSize="6"
+        deleteable={
+          ($$item) => { if ($$item.get('interface_bind') !== 'lo') return true; }
+        }
+        editable={
+          ($$item) => { if ($$item.get('interface_bind') !== 'lo') return true; }
+        }
         actionable
         selectable
         noTitle

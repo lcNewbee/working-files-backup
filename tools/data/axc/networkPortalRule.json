@@ -6,7 +6,7 @@
   "data": {
     "list": [
       {
-        "interface_bind": "eth0",
+        "interface_bind": "eth1",
         "template_name": "test",
         "max_usernum":50,
         "auth_mode":1,
@@ -15,7 +15,7 @@
         "auth_domain":"test",
         "idle_test":1
       }, {
-        "interface_bind": "eth1",
+        "interface_bind": "lo",
         "template_name": "floor1",
         "max_usernum":50,
         "auth_mode":1,

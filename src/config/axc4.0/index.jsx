@@ -111,6 +111,8 @@ const sPortalMac =
 // const sPortalTemplate =
 const sNetworkUrlWlan =
     require('../../screens/MainAxc/screens/Network/screens/URL/screens/Wlan');
+const sNetworkUrlRules=
+    require('../../screens/MainAxc/screens/Network/screens/URL/screens/Rules');
 const sNetworkUrlRulesGroup =
     require('../../screens/MainAxc/screens/Network/screens/URL/screens/RulesGroup');
 const sNetworkUrlFilterRules =
@@ -638,6 +640,13 @@ const routes = [
                         formUrl: 'goform/network/url/wlan',
                         text: __('WLAN'),
                         component: sNetworkUrlWlan.Screen,
+                      },
+                      {
+                        id: 'urlRules',
+                        path: '/main/network/url/rules',
+                        formUrl: 'goform/network/url/rules',
+                        text: __('Rules'),
+                        component: sNetworkUrlRules.Screen,
                       },
                       {
                         id: 'urlRulesGroup',
