@@ -82,7 +82,7 @@ class CardList_Model extends CI_Model {
             'money' => element('money',$data,''),
             'buyDate' => (string)exec('date "+%Y-%m-%d %H-%M-%S"'),
             'speed' => 1,//暂时默认给 1，就是1M
-            'maclimit' => element('maclimit',$data,''),
+            'maclimit' => 0,
             'autologin' => element('autologin',$data,'')
         );
         return $arr;
@@ -112,7 +112,7 @@ class CardList_Model extends CI_Model {
             'userDel' => element('userDel',$data,''),
             'cdKey' => uniqid('',true),            
             'money' => element('money',$data,''),
-            'maclimit' => element('maclimit',$data,''),
+            'maclimit' => 0,
             'maclimitcount' => element('maclimitcount',$data,1),
             'autologin' => element('autologin',$data,''),
             'speed' => 1,//暂时默认给 1，就是1M    
