@@ -5,43 +5,52 @@ class WirelessAcl_Model extends CI_Model {
         $this->load->library('session');
         $this->load->database();
         $this->load->helper(array('array', 'my_customfun_helper','array_page'));
-        $this->load->library('SqlPage');
     }
-    public function get_acl_list($retdata) {
-        $result = null;
+    public function get_list($data) {
+        $page = (int)element('page', $data, 1);
+        $size = (int)element('size', $data, 20);
+        $result = null;        
         //所有组
-        if ($retdata['groupid'] === -100) {
-            $result = $this->get_acl_data($retdata['filterGroupid'],$retdata['acltype']);
+        if ($data['groupid'] == -100) {
+            $result = $this->getAclAll($data['filterGroupid'], $data['aclType']);            
         } else {
             $acltype = 'black';
             $querydata = $this->db->select('ap_group.id,wids_template.acltype')
                                     ->from('ap_group')
                                     ->join('wids_template','ap_group.wids_tmp_id=wids_template.id','left')
-                                    ->where("ap_group.id=".$retdata['groupid'])
+                                    ->where("ap_group.id=".$data['groupid'])
                                     ->get()->result_array();
+
             if(count($querydata) > 0) {
               $acltype = $querydata[0]['acltype'];
             }
-            $result = axc_get_wireless_acl(json_encode($retdata));
-            $cgidata = json_decode($result);
+            $cgijson = array(
+                'groupid' => (int)element('groupid', $data, -1),                
+                'page' => (int)element('page', $data, 1),
+                'size' => (int)element('size', $data, 20),
+                'search' => element('search', $data, 20)
+            );
+            $result = axc_get_wireless_acl(json_encode($cgijson));
+            $cgidata = json_decode($result, true);
 
-            if ($cgidata->state->code === 2000) {
-              $cgidata->data->settings = array('type'=>$acltype);
+            if ($cgidata['state']['code'] == 2000) {
+              $cgidata['data']['settings'] = array('type'=>$acltype);
             } else {
-              $cgidata->data = array(
+              $cgidata['data'] = array(
                 'data'=>array(
                   'type'=>$acltype
                 )
               );
             }
-            $result = $cgidata;
-        }
-        /*对数组分页*/        
+            $result = $cgidata;            
+        }           
+        /*对数组分页*/    
         $where = array();
-        if($retdata['search'] != "" && $retdata['search'] != null){
-            $where = array('mac',$retdata['search']);
-        }
-        $data = array_page(json_decode(json_encode($result->data->list),true),$retdata['page'],$retdata['size'],$where);        
+        if(isset($data['search']) && $data['search'] != ''){
+            $where = array('mac',$data['search']);
+        }     
+        $pagedata = $result['data']['list'];
+        $data = array_page($pagedata,$page,$size,$where);        
         //添加序号index
         $datalist = array();
         $k = 0;
@@ -50,9 +59,8 @@ class WirelessAcl_Model extends CI_Model {
             $row['index'] = $k;
             $datalist[] = $row;
         }
-        $result->data->list = $datalist;//$data['data'];
-        $result->data->page = $data['page'];
-        
+        $result['data']['page'] = $data['page'];
+        $result['data']['list'] = $datalist;
         return json_encode($result);
     }
     public function add_acl($data) {
@@ -136,11 +144,12 @@ class WirelessAcl_Model extends CI_Model {
         }
         return $result;
     }
-    /*********************
+    /**
+     * 获取所有acl（当前组过滤掉）
      * @filterid 过滤groupid
      * @type     获取类型 默认白
-    *********************/
-    public function get_acl_data($filterid=0,$type='black') {
+    */
+    private function getAclAll($filterid=0, $type='black') {        
         $tableName = 'sta_black_list';
         if( $type === 'white') {
             $tableName = 'sta_white_list';
@@ -155,6 +164,7 @@ class WirelessAcl_Model extends CI_Model {
                                 ->from($tableName)
                                 ->where('wids_id !=',$filterid)
                                 ->get()->result_array();
+        
         if(count($querydata) > 0){
             $macary = array();
             foreach ($querydata as $row) {

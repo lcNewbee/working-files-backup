@@ -7,30 +7,23 @@ class WirelessAcl extends CI_Controller {
         $this->load->helper('array');
         $this->load->model('group/WirelessAcl_Model');
     }
-    function fetch() {
-        $retdata = array(
-            'groupid' => (int)element('groupid', $_GET, -1),
-            'filterGroupid' => (int)element('filterGroupid', $_GET, -1),
-            'acltype' => element('aclType', $_GET, 'black'),
-            'page' => (int)element('page', $_GET, 1),
-            'size' => (int)element('size', $_GET, 20),
-            'search' => element('search', $_GET, 20)
-        );
-        return $this->WirelessAcl_Model->get_acl_list($retdata);
+    function fetch() {        
+        return $this->WirelessAcl_Model->get_list($_GET);
     }
     function onAction($data) {
         $result = null;
         $actionType = element('action', $data);
-        if ($actionType === 'add') {
-            return $this->WirelessAcl_Model->add_acl($data);
-        } elseif ($actionType === 'edit') {
-            //$result=axc_set_wireless_acl(json_encode($data));			
-        } elseif ($actionType === 'delete') {
-            return $this->WirelessAcl_Model->delete_acl($data);
-        } elseif ($actionType === 'setting') {
-            return $this->WirelessAcl_Model->other_config($data);
-        } elseif ($actionType === 'copy') {
-            return $this->WirelessAcl_Model->copy_config($data);
+        switch($actionType){
+            case 'add' : $result = $this->WirelessAcl_Model->add_acl($data);
+                break;
+            case 'delete' : $result = $this->WirelessAcl_Model->delete_acl($data);
+                break;
+            case 'setting' : $result = $this->WirelessAcl_Model->other_config($data);
+                break;
+            case 'copy' : $result = $this->WirelessAcl_Model->copy_config($data);  
+                break;
+            default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
+                break;
         }
         return $result;
     }
