@@ -1045,6 +1045,7 @@ export default class Basic extends React.Component {
                   />
                   <Button
                     text={__('Change')}
+                    theme="primary"
                     style={{
                       marginLeft: '-1px',
                       width: '70px',
@@ -1270,6 +1271,7 @@ export default class Basic extends React.Component {
                               ) : (
                                 <Button
                                   text={__('Scan')}
+                                  theme="primary"
                                   onClick={this.onScanBtnClick}
                                 />
                               )
@@ -1862,6 +1864,7 @@ export default class Basic extends React.Component {
                 <Button
                   text={__('Add')}
                   icon="plus"
+                  theme="primary"
                   onClick={() => this.onAddNewSsidItem()}
                   style={{ marginRight: '10px' }}
                   disabled={curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta'}

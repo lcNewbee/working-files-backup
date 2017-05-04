@@ -13,6 +13,25 @@
     "utgVlanId":"1",
     "vlanEnable":"1",
 
+    "voipVlanId": "1",
+    "iptvVlanId": "1",
+    "portList": [
+      {
+        "name":"LAN1",
+        "type": "trunk",
+        "vlanId": "1",
+        "manageVlanId": "1",
+        "members": [1, 100]
+      },
+      {
+        "name":"VOIP",
+        "type": "trunk",
+        "vlanId": "1",
+        "manageVlanId": "-1",
+        "members": [100, 200]
+      }
+    ],
+
     "wiredMode": "bridge",
     "routerInfo": {
       "ip": "192.168.1.1",

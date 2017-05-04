@@ -9,6 +9,11 @@ const funConfig = {
   network: {
     router: false, // 是否有router模式
     hasVlan: false, // 是否有VLAN功能
+    hasMngVlanId: true, // 是否有管理VLAN ID的填写框
+    hasUntagVlanId: true, // 是否有untag VLAN ID填写框
+    hasPortListTable: true, // 是否有接口VLAN配置的列表显示
+    hasVoipVlanId: true, // 是否有voip VLAN配置输入框
+    hasIptvVLanId: true, // 是否有IPTV VLAN配置输入框
   },
   // 无线设置页面
   basic: {

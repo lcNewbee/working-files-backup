@@ -29,9 +29,10 @@ const pLogin = require('../../screens/Login');
 // 布局
 const MainAP = require('../../screens/MainAP');
 // 网络设置
+const sNetworkSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettings');
 // 子菜单
-const sLanSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettingsDemo/LanSettings');
-const sPortSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettingsDemo/PortSettings');
+// const sLanSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettingsDemo/LanSettings');
+// const sPortSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettingsDemo/PortSettings');
 
 const pSystemStatus = require('../../screens/MainAP/screens/SystemStatus/MultiRadioOverview');
 const sSsidDetails = require('../../screens/MainAP/screens/SystemStatus/SsidDetails');
@@ -66,6 +67,11 @@ const funConfig = {
   network: {
     router: false, // 是否有router模式
     hasVlan: true,
+    hasMngVlanId: false, // 是否有管理VLAN ID的填写框
+    hasUntagVlanId: false, // 是否有untag VLAN ID填写框
+    hasPortListTable: true, // 是否有接口VLAN配置的列表显示
+    hasVoipVlanId: false, // 是否有voip VLAN配置输入框
+    hasIptvVLanId: false, // 是否有IPTV VLAN配置输入框
   },
   // 无线设置页面
   basic: {
@@ -155,7 +161,35 @@ const routes = [{
       fetchUrl: 'goform/get_quicksetup_info_forTestUse',
       saveUrl: 'goform/set_quicksetup',
       component: pQuickSetup.Screen,
-    }, {
+    },
+    // {
+    //   id: 'networksettings',
+    //   path: '/main/networksettings',
+    //   icon: 'sphere',
+    //   text: __('Network'),
+    //   component: SharedComponents.TabContainer,
+    //   routes: [
+    //     {
+    //       id: 'lansettings',
+    //       formUrl: 'goform/get_network_info',
+    //       saveUrl: 'goform/set_network',
+    //       path: '/main/networksettings/lansettings',
+    //       text: __('LAN Settings'),
+    //       funConfig: funConfig.network,
+    //       component: sLanSettings.Screen,
+    //     },
+    //     {
+    //       id: 'portsettings',
+    //       formUrl: 'goform/get_port_vlan',
+    //       saveUrl: 'goform/set_port_vlan',
+    //       path: '/main/networksettings/portsettings',
+    //       text: __('Port Settings'),
+    //       funConfig: funConfig.network,
+    //       component: sPortSettings.Screen,
+    //     },
+    //   ],
+    // },
+    {
       id: 'networksettings',
       path: '/main/networksettings',
       icon: 'sphere',
@@ -163,25 +197,17 @@ const routes = [{
       component: SharedComponents.TabContainer,
       routes: [
         {
-          id: 'lansettings',
+          id: 'networksettings',
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
-          path: '/main/networksettings/lansettings',
+          funConfig: funConfig.network,
+          path: '/main/networksettings/networksettings',
           text: __('LAN Settings'),
-          funConfig: funConfig.network,
-          component: sLanSettings.Screen,
-        },
-        {
-          id: 'portsettings',
-          formUrl: 'goform/get_port_vlan',
-          saveUrl: 'goform/set_port_vlan',
-          path: '/main/networksettings/portsettings',
-          text: __('Port Settings'),
-          funConfig: funConfig.network,
-          component: sPortSettings.Screen,
+          component: sNetworkSettings.Screen,
         },
       ],
-    }, {
+    },
+    {
       id: 'wirelessconfig',
       path: '/main/wirelessconfig',
       icon: 'wifi',
@@ -299,8 +325,9 @@ const reducers = {
   app: app.reducer,
   settings: settings.reducer,
   toastr: toastrReducer,
-  lansettings: sLanSettings.lansettings,
-  portsettings: sPortSettings.portsettings,
+  // lansettings: sLanSettings.lansettings,
+  // portsettings: sPortSettings.portsettings,
+  networksettings: sNetworkSettings.networksettings,
   systemstatus: pSystemStatus.systemstatus,
   ssiddetails: sSsidDetails.ssiddetails,
   clientsdetails: sClientsDetails.clientsdetails,

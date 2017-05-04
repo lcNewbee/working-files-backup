@@ -1,10 +1,10 @@
 import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
-import { Map, fromJS } from 'immutable';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  SaveButton, FormGroup, FormInput, Table,
+  SaveButton, FormGroup, FormInput,
 } from 'shared/components';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
@@ -75,12 +75,6 @@ const validOptions = Map({
     rules: 'num:[1, 4094]',
   }),
   validVlanId2: validator({
-    rules: 'num:[1, 4094]',
-  }),
-  validVlanId3: validator({
-    rules: 'num:[1, 4094]',
-  }),
-  validVlanId4: validator({
     rules: 'num:[1, 4094]',
   }),
 });
@@ -230,164 +224,15 @@ export default class NetworkSettings extends React.Component {
     return flag;
   }
 
-  renderTypeSelector(val, item) {
-    const enable = this.props.store.getIn(['curData', 'vlanEnable']);
-    return (
-      <div className="form-group">
-        <div className="form-group--inline">
-          <FormInput
-            type="select"
-            value={val}
-            options={[
-              { label: 'Trunk', value: 'trunk' },
-              { label: 'Access', value: 'access' },
-            ]}
-            size="sm"
-            disabled={enable === '0'}
-            onChange={(data) => {
-              let portList = this.props.store.getIn(['curData', 'portList']);
-              const index = portList.indexOf(item);
-              portList = portList.setIn([index, 'type'], data.value);
-              this.props.updateItemSettings({ portList });
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  renderVlanIdInput(val, item) {
-    const type = item.get('type');
-    const enable = this.props.store.getIn(['curData', 'vlanEnable']);
-    return (
-      <div>
-        <span
-          style={{
-            textAlign: 'right',
-            marginRight: '15px',
-            display: 'inline-block',
-            width: '50px',
-          }}
-        >
-          {type === 'trunk' ? __('Untag ID') : __('Vlan ID')}
-        </span>
-        <FormInput
-          type="number"
-          value={val}
-          min="1"
-          max="4094"
-          disabled={enable === '0'}
-          onChange={(data) => {
-            let portList = this.props.store.getIn(['curData', 'portList']);
-            const index = portList.indexOf(item);
-            portList = portList.setIn([index, 'vlanId'], data.value);
-            this.props.updateItemSettings({ portList });
-          }}
-        />
-      </div>
-    );
-  }
-
-  renderMembersInput(val, item) {
-    const enable = this.props.store.getIn(['curData', 'vlanEnable']);
-    return (
-      <div>
-        <FormInput
-          type="number"
-          value={val.get('0')}
-          min="1"
-          max="4094"
-          disabled={item.get('type') === 'access' || enable === '0'}
-          onChange={(data) => {
-            let portList = this.props.store.getIn(['curData', 'portList']);
-            const index = portList.indexOf(item);
-            portList = portList.setIn([index, 'members', '0'], data.value);
-            this.props.updateItemSettings({ portList });
-          }}
-        />
-        <span> - </span>
-        <FormInput
-          type="number"
-          value={val.get('1')}
-          min="1"
-          max="4094"
-          disabled={item.get('type') === 'access' || enable === '0'}
-          onChange={(data) => {
-            let portList = this.props.store.getIn(['curData', 'portList']);
-            const index = portList.indexOf(item);
-            portList = portList.setIn([index, 'members', '1'], data.value);
-            this.props.updateItemSettings({ portList });
-          }}
-        />
-      </div>
-    );
-  }
-
-  renderManageVlanInput(val, item) {
-    const mngId = item.get('manageVlanId');
-    const enable = this.props.store.getIn(['curData', 'vlanEnable']);
-    return mngId === '-1' ? null : (
-      <FormInput
-        type="number"
-        value={item.get('manageVlanId')}
-        min="1"
-        max="4094"
-        disabled={enable === '0'}
-        onChange={(data) => {
-          let portList = this.props.store.getIn(['curData', 'portList']);
-          const index = portList.indexOf(item);
-          portList = portList.setIn([index, 'manageVlanId'], data.value);
-          this.props.updateItemSettings({ portList });
-        }}
-      />
-    );
-  }
-
   render() {
     const {
-      proto, fallbackIp, ip, mask, gateway, dns1, dns2, voipVlanId,
-      mngVlanId, utgVlanId, fallbackMask, vlanEnable, iptvVlanId,
+      proto, fallbackIp, ip, mask, gateway, dns1, dns2,
+      mngVlanId, utgVlanId, fallbackMask, vlanEnable,
     } = this.props.store.get('curData').toJS();
     const {
       lanIp, lanMask, firstDNS, secondDNS, validGateway, validVlanId1, validVlanId2,
-      validVlanId3, validVlanId4,
     } = this.props.validateOption;
     const nextIpAddr = this.props.store.getIn(['curData', 'ip']);
-    const that = this;
-    const portList = this.props.store.getIn(['curData', 'portList']);
-    const listOptions = fromJS([
-      {
-        id: 'name',
-        text: __('Name'),
-        width: '150px',
-      },
-      {
-        id: 'type',
-        text: __('Type'),
-        render: (val, item) => that.renderTypeSelector(val, item),
-        width: '150px',
-        paddingLeft: '30px',
-      },
-      {
-        id: 'vlanId',
-        text: __('VLAN ID'),
-        render: (val, item) => that.renderVlanIdInput(val, item),
-        wdith: '150',
-        paddingLeft: '30px',
-      },
-      {
-        id: 'members',
-        text: __('Members'),
-        render: (val, item) => that.renderMembersInput(val, item),
-        wdith: '150',
-        paddingLeft: '40px',
-      },
-      {
-        id: 'manageVlanId',
-        text: __('Manage VLAN ID'),
-        render: (val, item) => that.renderManageVlanInput(val, item),
-      },
-    ]);
     return (
       <div>
         <Modal
@@ -538,107 +383,43 @@ export default class NetworkSettings extends React.Component {
                   ) : null
                 }
               </div>
-              {
-                this.props.route.funConfig.hasMngVlanId ? (
-                  <FormGroup
-                    type="number"
-                    min="1"
-                    max="4094"
-                    label={__('Management VLAN ID')}
-                    disabled={vlanEnable === '0'}
-                    help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
-                    value={mngVlanId}
-                    onChange={data => this.props.updateItemSettings({
-                      mngVlanId: data.value,
-                    })}
-                    required
-                    {...validVlanId1}
-                  />
-                ) : null
-              }
-              {
-                this.props.route.funConfig.hasUntagVlanId ? (
-                  <FormGroup
-                    type="number"
-                    min="1"
-                    max="4094"
-                    label={__('Untagged VLAN ID')}
-                    help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
-                    value={utgVlanId}
-                    disabled={vlanEnable === '0'}
-                    onChange={data => this.props.updateItemSettings({
-                      utgVlanId: data.value,
-                    })}
-                    required
-                    {...validVlanId2}
-                  />
-                ) : null
-              }
-              {
-                this.props.route.funConfig.hasVoipVlanId ? (
-                  <FormGroup
-                    type="number"
-                    min="1"
-                    max="4094"
-                    defaultValue="1"
-                    label={__('VoIP VLAN ID')}
-                    help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
-                    value={voipVlanId}
-                    disabled={vlanEnable === '0'}
-                    onChange={data => this.props.updateItemSettings({
-                      voipVlanId: data.value,
-                    })}
-                    required
-                    {...validVlanId3}
-                  />
-                ) : null
-              }
-              {
-                this.props.route.funConfig.hasIptvVLanId ? (
-                  <FormGroup
-                    type="number"
-                    min="1"
-                    max="4094"
-                    defaultValue="1"
-                    label={__('IPTV VLAN ID')}
-                    help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
-                    value={iptvVlanId}
-                    disabled={vlanEnable === '0'}
-                    onChange={data => this.props.updateItemSettings({
-                      iptvVlanId: data.value,
-                    })}
-                    required
-                    {...validVlanId4}
-                  />
-                ) : null
-              }
-              {
-                this.props.route.funConfig.hasPortListTable ? (
-                  <div className="row">
-                    <div className="o-box col-9 col-offset-1">
-                      {/* <h3 className="o-box__cell">{__('Port Vlan Settings')}</h3> */}
-                      <div className="o-box__cell">
-                        <Table
-                          options={listOptions}
-                          list={portList}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ) : null
-              }
+              <FormGroup
+                type="number"
+                min="1"
+                max="4094"
+                label={__('Management VLAN ID')}
+                disabled={vlanEnable === '0'}
+                help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
+                value={mngVlanId}
+                onChange={data => this.props.updateItemSettings({
+                  mngVlanId: data.value,
+                })}
+                required
+                {...validVlanId1}
+              />
+              <FormGroup
+                type="number"
+                min="1"
+                max="4094"
+                label={__('Untagged VLAN ID')}
+                help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
+                value={utgVlanId}
+                disabled={vlanEnable === '0'}
+                onChange={data => this.props.updateItemSettings({
+                  utgVlanId: data.value,
+                })}
+                required
+                {...validVlanId2}
+              />
             </div>
           ) : null
         }
-        <div className="row">
-          <div className="col-2 col-offset-1">
+        <div className="form-group form-group--save">
+          <div className="form-control">
             <SaveButton
               type="button"
               loading={this.props.app.get('saving')}
               onClick={this.onSave}
-              style={{
-                marginTop: '30px',
-              }}
             />
           </div>
         </div>

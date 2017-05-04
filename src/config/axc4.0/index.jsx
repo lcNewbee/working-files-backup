@@ -317,14 +317,14 @@ const routes = [
                   },
                 ],
               },
-              {
-                id: 'networkHostnetwork',
-                path: '/main/network/hostnetwork',
-                formUrl: 'goform/network/hostnetwork',
-                text: __('Host Network'),
-                icon: 'th',
-                component: sHostNetwork.Screen,
-              },
+              // {
+              //   id: 'networkHostnetwork',
+              //   path: '/main/network/hostnetwork',
+              //   formUrl: 'goform/network/hostnetwork',
+              //   text: __('Host Network'),
+              //   icon: 'th',
+              //   component: sHostNetwork.Screen,
+              // },
               {
                 id: 'ethernetPort',
                 path: '/main/network/ethernetport',
