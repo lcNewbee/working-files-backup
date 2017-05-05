@@ -80,6 +80,9 @@
         if($pageindex < 1) {
             $pageindex = 1;
         }
+        if($pagesize < 1) {
+            $pagesize = 20;
+        }
 
         //检查数据库和表名
         if($db === 0 || $tablenames === 0){
