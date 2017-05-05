@@ -4,15 +4,12 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
-import { Button, SaveButton } from 'shared/components/Button';
+import { NavLink } from 'react-router-dom';
 import validator from 'shared/validator';
-import Nav from 'shared/components/Nav';
-import Modal from 'shared/components/Modal';
-import Icon from 'shared/components/Icon';
-import { FormGroup } from 'shared/components/Form';
-import Table from 'shared/components/Table';
+import {
+  Nav, Icon,
+} from 'shared/components';
 import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
-import { getActionable } from 'shared/axc';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as propertiesActions } from 'shared/containers/properties';
 import * as mainActions from '../../actions';
@@ -43,6 +40,7 @@ const propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
+  app: PropTypes.instanceOf(Map).isRequired,
 };
 const defaultProps = {};
 
@@ -50,13 +48,49 @@ class MainAAA extends React.PureComponent {
   constructor(props) {
     super(props);
     utils.binds(this, [
-      'sss',
+      'renderBreadcrumb',
     ]);
+  }
+  renderBreadcrumb() {
+    const { app } = this.props;
+    const curRoutes = app.getIn(['router', 'routes']).toJS();
+    let breadcrumbList = fromJS([]);
+    const len = curRoutes.length;
+    let i = 2;
+
+    for (i; i < len; i += 1) {
+      breadcrumbList = breadcrumbList.unshift({
+        path: curRoutes[i].path,
+        text: curRoutes[i].text,
+      });
+    }
+
+    return (
+      <ol className="m-breadcrumb m-breadcrumb--simple">
+        {
+          breadcrumbList.map(item => (
+            <li key={item.path}>
+              <NavLink
+                className="m-breadcrumb__link"
+                to={item.path}
+              >
+                {item.text}
+              </NavLink>
+            </li>
+          ))
+        }
+      </ol>
+    );
   }
   render() {
     const { route } = this.props;
     return (
       <div>
+        <div className="o-menu-bar">
+          {
+            this.renderBreadcrumb()
+          }
+        </div>
         <div className="t-main__nav">
           <Nav
             role="tree"

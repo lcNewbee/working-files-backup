@@ -8,7 +8,8 @@ import validator from 'shared/validator';
 import Nav from 'shared/components/Nav';
 import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
-import { FormGroup } from 'shared/components/Form';
+import { NavLink } from 'react-router-dom';
+import { FormGroup, FormInput } from 'shared/components/Form';
 import Table from 'shared/components/Table';
 import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import { getActionable } from 'shared/axc';
@@ -90,6 +91,7 @@ export default class MainGroup extends React.Component {
 
     this.state = { isShowUserPop: false };
     utils.binds(this, [
+      'renderBreadcrumb',
       'onSelectManageGroup',
       'showUserPopOver',
       'onRefresh',
@@ -194,7 +196,9 @@ export default class MainGroup extends React.Component {
   }
 
   onSelectGroup(id, e) {
-    // e.preventDefault();
+    if (e && typeof e.preventDefault === 'function') {
+      e.preventDefault();
+    }
     this.props.selectGroup(id);
   }
   onSelectManageGroup(id) {
@@ -1025,7 +1029,132 @@ export default class MainGroup extends React.Component {
         return null;
     }
   }
+  renderBreadcrumb() {
+    const { product, app } = this.props;
+    const groupData = product.get('group');
+    const selectGroupId = product.getIn(['group', 'selected', 'id']);
+    const manageGroupId = product.getIn(['group', 'manageSelected', 'id']);
+    const $$groupList = product.getIn(['group', 'list']);
+    const curRoutes = app.getIn(['router', 'routes']).toJS();
+    const selectOptions = $$groupList.map(
+      $$item => (
+        {
+          value: $$item.get('id'),
+          label: $$item.get('groupname'),
+        }
+      ),
+    ).toJS();
+    let breadcrumbList = fromJS([]);
+    const len = curRoutes.length;
+    let i = 2;
 
+    // 所有组
+    breadcrumbList = breadcrumbList.unshift({
+      id: 'allGroup',
+      path: '/main/group',
+      text: __('All Group'),
+    });
+
+    // 显示当前组
+    if (groupData.getIn(['selected', 'id']) !== ALL_GROUP_ID) {
+      breadcrumbList = breadcrumbList.unshift({
+        id: 'curGroup',
+        path: '/main/group/',
+        text: groupData.getIn(['selected', 'groupname']) || '',
+      });
+    }
+
+    for (i; i < len; i += 1) {
+      breadcrumbList = breadcrumbList.unshift({
+        path: curRoutes[i].path,
+        text: curRoutes[i].text,
+      });
+    }
+
+    return (
+      <ol className="m-breadcrumb m-breadcrumb--simple">
+        {
+          breadcrumbList.map((item) => {
+            let renderNode = (
+              <NavLink
+                className="m-breadcrumb__link"
+                to={item.path}
+              >
+                {item.text}
+              </NavLink>
+            );
+
+            /*
+            if (item.id === 'curGroup') {
+              renderNode = (
+                <a className="m-breadcrumb__link">
+                  <FormInput
+                    type="select"
+                    value={selectGroupId}
+                    options={selectOptions}
+                    onChange={(data) => {
+                      this.onSelectGroup(data.value);
+                    }}
+                  />
+                </a>
+              );
+            } else
+            */
+            if (item.id === 'allGroup') {
+              renderNode = (
+                <a className="m-breadcrumb__link" >
+                  {__('All Group')}
+                  {/*<Button
+                    style={{
+                      marginLeft: '4px',
+                    }}
+                    theme="primary"
+                    icon="plus"
+                    size="sm"
+                    onClick={() => {
+                      this.props.fetchGroupAps();
+                      this.props.updateAddApGroup({
+                        groupname: '',
+                        remark: '',
+                      });
+                      this.props.showMainModal({
+                        title: __('Add AP Group'),
+                        isShow: true,
+                        size: 'lg',
+                        name: 'groupAdd',
+                      });
+                    }}
+                  />
+                  <Button
+                    style={{
+                      marginLeft: '4px',
+                    }}
+                    theme="primary"
+                    icon="cog"
+                    size="sm"
+                    onClick={() => {
+                      this.props.fetchGroupAps(manageGroupId);
+                      this.props.showMainModal({
+                        title: __('Manage AP Groups'),
+                        isShow: true,
+                        size: 'lg',
+                        name: 'groupManage',
+                      });
+                    }}
+                  />*/}
+                </a>
+
+              );
+            }
+
+            return (
+              <li key={item.path}>{renderNode}</li>
+            );
+          })
+        }
+      </ol>
+    );
+  }
   render() {
     const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
     const { modal } = this.props.product.toJS();
@@ -1038,6 +1167,11 @@ export default class MainGroup extends React.Component {
 
     return (
       <div>
+        <div className="o-menu-bar">
+          {
+            this.renderBreadcrumb()
+          }
+        </div>
         <div className="t-main__nav">
           {this.renderAsideTop()}
           <Nav

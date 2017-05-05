@@ -54,7 +54,6 @@ export default class Main extends React.PureComponent {
       'onHiddenPopOver',
       'onToggleMainPopOver',
       'renderPopOverContent',
-      'renderBreadcrumb',
     ]);
 
     document.onkeydown = (e) => {
@@ -151,54 +150,6 @@ export default class Main extends React.PureComponent {
     }
   }
 
-  renderBreadcrumb() {
-    const { location, product, app } = this.props;
-    const groupData = product.get('group');
-    const curRoutes = app.getIn(['router', 'routes']).toJS();
-    let breadcrumbList = fromJS([]);
-    const len = curRoutes.length;
-    let i = 2;
-
-    // 如果是 AP组管理
-    if (location.pathname.indexOf('/main/group') === 0) {
-      breadcrumbList = breadcrumbList.unshift({
-        path: '/main/group',
-        text: __('All Group'),
-      });
-
-      if (groupData.getIn(['selected', 'id']) !== ALL_GROUP_ID) {
-        breadcrumbList = breadcrumbList.unshift({
-          path: '/main/group/',
-          text: groupData.getIn(['selected', 'groupname']) || '',
-        });
-      }
-    }
-
-    for (i; i < len; i += 1) {
-      breadcrumbList = breadcrumbList.unshift({
-        path: curRoutes[i].path,
-        text: curRoutes[i].text,
-      });
-    }
-
-    return (
-      <ol className="m-breadcrumb m-breadcrumb--simple">
-        {
-          breadcrumbList.map(item => (
-            <li key={item.path}>
-              <NavLink
-                className="m-breadcrumb__link"
-                to={item.path}
-              >
-                {item.text}
-              </NavLink>
-            </li>
-          ))
-        }
-      </ol>
-    );
-  }
-
   render() {
     const { version } = this.props.app.toJS();
     const { popOver, nav } = this.props.product.toJS();
@@ -272,11 +223,6 @@ export default class Main extends React.PureComponent {
               </a>
             </li>
           </ul>
-        </div>
-        <div className="o-menu-bar">
-          {
-            this.renderBreadcrumb()
-          }
         </div>
         <RouteSwitches
           routes={this.props.route.routes}
