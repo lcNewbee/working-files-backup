@@ -38,16 +38,16 @@ const listOptions = fromJS([
       noAdd: true,
     },
   },
-  {
-    id: 'ipType',
-    text: __('IP Type'),
-    type: 'select',
-    options: ipTypeOptions,
-    formProps: {
-      type: 'select',
-      options: ipTypeOptions,
-    },
-  },
+  // {
+  //   id: 'ipType',
+  //   text: __('IP Type'),
+  //   type: 'select',
+  //   options: ipTypeOptions,
+  //   formProps: {
+  //     type: 'select',
+  //     options: ipTypeOptions,
+  //   },
+  // },
   {
     id: 'destIP',
     text: __('Destination IP'),
