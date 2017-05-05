@@ -6,19 +6,19 @@
   "data": {
     "list": [
       {
-        "domain_name":"test1",
-        "auth_accesstype": "8021x-access",
+        "domain_name":"Local",
+        "auth_accesstype": "portal",
         "auth_schemetype": "1",
         "radius_template": "test"
       },
       {
-        "domain_name":"test2",
+        "domain_name":"Remote joy",
         "auth_accesstype": "8021x-access",
         "auth_schemetype": "0",
         "radius_template": "test22"
       },
       {
-        "domain_name":"test3",
+        "domain_name":"Remote Windy",
         "auth_accesstype":"portal",
         "auth_schemetype":"1",
         "radius_template": "test"

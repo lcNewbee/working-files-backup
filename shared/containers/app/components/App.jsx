@@ -92,7 +92,9 @@ export default class App extends Component {
   renderHtmlBody() {
     const { location } = this.props;
     const bodyElem = document.getElementsByTagName('body')[0];
-    if (location.pathname !== '/login') {
+
+    // Main 相关界面添加 fixed
+    if (location.pathname.indexOf('main') !== -1) {
       if (bodyElem.className.indexOf('fixed') === -1) {
         bodyElem.className = utils.addClassName(bodyElem.className, 'fixed');
       }

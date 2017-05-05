@@ -1,7 +1,8 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
 
@@ -10,6 +11,7 @@ import { actions as appActions } from 'shared/containers/app';
 import { Button } from 'shared/components/Button';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import moment from 'moment';
+
 function getUserName() {
   return utils.fetch('goform/portal/account/accountList')
     .then(json => (
@@ -227,8 +229,8 @@ const viewMessageOptions = fromJS([
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
   store: PropTypes.instanceOf(Map),
+  route: PropTypes.object,
   save: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,

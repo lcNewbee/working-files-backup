@@ -1,7 +1,7 @@
 import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 
 import { actions as appActions } from 'shared/containers/app';
