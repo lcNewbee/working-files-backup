@@ -77,6 +77,9 @@
         $order = array_key_exists('order',$parameter) ? $parameter['order'] : array();
         $pageindex = array_key_exists('pageindex',$parameter) ? $parameter['pageindex'] : 1;
         $pagesize = array_key_exists('pagesize',$parameter) ? $parameter['pagesize'] : 20;
+        if($pageindex < 1) {
+            $pageindex = 1;
+        }
 
         //检查数据库和表名
         if($db === 0 || $tablenames === 0){
@@ -119,7 +122,7 @@
 				$db->order_by($row[0], $row[1]);
 			}
 		}
-        //分页 limit
+        //分页 limit        
 		$db->limit($pagesize, ($pageindex - 1) * $pagesize);
 		$sqldata = $db->get()->result_array();
 		$arr['page'] = array(

@@ -148,20 +148,18 @@ class MapSonList_Model extends CI_Model {
             foreach ($data['selectedList'] as $res) {                
                 $querydata = $this->db->query("select id,imgpath from map_son_list where id=".$res);
                 $row = $querydata->row();
-                if( $this->db->delete('map_son_list',array('id'=>$res)) ) {
+                if( $this->db->delete('map_son_list',array('id'=>$res)) ) {                    
                     //delete file
                     if( $row->imgpath != "" ) {
                         unlink('/usr/web'.$row->imgpath);
                     }
-                    //delete mysql map_area
-                    $this->mysql->delete('map_area',array('map_son_id'=>$row->id));
                     //delete ap_map
                     $this->db->delete('ap_map',array('build_id'=>$row->id));
+                    //delete mysql map_area
+                    $this->mysql->delete('map_area',array('map_son_id'=>$row->id));                                       
                 }
             }
         }
-        $result = json_encode(json_ok());
-
         return json_encode(json_ok());
     }
 
