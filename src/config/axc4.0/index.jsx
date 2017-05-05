@@ -87,6 +87,7 @@ const sBasicRuleBinding = require('../../screens/MainAxc/screens/Network/screens
 const sExtendVlanInterface = require('../../screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/VlanInterface');
 const sExtendWLAN = require('../../screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/WLAN');
 const sExtendRuleGroup = require('../../screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/RuleGroup');
+const sExtendRuleGroups = require('../../screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/RuleGroups');
 const sExtendRuleDetails = require('../../screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/Rules');
 const sExtendRuleBinding = require('../../screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/BindRules');
 // const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat');
@@ -611,6 +612,13 @@ const routes = [
                       //   text: __('WLAN'),
                       //   component: sExtendWLAN.Screen,
                       // },
+                      {
+                        id: 'extendAclRuleGroups',
+                        path: '/main/network/acl/extendacl/rulegroups',
+                        formUrl: 'goform/network/extendacl/rulegroups',
+                        text: __('Rule Group Settings'),
+                        component: sExtendRuleGroups.Screen,
+                      },
                       {
                         id: 'extendAclRuleGroup',
                         path: '/main/network/acl/extendacl/rulegroup',
