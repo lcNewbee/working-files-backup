@@ -574,7 +574,7 @@ export default class NetworkSettings extends React.Component {
                   />
                 ) : null
               }
-              {
+              {/*
                 this.props.route.funConfig.hasVoipVlanId ? (
                   <FormGroup
                     type="number"
@@ -611,12 +611,11 @@ export default class NetworkSettings extends React.Component {
                     {...validVlanId4}
                   />
                 ) : null
-              }
+              */}
               {
                 this.props.route.funConfig.hasPortListTable ? (
                   <div className="row">
                     <div className="o-box col-9 col-offset-1">
-                      {/* <h3 className="o-box__cell">{__('Port Vlan Settings')}</h3> */}
                       <div className="o-box__cell">
                         <Table
                           options={listOptions}
@@ -626,6 +625,35 @@ export default class NetworkSettings extends React.Component {
                     </div>
                   </div>
                 ) : null
+              }
+            </div>
+          ) : null
+        }
+        {
+          this.props.route.funConfig.hasVlanInputByTable &&
+          typeof (this.props.store.getIn(['curData', 'portList'])) !== 'undefined' ? (
+            <div>
+              {
+                this.props.store.getIn(['curData', 'portList']).map((item, index) => (
+                  <FormGroup
+                    type="number"
+                    min="1"
+                    max="4094"
+                    defaultValue="1"
+                    key={item.get('name')}
+                    label={`${item.get('name')} VLAN ID`}
+                    help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
+                    value={item.get('vlanId')}
+                    disabled={vlanEnable === '0'}
+                    onChange={(data) => {
+                      const list = item.set('vlanId', data.value);
+                      const pList = this.props.store.getIn(['curData', 'portList']).set(index, list);
+                      this.props.updateItemSettings({ portList: pList });
+                    }}
+                    required
+                    {...validVlanId4}
+                  />
+                  ))
               }
             </div>
           ) : null

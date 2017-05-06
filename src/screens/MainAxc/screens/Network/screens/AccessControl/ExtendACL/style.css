@@ -1,7 +1,53 @@
 .group-slide-wrap {
   border: 1px solid #ccc;
+  margin-bottom: 20px;
 }
 
 .group-button {
   margin: 10px;
+}
+
+.slide-view {
+  overflow: hidden;
+  background-color: #ccc;
+}
+
+.group-slide {
+  width: 10000px;
+}
+
+.right-caret {
+  text-align: right;
+  margin-top: 3px;
+}
+
+.left-caret {
+  margin-top: 3px;
+}
+
+.list-in-group {
+  border: 1px solid #ccc;
+  background-color: #ccc;
+  height: 400px;
+}
+
+.list-out-group {
+  border: 1px solid #ccc;
+  background-color: #ccc;
+  height: 400px;
+}
+
+.group-config-wrap {
+  border: 1px solid #ccc;
+}
+
+.exchange-arrow {
+  text-align: center;
+  height: 422px;
+  line-height: 422px;
+}
+
+.list-out-group-head {
+  background-color: #999;
+  text-align: right;
 }

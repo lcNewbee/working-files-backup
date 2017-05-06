@@ -7,7 +7,7 @@ const redux = require('redux');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
-const prodConfig = require('./config/AEC120').default;
+const prodConfig = require('./config/ASW120').default;
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;
@@ -62,9 +62,9 @@ renderApp(prodConfig.routes);
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/AEC120', () => {
+  module.hot.accept('./config/ASW120', () => {
     /* eslint-disable global-require */
-    const nextConfig = require('./config/AEC120').default;
+    const nextConfig = require('./config/ASW120').default;
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,
