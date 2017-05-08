@@ -1,42 +1,30 @@
 import React from 'react'; import PropTypes from 'prop-types';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { Icon, FormContainer } from 'shared/components';
+import { Icon, FormContainer, SaveButton } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import validator from 'shared/validator';
 
 import {
-  $$radiusServerChoices, $$radiusAuthServer, $$radiusAccServer, $$radiusAdvancedSetting,
+  getPortList, getWebTemplate, getAllGroupSSID, getApMac,
+} from './getServerData';
+import {
+  $$radiusAuthServer, $$radiusAccServer, $$radiusAdvancedSetting, radiusDefaultData,
+  $$potalServerFormOptions, potalServerDefaultSettingData,
+  $$potalRuleFormOptions, potalRuleDefaultSettingData,
+  $$portalTemplateFormOptions, portalTemplateDefaultSettingData,
 } from './config';
 
-function getInterfaceTypeOptions() {
-  return utils.fetch('goform/network/radius/template')
-    .then(json => (
-      {
-        options: json.data.list.filter(
-          item => item,
-        ).map(
-          item => ({
-            value: item.template_name,
-            label: item.template_name,
-          }),
-        ),
-      }
-    ),
-  );
-}
-const MSG = {
-  Seconds: __('Seconds'),
-  minutes: __('Minutes'),
-  hour: __('Hour'),
-  hours: __('Hours'),
-  days: __('Days'),
-  userDef: __('User Defined'),
-  imageDes: __('Select 1-3 slide pictures of dimension 640px*640px'),
-};
+const RADIUS_AUTH_SERVER_KEY = 'authServer';
+const RADIUS_ACC_SERVER_KEY = 'accServer';
+const RADIUS_ADVANCE_SETTING_KEY = 'radiusAdvanceSetting';
+const PORTAL_SERVER_KEY = 'portalServer';
+const PORTAL_RULE_KEY = 'portalRule';
+const PORTAL_LOCAL_RULE_KEY = 'portalLocalRule';
+
 const accessTypeSeletOptions = [
   {
     value: 'portal',
@@ -72,12 +60,23 @@ const authTypeSeletOptions = [
     label: `${__('Remote')}`,
   },
 ];
+const serverType = [
+  {
+    value: 'local',
+    label: `${__('Local')}`,
+  },
+  {
+    value: 'remote',
+    label: `${__('Remote')}`,
+  },
+];
 
 // 大于2.5版本
 if (window.guiConfig.versionCode >= 20500) {
   // 开启 802.1x
   accessTypeSeletOptions[1].disabled = false;
 }
+
 const listOptions = fromJS([
   {
     id: 'domain_name',
@@ -106,25 +105,26 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'access_server_type',
-    text: __('Access Server Type'),
-    defaultValue: 'Lo',
-    options: authTypeSeletOptions,
+    id: 'radius_server_type',
+    text: __('Radius Server Type'),
+    options: serverType,
+    defaultValue: 'local',
     formProps: {
-      label: __('Access Server Type'),
+      label: __('Radius Server Type'),
       required: true,
       type: 'switch',
     },
   },
   {
-    id: 'radius_template',
-    text: __('Radius Template'),
+    id: 'access_server_type',
+    text: __('Access Server Type'),
+    defaultValue: 'local',
+    options: serverType,
     formProps: {
-      label: __('Radius Template'),
+      label: __('Portal Server Type'),
       required: true,
-      type: 'select',
-      placeholder: __('Please Select ') + __('Radius Template'),
-      options: [],
+      type: 'switch',
+      visible: $$data => $$data.get('auth_accesstype') === 'portal',
     },
   },
   {
@@ -143,12 +143,22 @@ const listOptions = fromJS([
   },
 ]);
 
+const $$baseFormOptions = utils.immutableUtils.getFormOptions(listOptions);
+const $$defaultData = fromJS(immutableUtils.getDefaultData(listOptions))
+    .mergeDeep({
+      radius: radiusDefaultData,
+      portalServer: potalServerDefaultSettingData,
+      portalRule: potalRuleDefaultSettingData,
+      portalTemplate: portalTemplateDefaultSettingData,
+    });
+
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   updateCurEditListItem: PropTypes.func,
   reportValidError: PropTypes.func,
-  createModal: PropTypes.func,
+  validateAll: PropTypes.func,
+  onListAction: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -158,62 +168,453 @@ export default class View extends React.Component {
 
     utils.binds(this, [
       'renderCustomModal',
+      'renderRemoteRadiusServer',
+      'renderRemotePortalServer',
+      'renderLocalPortalRule',
+      'toggleBox',
+      'initFormOptions',
+      'onSave',
+      'onFetchData',
     ]);
+
     this.state = {
-      radiusOptions: [],
+      radiusOptions: fromJS([]),
+      [RADIUS_AUTH_SERVER_KEY]: true,
+      [RADIUS_ADVANCE_SETTING_KEY]: true,
+      [RADIUS_ACC_SERVER_KEY]: true,
+      [PORTAL_SERVER_KEY]: true,
+      [PORTAL_RULE_KEY]: true,
+      [PORTAL_LOCAL_RULE_KEY]: true,
     };
   }
 
   componentWillMount() {
-    getInterfaceTypeOptions().then(
-      (data) => {
+    this.onFetchData();
+  }
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.portOptions !== nextState.portOptions) {
+      this.initFormOptions(nextProps, nextState);
+    }
+  }
+  onSave() {
+    this.props.validateAll()
+      .then(
+        ($$msg) => {
+          if ($$msg.isEmpty()) {
+            this.props.onListAction();
+          }
+        },
+      );
+  }
+  onFetchData() {
+    Promise.all([
+      getPortList(),
+      getAllGroupSSID(),
+      getApMac(),
+      getWebTemplate(),
+    ]).then(
+      (values) => {
+        const portOptions = fromJS(values[0].options);
+        let ssidOptions = fromJS(values[1].options);
+        let apsMacOptions = fromJS(values[2].options);
+        const webTemplateOptions = fromJS(values[3].options);
+
+        ssidOptions = ssidOptions.unshift(fromJS({
+          value: '',
+          label: __('ALL'),
+        }));
+        apsMacOptions = apsMacOptions.unshift(fromJS({
+          value: '',
+          label: __('ALL'),
+        }));
+
         this.setState({
-          radiusOptions: data.options,
+          portOptions,
+          ssidOptions,
+          apsMacOptions,
+          webTemplateOptions,
         });
       },
     );
   }
-  componentWillUpdate(nextProps, nextState) {
-    if (this.state.radiusOptions !== nextState.radiusOptions) {
-      this.listOptions = listOptions.map(
-        ($$item) => {
-          let $$ret = $$item;
+  initFormOptions(nextProps, nextState) {
+    const { store } = nextProps;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    const $$curList = $$myScreenStore.getIn(['data', 'list']);
+    const $$myPortOptions = nextState.portOptions
+      .filterNot(($$item) => {
+        const curPort = $$item.get('value');
+        const curPortIndex = $$curList.findIndex(
+          $$listItem => $$listItem.getIn(['portalRule', 'interface_bind']) === curPort,
+        );
+        let ret = curPortIndex !== -1;
 
-          if ($$ret.get('id') === 'radius_template') {
-            $$ret = $$ret.set('options', this.state.radiusOptions);
-          }
-          return $$ret;
-        },
-      );
+        if (actionType === 'edit' && $$myScreenStore.getIn(['curListItem', 'id']) === $$curList.getIn([curPortIndex, 'id'])) {
+          ret = false;
+        }
+
+        return ret;
+      });
+
+    this.listOptions = listOptions.map(
+      ($$item) => {
+        let $$ret = $$item;
+
+        if ($$ret.get('id') === 'radius_template') {
+          $$ret = $$ret.set('options', nextState.radiusOptions);
+        }
+        return $$ret;
+      },
+    );
+    this.$$potalRuleFormOptions = $$potalRuleFormOptions.map(
+      ($$item) => {
+        const curId = $$item.get('id');
+        let $$ret = $$item;
+
+        switch (curId) {
+          case 'interface_bind':
+            $$ret = $$ret.set('options', $$myPortOptions);
+            break;
+
+          default:
+        }
+
+        return $$ret;
+      },
+    );
+    this.$$portalTemplateFormOptions = $$portalTemplateFormOptions.map(
+      ($$item) => {
+        const curId = $$item.get('id');
+        let $$ret = $$item;
+
+
+        switch (curId) {
+          case 'ssid':
+            $$ret = $$ret.set('options', nextState.ssidOptions);
+            break;
+
+          case 'apmac':
+            $$ret = $$ret.set('options', nextState.apsMacOptions);
+            break;
+
+          case 'web':
+            $$ret = $$ret.set('options', nextState.webTemplateOptions);
+            break;
+
+          default:
+        }
+
+        return $$ret;
+      },
+    );
+  }
+
+  toggleBox(moduleName) {
+
+    // this.setState({
+    //   [moduleName]: !this.state[moduleName],
+    // });
+  }
+  renderRemoteRadiusServer($$curData) {
+    const { app } = this.props;
+
+    if ($$curData.get('radius_server_type') !== 'remote') {
+      return null;
     }
+    return (
+      <div>
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox(RADIUS_AUTH_SERVER_KEY)}
+          >
+            {/*<Icon
+              name={this.state[RADIUS_AUTH_SERVER_KEY] ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+            />*/}
+            {__('Remote Radius Auth Server')}
+          </h3>
+        </div>
+        {
+          this.state[RADIUS_AUTH_SERVER_KEY] ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id={RADIUS_AUTH_SERVER_KEY}
+                className="o-form--compassed"
+                options={$$radiusAuthServer}
+                data={$$curData.get('radius')}
+                onChangeData={(data) => {
+                  this.props.updateCurEditListItem({
+                    radius: data,
+                  });
+                }}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+              />
+            </div>
+          ) : null
+        }
+
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox(RADIUS_ACC_SERVER_KEY)}
+          >
+            {/*<Icon
+              name={this.state[RADIUS_ACC_SERVER_KEY] ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+              onClick={() => this.toggleBox(RADIUS_ACC_SERVER_KEY)}
+            />*/}
+            {__('Remote Radius Accounting Server')}
+          </h3>
+        </div>
+        {
+          this.state[RADIUS_ACC_SERVER_KEY] ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id={RADIUS_ACC_SERVER_KEY}
+                options={$$radiusAccServer}
+                className="o-form--compassed"
+                data={$$curData.get('radius')}
+                onChangeData={(data) => {
+                  this.props.updateCurEditListItem({
+                    radius: data,
+                  });
+                }}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+              />
+            </div>
+          ) : null
+        }
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox(RADIUS_ADVANCE_SETTING_KEY)}
+          >
+            {/*<Icon
+              name={this.state[RADIUS_ADVANCE_SETTING_KEY] ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+              onClick={() => this.toggleBox(RADIUS_ADVANCE_SETTING_KEY)}
+            />*/}
+            {__('Remote Radius Server Advanced Settings')}
+          </h3>
+        </div>
+        {
+          this.state[RADIUS_ADVANCE_SETTING_KEY] ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id={RADIUS_ADVANCE_SETTING_KEY}
+                options={$$radiusAdvancedSetting}
+                className="o-form--compassed"
+                data={$$curData.get('radius')}
+                onChangeData={(data) => {
+                  this.props.updateCurEditListItem({
+                    radius: data,
+                  });
+                }}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+              />
+            </div>
+          ) : null
+        }
+      </div>
+    );
+  }
+  renderRemotePortalServer($$curData) {
+    const { app } = this.props;
+    if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('access_server_type') !== 'remote') {
+      return null;
+    }
+
+    return (
+      <div>
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox(PORTAL_SERVER_KEY)}
+          >
+            {/*<Icon
+              name={this.state[PORTAL_SERVER_KEY] ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+              onClick={() => this.toggleBox(PORTAL_SERVER_KEY)}
+            />*/}
+            {__('Remote Portal Server')}
+          </h3>
+        </div>
+        {
+          this.state[PORTAL_SERVER_KEY] ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id={PORTAL_SERVER_KEY}
+                className="o-form--compassed"
+                options={$$potalServerFormOptions}
+                data={$$curData.get('portalServer')}
+                onChangeData={(data) => {
+                  this.props.updateCurEditListItem({
+                    portalServer: data,
+                  });
+                }}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+                isSaving={app.get('saving')}
+              />
+            </div>
+          ) : null
+        }
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox(PORTAL_RULE_KEY)}
+          >
+            {/*<Icon
+              name={this.state[PORTAL_RULE_KEY] ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+              onClick={() => this.toggleBox(PORTAL_RULE_KEY)}
+            />*/}
+            {__('Portal Rules')}
+          </h3>
+        </div>
+        {
+          this.state[PORTAL_RULE_KEY] ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id={PORTAL_RULE_KEY}
+                options={this.$$potalRuleFormOptions}
+                data={$$curData.get('portalRule')}
+                onChangeData={(data) => {
+                  this.props.updateCurEditListItem({
+                    portalRule: data,
+                  });
+                }}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+              />
+            </div>
+          ) : null
+        }
+      </div>
+    );
+  }
+  renderLocalPortalRule($$curData) {
+    const { app } = this.props;
+    const colStyle = {
+      padding: '0 6px',
+    };
+
+    if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('access_server_type') !== 'local') {
+      return null;
+    }
+    return (
+      <div>
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox(PORTAL_LOCAL_RULE_KEY)}
+          >
+            {/*<Icon
+              name={this.state[PORTAL_LOCAL_RULE_KEY] ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+              onClick={() => this.toggleBox(PORTAL_LOCAL_RULE_KEY)}
+            />*/}
+            {__('Local Portal Rule')}
+          </h3>
+        </div>
+        {
+          this.state[PORTAL_LOCAL_RULE_KEY] ? (
+            <div className="o-box__cell row">
+              <FormContainer
+                id="portalLocalPortSetting"
+                style={{
+                  padding: '0 5px',
+                }}
+                options={this.$$potalRuleFormOptions}
+                data={$$curData.get('portalRule')}
+                onChangeData={(data) => {
+                  this.props.updateCurEditListItem({
+                    portalRule: data,
+                  });
+                }}
+                onSave={() => this.onSave('portalServerSetting')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+                isSaving={app.get('saving')}
+              />
+              <FormContainer
+                id="portalLocalTemplateSetting"
+                options={this.$$portalTemplateFormOptions}
+                data={$$curData.get('portalTemplate')}
+                onChangeData={(data) => {
+                  this.props.updateCurEditListItem({
+                    portalTemplate: data,
+                  });
+                }}
+                style={{
+                  padding: '0 5px',
+                }}
+                onSave={() => this.onSave('portalServerSetting')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+                isSaving={app.get('saving')}
+              />
+            </div>
+          ) : null
+        }
+      </div>
+    );
   }
   renderCustomModal() {
     const { store, app } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curListItem');
+    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+
+    if (actionType !== 'add' && actionType !== 'edit') {
+      return null;
+    }
 
     return (
       <div className="o-box row">
         <div className="o-box__cell">
           <FormContainer
-            id="serverChoice"
-            className="o-form--compassed"
-            options={$$radiusServerChoices}
+            id="polifBase"
+            className="o-form"
+            options={$$baseFormOptions}
+            initOption={{
+              defaultEditData: $$defaultData.toJS(),
+            }}
             data={$$curData}
             onChangeData={(data) => {
-              if (data.serverType === 'local' && this.state.nasIPOptions.size < 1) {
-                this.props.createModal({
-                  type: 'alert',
-                  text: __(
-                    'No data, please go to the %s-->%s page to add nas data!',
-                    __('Hotspot'),
-                    __('Radius Server'),
-                  ),
-                });
-              } else {
-                this.props.updateCurEditListItem(data);
-              }
+              this.props.updateCurEditListItem(data);
             }}
             onSave={() => this.onSave('serverChoices')}
             invalidMsg={app.get('invalid')}
@@ -222,110 +623,19 @@ export default class View extends React.Component {
             isSaving={app.get('saving')}
           />
         </div>
-        <div className="o-box__cell">
-          <h3
-            style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox('isBaseShow')}
-          >
-            <Icon
-              name={this.state.isBaseShow ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-            />
-            {__('Base Settings')}
-          </h3>
-        </div>
-        {
-          this.state.isBaseShow ? (
-            <div className="o-box__cell">
-              <FormContainer
-                id="authServer"
-                className="o-form--compassed"
-                options={$$radiusAuthServer}
-                data={$$curData}
-                onChangeData={this.props.updateCurEditListItem}
-                onSave={() => this.onSave('authServer')}
-                invalidMsg={app.get('invalid')}
-                validateAt={app.get('validateAt')}
-                onValidError={this.props.reportValidError}
-                isSaving={app.get('saving')}
-                hasSaveButton
-              />
-            </div>
-          ) : null
-        }
+        { this.renderRemoteRadiusServer($$curData) }
+        { this.renderRemotePortalServer($$curData) }
+        { this.renderLocalPortalRule($$curData) }
 
         <div className="o-box__cell">
-          <h3
-            style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox('isAccountingShow')}
-          >
-            <Icon
-              name={this.state.isAccountingShow ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-              onClick={() => this.toggleBox('isAccountingShow')}
-            />
-            {__('Accounting Server Settings')}
-          </h3>
+          <SaveButton
+            style={{
+              marginLeft: '180px',
+            }}
+            onClick={this.onSave}
+          />
         </div>
-        {
-          this.state.isAccountingShow ? (
-            <div className="o-box__cell">
-              <FormContainer
-                id="accServer"
-                options={$$radiusAccServer}
-                className="o-form--compassed"
-                data={$$curData}
-                onChangeData={this.props.updateCurEditListItem}
-                onSave={() => this.onSave('accServer')}
-                invalidMsg={app.get('invalid')}
-                validateAt={app.get('validateAt')}
-                onValidError={this.props.reportValidError}
-                isSaving={app.get('saving')}
-                hasSaveButton
-              />
-            </div>
-          ) : null
-        }
-        <div className="o-box__cell">
-          <h3
-            style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox('isAdvancedShow')}
-          >
-            <Icon
-              name={this.state.isAdvancedShow ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-              onClick={() => this.toggleBox('isAdvancedShow')}
-            />
-            {__('Advanced Settings')}
-          </h3>
-        </div>
-        {
-          this.state.isAdvancedShow ? (
-            <div className="o-box__cell">
-              <FormContainer
-                id="advancedSetting"
-                options={$$radiusAdvancedSetting}
-                data={$$curData}
-                onChangeData={this.props.updateCurEditListItem}
-                onSave={() => this.onSave('advancedSetting')}
-                invalidMsg={app.get('invalid')}
-                validateAt={app.get('validateAt')}
-                onValidError={this.props.reportValidError}
-                isSaving={app.get('saving')}
-                hasSaveButton
-              />
-            </div>
-          ) : null
-        }
+
       </div>
     );
   }
@@ -334,13 +644,14 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listKey="domain_name"
-        renderCustomModal={this.renderCustomModal()}
+        modalChildren={this.renderCustomModal()}
         listOptions={this.listOptions}
+        initOption={{
+          defaultEditData: $$defaultData.toJS(),
+        }}
         deleteable={
           ($$item, index) => (index !== 0)
         }
-        maxListSize="16"
-        customModal
         actionable
         selectable
       />

@@ -1,6 +1,8 @@
 import { fromJS } from 'immutable';
 import validator from 'shared/validator';
+import utils, { immutableUtils } from 'shared/utils';
 
+// Radius
 export const $$radiusServerChoices = fromJS([
   {
     id: 'serverType',
@@ -25,19 +27,20 @@ export const $$radiusServerChoices = fromJS([
 ]);
 
 export const $$radiusAuthServer = fromJS([
+  // {
+  //   id: 'template_name',
+  //   label: __('Name'),
+  //   form: 'authServer',
+  //   type: 'text',
+  //   maxLength: '31',
+  //   required: true,
+  //   className: 'cols col-12',
+  //   notEditable: true,
+  //   validator: validator({
+  //     rules: 'utf8Len:[1,31]',
+  //   }),
+  // },
   {
-    id: 'template_name',
-    label: __('Name'),
-    form: 'authServer',
-    type: 'text',
-    maxLength: '31',
-    required: true,
-    className: 'cols col-12',
-    notEditable: true,
-    validator: validator({
-      rules: 'utf8Len:[1,31]',
-    }),
-  }, {
     id: 'nasip',
     label: __('NAS IP'),
     form: 'authServer',
@@ -308,6 +311,7 @@ export const $$radiusAdvancedSetting = fromJS([
     defaultValue: 'UNCHANGE',
     noTable: true,
     type: 'select',
+    className: 'cols col-6',
     required: true,
     placeholder: __('Please Select ') + __('User Format'),
     options: [
@@ -331,6 +335,7 @@ export const $$radiusAdvancedSetting = fromJS([
       return false;
     },
     label: __('Silent Time'),
+    className: 'cols col-6',
     fieldset: 'parameter',
     defaultValue: '300',
     min: '60',
@@ -341,6 +346,7 @@ export const $$radiusAdvancedSetting = fromJS([
     help: __('Seconds'),
   }, {
     id: 'retry_times',
+    className: 'cols col-6',
     disabled: (data) => {
       if (data.get('serverType') === 'local') {
         return true;
@@ -356,6 +362,7 @@ export const $$radiusAdvancedSetting = fromJS([
     required: true,
   }, {
     id: 'resp_time',
+    className: 'cols col-6',
     label: __('Response Timeout Time'),
     fieldset: 'parameter',
     type: 'number',
@@ -367,6 +374,7 @@ export const $$radiusAdvancedSetting = fromJS([
   },
   {
     id: 'accton_enable',
+    className: 'cols col-6',
     disabled: (data) => {
       if (data.get('serverType') === 'local') {
         return true;
@@ -384,6 +392,7 @@ export const $$radiusAdvancedSetting = fromJS([
     text: __('Enable'),
   }, {
     id: 'accton_sendtimes',
+    className: 'cols col-6',
     disabled: (data) => {
       if (data.get('serverType') === 'local') {
         return true;
@@ -404,6 +413,7 @@ export const $$radiusAdvancedSetting = fromJS([
     },
   }, {
     id: 'accton_sendinterval',
+    className: 'cols col-6',
     disabled: (data) => {
       if (data.get('serverType') === 'local') {
         return true;
@@ -426,6 +436,7 @@ export const $$radiusAdvancedSetting = fromJS([
   },
   {
     id: 'acct_interim_interval',
+    className: 'cols col-6',
     disabled: (data) => {
       if (data.get('serverType') === 'local') {
         return true;
@@ -443,6 +454,7 @@ export const $$radiusAdvancedSetting = fromJS([
     max: '3600',
   }, {
     id: 'realretrytimes',
+    className: 'cols col-6',
     disabled: (data) => {
       if (data.get('serverType') === 'local') {
         return true;
@@ -458,3 +470,395 @@ export const $$radiusAdvancedSetting = fromJS([
     max: '10',
   },
 ]);
+
+export const radiusDefaultData = utils.extend(
+  {},
+  immutableUtils.getDefaultData($$radiusAuthServer),
+  immutableUtils.getDefaultData($$radiusAccServer),
+  immutableUtils.getDefaultData($$radiusAdvancedSetting),
+);
+
+// Portal
+export const MSG = {
+  Seconds: __('Seconds'),
+  minutes: __('Minutes'),
+  hour: __('Hour'),
+  hours: __('Hours'),
+  days: __('Days'),
+  userDef: __('User Defined'),
+  imageDes: __('Select 1-3 slide pictures of dimension 640px*640px'),
+};
+export const refreshtimeOtions = [
+  {
+    value: '2',
+    label: `2 ${MSG.Seconds}`,
+  }, {
+    value: '3',
+    label: `3 ${MSG.Seconds}`,
+  }, {
+    value: '5',
+    label: `5 ${MSG.Seconds}`,
+    default: true,
+  }, {
+    value: '10',
+    label: `10 ${MSG.Seconds}`,
+  }, {
+    value: '20',
+    label: `20 ${MSG.Seconds}`,
+  },
+];
+
+// minutes
+export const expirationOptions = [
+  {
+    value: '600',
+    label: `10 ${MSG.minutes}`,
+  }, {
+    value: '1200',
+    label: `20 ${MSG.minutes}`,
+  }, {
+    value: '1800',
+    label: `30 ${MSG.minutes}`,
+  }, {
+    value: '3600',
+    label: `1 ${MSG.hour}`,
+  }, {
+    value: '14400',
+    label: `4 ${MSG.hours}`,
+  }, {
+    value: '28800',
+    label: `8 ${MSG.hours}`,
+  }, {
+    value: '86400',
+    label: `24 ${MSG.hours}`,
+  }, {
+    value: '172800',
+    label: `2 ${MSG.days}`,
+  }, {
+    value: '259200',
+    label: `3 ${MSG.days}`,
+  }, {
+    value: '432000',
+    label: `5 ${MSG.days}`,
+  }, {
+    value: '604800',
+    label: `7 ${MSG.days}`,
+  }, {
+    value: '1296000',
+    label: `15 ${MSG.days}`,
+  }, {
+    value: '2592000',
+    label: `30 ${MSG.days}`,
+  },
+];
+export const $$potalServerOptions = fromJS([
+  // {
+  //   id: 'template_name',
+  //   label: __('Server Name'),
+  //   noForm: true,
+  //   formProps: {
+  //     type: 'text',
+  //     maxLength: '31',
+  //     notEditable: true,
+  //     noForm: true,
+  //     required: true,
+  //     validator: validator({
+  //       rules: 'utf8Len:[1,31]',
+  //     }),
+  //   },
+  // },
+  {
+    id: 'server_ipaddr',
+    label: __('Server IP'),
+    fieldset: 'auth',
+    fieldsetOption: {
+      legend: ' ',
+      className: 'cols col-6',
+    },
+    formProps: {
+      type: 'text',
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+      // visible(data) {
+      //   return data.get('address_type') === '1';
+      // },
+    },
+  },
+  {
+    id: 'server_port',
+    label: __('Server Port'),
+    fieldset: 'auth',
+    formProps: {
+      type: 'number',
+      min: '1',
+      max: '65535',
+      required: true,
+    },
+  }, {
+    id: 'server_key',
+    label: __('Shared Key'),
+    fieldset: 'auth',
+    noTable: true,
+    formProps: {
+      type: 'password',
+      maxLength: '31',
+      required: true,
+      validator: validator({
+        rules: 'pwd',
+      }),
+    },
+  }, {
+    id: 'server_url',
+    label: __('Redirect URL'),
+    fieldset: 'other',
+    fieldsetOption: {
+      legend: ' ',
+      className: 'cols col-6',
+    },
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  }, {
+    id: 'ac_ip',
+    label: __('AC IP'),
+    fieldset: 'other',
+    formProps: {
+      type: 'text',
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  },
+]);
+
+export const $$potalServerFormOptions = immutableUtils.getFormOptions($$potalServerOptions);
+export const potalServerDefaultSettingData = immutableUtils.getDefaultData($$potalServerOptions);
+
+// Portal Rules
+export const $$potalRuleOptions = fromJS([
+  {
+    id: 'interface_bind',
+    label: __('Port'),
+    formProps: {
+      type: 'switch',
+      inputStyle: {
+        display: 'block',
+      },
+      required: true,
+    },
+  },
+  {
+    id: 'template_name',
+    label: __('Server Name'),
+    defaultValue: 'local',
+    noForm: true,
+    noTable: true,
+    formProps: {
+      type: 'select',
+      required: true,
+      notEditable: true,
+    },
+  },
+  {
+    id: 'max_usernum',
+    label: __('Max Users'),
+    defaultValue: '4096',
+    formProps: {
+      type: 'number',
+      min: '5',
+      max: '4096',
+    },
+  }, {
+    id: 'auth_mode',
+    label: __('Auth Type'),
+    defaultValue: '1',
+    options: [
+      {
+        value: '1',
+        label: __('Direct'),
+      },
+      {
+        value: '2',
+        label: __('Layer3'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+      inputStyle: {
+        width: '200px',
+      },
+    },
+  }, {
+    id: 'auth_ip',
+    label: __('Authentication IP'),
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'ip',
+      }),
+      required: true,
+      visible(data) {
+        return data.get('auth_mode') === '2';
+      },
+    },
+  }, {
+    id: 'auth_mask',
+    label: __('Authentication Subnet Mask'),
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'mask',
+      }),
+      required: true,
+      visible(data) {
+        return data.get('auth_mode') === '2';
+      },
+    },
+  },
+  {
+    id: 'idle_test',
+    label: __('Permanent Authentication'),
+    defaultValue: '0',
+    formProps: {
+      type: 'checkbox',
+      value: '1',
+    },
+  },
+]);
+
+export const $$potalRuleFormOptions = immutableUtils.getFormOptions($$potalRuleOptions);
+export const potalRuleDefaultSettingData = immutableUtils.getDefaultData($$potalRuleOptions);
+
+// Portal template
+export const $$portalTemplateOptions = fromJS([
+  // {
+  //   id: 'name',
+  //   text: _('Name'),
+  //   formProps: {
+  //     maxLength: '129',
+  //     type: 'text',
+  //     validator: validator({
+  //       rules: 'utf8Len:[1, 128]',
+  //     }),
+  //   },
+  // },
+  {
+    id: 'ip',
+    text: _('IP'),
+    noTable: true,
+    noForm: true,
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  }, {
+    id: 'address',
+    text: _('Address'),
+    noTable: true,
+    noForm: true,
+    formProps: {
+      type: 'text',
+      maxLength: '256',
+      validator: validator({
+        rules: 'utf8Len:[1, 255]',
+      }),
+    },
+  }, {
+    id: 'basip',
+    text: _('BAS'),
+    noTable: true,
+    noForm: true,
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  },
+  {
+    id: 'ssid',
+    text: _('SSID'),
+    options: [
+      {
+        value: '',
+        label: __('ALL'),
+      },
+    ],
+    formProps: {
+      type: 'select',
+      maxLength: '129',
+      validator: validator({
+        rules: 'utf8Len:[1, 128]',
+      }),
+    },
+  },
+  {
+    id: 'apmac',
+    text: _('AP MAC'),
+    options: [
+      {
+        value: '',
+        label: __('ALL'),
+      },
+    ],
+    formProps: {
+      type: 'select',
+    },
+  },
+  {
+    id: 'web',
+    text: _('Web Template'),
+    formProps: {
+      type: 'select',
+      defaultValue: '6',
+      required: true,
+    },
+  },
+  {
+    id: 'des',
+    text: _('Description'),
+    noTable: true,
+    formProps: {
+      type: 'textarea',
+      maxLength: '257',
+      validator: validator({
+        rules: 'utf8Len:[1, 256]',
+      }),
+    },
+  }, {
+    id: 'x',
+    text: _('x'),
+    noForm: true,
+    noTable: true,
+    formProps: {
+      type: 'select',
+    },
+  }, {
+    id: 'y',
+    text: _('y'),
+    noForm: true,
+    noTable: true,
+    formProps: {
+      type: 'select',
+
+    },
+  }, {
+    id: 'apid',
+    text: _('AP ID'),
+    noForm: true,
+    noTable: true,
+    formProps: {
+      type: 'select',
+    },
+  },
+]);
+
+export const $$portalTemplateFormOptions = immutableUtils.getFormOptions($$portalTemplateOptions);
+export const portalTemplateDefaultSettingData =
+    immutableUtils.getDefaultData($$portalTemplateOptions);
+
+

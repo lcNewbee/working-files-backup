@@ -51,6 +51,14 @@ var immutableUtils = {
     return ret;
   },
 
+  /**
+   * 获取默认值对象
+   *
+   * $$options(List)  配置集合
+   * $$options(String)  默认值的名称，默认 ‘defaultValue’
+   *
+   * return Object
+   */
   getDefaultData: function ($$options, key) {
     var defaultKey = key || 'defaultValue';
     var ret = {};

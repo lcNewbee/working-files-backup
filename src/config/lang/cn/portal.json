@@ -280,5 +280,14 @@
   "The format of the file is incorrect,please upload zip file!":"文件格式不正确,请选择ZIP格式的文件",
   "Please choose the date of today or before today!":"请选择今天的日期或者今天之前的日期！",
   "%s should be the date of today or after %s !":"%s应该为今天的日期或者%s之后的日期！",
-  "%s should be the date of today or before %s!":"%s应该为今天的日期或者%s之前的日期！"
+  "%s should be the date of today or before %s!":"%s应该为今天的日期或者%s之前的日期！",
+
+  "Remote Radius Auth Server": "远程Radius认证服务器",
+  "Remote Radius Accounting Server": "远程Radius计费服务器",
+  "Remote Radius Server Advanced Settings": "远程Radius服务器高级设置",
+  "Remote Portal Server": "远程Portal服务器",
+  "Portal Server Type": "Portal 服务器类型",
+  "Radius Server Type": "Radius 服务器类型",
+
+  "Local Portal Rule": "本地Portal规则"
 }

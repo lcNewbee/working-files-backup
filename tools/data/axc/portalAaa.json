@@ -9,19 +9,185 @@
         "domain_name":"Local",
         "auth_accesstype": "portal",
         "auth_schemetype": "1",
-        "radius_template": "test"
+        "radius_server_type": "local",
+        "portal_server_type": "local",
+
+        "radius": {
+          "radius_template": "local",
+          "nasip": "123.123.122.1",
+          "authpri_ipaddr": "1.1.1.1",
+          "authpri_port": "222",
+          "authpri_key": "2232",
+          "authsecond_ipaddr": "",
+          "authsecond_port": "",
+          "authsecond_key": "",
+          "acctpri_ipaddr": "1.1.1.1",
+          "acctpri_port": "3132",
+          "acctpri_key": "test",
+          "acctsecond_ipaddr": "",
+          "acctsecond_port": "",
+          "acctsecond_key": "",
+          "accton_enable": "0",
+          "accton_sendtimes": "23",
+          "accton_sendinterval": "22",
+          "quiet_time": "12",
+          "resp_time": "12",
+          "retry_times": "12",
+          "acct_interim_interval": "12",
+          "realretrytimes": "122",
+          "username_format": "WITHOUT"
+        },
+        "portalServer": {
+          "portal_template": "local",
+          "address_type": "1",
+          "server_ipaddr":"192.189.2.2",
+          "server_port":"324",
+          "server_key":"2334324432",
+          "server_url":"www.google.com",
+          "ac_ip":"192.189.2.2",
+          "interface_bind": "eth1"
+        },
+
+        "portalRule": {
+          "interface_bind": "eth2",
+          "template_name": "local",
+          "max_usernum": 50,
+          "auth_mode": 1,
+          "auth_ip": "192.189.2.2",
+          "auth_mask": "255.255.255.0",
+          "auth_domain": "test",
+          "idle_test": 1
+        },
+
+        "portalTemplate": {
+          "mac": "00:111:22:33:22",
+          "ssid": "Axilspot",
+          "address": "222",
+          "web": "LeeSon"
+        }
       },
       {
         "domain_name":"Remote joy",
         "auth_accesstype": "8021x-access",
-        "auth_schemetype": "0",
-        "radius_template": "test22"
+        "auth_schemetype": "1",
+        "radius_server_type": "remote",
+        "portal_server_type": "remote",
+
+        "radius": {
+          "radius_template": "Remote joy",
+          "nasip": "123.123.122.1",
+          "authpri_ipaddr": "1.1.1.1",
+          "authpri_port": "222",
+          "authpri_key": "2232",
+          "authsecond_ipaddr": "",
+          "authsecond_port": "",
+          "authsecond_key": "",
+          "acctpri_ipaddr": "1.1.1.1",
+          "acctpri_port": "3132",
+          "acctpri_key": "test",
+          "acctsecond_ipaddr": "",
+          "acctsecond_port": "",
+          "acctsecond_key": "",
+          "accton_enable": "0",
+          "accton_sendtimes": "23",
+          "accton_sendinterval": "22",
+          "quiet_time": "12",
+          "resp_time": "12",
+          "retry_times": "12",
+          "acct_interim_interval": "12",
+          "realretrytimes": "122",
+          "username_format": "WITHOUT"
+        },
+        "portalServer": {
+          "portal_template": "Remote joy",
+          "address_type": "1",
+          "server_ipaddr":"192.189.2.2",
+          "server_port":"324",
+          "server_key":"2334324432",
+          "server_url":"www.google.com",
+          "ac_ip":"192.189.2.2",
+          "interface_bind": "eth1"
+        },
+
+        "portalRule": {
+          "template_name": "Remote joy",
+          "interface_bind": "eth1",
+          "max_usernum": 50,
+          "auth_mode": 1,
+          "auth_ip": "192.189.2.2",
+          "auth_mask": "255.255.255.0",
+          "auth_domain": "test",
+          "idle_test": 1
+        },
+
+        "portalTemplate": {
+          "mac": "00:111:22:33:22",
+          "ssid": "Axilspot",
+          "address": "222",
+          "web": "LeeSon"
+        }
       },
       {
         "domain_name":"Remote Windy",
         "auth_accesstype":"portal",
-        "auth_schemetype":"1",
-        "radius_template": "test"
+        "auth_schemetype": "1",
+        "radius_server_type": "remote",
+        "portal_server_type": "remote",
+
+        "radius": {
+          "radius_template": "local",
+          "nasip": "123.123.122.1",
+          "authpri_ipaddr": "1.1.1.1",
+          "authpri_port": "222",
+          "authpri_key": "2232",
+          "authsecond_ipaddr": "",
+          "authsecond_port": "",
+          "authsecond_key": "",
+          "acctpri_ipaddr": "1.1.1.1",
+          "acctpri_port": "3132",
+          "acctpri_key": "test",
+          "acctsecond_ipaddr": "",
+          "acctsecond_port": "",
+          "acctsecond_key": "",
+          "accton_enable": "0",
+          "accton_sendtimes": "23",
+          "accton_sendinterval": "22",
+          "quiet_time": "12",
+          "resp_time": "12",
+          "retry_times": "12",
+          "acct_interim_interval": "12",
+          "realretrytimes": "122",
+          "username_format": "WITHOUT"
+        },
+
+        "portalServer": {
+          "portal_template": "Remote Windy",
+          "address_type": "1",
+          "server_ipaddr":"192.189.2.2",
+          "server_port":"324",
+          "server_key":"2334324432",
+          "server_url":"www.google.com",
+          "ac_ip":"192.189.2.2",
+          "interface_bind": "eth1"
+        },
+
+        "portalRule": {
+          "interface_bind": "eth0",
+          "template_name": "Remote joy",
+          "max_usernum": 50,
+          "auth_mode": 1,
+          "auth_ip": "192.189.2.2",
+          "auth_mask": "255.255.255.0",
+          "auth_domain": "test",
+          "idle_test": 1
+        },
+
+        "portalTemplate": {
+          "mac": "00:111:22:33:22",
+          "ssid": "Axilspot",
+          "address": "222",
+          "web": "LeeSon"
+        }
       }
     ]
   }
