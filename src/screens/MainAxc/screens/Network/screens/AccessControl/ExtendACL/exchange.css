@@ -1,0 +1,67 @@
+.exchange-wrap {
+  padding: 10px 20px;
+  border: 1px solid #888;
+}
+
+.box-left, .box-right {
+  min-width: 200px;
+  border: 1px solid #ccc;
+}
+
+.box-head {
+  background-color: #ddd;
+  margin: -10px -10px 0 -10px;
+}
+
+.box-body {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 300px;
+}
+
+.exchange-icon-wrap {
+  min-height: 280px;
+  text-align: center;
+  vertical-align: center;
+}
+
+.exchange-icon {
+  color: #0093dd;
+}
+
+h3 {
+  text-align: center;
+}
+
+.list-icon-wrap {
+  text-align: right;
+}
+
+.list-span {
+  display: inline-block;
+  width: 20%;
+  margin: 0 20px;
+}
+
+
+.list-icon {
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.action-icon {
+  cursor: pointer;
+  color: #0093dd;
+}
+
+
+.list-item {
+  padding: 10px 10px;
+  border-bottom: 1px solid #aaa;
+  white-space:nowrap;
+}
+
+.list-item:hover {
+  background-color: #aaa;
+  border-bottom: 1px solid #aaa;
+}

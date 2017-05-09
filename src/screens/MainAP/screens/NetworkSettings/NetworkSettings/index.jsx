@@ -359,29 +359,29 @@ export default class NetworkSettings extends React.Component {
       {
         id: 'name',
         text: __('Name'),
-        width: '150px',
+        // width: '150px',
       },
       {
         id: 'type',
         text: __('Type'),
         render: (val, item) => that.renderTypeSelector(val, item),
-        width: '150px',
+        // width: '150px',
         paddingLeft: '30px',
       },
       {
         id: 'vlanId',
         text: __('VLAN ID'),
         render: (val, item) => that.renderVlanIdInput(val, item),
-        wdith: '150',
+        // wdith: '150px',
         paddingLeft: '30px',
       },
-      {
-        id: 'members',
-        text: __('Members'),
-        render: (val, item) => that.renderMembersInput(val, item),
-        wdith: '150',
-        paddingLeft: '40px',
-      },
+      // {
+      //   id: 'members',
+      //   text: __('Members'),
+      //   render: (val, item) => that.renderMembersInput(val, item),
+      //   wdith: '150',
+      //   paddingLeft: '40px',
+      // },
       {
         id: 'manageVlanId',
         text: __('Manage VLAN ID'),
@@ -615,7 +615,7 @@ export default class NetworkSettings extends React.Component {
               {
                 this.props.route.funConfig.hasPortListTable ? (
                   <div className="row">
-                    <div className="o-box col-9 col-offset-1">
+                    <div className="o-box col-7 col-offset-1">
                       <div className="o-box__cell">
                         <Table
                           options={listOptions}
