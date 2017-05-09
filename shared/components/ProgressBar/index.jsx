@@ -4,8 +4,6 @@ import Progress from '../Progress';
 
 // import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
-require('./_index.scss');
-
 const propTypes = {
   title: PropTypes.string,    // 进度条上方显示的提示文字
 
