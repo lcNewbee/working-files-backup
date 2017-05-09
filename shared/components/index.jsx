@@ -1,5 +1,6 @@
 // Base
 export { default as PureComponent } from './Base/PureComponent';
+export { default as Tooltip } from './Tooltip';
 
 // Atom
 export { default as Icon } from './Icon';
