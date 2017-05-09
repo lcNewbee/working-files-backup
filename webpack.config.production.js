@@ -18,22 +18,7 @@ var GLOBALS = {
     BOWER: path.resolve(__dirname, 'bower_components'),
     NPM: path.resolve(__dirname, 'node_modules'),
   },
-
-  autoprefixer: {
-    browsers: [
-      'Android 2.3',
-      'Android >= 2.3',
-      'Chrome >= 20',
-      'Firefox >= 24', // Firefox 24 is the latest ESR
-      'iOS >= 6',
-      'Opera >= 12',
-      'Safari >= 6',
-    ],
-  },
 };
-
-// 自动添加兼容性css
-var autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 
 // 配置公用模块
 var vendorList = [
@@ -146,7 +131,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
-          use: "css-loader",
+          use: [
+            "css-loader",
+            "postcss-loader",
+          ],
         })
       },
 
@@ -155,14 +143,7 @@ module.exports = {
         use: ExtractTextPlugin.extract({
           use: [
             "css-loader",
-            {
-              loader:  "postcss-loader",
-              options: {
-                plugins: function () {
-                  return [autoprefixerHandle];
-                }
-              }
-            },
+            "postcss-loader",
             "sass-loader"
           ],
         })
@@ -229,7 +210,6 @@ module.exports = {
     // }),
     new ExtractTextPlugin({
       filename: "styles/axilspot.css",
-      disable: false,
       allChunks: true
     }),
     new webpack.optimize.UglifyJsPlugin(),

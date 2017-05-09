@@ -14,22 +14,7 @@ let GLOBALS = {
     BOWER: path.resolve(__dirname, 'bower_components'),
     NPM: path.resolve(__dirname, 'node_modules'),
   },
-
-  autoprefixer: {
-    browsers: [
-      'Android 2.3',
-      'Android >= 2.3',
-      'Chrome >= 20',
-      'Firefox >= 24', // Firefox 24 is the latest ESR
-      'iOS >= 6',
-      'Opera >= 12',
-      'Safari >= 6',
-    ],
-  },
 };
-
-// 自动添加兼容性css
-let autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 
 let config = {
 
@@ -106,7 +91,10 @@ let config = {
           },
           {
             loader: "css-loader"
-          }
+          },
+          {
+            loader: "postcss-loader",
+          },
         ]
       },
 
@@ -120,7 +108,7 @@ let config = {
             loader: "css-loader"
           },
           {
-            loader: "postcss-loader"
+            loader: "postcss-loader",
           },
           {
             loader: "sass-loader"
@@ -168,12 +156,6 @@ let config = {
 
       // set to false to see a list of every file being bundled.
       noInfo: true,
-
-      options: {
-        postcss() {
-          return [autoprefixerHandle];
-        },
-      }
     }),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.HotModuleReplacementPlugin(),
