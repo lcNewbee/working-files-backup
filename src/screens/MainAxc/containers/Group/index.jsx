@@ -470,7 +470,6 @@ export default class MainGroup extends React.Component {
       <aside className="t-main__asider-top">
         <header>
           <h3>{__('Group List')}</h3>
-          <p className="cur">{product.getIn(['group', 'selected', 'groupname'])}</p>
           <div className="toggle-bar" onClick={this.onClickTopMenuTitle} >
             <Icon
               name="caret-down"
@@ -478,7 +477,6 @@ export default class MainGroup extends React.Component {
             />
           </div>
         </header>
-
         <ul
           className="m-menu m-menu--open"
         >
@@ -1162,6 +1160,7 @@ export default class MainGroup extends React.Component {
         </div>
         <div className="t-main__nav">
           {this.renderAsideTop()}
+          <h4>{this.props.product.getIn(['group', 'selected', 'groupname'])}</h4>
           <Nav
             role="tree"
             menus={mainLeftMenus}

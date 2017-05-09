@@ -13,8 +13,8 @@
     "immutable"
   ],
   "scripts": {
-    "test:watch": "jest --config test/jest.config.json --watchAll --colors",
-    "test": "jest --config test/jest.config.json --colors"
+    "test:watch": "jest --watchAll --colors",
+    "test": "jest --colors"
   },
   "author": "",
   "private": true,
@@ -24,6 +24,7 @@
     "babel-cli": "^6.13.2",
     "babel-core": "^6.13.2",
     "babel-eslint": "^7.0.0",
+    "babel-jest": "^20.0.0",
     "babel-loader": "^7.0.0",
     "babel-plugin-module-resolver": "^2.4.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
@@ -119,5 +120,36 @@
     "redux-thunk": "^2.0.1",
     "tooltip.js": "^1.1.2",
     "whatwg-fetch": "^2.0.0"
+  },
+
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/test/__setup__/setup.jest.js",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/tools/",
+      "<rootDir>/build/",
+      "<rootDir>/dist/",
+      "<rootDir>/packages/"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/tools/",
+      "<rootDir>/build/",
+      "<rootDir>/dist/",
+      "<rootDir>/php/",
+      "<rootDir>/.tmp/",
+      "<rootDir>/node_modules/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/build/",
+      "<rootDir>/dist/",
+      "<rootDir>/.tmp/",
+      "<rootDir>/php/",
+      "<rootDir>/node_modules/"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
+      "\\.(css|scss|sass|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+    },
+    "collectCoverage": false,
+    "verbose": true
   }
 }

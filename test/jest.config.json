@@ -1,4 +1,8 @@
 {
+  "setupTestFrameworkScriptFile": "<rootDir>/test/__setup__/setup.jest.js",
+  "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+  },
   "modulePathIgnorePatterns": [
     "<rootDir>/tools/",
     "<rootDir>/build/",
@@ -25,6 +29,5 @@
     "\\.(css|scss|sass|less)$": "<rootDir>/test/__mocks__/styleMock.js"
   },
   "collectCoverage": false,
-  "verbose": false,
-  "setupTestFrameworkScriptFile": "<rootDir>/tools/test/step.jest.js"
+  "verbose": true
 }
