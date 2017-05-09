@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import classNames from 'classnames';
 import b28n from 'shared/b28n';
 import utils from '../../utils';
@@ -280,13 +280,13 @@ class Modal extends PureComponent {
                       >
                         {
                           hasCloseBtn ? (
-                            <button
-                              type="button"
+                            <span
+                              role="button"
                               className="close fr"
                               onClick={this.onClose}
                             >
                               &times;
-                            </button>
+                            </span>
                           ) : null
                         }
                         <h4 className="o-modal__title" id="myModalLabel">

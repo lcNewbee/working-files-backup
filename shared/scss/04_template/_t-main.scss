@@ -79,10 +79,6 @@ body {
 
       @include scrollbar();
 
-      .m-menu--open {
-        border-bottom: 1px solid #1d2531;
-      }
-
       .m-menu__link {
         background-color: #141a23;
         transition: background-color .2s ease-in-out;
@@ -142,6 +138,7 @@ body {
     }
 
     .t-main__asider-top {
+      position: relative;
       margin-top: 60px;
       max-height: 0;
       overflow-x: hidden;
@@ -163,30 +160,37 @@ body {
         width: $t-main-nav-size;
         z-index: 1502;
         background-color: #141a23;
+        padding: 8px 10px;
 
         > h3 {
-          background-color: #1d2531;
-          margin: 10px;
           margin-bottom: 0;
-          padding: 5px 10px;
-
-          > .icon {
-            float: right;
-            padding: 3px 5px;
-            background-color: #141a23;
-            color: $g-brand-primary;
-            cursor: pointer;
-          }
+          color: #666;
+        }
+        p {
+          font-size: 1rem;
+          list-style: 1;
+          color: $g-brand-primary;
+          text-shadow: 1px 1px 1px #000;
         }
       }
 
       .toggle-bar {
+        position: absolute;
+        right: $g-distance * .75;
+        top: 50%;
+        margin-top: -.625rem;
         text-align: center;
         cursor: pointer;
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 1px solid $g-brand-primary;
+        border-radius: 10px;
+        text-shadow: 1px 1px 1px #000;
 
         .icon {
           color: $g-brand-primary;
-          font-size: 1.25rem;
+          font-size: .75rem;
+          line-height: .75rem;
           transition: transform .4s ease-in-out;
         }
       }
@@ -351,7 +355,7 @@ body {
   position: static;
   bottom: 0;
   width: 100%;
-  padding: 4px 18px;
+  padding: 0 18px;
   width: $sidebar-width;
   margin-left: 1px;
   text-align: center;
@@ -360,9 +364,11 @@ body {
     cursor: pointer;
     width: 24px;
     height: 24px;
+    color: $g-brand-primary;
     line-height: 24px;
     text-align: center;
     transition: transform .3s ease-in-out;
+    text-shadow: 1px 1px 1px #000;
 
     &:hover {
       transform: rotate(90deg);

@@ -95,8 +95,11 @@ $model-z-index: 1650;
   border-bottom: 1px solid #999;
 
   .close {
+    display: inline-block;
+    vertical-align: middle;
     width: 22px;
     height: 22px;
+    line-height: 20px;
     margin-top: -2px;
     color: #fff;
     text-align: center;

@@ -4,7 +4,7 @@
 require('immutable');
 require('prop-types');
 require('react');
-require('react-addons-css-transition-group');
+require('react-transition-group/CSSTransitionGroup');
 require('react-addons-shallow-compare');
 require('react-dom');
 require('react-redux');

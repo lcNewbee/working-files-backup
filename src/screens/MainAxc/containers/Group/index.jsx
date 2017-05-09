@@ -9,12 +9,13 @@ import Nav from 'shared/components/Nav';
 import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
 import { NavLink } from 'react-router-dom';
-import { FormGroup, FormInput } from 'shared/components/Form';
+import { FormGroup, Tooltip } from 'shared/components';
 import Table from 'shared/components/Table';
 import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import { getActionable } from 'shared/axc';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as propertiesActions } from 'shared/containers/properties';
+
 import * as mainActions from '../../actions';
 
 const ALL_GROUP_ID = -100;
@@ -468,30 +469,8 @@ export default class MainGroup extends React.Component {
     return (
       <aside className="t-main__asider-top">
         <header>
-          <h3>
-            <span>{product.getIn(['group', 'selected', 'groupname'])}</span>
-            {
-              actionable && isGroupMenu ? (
-                <Icon
-                  name="plus"
-                  title={__('Add AP Group')}
-                  onClick={() => {
-                    this.props.fetchGroupAps();
-                    this.props.updateAddApGroup({
-                      groupname: '',
-                      remark: '',
-                    });
-                    this.props.showMainModal({
-                      title: __('Add AP Group'),
-                      isShow: true,
-                      size: 'lg',
-                      name: 'groupAdd',
-                    });
-                  }}
-                />
-              ) : null
-            }
-          </h3>
+          <h3>{__('Group List')}</h3>
+          <p className="cur">{product.getIn(['group', 'selected', 'groupname'])}</p>
           <div className="toggle-bar" onClick={this.onClickTopMenuTitle} >
             <Icon
               name="caret-down"
@@ -500,26 +479,6 @@ export default class MainGroup extends React.Component {
           </div>
         </header>
 
-        <h4 className="t-main__asider-header row">
-          {__('Group List')}
-          {
-              actionable ? (
-                <Icon
-                  name="cog"
-                  className="fr"
-                  onClick={() => {
-                    this.props.fetchGroupAps(manageGroupId);
-                    this.props.showMainModal({
-                      title: __('Manage AP Groups'),
-                      isShow: true,
-                      size: 'lg',
-                      name: 'groupManage',
-                    });
-                  }}
-                />
-              ) : null
-            }
-        </h4>
         <ul
           className="m-menu m-menu--open"
         >
@@ -564,19 +523,48 @@ export default class MainGroup extends React.Component {
           <div className="m-action-bar">
             {
               actionable ? (
-                <Icon
-                  name="cog"
-                  size="2x"
-                  onClick={() => {
-                    this.props.fetchGroupAps(manageGroupId);
-                    this.props.showMainModal({
-                      title: __('Manage AP Groups'),
-                      isShow: true,
-                      size: 'lg',
-                      name: 'groupManage',
-                    });
-                  }}
-                />
+                <div>
+                  <Tooltip
+                    title={__('Manage AP Groups')}
+                  >
+                    <Icon
+                      name="cog"
+                      size="2x"
+                      className="fr"
+                      onClick={() => {
+                        this.props.fetchGroupAps(manageGroupId);
+                        this.props.showMainModal({
+                          title: __('Manage AP Groups'),
+                          isShow: true,
+                          size: 'lg',
+                          name: 'groupManage',
+                        });
+                      }}
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    title={__('Add AP Group')}
+                  >
+                    <Icon
+                      name="plus"
+                      size="2x"
+                      className="fl"
+                      onClick={() => {
+                        this.props.fetchGroupAps();
+                        this.props.updateAddApGroup({
+                          groupname: '',
+                          remark: '',
+                        });
+                        this.props.showMainModal({
+                          title: __('Add AP Group'),
+                          isShow: true,
+                          size: 'lg',
+                          name: 'groupAdd',
+                        });
+                      }}
+                    />
+                  </Tooltip>
+                </div>
               ) : null
             }
           </div>

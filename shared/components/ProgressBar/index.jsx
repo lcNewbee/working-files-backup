@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Progress from '../Progress';
-import './ProgressBar.scss';
-// import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
+// import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+
+require('./_index.scss');
 
 const propTypes = {
-  title: PropTypes.string, // 进度条上方显示的提示文字
+  title: PropTypes.string,    // 进度条上方显示的提示文字
 
-  isShow: PropTypes.bool, // 控制组件是否显示
-  start: PropTypes.bool, // start属性控制进度条是否开始显示进度，为true表示开始移动，默认为false
-  style: PropTypes.object, // 设置进度条的样式
-  callback: PropTypes.func, //进度条走完后执行的函数
+  isShow: PropTypes.bool,     // 控制组件是否显示
+  start: PropTypes.bool,      // start属性控制进度条是否开始显示进度，为true表示开始移动，默认为false
+  style: PropTypes.object,    // 设置进度条的样式
+  callback: PropTypes.func,   // 进度条走完后执行的函数
 
   // 进度条总时长,单位为 秒（s）
   time: PropTypes.number,
@@ -37,6 +39,12 @@ export default class ProgressBar extends React.Component {
       n: props.initStep,
     };
   }
+
+  componentDidMount() {
+    if (this.props.start === true) {
+      this.startMove();
+    }
+  }
   componentWillReceiveProps(nextProps) {
     if (nextProps.initStep !== this.props.initStep) {
       this.setState({
@@ -48,12 +56,6 @@ export default class ProgressBar extends React.Component {
       this.setState({
         n: nextProps.curStep,
       });
-    }
-  }
-
-  componentDidMount() {
-    if (this.props.start === true) {
-      this.startMove();
     }
   }
 
