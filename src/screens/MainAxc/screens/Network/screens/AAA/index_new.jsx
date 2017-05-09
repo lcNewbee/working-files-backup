@@ -116,8 +116,8 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'access_server_type',
-    text: __('Access Server Type'),
+    id: 'portal_server_type',
+    text: __('Portal Server Type'),
     defaultValue: 'local',
     options: serverType,
     formProps: {
@@ -140,6 +140,42 @@ const listOptions = fromJS([
       type: 'switch',
       placeholder: __('Please Select ') + __('Rules Group'),
     },
+  },
+  {
+    id: 'radius_server_ip',
+    text: __('Radius Server IP'),
+    noForm: true,
+    render: (val, $$data) => $$data.getIn(['radius', 'nasip']),
+  },
+  {
+    id: 'portal_server_ip',
+    text: __('Portal Server IP'),
+    noForm: true,
+    render: (val, $$data) => $$data.getIn(['portalServer', 'server_ipaddr']),
+  },
+  {
+    id: 'portal_server_port',
+    text: __('Portal Rule Port'),
+    noForm: true,
+    render: (val, $$data) => $$data.getIn(['portalRule', 'interface_bind']),
+  },
+  {
+    id: 'portal_server_ssid',
+    text: __('Portal SSID '),
+    noForm: true,
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'ssid']),
+  },
+  {
+    id: 'portal_server_mac',
+    text: __('Portal AP MAC'),
+    noForm: true,
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']),
+  },
+  {
+    id: 'portal_server_web',
+    text: __('Portal WEB Template'),
+    noForm: true,
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'web']),
   },
 ]);
 
@@ -438,7 +474,7 @@ export default class View extends React.Component {
   }
   renderRemotePortalServer($$curData) {
     const { app } = this.props;
-    if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('access_server_type') !== 'remote') {
+    if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('portal_server_type') !== 'remote') {
       return null;
     }
 
@@ -525,7 +561,7 @@ export default class View extends React.Component {
       padding: '0 6px',
     };
 
-    if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('access_server_type') !== 'local') {
+    if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('portal_server_type') !== 'local') {
       return null;
     }
     return (
