@@ -21,16 +21,6 @@ const checkboxOptions = [
 ];
 const listOptions = fromJS([
   {
-    id: 'ip',
-    text: __('IP'),
-    formProps: {
-      type: 'text',
-      required: true,
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
     id: 'name',
     text: __('Name'),
     formProps: {
@@ -41,7 +31,19 @@ const listOptions = fromJS([
         rules: 'utf8Len:[1,128]',
       }),
     },
-  }, {
+  },
+  {
+    id: 'ip',
+    text: __('IP'),
+    formProps: {
+      type: 'text',
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  },
+  {
     id: 'sharedSecret',
     text: __('Shared Secret'),
     formProps: {

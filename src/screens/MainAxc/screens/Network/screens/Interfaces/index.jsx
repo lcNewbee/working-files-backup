@@ -146,6 +146,9 @@ export default class NetworkInterface extends React.Component {
         deleteable={
           ($$item, index) => (index !== 0)
         }
+        editable={
+          ($$item, index) => (index !== 0)
+        }
         selectable={
           ($$item, index) => (index !== 0)
         }

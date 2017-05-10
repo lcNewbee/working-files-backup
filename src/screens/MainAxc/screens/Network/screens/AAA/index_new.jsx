@@ -18,6 +18,11 @@ import {
   $$portalTemplateFormOptions, portalTemplateDefaultSettingData,
 } from './config';
 
+const $$defaultPortItem = fromJS({
+  value: '',
+  label: __('None'),
+});
+
 const RADIUS_AUTH_SERVER_KEY = 'authServer';
 const RADIUS_ACC_SERVER_KEY = 'accServer';
 const RADIUS_ADVANCE_SETTING_KEY = 'radiusAdvanceSetting';
@@ -106,9 +111,10 @@ const listOptions = fromJS([
   },
   {
     id: 'radius_server_type',
-    text: __('Radius Server Type'),
+    text: __('Radius Server'),
     options: serverType,
     defaultValue: 'local',
+    render: (val, $$data) => `${__(val)} (${$$data.getIn(['radius', 'nasip'])})`,
     formProps: {
       label: __('Radius Server Type'),
       required: true,
@@ -117,9 +123,10 @@ const listOptions = fromJS([
   },
   {
     id: 'portal_server_type',
-    text: __('Portal Server Type'),
+    text: __('Portal Server'),
     defaultValue: 'local',
     options: serverType,
+    render: (val, $$data) => `${__(val)} (${$$data.getIn(['portalServer', 'server_ipaddr'])})`,
     formProps: {
       label: __('Portal Server Type'),
       required: true,
@@ -142,40 +149,28 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'radius_server_ip',
-    text: __('Radius Server IP'),
-    noForm: true,
-    render: (val, $$data) => $$data.getIn(['radius', 'nasip']),
-  },
-  {
-    id: 'portal_server_ip',
-    text: __('Portal Server IP'),
-    noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalServer', 'server_ipaddr']),
-  },
-  {
     id: 'portal_server_port',
     text: __('Portal Rule Port'),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalRule', 'interface_bind']),
+    render: (val, $$data) => $$data.getIn(['portalRule', 'interface_bind']) || '-',
   },
   {
     id: 'portal_server_ssid',
     text: __('Portal SSID '),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'ssid']),
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'ssid']) || '-',
   },
   {
     id: 'portal_server_mac',
     text: __('Portal AP MAC'),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']),
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']) || '-',
   },
   {
     id: 'portal_server_web',
     text: __('Portal WEB Template'),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'web']),
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'web']) || '-',
   },
 ]);
 
@@ -215,6 +210,10 @@ export default class View extends React.Component {
 
     this.state = {
       radiusOptions: fromJS([]),
+      portOptions: fromJS([]),
+      ssidOptions: fromJS([]),
+      apsMacOptions: fromJS([]),
+      webTemplateOptions: fromJS([]),
       [RADIUS_AUTH_SERVER_KEY]: true,
       [RADIUS_ADVANCE_SETTING_KEY]: true,
       [RADIUS_ACC_SERVER_KEY]: true,
@@ -228,8 +227,20 @@ export default class View extends React.Component {
     this.onFetchData();
   }
   componentWillUpdate(nextProps, nextState) {
-    if (this.state.portOptions !== nextState.portOptions) {
-      this.initFormOptions(nextProps, nextState);
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const $$curList = $$myScreenStore.getIn(['data', 'list']);
+    const $$nextList = nextProps.store.getIn([myScreenId, 'data', 'list']);
+    const curActionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
+
+    if (nextState.portOptions.size > 0) {
+      if (this.state.portOptions !== nextState.portOptions) {
+        this.initFormOptions(nextProps, nextState);
+      } else if ($$curList !== $$nextList || curActionType !== nextActionType) {
+        this.updateFormOptions(nextProps, nextState);
+      }
     }
   }
   onSave() {
@@ -273,6 +284,44 @@ export default class View extends React.Component {
       },
     );
   }
+  updateFormOptions(nextProps, nextState) {
+    const { store } = nextProps;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    const $$curList = $$myScreenStore.getIn(['data', 'list']);
+    const $$myPortOptions = nextState.portOptions
+      .filterNot(($$item) => {
+        const curPort = $$item.get('value');
+        const curPortIndex = $$curList.findIndex(
+          $$listItem => $$listItem.getIn(['portalRule', 'interface_bind']) === curPort,
+        );
+        let ret = curPortIndex !== -1;
+
+        if (actionType === 'edit' && $$myScreenStore.getIn(['curListItem', 'domain_name']) === $$curList.getIn([curPortIndex, 'domain_name'])) {
+          ret = false;
+        }
+
+        return ret;
+      });
+
+    this.$$potalRuleFormOptions = $$potalRuleFormOptions.map(
+      ($$item) => {
+        const curId = $$item.get('id');
+        let $$ret = $$item;
+
+        switch (curId) {
+          case 'interface_bind':
+            $$ret = $$ret.set('options', $$myPortOptions.unshift($$defaultPortItem));
+            break;
+
+          default:
+        }
+
+        return $$ret;
+      },
+    );
+  }
   initFormOptions(nextProps, nextState) {
     const { store } = nextProps;
     const myScreenId = store.get('curScreenId');
@@ -287,7 +336,7 @@ export default class View extends React.Component {
         );
         let ret = curPortIndex !== -1;
 
-        if (actionType === 'edit' && $$myScreenStore.getIn(['curListItem', 'id']) === $$curList.getIn([curPortIndex, 'id'])) {
+        if (actionType === 'edit' && $$myScreenStore.getIn(['curListItem', 'domain_name']) === $$curList.getIn([curPortIndex, 'domain_name'])) {
           ret = false;
         }
 
@@ -311,7 +360,7 @@ export default class View extends React.Component {
 
         switch (curId) {
           case 'interface_bind':
-            $$ret = $$ret.set('options', $$myPortOptions);
+            $$ret = $$ret.set('options', $$myPortOptions.unshift($$defaultPortItem));
             break;
 
           default:
@@ -474,6 +523,7 @@ export default class View extends React.Component {
   }
   renderRemotePortalServer($$curData) {
     const { app } = this.props;
+
     if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('portal_server_type') !== 'remote') {
       return null;
     }
@@ -557,9 +607,7 @@ export default class View extends React.Component {
   }
   renderLocalPortalRule($$curData) {
     const { app } = this.props;
-    const colStyle = {
-      padding: '0 6px',
-    };
+    const $$localPortFormOptions = this.$$potalRuleFormOptions;
 
     if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('portal_server_type') !== 'local') {
       return null;
@@ -590,7 +638,7 @@ export default class View extends React.Component {
                 style={{
                   padding: '0 5px',
                 }}
-                options={this.$$potalRuleFormOptions}
+                options={$$localPortFormOptions}
                 data={$$curData.get('portalRule')}
                 onChangeData={(data) => {
                   this.props.updateCurEditListItem({
@@ -633,9 +681,23 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curListItem');
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    let $$myBaseFormOptions = $$baseFormOptions;
 
     if (actionType !== 'add' && actionType !== 'edit') {
       return null;
+    }
+
+    if (actionType === 'edit') {
+      $$myBaseFormOptions = $$myBaseFormOptions.map(
+        ($$item) => {
+          let $$ret = $$item;
+          if ($$item.get('notEditable')) {
+            $$ret = $$ret.set('readOnly', true);
+          }
+
+          return $$ret;
+        },
+      );
     }
 
     return (
@@ -644,7 +706,7 @@ export default class View extends React.Component {
           <FormContainer
             id="polifBase"
             className="o-form"
-            options={$$baseFormOptions}
+            options={$$myBaseFormOptions}
             initOption={{
               defaultEditData: $$defaultData.toJS(),
             }}

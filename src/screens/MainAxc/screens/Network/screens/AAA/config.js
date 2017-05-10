@@ -643,12 +643,12 @@ export const $$potalRuleOptions = fromJS([
   {
     id: 'interface_bind',
     label: __('Port'),
+    defaultValue: '',
     formProps: {
       type: 'switch',
       inputStyle: {
         display: 'block',
       },
-      required: true,
     },
   },
   {
@@ -661,6 +661,7 @@ export const $$potalRuleOptions = fromJS([
       type: 'select',
       required: true,
       notEditable: true,
+      visible: $$data => $$data.getIn(['interface_bind']),
     },
   },
   {
@@ -671,6 +672,7 @@ export const $$potalRuleOptions = fromJS([
       type: 'number',
       min: '5',
       max: '4096',
+      visible: $$data => $$data.getIn(['interface_bind']),
     },
   }, {
     id: 'auth_mode',
@@ -691,6 +693,7 @@ export const $$potalRuleOptions = fromJS([
       inputStyle: {
         width: '200px',
       },
+      visible: $$data => $$data.getIn(['interface_bind']),
     },
   }, {
     id: 'auth_ip',
@@ -701,8 +704,8 @@ export const $$potalRuleOptions = fromJS([
         rules: 'ip',
       }),
       required: true,
-      visible(data) {
-        return data.get('auth_mode') === '2';
+      visible($$data) {
+        return $$data.getIn(['interface_bind']) && $$data.get('auth_mode') === '2';
       },
     },
   }, {
@@ -714,8 +717,8 @@ export const $$potalRuleOptions = fromJS([
         rules: 'mask',
       }),
       required: true,
-      visible(data) {
-        return data.get('auth_mode') === '2';
+      visible($$data) {
+        return $$data.getIn(['interface_bind']) && $$data.get('auth_mode') === '2';
       },
     },
   },
@@ -726,6 +729,7 @@ export const $$potalRuleOptions = fromJS([
     formProps: {
       type: 'checkbox',
       value: '1',
+      visible: $$data => $$data.getIn(['interface_bind']),
     },
   },
 ]);

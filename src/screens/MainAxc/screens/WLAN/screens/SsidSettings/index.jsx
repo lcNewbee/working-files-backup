@@ -40,7 +40,7 @@ function getWebTemplateName() {
         options: json.data.list.map(
           item => ({
             value: item.id,
-            label: item.name,
+            label: __(item.name),
           }),
         ),
       }
@@ -71,7 +71,7 @@ let encryptionOptions = fromJS([
     label: __('NONE'),
   }, {
     value: 'psk-mixed',
-    label: __('SECURITY'),
+    label: __('WPA2-PSK'),
   }, {
     value: '802.1x',
     label: '802.1x',

@@ -46,6 +46,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[1, 128]',
       }),
+      render: val => __(val),
     },
   }, {
     id: 'adv',
@@ -101,6 +102,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[0, 256]',
       }),
+      render: val => __(val),
     },
   }, {
     id: 'file',

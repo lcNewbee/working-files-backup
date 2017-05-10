@@ -18,18 +18,18 @@ const defaultProps = {
   test: 0,
 };
 const settingsOptions = fromJS([
-  {
-    id: 'bas_ip',
-    label: __('Bas IP'),
-    fieldset: 'base_setting',
-    className: 'cols col-6',
-    required: true,
-    type: 'text',
-    validator: validator({
-      rules: 'ip',
-      exclude: '127.0.0.1',
-    }),
-  },
+  // {
+  //   id: 'bas_ip',
+  //   label: __('Bas IP'),
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   required: true,
+  //   type: 'text',
+  //   validator: validator({
+  //     rules: 'ip',
+  //     exclude: '127.0.0.1',
+  //   }),
+  // },
   {
     id: 'bas_port',
     fieldset: 'base_setting',
@@ -146,21 +146,23 @@ const settingsOptions = fromJS([
     validator: validator({
       rules: 'num:[0,10]',
     }),
-  }, {
-    id: 'web',
-    required: true,
-    fieldset: 'base_setting',
-    label: __('Web Template'),
-    className: 'cols col-6',
-    type: 'select',
-    defaultValue: '0',
-    options: [
-      {
-        value: '0',
-        label: __('Default Web'),
-      },
-    ],
-  }, {
+  },
+  // {
+  //   id: 'web',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   label: __('Web Template'),
+  //   className: 'cols col-6',
+  //   type: 'select',
+  //   defaultValue: '0',
+  //   options: [
+  //     {
+  //       value: '0',
+  //       label: __('Default Web'),
+  //     },
+  //   ],
+  // },
+  {
     id: 'list',
     type: 'list',
     className: 'table--base',

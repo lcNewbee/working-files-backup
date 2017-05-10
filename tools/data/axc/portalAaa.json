@@ -182,12 +182,7 @@
           "idle_test": 1
         },
 
-        "portalTemplate": {
-          "mac": "00:111:22:33:22",
-          "ssid": "Axilspot",
-          "address": "222",
-          "web": "LeeSon"
-        }
+        "portalTemplate": {}
       }
     ]
   }
