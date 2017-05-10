@@ -13,7 +13,10 @@ const listOptions = fromJS([
   {
     id: 'basip',
     text: __('Bas IP'),
+    defaultValue: '',
     width: '120px',
+    noForm: true,
+    noTable: true,
     formProps: {
       type: 'text',
       required: true,
@@ -21,7 +24,8 @@ const listOptions = fromJS([
         rules: 'ip',
       }),
     },
-  }, {
+  },
+  {
     id: 'ssid',
     text: __('SSID'),
     width: '120px',

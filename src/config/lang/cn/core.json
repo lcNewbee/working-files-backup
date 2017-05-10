@@ -440,6 +440,7 @@
   "Select file extension range: %s": "选择的文件后缀名范围: %s",
   "Same %s item already exists": "相同%s的项已经存在",
   "Group with the same name already exists": "已存在相同名字的组",
+  "Item with the same name already exists": "已存在相同名字的项",
 
   "bytes": "字节",
   "e.g. %s": "例如: %s",

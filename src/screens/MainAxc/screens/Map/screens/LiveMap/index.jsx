@@ -157,14 +157,14 @@ export default class LiveMap extends React.PureComponent {
         id: 'actions',
         text: __('Actions'),
         width: 180,
-        render: (val, $$item, index) => (
+        render: (val, $$item, $$option) => (
           <div className="action-btns">
             <Button
               icon="edit"
               text={__('Edit')}
               size="sm"
               onClick={() => {
-                this.props.editListItemByIndex(index);
+                this.props.editListItemByIndex($$option.get('__index__'));
               }}
             />
             <Button

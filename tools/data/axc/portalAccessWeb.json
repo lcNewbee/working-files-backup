@@ -16,7 +16,7 @@
     "list": [
       {
         "id":"1",
-        "name":"One Key",
+        "name":"One Key Auth",
         "countShow":"0",
         "countAuth":"0",
         "description":"One Key Auth",
@@ -32,7 +32,7 @@
       },
       {
         "id":"3",
-        "name":"Wechat",
+        "name":"Wechat Auth",
         "countShow":"0",
         "countAuth":"0",
         "description":"Wechat Auth",
@@ -40,7 +40,7 @@
       },
       {
         "id":"4",
-        "name":"Facebook",
+        "name":"Facebook Auth",
         "countShow":"0",
         "countAuth":"0",
         "description":"Facebook Auth",
@@ -48,7 +48,7 @@
       },
       {
         "id":"5",
-        "name":"SNS",
+        "name":"SNS Auth",
         "countShow":"0",
         "countAuth":"0",
         "description":"SNS Auth",
@@ -56,7 +56,7 @@
       },
       {
         "id":"6",
-        "name":"ALL",
+        "name":"ALL Auth",
         "countShow":"0",
         "countAuth":"0",
         "description":"One Key Auth,Account,Wechat,Facebook,SNS",

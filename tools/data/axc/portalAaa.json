@@ -63,7 +63,7 @@
           "mac": "00:111:22:33:22",
           "ssid": "Axilspot",
           "address": "222",
-          "web": "LeeSon"
+          "web": ""
         }
       },
       {
@@ -124,7 +124,7 @@
           "mac": "00:111:22:33:22",
           "ssid": "Axilspot",
           "address": "222",
-          "web": "LeeSon"
+          "web": "1"
         }
       },
       {
@@ -182,7 +182,12 @@
           "idle_test": 1
         },
 
-        "portalTemplate": {}
+        "portalTemplate": {
+          "mac": "00:111:22:33:22",
+          "ssid": "Axilspot",
+          "address": "222",
+          "web": "2"
+        }
       }
     ]
   }

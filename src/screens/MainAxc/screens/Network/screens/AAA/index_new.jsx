@@ -30,6 +30,8 @@ const PORTAL_SERVER_KEY = 'portalServer';
 const PORTAL_RULE_KEY = 'portalRule';
 const PORTAL_LOCAL_RULE_KEY = 'portalLocalRule';
 
+const DEFAULT_STR = _('ALL');
+
 const accessTypeSeletOptions = [
   {
     value: 'portal',
@@ -152,25 +154,31 @@ const listOptions = fromJS([
     id: 'portal_server_port',
     text: __('Portal Rule Port'),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalRule', 'interface_bind']) || '-',
+    render: (val, $$data) => $$data.getIn(['portalRule', 'interface_bind']) || __('None'),
   },
   {
     id: 'portal_server_ssid',
     text: __('Portal SSID '),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'ssid']) || '-',
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'ssid']) || DEFAULT_STR,
   },
   {
     id: 'portal_server_mac',
     text: __('Portal AP MAC'),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']) || '-',
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']) || DEFAULT_STR,
   },
   {
     id: 'portal_server_web',
+    valuePath: ['portalTemplate', 'web'],
     text: __('Portal WEB Template'),
+    options: fromJS([]),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'web']) || '-',
+    render: (val, $$data, $$option) => {
+      const $$curOptions = $$option.get('options');
+      const $$curItem = $$curOptions.find($$item => $$item.get('value') === val);
+      return $$curItem ? $$curItem.get('label') : DEFAULT_STR;
+    },
   },
 ]);
 
@@ -376,6 +384,8 @@ export default class View extends React.Component {
 
         if ($$ret.get('id') === 'radius_template') {
           $$ret = $$ret.set('options', nextState.radiusOptions);
+        } else if ($$ret.get('id') === 'portal_server_web') {
+          $$ret = $$ret.set('options', nextState.webTemplateOptions);
         }
         return $$ret;
       },
@@ -708,7 +718,6 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curListItem');
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
-    let $$myBaseFormOptions = $$baseFormOptions;
 
     if (actionType !== 'add' && actionType !== 'edit') {
       return null;
