@@ -33,7 +33,7 @@ class CateGory_Model extends CI_Model {
         return json_encode($arr);
     }
 
-    function getPram($data){        
+    private function getPram($data){        
         $arr = array(
             'id'=> element('id',$data,null),
             'name' => element('name',$data),
@@ -41,9 +41,9 @@ class CateGory_Model extends CI_Model {
             'time' => element('time',$data),
             'state' => element('state',$data),
             'money' => element('money',$data),
-            'maclimit' => element('maclimit',$data),
-            'maclimitcount' => element('maclimitcount',$data),
-            'autologin' => element('autologin',$data)
+            'maclimit' => 0,
+            'maclimitcount' => 0,
+            'autologin' => 0
         );
         return $arr;
     }

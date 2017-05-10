@@ -26,11 +26,11 @@ class AaaServer extends CI_Controller {
         $result = null;
         $actionType = element('action', $data);
         switch($actionType) {
-            case 'add' : $result = $this->AaaServer_Model->add_aaa_template($data);
+            case 'add' : $result = $this->AaaServer_Model->add($data);
                 break;
-            case 'delete' : $result = $this->AaaServer_Model->del_aaa_template($data);
+            case 'delete' : $result = $this->AaaServer_Model->del($data);
                 break;
-            case 'edit' : $result = $this->AaaServer_Model->edit_aaa_template($data);
+            case 'edit' : $result = $this->AaaServer_Model->edit($data);
                 break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
