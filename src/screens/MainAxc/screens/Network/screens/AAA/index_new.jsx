@@ -284,13 +284,15 @@ export default class View extends React.Component {
       },
     );
   }
-  updateFormOptions(nextProps, nextState) {
-    const { store } = nextProps;
+  updateFormOptions(props, state) {
+    const { store } = props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const $$curList = $$myScreenStore.getIn(['data', 'list']);
-    const $$myPortOptions = nextState.portOptions
+    const $$curListItem = $$myScreenStore.getIn(['curListItem']);
+    const curListItemName = $$myScreenStore.getIn(['curListItem', 'domain_name']);
+    const $$myPortOptions = state.portOptions
       .filterNot(($$item) => {
         const curPort = $$item.get('value');
         const curPortIndex = $$curList.findIndex(
@@ -321,6 +323,31 @@ export default class View extends React.Component {
         return $$ret;
       },
     );
+
+    //
+    if (actionType === 'edit') {
+      this.$$baseFormOptions = $$baseFormOptions.map(
+        ($$item) => {
+          const curId = $$item.get('id');
+          const localReadOnlyIds = 'radius_server_type,portal_server_type,auth_accesstype,';
+          let $$ret = $$item;
+
+          if ($$item.get('notEditable')) {
+            $$ret = $$ret.set('readOnly', true);
+          }
+
+          if (curListItemName === 'local') {
+            if (localReadOnlyIds.indexOf(`${curId},`) !== -1) {
+              $$ret = $$ret.set('readOnly', true);
+            }
+          }
+
+          return $$ret;
+        },
+      );
+    } else if (actionType === 'add') {
+      this.$$baseFormOptions = $$baseFormOptions;
+    }
   }
   initFormOptions(nextProps, nextState) {
     const { store } = nextProps;
@@ -687,18 +714,18 @@ export default class View extends React.Component {
       return null;
     }
 
-    if (actionType === 'edit') {
-      $$myBaseFormOptions = $$myBaseFormOptions.map(
-        ($$item) => {
-          let $$ret = $$item;
-          if ($$item.get('notEditable')) {
-            $$ret = $$ret.set('readOnly', true);
-          }
+    // if (actionType === 'edit') {
+    //   $$myBaseFormOptions = $$myBaseFormOptions.map(
+    //     ($$item) => {
+    //       let $$ret = $$item;
+    //       if ($$item.get('notEditable')) {
+    //         $$ret = $$ret.set('readOnly', true);
+    //       }
 
-          return $$ret;
-        },
-      );
-    }
+    //       return $$ret;
+    //     },
+    //   );
+    // }
 
     return (
       <div className="o-box row">
@@ -706,7 +733,7 @@ export default class View extends React.Component {
           <FormContainer
             id="polifBase"
             className="o-form"
-            options={$$myBaseFormOptions}
+            options={this.$$baseFormOptions}
             initOption={{
               defaultEditData: $$defaultData.toJS(),
             }}
@@ -750,8 +777,10 @@ export default class View extends React.Component {
         deleteable={
           ($$item, index) => (index !== 0)
         }
+        selectable={
+          ($$item, index) => (index !== 0)
+        }
         actionable
-        selectable
       />
     );
   }

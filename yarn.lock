@@ -1567,9 +1567,24 @@ cheerio@^0.22.0:
     lodash.reject "^4.4.0"
     lodash.some "^4.4.0"
 
-chokidar@1.6.1, chokidar@^1.4.3, chokidar@^1.6.1:
+chokidar@1.6.1:
   version "1.6.1"
   resolved "http://registry.npm.taobao.org/chokidar/download/chokidar-1.6.1.tgz#2f4447ab5e96e50fb3d789fd90d4c72e0e4c70c2"
+  dependencies:
+    anymatch "^1.3.0"
+    async-each "^1.0.0"
+    glob-parent "^2.0.0"
+    inherits "^2.0.1"
+    is-binary-path "^1.0.0"
+    is-glob "^2.0.0"
+    path-is-absolute "^1.0.0"
+    readdirp "^2.0.0"
+  optionalDependencies:
+    fsevents "^1.0.0"
+
+chokidar@^1.4.3, chokidar@^1.6.1:
+  version "1.7.0"
+  resolved "http://registry.npm.taobao.org/chokidar/download/chokidar-1.7.0.tgz#798e689778151c8076b4b360e5edd28cda2bb468"
   dependencies:
     anymatch "^1.3.0"
     async-each "^1.0.0"
@@ -2073,10 +2088,11 @@ create-hmac@^1.1.0, create-hmac@^1.1.2:
     inherits "^2.0.1"
 
 create-react-class@^15.5.1, create-react-class@^15.5.2:
-  version "15.5.2"
-  resolved "http://registry.npm.taobao.org/create-react-class/download/create-react-class-15.5.2.tgz#6a8758348df660b88326a0e764d569f274aad681"
+  version "15.5.3"
+  resolved "http://registry.npm.taobao.org/create-react-class/download/create-react-class-15.5.3.tgz#fb0f7cae79339e9a179e194ef466efa3923820fe"
   dependencies:
     fbjs "^0.8.9"
+    loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
 cross-spawn@^3.0.0:
@@ -2789,8 +2805,8 @@ es-to-primitive@^1.1.1:
     is-symbol "^1.0.1"
 
 es5-ext@^0.10.14, es5-ext@^0.10.9, es5-ext@~0.10.14:
-  version "0.10.15"
-  resolved "http://registry.npm.taobao.org/es5-ext/download/es5-ext-0.10.15.tgz#c330a5934c1ee21284a7c081a86e5fd937c91ea6"
+  version "0.10.16"
+  resolved "http://registry.npm.taobao.org/es5-ext/download/es5-ext-0.10.16.tgz#1ef1b04f3d09db6a5d630226d62202f2e425e45a"
   dependencies:
     es6-iterator "2"
     es6-symbol "~3.1"
@@ -3305,10 +3321,10 @@ finalhandler@0.5.0:
     unpipe "~1.0.0"
 
 find-babel-config@^1.0.1:
-  version "1.0.1"
-  resolved "http://registry.npm.taobao.org/find-babel-config/download/find-babel-config-1.0.1.tgz#179fa7b36bf3e94b487410855df448b6f853b9ec"
+  version "1.1.0"
+  resolved "http://registry.npm.taobao.org/find-babel-config/download/find-babel-config-1.1.0.tgz#acc01043a6749fec34429be6b64f542ebb5d6355"
   dependencies:
-    json5 "^0.5.0"
+    json5 "^0.5.1"
     path-exists "^3.0.0"
 
 find-cache-dir@^0.1.1:
@@ -4230,8 +4246,8 @@ ignore@^3.2.0:
   resolved "http://registry.npm.taobao.org/ignore/download/ignore-3.3.0.tgz#3812d22cbe9125f2c2b4915755a1b8abd745a001"
 
 image-webpack-loader@^3.0.0:
-  version "3.3.0"
-  resolved "http://registry.npm.taobao.org/image-webpack-loader/download/image-webpack-loader-3.3.0.tgz#e377ed58b1418b8db20267b17d8fcbbfe6b0de63"
+  version "3.3.1"
+  resolved "http://registry.npm.taobao.org/image-webpack-loader/download/image-webpack-loader-3.3.1.tgz#d2d72be024f8975e48c984f2401c0c484897cbd3"
   dependencies:
     imagemin "^5.2.2"
     imagemin-gifsicle "^5.1.0"
@@ -5020,8 +5036,8 @@ js-tokens@^3.0.0:
   resolved "http://registry.npm.taobao.org/js-tokens/download/js-tokens-3.0.1.tgz#08e9f132484a2c45a30907e9dc4d5567b7f114d7"
 
 js-yaml@^3.4.3, js-yaml@^3.5.1, js-yaml@^3.7.0:
-  version "3.8.3"
-  resolved "http://registry.npm.taobao.org/js-yaml/download/js-yaml-3.8.3.tgz#33a05ec481c850c8875929166fe1beb61c728766"
+  version "3.8.4"
+  resolved "http://registry.npm.taobao.org/js-yaml/download/js-yaml-3.8.4.tgz#520b4564f86573ba96662af85a8cafa7b4b5a6f6"
   dependencies:
     argparse "^1.0.7"
     esprima "^3.1.1"
@@ -5132,8 +5148,8 @@ jsonify@~0.0.0:
   resolved "http://registry.npm.taobao.org/jsonify/download/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
 jsonparse@^1.2.0:
-  version "1.3.0"
-  resolved "http://registry.npm.taobao.org/jsonparse/download/jsonparse-1.3.0.tgz#85fc245b1d9259acc6941960b905adf64e7de0e8"
+  version "1.3.1"
+  resolved "http://registry.npm.taobao.org/jsonparse/download/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
 
 jsonpointer@^4.0.0:
   version "4.0.1"
@@ -6587,8 +6603,8 @@ postcss-load-plugins@^2.3.0:
     object-assign "^4.1.0"
 
 postcss-loader@>0.8.2:
-  version "2.0.1"
-  resolved "http://registry.npm.taobao.org/postcss-loader/download/postcss-loader-2.0.1.tgz#4078aef52336c2434415aabaacbf9d7e7ae025e8"
+  version "2.0.3"
+  resolved "http://registry.npm.taobao.org/postcss-loader/download/postcss-loader-2.0.3.tgz#1aac19ef0ce78866f204c0f6299a386556c555a0"
   dependencies:
     loader-utils "^1.x"
     postcss "^6.x"
@@ -6840,10 +6856,11 @@ promise@^7.1.1:
     asap "~2.0.3"
 
 prop-types@^15.0.0, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
-  version "15.5.8"
-  resolved "http://registry.npm.taobao.org/prop-types/download/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
+  version "15.5.9"
+  resolved "http://registry.npm.taobao.org/prop-types/download/prop-types-15.5.9.tgz#d478eef0e761396942f70c78e772f76e8be747c9"
   dependencies:
     fbjs "^0.8.9"
+    loose-envify "^1.3.1"
 
 prr@~0.0.0:
   version "0.0.0"
@@ -7051,8 +7068,8 @@ react-proxy@^3.0.0-alpha.0:
     lodash "^4.6.1"
 
 react-redux-toastr@^6.2.4:
-  version "6.2.4"
-  resolved "http://registry.npm.taobao.org/react-redux-toastr/download/react-redux-toastr-6.2.4.tgz#2c31349fe705a680d324b7c6a2acaf5acbed1b60"
+  version "6.2.6"
+  resolved "http://registry.npm.taobao.org/react-redux-toastr/download/react-redux-toastr-6.2.6.tgz#d02166bb9f172fa383bc9d59cf6c25308fe5735b"
   dependencies:
     classnames "^2.2.3"
     eventemitter3 "^2.0.3"
@@ -7559,8 +7576,8 @@ sass-graph@^2.1.1:
     yargs "^6.6.0"
 
 sass-loader@^6.0.0:
-  version "6.0.3"
-  resolved "http://registry.npm.taobao.org/sass-loader/download/sass-loader-6.0.3.tgz#33983b1f90d27ddab0e57d0dac403dce9bc7ecfd"
+  version "6.0.4"
+  resolved "http://registry.npm.taobao.org/sass-loader/download/sass-loader-6.0.4.tgz#e1f20f534e8514445b9362deb566a4c40440d98d"
   dependencies:
     async "^2.1.5"
     clone-deep "^0.2.4"
@@ -7923,8 +7940,8 @@ stdout-stream@^1.4.0:
     readable-stream "^2.0.1"
 
 stealthy-require@^1.1.0:
-  version "1.1.0"
-  resolved "http://registry.npm.taobao.org/stealthy-require/download/stealthy-require-1.1.0.tgz#ca61cf38766158ea819a0a1b0070b35de957f9b0"
+  version "1.1.1"
+  resolved "http://registry.npm.taobao.org/stealthy-require/download/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
 
 stream-browserify@^2.0.1:
   version "2.0.1"
@@ -7945,8 +7962,8 @@ stream-consume@~0.1.0:
   resolved "http://registry.npm.taobao.org/stream-consume/download/stream-consume-0.1.0.tgz#a41ead1a6d6081ceb79f65b061901b6d8f3d1d0f"
 
 stream-http@^2.3.1:
-  version "2.7.0"
-  resolved "http://registry.npm.taobao.org/stream-http/download/stream-http-2.7.0.tgz#cec1f4e3b494bc4a81b451808970f8b20b4ed5f6"
+  version "2.7.1"
+  resolved "http://registry.npm.taobao.org/stream-http/download/stream-http-2.7.1.tgz#546a51741ad5a6b07e9e31b0b10441a917df528a"
   dependencies:
     builtin-status-codes "^3.0.0"
     inherits "^2.0.1"

@@ -121,7 +121,6 @@
     "tooltip.js": "^1.1.2",
     "whatwg-fetch": "^2.0.0"
   },
-
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/test/__setup__/setup.jest.js",
     "modulePathIgnorePatterns": [

@@ -6,7 +6,7 @@
   "data": {
     "list": [
       {
-        "domain_name":"Local",
+        "domain_name": "local",
         "auth_accesstype": "portal",
         "auth_schemetype": "1",
         "radius_server_type": "local",

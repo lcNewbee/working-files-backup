@@ -24,7 +24,7 @@ require('echarts/lib/chart/bar');
 require('echarts/lib/chart/line');
 require('echarts/lib/chart/lines');
 
-// 引入折饼图
+// 引入饼图
 require('echarts/lib/chart/pie');
 
 // 仪表盘
