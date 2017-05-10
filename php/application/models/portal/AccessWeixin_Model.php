@@ -2,6 +2,7 @@
 class AccessWeixin_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
+        $this->load->database();
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $this->load->helper(array('array', 'db_operation'));        
     }
@@ -30,27 +31,6 @@ class AccessWeixin_Model extends CI_Model {
         return json_encode($arr);
     }
 
-    function getPram($data){
-        $default_domain = $this->portalsql->select('domain')
-                                ->from('config')
-                                ->get()->result_array();
-        $default_outTime = $this->portalsql->select('outTime')
-                        ->from('portal_weixin_wifi')
-                        ->where('id=1')
-                        ->get()->result_array();
-        $arr = array(
-            'id'=> element('id',$data),
-            'basip' => element('basip',$data),
-            'ssid' => element('ssid',$data),
-            'shopId' => element('shopId',$data),
-            'appId' => element('appId',$data),
-            'secretKey' => element('secretKey',$data),
-            //'domain' => element('domain',$data,$default_domain['0']['domain']),
-            'domain' => 'http://'.$data['basip'].':8080',
-            'outTime' => element('outTime',$data,$default_outTime['0']['outTime'])
-        );
-        return $arr;
-    }
     function Add($data) {
         $result = FALSE;
         $insertary = $this->getPram($data);
@@ -75,5 +55,41 @@ class AccessWeixin_Model extends CI_Model {
         $result = $this->portalsql->replace('portal_weixin_wifi',$updata,array('id'=>$updata['id']));
         $result ? $result = json_ok() : $result = json_no('update error');
         return json_encode($result);
+    }
+
+    private function getPram($data){   
+        if(!isset($data['basip'])){
+            $data['basip'] = $this->getInterface();
+        }    
+        $default_domain = $this->portalsql->select('domain')
+                                ->from('config')
+                                ->get()->result_array();
+        $default_outTime = $this->portalsql->select('outTime')
+                        ->from('portal_weixin_wifi')
+                        ->where('id=1')
+                        ->get()->result_array();
+        $arr = array(
+            'id'=> element('id',$data),
+            'basip' => element('basip',$data, ''),
+            'ssid' => element('ssid',$data),
+            'shopId' => element('shopId',$data),
+            'appId' => element('appId',$data),
+            'secretKey' => element('secretKey',$data),
+            //'domain' => element('domain',$data,$default_domain['0']['domain']),
+            'domain' => 'http://'.$data['basip'].':8080',
+            'outTime' => element('outTime',$data,$default_outTime['0']['outTime'])
+        );        
+        return $arr;
+    }
+
+    private function getInterface() {
+        $data = $this->db->select('port_name,ip1')
+                ->from('port_table')
+                ->get()
+                ->result_array();
+        if( count($data) >0 ){
+            return $data[0]['ip1'];
+        }
+        return  $_SERVER['SERVER_ADDR'];
     }
 }

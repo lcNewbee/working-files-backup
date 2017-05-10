@@ -71,8 +71,8 @@ class AaaServer_Model extends CI_Model {
                             $row['portal_server_type'] = 'remote';                    
                         }
                         $row['portalServer'] = $this->getPortal($row['portal_template_name']);//获取portal属性
-                        //$this->getPortalRule($row['portal_template_name'], $row['portalServer']['interface_bind']);//获取portal 规则
-                        $row['portalRule'] = array('interface_bind'=>'');
+                        $row['portalRule'] = $this->getPortalRule($row['portal_template_name'], $row['portalServer']['interface_bind']);//获取portal 规则
+                        //$row['portalRule'] = array('interface_bind'=>'');
                     }  
                 }
 
