@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from 'shared/components/Form/Checkbox';
+import { fromJS, List } from 'immutable';
 import Icon from 'shared/components/Icon';
 import utilsCore from 'shared/utils/lib/core';
 
@@ -96,12 +97,16 @@ class Row extends Component {
     return options.map(
         ($$curTdOption) => {
           const id = $$curTdOption.get('id');
+          const $$valuePath = $$curTdOption.get('valuePath');
           const filterObj = $$curTdOption.get('filterObj');
           const thisKey = `tableRow${id}`;
-          const originVal = item.get(id);
-          let currVal = originVal;
+          let currVal = item.get(id);
           let currItemArr = [];
           let currValArr = [];
+
+          if ($$valuePath) {
+            currVal = item.getIn($$valuePath.toJS());
+          }
 
           // 优先过滤处理值
           if (filterObj && typeof filterObj.transform === 'function') {
@@ -194,7 +199,9 @@ class Row extends Component {
 
           // 使用自定义渲染函数
           } else {
-            currVal = $$curTdOption.get('render')(currVal, item, index);
+            currVal = $$curTdOption.get('render')(currVal, item, $$curTdOption.merge({
+              __index__: index,
+            }));
           }
 
           // 当鼠标停留在列表上，该项是否显示悬浮提示框，如果该列需要，则在options中添加getTitle函数，函数返回的字符串则作为提示内容

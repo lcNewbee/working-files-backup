@@ -32,6 +32,7 @@ const ERROR_MSG_MAP = {
   6402: __('This IP has existed'),
   6403: __('This username has benn used'),
   6404: __('The format of the file is incorrect,please upload zip file!'),
+  6405: __('Item with the same name already exists'),
 };
 
 export default ERROR_MSG_MAP;

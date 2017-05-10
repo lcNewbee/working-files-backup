@@ -550,7 +550,8 @@ class AppScreenList extends React.PureComponent {
           }));
         }
         this.listTableOptions = this.listTableOptions.setIn([-1, 'render'],
-          (val, $$item, index) => {
+          (val, $$item, $$option) => {
+            const index = $$option.get('__index__');
             let editableResult = editable;
             let deleteableResult = deleteable;
 

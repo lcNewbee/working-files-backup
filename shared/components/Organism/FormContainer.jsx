@@ -350,13 +350,13 @@ class FormContainer extends PureComponent {
           if (!$$item.get('noForm')) {
             retNode = $$item.set(
               'render',
-              (val, $$listData, index) => this.renderFormGroup(
+              (val, $$listData, $$itemOption) => this.renderFormGroup(
                 $$item.merge({
-                  __index__: index,
+                  __index__: $$itemOption.get('__index__'),
                   showLabel: false,
                   display: 'block',
                 }),
-                [formGroupListId, index, $$item.get('id')],
+                [formGroupListId, $$itemOption.get('__index__'), $$item.get('id')],
               ),
             );
           }
