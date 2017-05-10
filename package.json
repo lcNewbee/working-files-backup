@@ -71,7 +71,7 @@
     "image-webpack-loader": "^3.0.0",
     "jest": "^20.0.0",
     "jsdom": ">8.1.0",
-    "lerna": "^2.0.0-rc.3",
+    "lerna": "^2.0.0-rc.4",
     "mime": "^1.3.4",
     "minimist": "^1.2.0",
     "node-sass": "^4.5.2",
