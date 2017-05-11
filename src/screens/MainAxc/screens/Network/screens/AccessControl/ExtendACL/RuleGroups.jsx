@@ -8,7 +8,7 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import SlideViewer from './SlideViewer';
 import Exchange from './Exchange';
-import './style.css';
+import './style.scss';
 
 const exchangeListOptions = fromJS([
   {
@@ -57,6 +57,26 @@ export default class View extends React.Component {
         id: '5',
         name: 'GROUP5',
       },
+      {
+        id: '6',
+        name: 'GROUP6',
+      },
+      {
+        id: '7',
+        name: 'GROUP7',
+      },
+      {
+        id: '8',
+        name: 'GROeUP8',
+      },
+      {
+        id: '9',
+        name: 'GROeeeeeeUP9',
+      },
+      {
+        id: '10',
+        name: 'GROUP10',
+      },
     ]);
 
     return (
@@ -65,6 +85,7 @@ export default class View extends React.Component {
           <SlideViewer
             slidedirection="horizontal"
             slidekey="name"
+            contentwidth="150"
             slidelist={slidelist}
             onSlideBtnClick={(val) => {
               console.log(val);
@@ -161,8 +182,12 @@ export default class View extends React.Component {
             leftboxtitle="Left Box"
             rightboxtitle="Right Box"
             rightaddbutton
-            leftaddbutton
             listOptions={exchangeListOptions}
+            onEditModalOk={(list) => { console.log(list.toJS()); }}
+            onAddModalOk={(list) => { console.log(list.toJS()); }}
+            onDeleteBtnClick={(list) => { console.log(list.toJS()); }}
+            onRightListDoubleClick={(list) => { console.log(list.toJS()); }}
+            onLeftListDoubleClick={(list) => { console.log(list.toJS()); }}
             leftboxlist={fromJS([
               { index: '1', name: 'the first rule' },
               { index: '2', name: 'the second rule' },
@@ -173,6 +198,9 @@ export default class View extends React.Component {
               { index: '3', name: 'the third rule' },
               { index: '4', name: 'the fourth rule' },
               { index: '1', name: 'the first rule' },
+            ])}
+            rightboxlist={fromJS([
+              { index: '1', name: 'the first rule' },
               { index: '2', name: 'the second rule' },
               { index: '3', name: 'the third rule' },
               { index: '4', name: 'the fourth rule' },
@@ -180,6 +208,7 @@ export default class View extends React.Component {
               { index: '2', name: 'the second rule' },
               { index: '3', name: 'the third rule' },
               { index: '4', name: 'the fourth rule' },
+              { index: '1', name: 'the first rule' },
             ])}
           />
         </div>

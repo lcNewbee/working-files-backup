@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import utils from 'utils';
 import { fromJS, List } from 'immutable';
-import { Button, Icon, Modal, FormContainer } from 'shared/components';
+import { Icon, Modal, FormContainer } from 'shared/components';
 
-import './exchange.css';
+import './exchange.scss';
 
 const propTypes = {
   listOptions: PropTypes.instanceOf(List),
 
-  leftaddbutton: PropTypes.bool,
+  // leftaddbutton: PropTypes.bool,
   leftboxtitle: PropTypes.string,
   leftboxlist: PropTypes.instanceOf(List),
 
@@ -18,6 +18,10 @@ const propTypes = {
   rightboxlist: PropTypes.instanceOf(List),
 
   onEditModalOk: PropTypes.func,
+  onAddModalOk: PropTypes.func,
+  onDeleteBtnClick: PropTypes.func,
+  onRightListDoubleClick: PropTypes.func,
+  onLeftListDoubleClick: PropTypes.func,
 };
 
 const defaultProps = {
@@ -27,10 +31,27 @@ const defaultProps = {
 class Exchange extends Component {
   constructor(props) {
     super(props);
+    this.listOnMove = fromJS([]);
+    this.dragPosition = '';
+    this.dropPosition = '';
     this.state = {
-      showEditModal: true,
+      showEditModal: false,
       listItemOnEdit: fromJS({}),
     };
+    utils.binds(this, [
+      'onEditModalOk', 'onAddModalOk',
+    ]);
+  }
+
+  onAddModalOk() {
+    const listItemOnEdit = this.state.listItemOnEdit;
+    if (this.props.onAddModalOk) {
+      this.props.onAddModalOk(listItemOnEdit);
+    }
+    this.setState({
+      showEditModal: false,
+      listItemOnEdit: fromJS({}),
+    });
   }
 
   onEditModalOk() {
@@ -48,21 +69,12 @@ class Exchange extends Component {
     return (
       <div className="exchange-wrap container-grid">
         <div className="row">
+
           <div className="box-left cols col-5">
             {
               this.props.leftboxtitle ? (
                 <div className="box-head box-head-left row">
                   <h3 className="cols col-11">{this.props.leftboxtitle}</h3>
-                  {
-                    this.props.leftaddbutton ? (
-                      <Icon
-                        className="action-icon cols col-1"
-                        name="plus"
-                        size="lg"
-                        onClick={(e) => { this.setState({ showEditModal: true }); console.log('e', e.target); }}
-                      />
-                    ) : null
-                  }
                 </div>
               ) : null
             }
@@ -73,7 +85,91 @@ class Exchange extends Component {
                     this.props.leftboxlist.map((list) => {
                       const listshowinbox = this.props.listOptions.filter(item => item.get('showInBox'));
                       return (
-                        <li className="list-item">
+                        <li
+                          className="list-item"
+                          onDoubleClick={() => { this.props.onLeftListDoubleClick(list); }}
+                          draggable
+                          onDrag={() => {
+                            this.listOnMove = list;
+                            this.dragPosition = 'left';
+                          }}
+                          onDragOver={(e) => { e.preventDefault(); }}
+                          onDrop={() => {
+                            this.dropPosition = 'left';
+                            if (this.dragPosition !== this.dropPosition) {
+                              console.log('position', this.dragPosition, this.dropPosition);
+                              this.props.onRightListDoubleClick(list);
+                            }
+                          }}
+                        >
+                          {
+                            listshowinbox.map((item) => {
+                              const id = item.get('id');
+                              return (
+                                <span className="list-span">{list.get(id)}</span>
+                              );
+                            })
+                          }
+                        </li>
+                      );
+                    })
+                  ) : null
+                }
+              </ul>
+            </div>
+            <div className="box-footer" />
+          </div>
+
+          <div className="cols cols-2 exchange-icon-wrap">
+            <div className="exchange-icon">
+              <Icon
+                name="exchange"
+                size="4x"
+              />
+            </div>
+          </div>
+
+          <div className="box-right cols col-5">
+            {
+              this.props.rightboxtitle ? (
+                <div className="box-head box-head-right row">
+                  <h3 className="cols col-11">{this.props.rightboxtitle}</h3>
+                  {
+                    this.props.rightaddbutton ? (
+                      <Icon
+                        className="action-icon cols col-1"
+                        name="plus"
+                        size="lg"
+                        onClick={() => { this.setState({ showEditModal: true }); }}
+                      />
+                    ) : null
+                  }
+                </div>
+              ) : null
+            }
+            <div className="box-body">
+              <ul>
+                {
+                  this.props.rightboxlist ? (
+                    this.props.rightboxlist.map((list) => {
+                      const listshowinbox = this.props.listOptions.filter(item => item.get('showInBox'));
+                      return (
+                        <li
+                          className="list-item"
+                          onDoubleClick={() => { this.props.onRightListDoubleClick(list); }}
+                          draggable
+                          onDrag={() => {
+                            this.listOnMove = list;
+                            this.dragPosition = 'right';
+                          }}
+                          onDragOver={(e) => { e.preventDefault(); }}
+                          onDrop={() => {
+                            this.dropPosition = 'right';
+                            if (this.dragPosition !== this.dropPosition) {
+                              this.props.onLeftListDoubleClick(list);
+                            }
+                          }}
+                        >
                           {
                             listshowinbox.map((item) => {
                               const id = item.get('id');
@@ -87,11 +183,20 @@ class Exchange extends Component {
                               className="list-icon"
                               name="pencil-square-o"
                               size="lg"
+                              onClick={() => {
+                                this.setState({
+                                  showEditModal: true,
+                                  listItemOnEdit: list,
+                                });
+                              }}
                             />
                             <Icon
                               className="list-icon"
                               name="trash-o"
                               size="lg"
+                              onClick={() => {
+                                this.props.onDeleteBtnClick(list);
+                              }}
                             />
                             <Icon
                               className="list-icon"
@@ -108,35 +213,8 @@ class Exchange extends Component {
             </div>
             <div className="box-footer" />
           </div>
-          <div className="cols cols-2 exchange-icon-wrap">
-            <div className="exchange-icon">
-              <Icon
-                name="exchange"
-                size="4x"
-              />
-            </div>
-          </div>
-          <div className="box-right cols col-5">
-            {
-              this.props.rightboxtitle ? (
-                <div className="box-head box-head-right row">
-                  <h3 className="cols col-11">{this.props.rightboxtitle}</h3>
-                  {
-                    this.props.rightaddbutton ? (
-                      <Icon
-                        className="action-icon cols col-1"
-                        name="plus"
-                        size="lg"
-                      />
-                    ) : null
-                  }
-                </div>
-              ) : null
-            }
-            <div className="box-body" />
-            <div className="box-footer" />
-          </div>
         </div>
+
         <Modal
           isShow={this.state.showEditModal}
           title={__('Edit List')}

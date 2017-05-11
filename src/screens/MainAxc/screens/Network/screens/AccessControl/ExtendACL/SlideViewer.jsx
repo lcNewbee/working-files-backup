@@ -4,24 +4,29 @@ import utils from 'utils';
 import { fromJS, List } from 'immutable';
 import { Button, Icon } from 'shared/components';
 
+import './slideviewer.scss';
 
 const propTypes = {
   slidedirection: PropTypes.string,
   slidelist: PropTypes.instanceOf(List),
   slidekey: PropTypes.string,
   onSlideBtnClick: PropTypes.func,
+  contentwidth: PropTypes.string,
 };
 
 const defaultProps = {
   slidedirection: 'horizontal',
   slidelist: fromJS([]),
   slidekey: '',
+  contentwidth: '200',
 };
 
 class SlideViewer extends Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      sliderleft: '0',
+    };
     utils.binds(this, [
       'onSlideBtnClick',
     ]);
@@ -34,39 +39,41 @@ class SlideViewer extends Component {
   }
 
   render() {
-    const wrapwidth = this.props.slidedirection === 'horizontal' ? '100%' : 'auto';
-    const wrapheight = this.props.slidedirection === 'vertical' ? '100%' : 'auto';
     return (
-      <div
-        className="wrap row"
-        style={{
-          width: wrapwidth,
-          height: wrapheight,
-          padding: '20px',
-          border: '1px solid #ccc',
-        }}
-      >
+      <div className="slideview-wrap row">
         <div className="cols col-1">
           <Icon
             name="caret-left"
-            size="3x"
+            size="4x"
             style={{ color: '#0083cd' }}
+            onClick={() => {
+              const slideViewWrapWidth = this.slideViewWrap.offsetWidth;
+              const slideItemWdith = +this.props.contentwidth + 20;
+              const integrityNum = Math.floor(slideViewWrapWidth / slideItemWdith);
+              let left = +this.state.sliderleft + (integrityNum * slideItemWdith);
+              if (left > 0) {
+                left = 0;
+              }
+              this.setState({
+                sliderleft: `${left}`,
+              });
+            }}
           />
         </div>
         <div
           className="slider-wrap cols col-10"
-          style={{
-            overflow: 'hidden',
-            backgroundColor: '#999',
+          ref={(node) => {
+            this.slideViewWrap = node;
           }}
         >
-          <div
-            className="slider"
-          >
+          <div className="slider" >
             <nobr
               style={{
-                position: 'relative',
-                left: '-200px',
+                left: `${this.state.sliderleft}px`,
+                transition: 'left 1.5s',
+              }}
+              ref={(node) => {
+                this.slideWrap = node;
               }}
             >
               {
@@ -74,10 +81,14 @@ class SlideViewer extends Component {
                   const text = item.get(this.props.slidekey);
                   return (
                     <Button
+                      className="slide-content"
                       size="lg"
                       theme="primary"
                       text={text}
-                      style={{ margin: '10px' }}
+                      style={{
+                        margin: '10px',
+                        width: `${this.props.contentwidth}px`,
+                      }}
                       onClick={() => {
                         this.onSlideBtnClick(item);
                       }}
@@ -93,6 +104,17 @@ class SlideViewer extends Component {
             name="caret-right"
             size="4x"
             style={{ color: '#0083cd' }}
+            onClick={() => {
+              const slideViewWrapWidth = this.slideViewWrap.offsetWidth;
+              const slideItemWdith = +this.props.contentwidth + 20;
+              const integrityNum = Math.floor(slideViewWrapWidth / slideItemWdith);
+              const left = +this.state.sliderleft - (integrityNum * slideItemWdith);
+              if (Math.abs(left) < this.slideWrap.offsetWidth) {
+                this.setState({
+                  sliderleft: `${left}`,
+                });
+              }
+            }}
           />
         </div>
       </div>
