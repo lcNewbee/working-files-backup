@@ -84,7 +84,7 @@ module.exports = {
             options: {
               mimetype: 'image/png',
               limit: 11000,
-              name: 'images/[hash].[ext]',
+              name: 'images/[name].[ext]',
             },
           }
         ]
@@ -179,7 +179,7 @@ module.exports = {
   },
   output: {
     path: GLOBALS.folders.BUILD,
-    publicPath: '/',
+    publicPath: 'http://www.axilspot.com/demo-static/',
     filename: 'scripts/[name].bundle.js',
     chunkFilename: 'scripts/[id].bundle.js' //dundle生成的配置
   },

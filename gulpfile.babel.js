@@ -47,9 +47,7 @@ gulp.paths = paths;
 // 获取 App 名称
 
 // 从命令行的参数获取
-if (argv.n) {
-  gulp.appName = argv.n;
-}
+gulp.shellArgv = argv;
 
 // 引入
 require('./tools/gulp/help');

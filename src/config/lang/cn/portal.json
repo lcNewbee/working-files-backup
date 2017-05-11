@@ -103,7 +103,7 @@
   "App Auth":"App认证",
   "SNS Auth":"短信认证",
   "ALL Auth": "所有认证",
-  "Support All Auth": "支持所有认证",
+  "Support One Key, Accessed User, SMS, Wechat, Facebook Auth": "支持一键，接入用户，短信，微信，Facebook 等认证",
   "Only Support One Key Auth": "仅支持一键认证",
   "Accessed User Auth": "接入用户认证",
   "Only Support Accessed User Auth": "仅支持接入用户认证",

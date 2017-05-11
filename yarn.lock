@@ -74,7 +74,20 @@ after@0.8.1:
   version "0.8.1"
   resolved "http://registry.npm.taobao.org/after/download/after-0.8.1.tgz#ab5d4fb883f596816d3515f8f791c0af486dd627"
 
-airbnb-prop-types@^2.1.0:
+airbnb-js-shims@^1.1.1:
+  version "1.1.1"
+  resolved "http://registry.npm.taobao.org/airbnb-js-shims/download/airbnb-js-shims-1.1.1.tgz#27224f0030f244e6570442ed1020772c1434aec2"
+  dependencies:
+    array-includes "^3.0.2"
+    es5-shim "^4.5.9"
+    es6-shim "^0.35.1"
+    object.entries "^1.0.3"
+    object.getownpropertydescriptors "^2.0.3"
+    object.values "^1.0.3"
+    string.prototype.padend "^3.0.0"
+    string.prototype.padstart "^3.0.0"
+
+airbnb-prop-types@^2.4.1:
   version "2.5.3"
   resolved "http://registry.npm.taobao.org/airbnb-prop-types/download/airbnb-prop-types-2.5.3.tgz#2178ed7a1e6fc1d4864f7a3eab9cef3493f1da59"
   dependencies:
@@ -881,6 +894,10 @@ babel-plugin-transform-regenerator@^6.22.0, babel-plugin-transform-regenerator@^
   resolved "http://registry.npm.taobao.org/babel-plugin-transform-regenerator/download/babel-plugin-transform-regenerator-6.24.1.tgz#b8da305ad43c3c99b4848e4fe4037b770d23c418"
   dependencies:
     regenerator-transform "0.9.11"
+
+babel-plugin-transform-replace-object-assign@^0.2.1:
+  version "0.2.1"
+  resolved "http://registry.npm.taobao.org/babel-plugin-transform-replace-object-assign/download/babel-plugin-transform-replace-object-assign-0.2.1.tgz#52d35a1620e67350d921e56886d6911b49f97601"
 
 babel-plugin-transform-runtime@^6.15.0:
   version "6.23.0"
@@ -1861,6 +1878,10 @@ console-stream@^0.1.1:
   version "0.1.1"
   resolved "http://registry.npm.taobao.org/console-stream/download/console-stream-0.1.1.tgz#a095fe07b20465955f2fafd28b5d72bccd949d44"
 
+consolidated-events@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/consolidated-events/download/consolidated-events-1.0.1.tgz#70f475f4a5d6d20428e702da1b8870d9cc031a14"
+
 constant-case@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/constant-case/download/constant-case-2.0.0.tgz#4175764d389d3fa9c8ecd29186ed6005243b6a46"
@@ -2038,7 +2059,7 @@ core-js@^1.0.0:
   version "1.2.7"
   resolved "http://registry.npm.taobao.org/core-js/download/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
 
-core-js@^2.4.0:
+core-js@^2.4.0, core-js@^2.4.1:
   version "2.4.1"
   resolved "http://registry.npm.taobao.org/core-js/download/core-js-2.4.1.tgz#4de911e667b0eae9124e34254b53aea6fc618d3e"
 
@@ -2787,7 +2808,7 @@ error-stack-parser@^1.3.6:
   dependencies:
     stackframe "^0.3.1"
 
-es-abstract@^1.6.1, es-abstract@^1.7.0:
+es-abstract@^1.4.3, es-abstract@^1.5.1, es-abstract@^1.6.1, es-abstract@^1.7.0:
   version "1.7.0"
   resolved "http://registry.npm.taobao.org/es-abstract/download/es-abstract-1.7.0.tgz#dfade774e01bfcd97f96180298c449c8623fb94c"
   dependencies:
@@ -2810,6 +2831,10 @@ es5-ext@^0.10.14, es5-ext@^0.10.9, es5-ext@~0.10.14:
   dependencies:
     es6-iterator "2"
     es6-symbol "~3.1"
+
+es5-shim@^4.5.9:
+  version "4.5.9"
+  resolved "http://registry.npm.taobao.org/es5-shim/download/es5-shim-4.5.9.tgz#2a1e2b9e583ff5fed0c20a3ee2cbf3f75230a5c0"
 
 es6-iterator@2, es6-iterator@^2.0.1, es6-iterator@~2.0.1:
   version "2.0.1"
@@ -2843,6 +2868,10 @@ es6-set@~0.1.5:
     es6-iterator "~2.0.1"
     es6-symbol "3.1.1"
     event-emitter "~0.3.5"
+
+es6-shim@^0.35.1:
+  version "0.35.3"
+  resolved "http://registry.npm.taobao.org/es6-shim/download/es6-shim-0.35.3.tgz#9bfb7363feffff87a6cdb6cd93e405ec3c4b6f26"
 
 es6-symbol@3.1.1, es6-symbol@^3.1, es6-symbol@^3.1.1, es6-symbol@~3.1, es6-symbol@~3.1.1:
   version "3.1.1"
@@ -5218,7 +5247,7 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
-lerna@^2.0.0-rc.3:
+lerna@^2.0.0-rc.4:
   version "2.0.0-rc.4"
   resolved "http://registry.npm.taobao.org/lerna/download/lerna-2.0.0-rc.4.tgz#567fc62c1d46190ce5f5ee0f654e0a9c9a63bdba"
   dependencies:
@@ -5545,6 +5574,10 @@ lodash.templatesettings@^4.0.0:
   resolved "http://registry.npm.taobao.org/lodash.templatesettings/download/lodash.templatesettings-4.1.0.tgz#2b4d4e95ba440d915ff08bc899e4553666713316"
   dependencies:
     lodash._reinterpolate "~3.0.0"
+
+lodash.throttle@^4.1.1:
+  version "4.1.1"
+  resolved "http://registry.npm.taobao.org/lodash.throttle/download/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
 
 lodash.uniq@^4.5.0:
   version "4.5.0"
@@ -6121,6 +6154,13 @@ object.entries@^1.0.3, object.entries@^1.0.4:
     function-bind "^1.1.0"
     has "^1.0.1"
 
+object.getownpropertydescriptors@^2.0.3:
+  version "2.0.3"
+  resolved "http://registry.npm.taobao.org/object.getownpropertydescriptors/download/object.getownpropertydescriptors-2.0.3.tgz#8758c846f5b407adab0f236e0986f14b051caa16"
+  dependencies:
+    define-properties "^1.1.2"
+    es-abstract "^1.5.1"
+
 object.omit@^2.0.0:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/object.omit/download/object.omit-2.0.1.tgz#1a9c744829f39dbb858c76ca3579ae2a54ebd1fa"
@@ -6128,7 +6168,7 @@ object.omit@^2.0.0:
     for-own "^0.1.4"
     is-extendable "^0.1.1"
 
-object.values@^1.0.3:
+object.values@^1.0.3, object.values@^1.0.4:
   version "1.0.4"
   resolved "http://registry.npm.taobao.org/object.values/download/object.values-1.0.4.tgz#e524da09b4f66ff05df457546ec72ac99f13069a"
   dependencies:
@@ -7004,14 +7044,18 @@ react-addons-test-utils@>=15.0.0:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-dates@7.0.1:
-  version "7.0.1"
-  resolved "http://registry.npm.taobao.org/react-dates/download/react-dates-7.0.1.tgz#450cfa06de8af74f6ead65c42f511540771f4c90"
+react-dates@^12.0.0:
+  version "12.0.0"
+  resolved "http://registry.npm.taobao.org/react-dates/download/react-dates-12.0.0.tgz#6a906026ab8ec7590f07786637ea444e87524bef"
   dependencies:
-    airbnb-prop-types "^2.1.0"
-    array-includes "^3.0.2"
+    airbnb-prop-types "^2.4.1"
     classnames "^2.2.5"
-    react-moment-proptypes "^1.2.1"
+    consolidated-events "^1.0.1"
+    lodash.throttle "^4.1.1"
+    object.assign "^4.0.4"
+    object.values "^1.0.4"
+    prop-types "^15.5.6"
+    react-moment-proptypes "^1.3.0"
     react-portal "^3.0.0"
 
 react-deep-force-update@^2.0.1:
@@ -7049,7 +7093,7 @@ react-input-autosize@^1.1.0:
   version "1.1.3"
   resolved "http://registry.npm.taobao.org/react-input-autosize/download/react-input-autosize-1.1.3.tgz#ced3acd0f237cc04a1475c9207d4da1b7c0a0c86"
 
-react-moment-proptypes@^1.2.1:
+react-moment-proptypes@^1.3.0:
   version "1.4.0"
   resolved "http://registry.npm.taobao.org/react-moment-proptypes/download/react-moment-proptypes-1.4.0.tgz#831e329ebcec6cf794e75852d82d54a03817023f"
   dependencies:
@@ -8006,6 +8050,22 @@ string-width@^2.0.0:
   dependencies:
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^3.0.0"
+
+string.prototype.padend@^3.0.0:
+  version "3.0.0"
+  resolved "http://registry.npm.taobao.org/string.prototype.padend/download/string.prototype.padend-3.0.0.tgz#f3aaef7c1719f170c5eab1c32bf780d96e21f2f0"
+  dependencies:
+    define-properties "^1.1.2"
+    es-abstract "^1.4.3"
+    function-bind "^1.0.2"
+
+string.prototype.padstart@^3.0.0:
+  version "3.0.0"
+  resolved "http://registry.npm.taobao.org/string.prototype.padstart/download/string.prototype.padstart-3.0.0.tgz#5bcfad39f4649bb2d031292e19bcf0b510d4b242"
+  dependencies:
+    define-properties "^1.1.2"
+    es-abstract "^1.4.3"
+    function-bind "^1.0.2"
 
 string_decoder@^0.10.25, string_decoder@~0.10.x:
   version "0.10.31"

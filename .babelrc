@@ -2,7 +2,16 @@
   "presets": [
     ["env", {
       "targets": {
-        "browsers": ["not ie <= 8"]
+        "browsers": [
+          "last 2 versions"
+          // "Android >= 2.3",
+          // "Chrome >= 40",
+          // "Firefox >= 24", // Firefox 24 is the latest ESR
+          // "iOS >= 6",
+          // "Opera >= 12",
+          // "Safari >= 6",
+          // "ie >= 9"
+        ]
       }
     }],
     "stage-3",
@@ -20,10 +29,11 @@
     }
   },
   "plugins": [
+    //["transform-replace-object-assign", "object.assign"],
     ["transform-runtime", {
       "helpers": true, // defaults to true
-      "polyfill": true, // defaults to true
-      "regenerator": true // defaults to true
+      "polyfill": false, // defaults to true
+      "regenerator": false // defaults to true
     }],
     ["module-resolver", {
       "root": ["./src"],

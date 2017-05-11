@@ -12,6 +12,12 @@ const paths = gulp.paths;
 
 // 引用webpack对js进行操作
 gulp.task('webpack', (callback) => {
+  gulp.appName = getCurAppName();
+
+  webpackConfig.output.publicPath = paths.pubWebPath;
+  gutil.log(gutil.colors.cyan('正在构建的产品： '), gutil.colors.magenta(gulp.appName));
+  gutil.log(gutil.colors.cyan('产品publicPath： '), gutil.colors.magenta(webpackConfig.output.publicPath));
+
   webpack(webpackConfig, (err, stats) => {
     if (err || stats.hasErrors()) {
       throw new gutil.PluginError('webpack:production', err);
@@ -35,22 +41,16 @@ gulp.task('webpack:dll', (callback) => {
   });
 });
 
+// 处理静态资源
 gulp.task('build:assets', () => {
   const srcFiles = [`${paths.src}/assets/**/*`];
 
-  if (!gulp.appName) {
-    gulp.appName = getCurAppName('axc');
-  }
-
-  gutil.log('正在构建的产品： ', gutil.colors.magenta(gulp.appName));
-
-  // copy custom assets
+  // custom assets path
   srcFiles.push(`${paths.src}/config/${gulp.appName}/assets/**/*`);
 
   return gulp.src(srcFiles)
     .pipe(gulp.dest(paths.build));
-},
-);
+});
 
 gulp.task('build:html', () =>
   gulp.src(`${paths.build}/index.html`)
@@ -73,7 +73,8 @@ gulp.task('build:complete', () => {
 gulp.task('build', (callback) => {
   runSequence(
     'clean',
-    ['build:assets', 'webpack'],
+    ['webpack'],
+    'build:assets',
     'build:complete',
     callback,
   );
