@@ -24,8 +24,9 @@ export class Tooltip extends Component {
     });
   }
   componentWillUnmount() {
-    console.log(this.tooltip);
-    //this.tooltip.destroy();
+    if (this.tooltip && typeof this.tooltip === 'function') {
+      this.tooltip.destroy();
+    }
   }
 
   render() {

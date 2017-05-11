@@ -72,7 +72,7 @@ var polyfillList = [
 
 module.exports = {
   entry: {
-    app: './src/index_pub.jsx',
+    app: ['core-js/shim', 'isomorphic-fetch', './src/index_pub.jsx'],
   },
   module: {
     rules: [
@@ -194,9 +194,9 @@ module.exports = {
         context: __dirname,
       }
     }),
-    new webpack.ProvidePlugin({
-      'fetch': 'isomorphic-fetch',
-    }),
+    // new webpack.ProvidePlugin({
+    //   'fetch': 'isomorphic-fetch',
+    // }),
     new webpack.DllReferencePlugin({
       context: "dll",
       manifest: require("./src/config/scripts/vendors-manifest.json")

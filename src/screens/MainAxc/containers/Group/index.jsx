@@ -309,24 +309,22 @@ export default class MainGroup extends React.Component {
    * @memberOf MainGroup
    */
   autoRefreshData() {
-    const curRoutePath = this.props.route.path;
     const rateInterval = this.props.app.get('rateInterval');
 
     clearTimeout(this.autoRefreshTimer);
 
-    // 如是在AP组管理模块
-    if (curRoutePath === '/main/group') {
+    if (!this.pauseRfresh) {
       // 更新AP组相关信息
       this.props.fetchApGroup();
 
       // 获取未分组设备
       this.props.fetchGroupAps(-1);
-
-      this.autoRefreshTimer = setTimeout(
-        () => this.autoRefreshData(),
-        rateInterval,
-      );
     }
+
+    this.autoRefreshTimer = setTimeout(
+      () => this.autoRefreshData(),
+      rateInterval,
+    );
   }
   initFromLocationQuery() {
     const locationQuery = utils.getQuery(this.props.location.search);
@@ -605,7 +603,6 @@ export default class MainGroup extends React.Component {
     ]);
     let $$mannageGroupAps = product.getIn(['group', 'devices']);
 
-    // console.log(product.get(['group', 'devices']).toJS())
     switch (option.name) {
       case 'groupApAdd':
         return (
@@ -1149,6 +1146,12 @@ export default class MainGroup extends React.Component {
     // 如果当前是所有组，则隐藏组配置相关菜单
     if (selectGroupId === ALL_GROUP_ID) {
       mainLeftMenus = mainLeftMenus.slice(0, 3);
+    }
+
+    if (!modal.isShow) {
+      this.pauseRfresh = false;
+    } else {
+      this.pauseRfresh = true;
     }
 
     return (

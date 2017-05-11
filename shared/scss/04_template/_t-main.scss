@@ -78,8 +78,9 @@ body {
       transition: max-width .2s ease-in-out, overflow-y .2s ease-in-out;
 
       @include scrollbar();
+
       > h4 {
-        font-size: 1rem;
+        font-size: .875rem;
         list-style: 1;
         color: $g-brand-primary;
         text-shadow: 1px 1px 1px #000;

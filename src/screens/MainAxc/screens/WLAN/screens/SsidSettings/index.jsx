@@ -592,7 +592,6 @@ export default class View extends React.Component {
           $$copySelectedList,
         );
         $$copySelectedList = ret.selectedList;
-
         return ret.$$list;
       },
     );

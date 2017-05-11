@@ -176,6 +176,7 @@ var immutableUtils = {
         selectedList = selectedList.delete(data.index);
       }
     } else {
+      selectedList = $$retList.clear();
       if (data.selected) {
         $$retList = $$retList.map(function(item, index) {
           selectedList = selectedList.push(index);

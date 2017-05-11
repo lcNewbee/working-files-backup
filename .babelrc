@@ -3,14 +3,14 @@
     ["env", {
       "targets": {
         "browsers": [
-          "last 2 versions"
+          // "last 2 versions"
           // "Android >= 2.3",
           // "Chrome >= 40",
           // "Firefox >= 24", // Firefox 24 is the latest ESR
           // "iOS >= 6",
           // "Opera >= 12",
           // "Safari >= 6",
-          // "ie >= 9"
+          "ie >= 9"
         ]
       }
     }],
