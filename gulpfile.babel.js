@@ -38,6 +38,8 @@ const paths = {
   pubASC3: '../svn/ap_web/ASC3_web',
   pubASC6: '../svn/ap_web/ASC6_web',
   pubASW120: '../svn/ap_web/ASW120_web',
+
+  pubNHZYASW120: '../NHZYASW120_web',
 };
 
 // 默认值
@@ -105,6 +107,13 @@ function changeTitle(name) {
       .pipe($.replace('<title>Axilspot Access Manager</title>', `<title>Axilspot WIFI ${name}</title>`))
       .pipe(gulp.dest(paths.build));
 }
+
+function noBrandTitle() {
+  return gulp.src([`${paths.build}/index.html`])
+      .pipe($.replace('<title>Axilspot Access Manager</title>', '<title>Access Point</title>'))
+      .pipe(gulp.dest(paths.build));
+}
+
 gulp.task('changeAIP5Title', () => changeTitle('Bridge'));
 gulp.task('changeAIP10Title', () => changeTitle('AP'));
 gulp.task('changeAIP10LTitle', () => changeTitle('AP'));
@@ -117,4 +126,5 @@ gulp.task('changeAEC60Title', () => changeTitle('AP'));
 gulp.task('changeASC3Title', () => changeTitle('AP'));
 gulp.task('changeASC6Title', () => changeTitle('AP'));
 gulp.task('changeASW120Title', () => changeTitle('AP'));
+gulp.task('changeNHZYASW120Title', () => noBrandTitle());
 

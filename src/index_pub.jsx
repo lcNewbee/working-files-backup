@@ -1,4 +1,4 @@
-//import 'core-js/shim';
+// import 'core-js/shim';
 
 const React = require('react');
 const ReactDOM = require('react-dom');

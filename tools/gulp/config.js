@@ -44,3 +44,4 @@ gulp.task('config:AEC60', () => configProduct('AEC60'));
 gulp.task('config:ASC3', () => configProduct('ASC3'));
 gulp.task('config:ASC6', () => configProduct('ASC6'));
 gulp.task('config:ASW120', () => configProduct('ASW120'));
+gulp.task('config:NHZYASW120', () => configProduct('NHZYASW120'));
