@@ -211,6 +211,12 @@ class AaaServer_Model extends CI_Model {
                 if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
                     return json_encode(json_no('add portal web error!'));
                 }
+                //更新给Ap下发ssid属性
+                if($data['portalTemplate']['ssid'] != ''){
+                    if(!$this->editApSsid($data['portalTemplate']['ssid'], $data['domain_name'])){
+                        return json_encode(json_no('ssid domain set error'));
+                    }
+                } 
             }
 
             //portal认证 -> 本地radius服务器 + 远程Portal服务器
@@ -323,6 +329,12 @@ class AaaServer_Model extends CI_Model {
                 if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
                     return json_encode(json_no('add portal web error!'));
                 }
+                //更新给Ap下发ssid属性
+                if($data['portalTemplate']['ssid'] != ''){
+                    if(!$this->editApSsid($data['portalTemplate']['ssid'], $data['domain_name'])){
+                        return json_encode(json_no('ssid domain set error'));
+                    }
+                }
             }
 
             //portal认证 -> 远程radius服务器 + 远程Portal服务器
@@ -407,7 +419,10 @@ class AaaServer_Model extends CI_Model {
             //修改本地aaa模板只能修改端口和 web模板
             //修改 rule
             $ruleda = $this->getPortal('local');
-            if( $ruleda['interface_bind'] != ''){
+            $interface = element('interface_bind', $data['portalRule'],'');
+            //interface 端口必须有否则跳过
+            if( $ruleda['interface_bind'] != '' && $interface != ''){
+                                
                 $portal_rule_ary = array(
                     'template_name'=> 'local',
                     'interface_bind'=>(string)element('interface_bind', $data['portalRule'],''),
@@ -434,7 +449,7 @@ class AaaServer_Model extends CI_Model {
                 $this->portalsql->where('name', 'local_ssid_' . $domain_name);
                 if( ! $this->portalsql->update('portal_ssid', $web_ary) ) {
                     return json_encode(json_no('edit web Template error'));
-                }
+                }                
             } else {
                 //add web
                 $web_ary = array(
@@ -449,7 +464,13 @@ class AaaServer_Model extends CI_Model {
                 if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
                     return json_encode(json_no('edit -> add portal web error!'));
                 }
-            }          
+            } 
+            //更新给Ap下发ssid属性
+            if($data['portalTemplate']['ssid'] != ''){
+                if(!$this->editApSsid($data['portalTemplate']['ssid'], $domain_name)){
+                    return json_encode(json_no('ssid domain set error'));
+                }
+            }         
 
         }else{
             //全删除
@@ -785,6 +806,64 @@ class AaaServer_Model extends CI_Model {
         return FALSE;
     }
     // 5. web 网页模板
+
+    // 更新ap ssid 
+    private function editApSsid($ssid, $domain) {
+        $groupid = 0;
+        $ssid_data = array();
+        $query = $this->db->select('ssid_template.name,ssid_group.id,ssid_group.group_name')
+                            ->from('ssid_template')
+                            ->join('ssid_group_bind', 'ssid_template.id=ssid_group_bind.template_id', 'left')
+                            ->join('ssid_group', 'ssid_group_bind.group_id=ssid_group.id', 'left')
+                            ->where('ssid_template.name', $ssid)
+                            ->get()
+                            ->result_array();
+
+        if(count($query) > 0){            
+            $groupid = $query[0]['id'];
+            $cgigroup = array('groupid' => $groupid);
+            $retstr = axc_get_wireless_ssid(json_encode($cgigroup));
+            $retary = json_decode($retstr, true);
+                        
+            if($retary['state']['code'] == 2000 && count($retary['data']['list']) > 0 ){
+                foreach($retary['data']['list'] as $row) {                   
+                    if($row['ssid'] == $ssid){                        
+                        $ssid_data = $row;
+                        break;
+                    }
+                }
+            } 
+                      
+        }
+        
+        if($groupid > 0 && count($ssid_data) > 0 ){
+            $cgipam = array(
+                'groupid' => (int)$groupid,
+                'ssid' => element('ssid', $ssid_data),
+                'remark' => element('remark', $ssid_data),
+                'vlanid' => (int)element('vlanId', $ssid_data, 0),
+                'enabled' => (int)element('enabled', $ssid_data),
+                'maxBssUsers' => (int)element('maxBssUsers', $ssid_data),
+                'loadBalanceType' => (int)element('loadBalanceType', $ssid_data),
+                'hiddenSsid' => (int)element('hiddenSsid', $ssid_data),
+                'mandatorydomain' => $domain,
+                'storeForwardPattern' => element('storeForwardPattern', $ssid_data),
+                'upstream' => (int)element('upstream', $ssid_data),
+                'downstream' => (int)element('downstream', $ssid_data),
+                'encryption' => element('encryption', $ssid_data),
+                'password' => element('password', $ssid_data, ''),
+                'ssidisolate' => (int)element('ssidisolate', $ssid_data, ''),
+                'greenap' => (int)element('greenap', $ssid_data, '')
+            );
+            
+            $ret = axc_modify_wireless_ssid(json_encode($cgipam));
+            $obj = json_decode($ret);
+            if($obj->state->code == 2000){
+                return TRUE;
+            }            
+        }        
+        return FALSE;
+    }
 /*=======================================  select  =======================================*/
     //判断radius模板是否存在
     private function isRadiusTemplate($name) {
