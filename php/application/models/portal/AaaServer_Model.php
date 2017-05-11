@@ -80,7 +80,7 @@ class AaaServer_Model extends CI_Model {
                 if($row['portal_server_type'] === 'local') {
                     $portal_ssid = 'local_ssid_' . $row['domain_name'];
                     if($row['domain_name'] == 'local'){
-                            $portal_ssid = 'default';
+                            $portal_ssid = 'local_ssid_local';
                     }
                     $webquery = $this->portalsql->query("select id,apmac as mac,ssid,address,web from portal_ssid where name='{$portal_ssid}'")->result_array();
                     if(count($webquery) > 0) {
@@ -202,11 +202,11 @@ class AaaServer_Model extends CI_Model {
                 $web_ary = array(
                     'name' => 'local_ssid_' . element('domain_name', $data),
                     'address' => '',//地址
-                    'basip' => $_SERVER['SERVER_ADDR'],
+                    'basip' => $this->getInterface(),
                     'web' => element('web',$data['portalTemplate']),//页面模版
                     'des' => element('des',$data['portalTemplate']),//描述
                     'ssid' => element('ssid',$data['portalTemplate']),
-                    'apmac' => element('apmac',$data['portalTemplate'])
+                    'apmac' => element('apmac',$data['portalTemplate'], '')
                 );            
                 if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
                     return json_encode(json_no('add portal web error!'));
@@ -314,11 +314,11 @@ class AaaServer_Model extends CI_Model {
                 $web_ary = array(
                     'name' => 'local_ssid_' . element('domain_name', $data),
                     'address' => '',//地址
-                    'basip' => $_SERVER['SERVER_ADDR'],
+                    'basip' => $this->getInterface(),
                     'web' => element('web',$data['portalTemplate']),//页面模版
                     'des' => element('des',$data['portalTemplate']),//描述
                     'ssid' => element('ssid',$data['portalTemplate']),
-                    'apmac' => element('apmac',$data['portalTemplate'])
+                    'apmac' => element('apmac',$data['portalTemplate'], '')
                 );            
                 if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
                     return json_encode(json_no('add portal web error!'));
@@ -420,19 +420,36 @@ class AaaServer_Model extends CI_Model {
                 if(!$this->editPortalRule($portal_rule_ary)){
                     return json_encode(json_no('edit portal rule error!'));
                 }
-            }
-            //修改web
-            $web_ary = array(                
-                'basip' => $_SERVER['SERVER_ADDR'],
-                'web' => element('web',$data['portalTemplate']),//页面模版
-                'des' => element('des',$data['portalTemplate']),//描述
-                'ssid' => element('ssid',$data['portalTemplate']),
-                'apmac' => element('apmac',$data['portalTemplate'])
-            );
-            $this->portalsql->where('name', 'default');
-            if( ! $this->portalsql->update('portal_ssid', $web_ary) ) {
-                return json_encode(json_no('edit web Template error'));
-            }
+            }     
+            //判断web模板是否存在，才修改否则 创建
+            if($this->isWebTemplate('local_ssid_' . $domain_name)) {
+                //修改web
+                $web_ary = array(                
+                    'basip' => $this->getInterface(),
+                    'web' => element('web',$data['portalTemplate']),//页面模版
+                    'des' => element('des',$data['portalTemplate']),//描述
+                    'ssid' => element('ssid',$data['portalTemplate']),
+                    'apmac' => element('apmac',$data['portalTemplate'], '')
+                );
+                $this->portalsql->where('name', 'local_ssid_' . $domain_name);
+                if( ! $this->portalsql->update('portal_ssid', $web_ary) ) {
+                    return json_encode(json_no('edit web Template error'));
+                }
+            } else {
+                //add web
+                $web_ary = array(
+                    'name' => 'local_ssid_' . $domain_name,
+                    'address' => '',//地址
+                    'basip' => $this->getInterface(),
+                    'web' => element('web',$data['portalTemplate']),//页面模版
+                    'des' => element('des',$data['portalTemplate']),//描述
+                    'ssid' => element('ssid',$data['portalTemplate']),
+                    'apmac' => element('apmac',$data['portalTemplate'],'')
+                );            
+                if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
+                    return json_encode(json_no('edit -> add portal web error!'));
+                }
+            }          
 
         }else{
             //全删除
@@ -630,6 +647,17 @@ class AaaServer_Model extends CI_Model {
     private function getPortalWeb(){
 
     }
+
+    private function getInterface() {
+        $data = $this->db->select('port_name,ip1')
+                ->from('port_table')
+                ->get()
+                ->result_array();
+        if( count($data) >0 ){
+            return $data[0]['ip1'];
+        }
+        return  $_SERVER['SERVER_ADDR'];
+    }
 /*=======================================  ADD  =======================================*/
     //1.创建 Radius 模板
     private function addRadiusTemplate($data) {
@@ -790,5 +818,14 @@ class AaaServer_Model extends CI_Model {
                         ->join('portal_attr','portal_attr.id=portal_params.attr_id')
                         ->where('portal_auth.portal_name',$name)
                         ->get()->result_array();
+        return FALSE;
+    }
+    //判断Web模板是否存在
+    private function isWebTemplate($name) {
+        $ret = $this->portalsql->query("select * from portal_ssid where name='{$name}'")->result_array();
+        if(count($ret) > 0 ){
+            return TRUE;
+        }
+        return FALSE;
     }
 }

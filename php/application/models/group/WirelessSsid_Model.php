@@ -114,7 +114,7 @@ class WirelessSsid_Model extends CI_Model {
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {		
             //绑定portal
             if($data['accessControl'] === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {
-                $this->binPortalTemplate($data['auth'], $data['ssid']);
+                $this->binPortalTemplate($data['auth'], $data['ssid'], $temp_data['mandatorydomain']);
             }	
             //log
             $logary = array(
@@ -175,7 +175,7 @@ class WirelessSsid_Model extends CI_Model {
                 $this->delPoartalSsid($data['ssid']);
             }
 			if($data['accessControl'] === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {                
-                $this->editPoartalSsid($data['ssid'], $data['auth']);
+                $this->editPoartalSsid($data['ssid'], $data['auth'], $temp_data['mandatorydomain']);
             }            
             //log
             $logary = array(
@@ -291,12 +291,11 @@ class WirelessSsid_Model extends CI_Model {
      * @web_template 网页模板
      * @ssid 
     */
-    private function binPortalTemplate($web_template, $ssid) {
-        $name = $ssid . '_' .$web_template;
+    private function binPortalTemplate($web_template, $ssid, $domain) {    
         $arr = array(
-            'name'=> $name,
+            'name'=> 'local_ssid_' . $domain,
             'address'=>'',//地址
-            'basip'=> $_SERVER['SERVER_ADDR'],
+            'basip'=> $this->getInterface(),
             'web'=>$web_template,//页面模版
             'des'=>'',//描述
             'ssid'=> $ssid,
@@ -308,11 +307,10 @@ class WirelessSsid_Model extends CI_Model {
         return FALSE;               
     }
 	//修改portal_ssid
-	private function editPoartalSsid($ssid, $web_template) {
-        $name = $ssid . '_' .$web_template;
+	private function editPoartalSsid($ssid, $web_template, $domain) {     
         $arr = array(
-            'name'=> $name,
-            'basip'=> $_SERVER['SERVER_ADDR'],
+            'name'=> 'local_ssid_' . $domain,
+            'basip'=> $this->getInterface(),
             'web' => $web_template          
         );
         $this->portalsql->where('ssid', $ssid);
@@ -333,5 +331,16 @@ class WirelessSsid_Model extends CI_Model {
             return FALSE;
         }   
         return TRUE;     
+    }
+
+    private function getInterface() {
+        $data = $this->db->select('port_name,ip1')
+                ->from('port_table')
+                ->get()
+                ->result_array();
+        if( count($data) >0 ){
+            return $data[0]['ip1'];
+        }
+        return  $_SERVER['SERVER_ADDR'];
     }
 }
