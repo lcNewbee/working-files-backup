@@ -50,7 +50,6 @@ class Row extends Component {
     return options.map(
         ($$curThOption) => {
           let myOption = $$curThOption;
-
           if (myOption && typeof myOption.toJS === 'function') {
             myOption = myOption.toJS();
           }

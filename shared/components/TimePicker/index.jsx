@@ -23,8 +23,8 @@ class MyTimePicker extends PureComponent {
     const { showSecond, value, formatter } = this.props;
     const ThisComponent = TimePicker;
     let timeValue = value;
+    // 这句是不是不需要的？
     let timeFormat = 'HH:mm:ss';
-
     if (formatter) {
       timeFormat = formatter;
     } else if (!showSecond) {
