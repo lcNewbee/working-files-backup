@@ -2,19 +2,22 @@
 class AccessWeb_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
-        $this->portalsql = $this->load->database('mysqlportal', TRUE);
+        $this->portalsql = $this->load->database('mysqlportal', TRUE);        
         $this->load->helper(array('array', 'db_operation'));
         $this->load->library('PHPZip');
     }
     function get_list($data) {           
         $parameter = array(
             'db' => $this->portalsql, 
-            'columns' => 'portal_web.id,portal_web.name,portal_web.countShow,portal_web.countAuth,portal_web.description,adv_adv.name as adv', 
+            'columns' => 'portal_web.id,portal_web.name,portal_web.countShow,portal_web.countAuth,portal_web.description,adv_adv.name as adv,portal_basauth.url,portal_basauth.sessiontime', 
             'tablenames' => 'portal_web', 
             'pageindex' => (int) element('page', $data, 1), 
             'pagesize' => (int) element('size', $data, 20), 
             'wheres' => "1=1",
-            'joins' => array(array('adv_adv','portal_web.adv=adv_adv.id','left')), 
+            'joins' => array(
+                array('adv_adv','portal_web.adv=adv_adv.id','left'),
+                array('portal_basauth','portal_web.id=portal_basauth.type','left')
+            ), 
             'order' => array()
         );
         if(isset($data['search'])){
@@ -25,6 +28,11 @@ class AccessWeb_Model extends CI_Model {
            $parameter['wheres'] = $parameter['wheres']." AND adv_adv.id =".$data['adv'];
         } 
         $datalist = help_data_page_all($parameter);
+        if(count($datalist['data']) > 0){
+            //所有认证 没有rul和    sessiontime        
+            $datalist['data'][0]['url'] = '';
+            $datalist['data'][0]['sessiontime'] = '';
+        }
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
@@ -75,7 +83,9 @@ class AccessWeb_Model extends CI_Model {
             }
         }else{
             return json_encode(json_no($this->upload->display_errors(),6204));
-        }           
+        }
+        //更改url重定向
+        //$this->editPortalBasauth($data['id'], $data['url'], $data['sessiontime']); 暂时屏蔽了add功能
         $result = $result ? json_ok() : json_no($this->upload->display_errors());
         return json_encode($result);
     }
@@ -119,6 +129,10 @@ class AccessWeb_Model extends CI_Model {
                         $result = 0;//解压错误
                     }
                 }
+            }
+            //更改url重定向
+            if((int)$data['id'] > 1){
+                $this->editPortalBasauth($data['id'], $data['url'], $data['sessiontime']);
             }
         }        
         $result = $result ? json_ok() : json_no('update error');
@@ -168,6 +182,18 @@ class AccessWeb_Model extends CI_Model {
         $zip = new PHPZip();
         //3.压缩并下载 
         $zip->Zip_CompressDownload($path,$filename);
+    }
+    //设置portal_basauth的URL 和 上网认证时长
+    private function editPortalBasauth($type, $url, $sessiontime) {
+        $up = array(
+            'url' => $url,
+            'sessiontime' => $sessiontime
+        );
+        $this->portalsql->where('type', $type);
+        if( $this->portalsql->update('portal_basauth', $up) ){
+            return TRUE;
+        }        
+        return FALSE;
     }
     private function do_upload(){
         $config['upload_path'] = '/var/conf/portalserver';
