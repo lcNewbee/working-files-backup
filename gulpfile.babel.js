@@ -111,6 +111,7 @@ function changeTitle(name) {
 function noBrandTitle() {
   return gulp.src([`${paths.build}/index.html`])
       .pipe($.replace('<title>Axilspot Access Manager</title>', '<title>Access Point</title>'))
+      .pipe($.replace('Axilspot', ''))
       .pipe(gulp.dest(paths.build));
 }
 

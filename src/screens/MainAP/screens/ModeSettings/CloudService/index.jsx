@@ -84,11 +84,11 @@ export default class ModeSettings extends React.Component {
           const dominValid = /^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/.test(acIp);
           const ipValid = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/.test(acIp);
           if (!ipValid && !dominValid && nextMode === '1') {
-            validmsg = __('Please input a valid ntp server!');
+            validmsg = __('Please input a valid cloud address!');
           } else if (ipValid && nextMode === '1') {
             validmsg = validIp(acIp);
           } else if (!dominValid && nextMode === '1') {
-            validmsg = __('Please input a valid ntp server!');
+            validmsg = __('Please input a valid cloud address!');
           }
           // validmsg不为空，则存在错误
           if (validmsg !== '') {
@@ -146,9 +146,10 @@ export default class ModeSettings extends React.Component {
         />
         <FormGroup
           type="text"
-          label={__('Server Address')}
+          label={__('Cloud Address')}
           value={acIp}
           disabled={nextMode === '0'}
+          help={__('IP or Domain Name')}
           onChange={(data) => {
             this.props.updateItemSettings({ acIp: data.value });
           }}
