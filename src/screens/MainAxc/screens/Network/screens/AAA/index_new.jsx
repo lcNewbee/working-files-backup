@@ -18,7 +18,7 @@ import {
   $$portalTemplateFormOptions, portalTemplateDefaultSettingData,
 } from './config';
 
-const $$defaultPortItem = fromJS({
+const $$defaultNoneItem = fromJS({
   value: '',
   label: __('None'),
 });
@@ -274,14 +274,8 @@ export default class View extends React.Component {
         let apsMacOptions = fromJS(values[2].options);
         const webTemplateOptions = fromJS(values[3].options);
 
-        ssidOptions = ssidOptions.unshift(fromJS({
-          value: '',
-          label: __('ALL'),
-        }));
-        apsMacOptions = apsMacOptions.unshift(fromJS({
-          value: '',
-          label: __('ALL'),
-        }));
+        ssidOptions = ssidOptions.unshift($$defaultNoneItem);
+        apsMacOptions = apsMacOptions.unshift($$defaultNoneItem);
 
         this.setState({
           portOptions,
@@ -298,7 +292,6 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const $$curList = $$myScreenStore.getIn(['data', 'list']);
-    const $$curListItem = $$myScreenStore.getIn(['curListItem']);
     const curListItemName = $$myScreenStore.getIn(['curListItem', 'domain_name']);
     const $$myPortOptions = state.portOptions
       .filterNot(($$item) => {
@@ -322,7 +315,7 @@ export default class View extends React.Component {
 
         switch (curId) {
           case 'interface_bind':
-            $$ret = $$ret.set('options', $$myPortOptions.unshift($$defaultPortItem));
+            $$ret = $$ret.set('options', $$myPortOptions.unshift($$defaultNoneItem));
             break;
 
           default:
@@ -397,7 +390,7 @@ export default class View extends React.Component {
 
         switch (curId) {
           case 'interface_bind':
-            $$ret = $$ret.set('options', $$myPortOptions.unshift($$defaultPortItem));
+            $$ret = $$ret.set('options', $$myPortOptions.unshift($$defaultNoneItem));
             break;
 
           default:
@@ -452,13 +445,13 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(RADIUS_AUTH_SERVER_KEY)}
           >
-            {/*<Icon
+            {/* <Icon
               name={this.state[RADIUS_AUTH_SERVER_KEY] ? 'minus-square' : 'plus-square'}
               size="lg"
               style={{
                 marginRight: '5px',
               }}
-            />*/}
+            /> */}
             {__('Remote Radius Auth Server')}
           </h3>
         </div>
@@ -488,7 +481,7 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(RADIUS_ACC_SERVER_KEY)}
           >
-            {/*<Icon
+            {/* <Icon
               name={this.state[RADIUS_ACC_SERVER_KEY] ? 'minus-square' : 'plus-square'}
               size="lg"
               style={{
@@ -524,7 +517,7 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(RADIUS_ADVANCE_SETTING_KEY)}
           >
-            {/*<Icon
+            {/* <Icon
               name={this.state[RADIUS_ADVANCE_SETTING_KEY] ? 'minus-square' : 'plus-square'}
               size="lg"
               style={{
@@ -572,7 +565,7 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(PORTAL_SERVER_KEY)}
           >
-            {/*<Icon
+            {/* <Icon
               name={this.state[PORTAL_SERVER_KEY] ? 'minus-square' : 'plus-square'}
               size="lg"
               style={{
@@ -609,7 +602,7 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(PORTAL_RULE_KEY)}
           >
-            {/*<Icon
+            {/* <Icon
               name={this.state[PORTAL_RULE_KEY] ? 'minus-square' : 'plus-square'}
               size="lg"
               style={{
@@ -656,7 +649,7 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(PORTAL_LOCAL_RULE_KEY)}
           >
-            {/*<Icon
+            {/* <Icon
               name={this.state[PORTAL_LOCAL_RULE_KEY] ? 'minus-square' : 'plus-square'}
               size="lg"
               style={{
