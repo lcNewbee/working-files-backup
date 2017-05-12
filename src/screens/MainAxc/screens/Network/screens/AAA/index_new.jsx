@@ -134,6 +134,22 @@ const listOptions = fromJS([
       required: true,
       type: 'switch',
       visible: $$data => $$data.get('auth_accesstype') === 'portal',
+      onChange: (data) => {
+        const value = data.value;
+        const newData = data;
+
+        if (value === 'local') {
+          newData.mergeData = {
+            auth_schemetype: 'local',
+          };
+        } else {
+          newData.mergeData = {
+            auth_schemetype: 'radius-scheme',
+          };
+        }
+
+        return newData;
+      },
     },
   },
   {

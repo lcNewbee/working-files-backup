@@ -209,7 +209,8 @@ const settingsOptions = fromJS([
           textAlign: 'right',
         },
         noForm: true,
-      }, {
+      },
+      {
         id: 'url',
         label: __('Redirect URL after Authetication'),
         type: 'text',

@@ -606,12 +606,19 @@ const routes = [
                     component: SharedComponents.TabContainer,
                     routes: [
                       {
-                        id: 'portalAccessBase',
-                        path: '/main/portal/local/portal/config',
-                        formUrl: 'goform/portal/access/config',
-                        text: __('Base'),
-                        component: sPortalBase.Screen,
+                        id: 'portalAccessWeb',
+                        path: '/main/portal/local/portal/web',
+                        formUrl: 'goform/portal/access/web',
+                        text: __('Page Settings'),
+                        component: sPortalWeb.Screen,
                       },
+                      // {
+                      //   id: 'portalAccessBase',
+                      //   path: '/main/portal/local/portal/config',
+                      //   formUrl: 'goform/portal/access/config',
+                      //   text: __('Base'),
+                      //   component: sPortalBase.Screen,
+                      // },
                       {
                         id: 'portalWechat',
                         path: '/main/portal/local/portal/weixin',
@@ -632,13 +639,6 @@ const routes = [
                         formUrl: 'goform/portal/access/smsgateWay',
                         text: __('SMS Gateway'),
                         component: sPortalSMSGateWay.Screen,
-                      },
-                      {
-                        id: 'portalAccessWeb',
-                        path: '/main/portal/local/portal/web',
-                        formUrl: 'goform/portal/access/web',
-                        text: __('Web Template'),
-                        component: sPortalWeb.Screen,
                       },
                     ],
                   },

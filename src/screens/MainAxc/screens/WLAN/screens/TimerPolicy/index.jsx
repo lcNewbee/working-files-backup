@@ -82,6 +82,49 @@ const daysOptions = fromJS([
 
 const screenOptions = fromJS([
   {
+    id: 'objects_name',
+    label: __('Type'),
+    options: objectsNameOptions,
+    defaultValue: 'ssid',
+    formProps: {
+      type: 'switch',
+    },
+  }, {
+    id: 'objects_templatename',
+    text: __('Operation Object'),
+    formProps: {
+      type: 'select',
+      required: true,
+      visible($$data) {
+        const curRepaet = $$data.get('objects_name');
+
+        return curRepaet !== 'scan';
+      },
+    },
+  },
+  {
+    id: 'objects_templateswitch',
+    text: __('Operation'),
+    defaultValue: '1',
+    options: [
+      {
+        value: '1',
+        label: __('Enable'),
+      }, {
+        value: '0',
+        label: __('Disable'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+      visible($$data) {
+        const curRepaet = $$data.get('objects_name');
+
+        return curRepaet !== 'scan';
+      },
+    },
+  },
+  {
     id: 'policy_type',
     label: __('Repeat'),
     options: policyTypeOptions,
@@ -203,47 +246,6 @@ const screenOptions = fromJS([
     },
   },
   {
-    id: 'objects_name',
-    label: __('Type'),
-    options: objectsNameOptions,
-    defaultValue: 'ssid',
-    formProps: {
-      type: 'switch',
-    },
-  }, {
-    id: 'objects_templatename',
-    text: __('Operation Object'),
-    formProps: {
-      type: 'select',
-      required: true,
-      visible($$data) {
-        const curRepaet = $$data.get('objects_name');
-
-        return curRepaet !== 'scan';
-      },
-    },
-  }, {
-    id: 'objects_templateswitch',
-    text: __('Operation'),
-    defaultValue: '1',
-    options: [
-      {
-        value: '1',
-        label: __('Enable'),
-      }, {
-        value: '0',
-        label: __('Disable'),
-      },
-    ],
-    formProps: {
-      type: 'switch',
-      visible($$data) {
-        const curRepaet = $$data.get('objects_name');
-
-        return curRepaet !== 'scan';
-      },
-    },
-  }, {
     id: 'policy_enbale',
     label: __('Policy Switch'),
     width: '90px',
@@ -251,6 +253,7 @@ const screenOptions = fromJS([
     actionName: 'switch',
     actionKey: 'allKeys',
     defaultValue: '1',
+    noForm: true,
     formProps: {
       type: 'checkbox',
     },

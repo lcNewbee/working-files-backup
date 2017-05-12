@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
+import { FormContainer } from 'shared/components';
 
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
@@ -23,6 +24,7 @@ const listOptions = fromJS([
   {
     id: 'name',
     text: __('Name'),
+    noForm: true,
     formProps: {
       type: 'text',
       required: true,
@@ -35,6 +37,7 @@ const listOptions = fromJS([
   {
     id: 'ip',
     text: __('IP'),
+    noForm: true,
     formProps: {
       type: 'text',
       required: true,
@@ -46,6 +49,7 @@ const listOptions = fromJS([
   {
     id: 'sharedSecret',
     text: __('Shared Secret'),
+    noForm: true,
     formProps: {
       type: 'password',
       required: true,
@@ -152,6 +156,9 @@ const listOptions = fromJS([
     },
   },
 ]);
+const $$formOptions = utils.immutableUtils.getFormOptions(listOptions);
+const defaultData = utils.immutableUtils.getDefaultData(listOptions);
+
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
@@ -177,22 +184,47 @@ export default class View extends React.Component {
         }
       });
   }
+  componentDidUpdate(prevProps) {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const thisData = store.getIn([curScreenId, 'data']);
+    const prevData = prevProps.store.getIn([curScreenId, 'data']);
+
+    if (thisData !== prevData) {
+      this.props.editListItemByIndex(0);
+    }
+  }
 
   render() {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const $$formData = store.getIn([curScreenId, 'curListItem']);
+
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
-        deleteable={
-          ($$item, index) => (index !== 0)
-        }
-        actionable
-        selectable
-        searchable
-        searchProps={{
-          placeholder: `${__('Name')}/IP`,
+        initOption={{
+          defaultEditData: defaultData,
         }}
-      />
+      >
+        <FormContainer
+          options={$$formOptions}
+          data={$$formData}
+          onChangeData={($$data) => {
+            this.props.updateCurEditListItem($$data);
+          }}
+          onSave={() => {
+            this.props.validateAll()
+              .then(($$msg) => {
+                if ($$msg.isEmpty()) {
+                  this.props.onListAction();
+                }
+              });
+          }}
+          isSaving={this.props.app.get('saving')}
+          hasSaveButton
+        />
+      </AppScreen>
     );
   }
 }

@@ -80,15 +80,6 @@ const sNetworkRoutes = require('../../screens/MainAxc/screens/Network/screens/Ro
 const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
-const sRadiusTemplate =
-    require('../../screens/MainAxc/screens/Network/screens/RadiusTemplate');
-const sRadiusProxy =
-    require('../../screens/MainAxc/screens/Network/screens/RadiusProxy');
-const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA/index_new');
-const sPortalServer =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
-const sPortalRules =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
 const sPortalMac =
     require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 
@@ -169,6 +160,15 @@ const sNetworkTimeProtocol =
  * AAA 接入，认证，计费
  */
 const cAAA = require('../../screens/MainAxc/containers/AAA');
+const sRadiusTemplate =
+    require('../../screens/MainAxc/screens/Network/screens/RadiusTemplate');
+const sRadiusProxy =
+    require('../../screens/MainAxc/screens/Network/screens/RadiusProxy');
+const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA/index_new');
+const sPortalServer =
+    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
+const sPortalRules =
+    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
 const sPortalOverview =
     require('../../screens/MainAxc/screens/Portal/screens/Overview');
 const sPortalBase =
@@ -404,7 +404,7 @@ const routes = [
                 component: SharedComponents.TabContainer,
 
                 // 不要删除空格
-                text: __('Radio '),
+                text: __('SSID Management'),
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -416,7 +416,7 @@ const routes = [
                     id: 'smartRf',
                     path: '/main/group/wireless/smart',
                     formUrl: 'goform/group/smartRf',
-                    text: __('Smart RF'),
+                    text: __('Advance Settings'),
                     component: sSmartRf.Screen,
                   },
                 ],
@@ -497,23 +497,23 @@ const routes = [
                 id: 'wirelessSafePolicy',
                 icon: 'certificate',
                 path: '/main/group/safe',
-                formUrl: 'goform/group/timerPolicy',
                 text: __('Safe Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 routes: [
                   {
-                    id: 'wirelessWips',
-                    path: '/main/group/safe/wips',
-                    formUrl: 'goform/group/wips',
-                    text: __('AP Scan Settings'),
-                    component: sWips.Screen,
-                  }, {
                     id: 'wirelessEndpointProtection',
                     path: '/main/group/safe/endpointProtection',
                     formUrl: 'goform/group/wireless/protection',
                     text: __('Terminal Protection'),
                     component: sEndpointProtection.Screen,
+                  },
+                  {
+                    id: 'wirelessWips',
+                    path: '/main/group/safe/wips',
+                    formUrl: 'goform/group/wips',
+                    text: __('AP Monitor Settings'),
+                    component: sWips.Screen,
                   },
                 ],
               },
@@ -549,7 +549,7 @@ const routes = [
                 icon: 'desktop',
                 path: '/main/portal/onlineList',
                 formUrl: 'goform/portal/log/onlineList',
-                text: __('Online List'),
+                text: __('Online Clients'),
                 component: sPortalOnlineList.Screen,
               },
               // {
@@ -606,6 +606,13 @@ const routes = [
                     component: SharedComponents.TabContainer,
                     routes: [
                       {
+                        id: 'portalAccessWeb',
+                        path: '/main/portal/local/portal/web',
+                        formUrl: 'goform/portal/access/web',
+                        text: __('Page Settings'),
+                        component: sPortalWeb.Screen,
+                      },
+                      {
                         id: 'portalAccessBase',
                         path: '/main/portal/local/portal/config',
                         formUrl: 'goform/portal/access/config',
@@ -633,13 +640,13 @@ const routes = [
                         text: __('SMS Gateway'),
                         component: sPortalSMSGateWay.Screen,
                       },
-                      {
-                        id: 'portalAccessWeb',
-                        path: '/main/portal/local/portal/web',
-                        formUrl: 'goform/portal/access/web',
-                        text: __('Web Template'),
-                        component: sPortalWeb.Screen,
-                      },
+                      // {
+                      //   id: 'portalAccessWeb',
+                      //   path: '/main/portal/local/portal/web',
+                      //   formUrl: 'goform/portal/access/web',
+                      //   text: __('Web Template'),
+                      //   component: sPortalWeb.Screen,
+                      // },
                     ],
                   },
                   {
@@ -764,7 +771,7 @@ const routes = [
                 icon: 'link',
                 path: '/main/portal/aaa/list',
                 formUrl: 'goform/portal/Aaa',
-                text: __('AAA Profiles'),
+                text: __('AAA Policies'),
                 component: sNetworkAaa.Screen,
               },
             ],

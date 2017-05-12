@@ -6,10 +6,10 @@ import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
-import './web.scss';
 import { getActionable } from 'shared/axc';
 import SaveButton from 'shared/components/Button/SaveButton';
-import { Button } from 'shared/components/Button';
+
+import './web.scss';
 
 // const queryFormOptions = fromJS([
 //   {
@@ -48,7 +48,40 @@ const listOptions = fromJS([
       }),
     },
     render: val => __(val),
+  },
+  {
+    id: 'url',
+    label: __('Redirect URL after Authetication'),
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'utf8Len:[0, 255]',
+      }),
+    },
   }, {
+    id: 'sessiontime',
+    label: __('Limit Online Time after Authetication'),
+    defaultValue: '0',
+    formProps: {
+      help: __('minutes(0 means no limitation)'),
+      type: 'number',
+      min: '0',
+      max: '99999',
+      validator: validator({
+        rules: 'num:[0,99999]',
+      }),
+    },
+    render: (val) => {
+      let ret = val;
+
+      if (val === '0' || val === 0) {
+        ret = __('Limitless');
+      }
+
+      return ret;
+    },
+  },
+  {
     id: 'adv',
     text: __('Ads Page'),
     width: '120px',
@@ -238,13 +271,12 @@ export default class View extends React.Component {
         selectable={
           ($$item, index) => (index >= 6)
         }
-        searchable
+        // searchable
         searchProps={{
           placeholder: `${__('Name')}`,
         }}
-        deleteable={
-          ($$item, index) => (index >= 6)
-        }
+        deleteable={false}
+        addable={false}
       />
     );
   }

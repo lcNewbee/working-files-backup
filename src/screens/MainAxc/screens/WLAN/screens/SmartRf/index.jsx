@@ -176,80 +176,34 @@ export default class SmartRf extends React.Component {
         defaultSettingsData={defaultSettingsData}
         actionable={this.actionable}
       >
-        <div className="o-box row">
-          <div className="o-box__cell">
-            <h3
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.toggleBox('isBaseShow')}
-            >
-              <Icon
-                name={this.state.isBaseShow ? 'minus-square' : 'plus-square'}
-                size="lg"
-                style={{
-                  marginRight: '5px',
-                }}
-              />
-              {__('Base Settings')}
-            </h3>
-          </div>
-          {
-            this.state.isBaseShow ? (
-              <div className="o-box__cell">
-                <FormContainer
-                  id="radioBase"
-                  options={settingsFormOptions}
-                  data={$$curData}
-                  onChangeData={updateScreenSettings}
-                  onSave={() => this.onSave('radioBase')}
-                  invalidMsg={app.get('invalid')}
-                  validateAt={app.get('validateAt')}
-                  isSaving={app.get('saving')}
-                  saveText={__('Apply')}
-                  savingText={__('Applying')}
-                  savedText={__('Applied')}
-                />
-              </div>
-            ) : null
-          }
-
-          <div className="o-box__cell">
-            <h3
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.toggleBox('isAdvancedShow')}
-            >
-              <Icon
-                name={this.state.isAdvancedShow ? 'minus-square' : 'plus-square'}
-                size="lg"
-                style={{
-                  marginRight: '5px',
-                }}
-                onClick={() => this.toggleBox('isAdvancedShow')}
-              />
-              {__('Advanced Settings')}
-            </h3>
-          </div>
-          {
-            this.state.isAdvancedShow ? (
-              <div className="o-box__cell">
-                <FormContainer
-                  id="radioAdvance"
-                  options={$$radioAdvanceFormOptions}
-                  data={$$curData}
-                  onChangeData={updateScreenSettings}
-                  onSave={() => this.onSave('radioAdvance')}
-                  invalidMsg={app.get('invalid')}
-                  validateAt={app.get('validateAt')}
-                  onValidError={this.props.reportValidError}
-                  isSaving={app.get('saving')}
-                  hasSaveButton={this.actionable}
-                  saveText={__('Apply')}
-                  savingText={__('Applying')}
-                  savedText={__('Applied')}
-                />
-              </div>
-            ) : null
-          }
-        </div>
+        <FormContainer
+          id="radioBase"
+          options={settingsFormOptions}
+          data={$$curData}
+          onChangeData={updateScreenSettings}
+          onSave={() => this.onSave('radioBase')}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          isSaving={app.get('saving')}
+          saveText={__('Apply')}
+          savingText={__('Applying')}
+          savedText={__('Applied')}
+        />
+        <FormContainer
+          id="radioAdvance"
+          options={$$radioAdvanceFormOptions}
+          data={$$curData}
+          onChangeData={updateScreenSettings}
+          onSave={() => this.onSave('radioAdvance')}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          onValidError={this.props.reportValidError}
+          isSaving={app.get('saving')}
+          hasSaveButton={this.actionable}
+          saveText={__('Apply')}
+          savingText={__('Applying')}
+          savedText={__('Applied')}
+        />
       </AppScreen>
     );
   }

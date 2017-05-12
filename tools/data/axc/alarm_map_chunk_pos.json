@@ -13,7 +13,7 @@
         "end_lat": 43.230323231,
         "level": "3",
         "id": "1",
-        "describe": "aaa",
+        "describe": "Free",
         "gather_threshold": 300
       },
       {
@@ -23,7 +23,7 @@
         "end_lat": 43.230323231,
         "level": "3",
         "id": "2",
-        "describe": "aaa",
+        "describe": "Free",
         "gather_threshold": 400
       }
     ]

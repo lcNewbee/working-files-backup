@@ -103,7 +103,7 @@
     "invariant": "^2.2.2",
     "isomorphic-fetch": "^2.2.1",
     "keymaster": "^1.6.2",
-    "moment": "(2.10 - 2.14 || ^2.15.1) && < 2.18.0",
+    "moment": "^2.18.1",
     "object.assign": "^4.0.4",
     "prop-types": "^15.5.8",
     "rc-time-picker": "^2.3.5",

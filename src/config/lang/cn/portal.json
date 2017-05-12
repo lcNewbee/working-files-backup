@@ -37,6 +37,7 @@
   "Allowed":"允许",
   "Forbidden":"禁止",
   "Local Server List": "本地服务器列表",
+  "AAA Policies": "AAA 策略",
 
   "User IP":"用户IP",
   "User MAC":"用户MAC",
@@ -96,6 +97,7 @@
   "Closed":"关闭",
   "Open":"开启",
   "Portal Server IP":"Portal服务器IP",
+  "Page Settings": "页面配置",
   "User MAC Address":"用户MAC地址",
   "One Key Auth":"一键认证",
   "Access User Auth":"接入用户认证",
@@ -298,6 +300,6 @@
   "Radius Server Type": "Radius 服务器类型",
   "Portal Rule Port": "Portal 规则端口",
   "Portal WEB Template": "Portal 网页模板",
-
+  "Online Clients": "在线用户列表",
   "Local Portal Rule": "本地Portal规则"
 }

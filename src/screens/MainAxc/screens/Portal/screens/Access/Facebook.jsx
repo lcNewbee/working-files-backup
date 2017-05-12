@@ -50,10 +50,10 @@ const listOptions = fromJS([
     options: [
       {
         value: '1',
-        label: __('On Service'),
+        label: __('Enable'),
       }, {
         value: '0',
-        label: __('Out of Service'),
+        label: __('Disable'),
       },
     ],
   },

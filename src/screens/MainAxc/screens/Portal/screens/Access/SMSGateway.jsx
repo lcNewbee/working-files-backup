@@ -155,15 +155,16 @@ const listOptions = fromJS([
     text: __('State'),
     formProps: {
       type: 'select',
+      defaultValue: '1',
       required: true,
     },
     options: [
       {
         value: '1',
-        label: __('On Service'),
+        label: __('Enable'),
       }, {
         value: '0',
-        label: __('Out of Service'),
+        label: __('Disable'),
       },
     ],
   }, {
@@ -171,20 +172,21 @@ const listOptions = fromJS([
     text: __('MultiTerminal Log'),
     formProps: {
       type: 'select',
+      defaultValue: '1',
       required: true,
     },
     options: [
       {
         value: '0',
-        label: __('Allowed'),
+        label: __('Disable'),
       }, {
         value: '1',
-        label: __('Forbidden'),
+        label: __('Disable'),
       },
     ],
   }, {
     id: 'time',
-    text: __('Overdue Duration'),
+    text: __('Relese Time'),
     formProps: {
       type: 'number',
       min: '0',
