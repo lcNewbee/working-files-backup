@@ -795,6 +795,7 @@ export const $$portalTemplateOptions = fromJS([
     formProps: {
       type: 'select',
       maxLength: '129',
+      defaultValue: '',
       validator: validator({
         rules: 'utf8Len:[1, 128]',
       }),
@@ -810,6 +811,7 @@ export const $$portalTemplateOptions = fromJS([
       },
     ],
     formProps: {
+      defaultValue: '',
       type: 'select',
     },
   },
@@ -820,6 +822,7 @@ export const $$portalTemplateOptions = fromJS([
       type: 'select',
       defaultValue: '6',
       required: true,
+      visible: $$data => $$data.get('apmac') || $$data.get('ssid'),
     },
   },
   {

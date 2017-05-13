@@ -43,6 +43,7 @@ const listOptions = fromJS([
       type: 'text',
       maxLength: '129',
       required: true,
+      notEditable: true,
       validator: validator({
         rules: 'utf8Len:[1, 128]',
       }),
@@ -50,8 +51,22 @@ const listOptions = fromJS([
     render: val => __(val),
   },
   {
+    id: 'description',
+    text: __('Description'),
+    formProps: {
+      type: 'textarea',
+      maxLength: '257',
+      notEditable: true,
+      validator: validator({
+        rules: 'utf8Len:[0, 256]',
+      }),
+      rows: '3',
+    },
+    render: val => __(val),
+  },
+  {
     id: 'url',
-    label: __('Redirect URL after Authetication'),
+    label: __('Redirect URL'),
     formProps: {
       type: 'text',
       validator: validator({
@@ -60,7 +75,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'sessiontime',
-    label: __('Limit Connect Duration after Authetication'),
+    label: __('Limit Connect Duration'),
     defaultValue: '0',
     formProps: {
       help: __('minutes(0 means no limitation)'),
@@ -71,11 +86,17 @@ const listOptions = fromJS([
         rules: 'num:[0,99999]',
       }),
     },
-    render: (val) => {
+    render: (val, $$data) => {
       let ret = val;
+      const id = $$data.get('id');
 
       if (val === '0' || val === 0) {
         ret = __('Limitless');
+      } else if (val !== '-') {
+        ret = `${ret} ${__('Minutes')}`;
+      }
+      if (id === '3') {
+        ret = '-';
       }
 
       return ret;
@@ -126,25 +147,15 @@ const listOptions = fromJS([
         rules: 'num:[0,999999999]',
       }),
     },
-  }, {
-    id: 'description',
-    text: __('Description'),
-    formProps: {
-      type: 'textarea',
-      maxLength: '257',
-      validator: validator({
-        rules: 'utf8Len:[0, 256]',
-      }),
-    },
-    render: val => __(val),
-  }, {
+  },
+  {
     id: 'file',
     text: __('Template Zip File'),
     noTable: true,
     defaultValue: '',
     formProps: {
       type: 'file',
-      required: true,
+      //required: true,
     },
   }, {
     id: '__actions__',

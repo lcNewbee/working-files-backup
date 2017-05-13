@@ -147,6 +147,10 @@ const listOptions = fromJS([
     render: (val, $$data) => {
       const curName = $$data.getIn(['portalServer', 'portal_template']);
 
+      if ($$data.get('auth_accesstype') !== 'portal') {
+        return '-';
+      }
+
       return `${__(curName)} (${$$data.getIn(['portalServer', 'server_ipaddr'])})`;
     },
     formProps: {
@@ -175,7 +179,7 @@ const listOptions = fromJS([
   {
     id: 'auth_schemetype',
     text: __('Type'),
-    defaultValue: 'radius-scheme',
+    defaultValue: 'local',
     options: authTypeSeletOptions,
     noTable: true,
     noForm: true,
@@ -196,19 +200,41 @@ const listOptions = fromJS([
     id: 'portal_server_port',
     text: __('Portal Rule Port'),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalRule', 'interface_bind']) || __('None'),
+    render: (val, $$data) => {
+      let ret = $$data.getIn(['portalRule', 'interface_bind']);
+
+      if ($$data.get('auth_accesstype') !== 'portal') {
+        return '-';
+      }
+
+      if (!ret || ret === 'lo') {
+        ret = __('Limitless');
+      }
+      return ret;
+    },
   },
   {
     id: 'portal_server_ssid',
     text: __('Portal SSID '),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'ssid']) ||  __('None'),
+    render: (val, $$data) => {
+      if ($$data.get('auth_accesstype') !== 'portal') {
+        return '-';
+      }
+      return $$data.getIn(['portalTemplate', 'ssid']) || __('None');
+    },
   },
   {
     id: 'portal_server_mac',
     text: __('Portal Access Point MAC Address'),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']) ||  __('None'),
+    render: (val, $$data) => {
+      if ($$data.get('auth_accesstype') !== 'portal') {
+        return '-';
+      }
+
+      return $$data.getIn(['portalTemplate', 'mac']) || __('None')
+    },
   },
   {
     id: 'portal_server_web',
@@ -219,6 +245,11 @@ const listOptions = fromJS([
     render: (val, $$data, $$option) => {
       const $$curOptions = $$option.get('options');
       const $$curItem = $$curOptions.find($$item => $$item.get('value') === val);
+
+      if ($$data.get('auth_accesstype') !== 'portal') {
+        return '-';
+      }
+
       return $$curItem ? $$curItem.get('label') : DEFAULT_STR;
     },
   },
@@ -837,6 +868,7 @@ export default class View extends React.Component {
             style={{
               marginLeft: '180px',
             }}
+            loading={app.get('saving')}
             onClick={this.onSave}
           />
         </div>
