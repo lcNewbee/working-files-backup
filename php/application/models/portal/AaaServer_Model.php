@@ -6,101 +6,67 @@ class AaaServer_Model extends CI_Model {
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $this->load->helper(array('array', 'db_operation'));
 	}
-
-    function get_list() {    
+    function get_list(){
         $arr = array(
             'state' => array('code' => 2000,'msg' => 'ok'),
             'data' => array(
                 'list' => array()
             )
         );
-
+        $ret = $this->db->select('id,portal_rule_type,name,radius_template,domain_name,portal_template,portal_server_type,portal_rule,ssid,mac')
+                        ->from('portal_config')
+                        ->get()
+                        ->result_array();
 
         $retAry = array();
-        $datalist = $this->db->select('id,domain_name')
-                        ->from('domain_list')                        
-                        ->get()->result_array();
+        if( count($ret) > 0 ){
+            foreach($ret as $row) {                
+                $row['radius_server_type'] = $row['radius_template'] == 'local' ? 'local' : 'remote';
+                $row['radius'] = $this->getRadius($row['radius_template']);//获取radius属性
 
-        foreach( $datalist as $row) {          
-            $query = $this->db->select('domain_params.attr_value,domain_attr.attr_name')
-                                ->from('domain_params')
-                                ->join('domain_attr','domain_params.attr_id=domain_attr.id ','left')
-                                ->where('domain_params.domain_id', $row['id'])
-                                ->get()
-                                ->result_array();
-            foreach($query as $nrow) {
-                switch($nrow['attr_name']){
-                    case 'template_name' : 
-                        $row['radius_server_type'] = 'local';
-                        $row['radius_template_name'] = $nrow['attr_value']; //radius
-                        if($nrow['attr_value'] != 'local'){
-                            $row['radius_server_type'] = 'remote';
-                        }
-                        $row['radius'] = $this->getRadius($nrow['attr_value']);//获取radius属性
-                        break;                        
-                    case 'auth_access_type' : $row['auth_accesstype']  = $nrow['attr_value']; 
-                        break;
-                    case 'auth_scheme_type' : $row['auth_schemetype']  = $nrow['attr_value']; 
-                        break;
-                }
-                $sql  = "select portal_auth.portal_name,portal_params.attr_value,portal_attr.attr_name";
-                $sql .= " from portal_auth";
-                $sql .= " left join portal_params on portal_auth.id=portal_params.portal_id";
-                $sql .= " left join portal_attr on portal_params.attr_id=portal_attr.id";
-                $sql .= " where portal_params.attr_value='{$row['domain_name']}'";
-                $portal_data = $this->db->query($sql)->result_array();                              
-                if(count($portal_data) > 0){
-                    $row['portal_template_name'] = $portal_data[0]['portal_name'];//portal
-                    $row['portal_server_type'] = 'local';
-                    if( $portal_data[0]['portal_name'] != 'local'){                    
-                        $row['portal_server_type'] = 'remote';                    
-                    }
-                    $row['portalServer'] = $this->getPortal($row['portal_template_name']);//获取portal属性
-                    $row['portalRule'] = $this->getPortalRule($row['portal_template_name'], $row['portalServer']['interface_bind']);//获取portal 规则
-                }else{
-                    $sqllocal  = "select portal_auth.portal_name,portal_params.attr_value,portal_attr.attr_name";
-                    $sqllocal .= " from portal_auth";
-                    $sqllocal .= " left join portal_params on portal_auth.id=portal_params.portal_id";
-                    $sqllocal .= " left join portal_attr on portal_params.attr_id=portal_attr.id";
-                    $sqllocal .= " where portal_params.attr_value='local'";
-                    $portal_data_local = $this->db->query($sqllocal)->result_array();  
-                    if(count($portal_data_local) > 0){
-                        $row['portal_template_name'] = $portal_data_local[0]['portal_name'];//portal
-                        $row['portal_server_type'] = 'local';
-                        if( $portal_data_local[0]['portal_name'] != 'local'){                    
-                            $row['portal_server_type'] = 'remote';                    
-                        }
-                        $row['portalServer'] = $this->getPortal($row['portal_template_name']);//获取portal属性
-                        $row['portalRule'] = $this->getPortalRule($row['portal_template_name'], $row['portalServer']['interface_bind']);//获取portal 规则
-                        //$row['portalRule'] = array('interface_bind'=>'');
-                    }  
-                }
+                $row['portal_server_type'] = $row['portal_server_type'];
+                $row['portalServer'] = $this->getPortal($row['portal_template']);//获取portal属性
 
-                //ssid web
-                if($row['portal_server_type'] === 'local') {
-                    $portal_ssid = 'local_ssid_' . $row['domain_name'];
-                    if($row['domain_name'] == 'local'){
-                            $portal_ssid = 'local_ssid_local';
+                $row['portalRule'] = $this->getPortalRule($row['portal_template'], $row['portalServer']['interface_bind']);//获取portal 规则
+
+                if($row['portal_rule_type'] === 'ssid'){                                        
+                    $sqlcmd = "select id,apmac as mac,ssid,address,web from portal_ssid where ssid='{$row['ssid']}'";
+                    if($row['mac'] != '' && $row['mac'] != null){
+                        $sqlcmd = "select id,apmac as mac,ssid,address,web from portal_ssid where ssid='{$row['ssid']}' and apmac='{$row['mac']}'";                        
                     }
-                    $webquery = $this->portalsql->query("select id,apmac as mac,ssid,address,web from portal_ssid where name='{$portal_ssid}'")->result_array();
+                    $webquery = $this->portalsql->query($sqlcmd)->result_array();
                     if(count($webquery) > 0) {
                         $row['portalTemplate'] = $webquery[0];
                     }
-                    
                 }
-            }                        
-            $retAry[] = $row;
+                $domain_data = $this->getDomainState($row['domain_name']);
+                $row['auth_accesstype'] = $domain_data['auth_accesstype'];
+                $row['auth_schemetype'] = $domain_data['auth_schemetype'];
+                $retAry[] = $row;
+            }            
         }
+        $arr['data']['list'] = $retAry;
 
-        $arr['data']['list'] = $retAry;        
         return $arr;
     }
 
-    function add($data){
+    function add($data){        
+        if( $this->isportalConfig($data['name']) ){
+            return json_encode(json_no('name error', 6405));
+        }
         $auth_type   = element('auth_accesstype', $data, NULL);
         $radius_type = element('radius_server_type', $data, NULL);
-        $portal_type = element('portal_server_type', $data, NULL);        
-        
+        $portal_type = element('portal_server_type', $data, NULL);  
+        $portal_rule_type = element('portal_rule_type', $data, NULL);//ssid||port        
+        /**
+         * 1.radius
+         * 2.aaa
+         * 3.portal template
+         * 4.portal rule
+         * 5.web ssid
+         * 6.产生配置记录
+         * 7.下发ssid
+        */
         if($auth_type === '8021x-access'){
             //802.1x 认证
 
@@ -110,7 +76,7 @@ class AaaServer_Model extends CI_Model {
                 //2.创建 AAA
                 $aaa_ary = array(
                     'radius_template'=> $radius_type,
-                    'template_name'=>element('domain_name', $data),
+                    'template_name'=>element('name', $data),
                     'auth_accesstype'=>element('auth_accesstype', $data),
                     'auth_schemetype'=>element('auth_schemetype', $data)                
                 );
@@ -120,6 +86,14 @@ class AaaServer_Model extends CI_Model {
                 //3.创建 Portal 模板
                 //4.创建 Portal 规则
                 //5.创建 Portal 认证 ssid和网页模板  
+                //6.添加配置信息
+                $config_ary = array(
+                    'radius_template' => 'local',
+                    'name' => element('name', $data),
+                    'domain_name' => element('name', $data),
+                    'mac' => ''
+                );
+                $this->db->insert('portal_config', $config_ary);
             }   
             //802.1x 认证 -> 远程Radius服务器
             if( $radius_type === 'remote' ) { 
@@ -154,8 +128,8 @@ class AaaServer_Model extends CI_Model {
                 }
                 //2.创建 AAA
                 $aaa_ary = array(
-                    'radius_template'=> 'remote_radius_' . $data['domain_name'],
-                    'template_name'=>element('domain_name', $data),
+                    'radius_template'=> 'remote_radius_' . $data['name'],
+                    'template_name'=>element('name', $data),
                     'auth_accesstype'=>element('auth_accesstype', $data),
                     'auth_schemetype'=>element('auth_schemetype', $data)                
                 );
@@ -164,59 +138,150 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3.创建 Portal 模板
                 //4.创建 Portal 规则
-                //5.创建 Portal 认证 ssid和网页模板                                 
+                //5.创建 Portal 认证 ssid和网页模板  
+                //6.添加配置信息
+                $config_ary = array(
+                    'radius_template' => 'remote_radius_' . $data['name'],
+                    'name' => element('name', $data),
+                    'domain_name' => element('name', $data),
+                    'mac' => ''
+                );
+                $this->db->insert('portal_config', $config_ary);                               
             }
         }else if($auth_type === 'portal') {
             //portal认证
 
             //portal认证 -> 本地radius服务器 + 本地Portal服务器
             if($radius_type === 'local' && $portal_type === 'local'){
-                //1.创建 Radius 模板 
-                //2.创建 AAA
-                $aaa_ary = array(
-                    'radius_template'=> $radius_type,
-                    'template_name'=>element('domain_name', $data),
-                    'auth_accesstype'=>element('auth_accesstype', $data),
-                    'auth_schemetype'=>element('auth_schemetype', $data)                
-                );
-                if(!$this->addAaaTemplate($aaa_ary)){
-                    return json_encode(json_no('add aaa error!',6405));
-                }
-                
-                //3.创建 Portal 模板 
-
-                //4.创建 Portal 规则
-                $portal_rule_ary = array(
-                    'template_name'=> 'local',
-                    'interface_bind'=>(string)element('interface_bind', $data['portalRule'],''),
-                    'max_usernum'=>(string)element('max_usernum', $data['portalRule'],'4096'),
-                    'auth_mode'=>(string)element('auth_mode', $data['portalRule'],'1'),
-                    'auth_ip'=>(string)element('auth_ip', $data['portalRule'],''),
-                    'auth_mask'=>(string)element('auth_mask', $data['portalRule'],''),
-                    'idle_test'=>(string)element('idle_test', $data['portalRule'],'0')
-                );
-                if(!$this->addPortalRule($portal_rule_ary)){
-                    return json_encode(json_no('add portal rule error!'));
-                }
-                //5.创建 Portal 认证 ssid和网页模板
-                $web_ary = array(
-                    'name' => 'local_ssid_' . element('domain_name', $data),
-                    'address' => '',//地址
-                    'basip' => $this->getInterface(),
-                    'web' => element('web',$data['portalTemplate']),//页面模版
-                    'des' => element('des',$data['portalTemplate']),//描述
-                    'ssid' => element('ssid',$data['portalTemplate']),
-                    'apmac' => element('apmac',$data['portalTemplate'], '')
-                );            
-                if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
-                    return json_encode(json_no('add portal web error!'));
-                }
-                //更新给Ap下发ssid属性
-                if($data['portalTemplate']['ssid'] != ''){
-                    if(!$this->editApSsid($data['portalTemplate']['ssid'], $data['domain_name'])){
-                        return json_encode(json_no('ssid domain set error'));
+                //选择AP的SSID方式弹portal
+                if($portal_rule_type === 'ssid'){                    
+                    //5.创建 Portal 认证 ssid和网页模板
+                    $ssid = element('ssid',$data['portalTemplate'], '');
+                    $apmac = element('apmac',$data['portalTemplate'], '');
+                    if($ssid != ''){
+                        //用户选择了ssid 和apmac  添加
+                        if($apmac != ''){                            
+                            // add
+                            $web_ary = array(
+                                'name' => 'local_ssid_' . element('name', $data),
+                                'address' => '',//地址
+                                'basip' => $this->getInterface(),
+                                'web' => element('web',$data['portalTemplate']),//页面模版
+                                'des' => element('des',$data['portalTemplate']),//描述
+                                'ssid' => $ssid,
+                                'apmac' => $apmac
+                            );            
+                            if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
+                                return json_encode(json_no('add portal web error!'));
+                            }
+                        }else{
+                            //选择ssid 但未选择apmac 修改
+                            //没有apmac  ->  修改数据库中匹配到ssid 当没apmac的记录，
+                            $ssid_data = $this->portalsql->query("select * from portal_ssid where ssid='{$ssid}' and apmac=''")->result_array();
+                            if(count($ssid_data) > 0){
+                                $web_ins = array(
+                                    'name' => 'local_ssid_' . element('name', $data),
+                                    'address' => '',//地址
+                                    'basip' => $this->getInterface(),
+                                    'web' => element('web',$data['portalTemplate']),//页面模版
+                                    'des' => element('des',$data['portalTemplate']),//描述
+                                    'ssid' => $ssid,
+                                    'apmac' => $apmac
+                                );                            
+                                $this->portalsql->where("ssid='{$ssid}' AND apmac=''");
+                                $this->portalsql->update('portal_ssid', $web_ins);
+                            }else{
+                                //没有就添加
+                                $web_ary = array(
+                                    'name' => 'local_ssid_' . element('name', $data),
+                                    'address' => '',//地址
+                                    'basip' => $this->getInterface(),
+                                    'web' => element('web',$data['portalTemplate']),//页面模版
+                                    'des' => element('des',$data['portalTemplate']),//描述
+                                    'ssid' => $ssid,
+                                    'apmac' => $apmac
+                                );            
+                                if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
+                                    return json_encode(json_no('add portal web error!'));
+                                }
+                            }                            
+                        }                                                
+                    }                    
+                    
+                    //6.添加配置信息
+                    $config_ary = array(
+                        'name' => element('name', $data),
+                        'portal_rule_type' => element('portal_rule_type', $data, 'ssid'),
+                        'radius_template' => 'local',
+                        'domain_name' => 'local',//domain域默认用local 不在做添加aaa
+                        'portal_template' => 'local',
+                        'portal_server_type' => 'local',
+                        'portal_rule' => '',
+                        'ssid' => $ssid,
+                        'mac' => $apmac
+                    );
+                    $this->db->insert('portal_config', $config_ary);
+                    //7.更新给Ap下发ssid属性
+                    if(isset($data['portalTemplate']['ssid']) && $data['portalTemplate']['ssid'] != ''){
+                        if(!$this->editApSsid($data['portalTemplate']['ssid'], 'local')){
+                            return json_encode(json_no('ssid domain set error'));
+                        }
                     }
-                } 
+                }
+                //选择 根据端口弹portal
+                if($portal_rule_type === 'port'){
+                    //2.创建AAA
+                    $my_domain = 'local_' . $data['portalRule']['interface_bind'];
+                    $aaa_ary = array(
+                        'radius_template'=> 'local',
+                        'template_name'=>$my_domain,
+                        'auth_accesstype'=>element('auth_accesstype', $data),
+                        'auth_schemetype'=>element('auth_schemetype', $data)                
+                    );
+                    if(!$this->addAaaTemplate($aaa_ary)){
+                        return json_encode(json_no('add aaa error!',6405));
+                    }
+                    //3.创建 portal 模版
+                    $server_ip = $this->getInterface();
+                    $portal_tp = array(
+                        'ac_ip' => $server_ip,
+                        'server_ipaddr' => $server_ip, 
+                        'server_key' => '123456', 
+                        'server_port' => '50100',                     
+                        'server_url' => $server_ip . ':8080',                    
+                        'template_name' => $my_domain,
+                        'auth_domain' => $my_domain
+                    );
+                    if(!$this->addPortalTemplate($portal_tp)){
+                        return json_encode(json_no('add portal template errot!'));
+                    }
+                    //4.创建 Portal 规则
+                    $portal_rule_ary = array(
+                        'template_name'=> $my_domain,
+                        'interface_bind'=>(string)element('interface_bind', $data['portalRule'],''),
+                        'max_usernum'=>(string)element('max_usernum', $data['portalRule'],'4096'),
+                        'auth_mode'=>(string)element('auth_mode', $data['portalRule'],'1'),
+                        'auth_ip'=>(string)element('auth_ip', $data['portalRule'],''),
+                        'auth_mask'=>(string)element('auth_mask', $data['portalRule'],''),
+                        'idle_test'=>(string)element('idle_test', $data['portalRule'],'0')
+                    );
+                    if(!$this->addPortalRule($portal_rule_ary)){
+                        return json_encode(json_no('add portal rule error!'));
+                    }
+                    //6.添加配置信息
+                    $config_ary = array(
+                        'name' => element('name', $data),
+                        'portal_rule_type' => element('portal_rule_type', $data, 'ssid'),
+                        'radius_template' => 'local',
+                        'domain_name' => $my_domain,
+                        'portal_template' => $my_domain,
+                        'portal_server_type' => 'local',
+                        'portal_rule' => $data['portalRule']['interface_bind'],
+                        'ssid' => element('ssid',$data['portalTemplate']),
+                        'mac' => ''
+                    );
+                    $this->db->insert('portal_config', $config_ary);
+                }                
             }
 
             //portal认证 -> 本地radius服务器 + 远程Portal服务器
@@ -225,7 +290,7 @@ class AaaServer_Model extends CI_Model {
                 //2.创建 AAA              
                 $aaa_ary = array(
                     'radius_template'=> $radius_type,
-                    'template_name'=>element('domain_name', $data),
+                    'template_name'=>element('name', $data),
                     'auth_accesstype'=>element('auth_accesstype', $data),
                     'auth_schemetype'=>element('auth_schemetype', $data)                
                 );
@@ -239,15 +304,15 @@ class AaaServer_Model extends CI_Model {
                     'server_key' => element('server_key', $data['portalServer']), 
                     'server_port' => element('server_port', $data['portalServer']),                     
                     'server_url' => element('server_url', $data['portalServer']),                    
-                    'template_name' => 'remote_portal_' . $data['domain_name'],
-                    'auth_domain' => element('domain_name', $data)
+                    'template_name' => 'remote_portal_' . $data['name'],
+                    'auth_domain' => element('name', $data)
                 );
                 if(!$this->addPortalTemplate($portal_tp)){
                     return json_encode(json_no('add portal template errot!'));
                 }             
                 //4.创建 Portal 规则
                 $portal_rule_ary = array(
-                    'template_name'=> 'remote_portal_' . $data['domain_name'],//
+                    'template_name'=> 'remote_portal_' . $data['name'],//
                     'interface_bind'=>(string)element('interface_bind', $data['portalRule'],''),
                     'max_usernum'=>(string)element('max_usernum', $data['portalRule'],'4096'),
                     'auth_mode'=>(string)element('auth_mode', $data['portalRule'],'1'),
@@ -258,14 +323,27 @@ class AaaServer_Model extends CI_Model {
                 if(!$this->addPortalRule($portal_rule_ary)){
                     return json_encode(json_no('add portal rule error!'));
                 }
-                //5.创建 Portal 认证 ssid和网页模板
+                //5
+                //6.添加配置信息
+                $config_ary = array(
+                    'name' => element('name', $data),
+                    'portal_rule_type' => 'port',
+                    'radius_template' => 'local',
+                    'domain_name' => element('name', $data, ''),
+                    'portal_template' => 'remote_portal_' . $data['name'],
+                    'portal_server_type' => 'remote',
+                    'portal_rule' => $data['portalRule']['interface_bind'],
+                    'ssid' => '',
+                    'mac' => ''
+                );
+                $this->db->insert('portal_config', $config_ary);
             }
             
             //portal认证 -> 远程radius服务器 + 本地Portal服务器
             if($radius_type === 'remote' && $portal_type === 'local'){                
                 //1.创建 Radius 模板 
                 $radius_ary = array(
-                    'template_name' => 'remote_radius_' . $data['domain_name'], 
+                    'template_name' => 'remote_radius_' . $data['name'], 
                     'authpri_ipaddr' => element('authpri_ipaddr', $data['radius'], ''),
                     'authpri_port' => element('authpri_port', $data['radius'], ''), 
                     'authpri_key' => element('authpri_key', $data['radius'], ''),
@@ -294,18 +372,31 @@ class AaaServer_Model extends CI_Model {
                 }            
                 //2.创建 AAA
                 $aaa_ary = array(
-                    'radius_template' => 'remote_radius_' . $data['domain_name'], 
-                    'template_name'=>element('domain_name', $data),
+                    'radius_template' => 'remote_radius_' . $data['name'], 
+                    'template_name' => element('name', $data),
                     'auth_accesstype'=>element('auth_accesstype', $data),
                     'auth_schemetype'=>element('auth_schemetype', $data)                
                 );
                 if(!$this->addAaaTemplate($aaa_ary)){
                     return json_encode(json_no('add aaa error!',6405));
-                }                
-                //3.创建 Portal 模板                                
+                }                 
+                //3.创建 portal 模版
+                $server_ip = $this->getInterface();
+                $portal_tp = array(
+                    'ac_ip' => $server_ip,
+                    'server_ipaddr' => $server_ip, 
+                    'server_key' => '123456', 
+                    'server_port' => '50100',                     
+                    'server_url' => $server_ip . ':8080',                    
+                    'template_name' => 'local_' . $data['portalRule']['interface_bind'],
+                    'auth_domain' => 'local_' . $data['name']
+                );
+                if(!$this->addPortalTemplate($portal_tp)){
+                    return json_encode(json_no('add portal template errot!'));
+                }                         
                 //4.创建 Portal 规则
                 $portal_rule_ary = array(
-                    'template_name'=> 'local',
+                    'template_name'=> 'local_' . $data['portalRule']['interface_bind'],
                     'interface_bind'=>(string)element('interface_bind', $data['portalRule'],''),
                     'max_usernum'=>(string)element('max_usernum', $data['portalRule'],'4096'),
                     'auth_mode'=>(string)element('auth_mode', $data['portalRule'],'1'),
@@ -316,32 +407,27 @@ class AaaServer_Model extends CI_Model {
                 if(!$this->addPortalRule($portal_rule_ary)){
                     return json_encode(json_no('add portal rule error!'));
                 }
-                //5.创建 Portal 认证 ssid和网页模板
-                $web_ary = array(
-                    'name' => 'local_ssid_' . element('domain_name', $data),
-                    'address' => '',//地址
-                    'basip' => $this->getInterface(),
-                    'web' => element('web',$data['portalTemplate']),//页面模版
-                    'des' => element('des',$data['portalTemplate']),//描述
-                    'ssid' => element('ssid',$data['portalTemplate']),
-                    'apmac' => element('apmac',$data['portalTemplate'], '')
-                );            
-                if( !$this->portalsql->insert('portal_ssid',$web_ary) ) {
-                    return json_encode(json_no('add portal web error!'));
-                }
-                //更新给Ap下发ssid属性
-                if($data['portalTemplate']['ssid'] != ''){
-                    if(!$this->editApSsid($data['portalTemplate']['ssid'], $data['domain_name'])){
-                        return json_encode(json_no('ssid domain set error'));
-                    }
-                }
+                //5
+                //6.添加配置信息
+                $config_ary = array(
+                    'name' => element('name', $data),
+                    'portal_rule_type' => 'port',
+                    'radius_template' => 'remote_radius_' . $data['name'], 
+                    'domain_name' => element('name', $data),
+                    'portal_template' => 'local_' . $data['portalRule']['interface_bind'],
+                    'portal_server_type' => 'remote',
+                    'portal_rule' => $data['portalRule']['interface_bind'],
+                    'ssid' => '',
+                    'mac' => ''
+                );
+                $this->db->insert('portal_config', $config_ary);
             }
 
             //portal认证 -> 远程radius服务器 + 远程Portal服务器
             if($radius_type === 'remote' && $portal_type === 'remote'){
                 //1.创建 Radius 模板 
                 $radius_ary = array(
-                    'template_name' => 'remote_radius_' . $data['domain_name'], 
+                    'template_name' => 'remote_radius_' . $data['name'], 
                     'authpri_ipaddr' => element('authpri_ipaddr', $data['radius'], ''),
                     'authpri_port' => element('authpri_port', $data['radius'], ''), 
                     'authpri_key' => element('authpri_key', $data['radius'], ''),
@@ -370,8 +456,8 @@ class AaaServer_Model extends CI_Model {
                 }            
                 //2.创建 AAA
                 $aaa_ary = array(
-                    'radius_template'=> 'remote_radius_' . $data['domain_name'],
-                    'template_name'=> element('domain_name',$data),
+                    'radius_template'=> 'remote_radius_' . $data['name'],
+                    'template_name'=> element('name',$data),
                     'auth_accesstype'=>element('auth_accesstype', $data),
                     'auth_schemetype'=>element('auth_schemetype', $data)                
                 );
@@ -385,15 +471,15 @@ class AaaServer_Model extends CI_Model {
                     'server_key' => element('server_key', $data['portalServer']), 
                     'server_port' => element('server_port', $data['portalServer']),                     
                     'server_url' => element('server_url', $data['portalServer']),                    
-                    'template_name' => 'remote_portal_' . $data['domain_name'],
-                    'auth_domain' => element('domain_name', $data)
+                    'template_name' => 'remote_portal_' . $data['name'],
+                    'auth_domain' => element('name', $data)
                 );
                 if(!$this->addPortalTemplate($portal_tp)){
                     return json_encode(json_no('add portal template errot!'));
                 }                                 
                 //4.创建 Portal 规则
                 $portal_rule_ary = array(
-                    'template_name'=> 'remote_portal_' . $data['domain_name'],
+                    'template_name'=> 'remote_portal_' . $data['name'],
                     'interface_bind'=>(string)element('interface_bind', $data['portalRule'],''),
                     'max_usernum'=>(string)element('max_usernum', $data['portalRule'],'4096'),
                     'auth_mode'=>(string)element('auth_mode', $data['portalRule'],'1'),
@@ -404,7 +490,20 @@ class AaaServer_Model extends CI_Model {
                 if(!$this->addPortalRule($portal_rule_ary)){
                     return json_encode(json_no('add portal rule error!'));
                 } 
-                //web                
+                //5
+                //6.添加配置信息
+                $config_ary = array(
+                    'name' => element('name', $data),
+                    'portal_rule_type' => 'port',
+                    'radius_template' => 'remote_radius_' . $data['name'], 
+                    'domain_name' => element('name', $data),
+                    'portal_template' => 'remote_portal_' . $data['name'],
+                    'portal_server_type' => 'remote',
+                    'portal_rule' => $data['portalRule']['interface_bind'],
+                    'ssid' => '',
+                    'mac' => ''
+                );
+                $this->db->insert('portal_config', $config_ary);              
             }
         }
         return json_encode(json_ok());
@@ -413,30 +512,12 @@ class AaaServer_Model extends CI_Model {
         $auth_type   = element('auth_accesstype', $data, NULL);
         $radius_type = element('radius_server_type', $data, NULL);
         $portal_type = element('portal_server_type', $data, NULL); 
-        $domain_name = element('domain_name', $data, NULL);
+        $portal_rule_type = element('portal_rule_type', $data, NULL);//ssid||port
+        $domain_name = element('name', $data, NULL);
 
         if($domain_name === 'local') {
-            //修改本地aaa模板只能修改端口和 web模板
-            //修改 rule
-            $ruleda = $this->getPortal('local');
-            $interface = element('interface_bind', $data['portalRule'],'');
-            //interface 端口必须有否则跳过
-            if( $ruleda['interface_bind'] != '' && $interface != ''){
-                                
-                $portal_rule_ary = array(
-                    'template_name'=> 'local',
-                    'interface_bind'=>(string)element('interface_bind', $data['portalRule'],''),
-                    'max_usernum'=>(string)element('max_usernum', $data['portalRule'],'4096'),
-                    'auth_mode'=>(string)element('auth_mode', $data['portalRule'],'1'),
-                    'auth_ip'=>(string)element('auth_ip', $data['portalRule'],''),
-                    'auth_mask'=>(string)element('auth_mask', $data['portalRule'],''),
-                    'idle_test'=>(string)element('idle_test', $data['portalRule'],'0')
-                );                
-                if(!$this->editPortalRule($portal_rule_ary)){
-                    return json_encode(json_no('edit portal rule error!'));
-                }
-            }     
-            //判断web模板是否存在，才修改否则 创建
+            //只能修改ssid 和网页模板                 
+            //判断web模板是否存在，才修改否则 创建             
             if($this->isWebTemplate('local_ssid_' . $domain_name)) {
                 //修改web
                 $web_ary = array(                
@@ -465,6 +546,14 @@ class AaaServer_Model extends CI_Model {
                     return json_encode(json_no('edit -> add portal web error!'));
                 }
             } 
+            //更新配置
+            //6.添加配置信息
+            $config_ary = array(                
+                'ssid' => element('ssid',$data['portalTemplate']),
+                'mac' => element('apmac',$data['portalTemplate'], '')
+            );
+            $this->db->where('name', $data['name']);
+            $this->db->update('portal_config', $config_ary);  
             //更新给Ap下发ssid属性
             if($data['portalTemplate']['ssid'] != ''){
                 if(!$this->editApSsid($data['portalTemplate']['ssid'], $domain_name)){
@@ -472,30 +561,42 @@ class AaaServer_Model extends CI_Model {
                 }
             }         
 
-        }else{
-            //全删除
-            //1.删除 Radius 模板
-            if( $this->isRadiusTemplate('remote_radius_' . $domain_name) ) {               
-                $this->delRadiusTemplate( array('radius_list'=>array('remote_radius_' . $domain_name)) );                    
-            }
-            //2.删除aaa
-            if( $this->isAaaaTemplate($domain_name) ) {
-                $this->delAaaTemplate(array('aaa_list'=>array($domain_name)));
-            }
-            //3.删除Portal 模板
-            if( $this->isPortalTemplate('remote_portal_' . $domain_name) ) {
-                $this->delPortalTemplate( array('portal_list'=>array('remote_portal_' . $domain_name)) );
-            }
-            //4.删除Portal 规则
-            $data_rule = $this->getPortal('remote_portal_' . $domain_name);
-            if($data_rule['interface_bind'] != '') {
-                $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
-            }
-            //5.删除web 网页模板
-            $this->delWebTemplate('local_ssid_' . $domain_name);
+        }else{     
+            $query = $this->db->query("select * from portal_config where name='{$domain_name}'")->result_array();
+            if(count($query) > 0) {
+                //1.删除 Radius 模板
+                if($query[0]['radius_template'] != 'local'){
+                    if( $this->isRadiusTemplate( $query[0]['radius_template'] )) {               
+                        $this->delRadiusTemplate( array('radius_list'=>array( $query[0]['radius_template'] )) );                    
+                    }
+                }
+                //2.删除aaa
+                if($query[0]['domain_name'] != 'local'){
+                    if( $this->isAaaaTemplate($query[0]['domain_name']) ) {
+                        $this->delAaaTemplate(array('aaa_list'=>array( $query[0]['domain_name'] )));
+                    }
+                }
+                //3.删除Portal 模板    
+                if($query[0]['portal_template'] != 'local'){
+                    if( $this->isPortalTemplate( $query[0]['portal_template'] ) ) {
+                        $this->delPortalTemplate( array('portal_list'=>array( $query[0]['portal_template'] )) );
+                    }
+                }                            
+                //4.删除Portal 规则
+                $data_rule = $this->getPortal( $query[0]['portal_template'] );
+                if($data_rule['interface_bind'] != '') {
+                    $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
+                }
+                //5.删除web 网页模板   
+                $this->portalsql->where('name', 'local_ssid_' . $query[0]['name']);
+                $this->portalsql->delete('portal_ssid');             
+                //6.删除portal 配置
+                $this->db->where('name',$domain_name);
+                $this->db->delete('portal_config');
 
-            //重新添加
-            return $this->add($data);
+                //重新添加
+                return $this->add($data);
+            }                               
         }
         return json_encode(json_ok());
     }
@@ -505,25 +606,38 @@ class AaaServer_Model extends CI_Model {
             if($res === 'local'){
                 continue;
             }
-            //1.删除 Radius 模板
-            if( $this->isRadiusTemplate('remote_radius_' . $res) ) {               
-                $this->delRadiusTemplate( array('radius_list'=>array('remote_radius_' . $res)) );                    
-            }
-            //2.删除aaa
-            if( $this->isAaaaTemplate($res) ) {
-                $this->delAaaTemplate(array('aaa_list'=>array($res)));
-            }
-            //3.删除Portal 模板
-            if( $this->isPortalTemplate('remote_portal_' . $res) ) {
-                $this->delPortalTemplate( array('portal_list'=>array('remote_portal_' . $res)) );
-            }
-            //4.删除Portal 规则
-            $data_rule = $this->getPortal('remote_portal_' . $res);
-            if($data_rule['interface_bind'] != '') {
-                $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
-            }
-            //5.删除web 网页模板
-            $this->delWebTemplate('local_ssid_' . $res);
+            $query = $this->db->query("select * from portal_config where name='{$res}'")->result_array();
+            if(count($query) > 0) {
+                //1.删除 Radius 模板
+                if($query[0]['radius_template'] != 'local'){
+                    if( $this->isRadiusTemplate( $query[0]['radius_template'] )) {               
+                        $this->delRadiusTemplate( array('radius_list'=>array( $query[0]['radius_template'] )) );                    
+                    }
+                }
+                //2.删除aaa
+                if($query[0]['domain_name'] != 'local'){
+                    if( $this->isAaaaTemplate($query[0]['domain_name']) ) {
+                        $this->delAaaTemplate(array('aaa_list'=>array( $query[0]['domain_name'] )));
+                    }
+                }
+                //3.删除Portal 模板    
+                if($query[0]['portal_template'] != 'local'){
+                    if( $this->isPortalTemplate( $query[0]['portal_template'] ) ) {
+                        $this->delPortalTemplate( array('portal_list'=>array( $query[0]['portal_template'] )) );
+                    }
+                }                            
+                //4.删除Portal 规则
+                $data_rule = $this->getPortal( $query[0]['portal_template'] );
+                if($data_rule['interface_bind'] != '') {
+                    $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
+                }
+                //5.删除web 网页模板   
+                $this->portalsql->where('ssid', $query[0]['ssid']);
+                $this->portalsql->delete('portal_ssid');             
+                //6.删除portal 配置
+                $this->db->where('name',$res);
+                $this->db->delete('portal_config');
+            }            
         }
         return json_encode(json_ok());
     }
@@ -611,6 +725,25 @@ class AaaServer_Model extends CI_Model {
         return $arr;
     }
 
+    private function getDomainState($name) {
+        $arr = array(
+            'auth_accesstype' => '',
+            'auth_schemetype' => ''
+        );
+        $sqlcmd  = "select domain_list.domain_name,domain_params.attr_value,domain_attr.attr_name";
+        $sqlcmd .= " from domain_list";
+        $sqlcmd .= " left join domain_params on domain_list.id=domain_params.domain_id";
+        $sqlcmd .= " left join domain_attr on domain_params.attr_id=domain_attr.id";
+        $sqlcmd .= " where domain_list.domain_name='{$name}'";
+        $data = $this->db->query($sqlcmd)->result_array();
+        foreach($data as $row){
+            switch($row['attr_name']){
+                case 'auth_access_type' : $arr['auth_accesstype'] = $row['attr_value']; break;
+                case 'auth_scheme_type' : $arr['auth_schemetype'] = $row['attr_value']; break;
+            }
+        }
+        return $arr;
+    }
     private function getPortal($name) {
         $arr = array(
             'portal_template' => $name,
@@ -902,6 +1035,14 @@ class AaaServer_Model extends CI_Model {
     //判断Web模板是否存在
     private function isWebTemplate($name) {
         $ret = $this->portalsql->query("select * from portal_ssid where name='{$name}'")->result_array();
+        if(count($ret) > 0 ){
+            return TRUE;
+        }
+        return FALSE;
+    }
+    //判断 portal配置 名称是否重复
+    private function isportalConfig($name) {
+        $ret = $this->db->query("select * from portal_config where name='{$name}'")->result_array();
         if(count($ret) > 0 ){
             return TRUE;
         }

@@ -14,14 +14,16 @@ class DpiProto_Model extends CI_Model {
 				'protoClientList'=>array()
 			)
 		); 
-		$cgiary = array(
+		$cgiary = array(			
 			'page'=>(string)element('page',$data,1),
 			'time'=>(string)element('timeType',$data,0),
 			'pagesize'=>(string)element('size',$data,20)
 		);		
-		$result = ndpi_send_proto_to_php_db(json_encode($cgiary));	 
-		$cgiobj = json_decode($result);			
-		if(is_object($cgiobj) && $cgiobj->state->code === 2000){
+		$result = ndpi_send_protomsg(json_encode($cgiary));	 
+		$ary = json_decode($result);			
+		if($ary['state']['code'] === 2000){
+			$arr['data']['list'] = $ary['list_obj']['list_proto_obj'];
+			/*
 			$htmdata = array();
 			$sumbts = 0.01;//总流量
 			$lsary = array();
@@ -38,6 +40,7 @@ class DpiProto_Model extends CI_Model {
 			$htmdata = $this->sigcol_arrsort($htmdata,'trafficPercent',SORT_DESC);
 			$arr['data']['list'] = $htmdata;
 			$arr['data']['protoClientList'] = $this->get_detailed($data);
+			*/
 		}else{
 			return json_no($cgiobj->state->msg);
 		}		     	
