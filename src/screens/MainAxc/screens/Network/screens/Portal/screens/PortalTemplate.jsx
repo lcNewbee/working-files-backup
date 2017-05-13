@@ -95,7 +95,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'authRedirectUrl',
-    label: __('Auth Redirect URL'),
+    label: __('Authentication Redirect URL'),
     defaultValue: '0',
     formProps: {
       type: 'text',

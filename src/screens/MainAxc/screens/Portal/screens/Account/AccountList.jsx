@@ -48,7 +48,7 @@ const queryFormOptions = fromJS([
   {
     id: 'state',
     type: 'select',
-    label: __('Voucher Type'),
+    label: __('Account Type'),
     options: [
       {
         value: '0',
@@ -111,7 +111,7 @@ const listOptions = fromJS([
   }, {
     id: 'state',
     type: 'text',
-    text: __('Voucher Type'),
+    text: __('Account Type'),
     options: [
       {
         value: '0',
@@ -288,7 +288,7 @@ export const baseSetting = fromJS([
     }),
   }, {
     id: 'state',
-    label: __('Voucher Type'),
+    label: __('Account Type'),
     className: 'cols col-6',
     options: [
       {

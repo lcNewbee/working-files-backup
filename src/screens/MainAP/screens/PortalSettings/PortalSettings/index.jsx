@@ -154,12 +154,12 @@ export default class PortalSettings extends Component {
             required
           />
           <FormGroup
-            label={__('Auth Type')}
+            label={__('Authentication Type')}
             type="select"
             value={weixinEnable === '1' ? 'weixin' : 'web'}
             options={[
-              { label: __('WEB AUTH'), value: 'web' },
-              { label: __('WEIXIN AUTH'), value: 'weixin' },
+              { label: __('WEB Authentication'), value: 'web' },
+              { label: __('WEIXIN Authentication'), value: 'weixin' },
             ]}
             onChange={(data) => {
               if (data.value === 'weixin') {
@@ -200,7 +200,7 @@ export default class PortalSettings extends Component {
             ) : (
               <div>
                 <FormGroup
-                  label={__('Auth Redirect URL')}
+                  label={__('Authentication Redirect URL')}
                   type="text"
                   value={redirectUrl}
                   onChange={(data) => {

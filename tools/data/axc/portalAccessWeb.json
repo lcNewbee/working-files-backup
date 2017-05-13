@@ -7,12 +7,12 @@
     "list": [
       {
         "id":"1",
-        "name":"One Key Auth",
+        "name":"One Key Authetication",
         "url": "www.google.com",
         "sessiontime": "360",
         "countShow":"0",
         "countAuth":"0",
-        "description":"One Key Auth",
+        "description":"One Key Authetication",
         "adv":"OpenPortal"
       },
       {
@@ -22,47 +22,47 @@
         "sessiontime": "360",
         "countShow":"0",
         "countAuth":"0",
-        "description":"Account Auth",
+        "description":"Account Authetication",
         "adv":"OpenPortal"
       },
       {
         "id":"3",
-        "name":"Wechat Auth",
+        "name":"Wechat Authetication",
         "url": "www.google.com",
         "sessiontime": "360",
         "countShow":"0",
         "countAuth":"0",
-        "description":"Wechat Auth",
+        "description":"Wechat Authetication",
         "adv":"OpenPortal"
       },
       {
         "id":"4",
-        "name":"Facebook Auth",
+        "name":"Facebook Authetication",
         "url": "www.google.com",
         "sessiontime": "360",
         "countShow":"0",
         "countAuth":"0",
-        "description":"Facebook Auth",
+        "description":"Facebook Authetication",
         "adv":"OpenPortal"
       },
       {
         "id":"5",
-        "name":"SNS Auth",
+        "name":"SNS Authetication",
         "url": "www.google.com",
         "sessiontime": "360",
         "countShow":"0",
         "countAuth":"0",
-        "description":"SNS Auth",
+        "description":"SNS Authetication",
         "adv":"OpenPortal"
       },
       {
         "id":"6",
-        "name":"ALL Auth",
+        "name":"ALL Authetication",
         "url": "-",
         "sessiontime": "-",
         "countShow":"0",
         "countAuth":"0",
-        "description":"One Key Auth,Account,Wechat,Facebook,SNS",
+        "description":"One Key,Account,Wechat,Facebook,SNS",
         "adv":"OpenPortal"
       }
     ]

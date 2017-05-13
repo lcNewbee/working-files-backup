@@ -623,13 +623,13 @@ export default class Basic extends React.Component {
     const basicSettings = this.props.selfState.get('basicSettings');
     const preSecurity = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security']);
     const mode = data.value;
-    const auth = preSecurity.get('auth') || 'shared';
+    const Authentication = preSecurity.get('Authentication') || 'shared';
     const keyLength = preSecurity.get('keyLength') || '64';
     const keyType = preSecurity.get('keyType') || 'Hex';
     const key = '';
     const keyIndex = preSecurity.get('keyIndex') || '1';
     const cipher = preSecurity.get('cipher') || 'aes';
-    const afterSecurity = preSecurity.set('mode', mode).set('auth', auth)
+    const afterSecurity = preSecurity.set('mode', mode).set('Authentication', Authentication)
                           .set('keyType', keyType).set('keyLength', keyLength)
                           .set('keyIndex', keyIndex)
                           .set('cipher', cipher)
@@ -652,7 +652,7 @@ export default class Basic extends React.Component {
       security: {
         mode: 'none',
         cipher: 'aes',
-        auth: 'open',
+        Authentication: 'open',
         keyLength: '64',
         keyType: 'Hex',
         keyIndex: '1',
@@ -1576,13 +1576,13 @@ export default class Basic extends React.Component {
                   (basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? (
                     <div>
                       <FormGroup
-                        label={__('Auth Type')}
+                        label={__('Authentication Type')}
                         type="select"
                         options={wepAuthenOptions}
-                        value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'auth'])}
+                        value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'Authentication'])}
                         onChange={(data) => {
                           const security = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security'])
-                                          .set('auth', data.value);
+                                          .set('Authentication', data.value);
                           const radioList = basicSettings.get('radioList')
                                           .setIn([radioId, 'vapList', '0', 'security'], security);
                           this.props.updateBasicSettings({ radioList });
@@ -2211,7 +2211,7 @@ export default class Basic extends React.Component {
             onChange={(data) => {
               const securDefault = fromJS({
                 cipher: 'aes',
-                auth: 'shared',
+                Authentication: 'shared',
                 keyType: 'Hex',
                 keyIndex: '1',
               });
@@ -2265,13 +2265,13 @@ export default class Basic extends React.Component {
             (tableItemForSsid.getIn(['item', 'security', 'mode']) === 'wep') ? (
               <div>
                 <FormGroup
-                  label={__('Auth Type')}
+                  label={__('Authentication Type')}
                   type="select"
                   options={wepAuthenOptions}
-                  value={tableItemForSsid.getIn(['item', 'security', 'auth'])}
+                  value={tableItemForSsid.getIn(['item', 'security', 'Authentication'])}
                   onChange={(data) => {
                     const newItem = tableItemForSsid.get('item')
-                                    .setIn(['security', 'auth'], data.value);
+                                    .setIn(['security', 'Authentication'], data.value);
                     const newItemForSsid = tableItemForSsid.set('item', newItem);
                     this.props.changeTableItemForSsid(newItemForSsid);
                   }}

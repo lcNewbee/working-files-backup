@@ -77,7 +77,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'startDate',
-    text: __('Online Date'),
+    text: __('Connection Date'),
     type: 'text',
   }, {
     id: 'endDate',
@@ -86,7 +86,7 @@ const listOptions = fromJS([
     required: true,
   }, {
     id: 'time',
-    text: __('Online Time'),
+    text: __('Connection Duration'),
     formProps: {
       required: true,
     },

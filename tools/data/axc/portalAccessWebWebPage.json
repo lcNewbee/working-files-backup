@@ -19,7 +19,7 @@
         "name":"One Key",
         "countShow":"0",
         "countAuth":"0",
-        "description":"One Key Auth",
+        "description":"One Key Authentication",
         "adv":"OpenPortal"
       },
       {
@@ -27,7 +27,7 @@
         "name":"Account",
         "countShow":"0",
         "countAuth":"0",
-        "description":"Account Auth",
+        "description":"Account Authentication",
         "adv":"OpenPortal"
       },
       {
@@ -35,7 +35,7 @@
         "name":"Wechat",
         "countShow":"0",
         "countAuth":"0",
-        "description":"Wechat Auth",
+        "description":"Wechat Authentication",
         "adv":"OpenPortal"
       },
       {
@@ -43,7 +43,7 @@
         "name":"Facebook",
         "countShow":"0",
         "countAuth":"0",
-        "description":"Facebook Auth",
+        "description":"Facebook Authentication",
         "adv":"OpenPortal"
       },
       {
@@ -51,7 +51,7 @@
         "name":"SNS",
         "countShow":"0",
         "countAuth":"0",
-        "description":"SNS Auth",
+        "description":"SNS Authentication",
         "adv":"OpenPortal"
       },
       {
@@ -59,7 +59,7 @@
         "name":"ALL",
         "countShow":"0",
         "countAuth":"0",
-        "description":"One Key Auth,Account,Wechat,Facebook,SNS",
+        "description":"One Key Authentication,Account,Wechat,Facebook,SNS",
         "adv":"OpenPortal"
       }
     ]

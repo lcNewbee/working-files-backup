@@ -45,19 +45,19 @@ const queryFormOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('One Key Auth'),
+        label: __('One Key Authentication'),
       }, {
         value: '1',
-        label: __('Access User Auth'),
+        label: __('Access User Authentication'),
       }, {
         value: '4',
-        label: __('SNS Auth'),
+        label: __('SNS Authentication'),
       }, {
         value: '5',
-        label: __('Wechat Auth'),
+        label: __('Wechat Authentication'),
       }, {
         value: '9',
-        label: __('Facebook Auth'),
+        label: __('Facebook Authentication'),
       },
     ],
     saveOnChange: true,
@@ -99,7 +99,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'startDate',
-    text: __('Online Date'),
+    text: __('Connection Date'),
     formProps: {
       required: true,
     },
@@ -111,7 +111,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'time',
-    text: __('Online Time'),
+    text: __('Connection Duration'),
     formProps: {
       required: true,
     },
@@ -186,7 +186,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'apmac',
-    text: __('AP MAC'),
+    text: __('Access Point MAC Address'),
     formProps: {
       required: true,
     },

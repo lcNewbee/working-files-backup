@@ -124,9 +124,9 @@ const authServer = fromJS([
       }
       return false;
     },
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     fieldsetOption: {
-      legend: __('Primary Auth Server'),
+      legend: __('Primary Authentication Server'),
       className: 'cols col-6',
     },
     form: 'authServer',
@@ -145,7 +145,7 @@ const authServer = fromJS([
       return false;
     },
     label: __('Port'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     form: 'authServer',
     required: true,
     defaultValue: '1812',
@@ -161,7 +161,7 @@ const authServer = fromJS([
       return false;
     },
     label: __('Password'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     form: 'authServer',
     type: 'password',
     required: true,
@@ -180,7 +180,7 @@ const authServer = fromJS([
     label: __('IP Address'),
     fieldset: 'auth_secondary',
     fieldsetOption: {
-      legend: __('Secondary Auth Server'),
+      legend: __('Secondary Authentication Server'),
       className: 'cols col-6',
     },
     type: 'text',
@@ -510,12 +510,12 @@ const listOptions = fromJS([
   },
   {
     id: 'authpri_ipaddr',
-    label: __('Auth Server IP'),
-    fieldset: 'auth',
+    label: __('Authentication Server IP'),
+    fieldset: 'Authentication',
   }, {
     id: 'authpri_port',
-    label: __('Auth Server Port'),
-    fieldset: 'auth',
+    label: __('Authentication Server Port'),
+    fieldset: 'Authentication',
     defaultValue: '1812',
   }, {
     id: 'acctpri_ipaddr',

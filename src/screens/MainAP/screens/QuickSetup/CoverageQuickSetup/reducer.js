@@ -20,7 +20,7 @@ const defaultState = fromJS({
     ssid: 'Axilspot',
     security: {
       mode: 'none',
-      auth: 'open',
+      Authentication: 'open',
       keyLength: '64',
       keyType: 'Hex',
       key: '11223344',

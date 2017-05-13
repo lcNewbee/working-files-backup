@@ -42,7 +42,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'src_mac',
-    label: __('Mac White List'),
+    label: __('Mac Address'),
     formProps: {
       type: 'text',
       maxLength: '31',

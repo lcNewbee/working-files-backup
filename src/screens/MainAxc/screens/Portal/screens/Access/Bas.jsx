@@ -94,7 +94,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'authType',
-    text: __('Auth Type'),
+    text: __('Authentication Type'),
     options: [
       {
         value: '0',
@@ -108,8 +108,8 @@ const listOptions = fromJS([
     formProps: {
       required: true,
       type: 'select',
-      label: __('Auth Type'),
-      placeholder: __('Please Select ') + __('Auth Type'),
+      label: __('Authentication Type'),
+      placeholder: __('Please Select ') + __('Authentication Type'),
     },
   }, {
     id: 'timeoutSec',
@@ -164,14 +164,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_interface',
-    text: __('Interface Auth'),
+    text: __('Interface Authentication'),
     noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'isComputer',
-    text: __('Computer Auth'),
+    text: __('Computer Authentication'),
     options: [
       {
         value: '0',
@@ -185,8 +185,8 @@ const listOptions = fromJS([
     formProps: {
       required: true,
       type: 'select',
-      label: __('Computer Auth'),
-      placeholder: __('Please Select ') + __('Computer Auth'),
+      label: __('Computer Authentication'),
+      placeholder: __('Please Select ') + __('Computer Authentication'),
     },
   }, {
     id: 'isdebug',
@@ -198,7 +198,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'lateAuth',
-    text: __('Late Auth'),
+    text: __('Late Authentication'),
     options: [
       {
         value: '0',
@@ -212,8 +212,8 @@ const listOptions = fromJS([
     formProps: {
       required: true,
       type: 'select',
-      label: __('Late Auth'),
-      placeholder: __('Please Select ') + __('Late Auth'),
+      label: __('Late Authentication'),
+      placeholder: __('Please Select ') + __('Late Authentication'),
     },
   }, {
     id: 'lateAuthTime',

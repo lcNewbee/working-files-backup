@@ -41,7 +41,7 @@ export default class Systemstatus extends React.Component {
         <p>LAN0 MAC: <span>{systemState.get('Lan0Mac')}</span></p>
         <p>LAN1 MAC: <span>{systemState.get('Lan1Mac')}</span></p>
         <p>LAN0/LAN1: <span>{systemState.get('Security')}</span></p>
-        <p>AP mac: <span>{systemState.get('Security')}</span></p>
+        <p>Access Point MAC Address: <span>{systemState.get('Security')}</span></p>
         <p>{__('Online User: ')}<span>{systemState.get('Security')}</span></p>
         <p>{__('Background Noise: ')}<span>{systemState.get('Security')}</span></p>
         <p>{__('Transform CCQ: ')}<span>{systemState.get('Security')}</span></p>

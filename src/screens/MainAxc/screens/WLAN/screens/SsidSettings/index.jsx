@@ -423,7 +423,7 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'auth',
+    id: 'Authentication',
     text: __('Authetication'),
     formProps: {
       type: 'select',
@@ -604,15 +604,15 @@ export default class View extends React.Component {
     });
   }
   onBeforeSync($$actionQuery, $$curListItem) {
-    if ($$actionQuery.get('action') === 'add' && $$curListItem.get('portalTemplate') === 'local' && $$curListItem.get('auth') !== undefined) {
+    if ($$actionQuery.get('action') === 'add' && $$curListItem.get('portalTemplate') === 'local' && $$curListItem.get('Authentication') !== undefined) {
       this.props.save('goform/system/ap/version', $$actionQuery.merge($$curListItem).toJS())
         .then((json) => {
           const state = json && json.state;
           if (state.code === 2000) {
             this.props.save('goform/portal/access/ssidmanagement', {
-              name: `${$$curListItem.get('ssid')}${$$curListItem.get('auth')}`,
+              name: `${$$curListItem.get('ssid')}${$$curListItem.get('Authentication')}`,
               ssid: $$curListItem.get('ssid'),
-              web: $$curListItem.get('auth'),
+              web: $$curListItem.get('Authentication'),
             }).then(
                 () => {
                   if (json && json.state && json.state.code === 2000) {

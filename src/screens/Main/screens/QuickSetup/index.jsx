@@ -539,7 +539,7 @@ export default class QuickSetup extends React.Component {
     const { ip, mask, ssid, countryCode, frequency, channelWidth, distance, wirelessMode, autoAdjust } = store.get('curData').toJS();
     const mode = store.getIn(['curData', 'security', 'mode']);
     const key = store.getIn(['curData', 'security', 'key']);
-    const auth = store.getIn(['curData', 'security', 'auth']);
+    const Authentication = store.getIn(['curData', 'security', 'Authentication']);
     const keyLength = store.getIn(['curData', 'security', 'keyLength']);
     const keyType = store.getIn(['curData', 'security', 'keyType']);
     const keyIndex = store.getIn(['curData', 'security', 'keyIndex']);
@@ -640,7 +640,7 @@ export default class QuickSetup extends React.Component {
                   security: {
                     mode: data.value,
                     cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
-                    auth: store.getIn(['curData', 'security', 'auth']) || 'open',
+                    Authentication: store.getIn(['curData', 'security', 'Authentication']) || 'open',
                     keyIndex: store.getIn(['curData', 'security', 'keyIndex']) || '1',
                     keyLength: store.getIn(['curData', 'security', 'keyLength']) || '64',
                     keyType: store.getIn(['curData', 'security', 'keyType']) || 'Hex',
@@ -691,13 +691,13 @@ export default class QuickSetup extends React.Component {
                   (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
                     <div>
                       <FormGroup
-                        label={__('Auth Type')}
+                        label={__('Authentication Type')}
                         type="switch"
                         options={wepAuthenOptions}
-                        value={store.getIn(['curData', 'security', 'auth'])}
+                        value={store.getIn(['curData', 'security', 'Authentication'])}
                         onChange={(data) => {
                           const security = store.getIn(['curData', 'security'])
-                                          .set('auth', data.value);
+                                          .set('Authentication', data.value);
                           this.props.updateItemSettings({ security });
                         }}
                         minWidth="65px"
@@ -955,7 +955,7 @@ export default class QuickSetup extends React.Component {
                   security: {
                     mode: data.value,
                     cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
-                    auth: store.getIn(['curData', 'security', 'auth']) || 'open',
+                    Authentication: store.getIn(['curData', 'security', 'Authentication']) || 'open',
                     keyIndex: store.getIn(['curData', 'security', 'keyIndex']) || '1',
                     keyLength: store.getIn(['curData', 'security', 'keyLength']) || '64',
                     keyType: store.getIn(['curData', 'security', 'keyType']) || 'Hex',
@@ -1006,13 +1006,13 @@ export default class QuickSetup extends React.Component {
                 (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
                   <div>
                     <FormGroup
-                      label={__('Auth Type')}
+                      label={__('Authentication Type')}
                       type="switch"
                       options={wepAuthenOptions}
-                      value={store.getIn(['curData', 'security', 'auth'])}
+                      value={store.getIn(['curData', 'security', 'Authentication'])}
                       onChange={(data) => {
                         const security = store.getIn(['curData', 'security'])
-                                        .set('auth', data.value);
+                                        .set('Authentication', data.value);
                         this.props.updateItemSettings({ security });
                       }}
                       minWidth="65px"
@@ -1263,7 +1263,7 @@ export default class QuickSetup extends React.Component {
                 onChange={data => this.props.updateItemSettings({
                   security: {
                     mode: data.value,
-                    auth: store.getIn(['curData', 'security', 'auth']) || 'open',
+                    Authentication: store.getIn(['curData', 'security', 'Authentication']) || 'open',
                     keyLength: store.getIn(['curData', 'security', 'keyLength']) || '64',
                     keyIndex: store.getIn(['curData', 'security', 'keyIndex']) || '1',
                     keyType: store.getIn(['curData', 'security', 'keyType']) || 'Hex',
@@ -1275,14 +1275,14 @@ export default class QuickSetup extends React.Component {
                 store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
                   <div>
                     <FormGroup
-                      label={__('Auth Type')}
+                      label={__('Authentication Type')}
                       type="switch"
                       options={wepAuthenOptions}
-                      value={auth}
+                      value={Authentication}
                       onChange={data => this.props.updateItemSettings({
                         security: {
                           mode,
-                          auth: data.value,
+                          Authentication: data.value,
                           keyLength,
                           keyType,
                           key,
@@ -1300,7 +1300,7 @@ export default class QuickSetup extends React.Component {
                         onChange={(data) => this.props.updateItemSettings({
                           security: {
                             mode,
-                            auth,
+                            Authentication,
                             keyLength: data.value,
                             keyType,
                             key,
@@ -1319,7 +1319,7 @@ export default class QuickSetup extends React.Component {
                       onChange={data => this.props.updateItemSettings({
                         security: {
                           mode,
-                          auth,
+                          Authentication,
                           keyLength,
                           keyType: data.value,
                           key,
@@ -1336,7 +1336,7 @@ export default class QuickSetup extends React.Component {
                       onChange={data => this.props.updateItemSettings({
                         security: {
                           mode,
-                          auth,
+                          Authentication,
                           keyLength,
                           keyType,
                           key,
@@ -1352,7 +1352,7 @@ export default class QuickSetup extends React.Component {
                       onChange={data => this.props.updateItemSettings({
                         security: {
                           mode,
-                          auth,
+                          Authentication,
                           keyLength,
                           keyType,
                           key: data.value,

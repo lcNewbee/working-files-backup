@@ -1050,7 +1050,7 @@ export default class SystemStatus extends React.Component {
                     value={changeUptimeToReadable(uptime)}
                   />
                   <FormGroup
-                    label={__('AP MAC :')}
+                    label={__('Access Point MAC Address :')}
                     type="plain-text"
                     value={systemMac}
                   />

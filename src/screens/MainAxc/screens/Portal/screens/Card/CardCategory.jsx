@@ -16,17 +16,17 @@ const queryFormOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Hour Voucher'),
+        label: __('Hourly Voucher'),
       }, {
         value: '1',
-        label: __('Day Voucher'),
+        label: __('Dayly Voucher'),
       },
       {
         value: '2',
-        label: __('Month Voucher'),
+        label: __('Monthly Voucher'),
       }, {
         value: '3',
-        label: __('Year Voucher'),
+        label: __('Yearly Voucher'),
       }, {
         value: '4',
         label: __('Traffic Voucher'),
@@ -59,17 +59,17 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Hour Voucher'),
+        label: __('Hourly Voucher'),
       }, {
         value: '1',
-        label: __('Day Voucher'),
+        label: __('Dayly Voucher'),
       },
       {
         value: '2',
-        label: __('Month Voucher'),
+        label: __('Monthly Voucher'),
       }, {
         value: '3',
-        label: __('Year Voucher'),
+        label: __('Yearly Voucher'),
       }, {
         value: '4',
         label: __('Traffic Voucher'),

@@ -42,7 +42,7 @@ const listOptions = fromJS([
     text: 'SSID',
   }, {
     id: 'authType',
-    text: __('Auth Type'),
+    text: __('Authentication Type'),
   }, {
     id: 'connectap',
     text: __('Associated AP'),
@@ -93,7 +93,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'operationhours',
-    text: __('Online Time'),
+    text: __('Connection Duration'),
     filter: 'connectTime',
   }, {
     id: '__action__',

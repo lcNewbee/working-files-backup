@@ -69,7 +69,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_mode',
-    label: __('Auth Type'),
+    label: __('Authentication Type'),
     defaultValue: '1',
     options: [
       {
@@ -113,7 +113,7 @@ const listOptions = fromJS([
   },
   {
     id: 'idle_test',
-    label: __('Permanent Authentication'),
+    label: __('Auto Re-login'),
     defaultValue: '0',
     formProps: {
       type: 'checkbox',

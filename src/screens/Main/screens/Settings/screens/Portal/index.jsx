@@ -298,7 +298,7 @@ export class Portal extends PureComponent {
             {...portalname}
           />
           <FormGroup
-            label={__('Auth Redirect URL')}
+            label={__('Authentication Redirect URL')}
             name="url"
             value={getCurrData('url')}
             onChange={this.onUpdateSettings('url')}

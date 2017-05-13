@@ -60,7 +60,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'sessiontime',
-    label: __('Limit Online Time after Authetication'),
+    label: __('Limit Connect Duration after Authetication'),
     defaultValue: '0',
     formProps: {
       help: __('minutes(0 means no limitation)'),
@@ -153,7 +153,7 @@ const listOptions = fromJS([
     /*transform(val, $$item) {
       return (
         <span>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/auth.jsp`} target="_blank">{__('Auth')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/Authentication.jsp`} target="_blank">{__('Authentication')}</a>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
           <a
@@ -237,7 +237,7 @@ export default class View extends React.Component {
     // );
     const curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
         <span>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/auth.jsp`} target="_blank">{__('Auth')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/Authentication.jsp`} target="_blank">{__('Authentication')}</a>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
           <a

@@ -93,11 +93,11 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_accesstype',
-    text: __('Access Type'),
+    text: __('Authentication Type'),
     defaultValue: 'portal',
     options: accessTypeSeletOptions,
     formProps: {
-      label: __('Access Type'),
+      label: __('Authentication Type'),
       required: true,
       type: 'switch',
       placeholder: __('Please Select ') + __('Rules Group'),

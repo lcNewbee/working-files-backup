@@ -640,9 +640,9 @@ const authServer = fromJS([
       }
       return false;
     },
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     fieldsetOption: {
-      legend: __('Primary Auth Server'),
+      legend: __('Primary Authentication Server'),
       className: 'cols col-6',
     },
     form: 'authServer',
@@ -661,7 +661,7 @@ const authServer = fromJS([
       return false;
     },
     label: __('Port'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     form: 'authServer',
     required: true,
     defaultValue: '1812',
@@ -677,7 +677,7 @@ const authServer = fromJS([
       return false;
     },
     label: __('Password'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     form: 'authServer',
     type: 'password',
     required: true,
@@ -696,7 +696,7 @@ const authServer = fromJS([
     label: __('IP Address'),
     fieldset: 'auth_secondary',
     fieldsetOption: {
-      legend: __('Secondary Auth Server'),
+      legend: __('Secondary Authentication Server'),
       className: 'cols col-6',
     },
     type: 'text',
@@ -1111,7 +1111,7 @@ export default class View extends React.Component {
         },
       },
       {
-        id: 'auth',
+        id: 'Authentication',
         text: __('Authetication'),
         formProps: {
           type: 'select',
@@ -1124,19 +1124,19 @@ export default class View extends React.Component {
           options: [
             {
               value: '0',
-              label: 'Wechat Auth',
+              label: 'Wechat Authentication',
             },
             {
               value: '1',
-              label: 'Facebook Auth',
+              label: 'Facebook Authentication',
             },
             {
               value: '2',
-              label: 'On Key Auth',
+              label: 'On Key Authentication',
             },
             {
               value: '3',
-              label: 'SNS Auth',
+              label: 'SNS Authentication',
             },
           ],
         },
@@ -1431,7 +1431,7 @@ export default class View extends React.Component {
         title: __('Config Server'),
         render: this.renderServerConfigration,
       }, {
-        title: __('Choose Auth'),
+        title: __('Choose Authentication'),
         render: this.renderPortalAuthChoice,
       },
     ]);
@@ -1906,7 +1906,7 @@ export default class View extends React.Component {
             {
               id: 'oneKeyType',
               form: 'oneKey',
-              text: __('One Key Auth'),
+              text: __('One Key Authentication'),
               noForm: true,
             },
             {
@@ -1930,7 +1930,7 @@ export default class View extends React.Component {
             {
               id: 'accessUserType',
               form: 'accessUser',
-              text: __('Access User Auth'),
+              text: __('Access User Authentication'),
               noForm: true,
             },
             {
@@ -1953,7 +1953,7 @@ export default class View extends React.Component {
             {
               id: 'radiusAuthType',
               form: 'radiusAuth',
-              text: __('Radius Auth'),
+              text: __('Radius Authentication'),
               noForm: true,
             },
             {
@@ -1976,7 +1976,7 @@ export default class View extends React.Component {
             {
               id: 'appAuthType',
               form: 'appAuth',
-              text: __('App Auth'),
+              text: __('App Authentication'),
               noForm: true,
             },
             {
@@ -1999,7 +1999,7 @@ export default class View extends React.Component {
             {
               id: 'messageAuthType',
               form: 'messageAuth',
-              text: __('Messages Auth'),
+              text: __('Messages Authentication'),
               noForm: true,
             },
             {
@@ -2022,7 +2022,7 @@ export default class View extends React.Component {
             {
               id: 'wechatAuthType',
               form: 'wechatAuth',
-              text: __('Wechat Auth'),
+              text: __('Wechat Authentication'),
               noForm: true,
             },
             {
@@ -2045,7 +2045,7 @@ export default class View extends React.Component {
             {
               id: 'platFormAuthType',
               form: 'platFormAuth',
-              text: __('Public Platform Auth'),
+              text: __('Public Platform Authentication'),
               noForm: true,
             },
             {
@@ -2068,7 +2068,7 @@ export default class View extends React.Component {
             {
               id: 'visitorAuthType',
               form: 'visitorAuth',
-              text: __('Visitor Auth'),
+              text: __('Visitor Authentication'),
               noForm: true,
             },
             {
@@ -2091,7 +2091,7 @@ export default class View extends React.Component {
             {
               id: 'facebookAuthType',
               form: 'facebookAuth',
-              text: __('Facebook Auth'),
+              text: __('Facebook Authentication'),
               noForm: true,
             },
             {
@@ -2194,7 +2194,7 @@ export default class View extends React.Component {
         <div className="o-box__cell rows" style={{ color: '#fff', background: '#333' }}>
           <div className="cols col-3">{__('Type')}</div>
           <div className="cols col-4">{__('Sesstion Time')}</div>
-          <div className="cols col-4">{__('Redirect URL After Auth')}</div>
+          <div className="cols col-4">{__('Redirect URL After Authentication')}</div>
         </div>
         <div className="o-box__cell">
           <div className="o-form o-form--flow">
@@ -2202,7 +2202,7 @@ export default class View extends React.Component {
               name="isOneKey"
               checked={isOneKey === '1'}
               type="checkbox"
-              text={__('One Key Auth')}
+              text={__('One Key Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2273,7 +2273,7 @@ export default class View extends React.Component {
               name="isAccessUser"
               checked={isAccessUser === '1'}
               type="checkbox"
-              text={__('Access User Auth')}
+              text={__('Access User Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2396,7 +2396,7 @@ style={{
               name="isOneKey"
               value={this.isRadius ? '1' : '0'}
               type="checkbox"
-              text={__('Radius Auth')}
+              text={__('Radius Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2424,7 +2424,7 @@ style={{
               name="isAPP"
               value={this.isApp ? '1' : '0'}
               type="checkbox"
-              text={__('App Auth')}
+              text={__('App Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2452,7 +2452,7 @@ style={{
               name="isMessage"
               checked={isMessage === '1'}
               type="checkbox"
-              text={__('Message Auth')}
+              text={__('Message Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2482,7 +2482,7 @@ style={{
               name="isWechat"
               value={isWechat === '1'}
               type="checkbox"
-              text={__('Wechat Auth')}
+              text={__('Wechat Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2512,7 +2512,7 @@ style={{
               name="isPublicPlatform"
               value={this.isPublicPlatform ? '1' : '0'}
               type="checkbox"
-              text={__('Public Platform Auth')}
+              text={__('Public Platform Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2540,7 +2540,7 @@ style={{
               name="isVisitor"
               value={this.isVisitor ? '1' : '0'}
               type="checkbox"
-              text={__('Visitor Auth')}
+              text={__('Visitor Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2568,7 +2568,7 @@ style={{
               name="isFacebook"
               checked={isFacebook === '1'}
               type="checkbox"
-              text={__('Facebook Auth')}
+              text={__('Facebook Authentication')}
               className="cols col-3"
               style={formGroupStyle}
               onChange={
@@ -2745,24 +2745,24 @@ style={{
         options: [
           {
             value: '1',
-            label: __('On Service'),
+            label: __('Enable'),
           }, {
             value: '0',
-            label: __('Out of Service'),
+            label: __('Disable'),
           },
         ],
       }, {
         id: 'more',
-        label: __('MultiTerminal Log'),
+        label: __('Multi Terminal Log'),
         type: 'select',
         required: true,
         options: [
           {
             value: '0',
-            label: __('Allowed'),
+            label: __('Enable'),
           }, {
             value: '1',
-            label: __('Forbidden'),
+            label: __('Disable'),
           },
         ],
       }, {

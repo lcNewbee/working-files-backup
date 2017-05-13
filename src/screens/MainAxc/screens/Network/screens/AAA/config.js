@@ -93,9 +93,9 @@ export const $$radiusAuthServer = fromJS([
       }
       return false;
     },
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     fieldsetOption: {
-      legend: __('Primary Auth Server'),
+      legend: __('Primary Authentication Server'),
       className: 'cols col-6',
     },
     form: 'authServer',
@@ -114,7 +114,7 @@ export const $$radiusAuthServer = fromJS([
       return false;
     },
     label: __('Port'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     form: 'authServer',
     required: true,
     defaultValue: '1812',
@@ -130,7 +130,7 @@ export const $$radiusAuthServer = fromJS([
       return false;
     },
     label: __('Password'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     form: 'authServer',
     type: 'password',
     required: true,
@@ -149,7 +149,7 @@ export const $$radiusAuthServer = fromJS([
     label: __('IP Address'),
     fieldset: 'auth_secondary',
     fieldsetOption: {
-      legend: __('Secondary Auth Server'),
+      legend: __('Secondary Authentication Server'),
       className: 'cols col-6',
     },
     type: 'text',
@@ -570,7 +570,7 @@ export const $$potalServerOptions = fromJS([
   {
     id: 'server_ipaddr',
     label: __('Server IP'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     fieldsetOption: {
       legend: ' ',
       className: 'cols col-6',
@@ -589,7 +589,7 @@ export const $$potalServerOptions = fromJS([
   {
     id: 'server_port',
     label: __('Server Port'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     formProps: {
       type: 'number',
       min: '1',
@@ -599,7 +599,7 @@ export const $$potalServerOptions = fromJS([
   }, {
     id: 'server_key',
     label: __('Shared Key'),
-    fieldset: 'auth',
+    fieldset: 'Authentication',
     noTable: true,
     formProps: {
       type: 'password',
@@ -676,7 +676,7 @@ export const $$potalRuleOptions = fromJS([
     },
   }, {
     id: 'auth_mode',
-    label: __('Auth Type'),
+    label: __('Authentication Type'),
     defaultValue: '1',
     options: [
       {
@@ -724,7 +724,7 @@ export const $$potalRuleOptions = fromJS([
   },
   {
     id: 'idle_test',
-    label: __('Permanent Authentication'),
+    label: __('Auto Re-login'),
     defaultValue: '0',
     formProps: {
       type: 'checkbox',
@@ -802,7 +802,7 @@ export const $$portalTemplateOptions = fromJS([
   },
   {
     id: 'apmac',
-    text: _('AP MAC'),
+    text: _('Access Point MAC Address'),
     options: [
       {
         value: '',

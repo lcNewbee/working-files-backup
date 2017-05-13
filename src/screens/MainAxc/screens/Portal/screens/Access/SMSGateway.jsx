@@ -169,7 +169,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'more',
-    text: __('MultiTerminal Log'),
+    text: __('Multi Terminal Log'),
     formProps: {
       type: 'select',
       defaultValue: '1',
@@ -178,7 +178,7 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Disable'),
+        label: __('Enable'),
       }, {
         value: '1',
         label: __('Disable'),
@@ -186,7 +186,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'time',
-    text: __('Relese Time'),
+    text: __('Release Time'),
     formProps: {
       type: 'number',
       min: '0',

@@ -75,7 +75,7 @@ const settingsOptions = fromJS([
   {
     id: 'apmac',
     fieldset: 'url_setting',
-    label: __('AP Mac'),
+    label: __('Access Point MAC Address'),
     type: 'text',
     validator: validator({
       rules: 'utf8Len:[1,255]',

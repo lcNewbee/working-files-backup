@@ -123,7 +123,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'apmac',
-    text: _('AP MAC'),
+    text: _('Access Point MAC Address'),
     formProps: {
       type: 'select',
     },

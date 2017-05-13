@@ -1084,7 +1084,7 @@ const routes = [
                 isIndex: true,
                 path: '/main/portal/access',
                 icon: 'link',
-                text: __('Access Auth'),
+                text: __('Access Authentication'),
                 indexPath: '/main/portal/access/config',
                 routes: [
                   {
@@ -1116,13 +1116,13 @@ const routes = [
                     id: 'portalWechat',
                     path: '/main/portal/access/weixin',
                     formUrl: 'goform/portal/access/weixin',
-                    text: __('Wechat Auth'),
+                    text: __('Wechat Authentication'),
                     component: sPortalWeixin.Screen,
                   }, {
                     id: 'portalFacebook',
                     path: '/main/portal/access/facebook',
                     formUrl: 'goform/portal/access/facebook',
-                    text: __('Facebook Auth'),
+                    text: __('Facebook Authentication'),
                     component: sPortalFacebook.Screen,
                   }, {
                     id: 'portaSMSGateWay',
@@ -1217,7 +1217,7 @@ const routes = [
                 isIndex: true,
                 path: '/main/portal/message',
                 icon: 'envelope-o',
-                text: __('Message'),
+                text: __('SMS Options'),
                 indexPath: '/main/portal/message/send',
                 routes: [
                   {
@@ -1230,13 +1230,13 @@ const routes = [
                     id: 'portalReceiveBox',
                     path: '/main/portal/message/receive',
                     formUrl: 'goform/portal/message/receive',
-                    text: __('Receive Box'),
+                    text: __('Inbox'),
                     component: sPortalReceiveBox.Screen,
                   }, {
                     id: 'portalSendBox',
                     path: '/main/portal/message/send',
                     formUrl: 'goform/portal/message/send',
-                    text: __('Send Box'),
+                    text: __('Outbox'),
                     component: sPortalSendBox.Screen,
                   },
                 ],
@@ -1252,7 +1252,7 @@ const routes = [
                     id: 'portalLogLogList',
                     path: '/main/portal/log/logList',
                     formUrl: 'goform/portal/log/logList',
-                    text: __('Log List'),
+                    text: __('User Log'),
                     component: sPortalLogList.Screen,
                   }, {
                     id: 'portalLogOnlineList',
@@ -1264,7 +1264,7 @@ const routes = [
                     id: 'portalLogOnlineRecordList',
                     path: '/main/portal/log/onlineRecordList',
                     formUrl: 'goform/portal/log/onlineRecordList',
-                    text: __('History Record List'),
+                    text: __('User Record List'),
                     component: sPortalOnlineRecordList.Screen,
                   },
                 ],
@@ -1286,7 +1286,7 @@ const routes = [
                     id: 'portalCardCardList',
                     path: '/main/portal/card/cardlist',
                     formUrl: 'goform/portal/card/cardlist',
-                    text: __('Vouchers List'),
+                    text: __('Recharge Coupons'),
                     component: sPortalCardList.Screen,
                   },
                 ],

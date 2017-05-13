@@ -101,11 +101,11 @@ const listOptions = fromJS([
   },
   {
     id: 'auth_accesstype',
-    text: __('Access Type'),
+    text: __('Authentication Type'),
     defaultValue: 'portal',
     options: accessTypeSeletOptions,
     formProps: {
-      label: __('Access Type'),
+      label: __('Authentication Type'),
       required: true,
       type: 'switch',
       placeholder: __('Please Select ') + __('Rules Group'),
@@ -180,7 +180,7 @@ const listOptions = fromJS([
   },
   {
     id: 'portal_server_mac',
-    text: __('Portal AP MAC'),
+    text: __('Portal Access Point MAC Address'),
     noForm: true,
     render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']) || DEFAULT_STR,
   },
@@ -468,7 +468,7 @@ export default class View extends React.Component {
                 marginRight: '5px',
               }}
             /> */}
-            {__('Remote Radius Auth Server')}
+            {__('Remote Radius Authentication Server')}
           </h3>
         </div>
         {

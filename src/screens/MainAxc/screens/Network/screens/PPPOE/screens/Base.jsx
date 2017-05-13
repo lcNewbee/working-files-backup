@@ -22,7 +22,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_method',
-    text: __('Auth Method'),
+    text: __('Authentication Method'),
     formProps: {
       type: 'select',
       required: true,

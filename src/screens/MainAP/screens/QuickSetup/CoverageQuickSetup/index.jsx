@@ -54,7 +54,7 @@ const defaultState = {
   security: {
     mode: 'none',
     cipher: 'aes',
-    auth: 'open',
+    Authentication: 'open',
     keyType: 'ASCII',
     keyIndex: '1',
   },
@@ -722,7 +722,7 @@ export default class QuickSetup extends React.Component {
   }
 
   renderStepThree() {
-    const { mode, key, auth, keyType, keyIndex, cipher } = this.props.store.getIn(['curData', 'security']).toJS();
+    const { mode, key, Authentication, keyType, keyIndex, cipher } = this.props.store.getIn(['curData', 'security']).toJS();
     const { validSsid, validPassword } = this.props.validateOption;
     const radioSelectOptions = this.props.product.get('radioSelectOptions').toJS();
 
@@ -753,7 +753,7 @@ export default class QuickSetup extends React.Component {
               const security = fromJS({
                 mode: data.value,
                 cipher: 'aes&tkip',
-                auth: 'open',
+                Authentication: 'open',
                 keyIndex: '1',
                 keyLength: '64',
                 keyType: 'Hex',
@@ -806,13 +806,13 @@ export default class QuickSetup extends React.Component {
               (mode === 'wep') ? (
                 <div>
                   <FormGroup
-                    label={__('Auth Type')}
+                    label={__('Authentication Type')}
                     type="switch"
                     options={wepAuthenOptions}
-                    value={auth}
+                    value={Authentication}
                     onChange={(data) => {
                       const security = this.props.store.getIn(['curData', 'security'])
-                                            .set('auth', data.value);
+                                            .set('Authentication', data.value);
                       this.props.updateItemSettings({ security });
                     }}
                     minWidth="65px"
@@ -1003,8 +1003,8 @@ export default class QuickSetup extends React.Component {
                     <div>
                       <FormGroup
                         type="plain-text"
-                        label={__('Auth Type')}
-                        value={security.auth}
+                        label={__('Authentication Type')}
+                        value={security.Authentication}
                       />
                       <FormGroup
                         type="plain-text"
@@ -1144,8 +1144,8 @@ export default class QuickSetup extends React.Component {
                     <div>
                       <FormGroup
                         type="plain-text"
-                        label={__('Auth')}
-                        value={security.auth}
+                        label={__('Authentication')}
+                        value={security.Authentication}
                       />
                       <FormGroup
                         type="plain-text"

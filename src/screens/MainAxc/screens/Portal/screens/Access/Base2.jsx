@@ -119,7 +119,7 @@ const settingsOptions = fromJS([
     required: true,
     fieldset: 'base_setting',
     className: 'cols col-6',
-    label: __('Auth Type'),
+    label: __('Authentication Type'),
     type: 'select',
     defaultValue: '1',
     options: [
@@ -209,7 +209,7 @@ const settingsOptions = fromJS([
   //   required: true,
   //   fieldset: 'base_setting',
   //   className: 'cols col-6',
-  //   label: __('Computer Auth'),
+  //   label: __('Computer Authentication'),
   //   type: 'select',
   //   options: [
   //     {
@@ -226,7 +226,7 @@ const settingsOptions = fromJS([
   //   required: true,
   //   fieldset: 'base_setting',
   //   className: 'cols col-6',
-  //   label: __('Late Auth'),
+  //   label: __('Late Authentication'),
   //   type: 'select',
   //   options: [
   //     {
@@ -287,31 +287,31 @@ const settingsOptions = fromJS([
         options: [
           {
             value: '0',
-            label: __('One Key Auth'),
+            label: __('One Key Authentication'),
           }, {
             value: '1',
-            label: __('Access User Auth'),
+            label: __('Access User Authentication'),
           }, {
             value: '2',
-            label: __('Radius Auth'),
+            label: __('Radius Authentication'),
           }, {
             value: '3',
-            label: __('App Auth'),
+            label: __('App Authentication'),
           }, {
             value: '4',
-            label: __('Messages Auth'),
+            label: __('Messages Authentication'),
           }, {
             value: '5',
-            label: __('Wechat Auth'),
+            label: __('Wechat Authentication'),
           }, {
             value: '6',
-            label: __('Public Platform Auth'),
+            label: __('Public Platform Authentication'),
           }, {
             value: '7',
-            label: __('Visitor Auth'),
+            label: __('Visitor Authentication'),
           }, {
             value: '9',
-            label: __('Facebook Auth'),
+            label: __('Facebook Authentication'),
           },
         ],
         noForm: true,

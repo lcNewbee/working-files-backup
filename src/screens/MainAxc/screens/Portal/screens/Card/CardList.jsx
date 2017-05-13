@@ -76,17 +76,17 @@ const queryFormOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Hour Voucher'),
+        label: __('Hourly Voucher'),
       }, {
         value: '1',
-        label: __('Day Voucher'),
+        label: __('Dayly Voucher'),
       },
       {
         value: '2',
-        label: __('Month Voucher'),
+        label: __('Monthly Voucher'),
       }, {
         value: '3',
-        label: __('Year Voucher'),
+        label: __('Yearly Voucher'),
       }, {
         value: '4',
         label: __('Traffic Voucher'),
@@ -99,7 +99,7 @@ const queryFormOptions = fromJS([
 const listOptions = fromJS([
   {
     id: 'name',
-    text: __('Recharge Name'),
+    text: __('Coupon Name'),
     width: '120px',
     formProps: {
       type: 'text',
@@ -159,17 +159,17 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Hour Voucher'),
+        label: __('Hourly Voucher'),
       }, {
         value: '1',
-        label: __('Day Voucher'),
+        label: __('Dayly Voucher'),
       },
       {
         value: '2',
-        label: __('Month Voucher'),
+        label: __('Monthly Voucher'),
       }, {
         value: '3',
-        label: __('Year Voucher'),
+        label: __('Yearly Voucher'),
       }, {
         value: '4',
         label: __('Traffic Voucher'),
@@ -181,7 +181,6 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'number',
-      required: true,
       min: 0,
       validator: validator({
         rules: 'num:[0,9999]',
@@ -332,7 +331,6 @@ const listOptions = fromJS([
     text: __('Voucher Cost'),
     formProps: {
       type: 'text',
-      required: true,
       help: __('$'),
     },
   }, {
@@ -341,7 +339,6 @@ const listOptions = fromJS([
     text: __('Description'),
     formProps: {
       type: 'textarea',
-      required: true,
     },
   }, {
     id: '__actions__',
@@ -460,19 +457,19 @@ export default class View extends React.Component {
         let x;
         switch (type) {
           case 0:
-            x = __('Hour Voucher');
+            x = __('Hourly Voucher');
             break;
           case 1:
-            x = __('Day Voucher');
+            x = __('Dayly Voucher');
             break;
           case 2:
-            x = __('Month Voucher');
+            x = __('Monthly Voucher');
             break;
           case 3:
-            x = __('Year Voucher');
+            x = __('Yearly Voucher');
             break;
           default:
-            x = __('Year Voucher');
+            x = __('Yearly Voucher');
         }
         if ($$data.get('state') === '0') {
           return (
@@ -489,7 +486,7 @@ export default class View extends React.Component {
                 this.props.updateCurEditListItem({
                   id: $$data.get('id'),
                   title: __('CD Key of Recharge Voucher'),
-                  description: __('Recharge Name:') + $$data.get('name') + __('; ') + __('CD Key:') + $$data.get('cdKey') + __('; ') + __('Category Type:') + x,
+                  description: __('Coupon Name:') + $$data.get('name') + __('; ') + __('CD Key:') + $$data.get('cdKey') + __('; ') + __('Category Type:') + x,
                 });
               }}
             />);

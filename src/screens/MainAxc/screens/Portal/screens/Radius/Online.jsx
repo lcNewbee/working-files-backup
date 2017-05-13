@@ -43,10 +43,10 @@ const listOptions = fromJS([
     text: __('Time out'),
   }, {
     id: 'startDate',
-    text: __('Online Date'),
+    text: __('Connection Date'),
   }, {
     id: 'costTime',
-    text: __('Online Time'),
+    text: __('Connection Duration'),
     render(val) {
       return onlinetimeFilter.transform(val);
     },
