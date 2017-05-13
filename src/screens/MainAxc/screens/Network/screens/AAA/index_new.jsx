@@ -125,6 +125,18 @@ const listOptions = fromJS([
       label: __('Radius Server Type'),
       required: true,
       type: 'switch',
+      onChange: (data) => {
+        const value = data.value;
+        const newData = data;
+
+        if (value === 'remote') {
+          newData.mergeData = {
+            portal_rule_type: 'port',
+          };
+        }
+
+        return newData;
+      },
     },
   },
   {
@@ -695,30 +707,35 @@ export default class View extends React.Component {
         {
           this.state[PORTAL_LOCAL_RULE_KEY] ? (
             <div className="o-box__cell row">
-              <FormGroup
-                style={{
-                  padding: '0 .75rem',
-                }}
-                type="switch"
-                readOnly={$$curData.get('name') === 'local'}
-                value={portalRuleType}
-                label={__('Rule Type')}
-                options={[
-                  {
-                    value: 'ssid',
-                    label: __('SSID'),
-                  },
-                  {
-                    value: 'port',
-                    label: __('Port'),
-                  },
-                ]}
-                onChange={(data) => {
-                  this.props.updateCurEditListItem({
-                    portal_rule_type: data.value,
-                  });
-                }}
-              />
+              {
+                $$curData.get('radius_server_type') === 'local' ? (
+                  <FormGroup
+                    style={{
+                      padding: '0 .75rem',
+                    }}
+                    type="switch"
+                    readOnly={$$curData.get('name') === 'local'}
+                    value={portalRuleType}
+                    label={__('Rule Type')}
+                    options={[
+                      {
+                        value: 'ssid',
+                        label: __('SSID'),
+                      },
+                      {
+                        value: 'port',
+                        label: __('Port'),
+                      },
+                    ]}
+                    onChange={(data) => {
+                      this.props.updateCurEditListItem({
+                        portal_rule_type: data.value,
+                      });
+                    }}
+                  />
+                ) : null
+              }
+
               {
                 portalRuleType === 'port' ? (
                   <FormContainer
@@ -831,7 +848,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        listKey="domain_name"
+        listKey="name"
         modalChildren={this.renderCustomModal()}
         listOptions={this.listOptions}
         initOption={{

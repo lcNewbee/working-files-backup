@@ -645,7 +645,7 @@ class AppScreenList extends React.PureComponent {
           let $$retItem = $$item;
 
           if ($$retItem.get('type') === 'switch') {
-            $$retItem = $$retItem.set('render', (val, $$data, index) => (
+            $$retItem = $$retItem.set('render', (val, $$data, $$props) => (
               <FormInput
                 type="checkbox"
                 name={$$item.get('id')}
@@ -654,7 +654,7 @@ class AppScreenList extends React.PureComponent {
                 checked={parseInt(val, 10) === 1}
                 onChange={(data) => {
                   this.handleItemAction(
-                    $$item.set('index', index).toJS(),
+                    $$item.set('index', $$props.get('__index__')).toJS(),
                     {
                       [$$item.get('id')]: data.value,
                     },

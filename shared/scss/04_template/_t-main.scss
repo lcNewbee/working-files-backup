@@ -162,6 +162,10 @@ body {
 
       .m-menu__link {
         background-color: #141a23;
+
+        &.active {
+          color: $g-brand-primary;
+        }
       }
 
       > header {

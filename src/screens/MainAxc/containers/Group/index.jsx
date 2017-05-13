@@ -547,7 +547,6 @@ export default class MainGroup extends React.Component {
                     <Icon
                       name="cog"
                       size="2x"
-                      className="fr"
                       onClick={() => {
                         this.props.fetchGroupAps(manageGroupId);
                         this.props.showMainModal({
@@ -559,7 +558,7 @@ export default class MainGroup extends React.Component {
                       }}
                     />
                   </Tooltip>
-                  <Tooltip
+                  {/*<Tooltip
                     title={__('Add AP Group')}
                   >
                     <Icon
@@ -580,7 +579,7 @@ export default class MainGroup extends React.Component {
                         });
                       }}
                     />
-                  </Tooltip>
+                  </Tooltip>*/}
                 </div>
               ) : null
             }
