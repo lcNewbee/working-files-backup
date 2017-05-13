@@ -1,5 +1,6 @@
 {
   "Portal":"Portal认证",
+  "Authentication Type": "认证类型",
   "Authentication logs": "认证日志",
   "Locked": "已封锁",
   "Unlocked": "未封锁",

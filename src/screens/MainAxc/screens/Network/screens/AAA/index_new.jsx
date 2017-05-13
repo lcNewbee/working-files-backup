@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { Icon, FormContainer, SaveButton } from 'shared/components';
+import { Icon, FormContainer, SaveButton, FormGroup } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import validator from 'shared/validator';
@@ -86,7 +86,7 @@ if (window.guiConfig.versionCode >= 20500) {
 
 const listOptions = fromJS([
   {
-    id: 'domain_name',
+    id: 'name',
     text: __('Name'),
     defaultValue: '',
     notEditable: true,
@@ -116,7 +116,11 @@ const listOptions = fromJS([
     text: __('Radius Server'),
     options: serverType,
     defaultValue: 'local',
-    render: (val, $$data) => `${__(val)} (${$$data.getIn(['radius', 'nasip'])})`,
+    render: (val, $$data) => {
+      const curName = val;
+
+      return `${__(curName)} (${$$data.getIn(['radius', 'nasip'])})`;
+    },
     formProps: {
       label: __('Radius Server Type'),
       required: true,
@@ -128,7 +132,11 @@ const listOptions = fromJS([
     text: __('Portal Server'),
     defaultValue: 'local',
     options: serverType,
-    render: (val, $$data) => `${__(val)} (${$$data.getIn(['portalServer', 'server_ipaddr'])})`,
+    render: (val, $$data) => {
+      const curName = $$data.getIn(['portalServer', 'portal_template']);
+
+      return `${__(curName)} (${$$data.getIn(['portalServer', 'server_ipaddr'])})`;
+    },
     formProps: {
       label: __('Portal Server Type'),
       required: true,
@@ -167,6 +175,12 @@ const listOptions = fromJS([
     },
   },
   {
+    id: 'portal_rule_type',
+    defaultValue: 'ssid',
+    noTable: true,
+    noForm: true,
+  },
+  {
     id: 'portal_server_port',
     text: __('Portal Rule Port'),
     noForm: true,
@@ -176,13 +190,13 @@ const listOptions = fromJS([
     id: 'portal_server_ssid',
     text: __('Portal SSID '),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'ssid']) || DEFAULT_STR,
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'ssid']) ||  __('None'),
   },
   {
     id: 'portal_server_mac',
     text: __('Portal Access Point MAC Address'),
     noForm: true,
-    render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']) || DEFAULT_STR,
+    render: (val, $$data) => $$data.getIn(['portalTemplate', 'mac']) ||  __('None'),
   },
   {
     id: 'portal_server_web',
@@ -331,7 +345,7 @@ export default class View extends React.Component {
 
         switch (curId) {
           case 'interface_bind':
-            $$ret = $$ret.set('options', $$myPortOptions.unshift($$defaultNoneItem));
+            $$ret = $$ret.set('options', $$myPortOptions);
             break;
 
           default:
@@ -406,7 +420,7 @@ export default class View extends React.Component {
 
         switch (curId) {
           case 'interface_bind':
-            $$ret = $$ret.set('options', $$myPortOptions.unshift($$defaultNoneItem));
+            $$ret = $$ret.set('options', $$myPortOptions);
             break;
 
           default:
@@ -654,10 +668,12 @@ export default class View extends React.Component {
   renderLocalPortalRule($$curData) {
     const { app } = this.props;
     const $$localPortFormOptions = this.$$potalRuleFormOptions;
+    const portalRuleType = $$curData.get('portal_rule_type');
 
     if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('portal_server_type') !== 'local') {
       return null;
     }
+
     return (
       <div>
         <div className="o-box__cell">
@@ -679,42 +695,71 @@ export default class View extends React.Component {
         {
           this.state[PORTAL_LOCAL_RULE_KEY] ? (
             <div className="o-box__cell row">
-              <FormContainer
-                id="portalLocalPortSetting"
+              <FormGroup
                 style={{
-                  padding: '0 5px',
+                  padding: '0 .75rem',
                 }}
-                options={$$localPortFormOptions}
-                data={$$curData.get('portalRule')}
-                onChangeData={(data) => {
+                type="switch"
+                readOnly={$$curData.get('name') === 'local'}
+                value={portalRuleType}
+                label={__('Rule Type')}
+                options={[
+                  {
+                    value: 'ssid',
+                    label: __('SSID'),
+                  },
+                  {
+                    value: 'port',
+                    label: __('Port'),
+                  },
+                ]}
+                onChange={(data) => {
                   this.props.updateCurEditListItem({
-                    portalRule: data,
+                    portal_rule_type: data.value,
                   });
                 }}
-                onSave={() => this.onSave('portalServerSetting')}
-                invalidMsg={app.get('invalid')}
-                validateAt={app.get('validateAt')}
-                onValidError={this.props.reportValidError}
-                isSaving={app.get('saving')}
               />
-              <FormContainer
-                id="portalLocalTemplateSetting"
-                options={this.$$portalTemplateFormOptions}
-                data={$$curData.get('portalTemplate')}
-                onChangeData={(data) => {
-                  this.props.updateCurEditListItem({
-                    portalTemplate: data,
-                  });
-                }}
-                style={{
-                  padding: '0 5px',
-                }}
-                onSave={() => this.onSave('portalServerSetting')}
-                invalidMsg={app.get('invalid')}
-                validateAt={app.get('validateAt')}
-                onValidError={this.props.reportValidError}
-                isSaving={app.get('saving')}
-              />
+              {
+                portalRuleType === 'port' ? (
+                  <FormContainer
+                    id="portalLocalPortSetting"
+                    style={{
+                      padding: '0 5px',
+                    }}
+                    options={$$localPortFormOptions}
+                    data={$$curData.get('portalRule')}
+                    onChangeData={(data) => {
+                      this.props.updateCurEditListItem({
+                        portalRule: data,
+                      });
+                    }}
+                    onSave={() => this.onSave('portalServerSetting')}
+                    invalidMsg={app.get('invalid')}
+                    validateAt={app.get('validateAt')}
+                    onValidError={this.props.reportValidError}
+                    isSaving={app.get('saving')}
+                  />
+                ) : (
+                  <FormContainer
+                    id="portalLocalTemplateSetting"
+                    options={this.$$portalTemplateFormOptions}
+                    data={$$curData.get('portalTemplate')}
+                    onChangeData={(data) => {
+                      this.props.updateCurEditListItem({
+                        portalTemplate: data,
+                      });
+                    }}
+                    style={{
+                      padding: '0 5px',
+                    }}
+                    onSave={() => this.onSave('portalServerSetting')}
+                    invalidMsg={app.get('invalid')}
+                    validateAt={app.get('validateAt')}
+                    onValidError={this.props.reportValidError}
+                    isSaving={app.get('saving')}
+                  />
+                )
+              }
             </div>
           ) : null
         }

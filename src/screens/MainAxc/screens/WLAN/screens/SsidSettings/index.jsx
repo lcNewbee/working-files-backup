@@ -77,6 +77,28 @@ let encryptionOptions = fromJS([
     label: '802.1x',
   },
 ]);
+let authenticationTypeOptions = fromJS([
+  {
+    value: 'none+none',
+    label: __('NONE'),
+  },
+  {
+    value: 'none+portal',
+    label: __(' Portal'),
+  },
+  {
+    value: 'psk-mixed+none',
+    label: __('WPA2-PSK'),
+  },
+  {
+    value: 'psk-mixed+portal',
+    label: __('WPA2-PSK + Portal'),
+  },
+  {
+    value: '802.1x',
+    label: '802.1x',
+  },
+]);
 
 // 处理小于 2.5的版本
 if (window.guiConfig.versionCode < 20500) {
@@ -210,16 +232,251 @@ const listOptions = fromJS([
       }),
     },
     noTable: true,
-  }, {
-    id: 'enabled',
-    text: __('Status'),
-    options: checkboxOptions,
+  },
+  {
+    id: 'storeForwardPattern',
+    options: storeForwardOption,
+    text: __('Forwarding Mode'),
+    defaultValue: 'local',
+    formProps: {
+      type: 'select',
+    },
+  },
+  {
+    id: 'vlanId',
+    text: __('VLAN ID'),
     defaultValue: '1',
     formProps: {
-      type: 'checkbox',
-      value: '1',
+      type: 'number',
+      min: '1',
+      max: '4094',
+      required: true,
     },
-  }, {
+  },
+  {
+    id: 'upstream/downstream',
+    text: __('UP/Down Traffic'),
+    render(val, item) {
+      const upRate = flowRateFilter.transform(item.get('upstream'));
+      const downRate = flowRateFilter.transform(item.get('downstream'));
+
+      return `${upRate} / ${downRate}`;
+    },
+    noForm: true,
+  },
+  {
+    id: 'encryption',
+    text: __('Encryption'),
+    defaultValue: 'psk-mixed',
+    options: encryptionOptions,
+    noTable: true,
+    noForm: true,
+    formProps: {
+      type: 'switch',
+    },
+  },
+  {
+    id: 'authenticationType',
+    text: __('Authentication Type'),
+    defaultValue: 'none',
+    options: authenticationTypeOptions,
+    formProps: {
+      type: 'select',
+      initValue: ($$data) => {
+        const encryption = $$data.get('encryption');
+        const accessControl = $$data.get('accessControl');
+        let ret = '802.1x';
+
+        if (encryption !== '802.1x') {
+          ret = encryption;
+
+          if (accessControl) {
+            ret = `${ret}+${accessControl}`;
+          }
+        }
+
+        return ret;
+      },
+      onChange: (data) => {
+        const newData = data;
+        const encryption = newData.value.split('+')[0];
+        const accessControl = newData.value.split('+')[1];
+
+        newData.mergeData = {
+          encryption,
+        };
+
+        if (accessControl) {
+          newData.mergeData.accessControl = accessControl;
+        }
+
+        if (accessControl === 'portal') {
+          newData.mergeData.portalTemplate = 'local';
+        }
+
+        return newData;
+      },
+    },
+    render: (val, $$data) => {
+      const encryption = $$data.get('encryption');
+      const accessControl = $$data.get('accessControl');
+      let ret = '802.1x';
+
+      if (encryption !== '802.1x') {
+        ret = encryption;
+
+        if (accessControl) {
+          ret = `${ret}+${accessControl}`;
+        }
+      }
+
+      return ret;
+    },
+  },
+  {
+    id: 'password',
+    text: __('Password'),
+    defaultValue: '',
+    noTable: true,
+    formProps: {
+      type: 'password',
+      required: true,
+      maxLength: '63',
+      validator: validator({
+        rules: 'remarkTxt:["\'\\\\"]|utf8Len:[8, 63]',
+      }),
+      visible($$data) {
+        const curRepaet = $$data.get('encryption');
+
+        return curRepaet === 'psk-mixed';
+      },
+    },
+  },
+  {
+    id: 'accessControl',
+    text: __('Access Control'),
+    defaultValue: 'none',
+    noForm: true,
+    noTable: true,
+    options: [
+      {
+        value: 'none',
+        label: __('None'),
+      },
+      {
+        value: 'portal',
+        label: __('Portal'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+      visible($$data) {
+        const curRepaet = $$data.get('encryption');
+
+        return curRepaet !== '802.1x';
+      },
+    },
+  },
+  {
+    id: 'portalTemplate',
+    text: __('Portal Template'),
+    defaultValue: 'local',
+    noTable: true,
+    noForm: true,
+    formProps: {
+      type: 'select',
+      required: true,
+      visible($$data) {
+        const accessControl = $$data.get('accessControl');
+        const encryption = $$data.get('encryption');
+        return accessControl === 'portal' && encryption !== '802.1x';
+      },
+    },
+  },
+  {
+    id: 'Authentication',
+    text: __('Authetication'),
+    formProps: {
+      type: 'select',
+      required: true,
+      visible($$data) {
+        const portalTemplate = $$data.get('portalTemplate');
+        const accessControl = $$data.get('accessControl');
+        const encryption = $$data.get('encryption');
+        return portalTemplate === 'local' && accessControl === 'portal' && encryption !== '802.1x';
+      },
+    },
+  },
+  {
+    id: 'mandatorydomain',
+    text: __('AAA Policy'),
+    defaultValue: 'local',
+    noTable: true,
+    formProps: {
+      type: 'select',
+      required: true,
+      visible($$data) {
+        const encryption = $$data.get('encryption');
+        return encryption === '802.1x';
+      },
+    },
+  },
+  {
+    id: 'maxBssUsers',
+    text: __('Max Clients'),
+    defaultValue: 64,
+    formProps: {
+      type: 'number',
+      min: 1,
+      max: 128,
+    },
+  },
+  {
+    id: 'loadBalanceType',
+    text: __('Traffic Control'),
+    defaultValue: '0',
+    options: loadBalanceTypeArr,
+    formProps: {
+      type: 'switch',
+    },
+  },
+  {
+    id: 'upstream',
+    defaultValue: '64',
+    text: msg.upSpeed,
+    noTable: true,
+    formProps: {
+      type: 'number',
+      min: 1,
+      max: 102400,
+      required: true,
+      visible($$data) {
+        const curRepaet = $$data.get('loadBalanceType');
+
+        return curRepaet !== '0';
+      },
+      help: 'KB/S',
+    },
+  },
+  {
+    id: 'downstream',
+    defaultValue: '256',
+    text: msg.downSpeed,
+    noTable: true,
+    formProps: {
+      type: 'number',
+      min: 1,
+      max: 102400,
+      required: true,
+      visible($$data) {
+        const curRepaet = $$data.get('loadBalanceType');
+
+        return curRepaet !== '0';
+      },
+      help: 'KB/S',
+    },
+  },
+  {
     id: 'hiddenSsid',
     text: __('Hide SSID'),
     options: [
@@ -258,7 +515,8 @@ const listOptions = fromJS([
       type: 'checkbox',
       value: '1',
     },
-  }, {
+  },
+  {
     id: 'ssidisolate',
     text: __('Terminal Isolation'),
     defaultValue: '1',
@@ -279,174 +537,13 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'maxBssUsers',
-    text: __('Max Clients'),
-    defaultValue: 64,
-    formProps: {
-      type: 'number',
-      min: 1,
-      max: 128,
-    },
-  },
-  {
-    id: 'vlanId',
-    text: __('VLAN ID'),
+    id: 'enabled',
+    text: __('Status'),
+    options: checkboxOptions,
     defaultValue: '1',
     formProps: {
-      type: 'number',
-      min: '1',
-      max: '4094',
-      required: true,
-    },
-  },
-  {
-    id: 'storeForwardPattern',
-    options: storeForwardOption,
-    text: __('Forwarding Mode'),
-    defaultValue: 'local',
-    formProps: {
-      type: 'select',
-    },
-  }, {
-    id: 'upstream/downstream',
-    text: __('UP/Down Traffic'),
-    render(val, item) {
-      const upRate = flowRateFilter.transform(item.get('upstream'));
-      const downRate = flowRateFilter.transform(item.get('downstream'));
-
-      return `${upRate} / ${downRate}`;
-    },
-    noForm: true,
-  }, {
-    id: 'loadBalanceType',
-    text: __('Traffic Control'),
-    defaultValue: '0',
-    options: loadBalanceTypeArr,
-    formProps: {
-      type: 'switch',
-    },
-  }, {
-    id: 'upstream',
-    defaultValue: '64',
-    text: msg.upSpeed,
-    noTable: true,
-    formProps: {
-      type: 'number',
-      min: 1,
-      max: 102400,
-      required: true,
-      visible($$data) {
-        const curRepaet = $$data.get('loadBalanceType');
-
-        return curRepaet !== '0';
-      },
-      help: 'KB/S',
-    },
-  }, {
-    id: 'downstream',
-    defaultValue: '256',
-    text: msg.downSpeed,
-    noTable: true,
-    formProps: {
-      type: 'number',
-      min: 1,
-      max: 102400,
-      required: true,
-      visible($$data) {
-        const curRepaet = $$data.get('loadBalanceType');
-
-        return curRepaet !== '0';
-      },
-      help: 'KB/S',
-    },
-  },
-  {
-    id: 'encryption',
-    text: __('Encryption'),
-    defaultValue: 'psk-mixed',
-    options: encryptionOptions,
-    formProps: {
-      type: 'switch',
-    },
-  },
-  {
-    id: 'password',
-    text: __('Password'),
-    defaultValue: '',
-    noTable: true,
-    formProps: {
-      type: 'password',
-      required: true,
-      maxLength: '63',
-      validator: validator({
-        rules: 'remarkTxt:["\'\\\\"]|utf8Len:[8, 63]',
-      }),
-      visible($$data) {
-        const curRepaet = $$data.get('encryption');
-
-        return curRepaet === 'psk-mixed';
-      },
-    },
-  },
-  {
-    id: 'accessControl',
-    text: __('Access Control'),
-    defaultValue: 'none',
-    options: [
-      {
-        value: 'none',
-        label: __('None'),
-      }, {
-        value: 'portal',
-        label: __('Portal'),
-      },
-    ],
-    formProps: {
-      type: 'switch',
-      visible($$data) {
-        const curRepaet = $$data.get('encryption');
-        return curRepaet !== '802.1x';
-      },
-    },
-  },
-  {
-    id: 'portalTemplate',
-    text: __('Portal Template'),
-    formProps: {
-      type: 'select',
-      required: true,
-      visible($$data) {
-        const accessControl = $$data.get('accessControl');
-        const encryption = $$data.get('encryption');
-        return accessControl === 'portal' && encryption !== '802.1x';
-      },
-    },
-  },
-  {
-    id: 'Authentication',
-    text: __('Authetication'),
-    formProps: {
-      type: 'select',
-      required: true,
-      visible($$data) {
-        const portalTemplate = $$data.get('portalTemplate');
-        const accessControl = $$data.get('accessControl');
-        const encryption = $$data.get('encryption');
-        return portalTemplate === 'local' && accessControl === 'portal' && encryption !== '802.1x';
-      },
-    },
-  },
-  {
-    id: 'mandatorydomain',
-    text: __('AAA Policy'),
-    defaultValue: 'local',
-    formProps: {
-      type: 'select',
-      required: true,
-      visible($$data) {
-        const encryption = $$data.get('encryption');
-        return encryption === '802.1x';
-      },
+      type: 'checkbox',
+      value: '1',
     },
   },
 ]);
@@ -857,9 +954,16 @@ export default class View extends React.Component {
     const { store, route } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const isCopySsid = actionQuery.get('action') === 'copy';
-    const curListOptions = this.listOptions
-      .setIn([16, 'options'], this.state.portalServerTemplateNameOptions)
-      .setIn([17, 'options'], this.state.WebTemplateNameOptions);
+    const curListOptions = this.listOptions.map(($$item) => {
+      let $$retItem = $$item;
+
+      if ($$retItem.get('id') === 'portalTemplate') {
+        $$retItem = $$retItem.set('options', this.state.portalServerTemplateNameOptions);
+      } else if ($$retItem.get('id') === 'auth') {
+        $$retItem = $$retItem.set('options', this.state.WebTemplateNameOptions);
+      }
+      return $$retItem;
+    });
     return (
       <AppScreen
         {...this.props}

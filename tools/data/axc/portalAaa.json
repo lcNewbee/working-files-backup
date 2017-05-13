@@ -6,6 +6,7 @@
   "data": {
     "list": [
       {
+        "name": "local",
         "domain_name": "local",
         "auth_accesstype": "portal",
         "auth_schemetype": "1",
@@ -67,6 +68,7 @@
         }
       },
       {
+        "name": "Remote joy",
         "domain_name":"Remote joy",
         "auth_accesstype": "8021x-access",
         "auth_schemetype": "1",
@@ -128,6 +130,7 @@
         }
       },
       {
+        "name": "Remote Windy",
         "domain_name":"Remote Windy",
         "auth_accesstype":"portal",
         "auth_schemetype": "1",
