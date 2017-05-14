@@ -959,7 +959,7 @@ class AppScreenList extends React.PureComponent {
               list={list}
               page={page}
               onPageChange={this.onPageChange}
-              loading={store.get('fetching')}
+              // loading={store.get('fetching')}
               selectable={selectable}
               onRowSelect={this.props.selectListItem}
             />

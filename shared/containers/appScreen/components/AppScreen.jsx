@@ -80,8 +80,7 @@ function getLoadingStatus(props) {
   if (typeof loading === 'undefined') {
     ret = true;
 
-    if ($$myScreenStore.get('data').size >= 2 ||
-      ($$myScreenDataList.isEmpty() && $$myScreenDataSettings.isEmpty())) {
+    if (($$myScreenDataList && !$$myScreenDataList.isEmpty()) && ($$myScreenDataSettings && !$$myScreenDataSettings.isEmpty())) {
       ret = false;
     }
   }
@@ -145,10 +144,7 @@ export default class AppScreen extends React.Component {
 
     this.initOption = initOption;
     this.selectedList = [];
-
-    this.state = {
-      loading: getLoadingStatus(props),
-    };
+    this.state = {};
   }
   componentWillMount() {
     this.props.initScreen(this.initOption);
@@ -169,6 +165,9 @@ export default class AppScreen extends React.Component {
         loading: getLoadingStatus(nextProps),
       });
     }
+    if (nextProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.fetchAppScreenData(true);
+    }
   }
 
   componentWillUpdate(nextProps) {
@@ -188,10 +187,6 @@ export default class AppScreen extends React.Component {
     }
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
-      this.props.fetchScreenData();
-    }
-
     if (this.props.groupid !== prevProps.groupid) {
       this.props.changeScreenActionQuery({
         groupid: this.props.groupid,
@@ -200,7 +195,7 @@ export default class AppScreen extends React.Component {
         groupid: this.props.groupid,
       });
       if (this.props.groupid !== '') {
-        this.props.fetchScreenData();
+        this.fetchAppScreenData();
       }
     }
   }
@@ -210,14 +205,29 @@ export default class AppScreen extends React.Component {
       this.props.leaveScreen(this.props.route.id);
     }
   }
-  fetchAppScreenData() {
+  fetchAppScreenData(immediately) {
     const loaded = () => {
+      clearTimeout(this.loadingTimeout);
       this.setState({
         loading: false,
       });
     };
 
     if (this.props.fetchScreenData) {
+      // 当获取数据超过 200 ms 还没返回，显示加载中
+      if (immediately) {
+        this.setState({
+          loading: true,
+        });
+      } else {
+        this.loadingTimeout = setTimeout(() => {
+          this.setState({
+            loading: true,
+          });
+        }, 200);
+      }
+
+
       // 默认非组管理界面，直接获取数据
       if (this.props.groupid === 'not') {
         this.props.fetchScreenData().then(loaded);
@@ -225,11 +235,14 @@ export default class AppScreen extends React.Component {
         // 组管理界面，需要获取当前组id才能获取数据
       } else if (this.props.groupid !== '') {
         this.props.fetchScreenData().then(loaded);
+      } else {
+        this.props.fetchScreenData().then(loaded);
       }
 
       if (this.props.refreshInterval) {
+        clearInterval(this.refreshTimer);
         this.refreshTimer = setInterval(
-          () => this.props.fetchScreenData(),
+          () => this.fetchAppScreenData(),
           this.props.refreshInterval,
         );
       }
@@ -274,7 +287,6 @@ export default class AppScreen extends React.Component {
     if (className) {
       screenClassName = `${screenClassName} ${className}`;
     }
-
     return (
       <div className={screenClassName}>
         {
