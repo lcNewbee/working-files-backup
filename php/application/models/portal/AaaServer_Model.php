@@ -415,7 +415,7 @@ class AaaServer_Model extends CI_Model {
                     'radius_template' => 'remote_radius_' . $data['name'], 
                     'domain_name' => element('name', $data),
                     'portal_template' => 'local_' . $data['portalRule']['interface_bind'],
-                    'portal_server_type' => 'remote',
+                    'portal_server_type' => 'local',
                     'portal_rule' => $data['portalRule']['interface_bind'],
                     'ssid' => '',
                     'mac' => ''
@@ -632,7 +632,8 @@ class AaaServer_Model extends CI_Model {
                     $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
                 }
                 //5.删除web 网页模板   
-                $this->portalsql->where('ssid', $query[0]['ssid']);
+                //$this->portalsql->where('ssid', $query[0]['ssid']);
+                $this->portalsql->where('name', 'local_ssid_' . $query[0]['name']);
                 $this->portalsql->delete('portal_ssid');             
                 //6.删除portal 配置
                 $this->db->where('name',$res);

@@ -32,6 +32,7 @@ class AccessWeb_Model extends CI_Model {
             //所有认证 没有rul和    sessiontime
             $datalist['data'][0]['url'] = '';
             $datalist['data'][0]['sessiontime'] = '';
+            $datalist['data'][0]['authentication'] = $this->getPortalConfig();
         }
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
@@ -118,7 +119,7 @@ class AccessWeb_Model extends CI_Model {
             $arr = $this->getPram($data);
             $arr['id'] = element('id',$data);
             $result = $this->portalsql->replace('portal_web', $arr);
-            if($result){
+            if($result){                             
                 //解压
                 $filepath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$data['id'];
                 if( file_exists($filepath) ){
@@ -147,6 +148,9 @@ class AccessWeb_Model extends CI_Model {
               $this->editPortalBasauth($data['id'], $data['url'], $data['sessiontime']);
           }
         }
+        //修改portal_config
+        $this->editPortalConfig($data['auths']);
+        
         $result = $result ? json_ok() : json_no('update error');
         return json_encode($result);
     }
@@ -285,5 +289,24 @@ class AccessWeb_Model extends CI_Model {
             }
         }
         closedir($dir);
+    }
+
+    private function editPortalConfig($prams) {
+        $arr = array(
+            'auth_interface' => $prams
+        );
+        $this->portalsql->where('id',1);
+        if($this->portalsql->update('portal_config', $arr)){
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    private function getPortalConfig(){
+        $query = $this->portalsql->query("select id,auth_interface from portal_config where id=1")->result_array();
+        if( count($query) > 0 ){
+            return $query[0]['auth_interface'];
+        }
+        return '';        
     }
 }
