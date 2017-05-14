@@ -129,7 +129,7 @@ export const $$radiusAuthServer = fromJS([
       }
       return false;
     },
-    label: __('Password'),
+    label: __('Shared Key'),
     fieldset: 'Authentication',
     form: 'authServer',
     type: 'password',
@@ -179,7 +179,7 @@ export const $$radiusAuthServer = fromJS([
       }
       return false;
     },
-    label: __('Password'),
+    label: __('Shared Key'),
     fieldset: 'auth_secondary',
     type: 'password',
     form: 'authServer',
@@ -237,7 +237,7 @@ export const $$radiusAccServer = fromJS([
       return false;
     },
     required: true,
-    label: __('Password'),
+    label: __('Shared Key'),
     fieldset: 'primary',
     form: 'accServer',
     type: 'password',
@@ -286,7 +286,7 @@ export const $$radiusAccServer = fromJS([
       }
       return false;
     },
-    label: __('Password'),
+    label: __('Shared Key'),
     fieldset: 'secondary',
     form: 'accServer',
     type: 'password',

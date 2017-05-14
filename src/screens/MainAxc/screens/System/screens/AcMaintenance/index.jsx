@@ -158,7 +158,7 @@ export default class View extends React.PureComponent {
     }
   }
   initState(props) {
-    if (props.app.get('version').indexOf('AXC1000')) {
+    if (props.app.get('version').indexOf('AXC1000') !== -1) {
       this.setState({
         rebootStepTime: AXC1000_REBOOT_TIME,
       });

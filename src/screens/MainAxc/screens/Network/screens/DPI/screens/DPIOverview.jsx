@@ -261,17 +261,19 @@ export default class DPIOverview extends React.Component {
               </div>
             </div>
           ) : (
-            <div
-              style={{
-                fontWeight: 'bold',
-                fontSize: '20px',
-                paddingLeft: '230px',
-                marginTop: '30px',
-                color: '#CCC',
-              }}
-            >
-              {__('NDPI Disabled')}
-            </div>
+            this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '0' ? (
+              <div
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: '20px',
+                  paddingLeft: '230px',
+                  marginTop: '30px',
+                  color: '#CCC',
+                }}
+              >
+                {__('NDPI Disabled')}
+              </div>
+            ) : null
           )
         }
       </AppScreen>

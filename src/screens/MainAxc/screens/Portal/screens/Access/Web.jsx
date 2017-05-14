@@ -37,7 +37,7 @@ const $$authOptions = fromJS([
   },
   {
     value: '1',
-    label: __('Accessed User'),
+    label: __('Accessed User Authentication'),
   },
   // {
   //   value: '2',
@@ -104,6 +104,7 @@ const listOptions = fromJS([
   {
     id: 'description',
     text: __('Description'),
+    width: '120px',
     formProps: {
       type: 'textarea',
       maxLength: '257',
@@ -119,6 +120,7 @@ const listOptions = fromJS([
     id: 'authentication',
     label: __('Supported Authentication'),
     options: $$authOptions,
+    width: '120px',
     multi: false,
     formProps: {
       type: 'select',
@@ -126,8 +128,8 @@ const listOptions = fromJS([
       multi: false,
       linkId: 'auths',
     },
-    render: (val) => {
-      const valArr = val.split(',');
+    render: (val, $$data) => {
+      const valArr = val ? val.split(',') : [idToAuthMap[$$data.get('id')] || ''];
       let ret = '';
 
       ret = valArr.map(
@@ -161,6 +163,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
+      visible: $$data => $$data.get('id') > 2 && $$data.get('id') !== '4',
     },
     render: (val, $$data) => {
       const id = $$data.get('id');
@@ -185,6 +188,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'num:[0,99999]',
       }),
+      visible: $$data => $$data.get('id') > 2 && $$data.get('id') !== '4',
     },
     render: (val, $$data) => {
       let ret = val;
@@ -196,7 +200,7 @@ const listOptions = fromJS([
         ret = `${ret} ${__('Minutes')}`;
       }
 
-      if (id === '3' || id === '1' || id === '2') {
+      if (id === '4' || id === '1' || id === '2') {
         ret = '-';
       }
 
@@ -385,9 +389,6 @@ export default class View extends React.Component {
         }}
         noTitle
         actionable
-        selectable={
-          ($$item, index) => (index >= 6)
-        }
         // searchable
         searchProps={{
           placeholder: `${__('Name')}`,

@@ -255,7 +255,6 @@
 
   "AAA Settings": "AAA配置",
   "ISP Domain Name": "ISP域名",
-  "Authentication Type": "接入类型",
   "Authentication Type": "认证类型",
   "Accounting Type": "计费类型",
   "(Authentication)": "（认证）",
@@ -288,7 +287,6 @@
   "Occurrence Time": "出现时间",
   "Recently Appeared": "最近出现时间",
   "Createtime": "创建时间",
-  "Mac Address":"Mac白名单",
 
   "All Group": "所有组",
   "Select AP to group":"选择AP添加到组",

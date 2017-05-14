@@ -302,7 +302,7 @@ const routes = [
               {
                 id: 'dpi',
                 icon: 'copy',
-                label: __('beta'),
+                //label: __('beta'),
                 path: '/main/network/dpi',
                 text: __('App Analyze'),
                 indexPath: '/main/network/dpi/dpioverview',

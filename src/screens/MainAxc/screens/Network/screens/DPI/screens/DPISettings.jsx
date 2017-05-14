@@ -13,10 +13,70 @@ const propTypes = fromJS({
   initScreen: PropTypes.func,
 });
 
+const $$formOptions = fromJS([
+  {
+    id: 'ndpiEnable',
+    label: __('Application Analyze'),
+    type: 'checkbox',
+    saveOnChange: true,
+    // onChange: (data) => {
+    //   const payload = {
+    //     action: 'setting',
+    //     ndpiEnable: data.value,
+    //   };
+    //   this.props.save(this.props.route.formUrl, payload).then((json) => {
+    //     if (json.state && json.state.code === 2000) {
+    //       this.props.fetchScreenData();
+    //     }
+    //   });
+    // },
+  },
+  {
+    id: 'eth0Enable',
+    label: `ETH0 ${__('Active Status')}`,
+    type: 'checkbox',
+    onChange: (data) => { this.onChangeSettingData(data, 'eth0Enable'); },
+  },
+  {
+    id: 'eth1Enable',
+    label: `ETH1 ${__('Active Status')}`,
+    type: 'checkbox',
+    onChange: (data) => { this.onChangeSettingData(data, 'eth1Enable'); },
+  },
+  {
+    id: 'eth2Enable',
+    label: `ETH2 ${__('Active Status')}`,
+    type: 'checkbox',
+    onChange: (data) => { this.onChangeSettingData(data, 'eth2Enable'); },
+  },
+  {
+    id: 'eth3Enable',
+    label: `ETH3 ${__('Active Status')}`,
+    type: 'checkbox',
+    onChange: (data) => { this.onChangeSettingData(data, 'eth3Enable'); },
+  },
+  {
+    id: 'eth4Enable',
+    label: `ETH4 ${__('Active Status')}`,
+    type: 'checkbox',
+    onChange: (data) => { this.onChangeSettingData(data, 'eth4Enable'); },
+  },
+  {
+    id: 'eth5Enable',
+    label: `ETH5 ${__('Active Status')}`,
+    type: 'checkbox',
+    onChange: (data) => { this.onChangeSettingData(data, 'eth5Enable'); },
+  },
+]);
+
 export default class EthStatistic extends React.Component {
   constructor(props) {
     super(props);
-    this.onChangeSettingData = this.onChangeSettingData.bind(this);
+    utils.binds(this, [
+      'initFormOptions',
+      'onChangeSettingData',
+    ]);
+    this.formOptions = $$formOptions;
   }
 
   onChangeSettingData(data, val) {
@@ -32,66 +92,18 @@ export default class EthStatistic extends React.Component {
     });
   }
 
+  initFormOptions() {
+    if (this.props.app.get('version').indexOf('AXC1000') !== -1) {
+      this.formOptions = $$formOptions.delete(-1).delete(-1);
+    }
+  }
+
   render() {
-    const settingsFormOptions = fromJS([
-      {
-        id: 'ndpiEnable',
-        label: __('Application Analyze'),
-        type: 'checkbox',
-        saveOnChange: true,
-        // onChange: (data) => {
-        //   const payload = {
-        //     action: 'setting',
-        //     ndpiEnable: data.value,
-        //   };
-        //   this.props.save(this.props.route.formUrl, payload).then((json) => {
-        //     if (json.state && json.state.code === 2000) {
-        //       this.props.fetchScreenData();
-        //     }
-        //   });
-        // },
-      },
-      {
-        id: 'eth0Enable',
-        label: `ETH0 ${__('Active Status')}`,
-        type: 'checkbox',
-        onChange: (data) => { this.onChangeSettingData(data, 'eth0Enable'); },
-      },
-      {
-        id: 'eth1Enable',
-        label: `ETH1 ${__('Active Status')}`,
-        type: 'checkbox',
-        onChange: (data) => { this.onChangeSettingData(data, 'eth1Enable'); },
-      },
-      {
-        id: 'eth2Enable',
-        label: `ETH2 ${__('Active Status')}`,
-        type: 'checkbox',
-        onChange: (data) => { this.onChangeSettingData(data, 'eth2Enable'); },
-      },
-      {
-        id: 'eth3Enable',
-        label: `ETH3 ${__('Active Status')}`,
-        type: 'checkbox',
-        onChange: (data) => { this.onChangeSettingData(data, 'eth3Enable'); },
-      },
-      {
-        id: 'eth4Enable',
-        label: `ETH4 ${__('Active Status')}`,
-        type: 'checkbox',
-        onChange: (data) => { this.onChangeSettingData(data, 'eth4Enable'); },
-      },
-      {
-        id: 'eth5Enable',
-        label: `ETH5 ${__('Active Status')}`,
-        type: 'checkbox',
-        onChange: (data) => { this.onChangeSettingData(data, 'eth5Enable'); },
-      },
-    ]);
+    this.initFormOptions();
     return (
       <AppScreen
         {...this.props}
-        settingsFormOptions={settingsFormOptions}
+        settingsFormOptions={this.formOptions}
       />
     );
   }

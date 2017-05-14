@@ -106,7 +106,7 @@ export default class View extends React.Component {
         store={store}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
-        actionBarChildren={__('When the rule type is a port in AAA policy, you can specify that some macs do not require portal authentication. This function can not be used when rule type is SSID')}
+        actionBarChildren={__('This function is available only when the "Rule Type" is "Port",whice configured in "AAA Policies".')}
         editable={false}
         actionable
         selectable
