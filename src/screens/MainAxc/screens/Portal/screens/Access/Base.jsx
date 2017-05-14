@@ -181,7 +181,7 @@ const settingsOptions = fromJS([
             label: __('One Key Authentication'),
           }, {
             value: '1',
-            label: __('Access User Authentication'),
+            label: __('Accessed User Authentication'),
           }, {
             value: '2',
             label: __('Radius Authentication'),
@@ -190,7 +190,7 @@ const settingsOptions = fromJS([
             label: __('App Authentication'),
           }, {
             value: '4',
-            label: __('SNS Authentication'),
+            label: __('SMS Authentication'),
           }, {
             value: '5',
             label: __('Wechat Authentication'),

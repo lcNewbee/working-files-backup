@@ -676,16 +676,16 @@ export const $$potalRuleOptions = fromJS([
     },
   }, {
     id: 'auth_mode',
-    label: __('Authentication Type'),
+    label: __('IP Address Range'),
     defaultValue: '1',
     options: [
       {
         value: '1',
-        label: __('Direct'),
+        label: __('ALL'),
       },
       {
         value: '2',
-        label: __('Layer3'),
+        label: __('Custom'),
       },
     ],
     formProps: {
@@ -697,7 +697,7 @@ export const $$potalRuleOptions = fromJS([
     },
   }, {
     id: 'auth_ip',
-    label: __('Authentication IP'),
+    label: __('IP Address'),
     formProps: {
       type: 'text',
       validator: validator({
@@ -710,7 +710,7 @@ export const $$potalRuleOptions = fromJS([
     },
   }, {
     id: 'auth_mask',
-    label: __('Authentication Subnet Mask'),
+    label: __('Subnet Mask'),
     formProps: {
       type: 'text',
       validator: validator({

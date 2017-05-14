@@ -100,7 +100,6 @@ const listOptions = fromJS([
       label: __('Authentication Type'),
       required: true,
       type: 'switch',
-      placeholder: __('Please Select ') + __('Rules Group'),
     },
   }, {
     id: 'auth_schemetype',

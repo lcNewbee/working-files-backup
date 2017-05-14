@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
+import { FormContainer } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
@@ -25,6 +26,56 @@ import './web.scss';
 //     saveOnChange: true,
 //   },
 // ]);
+const $$authOptions = fromJS([
+  {
+    value: '',
+    label: __('ALL'),
+  },
+  {
+    value: '0',
+    label: __('One Key Authentication'),
+  },
+  {
+    value: '1',
+    label: __('Accessed User'),
+  },
+  // {
+  //   value: '2',
+  //   label: __('Radius Authentication'),
+  // },
+  // {
+  //   value: '3',
+  //   label: __('App Authentication'),
+  // },
+  {
+    value: '4',
+    label: __('SMS Authentication'),
+  },
+  {
+    value: '5',
+    label: __('Wechat Authentication'),
+  },
+  // {
+  //   value: '6',
+  //   label: __('Public Platform Authentication'),
+  // },
+  // {
+  //   value: '7',
+  //   label: __('Visitor Authentication'),
+  // },
+  {
+    value: '9',
+    label: __('Facebook Authentication'),
+  },
+]);
+const idToAuthMap = {
+  '3': '0',
+  '4': '1',
+  '5': '4',
+  '6': '5',
+  '7': '9',
+};
+
 const listOptions = fromJS([
   {
     id: 'id',
@@ -65,6 +116,44 @@ const listOptions = fromJS([
     render: val => __(val),
   },
   {
+    id: 'authentication',
+    label: __('Supported Authentication'),
+    options: $$authOptions,
+    multi: false,
+    formProps: {
+      type: 'select',
+      notEditable: true,
+      multi: false,
+      linkId: 'auths',
+    },
+    render: (val) => {
+      const valArr = val.split(',');
+      let ret = '';
+
+      ret = valArr.map(
+        (itemVal) => {
+          let valRet = $$authOptions.find(
+            $$myMap => $$myMap.get('value') === itemVal,
+          );
+
+          if (valRet) {
+            valRet = valRet.get('label');
+          }
+
+          return valRet;
+        },
+      ).join(', ');
+
+      return ret || '';
+    },
+  },
+  {
+    id: 'auths',
+    formProps: {
+      type: 'hidden',
+    },
+  },
+  {
     id: 'url',
     label: __('Redirect URL'),
     formProps: {
@@ -73,7 +162,18 @@ const listOptions = fromJS([
         rules: 'utf8Len:[0, 255]',
       }),
     },
-  }, {
+    render: (val, $$data) => {
+      const id = $$data.get('id');
+      let ret = val;
+
+      if (id === '2') {
+        ret = '-';
+      }
+
+      return ret;
+    },
+  },
+  {
     id: 'sessiontime',
     label: __('Limit Connect Duration'),
     defaultValue: '0',
@@ -95,7 +195,8 @@ const listOptions = fromJS([
       } else if (val !== '-') {
         ret = `${ret} ${__('Minutes')}`;
       }
-      if (id === '3') {
+
+      if (id === '3' || id === '1' || id === '2') {
         ret = '-';
       }
 
@@ -179,6 +280,7 @@ export default class View extends React.Component {
     utils.binds(this, [
       'getAdsPage',
       'onBackup',
+      'initListOptions',
     ]);
     this.actionable = getActionable(props);
     this.state = {
@@ -221,43 +323,63 @@ export default class View extends React.Component {
       },
     );
   }
-  render() {
-    // const { advOptions, advIsloading, advSelectPlaceholder } = this.state;
-    // const myEditFormOptions = listOptions.mergeIn(
-    //   [2, 'formProps'], {
-    //     isLoading: advIsloading,
-    //     options: advOptions,
-    //     placeholder: advSelectPlaceholder,
-    //   },
-    // );
-    const curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
-        <span>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/auth.jsp`} target="_blank">{__('Authentication')}</a>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
-          <a
-            className="tablelink"
-            href={`http://${window.location.hostname}:8080/${$$data.get('id')}/wx.jsp`}
-            target="_blank"
-          >
-            {__('Wechat')}
-          </a>
-          <SaveButton
-            type="button"
-            icon="download"
-            text={__('')}
-            theme="default"
-            onClick={
-              () => (this.onBackup($$data))
-            }
-            disabled={!this.actionable}
-          />
-        </span>
+  initListOptions() {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    const $$curListItem = $$myScreenStore.getIn(['curListItem']);
+
+    this.curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
+      <span>
+        <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/auth.jsp`} target="_blank">{__('Authentication')}</a>
+        <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
+        <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
+        <a
+          className="tablelink"
+          href={`http://${window.location.hostname}:8080/${$$data.get('id')}/wx.jsp`}
+          target="_blank"
+        >
+          {__('Wechat')}
+        </a>
+        <SaveButton
+          type="button"
+          icon="download"
+          text={__('')}
+          theme="default"
+          onClick={
+            () => (this.onBackup($$data))
+          }
+          disabled={!this.actionable}
+        />
+      </span>
     ));
+
+    if (actionType === 'edit' && $$curListItem.get('id') === '1') {
+      this.curListOptions = this.curListOptions.map(
+        ($$item) => {
+          const id = $$item.get('id');
+          let $$ret = $$item;
+
+          if (id === 'authentication') {
+            $$ret = $$ret.setIn(['formProps', 'notEditable'], false)
+              .setIn(['multi'], true)
+              .setIn(['formProps', 'multi'], true);
+          }
+
+          return $$ret;
+        },
+      );
+    }
+
+    return this.curListOptions;
+  }
+  render() {
+    this.initListOptions();
     return (
       <AppScreen
         {...this.props}
-        listOptions={curListOptions}
+        listOptions={this.curListOptions}
         editFormOption={{
           hasFile: true,
         }}

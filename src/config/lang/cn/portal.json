@@ -99,6 +99,7 @@
   "Portal Server IP":"Portal服务器IP",
   "Page Settings": "页面配置",
   "User MAC Address":"用户MAC地址",
+  "Supported Authentication": "支持的认证",
 
   "One Key Auth":"一键认证",
   "Accessed User Auth":"接入用户认证",
@@ -130,6 +131,8 @@
   "Only Support SMS Authentication": "仅支持短信认证",
   "Only Support Wechat Authentication": "仅支持微信认证",
   "Only Support Facebook Authentication": "仅支持Facebook认证",
+  "Port-based authentication rules use this settings": "基于端口的认证规则使用此配置",
+  "When the rule type is a port in AAA policy, you can specify that some macs do not require portal authentication. This function can not be used when rule type is SSID": "“AAA策略”中“规则类型”为端口时，可指定某些mac无需portal认证。“规则类型”为“SSID”时无法使用该功能。",
 
   "Public Platform Authentication":"公众号认证",
   "Visitor Authentication":"访客认证",

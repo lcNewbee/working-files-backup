@@ -74,7 +74,7 @@ export default class View extends React.Component {
     getPortList()
       .then((data) => {
         this.setState({
-          portOptions: fromJS(data.options),
+          portOptions: fromJS(data.options).filter($$item => $$item.get('value') !== 'lo'),
         });
       });
   }
@@ -106,6 +106,7 @@ export default class View extends React.Component {
         store={store}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
+        actionBarChildren={__('When the rule type is a port in AAA policy, you can specify that some macs do not require portal authentication. This function can not be used when rule type is SSID')}
         editable={false}
         actionable
         selectable
