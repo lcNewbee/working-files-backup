@@ -13,7 +13,7 @@ import PureComponent from '../Base/PureComponent';
  * @returns
  */
 function NavLink(props) {
-  const { item, className, hasSubmenus, hasTabs } = props;
+  const { item, className, hasSubmenus, hasTabs, label } = props;
   const { icon, path, text } = item.toJS();
   let branchIconName = 'caret-right';
   let CurComponent = Link;
@@ -55,6 +55,11 @@ function NavLink(props) {
         ) : null
       }
       {text}
+      {
+        label ? (
+          <span className="o-nav__label">{label}</span>
+        ) : null
+      }
     </CurComponent>
   );
 }
@@ -173,6 +178,7 @@ class Nav extends PureComponent {
                     className={linkClassName}
                     hasSubmenus={!!hasSubmenus}
                     hasTabs={!!hasTabs}
+                    label={item.get('label')}
                     onClick={() => {
                       if (hasSubmenus) {
                         this.onToggleBranch(myKey);
@@ -198,6 +204,7 @@ class Nav extends PureComponent {
                                   item={$$subItem}
                                   hasSubmenus={false}
                                   hasTabs={!!subHasTabs}
+                                  label={$$subItem.get('label')}
                                   className={mylinkClassName}
                                   onClick={this.onSelectItem}
                                 />

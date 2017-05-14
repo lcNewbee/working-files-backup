@@ -40,6 +40,21 @@ $main-blue: #0093dd;
       vertical-align: middle;
       transition: .3s transform ease-in-out;
     }
+    .o-nav__label {
+      position: absolute;
+      top: 50%;
+      right: 6px;
+      display: inline-block;
+      margin-top: -6px;
+      color: $g-brand-warning;
+      border: 1px solid $g-brand-warning;
+      font-size: 8px;
+      line-height: .9;
+      padding: 2px 4px;
+      vertical-align: middle;
+      border-radius: 2px;
+      background-color: transparent;
+    }
 
     &.active {
       color: #fff;
