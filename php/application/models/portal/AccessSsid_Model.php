@@ -80,10 +80,12 @@ class AccessSsid_Model extends CI_Model {
             $macdata = $this->portalsql->query("select id,apmac from portal_ssid");
             if( count($macdata->result_array()) > 0 ){
                 $arr = $query->result_array();
-                for($i=0; $i< count($arr); $i++){					
+                for($i=0; $i< count($arr); $i++){	
+                    $arr[$i]['enable'] = 0;				
                     foreach($macdata->result_array() as $rows) {
                         if( $arr[$i]['mac'] === $rows['apmac']){
-							unset($arr[$i]); //去除添加过的mac							
+							//unset($arr[$i]); //去除添加过的mac							
+                            $arr[$i]['enable'] = 1;
                             break;							
                         }						
                     }					

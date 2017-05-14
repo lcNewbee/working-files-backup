@@ -174,8 +174,15 @@ class WirelessSsid_Model extends CI_Model {
                 //没有选择portal认证 删除全部ssid下的portal_ssid
                 $this->delPoartalSsid($data['ssid']);
             }
-			if($data['accessControl'] === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {                
-                $this->editPoartalSsid($data['ssid'], $data['auth'], $temp_data['mandatorydomain']);
+			if($data['accessControl'] === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {   
+                if($this->getPortalSsidState($data['ssid'], $data['auth'])) {
+                    //有记录就修改
+                    $this->editPoartalSsid($data['ssid'], $data['auth'], $temp_data['mandatorydomain']);
+                }else{
+                    //没有就添加
+                    $this->binPortalTemplate($data['auth'], $data['ssid'], $temp_data['mandatorydomain']);
+                }
+                
             }            
             //log
             $logary = array(
@@ -286,6 +293,15 @@ class WirelessSsid_Model extends CI_Model {
         }
         return '';
     }
+
+    private function getPortalSsidState($name, $ssid){
+        $sqlcmd = "select * from portal_ssid where name='{$name}' and ssid='{$ssid}'";
+        $query = $this->portalsql->query($sqlcmd)->result_array();
+        if( count($query) > 0 ){
+            return TRUE;
+        }
+        return FALSE;
+    }
 	/**
      * 绑定portal模板 操作portal_ssid表
      * @web_template 网页模板
@@ -315,7 +331,7 @@ class WirelessSsid_Model extends CI_Model {
         );
         $this->portalsql->where('ssid', $ssid);
         $this->portalsql->where('apmac', '');
-        $this->portalsql->update('portal_ssid', $arr);
+        $this->portalsql->update('portal_ssid', $arr);                
     }
     //删除portal_ssid
 	private function delPoartalSsid($ssid) {

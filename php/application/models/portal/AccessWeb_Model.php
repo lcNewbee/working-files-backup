@@ -36,7 +36,7 @@ class AccessWeb_Model extends CI_Model {
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
-                'page'=>$datalist['page'],
+                //'page'=>$datalist['page'],
                 'list' => $datalist['data']
             )
         );
