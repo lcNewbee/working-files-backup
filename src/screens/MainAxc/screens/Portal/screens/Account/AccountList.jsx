@@ -132,7 +132,8 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '0',
-  }, {
+  },
+  {
     id: 'maclimit',
     text: __('Multi Device Login'),
     options: [
@@ -145,11 +146,13 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '0',
-  }, {
+  },
+  {
     id: 'maclimitcount',
     text: __('MAC Quantity'),
     noTable: true,
-  }, {
+  },
+  {
     id: 'autologin',
     text: __('Auto Re-login'),
     options: [
@@ -268,7 +271,6 @@ export const baseSetting = fromJS([
   {
     id: 'loginName',
     label: __('Username'),
-    className: 'cols col-6',
     type: 'text',
     required: true,
     maxLength: '129',
@@ -278,7 +280,6 @@ export const baseSetting = fromJS([
   }, {
     id: 'password',
     label: __('Password'),
-    className: 'cols col-6',
     type: 'password',
     noTable: true,
     required: true,
@@ -289,7 +290,6 @@ export const baseSetting = fromJS([
   }, {
     id: 'state',
     label: __('Account Type'),
-    className: 'cols col-6',
     options: [
       {
         value: '0',
@@ -313,21 +313,10 @@ export const baseSetting = fromJS([
     type: 'select',
     required: true,
     placeholder: __('Please Select ') + __('Type'),
-  }, {
-    id: 'maclimitcount',
-    label: __('Device limit'),
-    className: 'cols col-6',
-    type: 'number',
-    min: '0',
-    max: '999999',
-    validator: validator({
-      rules: 'num:[0,999999]',
-    }),
-    required: true,
-  }, {
+  },
+  {
     id: 'maclimit',
     label: __('Multi Device Login'),
-    className: 'cols col-6',
     options: [
       {
         value: '0',
@@ -341,10 +330,22 @@ export const baseSetting = fromJS([
     type: 'checkbox',
     required: true,
     // placeholder: __('Please Select ') + __('MAC Limit'),
-  }, {
+  },
+  {
+    id: 'maclimitcount',
+    label: __('Device limit'),
+    type: 'number',
+    min: '0',
+    max: '999999',
+    validator: validator({
+      rules: 'num:[0,999999]',
+    }),
+    required: true,
+    visible: $$data => $$data.get('maclimit') === '1',
+  },
+  {
     id: 'autologin',
     label: __('Auto Re-login'),
-    className: 'cols col-6',
     options: [
       {
         value: '0',
@@ -362,7 +363,6 @@ export const baseSetting = fromJS([
     label: __('Speed Limit'),
     noForm: true,
     noTable: true,
-    className: 'cols col-6',
     options: [
       {
         value: '1',
@@ -376,7 +376,6 @@ export const baseSetting = fromJS([
   }, {
     id: 'ex4',
     label: __('Last Unbind Month'),
-    className: 'cols col-6',
     type: 'number',
     required: true,
     min: '1',
@@ -387,7 +386,6 @@ export const baseSetting = fromJS([
   }, {
     id: 'ex3',
     label: __('Unbind Times'),
-    className: 'cols col-6',
     type: 'number',
     min: '0',
     max: '999999',
@@ -395,10 +393,86 @@ export const baseSetting = fromJS([
       rules: 'num:[0,999999]',
     }),
     required: true,
+  },
+]);
+
+export const advancedSetting = fromJS([
+  {
+    id: 'name',
+    label: __('Name'),
+    noTable: true,
+    noForm: true,
+    type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
   }, {
+    id: 'gender',
+    label: __('Gender'),
+    noTable: true,
+    options: [
+      {
+        value: '0',
+        label: __('Male'),
+      }, {
+        value: '1',
+        label: __('Female'),
+      },
+    ],
+    defaultValue: '0',
+    type: 'select',
+    placeholder: __('Please Select ') + __('Gender'),
+
+  }, {
+    id: 'idnumber',
+    label: __('ID Document Number'),
+    noTable: true,
+    type: 'text',
+    maxLength: '19',
+    validator: validator({
+      rules: 'utf8Len:[1,18]',
+    }),
+  }, {
+    id: 'phoneNumber',
+    label: __('Phone'),
+    noTable: true,
+    type: 'text',
+    maxLength: '19',
+    validator: validator({
+      rules: 'utf8Len:[1,18]',
+    }),
+  }, {
+    id: 'address',
+    label: __('Address'),
+    noTable: true,
+    type: 'text',
+    maxLength: '33',
+    validator: validator({
+      rules: 'utf8Len:[1,32]',
+    }),
+  }, {
+    id: 'email',
+    label: __('Email'),
+    noTable: true,
+    type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'email',
+    }),
+  }, {
+    id: 'description',
+    label: __('Details'),
+    noTable: true,
+    type: 'text',
+    maxLength: '257',
+    validator: validator({
+      rules: 'utf8Len:[1,256]',
+    }),
+  },
+  {
     id: 'ex1',
     label: __('Question'),
-    className: 'cols col-6',
     noTable: true,
     type: 'select',
     maxLength: '129',
@@ -424,98 +498,15 @@ export const baseSetting = fromJS([
     validator: validator({
       rules: 'utf8Len:[1,128]',
     }),
-  }, {
+  },
+  {
     id: 'ex2',
     label: __('Answer'),
-    className: 'cols col-6',
     noTable: true,
     type: 'text',
     maxLength: '129',
     validator: validator({
       rules: 'utf8Len:[1,128]',
-    }),
-  },
-]);
-
-export const advancedSetting = fromJS([
-  {
-    id: 'name',
-    label: __('Name'),
-    noTable: true,
-    noForm: true,
-    className: 'cols col-12',
-    type: 'text',
-    maxLength: '32',
-    validator: validator({
-      rules: 'utf8Len:[1,31]',
-    }),
-  }, {
-    id: 'gender',
-    label: __('Gender'),
-    className: 'cols col-6',
-    noTable: true,
-    options: [
-      {
-        value: '0',
-        label: __('Male'),
-      }, {
-        value: '1',
-        label: __('Female'),
-      },
-    ],
-    defaultValue: '0',
-    type: 'select',
-    placeholder: __('Please Select ') + __('Gender'),
-
-  }, {
-    id: 'idnumber',
-    label: __('ID Document Number'),
-    className: 'cols col-6',
-    noTable: true,
-    type: 'text',
-    maxLength: '19',
-    validator: validator({
-      rules: 'utf8Len:[1,18]',
-    }),
-  }, {
-    id: 'phoneNumber',
-    label: __('Phone'),
-    noTable: true,
-    className: 'cols col-6',
-    type: 'text',
-    maxLength: '19',
-    validator: validator({
-      rules: 'utf8Len:[1,18]',
-    }),
-  }, {
-    id: 'address',
-    label: __('Address'),
-    className: 'cols col-6',
-    noTable: true,
-    type: 'text',
-    maxLength: '33',
-    validator: validator({
-      rules: 'utf8Len:[1,32]',
-    }),
-  }, {
-    id: 'email',
-    label: __('Email'),
-    className: 'cols col-6',
-    noTable: true,
-    type: 'text',
-    maxLength: '32',
-    validator: validator({
-      rules: 'email',
-    }),
-  }, {
-    id: 'description',
-    label: __('Details'),
-    className: 'cols col-6',
-    noTable: true,
-    type: 'text',
-    maxLength: '257',
-    validator: validator({
-      rules: 'utf8Len:[1,256]',
     }),
   },
 ]);
@@ -714,6 +705,7 @@ export default class View extends React.Component {
       'onBeforeSave',
     ]);
     this.state = {
+      isBaseShow: true,
       $$cardDataList: fromJS([]),
     };
   }
@@ -849,7 +841,6 @@ export default class View extends React.Component {
             <div className="o-box__cell">
               <FormContainer
                 id="baseSetting"
-                className="o-form--compassed"
                 options={$$mybaseSetting}
                 data={$$curData}
                 onChangeData={this.props.updateCurEditListItem}
@@ -885,7 +876,6 @@ export default class View extends React.Component {
               <FormContainer
                 id="advancedSetting"
                 options={advancedSetting}
-                className="o-form--compassed"
                 data={$$curData}
                 onChangeData={this.props.updateCurEditListItem}
                 onSave={() => this.onSave('advancedSetting')}

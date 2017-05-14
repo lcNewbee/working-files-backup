@@ -4,67 +4,69 @@
     "msg": "ok"
   },
   "data": {
-    "list": [
-      {
-        "id":"1",
-        "name":"One Key Authetication",
-        "url": "www.google.com",
-        "sessiontime": "360",
-        "countShow":"0",
-        "countAuth":"0",
-        "description":"One Key Authetication",
-        "adv":"OpenPortal"
-      },
-      {
-        "id":"2",
-        "name":"Account",
-        "url": "www.google.com",
-        "sessiontime": "360",
-        "countShow":"0",
-        "countAuth":"0",
-        "description":"Account Authetication",
-        "adv":"OpenPortal"
-      },
-      {
-        "id":"3",
-        "name":"Wechat Authetication",
-        "url": "www.google.com",
-        "sessiontime": "360",
-        "countShow":"0",
-        "countAuth":"0",
-        "description":"Wechat Authetication",
-        "adv":"OpenPortal"
-      },
-      {
-        "id":"4",
-        "name":"Facebook Authetication",
-        "url": "www.google.com",
-        "sessiontime": "360",
-        "countShow":"0",
-        "countAuth":"0",
-        "description":"Facebook Authetication",
-        "adv":"OpenPortal"
-      },
-      {
-        "id":"5",
-        "name":"SNS Authetication",
-        "url": "www.google.com",
-        "sessiontime": "360",
-        "countShow":"0",
-        "countAuth":"0",
-        "description":"SNS Authetication",
-        "adv":"OpenPortal"
-      },
-      {
-        "id":"6",
-        "name":"ALL Authetication",
-        "url": "-",
-        "sessiontime": "-",
-        "countShow":"0",
-        "countAuth":"0",
-        "description":"One Key,Account,Wechat,Facebook,SNS",
-        "adv":"OpenPortal"
-      }
-    ]
+    "page": {
+      "start": 1,
+      "size": 20,
+      "currPage": 1,
+      "totalPage": 1,
+      "total": 6,
+      "nextPage": -1,
+      "lastPage": 1
+    },
+    "list": [{
+      "id": "1",
+      "name": "ALL Auth",
+      "countShow": "0",
+      "countAuth": "0",
+      "description": "Support One Key, Accessed User, SMS, Wechat, Facebook Auth",
+      "adv": null,
+      "url": "",
+      "sessiontime": ""
+    }, {
+      "id": "2",
+      "name": "One Key Auth",
+      "countShow": "0",
+      "countAuth": "0",
+      "description": "Only Support One Key Auth",
+      "adv": null,
+      "url": "http:\/\/www.qq.com",
+      "sessiontime": "60"
+    }, {
+      "id": "3",
+      "name": "Accessed User Auth",
+      "countShow": "0",
+      "countAuth": "0",
+      "description": "Only Support Accessed User Auth",
+      "adv": null,
+      "url": "http:\/\/www.baidu.com",
+      "sessiontime": "2"
+    }, {
+      "id": "4",
+      "name": "SMS Auth",
+      "countShow": "0",
+      "countAuth": "0",
+      "description": "Only Support SMS Auth",
+      "adv": null,
+      "url": "http:\/\/www.baidu.com",
+      "sessiontime": "8"
+    }, {
+      "id": "5",
+      "name": "Wechat Auth",
+      "countShow": "0",
+      "countAuth": "0",
+      "description": "Only Support Wechat Auth",
+      "adv": null,
+      "url": "http:\/\/www.baidu.com",
+      "sessiontime": "0"
+    }, {
+      "id": "6",
+      "name": "Facebook Auth",
+      "countShow": "0",
+      "countAuth": "0",
+      "description": "Only Support Facebook Auth",
+      "adv": null,
+      "url": "http:\/\/www.baidu.com",
+      "sessiontime": "0"
+    }]
   }
 }

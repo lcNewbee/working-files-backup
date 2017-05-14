@@ -639,6 +639,7 @@ class AppScreenList extends React.PureComponent {
       }
     }
 
+    // 处理包含 单条 启用开关
     if (this.listTableOptions) {
       this.listTableOptions = this.listTableOptions.map(
         ($$item) => {

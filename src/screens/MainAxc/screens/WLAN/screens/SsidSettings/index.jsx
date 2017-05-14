@@ -394,7 +394,7 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'Authentication',
+    id: 'auth',
     text: __('Authetication'),
     formProps: {
       type: 'select',

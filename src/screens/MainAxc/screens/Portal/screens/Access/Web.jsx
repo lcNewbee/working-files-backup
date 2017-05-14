@@ -161,22 +161,6 @@ const listOptions = fromJS([
     id: '__actions__',
     text: __('Actions'),
     noForm: true,
-    /*transform(val, $$item) {
-      return (
-        <span>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/Authentication.jsp`} target="_blank">{__('Authentication')}</a>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
-          <a
-            className="tablelink"
-            href={`http://${window.location.hostname}:8080/${$$item.get('id')}/wx.jsp`}
-            target="_blank"
-          >
-            {__('Wechat')}
-          </a>
-        </span>
-      );
-    },*/
   },
 ]);
 
@@ -248,7 +232,7 @@ export default class View extends React.Component {
     // );
     const curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
         <span>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/Authentication.jsp`} target="_blank">{__('Authentication')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/auth.jsp`} target="_blank">{__('Authentication')}</a>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
           <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
           <a

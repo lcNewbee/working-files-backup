@@ -80,15 +80,6 @@ const sNetworkRoutes = require('../../screens/MainAxc/screens/Network/screens/Ro
 const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
-const sRadiusTemplate =
-    require('../../screens/MainAxc/screens/Network/screens/RadiusTemplate');
-const sRadiusProxy =
-    require('../../screens/MainAxc/screens/Network/screens/RadiusProxy');
-const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA/index_new');
-const sPortalServer =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
-const sPortalRules =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
 const sPortalMac =
     require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 
@@ -161,10 +152,6 @@ const sApModel =
     require('../../screens/MainAxc/screens/System/screens/ApModel');
 const sAcMaintenance =
     require('../../screens/MainAxc/screens/System/screens/AcMaintenance');
-const sAttackDefense =
-    require('../../screens/MainAxc/screens/System/screens/Firewall/screens/attackDefenseSetting');
-const sFirewallBlackList =
-    require('../../screens/MainAxc/screens/System/screens/Firewall/screens/blackList');
 const sNetworkTimeProtocol =
     require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
@@ -173,6 +160,15 @@ const sNetworkTimeProtocol =
  * AAA 接入，认证，计费
  */
 const cAAA = require('../../screens/MainAxc/containers/AAA');
+const sRadiusTemplate =
+    require('../../screens/MainAxc/screens/Network/screens/RadiusTemplate');
+const sRadiusProxy =
+    require('../../screens/MainAxc/screens/Network/screens/RadiusProxy');
+const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA/index_new');
+const sPortalServer =
+    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
+const sPortalRules =
+    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
 const sPortalOverview =
     require('../../screens/MainAxc/screens/Portal/screens/Overview');
 const sPortalBase =
@@ -306,8 +302,9 @@ const routes = [
               {
                 id: 'dpi',
                 icon: 'copy',
+                label: __('beta'),
                 path: '/main/network/dpi',
-                text: __('Application Analyze'),
+                text: __('App Analyze'),
                 indexPath: '/main/network/dpi/dpioverview',
                 routes: [
                   {
@@ -408,7 +405,7 @@ const routes = [
                 component: SharedComponents.TabContainer,
 
                 // 不要删除空格
-                text: __('Radio '),
+                text: __('SSID Management'),
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -420,7 +417,7 @@ const routes = [
                     id: 'smartRf',
                     path: '/main/group/wireless/smart',
                     formUrl: 'goform/group/smartRf',
-                    text: __('Smart RF'),
+                    text: __('Advance Settings'),
                     component: sSmartRf.Screen,
                   },
                 ],
@@ -501,23 +498,23 @@ const routes = [
                 id: 'wirelessSafePolicy',
                 icon: 'certificate',
                 path: '/main/group/safe',
-                formUrl: 'goform/group/timerPolicy',
                 text: __('Safe Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 routes: [
                   {
-                    id: 'wirelessWips',
-                    path: '/main/group/safe/wips',
-                    formUrl: 'goform/group/wips',
-                    text: __('AP Scan Settings'),
-                    component: sWips.Screen,
-                  }, {
                     id: 'wirelessEndpointProtection',
                     path: '/main/group/safe/endpointProtection',
                     formUrl: 'goform/group/wireless/protection',
                     text: __('Terminal Protection'),
                     component: sEndpointProtection.Screen,
+                  },
+                  {
+                    id: 'wirelessWips',
+                    path: '/main/group/safe/wips',
+                    formUrl: 'goform/group/wips',
+                    text: __('AP Monitor Settings'),
+                    component: sWips.Screen,
                   },
                 ],
               },
@@ -581,7 +578,7 @@ const routes = [
               //     {
               //       id: 'ridiusList',
               //       path: '/main/portal/old/radius/list',
-              //       formUrl: 'goform/network/radius/radius/template',
+              //       formUrl: 'goform/network/radius/template',
               //       text: __('Radius Services'),
               //       component: sRadiusTemplate.Screen,
               //     },
@@ -644,6 +641,13 @@ const routes = [
                         text: __('SMS Gateway'),
                         component: sPortalSMSGateWay.Screen,
                       },
+                      // {
+                      //   id: 'portalAccessWeb',
+                      //   path: '/main/portal/local/portal/web',
+                      //   formUrl: 'goform/portal/access/web',
+                      //   text: __('Web Template'),
+                      //   component: sPortalWeb.Screen,
+                      // },
                     ],
                   },
                   {
@@ -768,7 +772,7 @@ const routes = [
                 icon: 'link',
                 path: '/main/portal/aaa/list',
                 formUrl: 'goform/portal/Aaa',
-                text: __('AAA Profiles'),
+                text: __('AAA Policies'),
                 component: sNetworkAaa.Screen,
               },
             ],
@@ -808,7 +812,7 @@ const routes = [
                     id: 'systemLog',
                     path: '/main/system/log/list',
                     formUrl: 'goform/system/log',
-                    text: __('User Log'),
+                    text: __('Log List'),
                     component: sSystemLogList.Screen,
                   }, {
                     id: 'systemLogMaintenance',
@@ -865,32 +869,6 @@ const routes = [
                 icon: 'cog',
                 text: __('AC Maintenance'),
                 component: sAcMaintenance.Screen,
-              }, {
-                id: 'firewall',
-                isIndex: true,
-                path: '/main/system/firewall',
-                icon: 'dot-circle-o ',
-                text: __('FireWall'),
-                noTree: true,
-                component: SharedComponents.TabContainer,
-                indexPath: '/main/system/firewall/attackdefense',
-                routes: [
-                  {
-                    id: 'attackDefense',
-                    isIndex: true,
-                    formUrl: 'goform/system/firewall/attackdefense',
-                    path: '/main/system/firewall/attackdefense',
-                    text: __('Attack Defense'),
-                    component: sAttackDefense.Screen,
-                  }, {
-                    id: 'firewallBlackList',
-                    isIndex: true,
-                    formUrl: 'goform/system/firewall/balcklist',
-                    path: '/main/system/firewall/balcklist',
-                    text: __('Black List'),
-                    component: sFirewallBlackList.Screen,
-                  },
-                ],
               }, {
                 id: 'ntp',
                 isIndex: true,
