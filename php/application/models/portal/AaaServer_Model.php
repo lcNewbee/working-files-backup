@@ -509,11 +509,11 @@ class AaaServer_Model extends CI_Model {
         return json_encode(json_ok());
     }
     function edit($data) {
-        $auth_type   = element('auth_accesstype', $data, NULL);
-        $radius_type = element('radius_server_type', $data, NULL);
-        $portal_type = element('portal_server_type', $data, NULL); 
-        $portal_rule_type = element('portal_rule_type', $data, NULL);//ssid||port
-        $domain_name = element('name', $data, NULL);
+        $auth_accesstype   = element('auth_accesstype', $data, NULL);//认证类型（portal ,802.1x）
+        $radius_server_type = element('radius_server_type', $data, NULL);//radius类型（local, remote）
+        $portal_server_type = element('portal_server_type', $data, NULL);//portal类型（local, remote）
+        $portal_rule_type = element('portal_rule_type', $data, NULL);//认证方式 （ssid ，port）
+        $domain_name = element('name', $data, NULL);//domain域（也是aaa模版的名称）
 
         if($domain_name === 'local') {
             //只能修改ssid 和网页模板                 
@@ -568,7 +568,7 @@ class AaaServer_Model extends CI_Model {
                 if($query[0]['radius_template'] != 'local'){
                     if( $this->isRadiusTemplate( $query[0]['radius_template'] )) {               
                         $this->delRadiusTemplate( array('radius_list'=>array( $query[0]['radius_template'] )) );                    
-                    }
+                     }
                 }
                 //2.删除aaa
                 if($query[0]['domain_name'] != 'local'){

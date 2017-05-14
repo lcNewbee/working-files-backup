@@ -12,14 +12,16 @@ class DpiEth_Model extends CI_Model {
             'pagesize'=>'0'
         );
 		$ary = array();
-		for($i = 0; $i < 6; $i++){
+        $port_list = $this->db->query("select portid,port_name from port_table")->result_array();
+        $port_sum = count($port_list);
+		for($i = 0; $i < $port_sum; $i++){
 			$str = "eth".$i;
 			$ary[] = $this->gtePram($str);
 		}
 		$result = ndpi_send_allethx_allmsg_intime(json_encode($cgiary));
 		$cgiary = json_decode($result,true);
 		if(is_array($cgiary) && $cgiary['state']['code'] === 2000){
-			for($i = 0; $i < 6; $i++){
+			for($i = 0; $i < $port_sum; $i++){
 				foreach($cgiary['data']['list'] as $row){
 					if($ary[$i]['ethx_name'] === $row['ethx_name']){
                         $curRate = abs( ((int)$row['eth_bytes_pre'] - (int)$row['eth_bytes'])/(int)$row['interval_time'] );//版本编好再打开
@@ -36,7 +38,7 @@ class DpiEth_Model extends CI_Model {
 		}
         //获取网卡状态
 		$ethstate = $this->get_eth_state();
-		for($k = 0; $k < 6; $k++){
+		for($k = 0; $k < $port_sum; $k++){
 			foreach($ary as $res){
 				if($ethstate[$k]['ifname'] === $res['ethx_name']){
 					$ary[$k]['active_eth'] =(string)$ethstate[$k]['value'];
