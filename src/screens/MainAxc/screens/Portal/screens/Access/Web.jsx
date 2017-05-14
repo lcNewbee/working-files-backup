@@ -163,7 +163,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
-      visible: $$data => $$data.get('id') > 2 && $$data.get('id') !== '4',
+      visible: $$data => $$data.get('id') > 2,
     },
     render: (val, $$data) => {
       const id = $$data.get('id');
@@ -368,7 +368,8 @@ export default class View extends React.Component {
           if (id === 'authentication') {
             $$ret = $$ret.setIn(['formProps', 'notEditable'], false)
               .setIn(['multi'], true)
-              .setIn(['formProps', 'multi'], true);
+              .setIn(['formProps', 'multi'], true)
+              .deleteIn(['options', 0]);
           }
 
           return $$ret;

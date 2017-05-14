@@ -5,21 +5,24 @@ class AccessWeb_Model extends CI_Model {
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $this->load->helper(array('array', 'db_operation'));
         $this->load->library('PHPZip');
+        $this->load->library('PortalSocket');
     }
     function get_list($data) {
         $parameter = array(
             'db' => $this->portalsql,
-            'columns' => 'portal_web.id,portal_web.name,portal_web.countShow,portal_web.countAuth,portal_web.description,adv_adv.name as adv,portal_basauth.url,portal_basauth.sessiontime',
+            'columns' => 'portal_web.id,portal_web.name,portal_web.countShow,portal_web.countAuth,portal_web.description,adv_adv.name as adv',
             'tablenames' => 'portal_web',
             'pageindex' => (int) element('page', $data, 1),
             'pagesize' => (int) element('size', $data, 20),
             'wheres' => "1=1",
             'joins' => array(
                 array('adv_adv','portal_web.adv=adv_adv.id','left'),
-                array('portal_basauth','portal_web.id=portal_basauth.type','left')
+                //array('portal_basauth','portal_web.id=portal_basauth.type','left')
             ),
             'order' => array()
         );
+        $portalBasauth = $this->portalsql->query("select url,type,sessiontime from portal_basauth")->result_array();
+
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND portal_web.name LIKE '%".$data['search']."%'";
         }
@@ -28,12 +31,47 @@ class AccessWeb_Model extends CI_Model {
            $parameter['wheres'] = $parameter['wheres']." AND adv_adv.id =".$data['adv'];
         }
         $datalist = help_data_page_all($parameter);
+
         if(count($datalist['data']) > 0){
             //所有认证 没有rul和    sessiontime
             $datalist['data'][0]['url'] = '';
             $datalist['data'][0]['sessiontime'] = '';
             $datalist['data'][0]['authentication'] = $this->getPortalConfig();
         }
+        // if ($name === "One Key Authentication") {
+        //   $newType = '0';
+        // } else if ($name === "Accessed User Authentication") {
+        //   $newType = '1';
+        // } else if ($name === "SMS Authentication") {
+        //    $newType = '4';
+        // } else if ($name === "Wechat Authentication") {
+        //    $newType = '5';
+        // } else if ($name === "Facebook Authentication") {
+        //    $newType = '9';
+        // }
+        foreach ($portalBasauth as $row) {
+          $type = $row['type'];
+          $index = 0;
+
+          if($type === '0') {
+            $index = 2;
+          } elseif ($type === '1') {
+            $index = 3;
+          } elseif ($type === '4') {
+            $index = 4;
+          } elseif ($type === '5') {
+            $index = 5;
+          } elseif ($type === '9') {
+            $index = 6;
+          }
+
+          if ($index !== 0) {
+            $datalist['data'][$index]['url'] = $row['url'];
+            $datalist['data'][$index]['sessiontime'] = $row['sessiontime'];
+          }
+
+        }
+
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
@@ -119,7 +157,7 @@ class AccessWeb_Model extends CI_Model {
             $arr = $this->getPram($data);
             $arr['id'] = element('id',$data);
             $result = $this->portalsql->replace('portal_web', $arr);
-            if($result){                             
+            if($result){
                 //解压
                 $filepath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$data['id'];
                 if( file_exists($filepath) ){
@@ -145,12 +183,15 @@ class AccessWeb_Model extends CI_Model {
 
           //更改url重定向
           if((int)$data['id'] > 1){
-              $this->editPortalBasauth($data['id'], $data['url'], $data['sessiontime']);
+              $this->editPortalBasauth($data['id'], $data['url'], $data['sessiontime'], $data['name']);
           }
         }
-        //修改portal_config
-        $this->editPortalConfig($data['auths']);
-        
+
+        if (element('id',$data) === '1') {
+          //修改portal_config
+          $this->editPortalConfig($data['auths']);
+        }
+
         $result = $result ? json_ok() : json_no('update error');
         return json_encode($result);
     }
@@ -199,18 +240,43 @@ class AccessWeb_Model extends CI_Model {
         //3.压缩并下载
         $zip->Zip_CompressDownload($path,$filename);
     }
+
     //设置portal_basauth的URL 和 上网认证时长
-    private function editPortalBasauth($type, $url, $sessiontime) {
-        $up = array(
+    private function editPortalBasauth($type, $url, $sessiontime, $name) {
+        $updata = array(
             'url' => $url,
-            'sessiontime' => $sessiontime
+            'sessiontime'=>(int)$sessiontime
         );
-        $this->portalsql->where('type', $type);
-        if( $this->portalsql->update('portal_basauth', $up) ){
-            return TRUE;
+        $newType = $type;
+
+        if ($name === "One Key Authentication") {
+          $newType = '0';
+        } else if ($name === "Accessed User Authentication") {
+          $newType = '1';
+        } else if ($name === "SMS Authentication") {
+           $newType = '4';
+        } else if ($name === "Wechat Authentication") {
+           $newType = '5';
+        } else if ($name === "Facebook Authentication") {
+           $newType = '9';
         }
+
+        //$this->portalsql->where('type', $type);
+        // if( $this->portalsql->update('portal_basauth', $up) ){
+        //     return TRUE;
+        // }
+        if ($this->noticeSocket($this->getSocketPortalAuthParams('edit', $updata, $name))) {
+            //up portal_auth
+            $this->portalsql->where('type', $newType);
+            if($this->portalsql->update('portal_basauth', $updata) ){
+                return TRUE;
+            }
+            return FALSE;
+        }
+
         return FALSE;
     }
+
     private function do_upload(){
         $config['upload_path'] = '/var/conf/portalserver';
         $config['overwrite']=true;
@@ -295,18 +361,119 @@ class AccessWeb_Model extends CI_Model {
         $arr = array(
             'auth_interface' => $prams
         );
-        $this->portalsql->where('id',1);
-        if($this->portalsql->update('portal_config', $arr)){
+        // $this->portalsql->where('id',1);
+        // if($this->portalsql->update('portal_config', $arr)){
+        //     return TRUE;
+        // }
+        $authinface = $prams;
+        $query = $this->portalsql->query("select * from portal_config where id=1")->result_array();
+        $data = $query[0];
+        $updata = $this->getSocketParam($data);
+        $updata['authInterface'] = $authinface;
+        if ($this->noticeSocket($this->getSocketPortalConfigParams('edit', $updata))) {
+            //up portal_config
+            $updata = $this->getDbParam($data);
+            $updata['id'] = element('id', $data, 0);
+            $updata['auth_interface'] = $authinface;
+            $result = $this->portalsql->replace('portal_config', $updata);
             return TRUE;
         }
+
         return FALSE;
     }
 
     private function getPortalConfig(){
-        $query = $this->portalsql->query("select id,auth_interface from portal_config where id=1")->result_array();
+        $query = $this->portalsql->query("select * from portal_config where id=1")->result_array();
         if( count($query) > 0 ){
             return $query[0]['auth_interface'];
         }
-        return '';        
+        return '';
+    }
+    private function getDbParam($data){
+        $linuxdate = (string)exec('date "+%Y-%m-%d %H:%M:%S"');
+        $numtime = $this->getConfigTime();
+        $arr = array(
+            'bas'=>element('bas',$data,''),
+            'basname'=>element('basname',$data,''),
+            'bas_ip'=>element('bas_ip',$data,''),
+            'bas_port'=>element('bas_port',$data,''),
+            'portalVer'=>element('portalVer',$data,''),
+            'authType'=>element('authType',$data,''),
+            'sharedSecret'=>element('sharedSecret',$data,''),
+            'bas_user'=>element('bas_user',$data,$linuxdate),
+            'bas_pwd'=>element('bas_pwd',$data,$numtime),
+            'timeoutSec'=>element('timeoutSec',$data,''),
+            'isPortalCheck'=>element('isPortalCheck',$data,0),
+            'isOut'=>element('isOut',$data,''),
+            'auth_interface'=>element('auth_interface',$data,''),
+            'isComputer'=>element('isComputer',$data,''),
+            'web'=>element('web',$data,''),
+            'isdebug'=>element('isdebug',$data,1),
+            'lateAuth'=>element('lateAuth',$data,''),
+            'lateAuthTime'=>element('lateAuthTime',$data,'')
+        );
+        return $arr;
+    }
+    private function getSocketParam($data){
+        $linuxdate = (string)exec('date "+%Y-%m-%d %H:%M:%S"');
+        $numtime = $this->getConfigTime();
+        $arr = array(
+            'bas'=>element('bas',$data,''),
+            'basname'=>element('basname',$data,''),
+            'basIp'=>element('bas_ip',$data,''),
+            'basPort'=>element('bas_port',$data,''),
+            'portalVer'=>element('portalVer',$data,''),
+            'authType'=>element('authType',$data,''),
+            'sharedSecret'=>element('sharedSecret',$data,''),
+            'basUser'=>element('bas_user',$data,$linuxdate),
+            'basPwd'=>element('bas_pwd',$data,$numtime),
+            'timeoutSec'=>element('timeoutSec',$data,''),
+            'isPortalCheck'=>element('isPortalCheck',$data,0),
+            'isOut'=>element('isOut',$data,''),
+            'authInterface'=>element('auth_interface',$data,''),
+            'isComputer'=>element('isComputer',$data,''),
+            'web'=>element('web',$data,''),
+            'isdebug'=>element('isdebug',$data,1),
+            'lateAuth'=>element('lateAuth',$data,''),
+            'lateAuthTime'=>element('lateAuthTime',$data,'')
+        );
+        return $arr;
+    }
+    private function getConfigTime(){
+        $result = 0;
+        $query = $this->portalsql->query("select usertime from config where id=1");
+        if($query->row()->usertime){
+            $result = $query->row()->usertime;
+            $result = $result * 60000;
+        }
+        return $result;
+    }
+     //socket portal
+    private function noticeSocket($data){
+        $result = null;
+        $portal_socket = new PortalSocket();
+        $result = $portal_socket->portal_socket(json_encode($data));
+        if($result['state']['code'] === 2000){
+            return TRUE;
+        }
+        return FALSE;
+    }
+    private function getSocketPortalConfigParams($type, $data) {
+         $socketarr = array(
+            'action'=>$type,
+            'resName'=>'bascfg',
+            'data'=>$data
+        );
+        return $socketarr;
+    }
+     private function getSocketPortalAuthParams($type, $data, $name) {
+        $newData = $data;
+        $newData['name'] = $name;
+        $socketarr = array(
+            'action'=>$type,
+            'resName'=>'basauth',
+            'data'=>$newData
+        );
+        return $socketarr;
     }
 }

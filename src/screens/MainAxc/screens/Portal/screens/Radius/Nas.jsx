@@ -162,6 +162,13 @@ const defaultData = utils.immutableUtils.getDefaultData(listOptions);
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
+  store: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
+  editListItemByIndex: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
+  reportValidError: PropTypes.func,
+  validateAll: PropTypes.func,
+  onListAction: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -196,7 +203,7 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { store } = this.props;
+    const { store, app } = this.props;
     const curScreenId = store.get('curScreenId');
     const $$formData = store.getIn([curScreenId, 'curListItem']);
 
@@ -213,6 +220,10 @@ export default class View extends React.Component {
           onChangeData={($$data) => {
             this.props.updateCurEditListItem($$data);
           }}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          onValidError={this.props.reportValidError}
+          isSaving={app.get('saving')}
           onSave={() => {
             this.props.validateAll()
               .then(($$msg) => {
@@ -221,7 +232,6 @@ export default class View extends React.Component {
                 }
               });
           }}
-          isSaving={this.props.app.get('saving')}
           hasSaveButton
         />
       </AppScreen>

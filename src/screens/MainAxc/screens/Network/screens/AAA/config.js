@@ -649,6 +649,7 @@ export const $$potalRuleOptions = fromJS([
       inputStyle: {
         display: 'block',
       },
+      required: true,
     },
   },
   {
