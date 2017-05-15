@@ -178,7 +178,7 @@ export default class View extends React.PureComponent {
           }
         });
     } else {
-      timeoutTime = 20000;
+      timeoutTime = 35000;
     }
 
     this.checkUpgradOkTimeout = setTimeout(() => {
