@@ -476,7 +476,7 @@ export default class MainGroup extends React.Component {
             />
           </div>
         </header>
-        <h4 className="t-main__asider-header row">
+        {/*<h4 className="t-main__asider-header row">
           {__('Group List')}
           {
             actionable ? (
@@ -495,7 +495,7 @@ export default class MainGroup extends React.Component {
               />
             ) : null
           }
-        </h4>
+        </h4>*/}
         <ul
           className="m-menu m-menu--open"
         >
