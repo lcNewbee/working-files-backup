@@ -24,7 +24,7 @@ class AaaServer_Model extends CI_Model {
                 $row['radius_server_type'] = $row['radius_template'] == 'local' ? 'local' : 'remote';
                 $row['radius'] = $this->getRadius($row['radius_template']);//获取radius属性
 
-                $row['portal_server_type'] = $row['portal_server_type'];
+                //$row['portal_server_type'] = $row['portal_server_type'];
                 $row['portalServer'] = $this->getPortal($row['portal_template']);//获取portal属性
 
                 $row['portalRule'] = $this->getPortalRule($row['portal_template'], $row['portalServer']['interface_bind']);//获取portal 规则
@@ -50,6 +50,15 @@ class AaaServer_Model extends CI_Model {
         return $arr;
     }
 
+    /****
+        * 1.radius
+        * 2.aaa
+        * 3.portal template
+        * 4.portal rule
+        * 5.web ssid
+        * 6.产生配置记录
+        * 7.下发ssid
+    */
     function add($data){        
         if( $this->isportalConfig($data['name']) ){
             return json_encode(json_no('name error', 6405));
@@ -57,19 +66,10 @@ class AaaServer_Model extends CI_Model {
         $auth_type   = element('auth_accesstype', $data, NULL);
         $radius_type = element('radius_server_type', $data, NULL);
         $portal_type = element('portal_server_type', $data, NULL);  
-        $portal_rule_type = element('portal_rule_type', $data, NULL);//ssid||port        
-        /**
-         * 1.radius
-         * 2.aaa
-         * 3.portal template
-         * 4.portal rule
-         * 5.web ssid
-         * 6.产生配置记录
-         * 7.下发ssid
-        */
-        if($auth_type === '8021x-access'){
-            //802.1x 认证
-
+        $portal_rule_type = element('portal_rule_type', $data, NULL);//ssid||port   
+        $domain = element('name', $data, NULL);
+        //802.1x 认证
+        if($auth_type === '8021x-access'){        
             //802.1x 认证 -> 本地Radius服务器
             if( $radius_type === 'local' ) {                
                 //1.创建 Radius 模板
@@ -98,31 +98,7 @@ class AaaServer_Model extends CI_Model {
             //802.1x 认证 -> 远程Radius服务器
             if( $radius_type === 'remote' ) { 
                 //1.创建 Radius 模板
-                $radius_ary = array(
-                    'template_name' => 'remote_radius_' . $data['domain_name'], 
-                    'authpri_ipaddr' => element('authpri_ipaddr', $data['radius'], ''),
-                    'authpri_port' => element('authpri_port', $data['radius'], ''), 
-                    'authpri_key' => element('authpri_key', $data['radius'], ''),
-                    'authsecond_ipaddr' => element('authsecond_ipaddr', $data['radius'], ''), 
-                    'authsecond_port' => element('authsecond_port', $data['radius'], ''),
-                    'authsecond_key' => element('authsecond_key', $data['radius'], ''),
-                    'acctpri_ipaddr' => element('acctpri_ipaddr', $data['radius'], ''),
-                    'acctpri_port' => element('acctpri_port', $data['radius'], ''),
-                    'acctpri_key' => element('acctpri_key', $data['radius'], ''),
-                    'acctsecond_ipaddr' => element('acctsecond_ipaddr', $data['radius'], ''), 
-                    'acctsecond_port' => element('acctsecond_port', $data['radius'], ''),
-                    'acctsecond_key' => element('acctsecond_key', $data['radius'], ''),
-                    'accton_enable' => element('accton_enable', $data['radius'], ''),
-                    'accton_sendtimes' => element('accton_sendtimes', $data['radius'], ''),
-                    'accton_sendinterval' => element('accton_sendinterval', $data['radius'], ''),
-                    'quiet_time' => element('quiet_time', $data['radius'], ''),
-                    'resp_time' => element('resp_time', $data['radius'], ''),
-                    'retry_times' => element('retry_times', $data['radius'], ''),
-                    'acct_interim_interval' => element('acct_interim_interval', $data['radius'], ''),
-                    'realretrytimes' => element('realretrytimes', $data['radius']),
-                    'nasip' => element('acctpri_ipaddr', $data['radius'], ''),
-                    'username_format' => element('username_format', $data['radius'], '')
-                ); 
+                $radius_ary = $this->getRadiusParams($data); 
                 if(!$this->addRadiusTemplate($radius_ary)){
                     return json_encode(json_no('add 802.1x && remote Radius error!'));
                 }
@@ -148,9 +124,9 @@ class AaaServer_Model extends CI_Model {
                 );
                 $this->db->insert('portal_config', $config_ary);                               
             }
-        }else if($auth_type === 'portal') {
-            //portal认证
-
+        }
+        //portal认证
+        if($auth_type === 'portal') {        
             //portal认证 -> 本地radius服务器 + 本地Portal服务器
             if($radius_type === 'local' && $portal_type === 'local'){
                 //选择AP的SSID方式弹portal
@@ -342,38 +318,14 @@ class AaaServer_Model extends CI_Model {
             //portal认证 -> 远程radius服务器 + 本地Portal服务器
             if($radius_type === 'remote' && $portal_type === 'local'){                
                 //1.创建 Radius 模板 
-                $radius_ary = array(
-                    'template_name' => 'remote_radius_' . $data['name'], 
-                    'authpri_ipaddr' => element('authpri_ipaddr', $data['radius'], ''),
-                    'authpri_port' => element('authpri_port', $data['radius'], ''), 
-                    'authpri_key' => element('authpri_key', $data['radius'], ''),
-                    'authsecond_ipaddr' => element('authsecond_ipaddr', $data['radius'], ''), 
-                    'authsecond_port' => element('authsecond_port', $data['radius'], ''),
-                    'authsecond_key' => element('authsecond_key', $data['radius'], ''),
-                    'acctpri_ipaddr' => element('acctpri_ipaddr', $data['radius'], ''),
-                    'acctpri_port' => element('acctpri_port', $data['radius'], ''),
-                    'acctpri_key' => element('acctpri_key', $data['radius'], ''),
-                    'acctsecond_ipaddr' => element('acctsecond_ipaddr', $data['radius'], ''), 
-                    'acctsecond_port' => element('acctsecond_port', $data['radius'], ''),
-                    'acctsecond_key' => element('acctsecond_key', $data['radius'], ''),
-                    'accton_enable' => element('accton_enable', $data['radius'], ''),
-                    'accton_sendtimes' => element('accton_sendtimes', $data['radius'], ''),
-                    'accton_sendinterval' => element('accton_sendinterval', $data['radius'], ''),
-                    'quiet_time' => element('quiet_time', $data['radius'], ''),
-                    'resp_time' => element('resp_time', $data['radius'], ''),
-                    'retry_times' => element('retry_times', $data['radius'], ''),
-                    'acct_interim_interval' => element('acct_interim_interval', $data['radius'], ''),
-                    'realretrytimes' => element('realretrytimes', $data['radius']),
-                    'nasip' => element('acctpri_ipaddr', $data['radius'], ''),
-                    'username_format' => element('username_format', $data['radius'], '')
-                );                                                              
+                $radius_ary = $this->getRadiusParams($data);                                                               
                 if(!$this->addRadiusTemplate($radius_ary)){                                        
                     return json_encode(json_no('add remote Radius error!'));
                 }            
                 //2.创建 AAA
                 $aaa_ary = array(
                     'radius_template' => 'remote_radius_' . $data['name'], 
-                    'template_name' => element('name', $data),
+                    'template_name' => 'local_' . $data['name'],//element('name', $data),
                     'auth_accesstype'=>element('auth_accesstype', $data),
                     'auth_schemetype'=>element('auth_schemetype', $data)                
                 );
@@ -413,7 +365,7 @@ class AaaServer_Model extends CI_Model {
                     'name' => element('name', $data),
                     'portal_rule_type' => 'port',
                     'radius_template' => 'remote_radius_' . $data['name'], 
-                    'domain_name' => element('name', $data),
+                    'domain_name' => 'local_' . element('name', $data),
                     'portal_template' => 'local_' . $data['portalRule']['interface_bind'],
                     'portal_server_type' => 'local',
                     'portal_rule' => $data['portalRule']['interface_bind'],
@@ -426,31 +378,7 @@ class AaaServer_Model extends CI_Model {
             //portal认证 -> 远程radius服务器 + 远程Portal服务器
             if($radius_type === 'remote' && $portal_type === 'remote'){
                 //1.创建 Radius 模板 
-                $radius_ary = array(
-                    'template_name' => 'remote_radius_' . $data['name'], 
-                    'authpri_ipaddr' => element('authpri_ipaddr', $data['radius'], ''),
-                    'authpri_port' => element('authpri_port', $data['radius'], ''), 
-                    'authpri_key' => element('authpri_key', $data['radius'], ''),
-                    'authsecond_ipaddr' => element('authsecond_ipaddr', $data['radius'], ''), 
-                    'authsecond_port' => element('authsecond_port', $data['radius'], ''),
-                    'authsecond_key' => element('authsecond_key', $data['radius'], ''),
-                    'acctpri_ipaddr' => element('acctpri_ipaddr', $data['radius'], ''),
-                    'acctpri_port' => element('acctpri_port', $data['radius'], ''),
-                    'acctpri_key' => element('acctpri_key', $data['radius'], ''),
-                    'acctsecond_ipaddr' => element('acctsecond_ipaddr', $data['radius'], ''), 
-                    'acctsecond_port' => element('acctsecond_port', $data['radius'], ''),
-                    'acctsecond_key' => element('acctsecond_key', $data['radius'], ''),
-                    'accton_enable' => element('accton_enable', $data['radius'], ''),
-                    'accton_sendtimes' => element('accton_sendtimes', $data['radius'], ''),
-                    'accton_sendinterval' => element('accton_sendinterval', $data['radius'], ''),
-                    'quiet_time' => element('quiet_time', $data['radius'], ''),
-                    'resp_time' => element('resp_time', $data['radius'], ''),
-                    'retry_times' => element('retry_times', $data['radius'], ''),
-                    'acct_interim_interval' => element('acct_interim_interval', $data['radius'], ''),
-                    'realretrytimes' => element('realretrytimes', $data['radius']),
-                    'nasip' => element('acctpri_ipaddr', $data['radius'], ''),
-                    'username_format' => element('username_format', $data['radius'], '')
-                );
+                $radius_ary = $this->getRadiusParams($data); 
                 if(!$this->addRadiusTemplate($radius_ary)){                    
                     return json_encode(json_no('add remote Radius error!'));
                 }            
@@ -597,7 +525,7 @@ class AaaServer_Model extends CI_Model {
                 //重新添加
                 return $this->add($data);
             }                               
-        }
+        }       
         return json_encode(json_ok());
     }
     function del($data) {
@@ -642,7 +570,38 @@ class AaaServer_Model extends CI_Model {
         }
         return json_encode(json_ok());
     }
-/*======================================  GET  ========================================*/
+
+
+/*=======================================  Params =======================================*/
+    private function getRadiusParams($data) {
+        $arr = array(
+            'template_name' => 'remote_radius_' . $data['name'], 
+            'authpri_ipaddr' => element('authpri_ipaddr', $data['radius'], ''), 
+            'authpri_port' => element('authpri_port', $data['radius'], ''), 
+            'authpri_key' => element('authpri_key', $data['radius'], ''), 
+            'authsecond_ipaddr' => element('authsecond_ipaddr', $data['radius'], ''), 
+            'authsecond_port' => element('authsecond_port', $data['radius'], ''), 
+            'authsecond_key' => element('authsecond_key', $data['radius'], ''), 
+            'acctpri_ipaddr' => element('acctpri_ipaddr', $data['radius'], ''), 
+            'acctpri_port' => element('acctpri_port', $data['radius'], ''), 
+            'acctpri_key' => element('acctpri_key', $data['radius'], ''), 
+            'acctsecond_ipaddr' => element('acctsecond_ipaddr', $data['radius'], ''), 
+            'acctsecond_port' => element('acctsecond_port', $data['radius'], ''), 
+            'acctsecond_key' => element('acctsecond_key', $data['radius'], ''), 
+            'accton_enable' => element('accton_enable', $data['radius'], ''), 
+            'accton_sendtimes' => element('accton_sendtimes', $data['radius'], ''), 
+            'accton_sendinterval' => element('accton_sendinterval', $data['radius'], ''), 
+            'quiet_time' => element('quiet_time', $data['radius'], ''), 
+            'resp_time' => element('resp_time', $data['radius'], ''), 
+            'retry_times' => element('retry_times', $data['radius'], ''), 
+            'acct_interim_interval' => element('acct_interim_interval', $data['radius'], ''), 
+            'realretrytimes' => element('realretrytimes', $data['radius']), 
+            'nasip' => element('acctpri_ipaddr', $data['radius'], ''), 
+            'username_format' => element('username_format', $data['radius'], '')
+        );
+        return $arr;
+    }
+/*=======================================  GET    =======================================*/
     private function getRadius($name) {
         $arr = array(
             'radius_template' => $name
@@ -813,7 +772,7 @@ class AaaServer_Model extends CI_Model {
         }
         return  $_SERVER['SERVER_ADDR'];
     }
-/*=======================================  ADD  =======================================*/
+/*=======================================  ADD    =======================================*/
     //1.创建 Radius 模板
     private function addRadiusTemplate($data) {
         $ret = radius_add_template_name(json_encode($data));
@@ -855,7 +814,7 @@ class AaaServer_Model extends CI_Model {
     }
     //5.创建 Portal 认证 ssid和网页模板
 
-/*=======================================  Del   =======================================*/
+/*=======================================  Del    =======================================*/
     // 1.Radius 模板
     private function delRadiusTemplate($data) {
         $ret = radius_del_template_name(json_encode($data));
@@ -902,7 +861,7 @@ class AaaServer_Model extends CI_Model {
     }
 
 
-/*=======================================  Edit  =======================================*/
+/*=======================================  Edit   =======================================*/
     // 1.Radius
     private function editRadiusTemplate($data){
         $ret = radius_edit_template_name(json_encode($data));
@@ -998,7 +957,7 @@ class AaaServer_Model extends CI_Model {
         }        
         return FALSE;
     }
-/*=======================================  select  =======================================*/
+/*=======================================  select =======================================*/
     //判断radius模板是否存在
     private function isRadiusTemplate($name) {
         $ret = $this->db->query("select * from radius_template where template_name='{$name}'")->result_array();
