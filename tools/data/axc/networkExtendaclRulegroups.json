@@ -1,0 +1,129 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "groupList": [
+      {
+        "id": "0",
+        "groupName": "group0",
+        "defaultAction": "accept",
+        "description": "the first group",
+        "ruleNameList": ["rule1", "rule2", "rule3", "rule4"]
+      },
+      {
+        "id": "1",
+        "groupName": "group1",
+        "defaultAction": "reject",
+        "description": "the first group",
+        "ruleNameList": ["rule5", "rule2", "rule3", "rule4"]
+      },
+      {
+        "id": "2",
+        "groupName": "group2",
+        "defaultAction": "redirect",
+        "description": "the first group",
+        "ruleNameList": ["rule6", "rule2", "rule3", "rule4"]
+      }
+    ],
+    "rulesList": [
+      {
+        "id": "0",
+        "ruleName": "rule0",
+        "action": "accept",
+        "ipType": "ipv4",
+        "protoType": "any",
+        "flowDirection": "in",
+        "srcIp": "192.168.0.1",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.100",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "100",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      },
+      {
+        "id": "1",
+        "ruleName": "rule1",
+        "action": "reject",
+        "ipType": "ipv6",
+        "protoType": "tcp",
+        "flowDirection": "out",
+        "srcIp": "192.168.0.2",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.200",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "200",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      },
+      {
+        "id": "2",
+        "ruleName": "rule2",
+        "action": "reject",
+        "ipType": "ipv6",
+        "protoType": "tcp",
+        "flowDirection": "out",
+        "srcIp": "192.168.0.3",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.200",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "200",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      },
+      {
+        "id": "3",
+        "ruleName": "rule3",
+        "action": "reject",
+        "ipType": "ipv6",
+        "protoType": "tcp",
+        "flowDirection": "out",
+        "srcIp": "192.168.0.3",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.200",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "200",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      },
+      {
+        "id": "4",
+        "ruleName": "rule4",
+        "action": "reject",
+        "ipType": "ipv6",
+        "protoType": "tcp",
+        "flowDirection": "out",
+        "srcIp": "192.168.0.3",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.200",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "200",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      },
+      {
+        "id": "5",
+        "ruleName": "rule5",
+        "action": "reject",
+        "ipType": "ipv6",
+        "protoType": "tcp",
+        "flowDirection": "out",
+        "srcIp": "192.168.0.3",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.200",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "200",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      }
+    ]
+  }
+}

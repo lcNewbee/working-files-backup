@@ -620,6 +620,7 @@ const routes = [
                         id: 'extendAclRuleGroups',
                         path: '/main/network/acl/extendacl/rulegroups',
                         formUrl: 'goform/network/extendacl/rulegroups',
+                        saveUrl: 'goform/network/extendacl/rulegroups',
                         text: __('Rule Group Settings'),
                         component: sExtendRuleGroups.Screen,
                       },

@@ -3,6 +3,10 @@
   border: 1px solid #888;
 }
 
+.exchange-wrap > .row {
+  height: 100%;
+}
+
 .box-left, .box-right {
   min-width: 200px;
   border: 1px solid #ccc;
@@ -20,9 +24,8 @@
 }
 
 .exchange-icon-wrap {
-  min-height: 280px;
+  height: 100%;
   text-align: center;
-  vertical-align: center;
 }
 
 .exchange-icon {
@@ -59,6 +62,7 @@ h3 {
   padding: 10px 10px;
   border-bottom: 1px solid #aaa;
   white-space:nowrap;
+  display: block;
 }
 
 .list-item:hover {

@@ -22,7 +22,7 @@ const settings = require('shared/containers/settings');
 const SharedComponents = require('shared/components');
 
 const pMainAP = require('../../screens/MainAP');
-const sWizard = require('../../screens/MainAP/Wizard');
+const sWizard = require('../../screens/MainAP/Wizard/indexForNHZY');
 // const sThinModeNotice = require('../../screens/MainAP/ThinModeNotice');
 // 登录界面
 const pLogin = require('../../screens/Login');

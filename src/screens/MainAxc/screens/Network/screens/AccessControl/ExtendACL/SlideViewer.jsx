@@ -70,7 +70,7 @@ class SlideViewer extends Component {
             <nobr
               style={{
                 left: `${this.state.sliderleft}px`,
-                transition: 'left 1.5s',
+                transition: 'left 1s',
               }}
               ref={(node) => {
                 this.slideWrap = node;

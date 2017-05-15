@@ -62,6 +62,7 @@ export default class ModeSettings extends React.Component {
 
   onSave() {
     this.props.validateAll().then((msg) => {
+      const that = this;
       function validIp(str) {
         const ipArr = str.split('.');
         const ipHead = ipArr[0];
@@ -73,31 +74,47 @@ export default class ModeSettings extends React.Component {
         }
         return '';
       }
+
+      function reportError(str) {
+        that.props.createModal({
+          role: 'alert',
+          text: `${__(str)}`,
+        });
+      }
       if (msg.isEmpty()) {
         const {
           nextMode, currMode, currAcIp, acIp,
         } = this.props.store.get('curData').toJS();
         if (nextMode !== currMode || (acIp !== currAcIp && nextMode === '1')) {
-          // situation 1：mode改变,则验证
-          // situation 2: mode没有改变，而地址改变，则只有在mode开启的时候才验证输入是否正确
-          let validmsg = '';
-          const dominValid = /^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/.test(acIp);
-          const ipValid = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/.test(acIp);
-          if (!ipValid && !dominValid && nextMode === '1') {
-            validmsg = __('Please input a valid cloud address!');
-          } else if (ipValid && nextMode === '1') {
-            validmsg = validIp(acIp);
-          } else if (!dominValid && nextMode === '1') {
-            validmsg = __('Please input a valid cloud address!');
-          }
-          // validmsg不为空，则存在错误
-          if (validmsg !== '') {
-            this.props.createModal({
-              role: 'alert',
-              text: validmsg,
-            });
+          const addrArr = acIp.split(':');
+          // 如果出现多个冒号，返回错误
+          if (addrArr.length > 2) {
+            reportError('Invalid server address!');
             return null;
           }
+          // 验证IP或者域名
+          const dominOrIp = addrArr[0];
+          const dominValid = /^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/.test(dominOrIp);
+          const ipValid = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/.test(dominOrIp);
+          if (nextMode === '1') { // 只有当开关打开，才验证地址是否正确
+            if (!dominValid && !ipValid) {
+              reportError('Invalid domain name or ip address!');
+              return null;
+            } else if (!dominValid && ipValid) {
+              const validmsg = validIp(dominOrIp);
+              if (validmsg !== '') {
+                reportError(validmsg);
+                return null;
+              }
+            }
+            // 验证端口
+            const port = addrArr[1];
+            if (typeof (port) !== 'undefined' && (port < 0 || port > 65535 || parseInt(port, 10).toString() !== port)) {
+              reportError('Invalid server address! Port must be an integer between 0 and 65535 !');
+              return null;
+            }
+          }
+          // 以上验证都通过，则没有错误，保存
           this.props.createModal({
             role: 'alert',
             text: __('Configuration changed, REBOOT to take effect ?'),
@@ -149,9 +166,11 @@ export default class ModeSettings extends React.Component {
           label={__('Cloud Address')}
           value={acIp}
           disabled={nextMode === '0'}
-          help={__('IP or Domain Name')}
+          placeholder={__('IP or Domain Name')}
+          help={__('Example:192.168.0.1:80')}
           onChange={(data) => {
-            this.props.updateItemSettings({ acIp: data.value });
+            const serveradd = data.value.replace(/：/g, ':');
+            this.props.updateItemSettings({ acIp: serveradd });
           }}
           required
           // {...this.props.validateOption.validateIp}

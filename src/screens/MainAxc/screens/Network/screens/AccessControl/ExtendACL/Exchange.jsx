@@ -70,7 +70,16 @@ class Exchange extends Component {
       <div className="exchange-wrap container-grid">
         <div className="row">
 
-          <div className="box-left cols col-5">
+          <div
+            className="box-left cols col-5"
+            onDragOver={(e) => { e.preventDefault(); }}
+            onDrop={() => {
+              this.dropPosition = 'left';
+              if (this.dragPosition !== this.dropPosition) {
+                this.props.onRightListDoubleClick(this.listOnMove);
+              }
+            }}
+          >
             {
               this.props.leftboxtitle ? (
                 <div className="box-head box-head-left row">
@@ -83,6 +92,7 @@ class Exchange extends Component {
                 {
                   this.props.leftboxlist ? (
                     this.props.leftboxlist.map((list) => {
+                      // 通过标签showInBox控制该项是否显示在box中
                       const listshowinbox = this.props.listOptions.filter(item => item.get('showInBox'));
                       return (
                         <li
@@ -92,14 +102,6 @@ class Exchange extends Component {
                           onDrag={() => {
                             this.listOnMove = list;
                             this.dragPosition = 'left';
-                          }}
-                          onDragOver={(e) => { e.preventDefault(); }}
-                          onDrop={() => {
-                            this.dropPosition = 'left';
-                            if (this.dragPosition !== this.dropPosition) {
-                              console.log('position', this.dragPosition, this.dropPosition);
-                              this.props.onRightListDoubleClick(list);
-                            }
                           }}
                         >
                           {
@@ -129,7 +131,16 @@ class Exchange extends Component {
             </div>
           </div>
 
-          <div className="box-right cols col-5">
+          <div
+            className="box-right cols col-5"
+            onDragOver={(e) => { e.preventDefault(); }}
+            onDrop={() => {
+              this.dropPosition = 'right';
+              if (this.dragPosition !== this.dropPosition) {
+                this.props.onLeftListDoubleClick(this.listOnMove);
+              }
+            }}
+          >
             {
               this.props.rightboxtitle ? (
                 <div className="box-head box-head-right row">
@@ -161,13 +172,6 @@ class Exchange extends Component {
                           onDrag={() => {
                             this.listOnMove = list;
                             this.dragPosition = 'right';
-                          }}
-                          onDragOver={(e) => { e.preventDefault(); }}
-                          onDrop={() => {
-                            this.dropPosition = 'right';
-                            if (this.dragPosition !== this.dropPosition) {
-                              this.props.onLeftListDoubleClick(list);
-                            }
                           }}
                         >
                           {

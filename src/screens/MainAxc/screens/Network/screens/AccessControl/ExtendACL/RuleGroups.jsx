@@ -1,6 +1,7 @@
 import React from 'react';
-import { fromJS } from 'immutable';
-import { Button, Icon } from 'shared/components';
+import PropTypes from 'prop-types';
+import { fromJS, Map } from 'immutable';
+import { Button, Icon, FormInput } from 'shared/components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
@@ -10,212 +11,309 @@ import SlideViewer from './SlideViewer';
 import Exchange from './Exchange';
 import './style.scss';
 
-const exchangeListOptions = fromJS([
-  {
-    id: 'index',
-    label: __('Index'),
-    showInBox: true,
-    type: 'text',
-    formProps: {
-      type: 'text',
-    },
-  },
-  {
-    id: 'name',
-    label: __('Name'),
-    showInBox: true,
-    formProps: {
-      type: 'text',
-    },
-  },
-]);
+const protoTypeOptions = [
+  { label: 'any', value: 'any' },
+  { label: 'icmp', value: 'icmp' },
+  { label: 'tcp', value: 'tcp' },
+  { label: 'udp', value: 'udp' },
+  { label: 'icmpv6', value: 'icmpv6' },
+];
+
+const flowDirectionOptions = [
+  { label: 'IN', value: 'in' },
+  { label: 'OUT', value: 'out' },
+  { label: 'FORWARD', value: 'forward' },
+];
+
+const propTypes = {
+  store: PropTypes.instanceOf(Map),
+  save: PropTypes.func,
+  fetchScreenData: PropTypes.func,
+  route: PropTypes.object,
+};
+
+const defaultProps = {
+};
+
+function getLeftBoxList(ruleNameListInGroup, allRules) {
+  if (typeof allRules === 'undefined') return fromJS([]);
+  const ruleDetailListInGroup = allRules.filter((item) => {
+    const name = item.get('ruleName');
+    if (ruleNameListInGroup.includes(name)) return true;
+    return false;
+  });
+  return ruleDetailListInGroup;
+}
+
+function getRightBoxList(ruleNameListInGroup, allRules) {
+  if (typeof allRules === 'undefined') return fromJS([]);
+  const ruleDetailListNotInGroup = allRules.filter((item) => {
+    const name = item.get('ruleName');
+    if (!ruleNameListInGroup.includes(name)) return true;
+    return false;
+  });
+  return ruleDetailListNotInGroup;
+}
+
 
 export default class View extends React.Component {
   constructor(props) {
     super(props);
+    this.groupOnEdit = '';
+    this.state = {
+      leftboxlist: fromJS([]),
+      rightboxlist: fromJS([]),
+    };
+
+    utils.binds(this, [
+      'onSlideBtnClick', 'saveGroupRulesChange',
+    ]);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const curScreenId = newProps.store.get('curScreenId');
+    const allRules = newProps.store.getIn([curScreenId, 'data', 'rulesList']);
+    const allGroups = newProps.store.getIn([curScreenId, 'data', 'groupList']);
+    // if there is no group has the same name as this.groupOnEdit, set this.groupOnEdit value to first group name.
+
+
+    let ruleNameListInGroup = '';
+    // 这里要修改，改成显示当前组的列表
+    if (this.groupOnEdit === '') {
+      // first time come into this page, this.groupOnEdit has no value, give the first group as default.
+      ruleNameListInGroup = newProps.store.getIn([curScreenId, 'data', 'groupList', '0', 'ruleNameList']);
+    } else {
+      // this.groupOnEdit has value already
+
+    }
+
+    const ruleDetailListInFirstGroup = getLeftBoxList(ruleNameListInGroup, allRules);
+    const ruleDetailListNotInFirstGroup = getRightBoxList(ruleNameListInGroup, allRules);
+    this.setState({
+      leftboxlist: ruleDetailListInFirstGroup,
+      rightboxlist: ruleDetailListNotInFirstGroup,
+    });
+  }
+
+  onSlideBtnClick(item) {
+    const curScreenId = this.props.store.get('curScreenId');
+    const allRules = this.props.store.getIn([curScreenId, 'data', 'rulesList']);
+    const ruleNameListInGroup = item.get('ruleNameList');
+    const ruleDetailListInGroup = getLeftBoxList(ruleNameListInGroup, allRules);
+    const ruleDetailListNotInGroup = getRightBoxList(ruleNameListInGroup, allRules);
+    this.setState({
+      leftboxlist: ruleDetailListInGroup,
+      rightboxlist: ruleDetailListNotInGroup,
+    });
+  }
+
+  onLeftListDoubleClick(item) {
+    const curScreenId = this.props.store.get('curScreenId');
+    const data = this.props.store.getIn([curScreenId, 'data']);
+    const groupList = data.get('groupList');
+    const groupOnEditIndex = groupList.findIndex(groupItem => groupItem.get('groupName') === this.groupOnEdit);
+    const ruleNameListOnEdit = groupList.getIn([groupOnEditIndex, 'ruleNameList']);
+    const newRuleNameList = ruleNameListOnEdit.filter(name => name !== item.get('ruleName'));
+    const newData = data.setIn(['groupList', groupOnEditIndex, 'ruleNameList'], newRuleNameList);
+    this.saveGroupRulesChange(newData);
+  }
+
+  onRightListDoubleClick(item) {
+    const curScreenId = this.props.store.get('curScreenId');
+    const data = this.props.store.getIn([curScreenId, 'data']);
+    const groupList = data.get('groupList');
+    const groupOnEditIndex = groupList.findIndex(groupItem => groupItem.get('groupName') === this.groupOnEdit);
+    const ruleNameListOnEdit = groupList.getIn([groupOnEditIndex, 'ruleNameList']);
+    const newRuleNameList = ruleNameListOnEdit.push(item.get('ruleName'));
+    const newData = data.setIn(['groupList', groupOnEditIndex, 'ruleNameList'], newRuleNameList);
+    this.saveGroupRulesChange(newData);
+  }
+
+  saveGroupRulesChange(data) {
+    this.props.save(this.props.route.saveUrl, data.toJS()).then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.fetchScreenData();
+      }
+    });
   }
 
   render() {
-    const slidelist = fromJS([
+    const store = this.props.store;
+    const curScreenId = store.get('curScreenId');
+    const curListItem = store.getIn([curScreenId, 'curListItem']);
+    const listOptions = fromJS([
       {
-        id: '1',
-        name: 'GROUP1',
+        id: 'id',
+        type: 'text',
+        label: __('Rule ID'),
+        formProps: {
+          noAdd: true,
+        },
+        notEditable: true,
+        showInBox: true,
       },
       {
-        id: '2',
-        name: 'GROUP2',
+        id: 'ruleName',
+        label: __('Rule Name'),
+        type: 'text',
+        showInBox: true,
       },
       {
-        id: '3',
-        name: 'GROeUP3',
+        id: 'action',
+        label: __('Action'),
+        type: 'select',
+        options: [
+          { label: __('Accept'), value: 'accept' },
+          { label: __('Reject'), value: 'reject' },
+          { label: __('Redirect'), value: 'redirect' },
+        ],
+        formProps: {
+          type: 'select',
+        },
       },
       {
-        id: '4',
-        name: 'GROeeeeeeUP4',
+        id: 'protoType',
+        type: 'select',
+        label: __('Protocol'),
+        options: protoTypeOptions,
+        formProps: {
+          type: 'select',
+        },
       },
       {
-        id: '5',
-        name: 'GROUP5',
+        id: 'flowDirection',
+        label: __('Flow Direction'),
+        formProps: {
+          type: 'select',
+          options: flowDirectionOptions,
+        },
       },
       {
-        id: '6',
-        name: 'GROUP6',
+        id: 'srcIp',
+        label: __('Source IP'),
+        formProps: {
+          type: 'text',
+        },
       },
       {
-        id: '7',
-        name: 'GROUP7',
+        id: 'srcIpMask',
+        label: __('Source IP Mask'),
+        formProps: {
+          type: 'text',
+        },
       },
       {
-        id: '8',
-        name: 'GROeUP8',
+        id: 'destIp',
+        label: __('Destination IP'),
+        formProps: {
+          type: 'text',
+        },
       },
       {
-        id: '9',
-        name: 'GROeeeeeeUP9',
+        id: 'destIpMask',
+        label: __('Destination IP Mask'),
+        formProps: {
+          type: 'text',
+        },
       },
       {
-        id: '10',
-        name: 'GROUP10',
+        id: 'srcPortRange',
+        label: __('Source Port'),
+        render: (val, item) => {
+          const srcStartPort = item.get('srcStartPort');
+          const srcEndPort = item.get('srcEndPort');
+          return `${srcStartPort} - ${srcEndPort}`;
+        },
+        formProps: {
+          children: [
+            <FormInput
+              type="number"
+              className="fl"
+              style={{ width: '93px' }}
+              value={curListItem.get('srcStartPort')}
+            />,
+            <span
+              className="fl"
+              style={{ marginTop: '5px' }}
+            >
+              {'-- '}
+            </span>,
+            <FormInput
+              type="number"
+              className="fl"
+              style={{ width: '93px' }}
+              value={curListItem.get('srcEndPort')}
+            />,
+          ],
+        },
+      },
+      {
+        id: 'destPortRange',
+        label: __('Destination Port'),
+        render: (val, item) => {
+          const destStartPort = item.get('srcStartPort');
+          const destEndPort = item.get('srcEndPort');
+          return `${destStartPort} - ${destEndPort}`;
+        },
+        formProps: {
+          children: [
+            <FormInput
+              type="number"
+              className="fl"
+              style={{ width: '93px' }}
+              value={curListItem.get('destStartPort')}
+            />,
+            <span
+              className="fl"
+              style={{ marginTop: '5px' }}
+            >
+              {'-- '}
+            </span>,
+            <FormInput
+              type="number"
+              className="fl"
+              style={{ width: '93px' }}
+              value={curListItem.get('destEndPort')}
+            />,
+          ],
+        },
       },
     ]);
 
     return (
-      <div className="container-grid">
-        <div className="row">
-          <SlideViewer
-            slidedirection="horizontal"
-            slidekey="name"
-            contentwidth="150"
-            slidelist={slidelist}
-            onSlideBtnClick={(val) => {
-              console.log(val);
-            }}
-          />
-          {/* <div className="group-slide-wrap cols col-10 col-offset-1">
-            <div className="left-caret cols col-1">
-              <Icon
-                name="caret-left"
-                style={{ color: '#0083cd' }}
-                size="4x"
-              />
-            </div>
-            <div className="slide-view cols col-10">
-              <div className="group-slide">
-                <nobr>
-                  <Button
-                    theme="primary"
-                    text="GROUP1"
-                    size="lg"
-                    className="group-button"
-                  />
-                  <Button
-                    theme="primary"
-                    text="GROUP2"
-                    size="lg"
-                    className="group-button"
-                  />
-                  <Button
-                    theme="primary"
-                    text="GROUP3"
-                    size="lg"
-                    className="group-button"
-                  />
-                  <Button
-                    theme="primary"
-                    text="GROUP4"
-                    size="lg"
-                    className="group-button"
-                  />
-                  <Button
-                    theme="primary"
-                    text="GROUP5"
-                    size="lg"
-                    className="group-button"
-                  />
-                  <Button
-                    theme="primary"
-                    text="GROUP6"
-                    size="lg"
-                    className="group-button"
-                  />
-                  <Button
-                    theme="primary"
-                    text="GROUP7"
-                    size="lg"
-                    className="group-button"
-                  />
-                </nobr>
-              </div>
-            </div>
-            <div className="right-caret cols col-1">
-              <Icon
-                name="caret-right"
-                style={{ color: '#0083cd' }}
-                size="4x"
-              />
-            </div>
-          </div>*/}
-          {/*<div className="group-config-wrap cols col-10 col-offset-1 text-justify">
-            <div className="list-in-group cols col-5">
-              <div className="list-in-group-head" />
-              <div className="list-in-group-body" />
-            </div>
-            <div className="exchange-arrow cols col-2">
-              <Icon
-                name="exchange"
-                style={{ color: '#0083cd' }}
-                size="4x"
-              />
-            </div>
-            <div className="list-out-group cols col-5">
-              <div className="list-out-group-head">
-                <Icon
-                  name="plus"
-                  size="2x"
-                  style={{ color: '#0083cd' }}
-                />
-              </div>
-              <div className="list-out-group-body" />
-            </div>
-          </div>*/}
-          <Exchange
-            leftboxtitle="Left Box"
-            rightboxtitle="Right Box"
-            rightaddbutton
-            listOptions={exchangeListOptions}
-            onEditModalOk={(list) => { console.log(list.toJS()); }}
-            onAddModalOk={(list) => { console.log(list.toJS()); }}
-            onDeleteBtnClick={(list) => { console.log(list.toJS()); }}
-            onRightListDoubleClick={(list) => { console.log(list.toJS()); }}
-            onLeftListDoubleClick={(list) => { console.log(list.toJS()); }}
-            leftboxlist={fromJS([
-              { index: '1', name: 'the first rule' },
-              { index: '2', name: 'the second rule' },
-              { index: '3', name: 'the third rule' },
-              { index: '4', name: 'the fourth rule' },
-              { index: '1', name: 'the first rule' },
-              { index: '2', name: 'the second rule' },
-              { index: '3', name: 'the third rule' },
-              { index: '4', name: 'the fourth rule' },
-              { index: '1', name: 'the first rule' },
-            ])}
-            rightboxlist={fromJS([
-              { index: '1', name: 'the first rule' },
-              { index: '2', name: 'the second rule' },
-              { index: '3', name: 'the third rule' },
-              { index: '4', name: 'the fourth rule' },
-              { index: '1', name: 'the first rule' },
-              { index: '2', name: 'the second rule' },
-              { index: '3', name: 'the third rule' },
-              { index: '4', name: 'the fourth rule' },
-              { index: '1', name: 'the first rule' },
-            ])}
-          />
-        </div>
-      </div>
+      <AppScreen
+        {...this.props}
+      >
+        <SlideViewer
+          slidedirection="horizontal"
+          slidekey="groupName"
+          contentwidth="150"
+          slidelist={this.props.store.getIn([curScreenId, 'data', 'groupList'])}
+          onSlideBtnClick={(item) => {
+            this.groupOnEdit = item.get('groupName');
+            this.onSlideBtnClick(item);
+          }}
+        />
+        <Exchange
+          leftboxtitle="Left Box"
+          rightboxtitle="Right Box"
+          rightaddbutton
+          listOptions={listOptions}
+          onEditModalOk={(list) => { console.log(list.toJS()); }}
+          onAddModalOk={(list) => { console.log(list.toJS()); }}
+          onDeleteBtnClick={(list) => { console.log(list.toJS()); }}
+          onRightListDoubleClick={(list) => { this.onRightListDoubleClick(list); }}
+          onLeftListDoubleClick={(list) => { this.onLeftListDoubleClick(list); }}
+          leftboxlist={this.state.leftboxlist}
+          rightboxlist={this.state.rightboxlist}
+        />
+      </AppScreen>
     );
   }
 }
+
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {

@@ -39,7 +39,7 @@ const paths = {
   pubASC6: '../svn/ap_web/ASC6_web',
   pubASW120: '../svn/ap_web/ASW120_web',
 
-  pubNHZYASW120: '../NHZYASW120_web',
+  pubNHZYASW120: '../svn_NHZY/NHZYASW120_web',
 };
 
 // 默认值
@@ -111,6 +111,7 @@ function changeTitle(name) {
 function noBrandTitle() {
   return gulp.src([`${paths.build}/index.html`])
       .pipe($.replace('<title>Axilspot Access Manager</title>', '<title>Access Point</title>'))
+      .pipe($.replace('<h3>Axilspot</h3>', '<h3>Loading</h3>'))
       .pipe($.replace('Axilspot', ''))
       .pipe(gulp.dest(paths.build));
 }
