@@ -179,7 +179,7 @@ class WirelessSsid_Model extends CI_Model {
                 $this->delPoartalSsid($data['ssid']);
             }
 			if($accessControl === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {
-                if($this->getPortalSsidState($data['ssid'], $data['auth'])) {
+                if($this->getPortalSsidState('local_ssid_local', $data['ssid'])) {
                     //有记录就修改
                     $this->editPoartalSsid($data['ssid'], $data['auth'], $temp_data['mandatorydomain']);
                 }else{
