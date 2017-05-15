@@ -12,15 +12,15 @@ class WirelessSsid extends CI_Controller {
         $retdata = array(
             'groupid' => (int)element('groupid', $_GET),
             'filterGroupid' => (int)element('filterGroupid', $_GET,0)
-        );        
-        return $this->WirelessSsid_Model->get_ssid_list($retdata);		
+        );
+        return $this->WirelessSsid_Model->get_ssid_list($retdata);
     }
     function onAction($data) {
         $result = null;
-        $actionType = element('action', $data);		
+        $actionType = element('action', $data);
         if ($actionType === 'add') {
             $result = $this->WirelessSsid_Model->add_ssid($data);
-        } elseif ($actionType === 'edit') {
+        } elseif ($actionType === 'edit' || $actionType === 'active') {
             $result = $this->WirelessSsid_Model->update_ssid($data);
         } elseif ($actionType === 'delete') {
             $result = $this->WirelessSsid_Model->delete_ssid($data);

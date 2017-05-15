@@ -26,8 +26,8 @@ class NetworkPort extends CI_Controller {
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
-		if ($actionType === 'edit') {
-			$result = $this->NetworkPort_Model->add_port($data);			
+		if ($actionType === 'edit' || $actionType === 'active') {
+			$result = $this->NetworkPort_Model->add_port($data);
 		} elseif ($actionType === 'delete') {
             /*
 			$keys = array("portname");

@@ -316,6 +316,7 @@ export default class AppScreen extends React.Component {
               fetchUrl={fetchUrl}
               saveUrl={saveUrl}
               actionable={myActionable}
+              loading={this.state.loading}
             />
           ) : null
         }

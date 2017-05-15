@@ -539,8 +539,11 @@ const listOptions = fromJS([
   {
     id: 'enabled',
     text: __('Status'),
-    options: checkboxOptions,
+    // options: checkboxOptions,
+    type: 'switch',
+    actionName: 'active',
     defaultValue: '1',
+    noForm: true,
     formProps: {
       type: 'checkbox',
       value: '1',

@@ -68,6 +68,9 @@ const listOptions = fromJS([
   }, {
     id: 'status',
     text: __('Port Status'),
+    type: 'switch',
+    actionName: 'active',
+    noForm: true,
     options: [
       {
         value: 1,

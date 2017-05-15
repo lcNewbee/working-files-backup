@@ -169,7 +169,8 @@ const listOptions = fromJS([
       const id = $$data.get('id');
       let ret = val;
 
-      if (id === '2') {
+      // 所有认证 与 默认 项没有自己的重定向 URL
+      if (id === '2' || id === '1') {
         ret = '-';
       }
 

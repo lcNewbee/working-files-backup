@@ -31,7 +31,7 @@
         "remark": "Market_2",
         "vlanId": "223",
         "nasId": "ds",
-        "enabled": "0",
+        "enabled": "1",
         "hiddenSsid": "1",
         "compulsoryAuth": "1",
         "maxSsidUsers": "4095",

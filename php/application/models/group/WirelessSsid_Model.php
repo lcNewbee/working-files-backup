@@ -69,15 +69,15 @@ class WirelessSsid_Model extends CI_Model {
         } else {
             $arr = array('groupid' => (int)element('groupid', $retdata));
             $result = axc_get_wireless_ssid(json_encode($arr));
-            $cgiary = json_decode($result,true);            
+            $cgiary = json_decode($result,true);
             $list = array();
-            if(is_array($cgiary) && $cgiary['state']['code'] == 2000){                
+            if(is_array($cgiary) && $cgiary['state']['code'] == 2000){
                 foreach($cgiary['data']['list'] as $row) {
                     if($row['mandatorydomain'] != "" && $row['encryption'] != '802.1x'){
                          $row['accessControl'] = 'portal';
                     }
-                    $sql = "SELECT * FROM `portal_ssid` WHERE `ssid`='{$row['ssid']}' AND `apmac`=''";                    
-                    $query = $this->portalsql->query($sql)->result_array();                    
+                    $sql = "SELECT * FROM `portal_ssid` WHERE `ssid`='{$row['ssid']}' AND `apmac`=''";
+                    $query = $this->portalsql->query($sql)->result_array();
                     if(count($query) > 0){
                         $row['accessControl'] = 'portal';
                         $row['auth'] = $query[0]['web'];
@@ -90,32 +90,32 @@ class WirelessSsid_Model extends CI_Model {
             return json_encode($cgiary);
         }
         return $result;
-    }    
+    }
     public function add_ssid($data) {
         $result = null;
         $temp_data = $this->getCgiParam($data);
 		//判断是否选择了1x 认证，并且没选择aaa模板 将默认的local清除
 		if($data['encryption'] === '802.1x' && $data['mandatorydomain'] === 'local'){
             $temp_data['mandatorydomain'] = '';
-        }		
+        }
 		//判断是否选择portal模板
         if($data['accessControl'] === 'portal') {
-            //使用portal 
-            //1. 用portal模板得到aaa模板        
+            //使用portal
+            //1. 用portal模板得到aaa模板
             $aaa_template = $this->getDomain($data['portalTemplate']);
 			$temp_data['mandatorydomain'] = $aaa_template;
         }
         if($data['accessControl'] === 'none' && $data['encryption'] != '802.1x'){
             $temp_data['mandatorydomain'] = '';
         }
-        
+
         $result = axc_add_wireless_ssid(json_encode($temp_data));
         $cgiObj = json_decode($result);
-        if( is_object($cgiObj) && $cgiObj->state->code === 2000) {		
+        if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
             //绑定portal
             if($data['accessControl'] === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {
                 $this->binPortalTemplate($data['auth'], $data['ssid'], $temp_data['mandatorydomain']);
-            }	
+            }
             //log
             $logary = array(
                 'type'=>'Add',
@@ -124,7 +124,7 @@ class WirelessSsid_Model extends CI_Model {
                 'operationResult'=>'ok',
                 'description'=>""
             );
-            Log_Record($this->db,$logary);            
+            Log_Record($this->db,$logary);
         }
         return $result;
     }
@@ -153,28 +153,32 @@ class WirelessSsid_Model extends CI_Model {
     public function update_ssid($data) {
         $result = null;
         $temp_data = $this->getCgiParam($data);
+
+        // 默认值为 none
+        $accessControl = element('accessControl', $data, 'none');
+
 		//判断是否选择了1x 认证，并且没选择aaa模板 将默认的local清除
 		if($data['encryption'] === '802.1x' && $data['mandatorydomain'] === 'local'){
             $temp_data['mandatorydomain'] = '';
-        }		
-		//判断是否选择portal模板
-        if($data['accessControl'] === 'portal') {
-            //使用portal 
-            //1. 用portal模板得到aaa模板        
-            $aaa_template = $this->getDomain($data['portalTemplate']);
-			$temp_data['mandatorydomain'] = $aaa_template;
         }
-        if($data['accessControl'] === 'none' && $data['encryption'] != '802.1x'){
+		//判断是否选择portal模板
+        if($accessControl === 'portal') {
+            //使用portal
+            //1. 用portal模板得到aaa模板
+            $aaa_template = $this->getDomain($data['portalTemplate']);
+		    	  $temp_data['mandatorydomain'] = $aaa_template;
+        }
+        if($accessControl === 'none' && $data['encryption'] != '802.1x'){
             $temp_data['mandatorydomain'] = '';
         }
         $result = axc_modify_wireless_ssid(json_encode($temp_data));
         $cgiObj = json_decode($result);
-        if( is_object($cgiObj) && $cgiObj->state->code === 2000) {            
-            if($data['accessControl'] === 'none'){
+        if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+            if($accessControl === 'none'){
                 //没有选择portal认证 删除全部ssid下的portal_ssid
                 $this->delPoartalSsid($data['ssid']);
             }
-			if($data['accessControl'] === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {   
+			if($accessControl === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {
                 if($this->getPortalSsidState($data['ssid'], $data['auth'])) {
                     //有记录就修改
                     $this->editPoartalSsid($data['ssid'], $data['auth'], $temp_data['mandatorydomain']);
@@ -182,8 +186,8 @@ class WirelessSsid_Model extends CI_Model {
                     //没有就添加
                     $this->binPortalTemplate($data['auth'], $data['ssid'], $temp_data['mandatorydomain']);
                 }
-                
-            }            
+
+            }
             //log
             $logary = array(
                 'type'=>'Update',
@@ -289,7 +293,7 @@ class WirelessSsid_Model extends CI_Model {
 		$sqlcmd .= " where portal_auth.portal_name='{$portal}' AND portal_params.attr_id =3";
 		$query = $this->db->query($sqlcmd)->result_array();
         if(count($query) > 0 && $query[0]['attr_value']) {
-            return $query[0]['attr_value'];            
+            return $query[0]['attr_value'];
         }
         return '';
     }
@@ -305,9 +309,9 @@ class WirelessSsid_Model extends CI_Model {
 	/**
      * 绑定portal模板 操作portal_ssid表
      * @web_template 网页模板
-     * @ssid 
+     * @ssid
     */
-    private function binPortalTemplate($web_template, $ssid, $domain) {    
+    private function binPortalTemplate($web_template, $ssid, $domain) {
         $arr = array(
             'name'=> 'local_ssid_' . $domain,
             'address'=>'',//地址
@@ -316,37 +320,37 @@ class WirelessSsid_Model extends CI_Model {
             'des'=>'',//描述
             'ssid'=> $ssid,
             'apmac'=> ''
-        );        
+        );
         if($this->portalsql->insert('portal_ssid',$arr)){
             return True;
         }
-        return FALSE;               
+        return FALSE;
     }
 	//修改portal_ssid
-	private function editPoartalSsid($ssid, $web_template, $domain) {     
+	private function editPoartalSsid($ssid, $web_template, $domain) {
         $arr = array(
             'name'=> 'local_ssid_' . $domain,
             'basip'=> $this->getInterface(),
-            'web' => $web_template          
+            'web' => $web_template
         );
         $this->portalsql->where('ssid', $ssid);
         $this->portalsql->where('apmac', '');
-        $this->portalsql->update('portal_ssid', $arr);                
+        $this->portalsql->update('portal_ssid', $arr);
     }
     //删除portal_ssid
 	private function delPoartalSsid($ssid) {
         $this->portalsql->where('ssid', $ssid);
-        $this->portalsql->delete('portal_ssid');        
+        $this->portalsql->delete('portal_ssid');
     }
 
     //检测是否可
     private function isPortalAdd($ssid) {
-        $sql = "SELECT * FROM `portal_ssid` WHERE `ssid`='{$ssid}' AND `apmac`=''";                    
-        $query = $this->portalsql->query($sql)->result_array();                    
+        $sql = "SELECT * FROM `portal_ssid` WHERE `ssid`='{$ssid}' AND `apmac`=''";
+        $query = $this->portalsql->query($sql)->result_array();
         if(count($query) > 0){
             return FALSE;
-        }   
-        return TRUE;     
+        }
+        return TRUE;
     }
 
     private function getInterface() {

@@ -302,9 +302,9 @@ const routes = [
               {
                 id: 'dpi',
                 icon: 'copy',
-                //label: __('beta'),
+                // label: __('beta'),
                 path: '/main/network/dpi',
-                text: __('App Analyze'),
+                text: __('Application Analyze'),
                 indexPath: '/main/network/dpi/dpioverview',
                 routes: [
                   {
@@ -591,13 +591,13 @@ const routes = [
                 icon: 'user-o',
                 text: __('Local Server'),
                 routes: [
-                  {
-                    id: 'portalRadiusNas',
-                    path: '/main/portal/local/radius',
-                    formUrl: 'goform/portal/radius/nas',
-                    text: __('Radius Server'),
-                    component: sPortalNas.Screen,
-                  },
+                  // {
+                  //   id: 'portalRadiusNas',
+                  //   path: '/main/portal/local/radius',
+                  //   formUrl: 'goform/portal/radius/nas',
+                  //   text: __('Radius Server'),
+                  //   component: sPortalNas.Screen,
+                  // },
                   {
                     id: 'portalAccess',
                     isIndex: true,

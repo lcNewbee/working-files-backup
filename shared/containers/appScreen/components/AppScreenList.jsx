@@ -28,6 +28,9 @@ const propTypes = {
   saveUrl: PropTypes.string,
   listTitle: PropTypes.string,
 
+  // AppScreen 组件的加载状态
+  loading: PropTypes.bool,
+
   // 用于配置 list表格主键，用于Ajax保存
   listKey: PropTypes.string,
   maxListSize: PropTypes.oneOfType([
@@ -42,6 +45,7 @@ const propTypes = {
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
   saveFile: PropTypes.func,
+
 
   // 通用控制开关选项
   customModal: PropTypes.bool,
@@ -959,7 +963,11 @@ class AppScreenList extends React.PureComponent {
               list={list}
               page={page}
               onPageChange={this.onPageChange}
-              // loading={store.get('fetching')}
+
+              // 必须要父级 AppScreen 已处理加载状态后
+              // 且 AppScreen 不是加载中，
+              // 用于 相应 列表中单元素的操作事件,显示数据交互过程
+              loading={this.props.loading === false && store.get('fetching')}
               selectable={selectable}
               onRowSelect={this.props.selectListItem}
             />

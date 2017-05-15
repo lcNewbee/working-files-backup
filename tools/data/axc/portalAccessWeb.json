@@ -4,15 +4,6 @@
     "msg": "ok"
   },
   "data": {
-    "page": {
-      "start": 1,
-      "size": 20,
-      "currPage": 1,
-      "totalPage": 1,
-      "total": 6,
-      "nextPage": -1,
-      "lastPage": 1
-    },
     "list": [{
       "id": "1",
       "name": "Default",

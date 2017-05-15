@@ -1,9 +1,8 @@
 import React from 'react'; import PropTypes from 'prop-types';
-import { fromJS, List, Map } from 'immutable';
+import { List, Map } from 'immutable';
 import { $$commonPieOption } from 'shared/config/axc';
 import EchartReact from 'shared/components/EchartReact';
 
-import Select from 'shared/components/Select';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
@@ -11,35 +10,6 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
-const msg = {
-  days: __('Days'),
-};
-const timeTypeSwitchs = fromJS([
-  {
-    value: '-1',
-    label: __('Current'),
-  },
-  {
-    value: '0',
-    label: __('Today'),
-  },
-  {
-    value: '1',
-    label: __('Yesterday'),
-  },
-  {
-    value: '7',
-    label: `7 ${msg.days}`,
-  },
-  {
-    value: '15',
-    label: `15 ${msg.days}`,
-  },
-  {
-    value: '30',
-    label: `30 ${msg.days}`,
-  },
-]);
 function getEchartOptionByName(serverData, listName) {
   let dataList = serverData.get(listName);
   const ret = $$commonPieOption.mergeDeep({
@@ -112,8 +82,29 @@ function getEchartOptionByName(serverData, listName) {
   return ret;
 }
 
+// 没有获取到启用状态时  要依据实际情况 显示加载中 或 禁用提示
+function renderNotEnable(statusInt) {
+  return (
+    statusInt === 0 ? (
+      <div
+        style={{
+          fontWeight: 'bold',
+          fontSize: '20px',
+          paddingLeft: '160px',
+          marginTop: '30px',
+          color: '#CCC',
+        }}
+      >
+        {__('Application Analyze Disabled')}
+      </div>
+    ) : null
+  );
+}
+
 const propTypes = {
   store: PropTypes.instanceOf(Map),
+  changeScreenQuery: PropTypes.func,
+  fetchScreenData: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -123,6 +114,7 @@ export default class DPIOverview extends React.Component {
 
     utils.binds(this, [
       'onChangeTimeType',
+      'renderNotEnable',
     ]);
   }
 
@@ -132,9 +124,10 @@ export default class DPIOverview extends React.Component {
   }
 
   render() {
+    const { store } = this.props;
     const curScreenId = this.props.store.get('curScreenId');
     const serverData = this.props.store.getIn([curScreenId, 'data']);
-    const store = this.props.store;
+    const statusInt = parseInt(store.getIn([curScreenId, 'curSettings', 'ndpiEnable']), 10);
 
     return (
       <AppScreen
@@ -148,7 +141,7 @@ export default class DPIOverview extends React.Component {
         }}
       >
         {
-          this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '1' ? (
+          statusInt === 1 ? (
             <div className="t-overview" style={{ minWidth: '1100px' }}>
               {/* <div className="element t-overview__section-header">
                 <h3>
@@ -260,21 +253,7 @@ export default class DPIOverview extends React.Component {
                 </div>
               </div>
             </div>
-          ) : (
-            this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '0' ? (
-              <div
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: '20px',
-                  paddingLeft: '230px',
-                  marginTop: '30px',
-                  color: '#CCC',
-                }}
-              >
-                {__('NDPI Disabled')}
-              </div>
-            ) : null
-          )
+          ) : renderNotEnable(statusInt)
         }
       </AppScreen>
     );
