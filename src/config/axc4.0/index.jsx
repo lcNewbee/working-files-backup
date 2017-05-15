@@ -1390,7 +1390,7 @@ const routes = [
                 isIndex: true,
                 path: '/main/system/firewall',
                 icon: 'dot-circle-o ',
-                text: __('FireWall'),
+                text: __('Firewall'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 indexPath: '/main/system/firewall/attackdefense',

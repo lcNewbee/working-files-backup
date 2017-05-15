@@ -1,0 +1,32 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "page": {
+      "start": 1,
+      "size": 20,
+      "currPage": 1,
+      "totalPage": 1,
+      "total": 11,
+      "pageCount": 11,
+      "nextPage": -1,
+      "lastPage": 1
+    },
+    "list": [
+        {
+            "mac": "00:11:22:33:44:55",
+            "dos_type": "syn-flood"
+        },
+        {
+            "mac": "00:11:22:33:44:66",
+            "dos_type": "icmp-flood"
+        },
+        {
+            "mac": "00:11:22:33:44:77",
+            "dos_type": "udp-flood"
+        }
+    ]
+  }
+}

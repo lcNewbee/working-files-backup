@@ -152,6 +152,10 @@ const sApModel =
     require('../../screens/MainAxc/screens/System/screens/ApModel');
 const sAcMaintenance =
     require('../../screens/MainAxc/screens/System/screens/AcMaintenance');
+const sAttackDefense =
+    require('../../screens/MainAxc/screens/System/screens/Firewall/screens/attackDefenseSetting');
+const sFirewallBlackList =
+    require('../../screens/MainAxc/screens/System/screens/Firewall/screens/blackList');
 const sNetworkTimeProtocol =
     require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
@@ -869,6 +873,32 @@ const routes = [
                 icon: 'cog',
                 text: __('AC Maintenance'),
                 component: sAcMaintenance.Screen,
+              }, {
+                id: 'firewall',
+                isIndex: true,
+                path: '/main/system/firewall',
+                icon: 'dot-circle-o ',
+                text: __('Firewall'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                indexPath: '/main/system/firewall/attackdefense',
+                routes: [
+                  {
+                    id: 'attackDefense',
+                    isIndex: true,
+                    formUrl: 'goform/system/firewall/attackdefense',
+                    path: '/main/system/firewall/attackdefense',
+                    text: __('Attack Defense'),
+                    component: sAttackDefense.Screen,
+                  }, {
+                    id: 'firewallBlackList',
+                    isIndex: true,
+                    formUrl: 'goform/system/firewall/balcklist',
+                    path: '/main/system/firewall/balcklist',
+                    text: __('Black List'),
+                    component: sFirewallBlackList.Screen,
+                  },
+                ],
               }, {
                 id: 'ntp',
                 isIndex: true,

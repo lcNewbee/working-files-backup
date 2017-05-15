@@ -758,7 +758,18 @@
   "Protocols ": "协议信息",
   "NDPI Disabled": "NDPI已禁用",
   "AP Monitor Settings": "AP 监控设置",
+
   "App Analyze": "应用识别",
   "Application Analyze Disabled": "应用识别已禁用",
-  "Application Analyze": "应用识别"
+  "Application Analyze": "应用识别",
+
+  "Attack Defense": "攻击防御",
+  "Firewall": "防火墙",
+  "Firewall Switch": "防火墙开关",
+  "TCP-Flood Attack Defense": "TCP-Flood攻击防御",
+  "Maxium TCP Package Quantity": "最大TCP包数量",
+  "ICMP-Flood Attack Defense": "ICMP-Flood攻击防御",
+  "Maxium ICMP Package Quantity": "最大ICMP包数量",
+  "UDP-Flood Attack Defense": "UDP-Flood攻击防御",
+  "Maxium UDP Package Quantity": "最大UDP包数量"
 }
