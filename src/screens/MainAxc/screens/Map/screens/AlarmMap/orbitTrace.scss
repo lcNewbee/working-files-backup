@@ -29,3 +29,33 @@
   }
 
 }
+
+.icon-with-tooltip .tooltip-text {
+  visibility: hidden;
+  color: white;
+  background-color: black;
+  width: 120px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0px;
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+  z-index: 100;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.icon-with-tooltip:hover .tooltip-text {
+  visibility: visible;
+}

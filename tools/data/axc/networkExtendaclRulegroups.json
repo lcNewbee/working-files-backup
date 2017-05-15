@@ -29,7 +29,6 @@
     ],
     "rulesList": [
       {
-        "id": "0",
         "ruleName": "rule0",
         "action": "accept",
         "ipType": "ipv4",
@@ -45,7 +44,6 @@
         "destEndPort": "200"
       },
       {
-        "id": "1",
         "ruleName": "rule1",
         "action": "reject",
         "ipType": "ipv6",
@@ -61,7 +59,6 @@
         "destEndPort": "200"
       },
       {
-        "id": "2",
         "ruleName": "rule2",
         "action": "reject",
         "ipType": "ipv6",
@@ -77,7 +74,6 @@
         "destEndPort": "200"
       },
       {
-        "id": "3",
         "ruleName": "rule3",
         "action": "reject",
         "ipType": "ipv6",
@@ -93,7 +89,6 @@
         "destEndPort": "200"
       },
       {
-        "id": "4",
         "ruleName": "rule4",
         "action": "reject",
         "ipType": "ipv6",
@@ -109,7 +104,6 @@
         "destEndPort": "200"
       },
       {
-        "id": "5",
         "ruleName": "rule5",
         "action": "reject",
         "ipType": "ipv6",

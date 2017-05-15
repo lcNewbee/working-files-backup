@@ -14,8 +14,9 @@ const propTypes = {
   leftboxlist: PropTypes.instanceOf(List),
 
   rightboxtitle: PropTypes.string,
-  rightaddbutton: PropTypes.bool,
   rightboxlist: PropTypes.instanceOf(List),
+
+  rightaddbutton: PropTypes.bool,
 
   onEditModalOk: PropTypes.func,
   onAddModalOk: PropTypes.func,

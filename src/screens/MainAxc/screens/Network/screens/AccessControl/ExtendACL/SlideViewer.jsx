@@ -85,6 +85,7 @@ class SlideViewer extends Component {
                       size="lg"
                       theme="primary"
                       text={text}
+                      key={text}
                       style={{
                         margin: '10px',
                         width: `${this.props.contentwidth}px`,

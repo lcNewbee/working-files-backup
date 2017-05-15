@@ -156,6 +156,18 @@ function getPointList(from, to) {
   return points;
 }
 
+// 格式化时间
+function formatTime(milesecond) {
+  const time = new Date(+milesecond);
+  const year = time.getFullYear();
+  const month = time.getMonth() + 1;
+  const day = time.getDate();
+  const hour = time.getHours();
+  const minutes = time.getMinutes();
+  const seconds = time.getSeconds();
+  return `${year}/${month}/${day} ${hour}:${minutes}:${seconds}`;
+}
+
 
 const propTypes = {
   store: PropTypes.object,
@@ -181,7 +193,6 @@ export default class View extends React.Component {
     super(props);
     this.curvePath = [];
     this.timeoutVal = [];
-    this.pathList = [];
     this.mapMouseDown = false;
     this.buildOptions = fromJS([]);
     this.colors = ['#2f4554', '#0093dd', '#d48265', '#91c7ae'];
@@ -193,6 +204,7 @@ export default class View extends React.Component {
       mapWidth: 1,
       mapHeight: 1,
       noticeFlag: -1,
+      pathList: fromJS([]),
     };
     utils.binds(this,
       [
@@ -510,13 +522,17 @@ export default class View extends React.Component {
       const ret = gps.getOffsetFromGpsPoint($$point, curItem.toJS());
       const x = Math.floor((ret.x * this.state.mapWidth) / 100);
       const y = Math.floor((ret.y * this.state.mapHeight) / 100);
-      return { x, y };
+      const time = $$point.time;
+      // console.log('point', $$point);
+      return { x, y, time };
     });
 
     stationaryPoint(ctx, pathListPixel);
 
     // console.log('list data to map data time', end - start);
-    this.pathList = pathListPixel; // 存储起来，避免在没有请求数据的情况下做多余的计算。
+    this.setState({
+      pathList: fromJS(pathListPixel), // 存储起来，避免在没有请求数据的情况下做多余的计算。
+    });
 
     const len = pathListPixel.length;
     this.curvePath = [];
@@ -582,6 +598,34 @@ export default class View extends React.Component {
             top: 0,
           }}
         />
+        {
+          this.state.pathList.map((point) => {
+            const fontsize = Math.round((24 * this.state.zoom) / 100);
+            // console.log('point', point.toJS());
+            return (
+              <div
+                className="icon-with-tooltip"
+                style={{
+                  position: 'absolute',
+                  display: 'inline-block',
+                  top: `${point.get('y') - fontsize}px`,
+                  left: `${point.get('x') - (Math.round((14.3 * this.state.zoom) / 100) / 2)}px`,
+                }}
+              >
+                <Icon
+                  name="map-pin"
+                  className="client"
+                  style={{
+                    color: '#0093DD',
+                    cursor: 'pointer',
+                    fontSize: `${fontsize}px`,
+                  }}
+                />
+                <span className="tooltip-text">{formatTime(point.get('time'))}</span>
+              </div>
+            );
+          })
+        }
       </div>
     );
   }
@@ -667,7 +711,7 @@ export default class View extends React.Component {
               onClick={() => { this.onSearch(); }}
               style={{
                 position: 'absolute',
-                left: '212px',
+                left: '215px',
                 height: '30px',
               }}
             />

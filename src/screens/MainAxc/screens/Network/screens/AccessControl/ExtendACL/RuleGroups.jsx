@@ -11,6 +11,8 @@ import SlideViewer from './SlideViewer';
 import Exchange from './Exchange';
 import './style.scss';
 
+// 以name为标识，name要不可修改，代码才能正常运行
+
 const protoTypeOptions = [
   { label: 'any', value: 'any' },
   { label: 'icmp', value: 'icmp' },
@@ -66,27 +68,23 @@ export default class View extends React.Component {
     };
 
     utils.binds(this, [
-      'onSlideBtnClick', 'saveGroupRulesChange',
+      'onSlideBtnClick', 'saveGroupRulesChange', 'onAddModalOk',
     ]);
   }
 
   componentWillReceiveProps(newProps) {
     const curScreenId = newProps.store.get('curScreenId');
     const allRules = newProps.store.getIn([curScreenId, 'data', 'rulesList']);
-    const allGroups = newProps.store.getIn([curScreenId, 'data', 'groupList']);
-    // if there is no group has the same name as this.groupOnEdit, set this.groupOnEdit value to first group name.
-
-
-    let ruleNameListInGroup = '';
-    // 这里要修改，改成显示当前组的列表
-    if (this.groupOnEdit === '') {
-      // first time come into this page, this.groupOnEdit has no value, give the first group as default.
-      ruleNameListInGroup = newProps.store.getIn([curScreenId, 'data', 'groupList', '0', 'ruleNameList']);
-    } else {
-      // this.groupOnEdit has value already
-
+    const allGroups = newProps.store.getIn([curScreenId, 'data', 'groupList']) || fromJS([]);
+    // if there is no group having the same name as this.groupOnEdit, set this.groupOnEdit value to the first group name.
+    let curGroupIndex = allGroups.findIndex(group => group.get('groupName') === this.groupOnEdit);
+    if (curGroupIndex === -1) {
+      this.groupOnEdit = allGroups.getIn(['0', 'groupName']);
+      curGroupIndex = 0;
     }
-
+    // get rule name list of the current group
+    const ruleNameListInGroup = newProps.store.getIn([curScreenId, 'data', 'groupList', curGroupIndex, 'ruleNameList']);
+    // get and set the left and right box list items
     const ruleDetailListInFirstGroup = getLeftBoxList(ruleNameListInGroup, allRules);
     const ruleDetailListNotInFirstGroup = getRightBoxList(ruleNameListInGroup, allRules);
     this.setState({
@@ -129,6 +127,23 @@ export default class View extends React.Component {
     this.saveGroupRulesChange(newData);
   }
 
+  onEditModalOk(item) {
+    const curScreenId = this.props.store.get('curScreenId');
+    const data = this.props.store.getIn([curScreenId, 'data']);
+    const groupList = data.get('groupList');
+    const indexOfCurItem = groupList.findIndex(listItem => listItem.equels(item));
+
+  }
+
+  onAddModalOk(item) {
+    const curScreenId = this.props.store.get('curScreenId');
+    const data = this.props.store.getIn([curScreenId, 'data']);
+    const rulesList = data.get('rulesList');
+    const newRulesList = rulesList.push(item);
+    const newData = data.set('rulesList', newRulesList);
+    this.saveGroupRulesChange(newData);
+  }
+
   saveGroupRulesChange(data) {
     this.props.save(this.props.route.saveUrl, data.toJS()).then((json) => {
       if (json.state && json.state.code === 2000) {
@@ -146,16 +161,14 @@ export default class View extends React.Component {
         id: 'id',
         type: 'text',
         label: __('Rule ID'),
-        formProps: {
-          noAdd: true,
-        },
-        notEditable: true,
+        noForm: true,
         showInBox: true,
       },
       {
         id: 'ruleName',
         label: __('Rule Name'),
         type: 'text',
+        notEditable: true,
         showInBox: true,
       },
       {
@@ -300,7 +313,7 @@ export default class View extends React.Component {
           rightaddbutton
           listOptions={listOptions}
           onEditModalOk={(list) => { console.log(list.toJS()); }}
-          onAddModalOk={(list) => { console.log(list.toJS()); }}
+          onAddModalOk={(list) => { this.onAddModalOk(list); }}
           onDeleteBtnClick={(list) => { console.log(list.toJS()); }}
           onRightListDoubleClick={(list) => { this.onRightListDoubleClick(list); }}
           onLeftListDoubleClick={(list) => { this.onLeftListDoubleClick(list); }}

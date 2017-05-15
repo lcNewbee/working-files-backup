@@ -343,8 +343,8 @@ export default class View extends React.Component {
       if (typeof area !== 'undefined' && !chunks.includes(area)) chunks = chunks.push(area);
     });
     // 告警动画
-    let startOpacity = 1;
-    let step = -0.2;
+    let startOpacity = 0;
+    let step = 0.2;
     const lineWidth = 4 * (this.state.zoom / 100);
     const alarmCtx = this.alarmCanvas.getContext('2d');
     const staPos = pixelPos.get(0).toJS();
@@ -464,7 +464,7 @@ export default class View extends React.Component {
           width: `${((myZoom * this.naturalWidth) / 100)}px`,
           height: `${((myZoom * this.naturalHeight) / 100)}px`,
           position: 'absolute',
-          overflow: 'hidden',
+          // overflow: 'hidden',
         }}
         onMouseDown={this.onMapMouseDown}
         onMouseUp={this.onMapMouseUp}
@@ -475,25 +475,34 @@ export default class View extends React.Component {
             // console.log('this.state.pixelPos', this.state.pixelPos);
             if (this.state.clientPos.isEmpty()) return null;
             const fontsize = Math.round((24 * this.state.zoom) / 100);
-            const nodeList = this.state.clientPos.map(item => (
-              <Icon
-                name="map-pin"
-                className="client"
-                key={item.get('id')}
-                style={{
-                  position: 'absolute',
-                  color: '#0093DD',
-                  cursor: 'pointer',
-                  top: `${item.get('y') - fontsize}px`,
-                  left: `${item.get('x') - (Math.round((14.3 * this.state.zoom) / 100) / 2)}px`,
-                  fontSize: `${fontsize}px`,
-                }}
-                title={item.get('mac')}
-                onClick={() => {
-                  this.props.history.push(`/main/group/map/orbittrace?mac=${item.get('mac')}`);
-                }}
-              />
-            ));
+            const nodeList = this.state.clientPos.map((item) => {
+              return (
+                <div
+                  className="icon-with-tooltip"
+                  style={{
+                    position: 'absolute',
+                    display: 'inline-block',
+                    top: `${item.get('y') - fontsize}px`,
+                    left: `${item.get('x') - (Math.round((14.3 * this.state.zoom) / 100) / 2)}px`,
+                  }}
+                >
+                  <Icon
+                    name="map-pin"
+                    className="client"
+                    key={item.get('id')}
+                    style={{
+                      color: '#0093DD',
+                      cursor: 'pointer',
+                      fontSize: `${fontsize}px`,
+                    }}
+                    onClick={() => {
+                      this.props.history.push(`/main/group/map/orbittrace?mac=${item.get('mac')}`);
+                    }}
+                  />
+                  <span className="tooltip-text">{item.get('mac')}</span>
+                </div>
+              );
+            });
             return nodeList.toJS();
           })()
         }
