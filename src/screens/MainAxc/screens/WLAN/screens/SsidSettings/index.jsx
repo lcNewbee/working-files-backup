@@ -11,7 +11,6 @@ import { actions as screenActions, AppScreen } from 'shared/containers/appScreen
 import { actions as appActions } from 'shared/containers/app';
 import * as productActions from '../../../../reducer';
 
-
 function getPortalTemplateName() {
   return utils.fetch('goform/network/portal/server', {
     size: 9999,
@@ -30,6 +29,16 @@ function getPortalTemplateName() {
   );
 }
 
+const idToAuthMap = {
+  '1': '',
+  '2': '1',
+  '3': '2',
+  '4': '3',
+  '5': '4',
+  '6': '5',
+  '7': '6',
+};
+
 function getWebTemplateName() {
   return utils.fetch('goform/portal/access/web', {
     size: 9999,
@@ -39,7 +48,7 @@ function getWebTemplateName() {
       {
         options: json.data.list.map(
           item => ({
-            value: item.id,
+            value: idToAuthMap[item.id],
             label: __(item.name),
           }),
         ),
