@@ -64,6 +64,7 @@ class MapBuilding_Model extends CI_Model {
         //3.修改整个建筑经纬度
         $arr = array(
             'id' => (int)element('id',$data),
+            'groupid' => (int)element('groupid', $data),
             'lat' => (float)element('lat',$data),
             'lng' => (float)element('lng',$data),
             'address' => element('address',$data),
