@@ -334,15 +334,23 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const $$curListItem = $$myScreenStore.getIn(['curListItem']);
-
+    const idToPageMap = {
+      '1': '',
+      '2': '/1',
+      '3': '/2',
+      '4': '/3',
+      '5': '/4',
+      '6': '/5',
+      '7': '/6',
+    };
     this.curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
       <span>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/auth.jsp`} target="_blank">{__('Authentication')}</a>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$data.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
+        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/auth.jsp`} target="_blank">{__('Authentication')}</a>
+        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/ok.jsp`}  target="_blank">{__('Success')}</a>
+        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/out.jsp`} target="_blank">{__('Exit')}</a>
         <a
           className="tablelink"
-          href={`http://${window.location.hostname}:8080/${$$data.get('id')}/wx.jsp`}
+          href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/wx.jsp`}
           target="_blank"
         >
           {__('Wechat')}

@@ -9,6 +9,7 @@ import { actions as screenActions, AppScreen } from 'shared/containers/appScreen
 import TIME_ZONE from 'shared/config/timeZone';
 import validator from 'shared/validator';
 
+let x;
 const settingsOptions = fromJS([
   {
     id: 'xdos_enable',
@@ -24,10 +25,11 @@ const settingsOptions = fromJS([
     required: true,
     disabled: ($$data) => {
       switch ($$data.get('xdos_enable')) {
-        case '0': return true;
-        case '1': return false;
-        default: return true;
+        case 0 : x = true; break;
+        case 1 : x = false; break;
+        default: x = true;
       }
+      return x;
     },
   },
   {
@@ -41,10 +43,11 @@ const settingsOptions = fromJS([
     }),
     disabled: ($$data) => {
       switch ($$data.get('xdos_enable')) {
-        case '0': return true;
-        case '1': return false;
-        default: return true;
+        case 0 : x = true; break;
+        case 1 : x = false; break;
+        default: x = true;
       }
+      return x;
     },
   },
   {
@@ -54,10 +57,11 @@ const settingsOptions = fromJS([
     required: true,
     disabled: ($$data) => {
       switch ($$data.get('xdos_enable')) {
-        case '0': return true;
-        case '1': return false;
-        default: return true;
+        case 0 : x = true; break;
+        case 1 : x = false; break;
+        default: x = true;
       }
+      return x;
     },
   },
   {
@@ -67,10 +71,11 @@ const settingsOptions = fromJS([
     type: 'number',
     disabled: ($$data) => {
       switch ($$data.get('xdos_enable')) {
-        case '0': return true;
-        case '1': return false;
-        default: return true;
+        case 0 : x = true; break;
+        case 1 : x = false; break;
+        default: x = true;
       }
+      return x;
     },
     required: true,
   },
@@ -80,10 +85,11 @@ const settingsOptions = fromJS([
     type: 'checkbox',
     disabled: ($$data) => {
       switch ($$data.get('xdos_enable')) {
-        case '0': return true;
-        case '1': return false;
-        default: return true;
+        case 0 : x = true; break;
+        case 1 : x = false; break;
+        default: x = true;
       }
+      return x;
     },
     required: true,
   },
@@ -95,10 +101,11 @@ const settingsOptions = fromJS([
     type: 'number',
     disabled: ($$data) => {
       switch ($$data.get('xdos_enable')) {
-        case '0': return true;
-        case '1': return false;
-        default: return true;
+        case 0 : x = true; break;
+        case 1 : x = false; break;
+        default: x = true;
       }
+      return x;
     },
     required: true,
   },
