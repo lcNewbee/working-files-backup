@@ -109,6 +109,7 @@ const funConfig = {
   },
   systemmaintenance: {
     poeOutFun: false,
+    voipFun: false,
   },
 };
 

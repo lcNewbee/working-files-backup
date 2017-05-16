@@ -37,6 +37,8 @@ const propTypes = {
   changeUpgradeBarInfo: PropTypes.func,
   resetSelfState: PropTypes.func,
   changePoeOut: PropTypes.func,
+  changeVoipEnable: PropTypes.func,
+  changeVoipVlanId: PropTypes.func,
 };
 
 const languageOptions = List(b28n.getOptions().supportLang).map(item => (
@@ -73,6 +75,14 @@ export default class SystemMaintenance extends Component {
     this.props.fetch('goform/get_poe_out').then((json) => {
       if (json.state && json.state.code === 2000) {
         this.props.changePoeOut(json.data.poeOut);
+      }
+    });
+    this.props.fetch('goform/get_voip_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        const enable = json.data.enable ? json.data.enable : '0';
+        const portVlanId = json.data.portVlanId ? json.data.portVlanId : '1';
+        this.props.changeVoipEnable(enable);
+        this.props.changeVoipVlanId(portVlanId);
       }
     });
   }
@@ -368,6 +378,42 @@ export default class SystemMaintenance extends Component {
                   }}
                 />
               </div>
+            </div>
+            ) : null
+        }
+
+        {
+          this.props.route.funConfig.voipFun ? (
+            <div>
+              <div className="o-form__legend">
+                {__('VOIP')}
+              </div>
+              <FormGroup
+                type="switch"
+                label={__('VOIP')}
+                options={[
+                  { label: __('Turn On'), value: '1' },
+                  { label: __('Turn Off'), value: '0' },
+                ]}
+                minWidth="80px"
+                value={this.props.selfState.get('voipEnable')}
+                onChange={(data) => {
+                  this.props.changeVoipEnable(data.value);
+                }}
+              />
+              <SaveButton
+                loading={this.props.app.get('saving')}
+                onClick={() => {
+                  const query = {
+                    enable: this.props.selfState.get('voipEnable'),
+                    portVlanId: this.props.selfState.get('portVlanId'),
+                  };
+                  this.props.save('goform/set_voip', query);
+                }}
+                style={{
+                  marginLeft: '165px',
+                }}
+              />
             </div>
             ) : null
         }
