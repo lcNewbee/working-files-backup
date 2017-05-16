@@ -5,7 +5,7 @@
   },
   "data": {
     "settings": {
-      "xdos_enable": 1,
+      "xdos_enable": 0,
       "tcp_syn_dos_enable": 1,
       "tcp_syn_limit_per":  10,
       "icmp_echo_dos_enable": 1,

@@ -82,7 +82,11 @@ const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat')
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
 const sPortalMac =
     require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
-
+// 防火墙
+const sAttackDefense =
+    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
+const sFirewallBlackList =
+    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
 
 /**
  * AP组管理
@@ -338,6 +342,33 @@ const routes = [
                     formUrl: 'goform/network/dpi/dpisettings',
                     text: __('Settings'),
                     component: sDPISettings.Screen,
+                  },
+                ],
+              },
+              {
+                id: 'firewall',
+                isIndex: true,
+                path: '/main/network/firewall',
+                icon: 'dot-circle-o ',
+                text: __('Firewall'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                indexPath: '/main/network/firewall/attackdefense',
+                routes: [
+                  {
+                    id: 'attackDefense',
+                    isIndex: true,
+                    formUrl: 'goform/network/firewall/attackdefense',
+                    path: '/main/network/firewall/attackdefense',
+                    text: __('Attack Defense'),
+                    component: sAttackDefense.Screen,
+                  }, {
+                    id: 'firewallBlackList',
+                    isIndex: true,
+                    formUrl: 'goform/network/firewall/balcklist',
+                    path: '/main/network/firewall/balcklist',
+                    text: __('Black List'),
+                    component: sFirewallBlackList.Screen,
                   },
                 ],
               },

@@ -14,6 +14,7 @@ const settingsOptions = fromJS([
     id: 'xdos_enable',
     label: __('Firewall Switch'),
     type: 'checkbox',
+    defaultValue: '0',
     required: true,
   },
   {
@@ -21,7 +22,13 @@ const settingsOptions = fromJS([
     label: __('TCP-Flood Attack Defense'),
     type: 'checkbox',
     required: true,
-    disabled: ($$data) => { return $$data.get('xdos_enable') === '0'; },
+    disabled: ($$data) => {
+      switch ($$data.get('xdos_enable')) {
+        case '0': return true;
+        case '1': return false;
+        default: return true;
+      }
+    },
   },
   {
     id: 'tcp_syn_limit_per',
@@ -32,28 +39,52 @@ const settingsOptions = fromJS([
     validator: validator({
       rules: 'number',
     }),
-    disabled: ($$data) => { return $$data.get('xdos_enable') === '0'; },
+    disabled: ($$data) => {
+      switch ($$data.get('xdos_enable')) {
+        case '0': return true;
+        case '1': return false;
+        default: return true;
+      }
+    },
   },
   {
     id: 'icmp_echo_dos_enable',
     label: __('ICMP-Flood Attack Defense'),
     type: 'checkbox',
     required: true,
-    disabled: ($$data) => { return $$data.get('xdos_enable') === '0'; },
+    disabled: ($$data) => {
+      switch ($$data.get('xdos_enable')) {
+        case '0': return true;
+        case '1': return false;
+        default: return true;
+      }
+    },
   },
   {
     id: 'icmp_echo_request_limit_per',
     label: __('Maxium ICMP Package Quantity'),
     defaultValue: '10',
     type: 'number',
-    disabled: ($$data) => { return $$data.get('xdos_enable') === '0'; },
+    disabled: ($$data) => {
+      switch ($$data.get('xdos_enable')) {
+        case '0': return true;
+        case '1': return false;
+        default: return true;
+      }
+    },
     required: true,
   },
   {
     id: 'udp_limit_dos_enable',
     label: __('UDP-Flood Attack Defense'),
     type: 'checkbox',
-    disabled: ($$data) => { return $$data.get('xdos_enable') === '0'; },
+    disabled: ($$data) => {
+      switch ($$data.get('xdos_enable')) {
+        case '0': return true;
+        case '1': return false;
+        default: return true;
+      }
+    },
     required: true,
   },
   {
@@ -62,7 +93,13 @@ const settingsOptions = fromJS([
     label: __('Maxium UDP Package Quantity'),
     defaultValue: '600',
     type: 'number',
-    disabled: ($$data) => { return $$data.get('xdos_enable') === '0'; },
+    disabled: ($$data) => {
+      switch ($$data.get('xdos_enable')) {
+        case '0': return true;
+        case '1': return false;
+        default: return true;
+      }
+    },
     required: true,
   },
 ]);

@@ -73,6 +73,8 @@ $route['goform/network/dpi/macstatistic'] = 'network/dpiMac';
 $route['goform/network/dpi/ethstatistic'] = 'network/dpiEth';
 $route['goform/network/dpi/protoinfo'] = 'network/dpiProto';
 $route['goform/network/dpi/dpisettings'] = 'network/dpiSettings';
+$route['goform/network/firewall/attackdefense'] = 'network/networkFirewallAttackDefense';
+$route['goform/network/firewall/balcklist'] = 'network/networkFirewallBlackList';
 
 // AP组管理
 $route['goform/group'] = 'group/group';
@@ -126,8 +128,7 @@ $route['goform/system/saveConfig'] = 'system/systemMaintenance/saveConfig';
 $route['goform/system/reboot'] = 'system/systemMaintenance/reboot';
 $route['goform/system/license'] = 'system/systemLicense';
 $route['goform/system/networktimeprotocol'] = 'system/systemNtp';
-$route['goform/system/firewall/attackdefense'] = 'system/systemFirewallAttackDefense';
-$route['goform/system/firewall/balcklist'] = 'system/systemFirewallBlackList';
+
 
 //Portal
 $route['goform/portal/overview'] = 'portal/overview';
