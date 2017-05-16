@@ -359,8 +359,8 @@ export default class View extends React.Component {
     this.mapMouseDown = true;
     this.mapClientX = e.clientX;
     this.mapClientY = e.clientY;
-    this.posXBeforeMove = this.state.mapOffsetX;
-    this.posYBeforeMove = this.state.mapOffsetY;
+    // this.posXBeforeMove = this.state.mapOffsetX;
+    // this.posYBeforeMove = this.state.mapOffsetY;
   }
   onMapMouseMove(e) {
     if (this.mapMouseDown) {
@@ -370,10 +370,11 @@ export default class View extends React.Component {
       });
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
-      if (this.posXBeforeMove !== this.state.mapOffsetX ||
-          this.posYBeforeMove !== this.state.mapOffsetY) {
-        cancelAnimationFrame(this.drawAnimationFrame);
-      }
+      /* 移动的过程中也可以画线， 因为定位是相对于canvas的偏移，和是否移动没有关系，所以移动的过程中不需要停止画线 */
+      // if (this.posXBeforeMove !== this.state.mapOffsetX ||
+      //     this.posYBeforeMove !== this.state.mapOffsetY) {
+      //   cancelAnimationFrame(this.drawAnimationFrame);
+      // }
     }
   }
   onSearch() {
@@ -437,7 +438,7 @@ export default class View extends React.Component {
       let loopStep = null;
 
       // 画线前先清除 以前划线定时器
-      cancelAnimationFrame(this.drawAnimationFrame);
+      // cancelAnimationFrame(this.drawAnimationFrame);
 
       ctx.beginPath();
       ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
@@ -489,11 +490,11 @@ export default class View extends React.Component {
       // console.log('did update curScreenId & pathlist', curScreenId, $$pathList);
 
       // 只有单列表点改变时，才花canvas
-      if (!this.mapMouseDown) {
+      // if (!this.mapMouseDown) {
         // 画所有经过的静态点
         // 绘图只应该发生在数据改变时
-        this.updateCanvas($$pathList, mapList);
-      }
+      this.updateCanvas($$pathList, mapList);
+      // }
     }
   }
   updateCanvas($$pathList, mapList) {
