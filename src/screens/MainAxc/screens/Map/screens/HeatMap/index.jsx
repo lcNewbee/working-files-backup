@@ -396,7 +396,7 @@ export default class View extends React.PureComponent {
             />
             <FormInput
               type="time"
-              value={store.getIn([curScreenId, 'query', 'startTime'])}
+              value={moment((store.getIn([curScreenId, 'query', 'startTime']) || '00:00:00').replace(':', ''), 'hms')}
               onChange={(data) => {
                 Promise.resolve().then(() => {
                   this.props.changeScreenQuery({ startTime: data.value });
@@ -432,7 +432,7 @@ export default class View extends React.PureComponent {
             />
             <FormInput
               type="time"
-              value={store.getIn([curScreenId, 'query', 'endTime'])}
+              value={moment((store.getIn([curScreenId, 'query', 'endTime']) || '00:00:00').replace(':', ''), 'hms')}
               onChange={(data) => {
                 Promise.resolve().then(() => {
                   this.props.changeScreenQuery({ endTime: data.value });

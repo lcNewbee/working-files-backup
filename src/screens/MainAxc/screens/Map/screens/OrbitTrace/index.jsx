@@ -681,7 +681,7 @@ export default class View extends React.Component {
             type="time"
             className="fl"
             label={__('Start Time')}
-            value={$$screenQuery.get('fromTime')}
+            value={moment(($$screenQuery.get('fromTime') || '00:00:00').replace(':', ''), 'hms')}
             onChange={(data) => {
               this.handleChangeQuery('fromTime', data);
             }}
@@ -692,7 +692,7 @@ export default class View extends React.Component {
             type="time"
             className="fl"
             label={__('End Time')}
-            value={$$screenQuery.get('toTime')}
+            value={moment(($$screenQuery.get('toTime') || '00:00:00').replace(':', ''), 'hms')}
             onChange={(data) => {
               this.handleChangeQuery('toTime', data);
             }}
