@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import { FormContainer } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
@@ -68,6 +67,7 @@ const $$authOptions = fromJS([
     label: __('Facebook Authentication'),
   },
 ]);
+/* eslint-disable quote-props */
 const idToAuthMap = {
   '3': '0',
   '4': '1',
@@ -273,9 +273,6 @@ const listOptions = fromJS([
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
-  changeScreenActionQuery: PropTypes.func,
-  route: PropTypes.object,
-  createModal: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -345,12 +342,20 @@ export default class View extends React.Component {
     };
     this.curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
       <span>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/auth.jsp`} target="_blank">{__('Authentication')}</a>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/ok.jsp`}  target="_blank">{__('Success')}</a>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/out.jsp`} target="_blank">{__('Exit')}</a>
+        <a
+          className="tablelink"
+          href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/auth.jsp`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {__('Authentication')}
+        </a>
+        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/ok.jsp`} rel="noopener noreferrer" target="_blank">{__('Success')}</a>
+        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/out.jsp`} rel="noopener noreferrer" target="_blank">{__('Exit')}</a>
         <a
           className="tablelink"
           href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/wx.jsp`}
+          rel="noopener noreferrer"
           target="_blank"
         >
           {__('Wechat')}

@@ -29,6 +29,7 @@ function getPortalTemplateName() {
   );
 }
 
+/* eslint-disable quote-props */
 const idToAuthMap = {
   '1': '0',
   '2': '1',

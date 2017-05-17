@@ -1,9 +1,9 @@
-import React, { PropTypes, PureComponent } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { fromJS, Map } from 'immutable';
 import utils from 'shared/utils';
-import WizardContainer from 'shared/components/Organism/WizardContainer';
+import { PureComponent, WizardContainer, FormGroup } from 'shared/components/';
 import DropzoneComponent from 'react-dropzone-component/dist/react-dropzone';
-import FormGroup from 'shared/components/Form/FormGroup';
 import 'dropzone/dist/min/dropzone.min.css';
 
 import './_style.scss';
