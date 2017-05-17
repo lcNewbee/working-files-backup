@@ -787,16 +787,11 @@ export const $$portalTemplateOptions = fromJS([
   {
     id: 'ssid',
     text: _('SSID'),
-    options: [
-      {
-        value: '',
-        label: __('ALL'),
-      },
-    ],
     formProps: {
       type: 'select',
       maxLength: '129',
       defaultValue: '',
+      required: true,
       validator: validator({
         rules: 'utf8Len:[1, 128]',
       }),
@@ -805,15 +800,10 @@ export const $$portalTemplateOptions = fromJS([
   {
     id: 'apmac',
     text: _('Access Point MAC Address'),
-    options: [
-      {
-        value: '',
-        label: __('ALL'),
-      },
-    ],
     formProps: {
       defaultValue: '',
       type: 'select',
+      required: true,
     },
   },
   {

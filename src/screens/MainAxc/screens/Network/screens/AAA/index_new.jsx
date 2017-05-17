@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { Icon, FormContainer, SaveButton, FormGroup } from 'shared/components';
+import { FormContainer, SaveButton, FormGroup } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import validator from 'shared/validator';
@@ -18,10 +18,10 @@ import {
   $$portalTemplateFormOptions, portalTemplateDefaultSettingData,
 } from './config';
 
-const $$defaultNoneItem = fromJS({
-  value: '',
-  label: __('None'),
-});
+// const $$defaultNoneItem = fromJS({
+//   value: '',
+//   label: __('None'),
+// });
 
 const RADIUS_AUTH_SERVER_KEY = 'authServer';
 const RADIUS_ACC_SERVER_KEY = 'accServer';
@@ -233,7 +233,7 @@ const listOptions = fromJS([
         return '-';
       }
 
-      return $$data.getIn(['portalTemplate', 'mac']) || __('None')
+      return $$data.getIn(['portalTemplate', 'mac']) || __('None');
     },
   },
   {
@@ -343,12 +343,9 @@ export default class View extends React.Component {
     ]).then(
       (values) => {
         const portOptions = fromJS(values[0].options);
-        let ssidOptions = fromJS(values[1].options);
-        let apsMacOptions = fromJS(values[2].options);
+        const ssidOptions = fromJS(values[1].options);
+        const apsMacOptions = fromJS(values[2].options);
         const webTemplateOptions = fromJS(values[3].options);
-
-        ssidOptions = ssidOptions.unshift($$defaultNoneItem);
-        apsMacOptions = apsMacOptions.unshift($$defaultNoneItem);
 
         this.setState({
           portOptions,
