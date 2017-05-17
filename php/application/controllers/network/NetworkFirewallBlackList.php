@@ -8,11 +8,7 @@ class NetworkFirewallBlackList extends CI_Controller {
 	}
 	function fetch() {
 		$arr = array(
-            'page'=>(string)element('page',$_GET,1),
-            'pagesize'=>(string)element('size',$_GET,20),
-            'mac' => (string)element('mac', $_GET),
-            'dos_type' => (string)element('dos_type', $_GET),
-        );
+    );
 		return axc_get_xdos_black(json_encode($arr));
 	}
 	function onAction($data) {

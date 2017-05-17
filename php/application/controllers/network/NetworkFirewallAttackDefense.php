@@ -7,20 +7,22 @@ class NetworkFirewallAttackDefense extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch() {
-		$arr = array(
-            'xdos_enable' => (int)element('xdos_enable', $_GET),
-            'tcp_syn_dos_enable' => (int)element('tcp_syn_dos_enable', $_GET),
-            'tcp_syn_limit_per' => (int)element('tcp_syn_limit_per', $_GET),
-            'icmp_echo_dos_enable' => (int)element('icmp_echo_dos_enable', $_GET),
-            'icmp_echo_request_limit_per' => (int)element('icmp_echo_request_limit_per', $_GET),
-            'udp_limit_dos_enable' => (int)element('udp_limit_dos_enable', $_GET),
-            'udp_limit_per' => (int)element('udp_limit_per', $_GET),
-        );
+    $arr = array(
+    );
 	  $temp_result = json_decode(axc_get_xdos_param(json_encode($arr)), true);
     $result = array(
             'state' => $temp_result['state'],
             'data' => array(
-                'settings' => $temp_result['data'],
+                'settings' => array(
+                  'xdos_enable' => (string)$temp_result['data']['xdos_enable'],
+                  'tcp_syn_dos_enable' => (string)$temp_result['data']['tcp_syn_dos_enable'],
+                  'tcp_syn_limit_per' => (string)$temp_result['data']['tcp_syn_limit_per'],
+                  'icmp_echo_dos_enable' => (string)$temp_result['data']['icmp_echo_dos_enable'],
+                  'icmp_echo_request_limit_per' => (string)$temp_result['data']['icmp_echo_request_limit_per'],
+                  'udp_limit_dos_enable' => (string)$temp_result['data']['udp_limit_dos_enable'],
+                  'udp_limit_per' => (string)$temp_result['data']['udp_limit_per'],
+                )
+
             )
         );
     return json_encode($result);

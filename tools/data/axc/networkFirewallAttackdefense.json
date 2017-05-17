@@ -5,13 +5,13 @@
   },
   "data": {
     "settings": {
-      "xdos_enable": 1,
-      "tcp_syn_dos_enable": 1,
-      "tcp_syn_limit_per":  10,
-      "icmp_echo_dos_enable": 1,
-      "icmp_echo_request_limit_per": 10,
-      "udp_limit_dos_enable": 1,
-      "udp_limit_per":  600
+      "xdos_enable": "1",
+      "tcp_syn_dos_enable": "1",
+      "tcp_syn_limit_per":  "10",
+      "icmp_echo_dos_enable": "1",
+      "icmp_echo_request_limit_per": "10",
+      "udp_limit_dos_enable": "1",
+      "udp_limit_per":  "600"
     }
   }
 }

@@ -6,16 +6,23 @@ import { bindActionCreators } from 'redux';
 
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
-import TIME_ZONE from 'shared/config/timeZone';
 import validator from 'shared/validator';
 
-let x;
+function disabledFunc($$data) {
+  let ret;
+  switch ($$data.get('xdos_enable')) {
+    case '0' : ret = true; break;
+    case '1' : ret = false; break;
+    default: ret = true;
+  }
+  return ret;
+}
+
 const settingsOptions = fromJS([
   {
     id: 'xdos_enable',
     label: __('Firewall Switch'),
     type: 'checkbox',
-    defaultValue: '0',
     required: true,
   },
   {
@@ -23,14 +30,7 @@ const settingsOptions = fromJS([
     label: __('TCP-Flood Attack Defense'),
     type: 'checkbox',
     required: true,
-    disabled: ($$data) => {
-      switch ($$data.get('xdos_enable')) {
-        case 0 : x = true; break;
-        case 1 : x = false; break;
-        default: x = true;
-      }
-      return x;
-    },
+    disabled: disabledFunc,
   },
   {
     id: 'tcp_syn_limit_per',
@@ -41,56 +41,28 @@ const settingsOptions = fromJS([
     validator: validator({
       rules: 'number',
     }),
-    disabled: ($$data) => {
-      switch ($$data.get('xdos_enable')) {
-        case 0 : x = true; break;
-        case 1 : x = false; break;
-        default: x = true;
-      }
-      return x;
-    },
+    disabled: disabledFunc,
   },
   {
     id: 'icmp_echo_dos_enable',
     label: __('ICMP-Flood Attack Defense'),
     type: 'checkbox',
     required: true,
-    disabled: ($$data) => {
-      switch ($$data.get('xdos_enable')) {
-        case 0 : x = true; break;
-        case 1 : x = false; break;
-        default: x = true;
-      }
-      return x;
-    },
+    disabled: disabledFunc,
   },
   {
     id: 'icmp_echo_request_limit_per',
     label: __('Maxium ICMP Package Quantity'),
     defaultValue: '10',
     type: 'number',
-    disabled: ($$data) => {
-      switch ($$data.get('xdos_enable')) {
-        case 0 : x = true; break;
-        case 1 : x = false; break;
-        default: x = true;
-      }
-      return x;
-    },
+    disabled: disabledFunc,
     required: true,
   },
   {
     id: 'udp_limit_dos_enable',
     label: __('UDP-Flood Attack Defense'),
     type: 'checkbox',
-    disabled: ($$data) => {
-      switch ($$data.get('xdos_enable')) {
-        case 0 : x = true; break;
-        case 1 : x = false; break;
-        default: x = true;
-      }
-      return x;
-    },
+    disabled: disabledFunc,
     required: true,
   },
   {
@@ -99,14 +71,7 @@ const settingsOptions = fromJS([
     label: __('Maxium UDP Package Quantity'),
     defaultValue: '600',
     type: 'number',
-    disabled: ($$data) => {
-      switch ($$data.get('xdos_enable')) {
-        case 0 : x = true; break;
-        case 1 : x = false; break;
-        default: x = true;
-      }
-      return x;
-    },
+    disabled: disabledFunc,
     required: true,
   },
 ]);
