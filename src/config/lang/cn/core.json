@@ -205,6 +205,7 @@
   "Channel": "信道",
   "Uptime": "运行时间",
   "IP Address": "IP地址",
+  "IP Address Range": "IP地址范围",
   "Static IP": "静态IP",
   "Default Gateway": "默认网关",
   "MAC Address": "MAC地址",

@@ -61,8 +61,8 @@
         },
 
         "portalTemplate": {
-          "mac": "00:111:22:33:22",
-          "ssid": "Axilspot",
+          "apmac": "12:22:11:22:11:33",
+          "ssid": "Market1",
           "address": "222",
           "web": ""
         }
@@ -123,8 +123,8 @@
         },
 
         "portalTemplate": {
-          "mac": "00:111:22:33:22",
-          "ssid": "",
+          "apmac": "12:22:11:22:11:22",
+          "ssid": "market2",
           "address": "",
           "web": ""
         }
@@ -185,10 +185,10 @@
         },
 
         "portalTemplate": {
-          "mac": "00:111:22:33:22",
-          "ssid": "Axilspot",
-          "address": "222",
-          "web": "1"
+          "apmac": "-",
+          "ssid": "-",
+          "address": "-",
+          "web": "-"
         }
       },
       {
@@ -248,10 +248,10 @@
         },
 
         "portalTemplate": {
-          "mac": "00:111:22:33:22",
-          "ssid": "Axilspot",
-          "address": "222",
-          "web": "2"
+          "apmac": "-",
+          "ssid": "-",
+          "address": "-",
+          "web": "-"
         }
       }
     ]

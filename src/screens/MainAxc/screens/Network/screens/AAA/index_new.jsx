@@ -1,7 +1,7 @@
 import React from 'react'; import PropTypes from 'prop-types';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { FormContainer, SaveButton, FormGroup } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
@@ -221,7 +221,7 @@ const listOptions = fromJS([
       if ($$data.get('auth_accesstype') !== 'portal') {
         return '-';
       }
-      return $$data.getIn(['portalTemplate', 'ssid']) || __('None');
+      return $$data.getIn(['portalTemplate', 'ssid']) || __('-');
     },
   },
   {
@@ -233,7 +233,7 @@ const listOptions = fromJS([
         return '-';
       }
 
-      return $$data.getIn(['portalTemplate', 'mac']) || __('None');
+      return $$data.getIn(['portalTemplate', 'apmac']) || __('-');
     },
   },
   {
@@ -250,7 +250,7 @@ const listOptions = fromJS([
         return '-';
       }
 
-      return $$curItem ? $$curItem.get('label') : DEFAULT_STR;
+      return $$curItem ? $$curItem.get('label') : '-';
     },
   },
 ]);
@@ -302,6 +302,15 @@ export default class View extends React.Component {
       [PORTAL_RULE_KEY]: true,
       [PORTAL_LOCAL_RULE_KEY]: true,
     };
+    this.listOptions = listOptions;
+    this.$$baseFormOptions = $$baseFormOptions;
+    this.$$radiusAuthServer = $$radiusAuthServer;
+    this.$$radiusAccServer = $$radiusAccServer;
+    this.$$radiusAdvancedSetting = $$radiusAdvancedSetting;
+
+    this.$$potalServerFormOptions = $$potalServerFormOptions;
+    this.$$potalRuleFormOptions = $$potalRuleFormOptions;
+    this.$$portalTemplateFormOptions = $$portalTemplateFormOptions;
   }
 
   componentWillMount() {
@@ -346,7 +355,6 @@ export default class View extends React.Component {
         const ssidOptions = fromJS(values[1].options);
         const apsMacOptions = fromJS(values[2].options);
         const webTemplateOptions = fromJS(values[3].options);
-
         this.setState({
           portOptions,
           ssidOptions,
@@ -378,7 +386,7 @@ export default class View extends React.Component {
         return ret;
       });
 
-    this.$$potalRuleFormOptions = $$potalRuleFormOptions.map(
+    this.$$potalRuleFormOptions = this.$$potalRuleFormOptions.map(
       ($$item) => {
         const curId = $$item.get('id');
         let $$ret = $$item;
@@ -397,7 +405,7 @@ export default class View extends React.Component {
 
     //
     if (actionType === 'edit') {
-      this.$$baseFormOptions = $$baseFormOptions.map(
+      this.$$baseFormOptions = this.$$baseFormOptions.map(
         ($$item) => {
           const curId = $$item.get('id');
           const localReadOnlyIds = 'radius_server_type,portal_server_type,auth_accesstype,';
@@ -441,7 +449,7 @@ export default class View extends React.Component {
         return ret;
       });
 
-    this.listOptions = listOptions.map(
+    this.listOptions = this.listOptions.map(
       ($$item) => {
         let $$ret = $$item;
 
@@ -453,7 +461,7 @@ export default class View extends React.Component {
         return $$ret;
       },
     );
-    this.$$potalRuleFormOptions = $$potalRuleFormOptions.map(
+    this.$$potalRuleFormOptions = this.$$potalRuleFormOptions.map(
       ($$item) => {
         const curId = $$item.get('id');
         let $$ret = $$item;
@@ -469,7 +477,7 @@ export default class View extends React.Component {
         return $$ret;
       },
     );
-    this.$$portalTemplateFormOptions = $$portalTemplateFormOptions.map(
+    this.$$portalTemplateFormOptions = this.$$portalTemplateFormOptions.map(
       ($$item) => {
         const curId = $$item.get('id');
         let $$ret = $$item;
@@ -531,7 +539,7 @@ export default class View extends React.Component {
               <FormContainer
                 id={RADIUS_AUTH_SERVER_KEY}
                 className="o-form--compassed"
-                options={$$radiusAuthServer}
+                options={this.$$radiusAuthServer}
                 data={$$curData.get('radius')}
                 onChangeData={(data) => {
                   this.props.updateCurEditListItem({
@@ -567,7 +575,7 @@ export default class View extends React.Component {
             <div className="o-box__cell">
               <FormContainer
                 id={RADIUS_ACC_SERVER_KEY}
-                options={$$radiusAccServer}
+                options={this.$$radiusAccServer}
                 className="o-form--compassed"
                 data={$$curData.get('radius')}
                 onChangeData={(data) => {
@@ -603,7 +611,7 @@ export default class View extends React.Component {
             <div className="o-box__cell">
               <FormContainer
                 id={RADIUS_ADVANCE_SETTING_KEY}
-                options={$$radiusAdvancedSetting}
+                options={this.$$radiusAdvancedSetting}
                 className="o-form--compassed"
                 data={$$curData.get('radius')}
                 onChangeData={(data) => {
@@ -652,7 +660,7 @@ export default class View extends React.Component {
               <FormContainer
                 id={PORTAL_SERVER_KEY}
                 className="o-form--compassed"
-                options={$$potalServerFormOptions}
+                options={this.$$potalServerFormOptions}
                 data={$$curData.get('portalServer')}
                 onChangeData={(data) => {
                   this.props.updateCurEditListItem({

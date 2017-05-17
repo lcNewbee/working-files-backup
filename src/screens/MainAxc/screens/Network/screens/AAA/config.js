@@ -811,7 +811,7 @@ export const $$portalTemplateOptions = fromJS([
     text: _('Web Template'),
     formProps: {
       type: 'select',
-      defaultValue: '6',
+      defaultValue: '0',
       required: true,
       visible: $$data => $$data.get('apmac') || $$data.get('ssid'),
     },

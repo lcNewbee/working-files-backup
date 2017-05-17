@@ -4,18 +4,44 @@
     "msg": "ok"
   },
   "data": {
-    "list": [{
-      "id": 1,
-      "name": "fanny",
-      "ip": "129.0.0.1",
-      "mac": "22:22:22:22:22",
-      "address": "深圳",
-      "basip": "129.0.0.1",
-      "web": "LeeSon",
-      "count": "3",
-      "des": "hello",
-      "x": "4",
-      "y": "0"
-    }]
+    "list": [
+      {
+        "id": 1,
+        "name": "fanny",
+        "ip": "129.0.0.1",
+        "mac": "12:22:11:22:11:22",
+        "address": "深圳",
+        "basip": "129.0.0.1",
+        "web": "LeeSon",
+        "count": "3",
+        "des": "hello",
+        "x": "4",
+        "y": "0"
+      }, {
+        "id": 2,
+        "name": "fanny",
+        "ip": "129.0.0.1",
+        "mac": "12:22:11:22:11:33",
+        "address": "深圳",
+        "basip": "129.0.0.1",
+        "web": "LeeSon",
+        "count": "3",
+        "des": "hello",
+        "x": "4",
+        "y": "0"
+      }, {
+        "id": 1,
+        "name": "fanny",
+        "ip": "129.0.0.1",
+        "mac": "12:22:11:22:11:44",
+        "address": "深圳",
+        "basip": "129.0.0.1",
+        "web": "LeeSon",
+        "count": "3",
+        "des": "hello",
+        "x": "4",
+        "y": "0"
+      }
+    ]
   }
 }

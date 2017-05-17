@@ -94,16 +94,18 @@ class WirelessSsid_Model extends CI_Model {
     public function add_ssid($data) {
         $result = null;
         $temp_data = $this->getCgiParam($data);
-		//判断是否选择了1x 认证，并且没选择aaa模板 将默认的local清除
-		if($data['encryption'] === '802.1x' && $data['mandatorydomain'] === 'local'){
+
+		    //判断是否选择了1x 认证，并且没选择aaa模板 将默认的local清除
+		    if($data['encryption'] === '802.1x' && $data['mandatorydomain'] === 'local'){
             $temp_data['mandatorydomain'] = '';
         }
-		//判断是否选择portal模板
+
+		    //判断是否选择portal模板
         if($data['accessControl'] === 'portal') {
-            //使用portal
-            //1. 用portal模板得到aaa模板
-            $aaa_template = $this->getDomain($data['portalTemplate']);
-			$temp_data['mandatorydomain'] = $aaa_template;
+          //使用portal
+          //1. 用portal模板得到aaa模板
+          $aaa_template = $this->getDomain($data['portalTemplate']);
+			    $temp_data['mandatorydomain'] = $aaa_template;
         }
         if($data['accessControl'] === 'none' && $data['encryption'] != '802.1x'){
             $temp_data['mandatorydomain'] = '';
@@ -112,6 +114,7 @@ class WirelessSsid_Model extends CI_Model {
         $result = axc_add_wireless_ssid(json_encode($temp_data));
         $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+
             //绑定portal
             if($data['accessControl'] === 'portal' && isset($data['auth']) && $data['auth'] != '' ) {
                 $this->binPortalTemplate($data['auth'], $data['ssid'], $temp_data['mandatorydomain']);
@@ -218,7 +221,7 @@ class WirelessSsid_Model extends CI_Model {
         }
         return $result;
     }
-    public  function unbind_ssid($data) {
+    public function unbind_ssid($data) {
         $result = null;
         $temp_data = $this->getCgiParam($data);
         $result = axc_unbind_wireless_ssid(json_encode($temp_data));
@@ -321,7 +324,7 @@ class WirelessSsid_Model extends CI_Model {
             'ssid'=> $ssid,
             'apmac'=> ''
         );
-        if($this->portalsql->insert('portal_ssid',$arr)){
+        if($this->portalsql->insert('portal_ssid', $arr)){
             return True;
         }
         return FALSE;
@@ -338,7 +341,7 @@ class WirelessSsid_Model extends CI_Model {
         $this->portalsql->update('portal_ssid', $arr);
     }
     //删除portal_ssid
-	private function delPoartalSsid($ssid) {
+	  private function delPoartalSsid($ssid) {
         $this->portalsql->where('ssid', $ssid);
         $this->portalsql->delete('portal_ssid');
     }

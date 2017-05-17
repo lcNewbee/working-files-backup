@@ -313,6 +313,8 @@
   "%s should be the date of today or after %s !":"%s应该为今天的日期或者%s之后的日期！",
   "%s should be the date of today or before %s!":"%s应该为今天的日期或者%s之前的日期！",
 
+  "Item with the same SSID and access point MAC address already exists": "已存在相同 SSID 与 AP MAC 的项",
+
   "Remote Radius Authentication Server": "远程Radius认证服务器",
   "Remote Radius Accounting Server": "远程Radius计费服务器",
   "Remote Radius Server Advanced Settings": "远程Radius服务器高级设置",

@@ -127,6 +127,8 @@ export default class App extends Component {
           onOk={this.onModalApply}
           noFooter={isLoadingModal}
           noClose={isLoadingModal}
+          okText={__('OK')}
+          cancelText={__('Cancel')}
           customBackdrop
         >
           {
