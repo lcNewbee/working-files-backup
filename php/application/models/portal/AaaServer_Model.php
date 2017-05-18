@@ -24,15 +24,14 @@ class AaaServer_Model extends CI_Model {
                 $row['radius_server_type'] = $row['radius_template'] == 'local' ? 'local' : 'remote';
                 $row['radius'] = $this->getRadius($row['radius_template']);//获取radius属性
 
-                //$row['portal_server_type'] = $row['portal_server_type'];
                 $row['portalServer'] = $this->getPortal($row['portal_template']);//获取portal属性
 
                 $row['portalRule'] = $this->getPortalRule($row['portal_template'], $row['portalServer']['interface_bind']);//获取portal 规则
 
                 if($row['portal_rule_type'] === 'ssid'){
-                    $sqlcmd = "select id,apmac,ssid,address,web from portal_ssid where ssid='{$row['ssid']}'";
-                    if($row['mac'] != '' && $row['mac'] != null){
-                        $sqlcmd = "select id,apmac,ssid,address,web from portal_ssid where ssid='{$row['ssid']}' and apmac='{$row['mac']}'";
+                    $sqlcmd = "select id,apmac,ssid,address,des,web from portal_ssid where ssid='{$row['ssid']}' and (apmac='' or apmac=null)";
+                    if($row['mac'] != '' && $row['mac'] != ''){
+                        $sqlcmd = "select id,apmac,ssid,address,des,web from portal_ssid where ssid='{$row['ssid']}' and apmac='{$row['mac']}'";
                     }
                     $webquery = $this->portalsql->query($sqlcmd)->result_array();
                     if(count($webquery) > 0) {
