@@ -82,11 +82,7 @@ const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat')
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
 const sPortalMac =
     require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
-// 防火墙
-const sAttackDefense =
-    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
-const sFirewallBlackList =
-    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
+
 
 /**
  * AP组管理
@@ -125,6 +121,11 @@ const sEthStatistic = require('../../screens/MainAxc/screens/Network/screens/DPI
 const sProtoInfo = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
 const sDPISettings = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPISettings');
 
+// 防火墙
+const sAttackDefense =
+    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
+const sFirewallBlackList =
+    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
 
 /**
  * 系统管理
@@ -306,6 +307,7 @@ const routes = [
               {
                 id: 'dpi',
                 icon: 'copy',
+                // label: __('beta'),
                 path: '/main/network/dpi',
                 text: __('Application Analyze'),
                 indexPath: '/main/network/dpi/dpioverview',
@@ -583,37 +585,37 @@ const routes = [
                 text: __('Online Clients'),
                 component: sPortalOnlineList.Screen,
               },
-              {
-                id: 'networkPortal',
-                icon: 'copy',
-                text: __('old page'),
-                noTree: true,
-                component: SharedComponents.TabContainer,
-                path: '/main/portal/old',
-                routes: [
-                  {
-                    id: 'portalServer',
-                    path: '/main/portal/old/portal/server',
-                    formUrl: 'goform/network/portal/server',
-                    text: __('Portal Services'),
-                    component: sPortalServer.Screen,
-                  },
-                  {
-                    id: 'portalRules',
-                    path: '/main/portal/old/portal/rules',
-                    formUrl: 'goform/network/portal/rule',
-                    text: __('Port Portal Rules'),
-                    component: sPortalRules.Screen,
-                  },
-                  {
-                    id: 'ridiusList',
-                    path: '/main/portal/old/radius/list',
-                    formUrl: 'goform/network/radius/template',
-                    text: __('Radius Services'),
-                    component: sRadiusTemplate.Screen,
-                  },
-                ],
-              },
+              // {
+              //   id: 'networkPortal',
+              //   icon: 'copy',
+              //   text: __('old page'),
+              //   noTree: true,
+              //   component: SharedComponents.TabContainer,
+              //   path: '/main/portal/old',
+              //   routes: [
+              //     {
+              //       id: 'portalServer',
+              //       path: '/main/portal/old/portal/server',
+              //       formUrl: 'goform/network/portal/server',
+              //       text: __('Portal Services'),
+              //       component: sPortalServer.Screen,
+              //     },
+              //     {
+              //       id: 'portalRules',
+              //       path: '/main/portal/old/portal/rules',
+              //       formUrl: 'goform/network/portal/rule',
+              //       text: __('Port Portal Rules'),
+              //       component: sPortalRules.Screen,
+              //     },
+              //     {
+              //       id: 'ridiusList',
+              //       path: '/main/portal/old/radius/list',
+              //       formUrl: 'goform/network/radius/template',
+              //       text: __('Radius Services'),
+              //       component: sRadiusTemplate.Screen,
+              //     },
+              //   ],
+              // },
               {
                 id: 'portalServices',
                 isIndex: true,
@@ -621,13 +623,13 @@ const routes = [
                 icon: 'user-o',
                 text: __('Local Server'),
                 routes: [
-                  {
-                    id: 'portalRadiusNas',
-                    path: '/main/portal/local/radius',
-                    formUrl: 'goform/portal/radius/nas',
-                    text: __('Radius Server'),
-                    component: sPortalNas.Screen,
-                  },
+                  // {
+                  //   id: 'portalRadiusNas',
+                  //   path: '/main/portal/local/radius',
+                  //   formUrl: 'goform/portal/radius/nas',
+                  //   text: __('Radius Server'),
+                  //   component: sPortalNas.Screen,
+                  // },
                   {
                     id: 'portalAccess',
                     isIndex: true,

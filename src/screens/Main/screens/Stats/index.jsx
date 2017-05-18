@@ -21,6 +21,12 @@ const msg = {
   total: __('Total:'),
   apNumber: __('AP Number'),
 };
+const colors = [
+  '#00a7f6', '#f6402b', '#ff9801', '#ffc100',
+  '#91d951', '#1fb5ac', '#73d6d1',
+  '#00a7f6', '#1193f5', '#3e4cb7',
+  '#6834bc', '#9c1ab2', '#eb1461',
+];
 const timeTypeSwitchs = fromJS([
   {
     value: 'today',
@@ -54,6 +60,7 @@ const clientTypeSwitchs = fromJS([
   },
 ]);
 const clientNetworkChartOption = {
+  color: colors,
   tooltip: {
     trigger: 'item',
     formatter: '{a} <br/>{b} : {c} ' + __('clientUnit') + ' ({d}%)',
@@ -83,6 +90,7 @@ const clientNetworkChartOption = {
   ],
 };
 const clientProducerOption = {
+  color: colors,
   tooltip: {
     trigger: 'item',
     formatter: '{a} <br/>{b} : {c} ' + __('clientUnit') + ' ({d}%)',
@@ -112,7 +120,7 @@ const clientProducerOption = {
   ],
 };
 const apChartOption = {
-  color: ['#c23531', '#4BC076', '#2f4554', '#61a0a8', '#d48265'],
+  color: [colors[1], colors[4]],
   tooltip: {
     trigger: 'item',
     formatter: `{a} <br/>{b} : {c} ${__('apUnit')} ({d}%)`,
@@ -138,7 +146,7 @@ const apChartOption = {
     },
   ],
 };
-const colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
+// const colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
 const clientsStatsOption = fromJS({
   color: colors,
   tooltip: {
@@ -169,7 +177,7 @@ const clientsStatsOption = fromJS({
     },
     axisLine: {
       lineStyle: {
-        color: colors[1],
+        // color: colors[1],
       },
     },
     splitLine: {
@@ -492,14 +500,14 @@ export class Status extends React.PureComponent {
     const clientsProducerChart = this.getClientNumberChartOption('producer');
 
     return (
-      <div className="Stats">
+      <div className="Stats t-overview">
         <h2>{ __('Statistics') }</h2>
-        <div className="o-box row" >
+        <div className="t-overview__section row" >
           <div className="cols col-4" >
-            <div className="o-box__cell">
+            <div className="element t-overview__section-header">
               <h3>{ msg.apNumber }</h3>
             </div>
-            <div className="o-box__cell">
+            <div className="element">
               <EchartReact
                 style={eChartStyle}
                 option={apNumberChartOption}
@@ -517,10 +525,10 @@ export class Status extends React.PureComponent {
             </div>
           </div>
           <div className="cols col-8" >
-            <div className="o-box__cell">
+            <div className="element t-overview__section-header">
               <h3>{ __('Clients Number') }</h3>
             </div>
-            <div className="o-box__cell row">
+            <div className="element row">
               <div className="cols col-6">
                 <EchartReact
                   option={clientNetworkChartOptions}
@@ -536,69 +544,68 @@ export class Status extends React.PureComponent {
 
             </div>
           </div>
-          <div className="cols col-12" >
-            <div className="o-box__cell">
-              <h3>{ __('Clients Statistics') }
-                <Switchs
-                  options={timeTypeSwitchs}
-                  value={this.props.query.get('time_type')}
-                  onChange={this.onChangeTime}
-                />
-              </h3>
-            </div>
-            <div className="o-box__cell">
-              <EchartReact
-                className="stats-group-canvas"
-                option={statisticsChartOption}
-                style={{
-                  width: '100%',
-                  height: '300px',
-                }}
-                needClear
+        </div>
+        <div className="t-overview__section row" >
+          <div >
+            <h3 className="element t-overview__section-header">{ __('Clients Statistics') }
+              <Switchs
+                options={timeTypeSwitchs}
+                value={this.props.query.get('time_type')}
+                onChange={this.onChangeTime}
               />
-            </div>
+            </h3>
           </div>
+          <div className="element">
+            <EchartReact
+              className="stats-group-canvas"
+              option={statisticsChartOption}
+              style={{
+                width: '100%',
+                height: '300px',
+              }}
+              needClear
+            />
+          </div>
+        </div>
 
-          <div className="cols col-12">
-            <div className="o-box__cell">
-              <h3>{__('Clients Ranklist')}
-                <Switchs
-                  options={clientTypeSwitchs}
-                  value={this.props.query.get('sort_type')}
-                  onChange={this.onChangeClientSortType}
-                />
-                <a className="link-more" href="#/main/clients">
-                  {__('See More')}
-                  <Icon name="arrow-circle-o-right" className="icon" />
-                </a>
-              </h3>
-            </div>
-            <div className="o-box__cell">
-              <Table
-                className="table"
-                options={clientsListOption}
-                list={this.props.data.get('clientlist')}
+        <div className="t-overview__section row">
+          <div className="element t-overview__section-header">
+            <h3>{__('Clients Ranklist')}
+              <Switchs
+                options={clientTypeSwitchs}
+                value={this.props.query.get('sort_type')}
+                onChange={this.onChangeClientSortType}
               />
-            </div>
+              <a className="link-more" href="#/main/clients">
+                {__('See More')}
+                <Icon name="arrow-circle-o-right" className="icon" />
+              </a>
+            </h3>
           </div>
-
-          <div className="cols col-12">
-            <div className="o-box__cell">
-              <h3>{ __('AP Activity Ranklist') }
-                <a className="link-more" href="#/main/devices">{__('See More')}
-                  <Icon name="arrow-circle-o-right" className="icon" />
-                </a>
-              </h3>
-            </div>
-            <div className="o-box__cell">
-              <Table
-                className="table"
-                options={apListOption}
-                list={this.props.data.get('aplist')}
-              />
-            </div>
+          <div className="element">
+            <Table
+              className="table"
+              options={clientsListOption}
+              list={this.props.data.get('clientlist')}
+            />
           </div>
+        </div>
 
+        <div className="t-overview__section row">
+          <div className="element t-overview__section-header">
+            <h3>{ __('AP Activity Ranklist') }
+              <a className="link-more" href="#/main/devices">{__('See More')}
+                <Icon name="arrow-circle-o-right" className="icon" />
+              </a>
+            </h3>
+          </div>
+          <div className="element">
+            <Table
+              className="table"
+              options={apListOption}
+              list={this.props.data.get('aplist')}
+            />
+          </div>
         </div>
 
         <Modal

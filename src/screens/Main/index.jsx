@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import utils from 'shared/utils';
+import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Nav from 'shared/components/Nav';
-import Icon from 'shared/components/Icon';
-import Navbar from 'shared/components/Navbar';
+import utils from 'shared/utils';
+import { Icon, Nav, Navbar } from 'shared/components';
 import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';

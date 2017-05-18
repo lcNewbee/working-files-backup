@@ -302,6 +302,7 @@ export class Portal extends PureComponent {
             name="url"
             value={getCurrData('url')}
             onChange={this.onUpdateSettings('url')}
+            maxLength="128"
             {...url}
           />
           <FormGroup
@@ -309,6 +310,7 @@ export class Portal extends PureComponent {
             name="title"
             value={getCurrData('title')}
             onChange={this.onUpdateSettings('title')}
+            maxLength="64"
             required
             {...title}
           />
