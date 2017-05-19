@@ -92,7 +92,7 @@ const sApList = require('../../screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/MainAxc/screens/Monitor/screens/SafeStatus');
 const sWirelessAcl = require('../../screens/MainAxc/screens/WLAN/screens/Acl');
 const sSsidSettings =
-    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings/IndiaBank');
+    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
 const sSmartRf =
     require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
 const sTimerPolicy =
@@ -181,6 +181,7 @@ const routes = [
             ],
           },
           {
+            id: 'group',
             path: '/main/group',
             icon: 'group',
             text: __('AP Groups '),
@@ -240,7 +241,7 @@ const routes = [
                 component: SharedComponents.TabContainer,
 
                 // 不要删除空格
-                text: __('Radio '),
+                text: __('SSID Management'),
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -252,7 +253,7 @@ const routes = [
                     id: 'smartRf',
                     path: '/main/group/wireless/smart',
                     formUrl: 'goform/group/smartRf',
-                    text: __('Smart RF'),
+                    text: __('Advance Settings'),
                     component: sSmartRf.Screen,
                   },
                 ],
@@ -333,23 +334,23 @@ const routes = [
                 id: 'wirelessSafePolicy',
                 icon: 'certificate',
                 path: '/main/group/safe',
-                formUrl: 'goform/group/timerPolicy',
                 text: __('Safe Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 routes: [
                   {
-                    id: 'wirelessWips',
-                    path: '/main/group/safe/wips',
-                    formUrl: 'goform/group/wips',
-                    text: __('AP Scan Settings'),
-                    component: sWips.Screen,
-                  }, {
                     id: 'wirelessEndpointProtection',
                     path: '/main/group/safe/endpointProtection',
                     formUrl: 'goform/group/wireless/protection',
                     text: __('Terminal Protection'),
                     component: sEndpointProtection.Screen,
+                  },
+                  {
+                    id: 'wirelessWips',
+                    path: '/main/group/safe/wips',
+                    formUrl: 'goform/group/wips',
+                    text: __('AP Monitor Settings'),
+                    component: sWips.Screen,
                   },
                 ],
               },

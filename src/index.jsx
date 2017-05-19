@@ -1,3 +1,5 @@
+require('shared/shim');
+
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');

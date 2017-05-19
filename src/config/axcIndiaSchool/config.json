@@ -2,5 +2,7 @@
   "name": "axilspot wireless lan access controller",
   "title": "Wireless LAN Access Controller",
   "version": "2.5.3",
+  "vendor": "indiaSchool",
+  "noPortal": true,
   "hasUsername": true
 }

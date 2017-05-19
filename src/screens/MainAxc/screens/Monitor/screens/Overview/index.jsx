@@ -326,10 +326,10 @@ function getFlowOption(serverData, timeType) {
   option.yAxis[0].name = utilObj.label;
 
   option.series[0].data = $$dataList[0].data.map(
-    val => parseFloat(Number(val / utilObj.val).toFixed(6)),
+    val => parseFloat(Number(val / utilObj.val).toFixed(1)),
   );
   option.series[1].data = $$dataList[1].data.map(
-    val => parseFloat(Number(val / utilObj.val).toFixed(6)),
+    val => parseFloat(Number(val / utilObj.val).toFixed(1)),
   );
 
   return option;

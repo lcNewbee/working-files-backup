@@ -11,110 +11,11 @@ import { actions as screenActions, AppScreen } from 'shared/containers/appScreen
 import { actions as appActions } from 'shared/containers/app';
 import * as productActions from '../../../../reducer';
 
-function getPortalTemplateName() {
-  return utils.fetch('goform/network/portal/server', {
-    size: 9999,
-    page: 1,
-  })
-    .then(json => (
-      {
-        options: json.data.list.map(
-          item => ({
-            value: item.template_name,
-            label: item.template_name,
-          }),
-        ),
-      }
-    ),
-  );
-}
-
-/* eslint-disable quote-props */
-const idToAuthMap = {
-  '1': '0',
-  '2': '1',
-  '3': '2',
-  '4': '3',
-  '5': '4',
-  '6': '5',
-  '7': '6',
-};
-
-function getWebTemplateName() {
-  return utils.fetch('goform/portal/access/web', {
-    size: 9999,
-    page: 1,
-  })
-    .then(json => (
-      {
-        options: json.data.list.map(
-          item => ({
-            value: idToAuthMap[item.id],
-            label: __(item.name),
-          }),
-        ),
-      }
-    ),
-  );
-}
-
-function getSSIDWebTemplate() {
-  return utils.fetch('goform/portal/access/ssidmanagement', {
-    size: 9999,
-    page: 1,
-  }).then((json) => {
-    if (json.state && json.state.code === 2000) {
-      return fromJS(json.data.list);
-    }
-    return fromJS([]);
-  });
-}
-
 const msg = {
   upSpeed: __('Up Speed'),
   downSpeed: __('Down Speed'),
   selectGroup: __('Select Group'),
 };
-let encryptionOptions = fromJS([
-  {
-    value: 'none',
-    label: __('NONE'),
-  }, {
-    value: 'psk-mixed',
-    label: __('WPA2-PSK'),
-  }, {
-    value: '802.1x',
-    label: '802.1x',
-  },
-]);
-let authenticationTypeOptions = fromJS([
-  {
-    value: 'none+none',
-    label: __('NONE'),
-  },
-  {
-    value: 'none+portal',
-    label: __(' Portal'),
-  },
-  {
-    value: 'psk-mixed+none',
-    label: __('WPA2-PSK'),
-  },
-  {
-    value: 'psk-mixed+portal',
-    label: __('WPA2-PSK + Portal'),
-  },
-  {
-    value: '802.1x',
-    label: '802.1x',
-  },
-]);
-
-// 处理小于 2.5的版本
-if (window.guiConfig.versionCode < 20500) {
-  encryptionOptions = encryptionOptions.delete(-1);
-}
-
 const loadBalanceTypeArr = [
   {
     value: '0',
@@ -217,6 +118,120 @@ const $$accessTypeSeletOptions = fromJS([
   },
 ]);
 const flowRateFilter = utils.filter('flowRate:["KB"]');
+/* eslint-disable quote-props */
+const idToAuthMap = {
+  '1': '0',
+  '2': '1',
+  '3': '2',
+  '4': '3',
+  '5': '4',
+  '6': '5',
+  '7': '6',
+};
+const defaultQuery = {};
+const noPortal = window.guiConfig.noPortal;
+
+let encryptionOptions = fromJS([
+  {
+    value: 'none',
+    label: __('NONE'),
+  }, {
+    value: 'psk-mixed',
+    label: __('WPA2-PSK'),
+  }, {
+    value: '802.1x',
+    label: '802.1x',
+  },
+]);
+let authenticationTypeOptions = fromJS([
+  {
+    value: 'none+none',
+    label: __('NONE'),
+  },
+  {
+    value: 'none+portal',
+    label: __(' Portal'),
+  },
+  {
+    value: 'psk-mixed+none',
+    label: __('WPA2-PSK'),
+  },
+  {
+    value: 'psk-mixed+portal',
+    label: __('WPA2-PSK + Portal'),
+  },
+  {
+    value: '802.1x',
+    label: '802.1x',
+  },
+]);
+let noAuthTableCol = false;
+let noAAAFormgroup = false;
+let aaaDefaultValue = 'local';
+
+function getPortalTemplateName() {
+  return utils.fetch('goform/network/portal/server', {
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.template_name,
+            label: item.template_name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
+function getWebTemplateName() {
+  return utils.fetch('goform/portal/access/web', {
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: idToAuthMap[item.id],
+            label: __(item.name),
+          }),
+        ),
+      }
+    ),
+  );
+}
+
+function getSSIDWebTemplate() {
+  return utils.fetch('goform/portal/access/ssidmanagement', {
+    size: 9999,
+    page: 1,
+  }).then((json) => {
+    if (json.state && json.state.code === 2000) {
+      return fromJS(json.data.list);
+    }
+    return fromJS([]);
+  });
+}
+
+// 处理无 Portal 模块时的配置
+if (noPortal) {
+  // 删除 802.1x
+  encryptionOptions = encryptionOptions.delete(-1);
+
+  // 删除 认证计费相关选项
+  authenticationTypeOptions = authenticationTypeOptions.delete(1).delete(-1).delete(-1);
+  noAuthTableCol = true;
+  noAAAFormgroup = true;
+  aaaDefaultValue = '';
+
+  defaultQuery.accessControl = 'none';
+}
+
+// 列表配置项
 const listOptions = fromJS([
   {
     id: 'ssid',
@@ -406,6 +421,7 @@ const listOptions = fromJS([
   {
     id: 'auth',
     text: __('Authetication'),
+    noTable: noAuthTableCol,
     formProps: {
       type: 'select',
       required: true,
@@ -420,11 +436,11 @@ const listOptions = fromJS([
   {
     id: 'mandatorydomain',
     text: __('AAA Policy'),
-    defaultValue: 'local',
+    defaultValue: aaaDefaultValue,
     noTable: true,
+    noForm: noAAAFormgroup,
     formProps: {
       type: 'select',
-      required: true,
       visible($$data) {
         const encryption = $$data.get('encryption');
         return encryption === '802.1x';
@@ -988,6 +1004,7 @@ export default class View extends React.Component {
           actionQuery: {
             copyFromGroupId: -100,
           },
+          query: defaultQuery,
         }}
         modalSize={isCopySsid ? 'lg' : 'md'}
         modalChildren={this.renderCopySsid()}

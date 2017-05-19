@@ -2,5 +2,7 @@
   "name": "axilspot wireless lan access controller",
   "title": "AXILSPOT Wireless LAN Access Controller",
   "version": "1.1.6",
+  "vendor": "indiaBank",
+  "noPortal": true,
   "hasUsername": true
 }

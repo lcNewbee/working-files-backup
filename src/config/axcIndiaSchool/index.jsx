@@ -119,6 +119,8 @@ const sEndpointProtection =
 const sLiveMap = require('../../screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
+const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 
@@ -261,7 +263,7 @@ const routes = [
                 id: 'networkAaa',
                 icon: 'lock',
                 path: '/main/network/aaa',
-                formUrl: 'goform/network/Aaa',
+                formUrl: 'goform/portal/AaaTemplate',
                 text: __('AAA'),
                 component: sNetworkAaa.Screen,
               }, {
@@ -394,7 +396,7 @@ const routes = [
                 component: SharedComponents.TabContainer,
 
                 // 不要删除空格
-                text: __('Radio '),
+                text: __('SSID Management'),
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -406,7 +408,7 @@ const routes = [
                     id: 'smartRf',
                     path: '/main/group/wireless/smart',
                     formUrl: 'goform/group/smartRf',
-                    text: __('Smart RF'),
+                    text: __('Advance Settings'),
                     component: sSmartRf.Screen,
                   },
                 ],
@@ -433,6 +435,22 @@ const routes = [
                     formUrl: 'goform/group/map/apPlan',
                     component: sApPlanMap.Screen,
                     noNav: true,
+                  },
+                  {
+                    id: 'heatMap',
+                    path: '/main/group/map/heat_map',
+                    formUrl: 'goform/group/map/heatmap',
+                    fetchUrl: 'goform/group/map/heatmap',
+                    text: __('Heat Map'),
+                    component: sHeatMap.Screen,
+                  },
+                  {
+                    id: 'orbitTrace',
+                    path: '/main/group/map/orbittrace',
+                    formUrl: '/goform/group/map/orbittrace',
+                    fetchUrl: '/goform/group/map/orbittrace',
+                    text: __('Orbit Trace'),
+                    component: sOrbitTrace.Screen,
                   },
                   {
                     id: 'cientsTrace',
@@ -471,23 +489,23 @@ const routes = [
                 id: 'wirelessSafePolicy',
                 icon: 'certificate',
                 path: '/main/group/safe',
-                formUrl: 'goform/group/timerPolicy',
                 text: __('Safe Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 routes: [
                   {
-                    id: 'wirelessWips',
-                    path: '/main/group/safe/wips',
-                    formUrl: 'goform/group/wips',
-                    text: __('AP Scan Settings'),
-                    component: sWips.Screen,
-                  }, {
                     id: 'wirelessEndpointProtection',
                     path: '/main/group/safe/endpointProtection',
                     formUrl: 'goform/group/wireless/protection',
                     text: __('Terminal Protection'),
                     component: sEndpointProtection.Screen,
+                  },
+                  {
+                    id: 'wirelessWips',
+                    path: '/main/group/safe/wips',
+                    formUrl: 'goform/group/wips',
+                    text: __('AP Monitor Settings'),
+                    component: sWips.Screen,
                   },
                 ],
               },
