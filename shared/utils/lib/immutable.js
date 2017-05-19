@@ -1,7 +1,25 @@
 // 对 immutable 数据的操作
 
+function warning(msg) {
+  /* eslint-disable no-console */
+  if (console && typeof console.error === 'function') {
+    console.error('Warning: ', msg);
+  }
+
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(msg)
+  /* eslint-disable no-empty */
+  } catch (e) { }
+}
+
 function isImmutableList($$list) {
-  return $$list && $$list.clear && (typeof $$list.map === 'function');
+  return $$list && $$list.constructor && typeof $$list.constructor.isList === 'function';
+}
+function isImmutableMap($$list) {
+  return $$list && $$list.constructor && typeof $$list.constructor.isMap === 'function';
 }
 
 var immutableUtils = {
@@ -63,21 +81,26 @@ var immutableUtils = {
     var defaultKey = key || 'defaultValue';
     var ret = {};
 
+    if (!isImmutableList($$options)) {
+      warning('immutableUtils.getDefaultData param need immutable.js List data');
+      return null;
+    }
+
     function fillRet($$item) {
-      var defaultVal = $$item.get(defaultKey) || $$item.getIn(['formProps', defaultKey]);
+      var defaultVal = $$item.get(defaultKey);
+
+      if (typeof defaultVal === undefined) {
+        defaultVal = $$item.getIn(['formProps', defaultKey]);
+      }
 
       // 如果是列表继续循环
-      if (typeof $$item.findIndex === 'function') {
+      if (isImmutableList($$item)) {
         $$item.forEach(function($$subItem) {
           fillRet($$subItem);
         })
       } else if (defaultVal !== undefined) {
         ret[$$item.get('id')] = defaultVal;
       }
-    }
-
-    if (!isImmutableList($$options)) {
-      return null;
     }
 
     // 初始化默认值对象
@@ -92,7 +115,7 @@ var immutableUtils = {
   getNumberKeys: function($$options) {
     var ret = [];
 
-    if(!$$options || ($$options && !$$options.clear)) {
+    if(!isImmutableList($$options)) {
       return ret;
     }
 
@@ -101,7 +124,7 @@ var immutableUtils = {
       var linkId;
 
       // 如果是 List 类型
-      if (typeof $$list.unshift === 'function') {
+      if (isImmutableList($$list)) {
         $$list.forEach(
           function($$item) {
             walkList($$item);
@@ -132,7 +155,7 @@ var immutableUtils = {
   getTableOptions: function ($$options) {
     var ret = $$options;
 
-    if (!ret) {
+    if (!isImmutableList(ret)) {
       return null;
     }
 
@@ -146,6 +169,10 @@ var immutableUtils = {
 
   getChanged: function ($$newData, $$oldData) {
     var $$ret = $$newData;
+
+    if (!isImmutableMap($$newData) || !isImmutableMap($$newData)) {
+      return null;
+    }
 
     $$ret = $$newData.filter(
       function(val, key) {
@@ -165,6 +192,10 @@ var immutableUtils = {
 
 
   selectList: function($$list, data, $$selectedList) {
+    if(!isImmutableList($$list) || !data) {
+      warning('immutableUtils.selectList need params $$list and data');
+      return null;
+    }
     var $$retList = $$list;
     var selectedList = $$selectedList || $$retList.clear();
 

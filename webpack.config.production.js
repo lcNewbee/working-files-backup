@@ -72,7 +72,7 @@ var polyfillList = [
 
 module.exports = {
   entry: {
-    app: ['core-js/shim', 'isomorphic-fetch', './src/index_pub.jsx'],
+    app: ['./src/index_pub.jsx'],
   },
   module: {
     rules: [

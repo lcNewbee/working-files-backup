@@ -25,8 +25,6 @@ let config = {
     index: [
        // necessary for hot reloading with IE:
       'eventsource-polyfill',
-      'core-js/shim',
-      'isomorphic-fetch',
       'react-hot-loader/patch',
       'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
 

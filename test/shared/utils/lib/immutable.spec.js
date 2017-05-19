@@ -1,4 +1,4 @@
-import { getNumberKeys, getFormOptions, getDefaultData } from 'shared/utils/lib/immutable';
+import { getNumberKeys, getFormOptions, getDefaultData, selectList } from 'shared/utils/lib/immutable';
 import { fromJS } from 'immutable';
 
 describe('immutableUtils', () => {
@@ -79,13 +79,15 @@ describe('immutableUtils', () => {
             type: 'file',
             dataType: 'number',
           },
-        }, {
+        },
+        {
           id: '2',
           linkId: 'link2',
           formProps: {
             type: 'file',
           },
-        }, {
+        },
+        {
           id: '3',
           linkId: 'link3',
           label: 'test',
@@ -126,11 +128,17 @@ describe('immutableUtils', () => {
           {
             id: '0.1',
             defaultValue: 'link1',
-          }, {
-            id: '0.2',
-            defaultValue: 'link1',
           },
-        ], [
+
+          // 需要剔除 undefined 的值
+          {
+            id: '0.2',
+            defaultValue: undefined,
+          },
+        ],
+
+        // 能处理列表
+        [
           {
             id: '0.11',
             defaultValue: 'link1',
@@ -138,14 +146,18 @@ describe('immutableUtils', () => {
             id: '0.22',
             defaultValue: 'link1',
           },
-        ], {
+        ],
+
+        // 需要保持 ‘’ 空的值
+        {
           id: '1',
-          defaultValue: 'link1',
+          defaultValue: '',
           formProps: {
             type: 'file',
             dataType: 'number',
           },
-        }, {
+        },
+        {
           id: 'sads',
           defaultValue: 'link2',
           formProps: {
@@ -154,13 +166,149 @@ describe('immutableUtils', () => {
         },
       ]);
       expect(getDefaultData(listOptions)).toEqual({
-        1: 'link1',
+        1: '', // 保持空值
         0.1: 'link1',
-        0.2: 'link1',
+        // '0.2' 被剔除
         0.11: 'link1',
         0.22: 'link1',
         sads: 'link2',
       });
     });
   });
+  describe('#selectList()', () => {
+    const $$list = fromJS([
+      {
+        id: 1,
+        name: '111',
+      },
+      {
+        id: 2,
+        name: '222',
+      },
+    ]);
+    it('should return null when not first argument or second argument', () => {
+      expect(selectList()).toEqual(null);
+      expect(selectList(fromJS([]))).toEqual(null);
+    });
+    it('should return correct $$list and selectedList when second argument is to select one', () => {
+      const data = {
+        index: 1,
+        selected: true,
+      };
+
+      expect(selectList($$list, data)).toEqual({
+        $$list: fromJS([
+          {
+            id: 1,
+            name: '111',
+          },
+          {
+            id: 2,
+            name: '222',
+            __selected__: true,
+          },
+        ]),
+        selectedList: fromJS([1]),
+      });
+    });
+    it('should return correct $$list and selectedList when second argument is to unselect one', () => {
+      const $$listSelected = fromJS([
+        {
+          id: 1,
+          name: '111',
+        },
+        {
+          id: 2,
+          name: '222',
+          __selected__: true,
+        },
+      ]);
+      const data = {
+        index: 1,
+        selected: false,
+      };
+
+      expect(selectList($$listSelected, data)).toEqual({
+        $$list: fromJS([
+          {
+            id: 1,
+            name: '111',
+          },
+          {
+            id: 2,
+            name: '222',
+            __selected__: false,
+          },
+        ]),
+        selectedList: fromJS([]),
+      });
+    });
+    it('should return correct $$list and selectedList when second argument is to select all', () => {
+      const $$listSelected = fromJS([
+        {
+          id: 1,
+          name: '111',
+        },
+        {
+          id: 2,
+          name: '222',
+          __selected__: true,
+        },
+      ]);
+      const data = {
+        index: -1,
+        selected: true,
+      };
+
+      expect(selectList($$listSelected, data)).toEqual({
+        $$list: fromJS([
+          {
+            id: 1,
+            name: '111',
+            __selected__: true,
+          },
+          {
+            id: 2,
+            name: '222',
+            __selected__: true,
+          },
+        ]),
+        selectedList: fromJS([0, 1]),
+      });
+    });
+    it('should return correct $$list and selectedList when second argument is to unselect all', () => {
+      const $$listSelected = fromJS([
+        {
+          id: 1,
+          name: '111',
+        },
+        {
+          id: 2,
+          name: '222',
+          __selected__: true,
+        },
+      ]);
+      const data = {
+        index: -1,
+        selected: false,
+      };
+
+      expect(selectList($$listSelected, data)).toEqual({
+        $$list: fromJS([
+          {
+            id: 1,
+            name: '111',
+            __selected__: false,
+          },
+          {
+            id: 2,
+            name: '222',
+            __selected__: false,
+          },
+        ]),
+        selectedList: fromJS([]),
+      });
+    });
+  });
 });
+
