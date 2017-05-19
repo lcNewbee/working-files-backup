@@ -8,14 +8,14 @@ class OnlineList_Model extends CI_Model {
 	}
 	function get_list($data) {
 		$socketarr = array(
-        'action'=>'get',
-        'resName'=>'online',
-        'data'=>array(
-            'pageSize'=>(int)element('size',$data,1),
-            'pageIndex'=>(int)element('page',$data,20)
-        )
-    );
-    $result = $this->notice_socket($socketarr);
+            'action'=>'get',
+            'resName'=>'online',
+            'data'=>array(
+                'pageSize'=>(int)element('size',$data,20),
+                'pageIndex'=>(int)element('page',$data,1)
+            )
+        );
+        $result = $this->notice_socket($socketarr);
 		return json_encode($result);
 	}
 

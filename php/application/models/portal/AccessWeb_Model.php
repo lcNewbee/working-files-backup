@@ -67,7 +67,7 @@ class AccessWeb_Model extends CI_Model {
 
           if ($index !== 0) {
             $datalist['data'][$index]['url'] = $row['url'];
-            $datalist['data'][$index]['sessiontime'] = $row['sessiontime'];
+            $datalist['data'][$index]['sessiontime'] = (int)$row['sessiontime'] >= 60000 ? (int)$row['sessiontime'] / 60000 : $row['sessiontime'];
           }
 
         }
@@ -245,7 +245,7 @@ class AccessWeb_Model extends CI_Model {
     private function editPortalBasauth($type, $url, $sessiontime, $name) {
         $updata = array(
             'url' => $url,
-            'sessiontime'=>(int)$sessiontime
+            'sessiontime'=>(int)$sessiontime * 60000
         );
         $newType = $type;
 

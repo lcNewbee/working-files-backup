@@ -153,6 +153,7 @@ $route['goform/portal/access/ssidmanagement'] = 'portal/AccessSsid';
 $route['goform/portal/access/ap'] = 'portal/AccessSsid/apmac';
 $route['goform/portal/access/facebook'] = 'portal/AccessFacebook';
 $route['goform/portal/Aaa'] = 'portal/AaaServer';
+$route['goform/portal/AaaTemplate'] = 'portal/AaaTemplate';
 
 
 
