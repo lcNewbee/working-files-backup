@@ -4,7 +4,7 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 import validator from 'shared/validator';
-
+import moment from 'moment';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
 // custom
@@ -44,6 +44,9 @@ function getCardInformation() {
 
 const uptimeFilter = utils.filter('connectTime');
 const flowFilter = utils.filter('flowRate');
+const curDate = {
+  date: moment().format('YYYY-MM-DD'),
+};
 const queryFormOptions = fromJS([
   {
     id: 'state',
@@ -79,6 +82,7 @@ const listOptions = fromJS([
   }, {
     id: 'date',
     text: __('Expiration'),
+    defaultValue: curDate.date,
     noForm: true,
   }, {
     id: 'time',
@@ -313,6 +317,14 @@ export const baseSetting = fromJS([
     type: 'select',
     required: true,
     placeholder: __('Please Select ') + __('Type'),
+  },
+  {
+    id: 'date',
+    label: __('Expiration'),
+    type: 'date',
+    required: true,
+    defaultValue: curDate.date,
+    visible: $$data => $$data.get('state') === '3',
   },
   {
     id: 'maclimit',
@@ -694,6 +706,7 @@ export default class View extends React.Component {
     this.state = {
       isBaseShow: true,
       isAdvancedShow: false,
+      date: curDate.date,
     };
 
     utils.binds(this, [
