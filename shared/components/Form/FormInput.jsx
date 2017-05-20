@@ -275,6 +275,7 @@ class FormInput extends PureComponent {
             onFocusChange={this.onDateFocusChange}
             onDateChange={this.onDateChange}
             focused={!!this.state.focusedInput}
+            showDefaultInputIcon
           />
         );
 
@@ -295,6 +296,7 @@ class FormInput extends PureComponent {
             onFocusChange={this.onDateFocusChange}
             onDatesChange={this.onDatesChange}
             focusedInput={this.state.focusedInput}
+            showDefaultInputIcon
           />
         );
 

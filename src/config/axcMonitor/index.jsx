@@ -276,7 +276,7 @@ const routes = [
                 component: SharedComponents.TabContainer,
 
                 // 不要删除空格
-                text: __('Radio '),
+                text: __('SSID Management'),
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -288,7 +288,7 @@ const routes = [
                     id: 'smartRf',
                     path: '/main/group/wireless/smart',
                     formUrl: 'goform/group/smartRf',
-                    text: __('Smart RF'),
+                    text: __('Advance Settings'),
                     component: sSmartRf.Screen,
                   },
                 ],
