@@ -148,14 +148,17 @@ const listActionBarButtons = [
     actionName: 'upgrade',
     text: __('Upgrade'),
     icon: 'arrow-circle-o-up',
+    needConfirm: true,
   }, {
     actionName: 'reboot',
     text: __('Reboot'),
     icon: 'power-off',
+    needConfirm: true,
   }, {
     actionName: 'reset',
     text: __('Reset'),
     icon: 'undo',
+    needConfirm: true,
   },
 ];
 
