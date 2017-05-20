@@ -3,5 +3,6 @@
   "title": "Wireless LAN Access Controller Monitor",
   "version": "3.9.1",
   "noPortal": true,
+  "noAAA": true,
   "hasUsername": true
 }

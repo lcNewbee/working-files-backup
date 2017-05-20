@@ -130,6 +130,7 @@ const idToAuthMap = {
 };
 const defaultQuery = {};
 const noPortal = window.guiConfig.noPortal;
+const noAAA = window.guiConfig.noAAA;
 
 let encryptionOptions = fromJS([
   {
@@ -219,16 +220,21 @@ function getSSIDWebTemplate() {
 
 // 处理无 Portal 模块时的配置
 if (noPortal) {
-  // 删除 802.1x
-  encryptionOptions = encryptionOptions.delete(-1);
-
-  // 删除 认证计费相关选项
-  authenticationTypeOptions = authenticationTypeOptions.delete(1).delete(-1).delete(-1);
+  // 删除 Portal 相关选项
+  authenticationTypeOptions = authenticationTypeOptions.delete(1).delete(-2);
   noAuthTableCol = true;
-  noAAAFormgroup = true;
   aaaDefaultValue = '';
 
   defaultQuery.accessControl = 'none';
+}
+
+//  处理没有 AAA 模板
+if (noAAA) {
+  // 删除 802.1x 相关配置
+  encryptionOptions = encryptionOptions.delete(-1);
+  authenticationTypeOptions = authenticationTypeOptions.delete(-1);
+
+  noAAAFormgroup = true;
 }
 
 // 列表配置项
@@ -623,29 +629,32 @@ export default class View extends React.Component {
     this.listOptions = listOptions;
   }
   componentWillMount() {
-    getWebTemplateName()
-      .then((data) => {
-        this.setState({
-          WebTemplateNameOptions: fromJS(data.options),
+    if (!noPortal) {
+      getWebTemplateName()
+        .then((data) => {
+          this.setState({
+            WebTemplateNameOptions: fromJS(data.options),
+          });
         });
-      });
-    getPortalTemplateName()
-      .then((data) => {
-        this.setState({
-          portalServerTemplateNameOptions: fromJS(data.options),
+      getPortalTemplateName()
+        .then((data) => {
+          this.setState({
+            portalServerTemplateNameOptions: fromJS(data.options),
+          });
         });
-      });
-    getSSIDWebTemplate()
-      .then(($$data) => {
-        this.setState({
-          ssidWebTemplateInformation: $$data,
+      getSSIDWebTemplate()
+        .then(($$data) => {
+          this.setState({
+            ssidWebTemplateInformation: $$data,
+          });
         });
-      });
+    }
   }
   componentDidMount() {
     this.props.changeScreenActionQuery({
       groupid: this.props.groupid,
     });
+
     this.fetchMandatoryDomainList();
   }
   onSave(type) {
@@ -789,9 +798,14 @@ export default class View extends React.Component {
               item => item,
             ).map(
               (item) => {
-                const curAccessTypeLabel = $$accessTypeSeletOptions.find(
+                const $$curAccessTypeItem = $$accessTypeSeletOptions.find(
                   $$item => $$item.get('value') === item.auth_accesstype,
-                ).get('label');
+                );
+                let curAccessTypeLabel = '';
+
+                if ($$curAccessTypeItem) {
+                  curAccessTypeLabel = $$curAccessTypeItem.get('label');
+                }
 
                 return {
                   value: item.domain_name,
