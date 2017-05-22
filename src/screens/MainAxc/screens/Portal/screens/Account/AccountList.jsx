@@ -45,7 +45,7 @@ function getCardInformation() {
 const uptimeFilter = utils.filter('connectTime');
 const flowFilter = utils.filter('flowRate');
 const curDate = {
-  date: moment().format('YYYY-MM-DD'),
+  date: moment().add(1, 'days').format('YYYY-MM-DD'),
 };
 const queryFormOptions = fromJS([
   {

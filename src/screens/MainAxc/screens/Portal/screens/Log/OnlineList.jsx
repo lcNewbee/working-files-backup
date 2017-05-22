@@ -115,16 +115,7 @@ const listOptions = fromJS([
       required: true,
     },
     render(val) {
-      // 大于一天
-      if (val >= 360) {
-        ret = `${parseInt(val / 360, 10)}d${val % 360}h`;
-        // 大于一小时
-      } else if (val >= 60) {
-        ret = `${parseInt(val / 60, 10)}h${val % 60}m`;
-      } else {
-        ret = `${val}m`;
-      }
-      return ret;
+      return uptimeFilter.transform(val * 60);
     },
   }, {
     id: 'state',
