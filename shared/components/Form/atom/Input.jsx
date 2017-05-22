@@ -31,6 +31,7 @@ onTransitionEnd,`;
 
 const propTypes = {
   isFocus: PropTypes.bool,
+  autoFocus: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -39,6 +40,13 @@ const defaultProps = {
 };
 
 class Input extends PureComponent {
+
+  componentDidMount() {
+    if (this.props.autoFocus) {
+      this.myRef.select();
+    }
+  }
+
   componentDidUpdate() {
     if (this.props.isFocus) {
       this.myRef.focus();

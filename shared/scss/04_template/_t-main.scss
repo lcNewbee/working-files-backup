@@ -276,6 +276,7 @@ body {
     &.is-main-nav-hidden {
       .t-main__nav {
         max-width: 0;
+        overflow-y: hidden;
       }
       .t-main__nav-toggle {
         left: $t-main-top-menu-size;

@@ -45,6 +45,7 @@ const propTypes = {
   // Select Option
   clearable: PropTypes.bool,
   searchable: PropTypes.bool,
+  // autofocus: PropTypes.bool,
 
   // Time or Date
   formatter: PropTypes.string,
@@ -76,6 +77,13 @@ class FormInput extends PureComponent {
       'onDateFocusChange',
     ]);
   }
+
+  // componentDidMount() {
+  //   const ifautofocus = this.props.autofocus;
+  //   console.log('ifautofocus', ifautofocus);
+  //   console.log('this.myInput', this.myInput);
+  //   if (ifautofocus) this.myInput.focus();
+  // }
 
   onBlur(e) {
     if (this.props.check) {

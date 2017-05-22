@@ -45,3 +45,4 @@ gulp.task('config:ASC3', () => configProduct('ASC3'));
 gulp.task('config:ASC6', () => configProduct('ASC6'));
 gulp.task('config:ASW120', () => configProduct('ASW120'));
 gulp.task('config:NHZYASW120', () => configProduct('NHZYASW120'));
+gulp.task('config:noBrandAIP10L', () => configProduct('noBrandAIP10L'));

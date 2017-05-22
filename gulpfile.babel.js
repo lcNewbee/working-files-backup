@@ -40,6 +40,7 @@ const paths = {
   pubASW120: '../svn/ASW120_web',
 
   pubNHZYASW120: '../svn_NHZY/NHZYASW120_web',
+  pubnoBrandAIP10L: '../svn_NHZY/noBrandAIP10L_web',
 };
 
 // 默认值
@@ -129,4 +130,5 @@ gulp.task('changeASC3Title', () => changeTitle('AP'));
 gulp.task('changeASC6Title', () => changeTitle('AP'));
 gulp.task('changeASW120Title', () => changeTitle('AP'));
 gulp.task('changeNHZYASW120Title', () => noBrandTitle());
+gulp.task('changenoBrandAIP10LTitle', () => noBrandTitle());
 

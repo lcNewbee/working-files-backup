@@ -76,6 +76,7 @@ gulp.task('clean:pubASC3', () => cleanPubPath(paths.pubASC3));
 gulp.task('clean:pubASC6', () => cleanPubPath(paths.pubASC6));
 gulp.task('clean:pubASW120', () => cleanPubPath(paths.pubASW120));
 gulp.task('clean:pubNHZYASW120', () => cleanPubPath(paths.pubNHZYASW120));
+gulp.task('clean:pubnoBrandAIP10L', () => cleanPubPath(paths.pubnoBrandAIP10L));
 
 // 将编译好的文件拷贝到发布文件夹
 function copyBuild2PubPath(dstPath) {
@@ -100,6 +101,7 @@ gulp.task('pub:copyASC3', () => copyBuild2PubPath(paths.pubASC3));
 gulp.task('pub:copyASC6', () => copyBuild2PubPath(paths.pubASC6));
 gulp.task('pub:copyASW120', () => copyBuild2PubPath(paths.pubASW120));
 gulp.task('pub:copyNHZYASW120', () => copyBuild2PubPath(paths.pubNHZYASW120));
+gulp.task('pub:copynoBrandAIP10L', () => copyBuild2PubPath(paths.pubnoBrandAIP10L));
 
 // 编译，替换，发布，压缩
 function pubAP(name, callback) {
@@ -125,6 +127,7 @@ gulp.task('pub:ASC3', callback => pubAP('ASC3', callback));
 gulp.task('pub:ASC6', callback => pubAP('ASC6', callback));
 gulp.task('pub:ASW120', callback => pubAP('ASW120', callback));
 gulp.task('pub:NHZYASW120', callback => pubAP('NHZYASW120', callback));
+gulp.task('pub:noBrandAIP10L', callback => pubAP('noBrandAIP10L', callback));
 
 // 压缩文件夹,提供给后台开发测试
 function compressBulidFile(dstPath) {
@@ -153,9 +156,12 @@ gulp.task('compressASC3', () => compressBulidFile(paths.pubASC3));
 gulp.task('compressASC6', () => compressBulidFile(paths.pubASC6));
 gulp.task('compressASW120', () => compressBulidFile(paths.pubASW120));
 gulp.task('compressNHZYASW120', () => compressBulidFile(paths.pubNHZYASW120));
+gulp.task('compressnoBrandAIP10L', () => compressBulidFile(paths.pubnoBrandAIP10L));
+
 
 // 执行所有列表中的AP编译工作
 gulp.task('pub:all', () => {
-  runSequence('test', 'pub:AIP5', 'pub:AIP10', 'pub:ASW3', 'pub:AEC120', 'pub:AEC175', 'pub:ASC175', 'pub:ASC120', 'pub:AEC60', 'pub:ASC3', 'pub:ASC6', 'pub:ASW120', 'pub:AIP10L', 'pub:NHZYASW120');
+  runSequence('test', 'pub:AIP5', 'pub:AIP10', 'pub:ASW3', 'pub:AEC120', 'pub:AEC175', 'pub:ASC175', 'pub:ASC120', 'pub:AEC60',
+              'pub:ASC3', 'pub:ASC6', 'pub:ASW120', 'pub:AIP10L', 'pub:NHZYASW120', 'pub:noBrandAIP10L');
   // runSequence('test', 'pub:AIP5', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120');
 });

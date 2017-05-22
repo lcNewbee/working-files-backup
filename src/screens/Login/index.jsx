@@ -186,6 +186,7 @@ export default class Login extends React.PureComponent {
                   onChange={this.onChangeData('username')}
                   onKeyUp={this.onUsernameKeyUp}
                   required
+                  autoFocus={guiConfig.hasUsername}
                   {...username}
                 />
               ) : null
@@ -201,6 +202,7 @@ export default class Login extends React.PureComponent {
               onChange={this.onChangeData('password')}
               onKeyUp={this.onInputKeyUp}
               required
+              autoFocus={!guiConfig.hasUsername}
               {...password}
             />
 
