@@ -155,33 +155,40 @@ function getApStatusOption(serverData) {
 
   return ret;
 }
-function getFlowUnit(val) {
+function getFlowUnit(val, step) {
+  const curStep = step || 50;
   let ret = {};
+
 
   if (val <= 10240) {
     ret = {
       label: 'B',
       val: 1,
     };
-  } else if (val <= (50 * (1024 ** 2))) {
+  } else if (val <= (curStep * (1024 ** 2))) {
     ret = {
       label: 'KB',
       val: 1024,
     };
-  } else if (val <= (50 * (1024 ** 3))) {
+  } else if (val <= (curStep * (1024 ** 3))) {
     ret = {
       label: 'MB',
       val: 1024 ** 2,
     };
-  } else if (val <= (50 * (1024 ** 4))) {
+  } else if (val <= (curStep * (1024 ** 4))) {
     ret = {
       label: 'GB',
       val: 1024 ** 3,
     };
-  } else {
+  } else if (val <= (curStep * (1024 ** 5))) {
     ret = {
       label: 'TB',
       val: 1024 ** 4,
+    };
+  } else {
+    ret = {
+      label: 'PB',
+      val: 1024 ** 5,
     };
   }
   return ret;
