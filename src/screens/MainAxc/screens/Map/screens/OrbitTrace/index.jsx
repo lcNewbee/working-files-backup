@@ -438,7 +438,7 @@ export default class View extends React.Component {
       let loopStep = null;
 
       // 画线前先清除 以前划线定时器
-      // cancelAnimationFrame(this.drawAnimationFrame);
+      cancelAnimationFrame(this.drawAnimationFrame);
 
       ctx.beginPath();
       ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
