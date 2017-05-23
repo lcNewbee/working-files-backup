@@ -82,7 +82,7 @@ var immutableUtils = {
     var ret = {};
 
     if (!isImmutableList($$options)) {
-      warning('immutableUtils.getDefaultData param need immutable.js List data');
+      warning('immutableUtils.getDefaultData param need immutable.js List data, but type is ' + typeof $$options);
       return null;
     }
 

@@ -3,11 +3,8 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
+import { FormContainer, Icon, Button } from 'shared/components';
 import { radioBase, radioAdvance, radioQos, numberKeys } from 'shared/config/axcRadio';
-import { Button } from 'shared/components/Button';
-
-import FormContainer from 'shared/components/Organism/FormContainer';
-import Icon from 'shared/components/Icon';
 import { apStatus } from 'shared/config/axcAp';
 import validator from 'shared/validator';
 

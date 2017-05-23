@@ -26,7 +26,7 @@ function getWebTemplate() {
 const listOptions = fromJS([
   {
     id: 'id',
-    text: _('ID'),
+    text: __('ID'),
     width: '120px',
     noForm: true,
     formProps: {

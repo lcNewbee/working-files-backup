@@ -742,7 +742,7 @@ export const potalRuleDefaultSettingData = immutableUtils.getDefaultData($$potal
 export const $$portalTemplateOptions = fromJS([
   // {
   //   id: 'name',
-  //   text: _('Name'),
+  //   text: __('Name'),
   //   formProps: {
   //     maxLength: '129',
   //     type: 'text',
@@ -753,7 +753,7 @@ export const $$portalTemplateOptions = fromJS([
   // },
   {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -762,7 +762,7 @@ export const $$portalTemplateOptions = fromJS([
     },
   }, {
     id: 'address',
-    text: _('Address'),
+    text: __('Address'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -774,7 +774,7 @@ export const $$portalTemplateOptions = fromJS([
     },
   }, {
     id: 'basip',
-    text: _('BAS'),
+    text: __('BAS'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -786,7 +786,7 @@ export const $$portalTemplateOptions = fromJS([
   },
   {
     id: 'ssid',
-    text: _('SSID'),
+    text: __('SSID'),
     formProps: {
       type: 'select',
       maxLength: '129',
@@ -799,7 +799,7 @@ export const $$portalTemplateOptions = fromJS([
   },
   {
     id: 'apmac',
-    text: _('Access Point MAC Address'),
+    text: __('Access Point MAC Address'),
     formProps: {
       defaultValue: '',
       type: 'select',
@@ -808,7 +808,7 @@ export const $$portalTemplateOptions = fromJS([
   },
   {
     id: 'web',
-    text: _('Web Template'),
+    text: __('Web Template'),
     formProps: {
       type: 'select',
       defaultValue: '0',
@@ -818,7 +818,7 @@ export const $$portalTemplateOptions = fromJS([
   },
   {
     id: 'des',
-    text: _('Description'),
+    text: __('Description'),
     noTable: true,
     formProps: {
       type: 'textarea',
@@ -829,7 +829,7 @@ export const $$portalTemplateOptions = fromJS([
     },
   }, {
     id: 'x',
-    text: _('x'),
+    text: __('x'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -837,7 +837,7 @@ export const $$portalTemplateOptions = fromJS([
     },
   }, {
     id: 'y',
-    text: _('y'),
+    text: __('y'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -846,7 +846,7 @@ export const $$portalTemplateOptions = fromJS([
     },
   }, {
     id: 'apid',
-    text: _('AP ID'),
+    text: __('AP ID'),
     noForm: true,
     noTable: true,
     formProps: {

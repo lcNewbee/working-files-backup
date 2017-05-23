@@ -21,6 +21,7 @@ const ERROR_MSG_MAP = {
   6200: __(''),
   6201: __('Already exists with the same name SSID'),
   6202: __('Group with the same name already exists'),
+  6203: __('AP with the same name already exists'),
 
   // AXC: 系统设置 6300 - 6399
   6300: __('Pelect upload the correct firmware file'),

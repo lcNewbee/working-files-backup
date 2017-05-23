@@ -11,9 +11,10 @@
           // "Opera >= 12",
           // "Safari >= 6",
           "ie >= 9"
-        ]
+        ],
+        "uglify": true
       },
-      "uglify": true,
+      "modules": false
     }],
     "stage-3",
     "react",
@@ -32,7 +33,7 @@
   "plugins": [
     //["transform-replace-object-assign", "object.assign"],
     ["transform-runtime", {
-      "helpers": true, // defaults to true
+      "helpers": false, // defaults to true
       "polyfill": false, // defaults to true
       "regenerator": false // defaults to true
     }],

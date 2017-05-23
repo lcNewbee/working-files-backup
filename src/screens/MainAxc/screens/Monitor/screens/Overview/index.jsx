@@ -370,10 +370,10 @@ export default class GroupOverview extends React.Component {
         text: __('Actions'),
         render: (val, $$data) => {
           const isCounter = $$data.get('isCounter');
-          let btnText = _('Counter This AP');
+          let btnText = __('Counter This AP');
 
           if (isCounter === 1) {
-            btnText = _('Countering');
+            btnText = __('Countering');
           }
 
           // 如果没有值则放回null, 兼容以前版本

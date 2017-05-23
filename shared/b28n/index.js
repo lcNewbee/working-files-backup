@@ -4,16 +4,13 @@
 //  $Id: b28new.js 2014-12-23 ETw $
 /** *********************************************************************************************
  ************************************************************************************************/
-import storage from '../utils/lib/storage';
-import strUtils from '../utils/lib/string';
-import utilsCore from '../utils/lib/core';
-
 const b28n = (function _b28n(doc, _win) {
   const STROE_KEY = 'B_LANGUAGE';
   const DEFAULT_OPTIONS = {
     supportLang: ['en', 'cn'],
     defaultLang: 'en',
   };
+  const hasOwnProperty = Object.prototype.hasOwnProperty;
   const special = {
     zh: 'cn',
     'zh-chs': 'cn',
@@ -29,11 +26,50 @@ const b28n = (function _b28n(doc, _win) {
   const localB28n = {
     options: DEFAULT_OPTIONS,
   };
+  const cookie = {
+    get(name) {
+      const cookieName = `${encodeURIComponent(name)}=`;
+      const cookieStart = doc.cookie.indexOf(cookieName);
+      let cookieEnd = doc.cookie.indexOf(';', cookieStart);
+      let cookieValue = null;
+
+      if (cookieStart > -1) {
+        if (cookieEnd === -1) {
+          cookieEnd = doc.cookie.length;
+        }
+        cookieValue = decodeURIComponent(doc.cookie.substring(cookieStart +
+          cookieName.length, cookieEnd));
+      }
+      return cookieValue;
+    },
+    set(name, value, path, domain, expires, secure) {
+      let cookieText = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+
+      if (expires instanceof Date) {
+        cookieText += `; expires=${expires.toGMTString()}`;
+      }
+      if (path) {
+        cookieText += `; path=${path}`;
+      }
+      if (domain) {
+        cookieText += `; domain=${domain}`;
+      }
+      if (secure) {
+        cookieText += `; secure=${secure}`;
+      }
+      /* eslint-disable no-param-reassign */
+      doc.cookie = cookieText;
+    },
+    unset(name, path, domain, secure) {
+      this.set(name, '', path, domain, new Date(0), secure);
+    },
+  };
 
   // Local can change Config
   let localLang;
   let localOptions = DEFAULT_OPTIONS;
   let currDict;
+
 
   /**
    * find support lang in supports array
@@ -50,10 +86,47 @@ const b28n = (function _b28n(doc, _win) {
 
     return false;
   }
+
+  function getText(val) {
+    let ret = '';
+
+    if (typeof val !== 'undefined' && val !== null) {
+      if (typeof val === 'object') {
+        if (JSON.stringify) {
+          ret = JSON.stringify(val);
+        }
+      } else {
+        ret = val;
+      }
+    }
+    return ret;
+  }
+
+  function stringFormat(...args) {
+    let ret = args.shift();
+    let count = 0;
+    let index;
+
+    if (typeof ret !== 'string' || ret === '') {
+      return '';
+    }
+
+    index = ret.indexOf('%s');
+
+    while (index !== -1) {
+      ret = ret.slice(0, index) + getText(args[count]) +
+        ret.slice(index + 2);
+      count = ((count + 1) === args.length) ? count : (count + 1);
+      index = ret.indexOf('%s');
+    }
+
+    return ret;
+  }
+
   function getLangWithBrowserSetting() {
     let ret = (win.navigator.language || win.navigator.userLanguage ||
-        win.navigator.browserLanguage || win.navigator.systemLanguage ||
-        'en').toLowerCase();
+      win.navigator.browserLanguage || win.navigator.systemLanguage ||
+      'en').toLowerCase();
 
     ret = special[ret] || ret.split('-')[0].toString();
     ret = isSupportLang(ret, localB28n.options.supportLang) || 'en';
@@ -70,24 +143,47 @@ const b28n = (function _b28n(doc, _win) {
   }
 
   function saveLangWithBrowserLocal(lang) {
-    storage.set(STROE_KEY, lang);
+    cookie.set(STROE_KEY, lang);
   }
 
   function getLangWithBrowserLocal() {
-    const ret = storage.get(STROE_KEY);
+    const ret = cookie.get(STROE_KEY);
 
     return ret || localLang;
+  }
+
+  function objectAssign(target, ...args) {
+    const ret = toObject(target, 'utils.objectAssign param target');
+    const len = arguments.length;
+    let i = 0;
+    let key;
+    let fromObj;
+
+    for (; i < len; i += 1) {
+      if (typeof args[i] === 'object') {
+        fromObj = args[i];
+
+        /* eslint-disable no-restricted-syntax */
+        for (key in fromObj) {
+          if (hasOwnProperty.call(fromObj, key)) {
+            ret[key] = fromObj[key];
+          }
+        }
+      }
+    }
+
+    return ret;
   }
 
   function extend(target, ...rest) {
     let ret = null;
 
     if (rest.length < 1) {
-      utilsCore.objectAssign(this, target);
+      objectAssign(this, target);
       return this;
     }
 
-    ret = utilsCore.objectAssign.call(Object, target, ...rest);
+    ret = objectAssign.call(Object, target, ...rest);
 
     return ret;
   }
@@ -106,9 +202,9 @@ const b28n = (function _b28n(doc, _win) {
       const dict = toObject(_dict);
 
       if (dicts[lang]) {
-        utilsCore.objectAssign(dicts[lang], dict);
+        objectAssign(dicts[lang], dict);
       } else {
-        dicts[lang] = utilsCore.objectAssign({}, dict);
+        dicts[lang] = objectAssign({}, dict);
       }
 
       return this;
@@ -161,7 +257,7 @@ const b28n = (function _b28n(doc, _win) {
       let initLang;
 
       // Extend options
-      initOptions = utilsCore.objectAssign({}, DEFAULT_OPTIONS, options);
+      initOptions = objectAssign({}, DEFAULT_OPTIONS, options);
 
       // init lang
       if (initOptions.lang) {
@@ -207,13 +303,13 @@ const b28n = (function _b28n(doc, _win) {
     if (rest.length === 0) {
       ret = translateStr;
     } else {
-      ret = strUtils.format.call(strUtils, translateStr, ...rest);
+      ret = stringFormat.call(null, translateStr, ...rest);
     }
 
     return ret;
   };
 
-  win._ = localB28n.format;
+  /* eslint-disable no-underscore-dangle */
   win.__ = localB28n.format;
 
   localB28n.langMap = {
@@ -238,4 +334,7 @@ const b28n = (function _b28n(doc, _win) {
 
 window.b28n = b28n;
 
-export default b28n;
+// exports
+if (typeof module === 'object' && typeof module.exports === 'object') {
+  module.exports = b28n;
+}

@@ -50,8 +50,12 @@ function initScreenState($$state, action) {
   let $$ret = $$state;
   let $$settingsData = $$ret.getIn([screenId, 'curSettings']) || fromJS({});
   let $$myScreenState = $$ret.get(screenId);
+
+  // 第一次初始化
   if (!$$myScreenState) {
     $$myScreenState = defaultItem.mergeDeep(action.payload);
+
+  // 更新
   } else {
     $$myScreenState = $$myScreenState.mergeDeep(action.payload);
   }

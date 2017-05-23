@@ -173,7 +173,9 @@ export default class SmartRf extends React.Component {
       <AppScreen
         {...this.props}
         store={screenStore}
-        defaultSettingsData={defaultSettingsData}
+        initOption={{
+          defaultSettingsData,
+        }}
         actionable={this.actionable}
       >
         <FormContainer

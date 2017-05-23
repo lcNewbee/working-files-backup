@@ -71,7 +71,6 @@ describe('b28n', () => {
       dict: '词典',
       'This is %s and %s': '这是 %s 和 %s',
     };
-    const _ = window._;
     b28n.addDict(testDict, 'cn');
 
     it('should do nothing when key not in dict', () => {

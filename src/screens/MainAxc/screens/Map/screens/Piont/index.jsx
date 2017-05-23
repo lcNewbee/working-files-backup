@@ -655,7 +655,7 @@ export default class View extends React.Component {
             }}
           />
           <Button
-            text={_('停止')}
+            text={__('停止')}
             theme="primary"
             onClick={this.onStopPoint}
             style={{
@@ -664,7 +664,7 @@ export default class View extends React.Component {
           />
 
           <Button
-            text={_('清除')}
+            text={__('清除')}
             theme="warning"
             onClick={this.onClearPoint}
           />

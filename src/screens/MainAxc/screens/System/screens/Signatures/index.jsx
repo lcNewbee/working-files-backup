@@ -71,7 +71,9 @@ export default class View extends React.PureComponent {
       <AppScreen
         {...this.props}
         settingsFormOptions={formOptions}
-        defaultSettingsData={defaultFormData}
+        initOption={{
+          defaultSettingsData: defaultFormData,
+        }}
       />
     );
   }

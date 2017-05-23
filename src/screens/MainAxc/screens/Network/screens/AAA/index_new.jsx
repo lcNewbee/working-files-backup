@@ -30,7 +30,7 @@ const PORTAL_SERVER_KEY = 'portalServer';
 const PORTAL_RULE_KEY = 'portalRule';
 const PORTAL_LOCAL_RULE_KEY = 'portalLocalRule';
 
-const DEFAULT_STR = _('ALL');
+const DEFAULT_STR = __('ALL');
 
 const accessTypeSeletOptions = [
   {

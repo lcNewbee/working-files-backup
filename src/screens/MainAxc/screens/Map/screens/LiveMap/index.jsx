@@ -64,7 +64,7 @@ const listOptions = fromJS({
         max: '180',
         defaultValue: '0',
         required: true,
-        help: _('e.g. %s', 123.23123231),
+        help: __('e.g. %s', 123.23123231),
       },
     }, {
       id: 'lat',
@@ -75,7 +75,7 @@ const listOptions = fromJS({
         max: '90',
         defaultValue: '0',
         required: true,
-        help: _('e.g. %s', 43.23123231),
+        help: __('e.g. %s', 43.23123231),
       },
     },
   ],
@@ -887,8 +887,10 @@ export default class LiveMap extends React.PureComponent {
     return (
       <AppScreen
         {...this.props}
-        defaultSettingsData={{
-          type: '0',
+        initOption={{
+          defaultSettingsData: {
+            type: '0',
+          },
         }}
         actionable
         noTitle

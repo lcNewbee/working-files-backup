@@ -26,11 +26,11 @@ const listOptions = fromJS([
     text: __('MAC'),
   }, {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
   },
   {
     id: 'sessionTime',
-    text: _('Session Time'),
+    text: __('Session Time'),
     render(val) {
       return onlinetimeFilter.transform(val);
     },

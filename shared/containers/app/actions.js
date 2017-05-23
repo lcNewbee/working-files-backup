@@ -116,6 +116,8 @@ export function receiveServerError(state) {
     }
 
     toastr.error(__('Data Sync Error'), __(errorMsg));
+  } else if (state.code === 4000) {
+    toastr.error(__('Data Sync Error'), __('Data Sync Error'));
   }
 
   return {

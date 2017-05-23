@@ -48,7 +48,6 @@ const propTypes = {
     PropTypes.instanceOf(List),
     PropTypes.array,
   ]),
-  defaultSettingsData: PropTypes.object,
   customSettingForm: PropTypes.bool,
 };
 const defaultProps = {
@@ -61,7 +60,6 @@ const defaultProps = {
   // Settings Form
   updateScreenSettings: emptyFunc,
   saveScreenSettings: emptyFunc,
-  defaultSettingsData: {},
   hasSettingsSaveButton: false,
   customSettingForm: false,
   settingOnlyChanged: false,
@@ -90,7 +88,7 @@ function getLoadingStatus(props) {
 export default class AppScreen extends React.Component {
   constructor(props) {
     const {
-      defaultSettingsData, settingsFormOptions, listOptions,
+      settingsFormOptions, listOptions,
       groupid,
     } = props;
     const initOption = utils.extend({
@@ -103,17 +101,19 @@ export default class AppScreen extends React.Component {
 
     super(props);
     utils.binds(this, [
-      'refreshOptions',
+      'refreshListOptions',
       'fetchAppScreenData',
     ]);
 
     // init listOptions
-    this.refreshOptions(props);
+    this.refreshListOptions(props);
 
     // init Settings Form
-    this.defaultSettingsData = defaultSettingsData ||
-      immutableUtils.getDefaultData(settingsFormOptions);
-    this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
+    if (settingsFormOptions) {
+      // 依据 settingsFormOptions 来获取默认值
+      this.defaultSettingsData = immutableUtils.getDefaultData(settingsFormOptions);
+      this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
+    }
     if (this.defaultSettingsData) {
       initOption.defaultSettingsData = utils.extend(
         {},
@@ -123,7 +123,10 @@ export default class AppScreen extends React.Component {
     }
 
     // init list defaultData
-    this.defaultEditData = immutableUtils.getDefaultData(listOptions);
+    if (listOptions) {
+      this.defaultEditData = immutableUtils.getDefaultData(listOptions);
+    }
+
     if (this.defaultEditData) {
       initOption.defaultEditData = utils.extend(
         {},
@@ -175,7 +178,7 @@ export default class AppScreen extends React.Component {
     const nextSettingOptions = nextProps.settingsFormOptions;
 
     if (!immutable.is(nextListOptions, this.props.listOptions)) {
-      this.refreshOptions(nextProps);
+      this.refreshListOptions(nextProps);
     }
 
     if (nextProps.actionable !== this.props.actionable) {
@@ -183,7 +186,14 @@ export default class AppScreen extends React.Component {
     }
 
     if (!immutable.is(nextSettingOptions, this.props.settingsFormOptions)) {
-      this.defaultSettingsData = immutableUtils.getDefaultData(nextSettingOptions);
+      this.defaultSettingsData = utils.extend(
+        {},
+        immutableUtils.getDefaultData(nextSettingOptions),
+        nextProps.initOption.defaultSettingsData,
+      );
+      this.props.initScreen({
+        defaultSettingsData: this.defaultSettingsData,
+      });
     }
   }
   componentDidUpdate(prevProps) {
@@ -248,7 +258,7 @@ export default class AppScreen extends React.Component {
       }
     }
   }
-  refreshOptions(props) {
+  refreshListOptions(props) {
     const { route, listOptions } = props;
     let thisListOptions = listOptions;
 

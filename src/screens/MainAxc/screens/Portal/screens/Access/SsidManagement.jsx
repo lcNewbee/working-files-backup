@@ -73,7 +73,7 @@ function getApMac() {
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       maxLength: '129',
       type: 'text',
@@ -84,7 +84,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -93,7 +93,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'address',
-    text: _('Address'),
+    text: __('Address'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -105,7 +105,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'basip',
-    text: _('BAS'),
+    text: __('BAS'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -116,21 +116,21 @@ const listOptions = fromJS([
     },
   }, {
     id: 'web',
-    text: _('Web Template'),
+    text: __('Web Template'),
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
     id: 'apmac',
-    text: _('Access Point MAC Address'),
+    text: __('Access Point MAC Address'),
     formProps: {
       type: 'select',
     },
   },
   {
     id: 'ssid',
-    text: _('SSID'),
+    text: __('SSID'),
     formProps: {
       type: 'select',
       maxLength: '129',
@@ -141,7 +141,7 @@ const listOptions = fromJS([
   },
   {
     id: 'des',
-    text: _('Description'),
+    text: __('Description'),
     noTable: true,
     formProps: {
       type: 'textarea',
@@ -152,7 +152,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'x',
-    text: _('x'),
+    text: __('x'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -160,7 +160,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'y',
-    text: _('y'),
+    text: __('y'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -169,7 +169,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'apid',
-    text: _('AP ID'),
+    text: __('AP ID'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -205,7 +205,7 @@ export default class View extends React.Component {
           macOptions: fromJS(data.options),
         });
       });
-    getAllGroupSSID()     
+    getAllGroupSSID()
       .then((data) => {
         this.setState({
           ssidOptions: fromJS(data.options),
