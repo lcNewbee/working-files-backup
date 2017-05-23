@@ -46,6 +46,7 @@ module.exports = {
         include: [
           path.resolve(__dirname, "src"),
           path.resolve(__dirname, "shared"),
+          path.resolve(__dirname, "packages"),
         ],
         use: [
           {
@@ -65,6 +66,7 @@ module.exports = {
     modules: [
       path.resolve(__dirname, "node_modules"),
       path.resolve(__dirname, "shared"),
+      path.resolve(__dirname, "packages"),
     ],
   },
   output: {

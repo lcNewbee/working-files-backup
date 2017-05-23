@@ -157,8 +157,11 @@ export default class View extends React.PureComponent {
       action: 'delete',
       mapId: curMapId,
       selectedList: [deviceMac],
+      groupid: this.props.groupid,
     });
-    this.props.onListAction();
+    setTimeout(() => {
+      this.props.onListAction();
+    }, 10);
   }
   // onUndeloyDevice(index) {
   //   this.updateListItemByIndex(index, {

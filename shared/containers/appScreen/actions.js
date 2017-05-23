@@ -77,7 +77,7 @@ export function fetchScreenData(option) {
       mode: ajaxMode,
     };
     let myUrl = fetchUrl;
-    let query = globalState.screens.getIn([name, 'query']) || {};
+    let query = globalState.screens.getIn([name, 'query']) || globalState.screens.clear();
 
     window.clearTimeout(refreshTimeout);
     dispatch(requestFetchScreenData());

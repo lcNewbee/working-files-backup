@@ -38,7 +38,7 @@ function isCustomIcon(name) {
   return customNameMap[name];
 }
 
-export class Icon extends React.Component {
+class Icon extends React.Component {
   render() {
     const {
       Component,

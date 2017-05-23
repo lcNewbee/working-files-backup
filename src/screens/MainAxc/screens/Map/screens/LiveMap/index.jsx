@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+
 import React from 'react'; import PropTypes from 'prop-types';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
@@ -398,7 +400,7 @@ export default class LiveMap extends React.PureComponent {
           }
         });
         viewButtonElem.addEventListener('click', () => {
-          this.props.history.push(`/main/group/map/building/${index}`);
+          this.props.history.push(`/main/group/map/building/${markerId}`);
         });
       },
     );
@@ -447,7 +449,6 @@ export default class LiveMap extends React.PureComponent {
     const geoc = new BMap.Geocoder();
     // 创建标注对象并添加到地图
     let marker = null;
-    const placeInputElem = document.getElementById('address');
 
     if (!this.placeInput) {
       this.placeInput = new BMap.Autocomplete({

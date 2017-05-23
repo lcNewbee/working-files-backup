@@ -3,13 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class MapApPlan extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
-		$this->load->database();    
+		$this->load->database();
 		$this->mysql = $this->load->database('mysqli', TRUE);//netmanager
-        $this->load->helper(array('array', 'my_customfun_helper'));    
+    $this->load->helper(array('array', 'my_customfun_helper'));
 	}
 	function fetch() {
-		$buildId = (int)element('buildId',$_GET,0);   
-		$retdar = array();		
+		$buildId = (int)element('buildId',$_GET,0);
+		$retdar = array();
 		$jsoncgi = array(
 			'groupid'=>(int)element('groupid', $_GET, -1),
 			'page'=>(int)element('page', $_GET, 1),
@@ -17,9 +17,10 @@ class MapApPlan extends CI_Controller {
 			'search'=>element('search', $_GET, '')
 		);
 		$cgidata = axc_get_aps(json_encode($jsoncgi));
-		$cgiary = json_decode($cgidata,true);
-		if(count($cgiary['data']['list']) > 0) {						
-			foreach( $cgiary['data']['list'] as $row ) {
+		$cgiary = json_decode($cgidata, true);
+
+    if (element('data', $cgiary) && count($cgiary['data']['list']) > 0) {
+      foreach( $cgiary['data']['list'] as $row ) {
 				$aa = array(
 					'map' => array(
 						'id' => -100,
@@ -35,7 +36,7 @@ class MapApPlan extends CI_Controller {
 				);
 				$mapdata = $this->db->select('ap_map.*,map_son_list.id as son_id,map_son_list.imgpath,map_son_list.mapname as son_name')
 									->from('ap_map')
-									->join('map_son_list','ap_map.build_id=map_son_list.id','left')									
+									->join('map_son_list','ap_map.build_id=map_son_list.id','left')
 									->where('ap_map.ap_mac',$row['mac'])->get()->result_array();
 				if(count($mapdata) > 0 ) {
 					foreach($mapdata as $res) {
@@ -47,23 +48,23 @@ class MapApPlan extends CI_Controller {
 						$aa['map']['lng'] = element('ypos',$res,25);
 						$aa['map']['locked'] = element('locked',$res,1);
 						$aa['map']['coverage'] = element('coverage',$res,100);
-					}						
-				}			
+					}
+				}
 				foreach($row as $k=>$v) {
 					$aa[$k] = $v;
 				}
-				$retdar[] = $aa;				
+				$retdar[] = $aa;
 			}
-		}		
+    }
 		$result = array(
-			'state' => array('code' => 2000, 'msg' => 'OK'), 
+			'state' => array('code' => 2000, 'msg' => 'OK'),
 			'data' => array(
 				'settings'=>array('zoom'=>100),
 				'list' => $retdar
 			)
 		);
 		return $result;
-	}	
+	}
 	function onAction($data) {
 		if (!$data) {
             $data = $_POST;
@@ -71,12 +72,12 @@ class MapApPlan extends CI_Controller {
         $result = null;
         $actionType = element('action', $data);
 		if ($actionType === 'add') {
-           //			
+           //
 		} elseif ($actionType === 'place') {
 			$result = $this->ap_map_bind($data);
 		} elseif ($actionType === 'delete') {
             foreach ($data['selectedList'] as $mac) {
-                $this->db->delete('ap_map',array('ap_mac'=>$mac));	
+                $this->db->delete('ap_map',array('ap_mac'=>$mac));
 				$this->up_netmanager_ap($mac,true);
             }
             $result = json_encode(json_ok());
@@ -96,7 +97,7 @@ class MapApPlan extends CI_Controller {
         );
 		//del
 		$this->db->where('ap_mac', $data['mac']);
-		$this->db->delete('ap_map');	
+		$this->db->delete('ap_map');
 		//add
         if( $this->db->insert('ap_map', $arr) ) {
             $result = json_ok();
@@ -118,7 +119,7 @@ class MapApPlan extends CI_Controller {
 	}
 	//更新 netmanager 数据库 ap_list表
 	private function up_netmanager_ap($data,$type=false){
-		$result = 0;			
+		$result = 0;
 		if($type){
 			$arr['Lat'] = null;
 			$arr['Lon'] = null;
@@ -131,7 +132,7 @@ class MapApPlan extends CI_Controller {
 			);
 			$this->mysql->where('ApMac', element('mac',$data));
 			$result = $this->mysql->update('ap_list', $arr);
-		}			
+		}
 		return $result;
 	}
 }

@@ -22,7 +22,8 @@
                 ],
                 "moduleDirectory": [
                     "node_modules",
-                    "shared"
+                    "shared",
+                    "packages"
                 ]
             }
         }

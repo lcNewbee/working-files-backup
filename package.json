@@ -132,8 +132,7 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/tools/",
       "<rootDir>/build/",
-      "<rootDir>/dist/",
-      "<rootDir>/packages/"
+      "<rootDir>/dist/"
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/tools/",

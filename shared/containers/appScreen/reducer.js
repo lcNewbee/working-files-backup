@@ -175,20 +175,26 @@ function receiveScreenData($$state, curScreenName, action) {
 }
 function addScreen(state, action) {
   let $$ret = state;
+  const curScreenId = action.payload && action.payload.id;
 
-  if (action.payload && action.payload.id) {
-    $$ret = state.set(action.payload.id, defaultItem)
-      .set('curScreenId', action.payload.id);
-
-    if (action.payload.route) {
-      $$ret = $$ret.mergeIn(
-        [action.payload.id],
-        fromJS(action.payload.route).delete('routes'),
-      );
-    }
+  // 没有 curScreenId 不做任何修改
+  if (typeof curScreenId === 'undefined') {
+    return $$ret;
   }
 
-  return $$ret;
+  // 为空时才添加 Screen 默认值
+  if (!$$ret.get(curScreenId)) {
+    $$ret = state.set(curScreenId, defaultItem);
+  }
+
+  if (action.payload.route) {
+    $$ret = $$ret.mergeIn(
+      [action.payload.id],
+      fromJS(action.payload.route).delete('routes'),
+    );
+  }
+
+  return $$ret.set('curScreenId', curScreenId);
 }
 export default function (state = defaultState, action) {
   const curScreenName = (action.meta && action.meta.name) || state.get('curScreenId');
@@ -196,7 +202,7 @@ export default function (state = defaultState, action) {
 
   switch (action.type) {
 
-    // Screen 全局action
+    // Screen 全局 action
     case ACTION_TYPES.ADD:
       return addScreen(state, action);
     case ACTION_TYPES.INIT:
