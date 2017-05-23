@@ -698,25 +698,26 @@ export default class View extends React.Component {
             }}
           // showSecond={false}
           />
-          <div className="fl clearfix" style={{ position: 'relative' }}>
-            <FormGroup
-              type="text"
-              className="fl"
-              label={__('Client')}
-              value={store.getIn([curScreenId, 'query', 'mac'])}
-              onChange={data => this.onChangeMac(data.value)}
-            />
-            <Button
-              className="fl"
-              text={'GO'}
-              onClick={() => { this.onSearch(); }}
-              style={{
-                position: 'absolute',
-                left: '215px',
-                height: '30px',
-              }}
-            />
-          </div>
+          <FormGroup
+            type="text"
+            className="fl"
+            label={__('Client')}
+            value={store.getIn([curScreenId, 'query', 'mac'])}
+            onChange={data => this.onChangeMac(data.value)}
+            appendRender={() => (
+              <Button
+                text={'GO'}
+                onClick={() => { this.onSearch(); }}
+                style={{
+                  marginLeft: '-8px',
+                  height: '30px',
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                }}
+              />
+            )}
+          />
+
         </div>
         <div
           className="o-map-warp"
