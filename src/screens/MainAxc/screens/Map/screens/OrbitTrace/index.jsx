@@ -279,7 +279,7 @@ export default class View extends React.Component {
 
     /** *********hack: 暂时解决store中curScreenId更新不及时引起的bug**********/
 
-    // 只有单列表点改变时，才花canvas
+    // 只有单列表点改变时，才画canvas
     if ($$prevPathList !== $$pathList || !this.mapMouseDown) {
       this.drawMap($$pathList);
     }
@@ -444,7 +444,7 @@ export default class View extends React.Component {
       ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
       ctx.lineWidth = 1.5;
 
-      // 考虑到时间，每一帧最多花100个点
+      // 考虑到时间，每一帧最多画100个点
       animationFramePiontsLen = animationFramePiontsLen > MAX_FRAME_PIONTS ? MAX_FRAME_PIONTS : animationFramePiontsLen;
 
       loopStep = () => {
@@ -489,7 +489,7 @@ export default class View extends React.Component {
     if (typeof mapList !== 'undefined') {
       // console.log('did update curScreenId & pathlist', curScreenId, $$pathList);
 
-      // 只有单列表点改变时，才花canvas
+      // 只有单列表点改变时，才画canvas
       // if (!this.mapMouseDown) {
         // 画所有经过的静态点
         // 绘图只应该发生在数据改变时

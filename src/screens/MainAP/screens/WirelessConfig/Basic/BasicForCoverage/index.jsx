@@ -1380,6 +1380,7 @@ export default class Basic extends React.Component {
                               label="WDS Peers"
                               type="text"
                               minWidth="350px"
+                              className="basic-wds-mac-input"
                               value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || ''}
                               onChange={(data) => {
                                 const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';

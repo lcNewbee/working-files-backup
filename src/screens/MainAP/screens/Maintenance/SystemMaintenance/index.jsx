@@ -384,24 +384,26 @@ export default class SystemMaintenance extends Component {
 
         {
           this.props.route.funConfig.voipFun ? (
-            <div>
-              <div className="o-form__legend">
+            <div className="clearfix">
+              {/* <div className="o-form__legend">
                 {__('VOIP')}
-              </div>
+              </div>*/}
               <FormGroup
+                className="fl"
                 type="switch"
                 label={__('VOIP')}
                 options={[
                   { label: __('Turn On'), value: '1' },
                   { label: __('Turn Off'), value: '0' },
                 ]}
-                minWidth="80px"
+                minWidth="99px"
                 value={this.props.selfState.get('voipEnable')}
                 onChange={(data) => {
                   this.props.changeVoipEnable(data.value);
                 }}
               />
               <SaveButton
+                className="fl"
                 loading={this.props.app.get('saving')}
                 onClick={() => {
                   const query = {
@@ -411,7 +413,7 @@ export default class SystemMaintenance extends Component {
                   this.props.save('goform/set_voip', query);
                 }}
                 style={{
-                  marginLeft: '165px',
+                  marginLeft: '7px',
                 }}
               />
             </div>

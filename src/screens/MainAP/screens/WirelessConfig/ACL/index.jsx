@@ -379,6 +379,16 @@ export default class ACL extends React.Component {
               const val = data.value.replace(/：/g, ':');
               this.onMacInputChange(val, e);
             }}
+            onKeyUp={(e) => {
+              // 回车键，和添加按钮功能一样
+              const event = e || window.event;
+              let charcode;
+              if (typeof event.charCode === 'number' && event.charCode >= 9) charcode = event.charCode;
+              else charcode = event.keyCode;
+              if (charcode === 13) {
+                this.onAddMacToLocalList();
+              }
+            }}
             {...this.props.validateOption.inputMac}
             style={{
               width: '387px',
