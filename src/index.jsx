@@ -64,17 +64,9 @@ renderApp(prodConfig.routes);
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-<<<<<<< HEAD
-
   module.hot.accept('./config/axc3.0', () => {
     /* eslint-disable global-require */
     const nextConfig = require('./config/axc3.0').default;
-
-=======
-  module.hot.accept('./config/ASW3', () => {
-    /* eslint-disable global-require */
-    const nextConfig = require('./config/ASW3').default;
->>>>>>> ap:完成noBrandAIP10页面，对ACL页面代码优化
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,
