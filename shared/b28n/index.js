@@ -193,6 +193,12 @@ const b28n = (function _b28n(doc, _win) {
   localB28n.extend({
     version: '0.0.1',
 
+    /**
+     * Detect lang if supported
+     *
+     * @param {any} lang
+     * @returns is support
+     */
     isSupport(lang) {
       return isSupportLang(lang, localOptions.supportLang);
     },

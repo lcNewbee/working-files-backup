@@ -306,7 +306,15 @@ export function saveScreenSettings(option) {
         if ($$subData.isEmpty()) {
           $$subData = $$actionQuery.delete('selectedList');
         }
+
+        // 一直会下发的参数列表
+        if (Array.isArray(option.alwaySaveKeys)) {
+          option.alwaySaveKeys.forEach((key) => {
+            $$subData = $$subData.set(key, $$curData.get(key));
+          });
+        }
       }
+
       // 数字类型转换
       if (option.numberKeys) {
         $$subData = immutableUtils.toNumberWithKeys($$subData, option.numberKeys);

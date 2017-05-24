@@ -274,6 +274,9 @@ export default class View extends React.Component {
                 action: EDIT_LIST_ACTION,
                 selectedList: selectedMacList,
               },
+              alwaySaveKeys: [
+                'beaconinterval', 'fragthreshold', 'rtsthreshold', 'dtim',
+              ],
             }).then(
               () => {
                 this.props.closeModal();
