@@ -60,6 +60,9 @@ export default class MainAP extends React.PureComponent {
         this.props.setDeviceRadioList(fromJS(json.data.deviceRadioList));
         const options = makeRadioSelectOptions(json.data.deviceRadioList);
         this.props.setRadioSelectOptions(options);
+
+        const title = document.getElementById('ap-main-html-title');
+        title.innerHTML = json.data.title;
       }
     }).then(() =>
       this.props.fetch('goform/get_firstLogin_info'),

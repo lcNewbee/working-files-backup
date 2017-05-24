@@ -72,6 +72,9 @@ export default class Main extends React.PureComponent {
     if (purview === 'none' && appId !== 'ad30a4a05ac6855c64074246948fbf9c') {
       this.props.history.push('/login');
     }
+
+    const title = document.getElementById('ap-main-html-title');
+    title.innerHTML = 'Axilspot Access Manager';
   }
   componentWillUnmount() {
     clearTimeout(this.onRefreshTimeout);

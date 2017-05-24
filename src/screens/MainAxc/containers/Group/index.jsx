@@ -403,7 +403,8 @@ export default class MainGroup extends React.Component {
     const { product } = this.props;
     const $$addData = this.props.product.getIn(['group', 'addData']);
     const $$editData = product.getIn(['group', 'manageSelected']);
-    const $$apAddData = product.getIn(['group', 'apAddData']);
+    const validMac = product.getIn(['group', 'apAddData', 'apmac']).replace(/-/g, ':');
+    const $$apAddData = product.getIn(['group', 'apAddData']).set('apmac', validMac);
     const curModalName = product.getIn(['modal', 'name']);
     const $$selectMacList = this.props.product
       .get('defaultDevices')
@@ -476,7 +477,7 @@ export default class MainGroup extends React.Component {
             />
           </div>
         </header>
-        {/*<h4 className="t-main__asider-header row">
+        {/* <h4 className="t-main__asider-header row">
           {__('Group List')}
           {
             actionable ? (

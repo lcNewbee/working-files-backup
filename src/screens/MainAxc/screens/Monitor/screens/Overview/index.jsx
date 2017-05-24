@@ -201,14 +201,22 @@ function getFlowOption(serverData, timeType) {
     tooltip: {
       trigger: 'axis',
       formatter: (params) => {
+        function convertFlowBackToOrigin(val) {
+          const origin = val * utilObj.val;
+          const ret = getFlowUnit(origin);
+          const label = ret.label;
+          const valWidthUnit = `${parseFloat(Number(origin / ret.val)).toFixed(1)} ${label}`;
+          return valWidthUnit;
+        }
+
         let ret = `${params[0].name}<br />`;
 
         if (params[0] && params[0].seriesName) {
-          ret += `${params[0].seriesName}: ${params[0].value} ${utilObj.label}<br />`;
+          ret += `${params[0].seriesName}: ${convertFlowBackToOrigin(params[0].value)}<br />`;
         }
 
         if (params[1] && params[1].seriesName) {
-          ret += `${params[1].seriesName}: ${params[1].value} ${utilObj.label}`;
+          ret += `${params[1].seriesName}: ${convertFlowBackToOrigin(params[1].value)}`;
         }
 
         return ret;
@@ -333,10 +341,10 @@ function getFlowOption(serverData, timeType) {
   option.yAxis[0].name = utilObj.label;
 
   option.series[0].data = $$dataList[0].data.map(
-    val => parseFloat(Number(val / utilObj.val).toFixed(1)),
+    val => parseFloat(Number(val / utilObj.val)),
   );
   option.series[1].data = $$dataList[1].data.map(
-    val => parseFloat(Number(val / utilObj.val).toFixed(1)),
+    val => parseFloat(Number(val / utilObj.val)),
   );
 
   return option;
