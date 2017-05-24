@@ -906,39 +906,45 @@ export default class View extends React.Component {
   }
   render() {
     const curListOptions = listOptions
-          .setIn([-1, 'render'], (val, $$data) => (
-            <span>
-              <Button
-                text={__('Recharge')}
-                key="rechargeActionButton"
-                icon="vcard"
-                onClick={() => {
-                  this.props.changeScreenActionQuery({
-                    action: 'recharge',
-                    myTitle: __('Recharge'),
-                  });
-                  this.props.updateCurEditListItem({
-                    id: $$data.get('id'),
-                    loginName: $$data.get('loginName'),
-                    nickname: $$data.get('name'),
-                  });
-                }}
-              />
-            </span>
-          ),
-          );
+          .setIn([-1, 'render'], (val, $$data) => {
+            if (parseInt($$data.get('id'), 10) === 1) {
+              return null;
+            }
+            return (
+              <span>
+                <Button
+                  text={__('Recharge')}
+                  key="rechargeActionButton"
+                  icon="vcard"
+                  onClick={() => {
+                    this.props.changeScreenActionQuery({
+                      action: 'recharge',
+                      myTitle: __('Recharge'),
+                    });
+                    this.props.updateCurEditListItem({
+                      id: $$data.get('id'),
+                      loginName: $$data.get('loginName'),
+                      nickname: $$data.get('name'),
+                    });
+                  }}
+                />
+              </span>
+            );
+          });
     return (
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
         modalChildren={this.renderCustomModal()}
-        selectable
-        actionable
         queryFormOptions={queryFormOptions}
         searchable
         searchProps={{
           placeholder: `${__('Username')}`,
         }}
+        selectable={$$data => parseInt($$data.get('id'), 10) !== 1}
+        deleteable={$$data => parseInt($$data.get('id'), 10) !== 1}
+        editable={$$data => parseInt($$data.get('id'), 10) !== 1}
+        actionable
       />
     );
   }
