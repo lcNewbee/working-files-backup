@@ -9,6 +9,7 @@ import classNamesUtils from 'classnames';
 import Icon from 'shared/components/Icon';
 import PopOver from 'shared/components/PopOver';
 import Navbar from 'shared/components/Navbar';
+import Tooltip from 'shared/components/Tooltip';
 import { actions as appActions } from 'shared/containers/app';
 import {
   actions as propertiesActions,
@@ -19,6 +20,9 @@ import * as actions from './actions';
 import myReducer from './reducer';
 
 const ALL_GROUP_ID = -100;
+const emailUrl = window.guiConfig.email || 'sales@axilspot.com';
+const companyName = window.guiConfig.company || 'Axilspot';
+
 
 const propTypes = {
   refreshAll: PropTypes.func,
@@ -218,8 +222,8 @@ export default class Main extends React.PureComponent {
             <li>
               <a
                 className=""
-                title={__('Email to Axilspot')}
-                href="mailto:sales@axilspot.com"
+                title={__('Email to %s', companyName)}
+                href={`mailto:${emailUrl}`}
               >
                 <Icon name="envelope" />
                 <div>{__('Contact Us')}</div>
