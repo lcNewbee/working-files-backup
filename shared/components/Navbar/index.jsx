@@ -22,7 +22,7 @@ function Navbar(props) {
   }
   return (
     <header className={navbarClassName}>
-      <div className="brand" />
+      <img alt="logo" className="brand" src="images/logo.png" />
       <h1>{title}</h1>
       {
         version ? (
