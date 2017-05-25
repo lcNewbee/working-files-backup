@@ -77,8 +77,8 @@ function getLoadingStatus(props) {
 
   if (typeof loading === 'undefined') {
     ret = true;
-
-    if (($$myScreenDataList && !$$myScreenDataList.isEmpty()) && ($$myScreenDataSettings && !$$myScreenDataSettings.isEmpty())) {
+    if (($$myScreenDataList && !$$myScreenDataList.isEmpty()) && ($$myScreenDataSettings &&
+        !$$myScreenDataSettings.isEmpty())) {
       ret = false;
     }
   }
@@ -185,12 +185,14 @@ export default class AppScreen extends React.Component {
       this.actionable = getActionable(nextProps);
     }
 
+    // 更新 Settings 相关配置，需要根系 默认数据
     if (!immutable.is(nextSettingOptions, this.props.settingsFormOptions)) {
       this.defaultSettingsData = utils.extend(
         {},
         immutableUtils.getDefaultData(nextSettingOptions),
-        nextProps.initOption.defaultSettingsData,
+        nextProps.initOption ? nextProps.initOption.defaultSettingsData : {},
       );
+
       this.props.initScreen({
         defaultSettingsData: this.defaultSettingsData,
       });
