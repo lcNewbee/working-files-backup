@@ -559,7 +559,7 @@ export default class MainGroup extends React.Component {
                       }}
                     />
                   </Tooltip>
-                  {/*<Tooltip
+                  {/* <Tooltip
                     title={__('Add AP Group')}
                   >
                     <Icon
@@ -1108,7 +1108,7 @@ export default class MainGroup extends React.Component {
               renderNode = (
                 <a className="m-breadcrumb__link" >
                   {__('All Group')}
-                  {/*<Button
+                  {/* <Button
                     style={{
                       marginLeft: '4px',
                     }}
