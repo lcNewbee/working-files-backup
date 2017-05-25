@@ -368,13 +368,21 @@ export default class SignUp extends React.Component {
               <div
                 style={{
                   color: 'red',
-                  margin: '10px 100px',
+                  margin: '10px 165px',
                 }}
               >
                 {__(this.state.errorMsg)}
               </div>
             )
           }
+          <FormGroup
+            type="text"
+            label={__('Organize ID')}
+            value={nextModeData.orgId}
+            onChange={(data) => {
+              this.props.changeNextModeData(fromJS({ orgId: data.value }));
+            }}
+          />
           <span>
             {__('Notice: The device will reboot when you click \'OK\' button if the configuration changed! Or, the page will be directed to management web.')}
           </span>

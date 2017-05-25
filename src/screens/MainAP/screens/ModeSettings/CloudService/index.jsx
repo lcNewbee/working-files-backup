@@ -55,6 +55,8 @@ export default class ModeSettings extends React.Component {
               currAcIp: json.data.acIp,
               acIp: json.data.acIp,
               enable: json.data.enable,
+              orgId: json.data.orgId,
+              currOrgId: json.data.orgId,
             });
           }
         });
@@ -83,9 +85,9 @@ export default class ModeSettings extends React.Component {
       }
       if (msg.isEmpty()) {
         const {
-          nextMode, currMode, currAcIp, acIp,
+          nextMode, currMode, currAcIp, acIp, orgId, currOrgId,
         } = this.props.store.get('curData').toJS();
-        if (nextMode !== currMode || (acIp !== currAcIp && nextMode === '1')) {
+        if (nextMode !== currMode || (acIp !== currAcIp && nextMode === '1') || (orgId !== currOrgId && nextMode === '1')) {
           const addrArr = acIp.split(':');
           // 如果出现多个冒号，返回错误
           if (addrArr.length > 2) {
@@ -148,7 +150,7 @@ export default class ModeSettings extends React.Component {
   }
 
   render() {
-    const { acIp, nextMode } = this.props.store.get('curData').toJS();
+    const { acIp, nextMode, orgId } = this.props.store.get('curData').toJS();
     return (
       <div className="o-form">
         <div className="o-form__legend">{__('Cloud Service Settings')}</div>
@@ -174,6 +176,15 @@ export default class ModeSettings extends React.Component {
           }}
           required
           // {...this.props.validateOption.validateIp}
+        />
+        <FormGroup
+          type="text"
+          label={__('Organize ID')}
+          value={orgId}
+          disabled={nextMode === '0'}
+          onChange={(data) => {
+            this.props.updateItemSettings({ orgId: data.value });
+          }}
         />
         <FormGroup>
           <SaveButton
