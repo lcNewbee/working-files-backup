@@ -107,7 +107,6 @@ function handleValidateAll(state, action) {
 
   return state.set('invalid', fromJS({}))
     .set('validateAt', `${formId}.${time}`);
-
 }
 
 function changeLoginState(state, action) {

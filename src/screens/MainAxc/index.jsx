@@ -9,7 +9,6 @@ import classNamesUtils from 'classnames';
 import Icon from 'shared/components/Icon';
 import PopOver from 'shared/components/PopOver';
 import Navbar from 'shared/components/Navbar';
-import Tooltip from 'shared/components/Tooltip';
 import { actions as appActions } from 'shared/containers/app';
 import {
   actions as propertiesActions,
@@ -18,11 +17,6 @@ import {
 import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
-
-const ALL_GROUP_ID = -100;
-const emailUrl = window.guiConfig.email || 'sales@axilspot.com';
-const companyName = window.guiConfig.company || 'Axilspot';
-
 
 const propTypes = {
   refreshAll: PropTypes.func,
@@ -58,6 +52,7 @@ export default class Main extends React.PureComponent {
       'onHiddenPopOver',
       'onToggleMainPopOver',
       'renderPopOverContent',
+      'onRefreshProductInfo',
     ]);
 
     document.onkeydown = (e) => {
@@ -76,12 +71,33 @@ export default class Main extends React.PureComponent {
     if (purview === 'none' && appId !== 'ad30a4a05ac6855c64074246948fbf9c') {
       this.props.history.push('/login');
     }
-
-    const title = document.getElementById('ap-main-html-title');
-    title.innerHTML = 'Axilspot Access Manager';
+    this.onRefreshProductInfo(this.props);
   }
+  componentWillUpdate(nextProps) {
+    if (this.props.app.get('companyname') !== nextProps.app.get('companyname')) {
+      this.onRefreshProductInfo(nextProps);
+    }
+  }
+
   componentWillUnmount() {
     clearTimeout(this.onRefreshTimeout);
+  }
+
+  /**
+   * 用于更新不同厂商的相关信息
+   *
+   * @param {object} props
+   *
+   * @memberof Main
+   */
+  onRefreshProductInfo(props) {
+    this.companyTitle = props.app.get('title') || 'Axilspot';
+    this.companyName = props.app.get('companyname') || 'axilspot';
+
+    // 'sales@axilspot.com'
+    this.emailUrl = props.app.get('email') || 'sales@axilspot.com';
+
+    document.title = `${this.companyTitle} Access Manager`;
   }
 
   onRefresh(e) {
@@ -166,7 +182,6 @@ export default class Main extends React.PureComponent {
     let isMainLeftShow = false;
     let isMainRightShow = isShowPanel;
 
-
     isMainLeftShow = popOver.isShow && (popOver.name === 'vlanAsider' || popOver.name === 'groupAsider');
     isMainRightShow = isShowPanel;
     mainClassName = classNamesUtils(mainClassName, {
@@ -222,8 +237,8 @@ export default class Main extends React.PureComponent {
             <li>
               <a
                 className=""
-                title={__('Email to %s', companyName)}
-                href={`mailto:${emailUrl}`}
+                title={__('Email to %s', this.companyTitle)}
+                href={`mailto:${this.emailUrl}`}
               >
                 <Icon name="envelope" />
                 <div>{__('Contact Us')}</div>

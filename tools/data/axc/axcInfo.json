@@ -4,6 +4,9 @@
     "msg": "ok"
   },
   "data": {
-    "version":"AXC1000"
+    "version": "AXC1000",
+    "title": "Lenovonet",
+    "companyname": "lenovonet",
+    "email": "support@lenovonet.com"
   }
 }

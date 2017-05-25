@@ -167,12 +167,13 @@ export class SignUp extends React.PureComponent {
   }
   render() {
     const { version } = this.props.app.toJS();
+    const companyTitle = this.props.app.get('title');
 
     return (
       <div>
         <header className="navbar">
           <div className="brand" />
-          <h1>{__('Axilspot Access Manager')}</h1>
+          <h1>{__('%s Access Manager', companyTitle)}</h1>
           <span className="version">GUI {version}</span>
         </header>
         <div className="sign sign-up">
