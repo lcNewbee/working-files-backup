@@ -9,8 +9,8 @@ class SystemAdmin extends CI_Controller {
 	}
 	function fetch() {
         $retdata = array(
-            'page' => (int)element('page', $_GET, -1), 
-            'size' => (int)element('size', $_GET, -1));
+            'page' => (int)element('page', $_GET, 1), 
+            'size' => (int)element('size', $_GET, 20));
 
 		return $this->SystemAdmin_Model->get_account_list($retdata);
 	}

@@ -23,15 +23,11 @@ class AxcInfo extends CI_Controller {
 
     function get_ac_info(){
         $arr = array(
-            'version' => '1.0.1',
+            'version' => $this->get_ac_version(),
             'title' =>  'Axilspot',
             'companyname' =>  'axilspot',
             'email' =>  'support@lenovonet.com'
-        );
-        $version = file_get_contents('/etc/version');
-        $version = str_replace('AXC1000_V1_TEST_','',$version);              
-        $arr['version'] = str_replace('\n','',$version); 
-
+        );        
         $data = $this->sqlite_license->select('ac_base_conf.companyname, verder_list.title,verder_list.email')
                                     ->from('ac_base_conf')
                                     ->join('verder_list', 'ac_base_conf.vender_id = verder_list.vender_id', 'left')
@@ -43,5 +39,21 @@ class AxcInfo extends CI_Controller {
             $arr['email'] = $data[0]['email'];
         }
         return $arr;
-    }        
+    }   
+
+    function get_ac_version() {
+        /*
+        $version = file_get_contents('/etc/version');
+        $version = str_replace('AXC1000_V1_TEST_','',$version);              
+        $arr['version'] = str_replace("\n",'',$version); 
+        */
+        $ret = '';
+
+        $name = file_get_contents('/etc/acname');
+        $version = file_get_contents('/etc/version');
+        $ret = $name . ' ' .$version;
+
+        $ret = str_replace("\n", '' , $ret);
+        return $ret;
+    }
 }
