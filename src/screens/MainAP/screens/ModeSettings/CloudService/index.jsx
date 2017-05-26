@@ -136,6 +136,7 @@ export default class ModeSettings extends React.Component {
     const saveDate = {
       enable: this.props.store.getIn(['curData', 'nextMode']),
       acIp: this.props.store.getIn(['curData', 'acIp']),
+      orgId: this.props.store.getIn(['curData', 'orgId']),
     };
     this.props.save('goform/set_thin', saveDate).then((json) => {
       if (json.state && json.state.code === 2000) {
