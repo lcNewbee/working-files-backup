@@ -117,6 +117,28 @@ $db['sqlite'] = array(
     'save_queries' => TRUE
 );
 
+$db['sqlite_license'] = array(
+	  'dsn'   => '',
+    'hostname' => '',
+    'username' => '',
+    'password' => '',
+    'database' => '/var/license/ac_config.db',
+    'dbdriver' => 'sqlite3',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => TRUE,
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt' => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);
+
 $db['mysqli'] = array(
 	'dsn'   => '',
     'hostname' => 'localhost',
