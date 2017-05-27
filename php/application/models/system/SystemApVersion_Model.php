@@ -4,6 +4,7 @@ class SystemApVersion_Model extends CI_Model {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
+        $this->sqlite_license = $this->load->database('sqlite_license', TRUE);
         $this->load->helper(array('array','db_operation'));
     }
     function get_list($data) {
@@ -74,7 +75,7 @@ class SystemApVersion_Model extends CI_Model {
             $filename = $this->upload->data('file_name');
             $filepath = $this->upload->data('full_path');
             $retData = array(
-                'vendor' => element('vendor', $data, 48208) ,
+                'vendor' => $this->getVersionId(),
                 'model' => element('model', $data) ,
                 'sfver' => element('softVersion', $data) ,
                 'fmname' => element('fileNameText',$data),//$filename,
@@ -113,7 +114,7 @@ class SystemApVersion_Model extends CI_Model {
             $filepath = element('uploadPath', $data);
         }
         $retData = array(
-            'vendor' => element('vendor', $data, 48208) ,
+            'vendor' => $this->getVersionId(),
             'model' => element('model', $data, '') ,
             'sfver' => element('softVersion', $data, '') ,
             'fmname' => element('fileNameText',$data),
@@ -154,7 +155,7 @@ class SystemApVersion_Model extends CI_Model {
     function active_apversion($data) {
         $result = null;
         $retData = array(
-            'vendor' => element('vendor', $data, 48208) ,
+            'vendor' => $this->getVersionId(),
             'model' => element('model', $data) ,
             'sfver' => element('softVersion', $data) ,
             'fmname' => element('fileName', $data) ,
@@ -188,6 +189,15 @@ class SystemApVersion_Model extends CI_Model {
             $result = 1;
         }
         return $result;
+    }
+
+    private function getVersionId() {
+        $ret = 48208;
+        $query = $this->sqlite_license->query("select vender_id from ac_base_conf")->result_array();
+        if(count($query) > 0){
+            $ret = $query[0]['vender_id'];
+        }
+        return $ret;
     }
 }
 
