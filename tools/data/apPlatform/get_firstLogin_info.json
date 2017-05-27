@@ -5,7 +5,7 @@
   },
   "data": {
     "ifFirstLogin": "0",
-    "enable": "1",
+    "enable": "0",
     "discoveryType": "static",
     "acIp": "192.168.0.1",
     "orgId": "ABCD-1234"

@@ -95,17 +95,19 @@ export default class SignUp extends React.Component {
     }
     this.props.validateAll('acipinput').then((mg) => {
       if (mg.isEmpty()) {
-        if (nextModeData.enable === '1' && !showThinModeConfigModal) {
+        if (nextModeData.enable === '1' && !showThinModeConfigModal) { // 瘦模式弹出设置框
           this.props.changeShowThinModeConfigModal(true);
-        } else if (currModeData.enable === nextModeData.enable && nextModeData.enable === '0') {
-          // 模式没有改变，且是胖AP，直接跳到管理页面
+        } else if (fromJS(currModeData).equals(fromJS(nextModeData))) { // 不论胖瘦，如果配置没有改变，则直接进入管理页面
+          this.props.changeShowThinModeConfigModal(false);
           window.location.href = '#/main/status';
-        } else if (currModeData.enable !== nextModeData.enable && nextModeData.enable === '0') {
+          return null;
+        } else if (currModeData.enable !== nextModeData.enable && nextModeData.enable === '0') { // 模式改变，从瘦到胖
           this.comfirmModeChange();
           this.props.changeShowThinModeConfigModal(false);
-        } else if (nextModeData.enable === '1') {
-          // 模式不变，瘦AP，需要验证服务器输入是否正确（这里是首次进入页面，之前的服务器地址为空，所以没有必要比较地址不变的情况。）
+        } else if (nextModeData.enable === '1') { // 瘦模式，配置改变（若配置不变，则不会执行到这里来，在前面已经返回了）
+          // 验证各个参数是否合法，其中orgId没有验证
           const nextServerAddr = nextModeData.acIp;
+          // const nextOrgId = nextModeData.orgId;
           const addrArr = nextServerAddr.split(':');
           // 如果出现多个冒号，返回错误
           if (addrArr.length > 2) {
