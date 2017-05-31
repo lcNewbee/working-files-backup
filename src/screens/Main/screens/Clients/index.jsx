@@ -351,14 +351,6 @@ export class Clients extends PureComponent {
             options={typeArr}
             onChange={this.onChangeType}
           />
-          <Select
-            className="fr"
-            clearable={false}
-            value={this.props.query.get('size')}
-            onChange={this.onChangeTableSize}
-            options={selectOptions}
-            searchable={false}
-          />
         </div>
 
         <Table
@@ -366,7 +358,9 @@ export class Clients extends PureComponent {
           options={tableOptions}
           list={this.props.data.get('list')}
           page={this.props.data.get('page')}
+          size={this.props.query.get('size')}
           onPageChange={this.onPageChange}
+          onPageSizeChange={this.onChangeTableSize}
           loading={this.props.fetching}
         />
 

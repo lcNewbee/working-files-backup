@@ -4,6 +4,7 @@ $_height: 28px;
   display: inline-block;
   width: 200px;
   max-width: 100%;
+  min-width: 60px;
   font-size: 12px;
   vertical-align: middle;
 
@@ -11,6 +12,7 @@ $_height: 28px;
   .Select-control {
     height: $_height;
   }
+
   &.is-disabled {
     > .Select-control {
       background-color: #eee;
@@ -27,6 +29,9 @@ $_height: 28px;
       z-index: 1;
       opacity: 0;
     }
+  }
+  &.is-auto-width {
+    width: auto;
   }
 
   .Select-placeholder {

@@ -310,26 +310,25 @@ export class GroupSettings extends PureComponent {
     return (
       <div>
         <h3>{__('Group List')}</h3>
-        <Table
-          className="table"
-          loading={this.props.fetching}
-          options={fromJS(groupTableOptions)}
-          list={this.props.data.get('list')}
-        />
-        <div className="form-footer">
+        <div style={{ padding: '8px 0', overflow: 'auto' }}>
           {
             noControl ? null : (
               <Button
                 icon="plus"
-                className="fr"
+                className="fl"
                 theme="primary"
                 onClick={this.onAddGroup}
                 text={msg.add}
               />
             )
           }
-
         </div>
+        <Table
+          className="table"
+          loading={this.props.fetching}
+          options={fromJS(groupTableOptions)}
+          list={this.props.data.get('list')}
+        />
 
         <Modal
           isShow={this.props.edit ? true : false}

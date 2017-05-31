@@ -13,9 +13,11 @@ const propTypes = {
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   list: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   page: PropTypes.object,
+  pageOptions: PropTypes.array,
   loading: PropTypes.bool,
   className: PropTypes.string,
   onPageChange: PropTypes.func,
+  onPageSizeChange: PropTypes.func,
   selectable: PropTypes.oneOfType([
     PropTypes.bool, PropTypes.func,
   ]),
@@ -25,6 +27,7 @@ const propTypes = {
 
 const defaultProps = {
   isTh: false,
+  page: null,
   list: fromJS([]),
 };
 
@@ -199,6 +202,7 @@ class Table extends PureComponent {
     const myList = this.state.myList;
     const myBodyChildren = this.renderBodyRow(myList);
     const unselectableLen = this.unselectableList.length;
+    let curPage = page;
     let myTableClassName = 'table';
     let isSelectAll = false;
 
@@ -213,6 +217,12 @@ class Table extends PureComponent {
 
     if (className) {
       myTableClassName = `${myTableClassName} ${className}`;
+    }
+
+    if (!curPage) {
+      curPage = {
+        total: myList.size,
+      };
     }
 
     return (
@@ -235,13 +245,13 @@ class Table extends PureComponent {
           </tbody>
         </table>
 
-        {
-          // 只有当 总页数大于 1时 才显示分页
-          (page && page.get('totalPage') > 1) ? <Pagination
-            page={page}
-            onPageChange={this.props.onPageChange}
-          /> : null
-        }
+        <Pagination
+          page={curPage}
+          size={this.props.size}
+          sizeOptions={this.props.sizeOptions}
+          onPageChange={this.props.onPageChange}
+          onPageSizeChange={this.props.onPageSizeChange}
+        />
 
         {
           loading ? (

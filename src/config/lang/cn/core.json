@@ -22,6 +22,7 @@
   "Fetch": "获取",
   "Select": "选择",
   "Items per page: ": "每页显示条目：",
+  "Items per page": "每页显示条目数",
   "Next": "下一页",
   "Prev": "上一页",
   "First": "第一页",
@@ -128,6 +129,7 @@
   "Start Date":"开始日期",
   "Limitless": "无限制",
   "beta": "测试版",
+  "A total of %s": "共 %s 条",
 
   "Width": "宽度",
   "Length": "长度",

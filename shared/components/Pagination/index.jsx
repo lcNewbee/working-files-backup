@@ -1,16 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PureComponent from '../Base/PureComponent';
+import Select from '../Select';
 
 import './index.scss';
 
+const sizeOptions = [
+  { value: 20, label: '20' },
+  { value: 50, label: '50' },
+  { value: 100, label: '100' },
+];
+
 const propTypes = {
   onPageChange: PropTypes.func,
+  onPageSizeChange: PropTypes.func,
+  size: PropTypes.number,
+  sizeOptions: PropTypes.array,
   page: PropTypes.object,
 };
 
 const defaultProps = {
   currPage: 1,
+  sizeOptions,
 };
 
 class Pagination extends PureComponent {
@@ -83,7 +94,7 @@ class Pagination extends PureComponent {
     }
   }
   render() {
-    const { currPage, nextPage, totalPage } = this.getPageOptions();
+    const { currPage, nextPage, totalPage, total } = this.getPageOptions();
     const prevClassName = +currPage === 1 ? 'disabled' : '';
     const nextClassName = +nextPage === -1 ? 'disabled' : '';
     const list = [];
@@ -108,13 +119,42 @@ class Pagination extends PureComponent {
     }
 
     return (
-      <ul className="pagination">
-        <li className={prevClassName}><a href="#/" onClick={this.onGoFrist}>{__('First')}</a></li>
-        <li className={prevClassName}><a href="#/" onClick={this.onPrev}>{__('<')}</a></li>
-        {list}
-        <li className={nextClassName}><a href="#/" onClick={this.onNext}>{__('>')}</a></li>
-        <li className={nextClassName}><a href="#/" onClick={this.onGoEnd}>{__('Last')}</a></li>
-      </ul>
+      <div className="m-pagination">
+        <span className="m-pagination__total">{__('A total of %s', total)}.</span>
+        {
+          this.props.sizeOptions && this.props.size ? (
+            <div className="m-pagination__size">
+              <label
+                key="pageLabel"
+                htmlFor="pageSelect"
+              >
+                {__('Items per page')}
+              </label>
+              <Select
+                key="pageSelect"
+                value={this.props.size}
+                onChange={this.props.onPageSizeChange}
+                options={this.props.sizeOptions}
+                searchable={false}
+                clearable={false}
+                autoWidth
+              />
+            </div>
+          ) : null
+        }
+
+        {
+          totalPage && totalPage > 1 ? (
+            <ul className="pagination">
+              <li className={prevClassName}><a href="#/" onClick={this.onGoFrist}>{__('First')}</a></li>
+              <li className={prevClassName}><a href="#/" onClick={this.onPrev}>{__('<')}</a></li>
+              {list}
+              <li className={nextClassName}><a href="#/" onClick={this.onNext}>{__('>')}</a></li>
+              <li className={nextClassName}><a href="#/" onClick={this.onGoEnd}>{__('Last')}</a></li>
+            </ul>
+          ) : null
+        }
+      </div>
     );
   }
 }

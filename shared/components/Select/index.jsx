@@ -7,6 +7,7 @@ import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
   isAsync: PropTypes.bool,
+  autoWidth: PropTypes.bool,
   onChange: PropTypes.func,
   readOnly: PropTypes.any,
   className: PropTypes.string,
@@ -45,7 +46,7 @@ class MySelect extends PureComponent {
 
   render() {
     let ThisComponent = Select;
-    const { readOnly, className } = this.props;
+    const { readOnly, className, autoWidth } = this.props;
     let thisClassname = className;
 
     if (this.props.isAsync) {
@@ -58,6 +59,10 @@ class MySelect extends PureComponent {
       } else {
         thisClassname = 'is-disabled';
       }
+    }
+
+    if (autoWidth) {
+      thisClassname = `${thisClassname} is-auto-width`;
     }
 
     return (

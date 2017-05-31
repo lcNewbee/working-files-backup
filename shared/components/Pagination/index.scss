@@ -1,10 +1,25 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 
+.m-pagination {
+  margin: $g-distance 0;
+  .m-pagination__total {
+    margin: 0 ($g-distance / 2);
+  }
+
+  .m-pagination__size {
+    display: inline-block;
+    margin: 0 ($g-distance / 2);
+
+    > label {
+      margin-right:  ($g-distance / 4);
+    }
+  }
+}
+
 .pagination {
   display: inline-block;
   padding-left: 0;
-  margin: $g-distance 0;
   border-radius: 4px;
   font-size: 12px;
 
@@ -33,6 +48,7 @@
     }
   }
 }
+
 .pagination > li > a:hover,
 .pagination > li > span:hover,
 .pagination > li > a:focus,

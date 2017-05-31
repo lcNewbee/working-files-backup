@@ -212,15 +212,6 @@ export class Logs extends PureComponent {
             theme="danger"
             onClick={this.cleanAllLog}
           />
-          <Select
-            className="fr"
-            clearable={false}
-            value={query.get('size')}
-            onChange={onChangeTableSize}
-            options={selectOptions}
-            searchable={false}
-          />
-
         </div>
 
         <Table
@@ -228,7 +219,9 @@ export class Logs extends PureComponent {
           options={options}
           list={data.get('list')}
           page={data.get('page')}
+          size={query.get('size')}
           onPageChange={onPageChange}
+          onPageSizeChange={onChangeTableSize}
           loading={fetching}
         />
 

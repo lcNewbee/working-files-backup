@@ -60,9 +60,9 @@ const validOptions = Map({
 });
 
 const selectOptions = [
-  { value: 20, label: labelPre + '20' },
-  { value: 50, label: labelPre + '50' },
-  { value: 100, label: labelPre + '100' },
+  { value: 20, label: '20' },
+  { value: 50, label: '50' },
+  { value: 100, label: '100' },
 ];
 
 // 原生的 react 页面
@@ -458,14 +458,6 @@ export class Device extends PureComponent {
             onChange={this.onChangeDevicesQuery}
           />
 
-          <Select
-            className="fr"
-            clearable={false}
-            value={size}
-            onChange={this.onChangeTableSize}
-            options={selectOptions}
-            searchable={false}
-          />
         </div>
 
         <Table
@@ -474,6 +466,9 @@ export class Device extends PureComponent {
           options={devicesTableOptions}
           list={this.props.store.getIn(['data', 'list'])}
           page={this.props.store.getIn(['data', 'page'])}
+          size={size}
+          onPageSizeChange={this.onChangeTableSize}
+          sizeOptions={selectOptions}
           onPageChange={this.onPageChange}
         />
 

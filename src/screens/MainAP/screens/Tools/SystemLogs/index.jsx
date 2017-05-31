@@ -33,11 +33,14 @@ const defaultProps = {};
 export default class SystemLogs extends Component {
   constructor(props) {
     super(props);
-    this.onChangeLogSwitch = this.onChangeLogSwitch.bind(this);
-    this.onChangePage = this.onChangePage.bind(this);
-    this.onChangeSearchItem = this.onChangeSearchItem.bind(this);
-    this.fetchlogAndShow = this.fetchlogAndShow.bind(this);
-    this.generateLogNo = this.generateLogNo.bind(this);
+    utils.binds(this, [
+      'onChangeLogSwitch',
+      'onChangePage',
+      'onChangeSearchItem',
+      'fetchlogAndShow',
+      'generateLogNo',
+      'onChangeNumOfPerPage',
+    ]);
   }
 
   componentWillMount() {
@@ -125,6 +128,7 @@ export default class SystemLogs extends Component {
       currPage,
       nextPage,
       lastPage: totalPage,
+      total: logList.length,
     }));
     if (startNo > listLen) {
       throw new Error(__('The page does not exist'));
@@ -233,7 +237,7 @@ export default class SystemLogs extends Component {
     ];
 
     return (
-      <div className="stats-group">
+      <div>
         <h3>{__('System Logs')}</h3>
         <FormGroup
           type="checkbox"
@@ -243,13 +247,8 @@ export default class SystemLogs extends Component {
         />
         {
           this.props.store.getIn(['curData', 'logEnable']) === '1' ? (
-            <div
-              style={{
-                width: '90%',
-                margin: 'auto',
-              }}
-            >
-              <div>
+            <div>
+              <div className="m-action-bar">
                 <Search
                   value={this.props.selfState.get('searchItem')}
                   onChange={(val, e) => {
@@ -259,23 +258,17 @@ export default class SystemLogs extends Component {
                     }, 0);
                   }}
                 />
-                <FormGroup
-                  label={__('Items Per Page')}
-                  type="select"
-                  options={numOfPerPageOptions}
-                  value={this.props.selfState.get('perPageNum')}
-                  onChange={data => this.onChangeNumOfPerPage(data)}
-                />
               </div>
-              <div className="stats-group-cell">
-                <Table
-                  className="table"
-                  options={systemLogOptions}
-                  list={this.props.selfState.get('tableList')}
-                  page={this.props.selfState.get('logPage')}
-                  onPageChange={data => this.onChangePage(data)}
-                />
-              </div>
+              <Table
+                className="table"
+                options={systemLogOptions}
+                list={this.props.selfState.get('tableList')}
+                page={this.props.selfState.get('logPage')}
+                size={this.props.selfState.get('perPageNum')}
+                sizeOptions={numOfPerPageOptions}
+                onPageChange={data => this.onChangePage(data)}
+                onPageSizeChange={this.onChangeNumOfPerPage}
+              />
             </div>
           ) : null
         }

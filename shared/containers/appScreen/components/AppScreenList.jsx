@@ -16,7 +16,7 @@ const searchInputStyle = {
   marginRight: '12px',
 };
 
-const selectOptions = [
+const sizeOptions = [
   { value: 20, label: '20' },
   { value: 50, label: '50' },
   { value: 100, label: '100' },
@@ -839,7 +839,7 @@ class AppScreenList extends React.PureComponent {
     }
 
     // 页面大小选择下拉框
-    if (page) {
+    /* if (page) {
       rightChildrenNode = [
         <label
           key="pageLabel"
@@ -851,12 +851,12 @@ class AppScreenList extends React.PureComponent {
           key="pageSelect"
           value={query.get('size')}
           onChange={this.onChangeTableSize}
-          options={selectOptions}
+          options={sizeOptions}
           searchable={false}
           clearable={false}
         />,
       ];
-    }
+    } */
 
     return (
       <FormContainer
@@ -945,6 +945,8 @@ class AppScreenList extends React.PureComponent {
     } = this.props;
     const page = store.getIn(['data', 'page']);
     const list = store.getIn(['data', 'list']);
+    const query = store.getIn(['query']);
+
     return (
       <div className="t-list-info">
         {
@@ -963,6 +965,9 @@ class AppScreenList extends React.PureComponent {
               list={list}
               page={page}
               onPageChange={this.onPageChange}
+              size={query.get('size')}
+              onPageSizeChange={this.onChangeTableSize}
+              sizeOptions={sizeOptions}
 
               // 必须要父级 AppScreen 已处理加载状态后
               // 且 AppScreen 不是加载中，
