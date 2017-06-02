@@ -100,7 +100,13 @@ class AaaServer_Model extends CI_Model {
                 $radius_ary = $this->getRadiusParams($data);
                 if(!$this->addRadiusTemplate($radius_ary)){
                     return json_encode(json_no('add 802.1x && remote Radius error!'));
-                }
+                }    
+                //开启radius代理
+                $radius_proxy = array(
+                    'radsec_enable' => '1',
+                    'radius_template' => 'remote_radius_' . $data['name']
+                );
+                radsec_set_radsecproxy_info(json_encode($radius_proxy));
                 //2.创建 AAA
                 $aaa_ary = array(
                     'radius_template'=> 'remote_radius_' . $data['name'],
