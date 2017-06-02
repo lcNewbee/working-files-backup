@@ -197,8 +197,9 @@ class AccessWeb_Model extends CI_Model {
     }
     function web_download($data) {
         $filesum = element('id', $data, 1);
+        $filesum = $filesum - 1;
         $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$filesum.'/';
-        if($filesum == 1){
+        if($filesum == 0){
             $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/';
         }
         $path = '/var/conf/portal_web_tmp';//需压缩的目录（文件夹）
