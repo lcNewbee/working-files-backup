@@ -587,6 +587,7 @@ export default class View extends React.Component {
   }
 
   render() {
+    console.log('re-render');
     const myZoom = this.state.zoom;
     if (!this.mapList) return null;
 

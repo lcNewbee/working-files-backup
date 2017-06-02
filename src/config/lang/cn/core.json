@@ -460,6 +460,7 @@
   "Static IP and default gateway must be in the same network segment": "IP地址和网关必须在同一网段。",
   "Please input a valid username.": "用户名错误。",
   "Must be numbers, letters or an underscore": "密码只能由数字、英文字母及下划线组成。",
+  "Password contains invalid char!": "密码中包含非法字符！",
   "Must be ASCII.": "密码必须由ASCII码组成。",
   "Must be hex.": "密码必须由十六进制字符组成。",
   "%s can not be broadcast address": "%s不能为广播地址",

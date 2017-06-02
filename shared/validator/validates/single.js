@@ -245,8 +245,8 @@ var vaildate = {
   pwd: function (str, minLen, maxLen) {
     var ret;
 
-    if (!(/^[0-9a-zA-Z_]+$/).test(str)) {
-      return __('Must be numbers, letters or an underscore');
+    if (!(/^[0-9a-zA-Z_`~\!@#\$%\^&\*\(\)_\+-\=\{\}\|\[\]\\\:";'<>\?,\.\/]+$/).test(str)) {
+      return __('Password contains invalid char!');
     }
 
     if (minLen && maxLen) {

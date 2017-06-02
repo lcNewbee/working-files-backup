@@ -178,6 +178,7 @@ const propTypes = {
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
   receiveScreenData: PropTypes.func,
+  groupid: PropTypes.any,
 };
 const defaultProps = {};
 const defaultQuery = {
@@ -230,7 +231,7 @@ export default class View extends React.Component {
   componentWillMount() {
     const locationQuery = utils.getQuery(this.props.location.search);
 
-    this.props.fetch('goform/group/map/building').then((json) => {
+    this.props.fetch('goform/group/map/building', { groupid: this.props.groupid }).then((json) => {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
       }

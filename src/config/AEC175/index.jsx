@@ -100,6 +100,7 @@ const funConfig = {
     beaconIntervalFun: true, // Beacon帧间间隔
     dtimIntervalFun: true, // DTIM间隔
     segmentThreshFun: true, // 分片阈值
+    distanceFun: false,          // 距离调整
     ampduFun: true, // ampdu值
     rateSetFun: true, // 速率集
     rssiLimitFun: true, // rssi限制

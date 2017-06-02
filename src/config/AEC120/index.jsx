@@ -101,6 +101,7 @@ const funConfig = {
     ledThreshFun: false, // 信号强度控制LED灯功能
     beaconIntervalFun: true, // Beacon帧间间隔
     dtimIntervalFun: true, // DTIM间隔
+    distanceFun: false,          // 距离调整
     segmentThreshFun: true, // 分片阈值
     ampduFun: true, // ampdu值
     rateSetFun: true, // 速率集

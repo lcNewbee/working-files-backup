@@ -10,6 +10,10 @@ import { actions as propertiesActions } from 'shared/containers/properties';
 import validator from 'shared/validator';
 import './orbitTrace.scss';
 
+// onChangeMapId和onChangeBuildId还有优化空间，这两个函数可以合并。目前这两个函数的问题是，两者存在联动，导致页面出现多次重绘的问题
+// this.setState使用的太过于频繁，而且很分散，每次只能更新一个参数。可以将mapId和buildId一起更新，减少重绘次数。
+// 更新state后的后续动作从这两个函数中脱离，放入componentDidUpdate中去（首次绘制不调用，注意可能出现的问题）
+
 const propTypes = {
   save: PropTypes.func,
   store: PropTypes.object,
@@ -18,6 +22,7 @@ const propTypes = {
   fetchScreenData: PropTypes.func,
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
+  groupid: PropTypes.any,
 };
 const defaultProps = {};
 const defaultQuery = {
@@ -82,7 +87,7 @@ export default class View extends React.Component {
   }
   componentWillMount() {
     this.preScreenId = this.props.store.get('curScreenId');
-    this.props.fetch('goform/group/map/building').then((json) => {
+    this.props.fetch('goform/group/map/building', { groupid: this.props.groupid }).then((json) => {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
       }

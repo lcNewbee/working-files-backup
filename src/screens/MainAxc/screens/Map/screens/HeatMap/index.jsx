@@ -15,9 +15,6 @@ import { actions as propertiesActions } from 'shared/containers/properties';
 
 import '../../shared/_map.scss';
 
-// 优化点：图片拖动时，canvas图一直在不断的重绘，计算量大，导致拖动时明显卡顿
-// 可以监听鼠标按下和移动事件，在拖动的过程中不重绘，而在鼠标停止拖动时重绘，参考轨迹图做法
-
 function calcValueWithinCircle(dataList, centerPoint, radius) {
   let totalValue = 0;
   dataList.forEach((item) => {
@@ -37,6 +34,7 @@ const propTypes = {
   changeScreenQuery: PropTypes.func,
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
+  groupid: PropTypes.any,
 };
 const defaultProps = {};
 
@@ -84,7 +82,8 @@ export default class View extends React.PureComponent {
 
   componentWillMount() {
     // console.log('this.props.store', this.props.store.get('curScreenId'));
-    this.props.fetch('goform/group/map/building').then((json) => {
+    const groupid = this.props.groupid;
+    this.props.fetch('goform/group/map/building', { groupid }).then((json) => {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
       }
