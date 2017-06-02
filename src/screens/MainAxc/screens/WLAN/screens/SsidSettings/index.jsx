@@ -662,8 +662,10 @@ export default class View extends React.Component {
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$copyGroupSsids = $$myScreenStore.getIn(['data', 'copyGroupSsids']);
+
     if (type === 'copy') {
       let $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+
       $$copySelectedList = $$copySelectedList.map(
         index => $$copyGroupSsids.getIn(['list', index, 'ssid']),
       );
@@ -678,7 +680,11 @@ export default class View extends React.Component {
         this.props.changeScreenActionQuery({
           copySelectedList: $$copySelectedList.toJS(),
         });
-        this.props.onListAction();
+        this.props.onListAction().then(() => {
+          this.props.changeScreenActionQuery({
+            copySelectedList: [],
+          });
+        });
       }
     }
   }
@@ -878,6 +884,56 @@ export default class View extends React.Component {
     const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const isCopySsid = actionQuery.get('action') === 'copy';
+    const ssidTableOptions = [
+      {
+        id: 'ssid',
+        text: __('SSID'),
+      }, {
+        id: 'hiddenSsid',
+        text: __('Hide SSID'),
+        options: [
+          {
+            value: '1',
+            label: __('YES'),
+            render() {
+              return (
+                <span
+                  style={{
+                    color: 'red',
+                  }}
+                >
+                  {__('YES')}
+                </span>
+              );
+            },
+          }, {
+            value: '0',
+            label: __('NO'),
+            render() {
+              return (
+                <span
+                  style={{
+                    color: 'green',
+                  }}
+                >
+                  {__('NO')}
+                </span>
+              );
+            },
+          },
+        ],
+        defaultValue: '0',
+      }, {
+        id: 'storeForwardPattern',
+        options: storeForwardOption,
+        text: __('Forward Pattern'),
+        defaultValue: 'local',
+      }, {
+        id: 'encryption',
+        text: __('Encryption'),
+        defaultValue: 'psk-mixed',
+      },
+    ];
 
     if (!isCopySsid) {
       return null;
@@ -922,56 +978,7 @@ export default class View extends React.Component {
         <div className="o-list cols col-8">
           <h3 className="o-list__header">{__('Group SSID List')}</h3>
           <Table
-            options={[
-              {
-                id: 'ssid',
-                text: __('SSID'),
-              }, {
-                id: 'hiddenSsid',
-                text: __('Hide SSID'),
-                options: [
-                  {
-                    value: '1',
-                    label: __('YES'),
-                    render() {
-                      return (
-                        <span
-                          style={{
-                            color: 'red',
-                          }}
-                        >
-                          {__('YES')}
-                        </span>
-                      );
-                    },
-                  }, {
-                    value: '0',
-                    label: __('NO'),
-                    render() {
-                      return (
-                        <span
-                          style={{
-                            color: 'green',
-                          }}
-                        >
-                          {__('NO')}
-                        </span>
-                      );
-                    },
-                  },
-                ],
-                defaultValue: '0',
-              }, {
-                id: 'storeForwardPattern',
-                options: storeForwardOption,
-                text: __('Forward Pattern'),
-                defaultValue: 'local',
-              }, {
-                id: 'encryption',
-                text: __('Encryption'),
-                defaultValue: 'psk-mixed',
-              },
-            ]}
+            options={ssidTableOptions}
             list={$$myScreenStore.getIn(['data', 'copyGroupSsids', 'list'])}
             psge={$$myScreenStore.getIn(['data', 'copyGroupSsids', 'page'])}
             onRowSelect={this.onSelectCopySsid}

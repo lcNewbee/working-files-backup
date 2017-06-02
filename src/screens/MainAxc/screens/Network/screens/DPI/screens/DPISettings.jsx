@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -8,10 +9,10 @@ import utils from 'shared/utils';
 import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
 
-const propTypes = fromJS({
+const propTypes = {
   route: PropTypes.object,
   initScreen: PropTypes.func,
-});
+};
 
 export default class EthStatistic extends React.Component {
   constructor(props) {
@@ -21,6 +22,10 @@ export default class EthStatistic extends React.Component {
       'onChangeSettingData',
     ]);
   }
+  componentDidMount() {
+    this.initFormOptions();
+  }
+
 
   onChangeSettingData(data, val) {
     const payload = {
@@ -30,7 +35,9 @@ export default class EthStatistic extends React.Component {
     };
     this.props.save(this.props.route.formUrl, payload).then((json) => {
       if (json.state && json.state.code === 2000) {
-        this.props.fetchScreenData();
+        this.props.fetchScreenData({
+          url: this.props.route.formUrl,
+        });
       }
     });
   }
@@ -41,18 +48,20 @@ export default class EthStatistic extends React.Component {
         id: 'ndpiEnable',
         label: __('Application Analyze'),
         type: 'checkbox',
-        saveOnChange: true,
-        // onChange: (data) => {
-        //   const payload = {
-        //     action: 'setting',
-        //     ndpiEnable: data.value,
-        //   };
-        //   this.props.save(this.props.route.formUrl, payload).then((json) => {
-        //     if (json.state && json.state.code === 2000) {
-        //       this.props.fetchScreenData();
-        //     }
-        //   });
-        // },
+        // saveOnChange: true,
+        onChange: (data) => {
+          const payload = {
+            action: 'setting',
+            ndpiEnable: data.value,
+          };
+          this.props.save(this.props.route.formUrl, payload).then((json) => {
+            if (json.state && json.state.code === 2000) {
+              this.props.fetchScreenData({
+                url: this.props.route.formUrl,
+              });
+            }
+          });
+        },
       },
       {
         id: 'eth0Enable',
@@ -94,15 +103,13 @@ export default class EthStatistic extends React.Component {
     if (this.props.app.get('version').indexOf('AXC1000') !== -1) {
       this.formOptions = this.$$formOptions.delete(-1).delete(-1);
     }
-
-    return this.$$formOptions;
   }
 
   render() {
     return (
       <AppScreen
         {...this.props}
-        settingsFormOptions={this.initFormOptions()}
+        settingsFormOptions={this.$$formOptions}
       />
     );
   }

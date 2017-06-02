@@ -13,10 +13,10 @@ import { actions, AppScreen } from 'shared/containers/appScreen';
 import { colors } from 'shared/config/axc';
 
 const flowRateFilter = utils.filter('flowRate');
-const propTypes = fromJS({
+const propTypes = {
   route: PropTypes.object,
   initScreen: PropTypes.func,
-});
+};
 
 // const flowChartStyle = {
 //   width: '100%',

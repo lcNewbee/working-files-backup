@@ -8,10 +8,10 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
-const propTypes = fromJS({
+const propTypes = {
   route: PropTypes.object,
   initScreen: PropTypes.func,
-});
+};
 
 const listOptions = fromJS([
   {

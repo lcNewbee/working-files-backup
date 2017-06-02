@@ -14,10 +14,9 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
-const propTypes = fromJS({
-  route: PropTypes.object,
-  initScreen: PropTypes.func,
-});
+const propTypes = {
+  store: PropTypes.object,
+};
 
 // const flowChartStyle = {
 //   width: '100%',
@@ -310,9 +309,6 @@ function getFlowOption(serverData, timeType) {
 
   return option;
 }
-
-
-
 
 export default class EthStatistic extends React.Component {
   constructor(props) {
