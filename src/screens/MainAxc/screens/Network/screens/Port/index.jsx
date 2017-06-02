@@ -32,23 +32,42 @@ const listOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
+      // onChange(changeData, data) {
+      //   const retData = changeData;
+      //   const speed = data.speed;
+
+      //   if (speed === '1000' && retData.value === 'half') {
+      //     retData.mergeData = {
+      //       speed: 100,
+      //     };
+      //   }
+
+      //   return retData;
+      // },
     },
   },
   {
     id: 'speed',
     text: __('Port Speed'),
-    options: [
-      {
-        value: '10',
-        label: '10',
-      }, {
-        value: '100',
-        label: '100',
-      }, {
-        value: '1000',
-        label: __('1000'),
-      },
-    ],
+    options($$data) {
+      const ret = [
+        {
+          value: '10',
+          label: '10',
+        }, {
+          value: '100',
+          label: '100',
+        }, {
+          value: '1000',
+          label: __('1000'),
+        },
+      ];
+
+      // if ($$data.get('workModel') === 'half') {
+      //   ret.splice(-1, 1);
+      // }
+      return ret;
+    },
     formProps: {
       type: 'switch',
       visible(data) {

@@ -24,9 +24,6 @@
       "presets": [
         // "es2015-loose"
       ]
-    },
-    "test": {
-      "plugins": ["transform-es2015-modules-commonjs"]
     }
   },
   "plugins": [

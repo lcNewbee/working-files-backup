@@ -109,6 +109,17 @@ const listOptions = fromJS([
       required: true,
       type: 'switch',
       placeholder: __('Please Select ') + __('Rules Group'),
+      onChange(newData) {
+        const ret = newData;
+
+        if (newData.value === '8021x-access') {
+          ret.mergeData = {
+            radius_server_type: 'remote',
+          };
+        }
+
+        return ret;
+      },
     },
   },
   {
@@ -125,6 +136,9 @@ const listOptions = fromJS([
       label: __('Radius Server Type'),
       required: true,
       type: 'switch',
+      disabled($$data) {
+        return $$data.get('auth_accesstype') === '8021x-access';
+      },
       onChange: (data) => {
         const value = data.value;
         const newData = data;
@@ -324,11 +338,14 @@ export default class View extends React.Component {
     const $$nextList = nextProps.store.getIn([myScreenId, 'data', 'list']);
     const curActionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
+    const curListItemName = $$myScreenStore.getIn(['curListItem', 'name']);
+    const nextListItemName = $$myScreenStore.getIn(['curListItem', 'name']);
 
     if (nextState.portOptions.size > 0) {
       if (this.state.portOptions !== nextState.portOptions) {
         this.initFormOptions(nextProps, nextState);
-      } else if ($$curList !== $$nextList || curActionType !== nextActionType) {
+      } else if ($$curList !== $$nextList || curActionType !== nextActionType ||
+          curListItemName !== nextListItemName) {
         this.updateFormOptions(nextProps, nextState);
       }
     }
@@ -370,7 +387,7 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const $$curList = $$myScreenStore.getIn(['data', 'list']);
-    const curListItemName = $$myScreenStore.getIn(['curListItem', 'domain_name']);
+    const curListItemName = $$myScreenStore.getIn(['curListItem', 'name']);
     const $$myPortOptions = state.portOptions
       .filterNot(($$item) => {
         const curPort = $$item.get('value');
@@ -414,11 +431,12 @@ export default class View extends React.Component {
           if ($$item.get('notEditable')) {
             $$ret = $$ret.set('readOnly', true);
           }
-
           if (curListItemName === 'local') {
             if (localReadOnlyIds.indexOf(`${curId},`) !== -1) {
               $$ret = $$ret.set('readOnly', true);
             }
+          } else if (localReadOnlyIds.indexOf(`${curId},`) !== -1) {
+            $$ret = $$ret.set('readOnly', false);
           }
 
           return $$ret;

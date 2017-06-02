@@ -114,11 +114,11 @@ class Row extends Component {
 
           // 如果没有自定义渲染函数，依据配置渲染
           if (!$$curTdOption.get('render')) {
-            if (currVal !== undefined) {
+            if (currVal !== undefined && currVal !== null) {
               // options 则需要渲染 value 对应的 label 值
               if ($$curTdOption.get('options') && $$curTdOption.get('options').size > 0) {
-                // 如果是多选
-                if ($$curTdOption.get('multi')) { // 多选则找出值对应的label，组成一个数组
+                // 如果是多选 则找出值对应的 label，组成一个数组
+                if ($$curTdOption.get('multi')) {
                   currItemArr = currVal.split(',').map(
                     itemVal => $$curTdOption.get('options').find((myMap) => {
                       let ret = false;
