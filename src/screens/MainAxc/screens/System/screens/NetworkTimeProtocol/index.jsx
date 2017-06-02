@@ -38,7 +38,7 @@ const settingsOptions = fromJS([
     type: 'text',
     required: true,
     validator: validator({
-      rules: 'ip',
+      rules: 'domainIP',
     }),
   },
   {
@@ -47,7 +47,7 @@ const settingsOptions = fromJS([
     label: __('Referral Server'),
     type: 'text',
     validator: validator({
-      rules: 'ip',
+      rules: 'domainIP',
     }),
   },
   {

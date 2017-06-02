@@ -173,11 +173,11 @@ export class GroupSettings extends PureComponent {
         id: 'groupname',
         text: msg.groupname,
         render (val) {
-        if (val === 'Default') {
-          val = __('Ungrouped Devices');
-        }
-        return val;
-      },
+          if (val === 'Default') {
+            val = __('Ungrouped Devices');
+          }
+          return val;
+        },
       }, {
       id: 'num',
       text: msg.devicesNum,
@@ -239,8 +239,8 @@ export class GroupSettings extends PureComponent {
       id: 'devicename',
       text: __('MAC Address') + '/' + __('Name'),
       render (val, item) {
-          return item.get('devicename') || item.get('mac');
-        },
+        return item.get('devicename') || item.get('mac');
+      },
     }, {
         id: 'ip',
         text: __('IP Address'),

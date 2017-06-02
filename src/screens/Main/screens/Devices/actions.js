@@ -45,6 +45,12 @@ export function locateDevice(mac) {
     mac,
   };
 }
+export function selectRow(index) {
+  return {
+    type: 'SELECT_ROW',
+    payload: index,
+  };
+}
 
 export function leaveDevicesScreen() {
   window.clearTimeout(refreshTimeout);
@@ -58,6 +64,7 @@ export function fetchDevices() {
   return (dispatch, getState) => {
     const refreshTime = getState().app.get('rateInterval');
     const query = getState().devices.get('query').toJS();
+    //  并没有找到edit;
     const isEdit = getState().devices.get('edit');
 
     window.clearTimeout(refreshTimeout);
@@ -90,6 +97,15 @@ export function saveDevicesAction(data) {
           dispatch(fetchDevices(json.data));
         }
       });
+  };
+}
+
+// 选择或取消 设备
+export function selectDevice(mac, unselect) {
+  return {
+    type: 'SELECT_DEVICE',
+    mac,
+    unselect,
   };
 }
 
@@ -148,7 +164,6 @@ export function saveDeviceNetwork(mac) {
           dispatch(closeDeviceEdit());
           dispatch(fetchDevices());
         }
-
         dispatch(appActions.receiveSave(json.state));
       });
   };

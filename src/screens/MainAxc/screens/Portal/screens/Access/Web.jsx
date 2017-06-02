@@ -11,6 +11,24 @@ import SaveButton from 'shared/components/Button/SaveButton';
 
 import './web.scss';
 
+const idToPageMap = {
+  '1': '',
+  '2': '/1',
+  '3': '/2',
+  '4': '/3',
+  '5': '/4',
+  '6': '/5',
+  '7': '/6',
+};
+const idTownloadIdMap = {
+  '1': '',
+  '2': '1',
+  '3': '2',
+  '4': '3',
+  '5': '4',
+  '6': '5',
+  '7': '6',
+};
 // const queryFormOptions = fromJS([
 //   {
 //     id: 'adv',
@@ -297,7 +315,7 @@ export default class View extends React.Component {
   }
   onBackup($$data) {
     if (this.actionable) {
-      window.location.href = `goform/portal/access/download/?id=${$$data.get('id')}`;
+      window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
     }
   }
   getAdsPage() {
@@ -331,15 +349,6 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const $$curListItem = $$myScreenStore.getIn(['curListItem']);
-    const idToPageMap = {
-      '1': '',
-      '2': '/1',
-      '3': '/2',
-      '4': '/3',
-      '5': '/4',
-      '6': '/5',
-      '7': '/6',
-    };
     this.curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
       <span>
         <a

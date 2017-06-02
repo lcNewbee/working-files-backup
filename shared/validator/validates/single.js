@@ -136,7 +136,38 @@ var vaildate = {
       return vaildate.ip.specific(str, noMask);
     }
   },
+  domainIP: {
+    all: function (str, isSegment) {
+      var ret = this.specific(str);
+      var ipReg = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/;
+      var domainReg =/^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/;
+      if (ret) {
+        return ret;
+      }
+      if (isSegment) {
+        ipReg = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/
+      }
 
+      if (!(ipReg).test(str) && !(domainReg).test(str)) {
+        return __("Please input a valid IP address or domain name");
+      }
+    },
+
+    /**
+     * 不能为回环地址，A类地址
+     */
+    specific: function (str) {
+      var ipArr = str.split('.'),
+        ipHead = ipArr[0];
+
+      if (ipArr[0] === '127') {
+        return __("Address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
+      }
+      if (ipArr[0] > 223) {
+        return __('Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
+      }
+    }
+  },
   dns: {
     all: function (str) {
       var ret = this.specific(str);

@@ -469,6 +469,7 @@
   "Range: %s - %s": "范围：%s - %s",
   "%s is required": "%s不能为空",
   "Please input a valid IP address": "请输入正确的 IP 地址",
+  "Please input a valid IP address or domain name":"请输入正确的 IP 地址或域名",
   "Please input a valid subnet mask": "请输入正确的子网掩码",
   "Please input a valid MAC address": "请输入正确的 MAC 地址",
   "Mac can not be 00:00:00:00:00:00": "Mac 地址不能全为0",

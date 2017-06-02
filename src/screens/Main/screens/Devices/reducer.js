@@ -1,4 +1,5 @@
 import { fromJS, Map } from 'immutable';
+import immutableUtils from 'shared/utils/lib/immutable';
 
 const defaultState = fromJS({
   fetching: false,
@@ -8,7 +9,10 @@ const defaultState = fromJS({
   query: {
     devicetype: '0',
     size: 20,
-    page: 1
+    page: 1,
+  },
+  actionQuery: {
+    selectedList: [],
   },
 });
 
@@ -16,6 +20,16 @@ function getEditObjByMac(state, mac) {
   return state.getIn(['data', 'list']).find(function(item) {
     return item.get('mac') == mac;
   }).set('devices', devices)
+}
+function selectRow(state, action) {
+  const selectObject = immutableUtils.selectList(
+    state.getIn(['data', 'list']),
+    action.payload,
+    state.getIn(['actionQuery', 'selectedList']),
+  );
+
+  return state.setIn(['data', 'list'], selectObject.$$list)
+    .setIn(['actionQuery', 'selectedList'], selectObject.selectedList);
 }
 
 export default function (state = defaultState, action) {
@@ -25,6 +39,9 @@ export default function (state = defaultState, action) {
 
     case 'REQEUST_FETCH_DEVICE':
       return state.set('fetching', true);
+
+    case 'SELECT_ROW':
+      return selectRow(state, action);
 
     case 'RECIVE_FETCH_DEVICES':
       return state.set('fetching', false)

@@ -46,7 +46,11 @@ class File extends PureComponent {
       showText: transformShowText(props.value),
     };
   }
-
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      showText: transformShowText(nextProps.value),
+    });
+  }
   onAlert(msg) {
     const createModal = this.props.createModal;
 

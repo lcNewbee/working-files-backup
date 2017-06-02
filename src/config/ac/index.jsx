@@ -61,6 +61,7 @@ const sPortal = require('../../screens/Main/screens/Settings/screens/Portal');
 const sGuest = require('../../screens/Main/screens/Settings/screens/Guest');
 const sVoip = require('../../screens/Main/screens/Settings/screens/Voip');
 const sMode = require('../../screens/Main/screens/Settings/screens/Mode');
+const sSystem = require('../../screens/Main/screens/Settings/screens/System');
 const sAdmin = require('../../screens/Main/screens/Settings/screens/Admin');
 
 
@@ -139,6 +140,11 @@ const routes = [
                 saveUrl: 'goform/setApMode',
                 text: __('AP Mode'),
                 component: sMode.Screen,
+              }, {
+                id: 'systemSetting',
+                path: '/main/settings/system',
+                text: __('System'),
+                component: sSystem.Screen,
               }, {
                 id: 'password',
                 path: '/main/settings/admin',

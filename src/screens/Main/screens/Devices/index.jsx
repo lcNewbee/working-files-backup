@@ -69,7 +69,6 @@ const selectOptions = [
 export class Device extends PureComponent {
   constructor(props) {
     super(props);
-
     utils.binds(this, [
       'onAction',
       'onChangeSearchText',
@@ -88,6 +87,10 @@ export class Device extends PureComponent {
       'combine',
       'handleSearch',
       'handleAction',
+      'onSelectDevice',
+      'onRowSelect',
+      'onMultiUpgradeDevice',
+      'onMultiLocateDevice',
     ]);
   }
 
@@ -124,7 +127,11 @@ export class Device extends PureComponent {
 
     this.props.saveDevicesAction(data);
   }
-
+  onRowSelect(index) {
+    //  index {index: 0, selected: true, unselectableList: Array(0)};
+    console.log(index) ;
+    this.props.selectRow(index);
+  }
   // on Query changed
   onChangeSearchText(val) {
     this.props.changeDevicesQuery({
@@ -154,6 +161,7 @@ export class Device extends PureComponent {
   /**
    *
    */
+
   onResetDevice(mac) {
     let msg_text = __('Are you sure reset device: %s?', mac);
 
@@ -187,7 +195,7 @@ export class Device extends PureComponent {
     this.handleAction(mac, actionType);
   }
   onUpgradeDevice(mac) {
-    let msg_text = __('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
+    const msg_text = __('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
 
     this.props.createModal({
       id: 'settings',
@@ -199,6 +207,23 @@ export class Device extends PureComponent {
     });
   }
 
+  onMultiUpgradeDevice() {
+    const warningMsgText = __('PLease choose devices to upgrade!');
+    this.props.createModal({
+      id: 'settings',
+      role: 'confirm',
+      text: warningMsgText,
+    });
+  }
+
+  onMultiLocateDevice() {
+    const warningMsgText = __('PLease choose devices to locate!');
+    this.props.createModal({
+      id: 'settings',
+      role: 'confirm',
+      text: warningMsgText,
+    });
+  }
   // onEdit
   showEditNetwork(mac) {
     return function (e) {
@@ -281,11 +306,11 @@ export class Device extends PureComponent {
         {
           id: 'devicename',
           text: __('MAC Address') + '/' + __('Name'),
-          render (val, item) {
-              let deviceMac = item.get('mac');
+          render(val, item) {
+            const deviceMac = item.get('mac');
 
-              return val || deviceMac;
-            },
+            return val || deviceMac;
+          },
         }, {
           id: 'model',
           text: __('Model'),
@@ -304,13 +329,40 @@ export class Device extends PureComponent {
       ]);
     } else {
       ret = fromJS([
+        /*{
+          id: 'select',
+          text: (() => {
+            return (
+              <div className="action-btns">
+                <input
+                  type="checkbox"
+                />
+              </div>
+            );
+          })(),
+          width: 50,
+          render: function (val, item) {
+            const deviceMac = item.get('mac');
+            const selectedDevices = this.props.store.getIn(['selectedList', 'list']);
+            return (
+              <div className="action-btns">
+                <input
+                  type="checkbox"
+                  value={deviceMac}
+                  onChange={this.onSelectDevice}
+                  checked={selectedDevices.indexOf(deviceMac) !== -1}
+                />
+              </div>
+            );
+          }.bind(this),
+        },*/
         {
           id: 'devicename',
           text: __('MAC Address') + '/' + __('Name'),
           render: function (val, item) {
-            let deviceMac = item.get('mac');
-            let name = item.get('devicename') || deviceMac;
-            let deviceStatus = item.get('status');
+            const deviceMac = item.get('mac');
+            const name = item.get('devicename') || deviceMac;
+            const deviceStatus = item.get('status');
 
             if (deviceStatus === 'disable' || noControl) {
               return <span>{name}</span>;
@@ -337,7 +389,6 @@ export class Device extends PureComponent {
             if (deviceStatus === 'disable' || noControl) {
               return <span>{item.get('ip') }</span>;
             }
-
             return (
               <span
                 className="link-text"
@@ -383,8 +434,8 @@ export class Device extends PureComponent {
 
             if (item.get('newest') === '0') {
               upgradeBtn = (<Button
-                onClick={this.onUpgradeDevice.bind(this, deviceMac) }
-                text={__('Upgrade') }
+                onClick={this.onUpgradeDevice.bind(this, deviceMac)}
+                text={__('Upgrade')}
                 size="sm"
                 icon="level-up"
                 />);
@@ -439,7 +490,6 @@ export class Device extends PureComponent {
     const currData = this.props.store.get('edit') || Map({});
     const { ip, mask, gateway, main_dns, second_dns } = this.props.validateOption;
     const { text, devicetype, size } = this.props.store.get('query').toJS();
-
     return (
       <div>
         <h2>{__('Devices Info') }</h2>
@@ -459,7 +509,20 @@ export class Device extends PureComponent {
           />
 
         </div>
-
+        <div className="m-action-bar">
+          <Button
+            text={__('Locate')}
+            size="sm"
+            icon="location-arrow"
+            onClick={this.onMultiLocateDevice}
+          />
+          <Button
+            text={__('Upgrade')}
+            size="sm"
+            icon="level-up"
+            onClick={this.onMultiUpgradeDevice}
+          />
+        </div>
         <Table
           className="table"
           loading={this.props.store.get('fetching')}
@@ -470,6 +533,8 @@ export class Device extends PureComponent {
           onPageSizeChange={this.onChangeTableSize}
           sizeOptions={selectOptions}
           onPageChange={this.onPageChange}
+          onRowSelect={this.onRowSelect}
+          selectable
         />
 
         <Modal

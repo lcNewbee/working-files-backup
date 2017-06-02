@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import validator from 'shared/validator';
-import { FormGroup } from 'shared/components/Form';
+import FormGroup from 'shared/components/Form/FormGroup';
 import Select from 'shared/components/Select';
 import { Button, SaveButton } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
@@ -44,9 +44,14 @@ const validOptions = fromJS({
 
 const propTypes = {
   reqeustFetchPortal: PropTypes.func,
+  createModal: PropTypes.func,
+  fetchPortalSettings: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
+  changePortalSettings: PropTypes.func,
+  validateAll: PropTypes.func,
+  setPortal: PropTypes.func,
   fetching: PropTypes.bool,
   data: PropTypes.instanceOf(Map),
-  groups: PropTypes.instanceOf(List),
 };
 
 export class Portal extends PureComponent {
@@ -105,9 +110,9 @@ export class Portal extends PureComponent {
 
   onChangeImage(i) {
     return function (e) {
-      let data = {};
-      let filePath = e.target.value;
-      let extension = utils.getExtension(filePath);
+      const data = {};
+      const filePath = e.value;
+      const extension = utils.getExtension(filePath);
 
       if (!filePath) {
         this.props.createModal({
@@ -125,30 +130,15 @@ export class Portal extends PureComponent {
           text: __('Please select a upload image'),
         });
 
-        e.target.value = '';
+        e.value = '';
         this.restImageStatus(i);
         return;
       }
 
-      data['imageStatus' + i] = 'selected';
+      data[`imageStatus${i}`] = 'selected';
+      data[`filename${i}`] = filePath;
       this.setState(utils.extend({}, this.state, data));
     }.bind(this);
-  }
-
-  restImageStatus(i) {
-    let input = document.getElementById('filename' + i);
-    let data = {};
-
-    data['imageStatus' + i] = 'default';
-    this.setState(utils.extend({}, this.state, data));
-    input.value = '';
-  }
-
-  imageUploading(i) {
-    let data = {};
-
-    data['imageStatus' + i] = 'loading';
-    this.setState(utils.extend({}, this.state, data));
   }
 
   onUploadImage(i) {
@@ -213,6 +203,25 @@ export class Portal extends PureComponent {
     return this.props.store.getIn(['data', 'curr', name]) || myDefault;
   }
 
+  restImageStatus(i) {
+    // 已经把input改为formgroup，所以input.value = ''无效，可以删除。
+    let input = document.getElementById(`filename${i}`);
+    let data = {};
+
+    data[`imageStatus${i}`] = 'default';
+    data[`filename${i}`] = '';
+    this.setState(utils.extend({}, this.state, data));
+    console.log('state',this.state);
+    input.value = '';
+  }
+
+  imageUploading(i) {
+    let data = {};
+
+    data[`imageStatus${i}`] = 'loading';
+    this.setState(utils.extend({}, this.state, data));
+  }
+
   render() {
     const { getCurrData } = this;
     const images = getCurrData('image');
@@ -223,57 +232,57 @@ export class Portal extends PureComponent {
     const refreshtimeOtions = [
       {
         value: '2',
-        label: '2 ' + MSG.Seconds,
+        label: `2 ${MSG.Seconds}`,
       }, {
         value: '3',
-        label: '3 ' + MSG.Seconds,
+        label: `3 ${MSG.Seconds}`,
       }, {
         value: '5',
-        label: '5 ' + MSG.Seconds,
+        label: `5 ${MSG.Seconds}`,
         default: true,
       }, {
         value: '10',
-        label: '10 ' + MSG.Seconds,
+        label: `10 ${MSG.Seconds}`,
       }, {
         value: '20',
-        label: '20 ' + MSG.Seconds,
+        label: `20 ${MSG.Seconds}`,
       },
     ];
     // minutes
     const expirationOptions = [
       {
         value: '600',
-        label: '10 ' + MSG.minutes,
+        label: `10 ${MSG.minutes}`,
       }, {
         value: '1200',
-        label: '20 ' + MSG.minutes,
+        label: `20 ${MSG.minutes}`,
       }, {
         value: '1800',
-        label: '30 ' + MSG.minutes,
+        label: `30 ${MSG.minutes}`,
       }, {
         value: '3600',
-        label: '1 ' + MSG.hour,
+        label: `1 ${MSG.hour}`,
       }, {
         value: '14400',
-        label: '4 ' + MSG.hours,
+        label: `4 ${MSG.hours}`,
       }, {
         value: '28800',
-        label: '8 ' + MSG.hours,
+        label: `8 ${MSG.hours}`,
       }, {
         value: '86400',
-        label: '24 ' + MSG.hours,
+        label: `24 ${MSG.hours}`,
       }, {
         value: '172800',
-        label: '2 ' + MSG.days,
+        label: `2 ${MSG.days}`,
       }, {
         value: '259200',
-        label: '3 ' + MSG.days,
+        label: `3 ${MSG.days}`,
       }, {
         value: '432000',
-        label: '5 ' + MSG.days,
+        label: `5 ${MSG.days}`,
       }, {
         value: '604800',
-        label: '7 ' + MSG.days,
+        label: `7 ${MSG.days}`,
       },
     ];
     const uploadStyles = {
@@ -348,30 +357,30 @@ export class Portal extends PureComponent {
             target="imagesIf"
             encType="multipart/form-data"
           >
-            <div className="form-control">
+            <div>
               <input type="hidden" name="count" value="1" />
               <input type="hidden" name="pid" value={getCurrData('pid')} />
-              <input
+              <FormGroup
                 type="file"
-                className="text"
+                className="portal_file"
                 id="filename1"
                 name="filename"
+                value={this.state.filename1}
                 onChange={this.onChangeImage('1')}
               />
               {
                 noControl ? null : (
                   <Button
                     type="button"
-                    text={__('Upload Image') + ' 1'}
+                    text={`${__('Upload Image')} 1`}
                     icon="upload"
                     loading={this.state.imageStatus1 === 'loading'}
                     theme={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
                     style={uploadStyles}
-                    onClick={this.onUploadImage(1)}
+                    onClick={this.onUploadImage(1) }
                   />
                 )
               }
-
             </div>
           </form>
 
@@ -383,14 +392,15 @@ export class Portal extends PureComponent {
             target="imagesIf"
             encType="multipart/form-data"
           >
-            <div className="form-control">
+            <div>
               <input type="hidden" name="count" value="2" />
               <input type="hidden" name="pid" value={getCurrData('pid')} />
-              <input
+              <FormGroup
                 type="file"
-                className="text"
+                className="portal_file"
                 id="filename2"
                 name="filename"
+                value={this.state.filename2}
                 onChange={this.onChangeImage('2')}
               />
 
@@ -398,7 +408,7 @@ export class Portal extends PureComponent {
                 noControl ? null : (
                   <Button
                     type="button"
-                    text={__('Upload Image') + ' 2'}
+                    text={`${__('Upload Image')} 2`}
                     icon="upload"
                     style={uploadStyles}
                     loading={this.state.imageStatus2 === 'loading'}
@@ -418,14 +428,15 @@ export class Portal extends PureComponent {
             target="imagesIf"
             encType="multipart/form-data"
           >
-            <div className="form-control">
+            <div >
               <input type="hidden" name="count" value="3" />
               <input type="hidden" name="pid" value={getCurrData('pid')} />
-              <input
+              <FormGroup
                 type="file"
-                className="text"
+                className="portal_file"
                 id="filename3"
                 name="filename"
+                value={this.state.filename3}
                 onChange={this.onChangeImage('3')}
               />
 
@@ -433,7 +444,7 @@ export class Portal extends PureComponent {
                 noControl ? null : (
                   <Button
                     type="button"
-                    text={__('Upload Image') + ' 3'}
+                    text={`${__('Upload Image')} 3`}
                     icon="upload"
                     style={uploadStyles}
                     loading={this.state.imageStatus3 === 'loading'}

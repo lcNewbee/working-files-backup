@@ -48,7 +48,6 @@ function selectDevice(state, mac, unselect) {
 
   return state.updateIn(['edit', 'devices'], data => {
     let ret;
-
     if(unselect) {
       ret = data.filterNot(function(val) {
         return val === mac;
