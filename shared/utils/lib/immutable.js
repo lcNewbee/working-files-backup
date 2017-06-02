@@ -197,20 +197,32 @@ var immutableUtils = {
       return null;
     }
     var $$retList = $$list;
-    var selectedList = $$selectedList || $$retList.clear();
+    var $$newSelectedList = $$selectedList || $$retList.clear();
+    var selectListIndex = -1;
 
+    // 只操作其中一项
     if (data.index !== -1) {
       $$retList = $$retList.setIn([data.index, '__selected__'], data.selected);
+      selectListIndex = $$newSelectedList.indexOf(data.index);
+
       if (data.selected) {
-        selectedList = selectedList.push(data.index);
-      } else {
-        selectedList = selectedList.delete(data.index);
+        if (selectListIndex === -1) {
+          $$newSelectedList = $$newSelectedList.push(data.index);
+        }
+
+      // 已存在选择中列表中
+      } else if (selectListIndex !== -1) {
+        $$newSelectedList = $$newSelectedList.delete(selectListIndex);
       }
+
+
+    // 操作全部项
     } else {
-      selectedList = $$retList.clear();
+      $$newSelectedList = $$retList.clear();
+
       if (data.selected) {
         $$retList = $$retList.map(function(item, index) {
-          selectedList = selectedList.push(index);
+          $$newSelectedList = $$newSelectedList.push(index);
 
           return item.set('__selected__', true);
         });
@@ -223,7 +235,7 @@ var immutableUtils = {
 
     return {
       $$list: $$retList,
-      selectedList: selectedList
+      selectedList: $$newSelectedList
     };
   },
 
