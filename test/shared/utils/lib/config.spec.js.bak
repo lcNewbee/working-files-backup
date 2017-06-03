@@ -132,9 +132,20 @@ describe('utils config', () => {
 });
 */
 
+// findPath
 describe('utils config', () => {
-  describe('#findRoute()', () => {
-    const objectAssign = config.findRoute;
+  describe('#findPath()', () => {
+    const objectAssign = config.findPath;
+
+    it('should return empty array when id not found', () => {
+      const target = [
+        {
+          id: 'level0',
+          value: 'before',
+        },
+      ];
+      expect(objectAssign(target, 'level')).toEqual([]);
+    });
 
     it('should return array with only one element', () => {
       const target = [
@@ -147,17 +158,7 @@ describe('utils config', () => {
       expect(objectAssign(target, 'level0')).toEqual([0]);
     });
 
-    it('should return empty array when id not found', () => {
-      const target = [
-        {
-          id: 'level0',
-          value: 'before',
-        },
-      ];
-      expect(objectAssign(target, 'level')).toEqual([]);
-    });
-
-    it('should return route in depth in array type', () => {
+    it('should return path in deep depth in array of object', () => {
       const target = [
         {
           id: 'level0',
@@ -185,6 +186,7 @@ describe('utils config', () => {
   });
 });
 
+// getIn
 describe('utils config', () => {
   describe('#getIn()', () => {
     const objectAssign = config.getIn;
@@ -204,14 +206,40 @@ describe('utils config', () => {
         });
     });
 
-    it('should return null if no object was found by the route', () => {
+    it('should return undefined if path is empty', () => {
       const target = [
         {
           id: 'level0',
           value: 'before',
         },
       ];
-      expect(objectAssign(target, [])).toEqual(null);
+      expect(objectAssign(target, [])).toEqual(undefined);
+    });
+
+    it('should return undefined if no object was found by the path', () => {
+      const target = [
+        {
+          id: 'level0',
+          value: 'level0',
+        },
+        {
+          routes: [
+            {
+              id: 'level1',
+              value: 'level1',
+            },
+            {
+              routes: [
+                {
+                  id: 'level2',
+                  value: 'level2',
+                },
+              ],
+            },
+          ],
+        },
+      ];
+      expect(objectAssign(target, [1, 'routes', 0, 'routes', 0])).toEqual(undefined);
     });
 
     it('should return object in deep depth', () => {
@@ -246,6 +274,7 @@ describe('utils config', () => {
   });
 });
 
+// setIn
 describe('utils config', () => {
   describe('#setIn()', () => {
     const objectAssign = config.setIn;
@@ -272,7 +301,7 @@ describe('utils config', () => {
         }]);
     });
 
-    it('should throw error if route is empty', () => {
+    it('should return target without change if path is empty', () => {
       const target = [
         {
           id: 'level0',
@@ -287,7 +316,7 @@ describe('utils config', () => {
       expect(objectAssign(target, [], value)).toEqual(target);
     });
 
-    it('should throw error if object can not find', () => {
+    it('should return target without change if object can not be found by the path', () => {
       const target = [
         {
           id: 'level0',
@@ -319,7 +348,7 @@ describe('utils config', () => {
       expect(objectAssign(target, [1, 'routes', undefined, 'routes', 0], value)).toEqual(target);
     });
 
-    it('should return the target array with the object refered by the route changed', () => {
+    it('should return the target array with the object refered by the path changed', () => {
       const target = [
         {
           id: 'level0',
@@ -376,7 +405,7 @@ describe('utils config', () => {
   });
 });
 
-
+// merge
 describe('utils config', () => {
   describe('#merge()', () => {
     const objectAssign = config.merge;
@@ -403,7 +432,7 @@ describe('utils config', () => {
         }]);
     });
 
-    it('should return the target array with the object refered by the route changed', () => {
+    it('should return the target array with the object refered by the path changed', () => {
       const target = [
         {
           id: 'level0',
@@ -479,3 +508,235 @@ describe('utils config', () => {
     });
   });
 });
+
+// mergeIn
+describe('utils config', () => {
+  describe('#mergeIn()', () => {
+    const objectAssign = config.mergeIn;
+    // it('should throw error if item to be merged in is not an object')
+
+    // it('should throw error if item refered by path is not an object')
+
+    it('should return object with shadow object merged in', () => {
+      const target = [
+        {
+          id: 'level0',
+          value: 'before',
+        },
+      ];
+
+      const value = {
+        id: 'level0',
+        value: 'after',
+        added: 'addValue',
+      };
+
+      expect(objectAssign(target, [0], value)).toEqual(
+        [{
+          id: 'level0',
+          value: 'after',
+          added: 'addValue',
+        }]);
+    });
+
+    it('should return the target array with the object refered by the path changed', () => {
+      const target = [
+        {
+          id: 'level0',
+          value: 'level0',
+        },
+        {
+          routes: [
+            {
+              id: 'level1',
+              value: 'level1',
+            },
+            {
+              routes: [
+                {
+                  id: 'level2',
+                  value: 'level2',
+                  origin: 'still',
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      const value = {
+        id: 'level2',
+        value: 'after',
+        added: 'addValue',
+      };
+      expect(objectAssign(target, [1, 'routes', 1, 'routes', 0], value)).toEqual(
+        [
+          {
+            id: 'level0',
+            value: 'level0',
+          },
+          {
+            routes: [
+              {
+                id: 'level1',
+                value: 'level1',
+              },
+              {
+                routes: [
+                  {
+                    id: 'level2',
+                    value: 'after',
+                    added: 'addValue',
+                    origin: 'still',
+                  },
+                ],
+              },
+            ],
+          },
+        ]);
+    });
+  });
+});
+
+// deleteIn
+describe('utils config', () => {
+  describe('#deleteIn()', () => {
+    const objectAssign = config.deleteIn;
+
+    // should throw error if path is not an array
+
+    it('should return the target array with the object refered by the path deleted', () => {
+      const target = [
+        {
+          id: 'level0',
+          value: 'level0',
+        },
+        {
+          routes: [
+            {
+              id: 'level1',
+              value: 'level1',
+            },
+            {
+              routes: [
+                {
+                  id: 'level2',
+                  value: 'level2',
+                  origin: 'still',
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      expect(objectAssign(target, [1, 'routes', 1, 'routes', 0])).toEqual(
+        [
+          {
+            id: 'level0',
+            value: 'level0',
+          },
+          {
+            routes: [
+              {
+                id: 'level1',
+                value: 'level1',
+              },
+              {
+                routes: [],
+              },
+            ],
+          },
+        ]);
+    });
+
+    it('should return the target array with the attribute refered by the path deleted', () => {
+      const target = [
+        {
+          id: 'level0',
+          value: 'level0',
+        },
+        {
+          routes: [
+            {
+              id: 'level1',
+              value: 'level1',
+            },
+            {
+              routes: [
+                {
+                  id: 'level2',
+                  value: 'level2',
+                  origin: 'still',
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      expect(objectAssign(target, [1, 'routes', 1, 'routes', 0, 'value'])).toEqual(
+        [
+          {
+            id: 'level0',
+            value: 'level0',
+          },
+          {
+            routes: [
+              {
+                id: 'level1',
+                value: 'level1',
+              },
+              {
+                routes: [
+                  {
+                    id: 'level2',
+                    origin: 'still',
+                  },
+                ],
+              },
+            ],
+          },
+        ]);
+    });
+
+    it('should return the target without change if object refered by the path is not found', () => {
+      const target = [
+        {
+          id: 'level0',
+          value: 'level0',
+        },
+        {
+          routes: [
+            {
+              id: 'level1',
+              value: 'level1',
+            },
+            {
+              routes: [
+                {
+                  id: 'level2',
+                  value: 'level2',
+                  origin: 'still',
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      expect(objectAssign(target, [1, 'routes', 1, 'routes', 1])).toEqual(target);
+    });
+  });
+});
+
+// delete
+
+
+
+// append
+
+
+
+// addBefore
+
