@@ -5,21 +5,21 @@ class AccessSms_Model extends CI_Model {
 		$this->portalsql = $this->load->database('mysqlportal', TRUE);
 		$this->load->helper(array('array', 'db_operation'));
 	}
-	function get_list($data) {   
+	function get_list($data) {
         $parameter = array(
-            'db' => $this->portalsql, 
-            'columns' => '*', 
-            'tablenames' => 'portal_smsapi', 
-            'pageindex' => (int) element('page', $data, 1), 
-            'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "1=1", 
-            'joins' => array(), 
+            'db' => $this->portalsql,
+            'columns' => '*',
+            'tablenames' => 'portal_smsapi',
+            'pageindex' => (int) element('page', $data, 1),
+            'pagesize' => (int) element('size', $data, 20),
+            'wheres' => "1=1",
+            'joins' => array(),
             'order' => array(array('id','DESC'))
         );
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
         }
-        if(isset($data['gateway_type'])){
+        if(isset($data['gateway_type']) && $data['gateway_type']){
             $parameter['wheres'] = $parameter['wheres']." AND type='".$data['gateway_type']."'";
         }
         $datalist = help_data_page_all($parameter);
@@ -29,7 +29,7 @@ class AccessSms_Model extends CI_Model {
 				'page'=>$datalist['page'],
 				'list' =>$datalist['data']
 			)
-		);               
+		);
 		return json_encode($arr);
 	}
     function Add($data){
@@ -42,20 +42,20 @@ class AccessSms_Model extends CI_Model {
         }
         $result = $result ? json_ok() : json_no('delete error');
         return json_encode($result);
-    }    
+    }
     function Delete($data){
         $result = FALSE;
-        $dellist = $data['selectedList'];       
+        $dellist = $data['selectedList'];
         foreach($dellist as $row) {
             $this->portalsql->where('id', $row['id']);
             $result = $this->portalsql->delete('portal_smsapi');
-        }     
+        }
         $result = $result ? json_ok() : json_on('delete error');
         return json_encode($result);
     }
     function Edit($data){
         $result = 0;
-        $arr = $this->params($data);        
+        $arr = $this->params($data);
         $this->portalsql->where('id', $data['id']);
         $result = $this->portalsql->update('portal_smsapi', $arr);
         if($result == 1 && $data['state'] == 1){
@@ -64,7 +64,7 @@ class AccessSms_Model extends CI_Model {
         }
         $result = $result ? json_ok() : json_no('edit error');
         return json_encode($result);
-    }    
+    }
     private function params($data){
         $arr = array(
             'name'=>element('name',$data),
@@ -88,7 +88,7 @@ class AccessSms_Model extends CI_Model {
         $this->portalsql->where('id !=',$id);
         if($this->portalsql->update('portal_smsapi')){
             return 1;
-        }        
+        }
         return 0;
     }
 }

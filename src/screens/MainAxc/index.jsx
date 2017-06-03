@@ -91,7 +91,7 @@ export default class Main extends React.PureComponent {
    * @memberof Main
    */
   onRefreshProductInfo(props) {
-    this.companyTitle = props.app.get('title') || 'Axilspot';
+    this.companyTitle = props.app.get('title') || '';
     this.companyName = props.app.get('companyname') || 'axilspot';
 
     // 'sales@axilspot.com'

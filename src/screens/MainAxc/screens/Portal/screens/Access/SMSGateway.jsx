@@ -223,6 +223,10 @@ const queryFormOptions = fromJS([
     label: __('Type'),
     options: [
       {
+        value: '',
+        label: __('ALL'),
+      },
+      {
         value: '1',
         label: __('iKuai'),
       }, {
