@@ -76,7 +76,7 @@ class WirelessSsid_Model extends CI_Model {
                     if($row['mandatorydomain'] != "" && $row['encryption'] != '802.1x'){
                          $row['accessControl'] = 'portal';
                     }
-                    $sql = "SELECT * FROM `portal_ssid` WHERE `ssid`='{$row['ssid']}' AND `apmac`=''";
+                    $sql = "SELECT * FROM `portal_ssid` WHERE BINARY `ssid`='{$row['ssid']}' AND `apmac`=''";
                     $query = $this->portalsql->query($sql)->result_array();
                     if(count($query) > 0){
                         $row['accessControl'] = 'portal';
@@ -331,14 +331,20 @@ class WirelessSsid_Model extends CI_Model {
     }
 	//修改portal_ssid
 	private function editPoartalSsid($ssid, $web_template, $domain) {
+        $name = 'local_ssid_' . $domain;
+        $basip =  $this->getInterface();
+        $sqlcmd = "update portal_ssid set name='{$name}',basip='{$basip}',web={$web_template} where BINARY ssid='{$ssid}'";
+        /*
         $arr = array(
             'name'=> 'local_ssid_' . $domain,
             'basip'=> $this->getInterface(),
             'web' => $web_template
-        );
-        $this->portalsql->where('ssid', $ssid);
+        );        
+        $this->portalsql->where('ssid=', $ssid);
         $this->portalsql->where('apmac', '');
         $this->portalsql->update('portal_ssid', $arr);
+        */
+        $this->portalsql->query($sqlcmd);
     }
     //删除portal_ssid
 	  private function delPoartalSsid($ssid) {
