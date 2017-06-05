@@ -34,7 +34,7 @@ class Overview_Model extends CI_Model {
         
         $query = $this->portalsql->query('select * from portal_account');        
         foreach ($query->result_array() as $row) {
-            if($row['state'] === 0) {
+            if($row['state'] === '0') {
                 $lockcount = $lockcount + 1;
             }
         }
