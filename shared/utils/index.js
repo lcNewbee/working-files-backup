@@ -16,6 +16,7 @@ utils.extend({
   gps: require('./lib/gps'),
   immutableUtils: require('./lib/immutable'),
   inputFormat: require('./lib/inputFormat'),
+  config: require('./lib/config'),
 });
 
 // exports

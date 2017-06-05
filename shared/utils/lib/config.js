@@ -16,14 +16,12 @@ function warning(msg) {
   } catch (e) { }
 }
 
+// 多数方法都会修改传入的target数组，因为数组包含的对象中，含有来自其他地方的引用，必须保持这个引用
+
 /**
  * 通过遍历targetArr数组，找出id所指示的对象路径
  * 遍历过程中，给每个加入堆栈的对象添加一个标识其路径的属性，如果该对象id和目的id相同，则返回该路径
  */
-
-// 由于复制方式的原因，该函数还是修改了参数target
-// 导致target中，与推入栈中的对象对应的部分多出一个pathStack对象
-// 最根本的解决方法是修改复制的方法
 function findPath(target, id) {
   var objStack = [];
   if (!target || !target.length) return ;
@@ -59,7 +57,7 @@ function findPath(target, id) {
       }
     }
   }
-  console.log('target', target);
+
   return [];
 }
 
@@ -73,8 +71,7 @@ function getIn(target, path) {
     throw new Error("The second argument of function getIn must be array");
   }
   if (path.length == 0) return undefined;
-  var targetStr = JSON.stringify(target);
-  var result = JSON.parse(targetStr), i = 0;
+  var result = target, i = 0;
   var len = path.length;
   while (i < len && result) {
     result = result[path[i++]];
@@ -84,9 +81,8 @@ function getIn(target, path) {
 
 // 同上，也可以做的更加通用
 function setIn(target, path, value) {
-  var targetStr = JSON.stringify(target);
+  var result = [].concat(target);
   var pathStackStr = JSON.stringify(path);
-  var result = JSON.parse(targetStr); // 避免修改参数
   var pathStack = JSON.parse(pathStackStr);
   if (Object.prototype.toString.call(target) != "[object Array]") {
     throw new Error("The first argument of function setIn must be array");
@@ -116,8 +112,7 @@ function setIn(target, path, value) {
 // path指示的对象必须是object，不能是数组或普通变量，否则报错
 function mergeIn(target, path, mergeObj) {
   // 合并一个有path指示的对象到target
-  var targetStr = JSON.stringify(target);
-  var result = JSON.parse(targetStr);
+  var result = [].concat(target);
   if (Object.prototype.toString.call(path) != "[object Array]") {
     throw new Error("config --> mergeIn: Argument path must be array");
   } else if (path.length == 0) {
@@ -152,21 +147,34 @@ function mergeIn(target, path, mergeObj) {
 // 删除之后，可能留下一个空的routes数组，需不需要特殊处理？
 function deleteIn(target, path) {
   // 删除path指示的对象
-  var targetStr = JSON.stringify(target);
-  var result = JSON.parse(targetStr);
+  var result = [].concat(target);
   if (Object.prototype.toString.call(path) != "[object Array]") {
     throw new Error("config.js -> deleteIn: The second argument must be array");
   } else if (path.length == 0) {
     warning('config.js -> deleteIn: Can not find the object refered by path, return target without change');
     return result;
   }
-  return setIn(result, path, undefined);
+  var parentPath = path.slice(0, -1);
+  var finalPath = path[path.length - 1];
+  var parent = getIn(result, parentPath);
+  if (parentPath.length == 0) parent = result; // 特殊情况，
+  if (Object.prototype.toString.call(parent) == "[object Array]") {
+    var r1 = parent.slice(0, finalPath);
+    var r2 = parent.slice(finalPath + 1);
+    parent = r1.concat(r2);
+  }
+  if (Object.prototype.toString.call(parent) == "[object Object]") {
+    delete parent[finalPath];
+  }
+  // 设置的是target数组的元素，其父级元素就是target，直接返回
+  if (parentPath.length == 0) return parent;
+
+  return setIn(result, parentPath, parent);
 }
 
 function append(target, path, routeObj) {
   // 按照所给路径添加一个routes对象
-  var targetStr = JSON.stringify(target);
-  var result = JSON.parse(targetStr)
+  var result = [].concat(target);
   var pathStackStr = JSON.stringify(path);
   var pathStack = JSON.parse(pathStackStr);
   if (Object.prototype.toString.call(path) != "[object Array]") {
@@ -185,6 +193,10 @@ function append(target, path, routeObj) {
       return result;
     }
   }
+  if (Object.prototype.toString.call(obj) != "[object Array]") {
+    warning('config.js -> append: item refered by path has to be an array, return target without change');
+    return target;
+  }
   // 只有数组才能添加，所以obj最后必然是引用，无需保留最后一步
   obj.push(routeObj);
 
@@ -193,12 +205,11 @@ function append(target, path, routeObj) {
 
 function addBefore(target, posId, routeObj) {
   // 在posId指示的对象前，添加一个路由Object
-  var targetStr = JSON.stringify(target);
-  var result = JSON.parse(targetStr)
+  var result = [].concat(target);
   var idRoute = findPath(result, posId);
   if (idRoute.length == 0) {
     warning('config.js -> addBefore: Can not find the object refered by path, return target without change');
-    return result;
+    return target;
   }
 
   // 拿到posId所在的数组
@@ -207,7 +218,7 @@ function addBefore(target, posId, routeObj) {
   var childRoutes = getIn(result, arrRoute);
   var len = childRoutes.length - 1;
   // 数组元素依次往后挪动一位
-  while(len > addPos) {
+  while(len >= addPos) {
     childRoutes[len + 1] = childRoutes[len];
     len--;
   }
@@ -225,15 +236,14 @@ function merge(target, objArr) {
     throw new Error("config.js -> merge: The second argument must be array");
   }
 
-  var targetStr = JSON.stringify(target);
-  var result = JSON.parse(targetStr)
+  var result = [].concat(target);
   objArr.forEach(function(item) {
     var id = item.id;
     if (typeof id == 'undefined') {
       warning('config.js -> merge: Object to be merged must contain an attribute named id. Object without id was ingnored!')
     } else {
-      var route = findPath(result, id);
-      result = mergeIn(result, route, item);
+      var path = findPath(result, id);
+      result = mergeIn(result, path, item);
     }
   });
   return result;
@@ -241,8 +251,7 @@ function merge(target, objArr) {
 
 // 删除target一组由id指示的对象
 function deleteByIdArr(target, idArr) {
-  var targetStr = JSON.stringify(target);
-  var result = JSON.parse(targetStr)
+  var result = [].concat(target);
   if (Object.prototype.toString.call(idArr) != "[object Array]") {
     throw new Error("config.js -> deleteByIdArr: The second argument must be array");
   }
@@ -254,6 +263,21 @@ function deleteByIdArr(target, idArr) {
   return result;
 }
 
+// merge funConfig to routes
+function merge_funConfig_to_routes(routes, funConfig) {
+  console.log('routes original', routes);
+  var mergeArr = [];
+  for (var prop in funConfig) {
+    var mergeItem = {
+      id: prop,
+      funConfig: funConfig[prop],
+    }
+    mergeArr.push(mergeItem);
+  }
+  routes = merge(routes, mergeArr);
+  console.log('routes changed', routes);
+  return routes;
+}
 
 config = {
   findPath: findPath,
@@ -264,6 +288,8 @@ config = {
   delete: deleteByIdArr,
   append: append,
   addBefore: addBefore,
+  deleteIn: deleteIn,
+  merge_funConfig_to_routes: merge_funConfig_to_routes,
 };
 
 // exports
