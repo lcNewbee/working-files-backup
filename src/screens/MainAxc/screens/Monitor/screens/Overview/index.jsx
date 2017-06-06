@@ -81,8 +81,25 @@ function getTerminalTypeOption(serverData) {
         const num = dataList
           .find($$item => $$item.get('name') === name)
           .get('value') || 0;
-
+        if ((name.split('\n')).length > 1) {
+          return `others: ${num}`;
+        }
         return `${name}: ${num}`;
+      },
+      tooltip: {
+        show: true,
+        formatter: (params) => {
+          const arr = params.name.split('\n');
+          let str = '';
+          arr.forEach((item, index) => {
+            if (index === arr.length - 1) str += `${item}`;
+            else str += `${item}<br />`;
+          });
+          return str;
+        },
+        textStyle: {
+          fontSize: 10,
+        },
       },
     },
     series: [
@@ -90,6 +107,14 @@ function getTerminalTypeOption(serverData) {
         name: __('Type'),
       },
     ],
+    tooltip: {
+      show: true,
+      formatter: (params) => {
+        const arr = params.name.split('\n');
+        if (arr.length > 1) return `Type:<br /> others: ${params.value}`;
+        return `Type:<br /> ${params.name}: ${params.value}`;
+      },
+    },
   }).toJS();
 
 
@@ -114,6 +139,25 @@ function getTerminalTypeOption(serverData) {
         return result;
       });
     }
+    // 客户端类别如果超过14个，则从第14个开始，个数相加，统称为others
+    const size = dataList.size;
+    let num = 0;
+    let othermap = fromJS({});
+    let otherNameStr = '';
+    if (size > 14) {
+      let i = 13;
+      while (i < size) {
+        const name = dataList.getIn([i, 'name']);
+        const value = dataList.getIn([i, 'value']);
+        otherNameStr += `${name}: ${value}\n`;
+        num += value;
+        i += 1;
+      }
+      othermap = othermap.set('name', otherNameStr);
+      othermap = othermap.set('value', num);
+    }
+    dataList = dataList.slice(0, 13);
+    dataList = dataList.push(othermap);
 
     ret.legend.data = dataList.map(item => item.get('name')).toJS();
     ret.series[0].data = dataList.toJS();

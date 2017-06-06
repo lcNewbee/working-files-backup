@@ -4,10 +4,95 @@
     "msg": "ok"
   },
   "data": {
-    "clientsNumber": 0,
+    "clientsNumber": 12,
     "online": 693,
     "offline": 293,
-    "terminalType": [],
+    "terminalType": [
+      {
+        "name": "HUAWEI1",
+        "value": 12
+      },
+      {
+        "name": "HUAWEI2",
+        "value": 122
+      },
+      {
+        "name": "HUAWEI3",
+        "value": 312
+      },
+      {
+        "name": "HUAWEI4",
+        "value": 162
+      },
+      {
+        "name": "HUAWEI5",
+        "value": 128
+      },
+      {
+        "name": "HUAWEI6",
+        "value": 212
+      },
+      {
+        "name": "HUAWEI7",
+        "value": 127
+      },
+      {
+        "name": "HUAWEI8",
+        "value": 412
+      },
+      {
+        "name": "HUAWEI9",
+        "value": 512
+      },
+      {
+        "name": "HUAWEI10",
+        "value": 122
+      },
+      {
+        "name": "HUAWEI11",
+        "value": 162
+      },
+      {
+        "name": "HUAWEI12",
+        "value": 129
+      },
+      {
+        "name": "HUAWEI13",
+        "value": 112
+      },
+      {
+        "name": "HUAWEI14",
+        "value": 172
+      },
+      {
+        "name": "HUAWEI15",
+        "value": 129
+      },
+      {
+        "name": "HUAWEI16",
+        "value": 122
+      },
+      {
+        "name": "HUAWEI17",
+        "value": 121
+      },
+      {
+        "name": "HUAWEI18",
+        "value": 124
+      },
+      {
+        "name": "HUAWEI19",
+        "value": 152
+      },
+      {
+        "name": "HUAWEI20",
+        "value": 212
+      },
+      {
+        "name": "HUAWEI21",
+        "value": 128
+      }
+    ],
     "flowList": [
         {
             "name": "ap",

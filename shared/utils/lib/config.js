@@ -61,14 +61,12 @@ function findPath(target, id) {
   return [];
 }
 
-// 这个方法可以更加通用一些，不仅仅针对数组，object对象也可以使用
-// 现在的问题是，如何判断传入的参数是否是object对象，而不是普通变量
 function getIn(target, path) {
-  if (Object.prototype.toString.call(target) != "[object Array]") {
-    throw new Error("The first argument of function getIn must be array");
+  if (typeof target != 'object') {
+    throw new Error("config.js -> getIn: The first argument must be an object or array");
   }
   if (Object.prototype.toString.call(path) != "[object Array]") {
-    throw new Error("The second argument of function getIn must be array");
+    throw new Error("config.js -> getIn: The second argument must be an array");
   }
   if (path.length == 0) return undefined;
   var result = target, i = 0;
@@ -79,16 +77,15 @@ function getIn(target, path) {
   return result;
 }
 
-// 同上，也可以做的更加通用
 function setIn(target, path, value) {
   var result = [].concat(target);
   var pathStackStr = JSON.stringify(path);
   var pathStack = JSON.parse(pathStackStr);
-  if (Object.prototype.toString.call(target) != "[object Array]") {
-    throw new Error("The first argument of function setIn must be array");
+  if (typeof target != 'object') {
+    throw new Error("config.js -> setIn: The first argument must be an object or array");
   }
   if (Object.prototype.toString.call(path) != "[object Array]") {
-    throw new Error("The second argument of function setIn must be array");
+    throw new Error("config.js -> setIn: The second argument must be an array");
   }
   if (path.length == 0) {
     warning('config.js -> setIn: Can not find the object refered by path, return target without change');
@@ -265,7 +262,6 @@ function deleteByIdArr(target, idArr) {
 
 // merge funConfig to routes
 function merge_funConfig_to_routes(routes, funConfig) {
-  console.log('routes original', routes);
   var mergeArr = [];
   for (var prop in funConfig) {
     var mergeItem = {
@@ -275,7 +271,6 @@ function merge_funConfig_to_routes(routes, funConfig) {
     mergeArr.push(mergeItem);
   }
   routes = merge(routes, mergeArr);
-  console.log('routes changed', routes);
   return routes;
 }
 

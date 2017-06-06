@@ -17,7 +17,7 @@ import guiConfig from './config.json';
 // });
 // window.guiConfig = guiConfig;
 const baseComponents = {};
-// 公用
+// 公用，一般不会改变，没有必要写入baseComponents
 const app = require('shared/containers/app');
 const settings = require('shared/containers/settings');
 const SharedComponents = require('shared/components');
@@ -31,20 +31,18 @@ baseComponents.pLogin = require('../../screens/Login');
 baseComponents.MainAP = require('../../screens/MainAP');
 // 网络设置
 baseComponents.sNetworkSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettings');
-
+// 系统状态
 baseComponents.pSystemStatus = require('../../screens/MainAP/screens/SystemStatus/MultiRadioOverview');
 baseComponents.sSsidDetails = require('../../screens/MainAP/screens/SystemStatus/SsidDetails');
 baseComponents.sClientsDetails = require('../../screens/MainAP/screens/SystemStatus/ClientsDetails');
 baseComponents.sRadioDetails = require('../../screens/MainAP/screens/SystemStatus/RadioDetails');
 // 快速设置
 baseComponents.pQuickSetup = require('../../screens/MainAP/screens/QuickSetup/CoverageQuickSetup');
-
 // 无线设置
-// 子菜单
 baseComponents.sBasic = require('../../screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
 baseComponents.sAdvance = require('../../screens/MainAP/screens/WirelessConfig/Advance');
-// baseComponents.sQos = require('../../screens/MainAP/screens/WirelessConfig/QoS');
 baseComponents.sACL = require('../../screens/MainAP/screens/WirelessConfig/ACL');
+// baseComponents.sQos = require('../../screens/MainAP/screens/WirelessConfig/QoS');
 // 系统维护
 baseComponents.sSystemMaintenance = require('../../screens/MainAP/screens/Maintenance/SystemMaintenance');
 baseComponents.sTimeSettings = require('../../screens/MainAP/screens/Maintenance/TimeSettings');
@@ -300,6 +298,7 @@ const reducers = {
   app: app.reducer,
   settings: settings.reducer,
   toastr: toastrReducer,
+
   networksettings: baseComponents.sNetworkSettings.networksettings,
   systemstatus: baseComponents.pSystemStatus.systemstatus,
   ssiddetails: baseComponents.sSsidDetails.ssiddetails,
@@ -310,7 +309,6 @@ const reducers = {
   advance: baseComponents.sAdvance.advance,
   acl: baseComponents.sACL.acl,
   // qos: sQos.qos,
-
   // 系统维护
   systemmaintenance: baseComponents.sSystemMaintenance.systemmaintenance,
   accountsettings: baseComponents.sAccountSettings.accountsettings,
@@ -331,5 +329,4 @@ export default {
   baseComponents,
   appConfig: guiConfig,
 };
-
 
