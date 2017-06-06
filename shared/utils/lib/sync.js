@@ -136,12 +136,14 @@ var sync = {
       // 判断是否已加载了相同的 域名和端口的文件
       for (i = 0; i < len; i++) {
         if (url.split('?')[0] === scriptElems[i].src.split('?')[0]) {
+          // resolve('has same');
           return null;
         }
       }
 
       // 防止重复加载同一URL
       if(loadedScripts.indexOf(url) !== -1) {
+        // resolve('has same');
         return null;
       }
 

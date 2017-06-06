@@ -20,6 +20,12 @@ export function initScreen(option) {
     payload: option,
   };
 }
+export function updateScreen(option) {
+  return {
+    type: ACTION_TYPES.UPDATE,
+    payload: option,
+  };
+}
 export function leaveScreen(screenId) {
   window.clearTimeout(refreshTimeout);
 

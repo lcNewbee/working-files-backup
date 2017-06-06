@@ -193,7 +193,7 @@ export default class AppScreen extends React.Component {
         nextProps.initOption ? nextProps.initOption.defaultSettingsData : {},
       );
 
-      this.props.initScreen({
+      this.props.updateScreen({
         defaultSettingsData: this.defaultSettingsData,
       });
     }

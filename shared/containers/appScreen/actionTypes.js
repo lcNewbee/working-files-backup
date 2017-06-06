@@ -4,6 +4,7 @@
 export default {
   ADD: 'screen/ADD',
   INIT: 'screen/INIT',
+  UPDATE: 'screen/UPDATE',
   LEAVE: 'screen/LEAVE',
 
   // Ajax Fetch

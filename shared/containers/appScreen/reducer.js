@@ -70,7 +70,11 @@ function initScreenState($$state, action) {
   $$ret = $$ret.mergeIn(
     [screenId],
     $$myScreenState.set('curSettings', $$settingsData),
-  ).set('curScreenId', screenId);
+  );
+
+  if (screenId) {
+    $$ret = $$ret.set('curScreenId', screenId);
+  }
 
   return $$ret;
 }
@@ -193,7 +197,6 @@ function addScreen(state, action) {
       fromJS(action.payload.route).delete('routes'),
     );
   }
-
   return $$ret.set('curScreenId', curScreenId);
 }
 export default function (state = defaultState, action) {
@@ -207,13 +210,16 @@ export default function (state = defaultState, action) {
       return addScreen(state, action);
     case ACTION_TYPES.INIT:
       return initScreenState(state, action, curScreenName);
+    case ACTION_TYPES.UPDATE:
+      return state.merge(action.payload);
 
     case ACTION_TYPES.LEAVE:
       return state.mergeIn([curScreenName, 'query'], {
         search: '',
       })
       .setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'))
-      .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));
+      .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]))
+      .setIn([curScreenName, 'actionQuery', 'action'], '');
 
     case ACTION_TYPES.REQUEST_FETCH_DATA:
       return state.setIn([curScreenName, 'fetching'], true);
