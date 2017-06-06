@@ -385,27 +385,28 @@ export const baseSetting = fromJS([
     type: 'select',
     required: true,
     placeholder: __('Please Select ') + __('Speed Limit'),
-  }, {
-    id: 'ex4',
-    label: __('Last Unbind Month'),
-    type: 'number',
-    required: true,
-    min: '1',
-    max: '12',
-    validator: validator({
-      rules: 'num:[0,12]',
-    }),
-  }, {
-    id: 'ex3',
-    label: __('Unbind Times'),
-    type: 'number',
-    min: '0',
-    max: '999999',
-    validator: validator({
-      rules: 'num:[0,999999]',
-    }),
-    required: true,
   },
+  // {
+  //   id: 'ex4',
+  //   label: __('Last Unbind Month'),
+  //   type: 'number',
+  //   required: true,
+  //   min: '1',
+  //   max: '12',
+  //   validator: validator({
+  //     rules: 'num:[0,12]',
+  //   }),
+  // }, {
+  //   id: 'ex3',
+  //   label: __('Unbind Times'),
+  //   type: 'number',
+  //   min: '0',
+  //   max: '999999',
+  //   validator: validator({
+  //     rules: 'num:[0,999999]',
+  //   }),
+  //   required: true,
+  // },
 ]);
 
 export const advancedSetting = fromJS([
