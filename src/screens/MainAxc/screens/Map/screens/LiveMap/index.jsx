@@ -207,7 +207,7 @@ export default class LiveMap extends React.PureComponent {
 
     // 实时地图
     if (curType === '0' && this.mapContent) {
-      if ($$thisData !== $$prevData) {
+      if ($$thisData !== $$prevData || curType !== prevProps.store.getIn([curScreenId, 'curSettings', 'type'])) {
         this.map = null;
         this.loadMapScript();
       }
