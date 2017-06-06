@@ -315,7 +315,11 @@ export default class View extends React.Component {
   }
   onBackup($$data) {
     if (this.actionable) {
-      window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
+      if (idTownloadIdMap[$$data.get('id')]) {
+        window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
+      } else {
+        window.location.href = 'goform/portal/access/download/';
+      }
     }
   }
   getAdsPage() {

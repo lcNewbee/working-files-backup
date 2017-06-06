@@ -339,7 +339,7 @@ const routes = [
                     component: sProtoInfo.Screen,
                   },
                   {
-                    id: 'dpisettings',
+                    id: 'dpiSettings',
                     path: '/main/network/dpi/dpisettings',
                     formUrl: 'goform/network/dpi/dpisettings',
                     text: __('Settings'),

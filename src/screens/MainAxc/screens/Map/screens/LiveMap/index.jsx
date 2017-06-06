@@ -137,11 +137,16 @@ export default class LiveMap extends React.PureComponent {
       'renderActionBar',
       'onViewBuildingInfo',
 
+      // map
+      'destroyMap',
+      'loadMapScript',
+      'resetCurMarker',
+      'addMakerToBaiduMap',
+
       // Google Map
       'renderGoogleMap',
       'renderMarkerToGoogleMap',
       'renderGooglePlaceInput',
-      'loadMapScript',
 
       // Baidu Map
       'renderBaiduMap',
@@ -197,7 +202,6 @@ export default class LiveMap extends React.PureComponent {
     const actionType = store.getIn([curScreenId, 'actionQuery', 'action']);
     const curType = store.getIn([curScreenId, 'curSettings', 'type']);
     const prevActionType = $$prevData.getIn([curScreenId, 'actionQuery', 'action']);
-    const prevIsOpenHeader = prevActionType === 'add' || prevActionType === 'edit';
     const isOpenHeader = actionType === 'add' || actionType === 'edit';
     const thisLiveMapType = store.getIn([curScreenId, 'curSettings', 'liveMapType']);
 
@@ -206,10 +210,9 @@ export default class LiveMap extends React.PureComponent {
       if ($$thisData !== $$prevData) {
         this.map = null;
         this.loadMapScript();
-      } else if (!this.map) {
-        this.loadMapScript();
       }
-      if (prevIsOpenHeader !== isOpenHeader) {
+
+      if (prevActionType !== actionType) {
         if (thisLiveMapType === 'Google') {
           if (isOpenHeader) {
             this.renderGooglePlaceInput();
@@ -218,7 +221,9 @@ export default class LiveMap extends React.PureComponent {
           if (isOpenHeader) {
             this.renderBaiduPlaceInput(actionType);
           } else if (this.placeInput) {
-            this.placeInput.dispose();
+            if (typeof this.placeInput.dispose === 'function') {
+              this.placeInput.dispose();
+            }
             this.placeInput = null;
           }
         }
@@ -227,9 +232,6 @@ export default class LiveMap extends React.PureComponent {
     } else {
       this.map = null;
     }
-
-
-    // this.renderHeatMap()
   }
 
   onViewBuildingInfo(e, i) {
@@ -266,6 +268,13 @@ export default class LiveMap extends React.PureComponent {
       this.props.resetVaildateMsg();
     }
   }
+  destroyMap() {
+    this.map = null;
+    this.mapContent.innerHTML = '';
+    this.placeInput = null;
+    this.markers = [];
+  }
+
   loadMapScript() {
     const liveMapType = this.props.curStore.getIn(['curSettings', 'liveMapType']);
 
@@ -277,11 +286,12 @@ export default class LiveMap extends React.PureComponent {
           loadMapStatus: 'ok',
         });
       } else {
+        this.destroyMap();
         this.props.updateScreenCustomProps({
           loadMapStatus: 'loading',
         });
         utils.loadScript(
-          'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
+          'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places,geocoder',
           {
             timeout: 8000,
           },
@@ -310,9 +320,16 @@ export default class LiveMap extends React.PureComponent {
         });
         this.renderBaiduMap();
       } else {
+        this.destroyMap();
         this.props.updateScreenCustomProps({
           loadMapStatus: 'loading',
         });
+        window.initializeBaidu = () => {
+          this.renderBaiduMap();
+          this.props.updateScreenCustomProps({
+            loadMapStatus: 'ok',
+          });
+        };
         utils.loadScript(
           'https://api.map.baidu.com/api?v=2.0&ak=po9QoGKxy9nyplgmTHh7SrEPGl48lzDE&callback=initializeBaidu',
           {
@@ -328,17 +345,93 @@ export default class LiveMap extends React.PureComponent {
             }
           },
         );
-        window.initializeBaidu = () => {
-          this.renderBaiduMap();
-          this.props.updateScreenCustomProps({
-            loadMapStatus: 'ok',
-          });
-        };
       }
     }
   }
 
+  resetCurMarker() {
+    const curIndex = this.markerIndex;
+    const liveMapType = this.props.curStore.getIn(['curSettings', 'liveMapType']);
+    const $$list = getCurAppScreenState(this.props.store, 'list');
+    let $$orgMarkerData = $$list.get(curIndex);
+    let curMarker = this.markers[curIndex];
+
+    // 操作正在添加的 Marker
+    if (curIndex === -1) {
+      curMarker = this.addMarker;
+      $$orgMarkerData = null;
+    }
+
+    // 复位正在编辑的 Marker
+    if (curMarker) {
+      if (liveMapType === 'Baidu') {
+        this.map.removeOverlay(curMarker);
+        this.map.closeInfoWindow();
+
+        if ($$orgMarkerData) {
+          this.markers[curIndex] = this.renderMarkerToBaiduMap($$orgMarkerData, this.map, curIndex);
+        }
+      } else if (liveMapType === 'Google') {
+        curMarker.setMap(null);
+        if ($$orgMarkerData) {
+          this.markers[curIndex] = this.renderMarkerToGoogleMap(
+            $$orgMarkerData,
+            this.map,
+            curIndex,
+          );
+        }
+      }
+    }
+
+    this.markerIndex = -99;
+  }
+
   // Baidu Map
+  addMakerToBaiduMap(point) {
+    const myIcon = new BMap.Icon(
+      buildingIconImg,
+      new BMap.Size(50, 50),
+    );
+    const geoc = new BMap.Geocoder();
+    const marker = new BMap.Marker(
+      point,
+      {
+        icon: myIcon,
+        enableDragging: true,
+      },
+    );
+
+    this.map.addOverlay(marker);
+    marker.addEventListener('dragend', (event) => {
+      const curPoint = event.point;
+
+      marker.removeEventListener('click');
+
+      geoc.getLocation(curPoint, (rs) => {
+        const addComp = rs.addressComponents;
+        const curAddress = addComp.province + addComp.city + addComp.district +
+            addComp.street + addComp.streetNumber;
+        const newInfoWindow = new BMap.InfoWindow(curAddress, {
+          maxWidth: 300,
+          height: 0,
+          offset: new BMap.Size(-2, -18),
+        });
+
+        marker.addEventListener('click', (event1) => {
+          this.map.openInfoWindow(newInfoWindow, event1.point);
+        });
+
+        this.props.updateCurEditListItem({
+          address: curAddress,
+          lng: curPoint.lng,
+          lat: curPoint.lat,
+        });
+        this.map.openInfoWindow(newInfoWindow, curPoint);
+        this.placeInput.setInputValue(curAddress);
+      });
+    });
+    this.addMarker = marker;
+  }
   renderMarkerToBaiduMap(item, map, index) {
     const myIcon = new BMap.Icon(
       buildingIconImg,
@@ -391,7 +484,11 @@ export default class LiveMap extends React.PureComponent {
         editButtonElem = document.getElementById(`editBulid${markerId}`);
         viewButtonElem = document.getElementById(`viewBulid${markerId}`);
 
+        // 编辑建筑
         editButtonElem.addEventListener('click', () => {
+          this.resetCurMarker();
+          this.markerIndex = index;
+
           this.props.editListItemByIndex(index);
 
           // @@product(axcMonitor): AXC监控模式下不可修改 地址
@@ -399,6 +496,8 @@ export default class LiveMap extends React.PureComponent {
             marker.enableDragging();
           }
         });
+
+        // 查看建筑内地图
         viewButtonElem.addEventListener('click', () => {
           this.props.history.push(`/main/group/map/building/${markerId}`);
         });
@@ -442,13 +541,9 @@ export default class LiveMap extends React.PureComponent {
     return marker;
   }
   renderBaiduPlaceInput() {
-    const myIcon = new BMap.Icon(
-      buildingIconImg,
-      new BMap.Size(50, 50),
-    );
-    const geoc = new BMap.Geocoder();
-    // 创建标注对象并添加到地图
-    let marker = null;
+    const initAddress = this.props.curStore.getIn([
+      'curListItem', 'address',
+    ]);
 
     if (!this.placeInput) {
       this.placeInput = new BMap.Autocomplete({
@@ -456,52 +551,30 @@ export default class LiveMap extends React.PureComponent {
         location: this.map,
       });
 
+      if (initAddress) {
+        this.placeInput.setInputValue(initAddress);
+      }
+
       this.placeInput.addEventListener('onconfirm', (e) => {
+        // 创建标注对象并添加到地图
+        let marker = this.markers[this.markerIndex];
         const curValue = e.item.value;
         const address = curValue.province + curValue.city + curValue.district +
             curValue.street + curValue.business;
+
+        this.placeInput.setInputValue(address);
+
+        // 如果是添加状态
+        if (this.markerIndex === -1 && this.addMarker) {
+          marker = this.addMarker;
+        }
 
         const local = new BMap.LocalSearch(this.map, {
           onSearchComplete: () => {
             const pp = local.getResults().getPoi(0).point;
 
             if (!marker) {
-              marker = new BMap.Marker(
-                pp,
-                {
-                  icon: myIcon,
-                  enableDragging: true,
-                },
-              );
-              this.map.addOverlay(marker);
-              marker.addEventListener('dragend', (event) => {
-                const curPoint = event.point;
-
-                marker.removeEventListener('click');
-
-                geoc.getLocation(curPoint, (rs) => {
-                  const addComp = rs.addressComponents;
-                  const curAddress = addComp.province + addComp.city + addComp.district +
-                      addComp.street + addComp.streetNumber;
-                  const newInfoWindow = new BMap.InfoWindow(curAddress, {
-                    maxWidth: 300,
-                    height: 0,
-                    offset: new BMap.Size(-2, -18),
-                  });
-
-                  marker.addEventListener('click', (event1) => {
-                    this.map.openInfoWindow(newInfoWindow, event1.point);
-                  });
-
-                  this.props.updateCurEditListItem({
-                    address: curAddress,
-                    lng: curPoint.lng,
-                    lat: curPoint.lat,
-                  });
-                  this.map.openInfoWindow(newInfoWindow, curPoint);
-                  this.placeInput.setInputValue(curAddress);
-                });
-              });
+              this.addMakerToBaiduMap(pp);
             } else {
               const infoWindow = new BMap.InfoWindow(address, {
                 maxWidth: 300,
@@ -513,7 +586,6 @@ export default class LiveMap extends React.PureComponent {
             }
 
             this.map.centerAndZoom(pp);
-
             this.props.updateCurEditListItem({
               address,
               lng: pp.lng,
@@ -529,7 +601,6 @@ export default class LiveMap extends React.PureComponent {
   }
   renderBaiduMap() {
     const store = this.props.store;
-    const loadMapStatus = this.props.curStore.getIn(['customProps', 'loadMapStatus']);
     const list = getCurAppScreenState(store, 'list');
     const $$settings = getCurAppScreenState(store, 'settings');
     const markers = [];
@@ -538,7 +609,7 @@ export default class LiveMap extends React.PureComponent {
       lng: 116.404,
     };
 
-    if (!BMap.Map || loadMapStatus !== 'ok') {
+    if (!BMap.Map) {
       return;
     }
 
@@ -566,6 +637,7 @@ export default class LiveMap extends React.PureComponent {
 
   // Google Map
   renderMarkerToGoogleMap(item, map, index) {
+    const service = new google.maps.places.PlacesService(map);
     const apIcon = {
       path: google.maps.SymbolPath.CIRCLE,
       scale: 10,
@@ -591,7 +663,7 @@ export default class LiveMap extends React.PureComponent {
       //   text: item.get('markerTitle') || `${index}`,
       // },
       // draggable: actionType === 'add' || actionType === 'edit',
-      //animation: google.maps.Animation.DROP,
+      // animation: google.maps.Animation.DROP,
     });
     const markerId = item.get('id');
     const contentString = `
@@ -631,6 +703,8 @@ export default class LiveMap extends React.PureComponent {
         viewButtonElem = document.getElementById(`viewBulid${markerId}`);
 
         editButtonElem.addEventListener('click', () => {
+          this.resetCurMarker();
+          this.markerIndex = index;
           this.props.editListItemByIndex(index);
           marker.setDraggable(true);
         });
@@ -639,6 +713,26 @@ export default class LiveMap extends React.PureComponent {
         });
       },
     );
+
+    marker.addListener('dragend', (e) => {
+      const geocoder = new google.maps.Geocoder;
+      geocoder.geocode(
+        {
+          location: e.latLng,
+        },
+        (arr, status) => {
+          if (status === 'OK') {
+            if (arr && arr[0] && arr[0].formatted_address) {
+              this.props.updateCurEditListItem({
+                address: arr[0].formatted_address,
+                lat: e.latLng.lat(),
+                lng: e.latLng.lng(),
+              });
+            }
+          }
+        },
+      );
+    });
     marker.addListener('click', () => {
       infowindow.open(map, marker);
     });
@@ -658,20 +752,45 @@ export default class LiveMap extends React.PureComponent {
       origin: new google.maps.Point(0, 0), // origin
       anchor: new google.maps.Point(25, 25), // anchor
     };
-    const marker = new google.maps.Marker({
-      map: this.map,
-      draggable: true,
-      anchorPoint: new google.maps.Point(0, -29),
-    });
     const input = document.getElementsByName('address');
 
     if (input && input[0] && !input[0].placeholder) {
-      const autocomplete = new google.maps.places.Autocomplete(input[0]);
-      autocomplete.bindTo('bounds', this.map);
-      autocomplete.addListener('place_changed', () => {
+      this.placeInput = new google.maps.places.Autocomplete(input[0]);
+      this.placeInput.bindTo('bounds', this.map);
+      this.placeInput.addListener('place_changed', () => {
+        let marker = this.markers[this.markerIndex];
+        const place = this.placeInput.getPlace();
+
+        if (!marker) {
+          this.addMarker = new google.maps.Marker({
+            map: this.map,
+            draggable: true,
+            anchorPoint: new google.maps.Point(0, -29),
+          });
+          marker = this.addMarker;
+
+          marker.addListener('dragend', (e) => {
+            geocoder.geocode(
+              {
+                location: e.latLng,
+              },
+              (arr, status) => {
+                if (status === 'OK') {
+                  if (arr && arr[0] && arr[0].formatted_address) {
+                    this.props.updateCurEditListItem({
+                      address: arr[0].formatted_address,
+                      lat: e.latLng.lat(),
+                      lng: e.latLng.lng(),
+                    });
+                  }
+                }
+              },
+            );
+          });
+        }
+
         infowindow.close();
         marker.setVisible(false);
-        const place = autocomplete.getPlace();
 
         if (!place.geometry) {
           window.alert("Autocomplete's returned place contains no geometry");
@@ -683,7 +802,7 @@ export default class LiveMap extends React.PureComponent {
           this.map.fitBounds(place.geometry.viewport);
         } else {
           this.map.setCenter(place.geometry.location);
-          this.map.setZoom(17);  // Why 17? Because it looks good.
+          // this.map.setZoom(17);  // Why 17? Because it looks good.
         }
         marker.setIcon(buildingIcon);
         marker.setPosition(place.geometry.location);
@@ -706,29 +825,28 @@ export default class LiveMap extends React.PureComponent {
         infowindow.setContent(`<div><strong>${place.name}</strong><br>${address}`);
         infowindow.open(this.map, marker);
       });
-      marker.addListener('mouseup', (e) => {
-        const latlng = e.latLng.toJSON();
-        geocoder.geocode({ location: latlng }, (results, status) => {
-          if (status === google.maps.GeocoderStatus.OK) {
-            if (results[1]) {
-              infowindow.setContent(results[1].formatted_address);
-              this.props.updateCurEditListItem(utils.extend({
-                address: results[1].formatted_address,
-              }, latlng));
-            } else {
-              window.alert('No results found');
-            }
-          } else {
-            window.alert(`Geocoder failed due to: ${status}`);
-          }
-        });
-        infowindow.open(this.map, marker);
-      });
+    //   marker.addListener('mouseup', (e) => {
+    //     const latlng = e.latLng.toJSON();
+    //     geocoder.geocode({ location: latlng }, (results, status) => {
+    //       if (status === google.maps.GeocoderStatus.OK) {
+    //         if (results[1]) {
+    //           infowindow.setContent(results[1].formatted_address);
+    //           this.props.updateCurEditListItem(utils.extend({
+    //             address: results[1].formatted_address,
+    //           }, latlng));
+    //         } else {
+    //           window.alert('No results found');
+    //         }
+    //       } else {
+    //         window.alert(`Geocoder failed due to: ${status}`);
+    //       }
+    //     });
+    //     infowindow.open(this.map, marker);
+    //   });
     }
   }
   renderGoogleMap() {
     const store = this.props.store;
-    const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadMapStatus']);
     const list = getCurAppScreenState(store, 'list');
     const settings = getCurAppScreenState(store, 'settings');
     const google = window.google;
@@ -738,7 +856,7 @@ export default class LiveMap extends React.PureComponent {
       lng: 113.878773,
     };
 
-    if (googleMapStatus !== 'ok' || (google.maps && !google.maps.Map)) {
+    if (google.maps && !google.maps.Map) {
       return;
     }
 
@@ -806,6 +924,8 @@ export default class LiveMap extends React.PureComponent {
               theme="primary"
               onClick={
                 () => {
+                  this.resetCurMarker();
+                  this.markerIndex = -1;
                   this.props.addListItem();
                 }
               }
@@ -856,7 +976,7 @@ export default class LiveMap extends React.PureComponent {
     const page = store.getIn([myScreenId, 'data', 'page']);
     const editData = store.getIn([myScreenId, 'curListItem']);
     const isOpenHeader = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
-    const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadMapStatus']);
+    const loadMapStatus = this.props.curStore.getIn(['customProps', 'loadMapStatus']);
     let myFormOptions = formOptions;
     let mapClassName = 'o-map';
 
@@ -885,6 +1005,7 @@ export default class LiveMap extends React.PureComponent {
       );
     }
     this.isChangeMapBuilding = isOpenHeader && settings.get('type') === LIVE_GOOGLE_MAP;
+
     return (
       <AppScreen
         {...this.props}
@@ -939,26 +1060,28 @@ export default class LiveMap extends React.PureComponent {
                       this.mapContent = elem;
                     }
                   }}
-                >
-                  <div className="o-map__body-loading">
-                    {
-                      googleMapStatus === 'fail' ? (
-                        <Button
-                          className="fail"
-                          theme="primary"
-                          text={__('Reload')}
-                          onClick={() => {
-                            this.loadMapScript(this.props.curStore.getIn(['curSettings', 'liveMapType']));
-                          }}
-                        />
-                      ) : null
-                    }
-                    {
-                      googleMapStatus !== 'ok' && googleMapStatus !== 'fail' ? <Icon name="spinner" size="2x" spin /> : null
-                    }
-                  </div>
-
-                </div>
+                />
+                {
+                  loadMapStatus === 'fail' ? (
+                    <div className="o-map__body-loading">
+                      <Button
+                        className="fail"
+                        theme="primary"
+                        text={__('Reload')}
+                        onClick={() => {
+                          this.loadMapScript(this.props.curStore.getIn(['curSettings', 'liveMapType']));
+                        }}
+                      />
+                    </div>
+                  ) : null
+                }
+                {
+                  loadMapStatus === 'loading' ? (
+                    <div className="o-map__body-loading">
+                      <Icon name="spinner" size="2x" spin />
+                    </div>
+                  ) : null
+                }
               </div>
             </div>
           ) : (
