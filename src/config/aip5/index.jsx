@@ -15,9 +15,8 @@ window.CB = b28n.init({
 });
 window.guiConfig = guiConfig;
 
-
-const customComponents = {};
 // 客制化快速设置页面
+const customComponents = {};
 customComponents.pQuickSetup = require('../../screens/MainAP/screens/QuickSetup/P2pQuickSetup');
 
 // 页面功能项配置

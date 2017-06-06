@@ -49,7 +49,7 @@ baseComponents.sTimeSettings = require('../../screens/MainAP/screens/Maintenance
 baseComponents.sAccountSettings = require('../../screens/MainAP/screens/Maintenance/AccountSettings');
 baseComponents.sModeSettings = require('../../screens/MainAP/screens/ModeSettings/ModeSettings');
 // 工具
-baseComponents.sSpeedTest = require('../../screens/MainAP/screens/Tools/SpeedTest');
+// baseComponents.sSpeedTest = require('../../screens/MainAP/screens/Tools/SpeedTest');
 baseComponents.sSiteSurvey = require('../../screens/MainAP/screens/Tools/SiteSurvey');
 baseComponents.sSystemLogs = require('../../screens/MainAP/screens/Tools/SystemLogs');
 baseComponents.sChannelUtilization = require('../../screens/MainAP/screens/Tools/ChannelUtilization');
@@ -239,13 +239,14 @@ const routes = [{
       text: __('Tools'),
       component: SharedComponents.TabContainer,
       routes: [
+        // {
+        //   id: 'speedtest',
+        //   path: '/main/tools/speedtest',
+        //   text: __('Speed Test'),
+        //   saveUrl: '/goform/bandwidth_test',
+        //   component: baseComponents.sSpeedTest.Screen,
+        // },
         {
-          id: 'speedtest',
-          path: '/main/tools/speedtest',
-          text: __('Speed Test'),
-          saveUrl: '/goform/bandwidth_test',
-          component: baseComponents.sSpeedTest.Screen,
-        }, {
           id: 'sitesurvey',
           path: '/main/tools/sitesurvey',
           fetchUrl: 'goform/get_site_survey',
@@ -314,7 +315,7 @@ const reducers = {
   accountsettings: baseComponents.sAccountSettings.accountsettings,
   timesettings: baseComponents.sTimeSettings.timesettings,
   // tools -> speedtest
-  speedtest: baseComponents.sSpeedTest.speedtest,
+  // speedtest: baseComponents.sSpeedTest.speedtest,
   sitesurvey: baseComponents.sSiteSurvey.sitesurvey,
   systemlogs: baseComponents.sSystemLogs.systemlogs,
   channelutilization: baseComponents.sChannelUtilization.channelutilization,

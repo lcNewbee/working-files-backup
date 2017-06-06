@@ -50,7 +50,7 @@ const sTimeSettings = require('../../screens/MainAP/screens/Maintenance/TimeSett
 const sAccountSettings = require('../../screens/MainAP/screens/Maintenance/AccountSettings');
 const sModeSettings = require('../../screens/MainAP/screens/ModeSettings/ModeSettings');
 // 工具
-const sSpeedTest = require('../../screens/MainAP/screens/Tools/SpeedTest');
+// const sSpeedTest = require('../../screens/MainAP/screens/Tools/SpeedTest');
 const sSiteSurvey = require('../../screens/MainAP/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/MainAP/screens/Tools/ChannelUtilization');
@@ -242,13 +242,14 @@ const routes = [{
       text: __('Tools'),
       component: SharedComponents.TabContainer,
       routes: [
+        // {
+        //   id: 'speedtest',
+        //   path: '/main/tools/speedtest',
+        //   text: __('Speed Test'),
+        //   saveUrl: '/goform/bandwidth_test',
+        //   component: sSpeedTest.Screen,
+        // },
         {
-          id: 'speedtest',
-          path: '/main/tools/speedtest',
-          text: __('Speed Test'),
-          saveUrl: '/goform/bandwidth_test',
-          component: sSpeedTest.Screen,
-        }, {
           id: 'sitesurvey',
           path: '/main/tools/sitesurvey',
           fetchUrl: 'goform/get_site_survey',
@@ -317,7 +318,7 @@ const reducers = {
   accountsettings: sAccountSettings.accountsettings,
   timesettings: sTimeSettings.timesettings,
   // tools -> speedtest
-  speedtest: sSpeedTest.speedtest,
+  // speedtest: sSpeedTest.speedtest,
   sitesurvey: sSiteSurvey.sitesurvey,
   systemlogs: sSystemLogs.systemlogs,
   channelutilization: sChannelUtilization.channelutilization,

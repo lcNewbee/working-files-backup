@@ -52,7 +52,7 @@ const sTimeSettings = require('../../screens/MainAP/screens/Maintenance/TimeSett
 const sAccountSettings = require('../../screens/MainAP/screens/Maintenance/AccountSettings');
 const sModeSettings = require('../../screens/MainAP/screens/ModeSettings/CloudService');
 // 工具
-const sSpeedTest = require('../../screens/MainAP/screens/Tools/SpeedTest');
+// const sSpeedTest = require('../../screens/MainAP/screens/Tools/SpeedTest');
 const sSiteSurvey = require('../../screens/MainAP/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/MainAP/screens/Tools/ChannelUtilization');
@@ -342,7 +342,7 @@ const reducers = {
   accountsettings: sAccountSettings.accountsettings,
   timesettings: sTimeSettings.timesettings,
   // tools -> speedtest
-  speedtest: sSpeedTest.speedtest,
+  // speedtest: sSpeedTest.speedtest,
   sitesurvey: sSiteSurvey.sitesurvey,
   systemlogs: sSystemLogs.systemlogs,
   channelutilization: sChannelUtilization.channelutilization,
