@@ -8,10 +8,10 @@ class DpiSettings_Model extends CI_Model {
 	function get_list($data) {
 		$result = null; 
         $arr = array(
-            'state'=>array('code'=>2000,'msg'=>'ok'),
-            'data'=>array(    
-                'settings'=>array(
-                    'ndpiEnable'=>$this->get_ndpi_state()
+            'state' => array('code'=>2000,'msg'=>'ok'),
+            'data' => array(    
+                'settings' => array(
+                    'ndpiEnable' => $this->get_ndpi_state()
                 ),                            
             )
         );   

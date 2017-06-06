@@ -5,77 +5,58 @@ class DpiEth_Model extends CI_Model {
 		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
-	function get_list($data) {
-		$result = null;
+    function get_list($data) {
+        $result = null;
         $cgiary = array(
-            'time'=>(string)element('timeType',$data,0),
-            'pagesize'=>'0'
+            'time' => (string)element('timeType', $data, 0)
         );
-		$ary = array();
+        $ary = array();
         $port_list = $this->db->query("select portid,port_name from port_table")->result_array();
         $port_sum = count($port_list);
-		for($i = 0; $i < $port_sum; $i++){
-			$str = "eth".$i;
-			$ary[] = $this->gtePram($str);
-		}
-		$result = ndpi_send_allethx_allmsg_intime(json_encode($cgiary));
-		$cgiary = json_decode($result,true);
-		if(is_array($cgiary) && $cgiary['state']['code'] === 2000){
-			for($i = 0; $i < $port_sum; $i++){
-				foreach($cgiary['data']['list'] as $row){
-					if($ary[$i]['ethx_name'] === $row['ethx_name']){
-                        $curRate = abs( ((int)$row['eth_bytes_pre'] - (int)$row['eth_bytes'])/(int)$row['interval_time'] );//版本编好再打开
-                        $tary['active_eth'] = "1";
-                        $tary['ethx_name']=$row['ethx_name'];
-                        $tary['userNum']= (string)$this->get_user_num($data,$row['ethx_name']);
-                        $tary['application']= $row['detected_protos'] === " " ? array() : explode('/',$row['detected_protos']);
-                        $tary['curRate']= (string)$curRate;
-
-                        $ary[$i] = $tary;
-					}
-				}
-			}
-		}
-        //获取网卡状态
-		$ethstate = $this->get_eth_state();
-		for($k = 0; $k < $port_sum; $k++){
-			foreach($ary as $res){
-				if($ethstate[$k]['ifname'] === $res['ethx_name']){
-					$ary[$k]['active_eth'] =(string)$ethstate[$k]['value'];
-					break;
-				}
-			}
-
-		}
-        //
-        $ethmac = $this->get_eth_allmac($data);
-		$retary = array(
-			'state'=>array('code'=>2000,'msg'=>'ok'),
-			'data'=>array(
-                'page'=>$ethmac['page'],
-				'list'=>$ary,
-                'ethxClientList'=>$ethmac['data']
-			)
-		);
-		return json_encode($retary);
-	}
-    //获取用户数
-    function get_user_num($data,$eth){
-        $result = 0;
-        $cgiary = array(
-            'time'=>(string)element('timeType',$data,0),
-            'page'=>(string)element('page',$data,1),
-            'pagesize'=>(string)element('size',$data,20),
-            'ethx'=>$eth
-        );
-        $cgistr = ndpi_send_ethx_allmac_intime(json_encode($cgiary));
-        $obj = json_decode($cgistr);
-        if( is_object($obj) && $obj->state->code === 2000 ){
-            $result = $obj->data->total_msg->list_recnum;
+        for ($i = 0;$i < $port_sum;$i++) {
+            $str = "eth" . $i;
+            $ary[] = $this->gtePram($str);
         }
-        return $result;
+        $result = ndpi_send_ethxmsg(json_encode($cgiary));
+        $cgiary = json_decode($result, true);
+        if (is_array($cgiary) && $cgiary['state']['code'] === 2000) {
+            for ($i = 0;$i < $port_sum;$i++) {
+                foreach ($cgiary['data']['list'] as $row) {
+                    if ($ary[$i]['ethx_name'] === $row['ethx']) {
+                        $tary['active_eth'] = "1";
+                        $tary['ethx_name'] = $row['ethx'];
+                        $tary['userNum'] = $row['usernum'];
+                        $tary['application'] = $row['protos'] === 'null' ? array() : explode("/", $row['protos']);
+                        $tary['curRate'] = $row['bytes_rate'];
+                        $ary[$i] = $tary;
+                    }
+                }
+            }
+        }
+        //获取网卡状态
+        $ethstate = $this->getEthState();
+        for ($k = 0;$k < $port_sum;$k++) {
+            foreach ($ary as $res) {
+                if ($ethstate[$k]['ifname'] === $res['ethx_name']) {
+                    $ary[$k]['active_eth'] = (string)$ethstate[$k]['value'];
+                    break;
+                }
+            }
+        }
+        //获取点击后数据
+        $ethmac = $this->getEthAllMac($data);
+        $retary = array(
+            'state' => array('code' => 2000, 'msg' => 'ok'), 
+            'data' => array(
+                'page' => $ethmac['page'], 
+                'list' => $ary, 
+                'ethxClientList' => $ethmac['data']
+            )
+        );
+        return json_encode($retary);
     }
-	function get_eth_state(){
+    //获取网卡状态
+	private function getEthState(){
         $query=$this->db->select('attr_name,attr_value')
                         ->from('ndpi_attr')
                         ->join('ndpi_params','ndpi_params.attr_id = ndpi_attr.id')
@@ -102,48 +83,48 @@ class DpiEth_Model extends CI_Model {
         }
 		return $arr;
 	}
-	function set_eth($data){
-        $result = null;
-		$state = (string)element('active_eth',$data);
-		$arr = array('interface'=>$data['ethx_name']);
-		if($state === "1"){
-        	$result = ndpi_set_interface_to_config(json_encode($arr));
-		}
-		if($state === "0"){
-			$result = ndpi_del_interface_from_config(json_encode($arr));
-		}
-        return $result;
-    }
-    private function get_eth_allmac($data){
+    //获取指定端口信息    ndpi_send_ethxmsg_usrnum 
+    private function getEthAllMac($data){
         $result = array(
             'page'=>array(),
             'data'=>array()
         );
+
+        $page = element('page', $data, 1);
+        $pagesize = element('size', $data, 20);
         $cgiarr = array(
             'time'=>(string)element('timeType',$data),
-            'page'=>(string)element('page',$data),
-            'pagesize'=>(string)element('size',$data),
+            'page'=>(string)$page,
+            'pagesize'=>(string)$pagesize,
             'ethx'=>(string)element('ethx',$data,'eth0'),
         );
-        $cgidata = ndpi_send_ethx_allmac_intime(json_encode($cgiarr));
-        $dataary = json_decode($cgidata,true);
+        $cgidata = ndpi_send_ethxmsg_usrnum(json_encode($cgiarr));
+        $dataary = json_decode($cgidata,TRUE);
         if(is_array($dataary) && $dataary['state']['code'] === 2000){
-            $arr['startline'] = 1;
-            $arr['size'] = (int)element('size',$data,20);
-            $arr['currPage'] = (int)element('page',$data,1);
-            $arr['totalPage'] = element('sum_page',$dataary['data']['total_msg'],1);
-            $arr['total'] = element('list_recnum',$dataary['data']['total_msg'],20);
-            $arr['nextPage'] = (int)$data['page']+1;
-            $arr['lastline'] = element('sum_page',$dataary['data']['total_msg'],1);
-            $arr['sum_upbytes_allmac'] = $dataary['data']['total_msg']['sum_upbytes_allmac'];
-
-            $result['page'] = $arr;
+            //总行
+            $total = element('item_num', $dataary['data']['page'], 0);
+            //计算总页
+            $totalPage = intval($total / $pagesize);
+            if (($total % $pagesize) > 0) {
+				$totalPage = $totalPage + 1;
+			}
+            $result['page'] = array(
+                'startline' => 1, 
+                'size' => $pagesize, 
+                'currPage' => $page, 
+                'total' => $total,
+                'totalPage' => $totalPage,                
+                'nextPage' => $page + 1, 
+                'lastline' => $totalPage, // 最后一页
+            );
 
             $macAry = array();
             foreach($dataary['data']['list'] as $row){
-                $row['application'] =  explode('/',$row['all_protos']);
-                $row['trafficPercent'] = round((($row['mac_sum_bytes'] / $arr['sum_upbytes_allmac'])*100),2).'%';
-                $row['curRate'] = $row['mac_speed'];
+                $row['application'] =  explode('/',$row['proto']);
+                $row['trafficPercent'] = $row['flow_account'];
+                $row['curRate'] = $row['bytes_rate'];
+                $row['mac'] = $row['mac'];
+                $row['ip'] = $row['ip'];
                 $macAry[] = $row;
             }
             $result['data'] = $macAry;

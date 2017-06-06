@@ -5,94 +5,93 @@ class DpiProto_Model extends CI_Model {
 		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
-	function get_list($data) {   
-		$result = null;
+
+	function get_list($data) {
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
-				'list'=>array(),
-				'protoClientList'=>array()
+				'page' => array(),// 应用信息列表分页信息
+				'clientPage' => array(),// 特定应用下客户端列表分页信息
+				'list' => array(),
+				'protoClientList' => array()
 			)
-		); 
-		$cgiary = array(
-			'page'=>(string)element('page',$data,1),
-			'time'=>(string)element('timeType',$data,0),
-			'pagesize'=>(string)element('size',$data,20)
-		);		
-		$result = ndpi_send_proto_to_php_db(json_encode($cgiary));	 
-		$cgiobj = json_decode($result);			
-		if(is_object($cgiobj) && $cgiobj->state->code === 2000){
-			$htmdata = array();
-			$sumbts = 0.01;//总流量
-			$lsary = array();
-			foreach($cgiobj->data->list as $res){
-				$sumbts = $sumbts + (int)$res->bytes;
-			}
-			foreach($cgiobj->data->list as $row){
-				$lsary['attr_name'] = $row->attr_name;
-				$lsary['curRate'] = $row->bytes_speed;
-				$lsary['userNum'] = $row->user_num;
-				$lsary['trafficPercent'] = round(($row->bytes / $sumbts)*100,2).'%';
-				$htmdata[] = $lsary;
-			}
-			$htmdata = $this->sigcol_arrsort($htmdata,'trafficPercent',SORT_DESC);
-			$arr['data']['list'] = $htmdata;
-			$arr['data']['protoClientList'] = $this->get_detailed($data);
-		}else{
-			return json_no($cgiobj->state->msg);
-		}		     	
-		return json_encode($arr);			
-	}
-	private function get_detailed($data){
-		$result = array();
-		$cgiary = array(
-			'page'=>(string)element('page',$data,1),
-			'time'=>(string)element('timeType',$data,0),
-			'proto_type'=>(string)element('proto',$data),
-			'pagesize'=>(string)element('size',$data,20)
 		);
-		$cgiret = ndpi_send_one_proto_all_macMsg_to_php(json_encode($cgiary));
-		$arr = json_decode($cgiret,true);
-		if(is_array($arr) && $arr['state']['code'] === 2000){
-			$htmdata = array();
-			$sumbts = $arr['data']['total_msg']['sum_all_mac_bytes'];
-			foreach($arr['data']['list'] as $row){
-				$htmdata['mac'] = $row['mac'];
-				$htmdata['ip'] = $row['ip'];
-				$htmdata['osType'] = '--';
-				$htmdata['ethx_name'] = '--'; // 该客户端所在端口
-				$htmdata['curRate'] = $row['mac_speed'];
-				$htmdata['traffic'] = $row['mac_sum_bytes']; // 该客户端使用当前应用的流量
-				$htmdata['trafficPercent'] = round((($row['mac_sum_bytes'] / $sumbts)*100),2).'%';
-				$result[] = $htmdata;
+		$page = element('page', $data, 1);
+        $pagesize = element('size', $data, 20);
+		$cgipar = array(
+			'time' => (string)element('timeType', $data, '0'),
+			'page' => (string)$page,
+			'pagesize' => (string)$pagesize
+		);
+		//主列表
+		$cgiret = ndpi_send_protomsg(json_encode($cgipar));
+		$cgiary = json_decode($cgiret, TRUE);
+		if($cgiary['state']['code'] === 2000) {
+			//总行
+            $total = element('item_num', $cgiary['data']['page'], 0);
+            //计算总页
+            $totalPage = intval($total / $pagesize);
+            if (($total % $pagesize) > 0) {
+				$totalPage = $totalPage + 1;
 			}
-			if($result){
-				$result = $this->sigcol_arrsort($result,'trafficPercent',SORT_DESC);
+			$arr['data']['page'] = array(
+                'startline' => 1, 
+                'size' => $pagesize, 
+                'currPage' => $page, 
+                'total' => $total,
+                'totalPage' => $totalPage,                
+                'nextPage' => $page + 1, 
+                'lastline' => $totalPage, // 最后一页
+            );
+			foreach($cgiary['data']['list'] as $row){
+				$arr['data']['list'][] = array(
+					'attr_name' => $row['proto'],
+					'curRate' => $row['bytes_rate'],
+					'userNum' => $row['usernum'],
+					'trafficPercent' => $row['flow_account']
+				);
 			}
 		}
-		return $result;
-	}
-	/**
-	 * 排序
-	 * @data 二维数组
-	 * @col 排序列
-	 * @type SORT_DESC/SORT_ASC
-	 */
-	function sigcol_arrsort($data,$col,$type=SORT_DESC){
-		if(is_array($data)){
-			$i=0;
-			foreach($data as $k=>$v){
-				if(key_exists($col,$v)){
-					$arr[$i] = $v[$col];
-					$i++;
-				}else{
-					continue;
-				}
+
+		//获取指定数据 ndpi_send_protomsg_usrnum
+		$modalPage = element('modalPage', $data, 1);
+        $modalSize = element('modalSize', $data, 20);
+		$cgipar_user = array(
+			'time' => (string)element('timeType', $data, '0'),
+			'proto' => (string)element('proto', $data, 'HTTP'),
+			'page' => (string)$modalPage,
+			'pagesize' => (string)$modalSize
+		);
+		$cgiret_user = ndpi_send_protomsg_usrnum(json_encode($cgipar_user));
+		$cgiary_user = json_decode($cgiret_user, TRUE);
+		if($cgiary_user['state']['code'] === 2000){
+			//总行
+            $total = element('item_num', $cgiary_user['data']['page'], 0);
+            //计算总页
+            $totalPage = intval($total / $modalSize);
+            if (($total % $modalSize) > 0) {
+				$totalPage = $totalPage + 1;
 			}
-		}else{
-			return false;
+			$arr['data']['clientPage'] = array(
+                'startline' => 1, 
+                'size' => $modalSize, 
+                'currPage' => $modalPage, 
+                'total' => $total,
+                'totalPage' => $totalPage,                
+                'nextPage' => $modalPage + 1, 
+                'lastline' => $totalPage, // 最后一页
+            );
+			foreach($cgiary_user['data']['list'] as $row){
+				$arr['data']['protoClientList'][] = array(
+					'mac' => $row['mac'],
+					'ip' => $row['ip'],
+					'osType' => '--',
+					'ethx_name' => '--',
+					'curRate' => $row['bytes_rate'],
+					'trafficPercent' => $row['flow_account']
+				);
+			}			
 		}
-		array_multisort($arr,$type,$data);
-		return $data;
-	}	
+		return json_encode($arr);		
+	}		
 }
