@@ -66,38 +66,36 @@ export default class OpenPortalBase extends React.Component {
         label: __('Start Date'),
         isOutsideRange: () => false,
         onChange: (data) => {
-          Promise.resolve().then(() => {
-            const { store } = this.props;
-            const curScreenId = store.get('curScreenId');
-            const endDate = store.getIn([curScreenId, 'query', 'endDate']);
-            let startDate = data.value;
-            const curDate = moment().format('YYYY-MM-DD');
-            const overDate = moment(curDate).isBefore(startDate);
-            const diff = moment(endDate).isBefore(startDate);
-            if (diff) {
-              this.props.createModal({
-                type: 'alert',
-                text: __(
-                  '%s should be the date of today or before %s!',
-                    __('Start Date'),
-                    __('End Date'),
-                ),
-              });
-              startDate = endDate;
-              this.props.changeScreenQuery({ startDate });
-            } else if (!diff && overDate) {
-              this.props.createModal({
-                type: 'alert',
-                text: __(
-                 'Please choose the date of today or before today!',
-                ),
-              });
-              startDate = curDate;
-              this.props.changeScreenQuery({ startDate });
-            } else {
-              this.props.changeScreenQuery({ startDate });
-            }
-          });
+          const { store } = this.props;
+          const curScreenId = store.get('curScreenId');
+          const endDate = store.getIn([curScreenId, 'query', 'endDate']);
+          let startDate = data.value;
+          const curDate = moment().format('YYYY-MM-DD');
+          const overDate = moment(curDate).isBefore(startDate);
+          const diff = moment(endDate).isBefore(startDate);
+          if (diff) {
+            this.props.createModal({
+              type: 'alert',
+              text: __(
+                '%s should be the date of today or before %s!',
+                  __('Start Date'),
+                  __('End Date'),
+              ),
+            });
+            startDate = endDate;
+            this.props.changeScreenQuery({ startDate });
+          } else if (!diff && overDate) {
+            this.props.createModal({
+              type: 'alert',
+              text: __(
+                'Please choose the date of today or before today!',
+              ),
+            });
+            startDate = curDate;
+            this.props.changeScreenQuery({ startDate });
+          } else {
+            this.props.changeScreenQuery({ startDate });
+          }
         },
         // saveOnChange: true,
       }, {
@@ -105,38 +103,36 @@ export default class OpenPortalBase extends React.Component {
         type: 'date',
         label: __('End Date'),
         onChange: (data) => {
-          Promise.resolve().then(() => {
-            const { store } = this.props;
-            const curScreenId = store.get('curScreenId');
-            const startDate = store.getIn([curScreenId, 'query', 'startDate']);
-            let endDate = data.value;
-            const curDate = moment().format('YYYY-MM-DD');
-            const overDate = moment(curDate).isBefore(endDate);
-            const diff = moment(endDate).isBefore(startDate);
-            if (diff) {
-              this.props.createModal({
-                type: 'alert',
-                text: __(
-                 '%s should be the date of today or after %s !',
-                    __('End Date'),
-                    __('Start Date'),
-                ),
-              });
-              endDate = curDate;
-              this.props.changeScreenQuery({ endDate });
-            } else if (!diff && overDate) {
-              this.props.createModal({
-                type: 'alert',
-                text: __(
-                 'Please choose the date of today or before today!',
-                ),
-              });
-              endDate = curDate;
-              this.props.changeScreenQuery({ endDate });
-            } else {
-              this.props.changeScreenQuery({ endDate });
-            }
-          });
+          const { store } = this.props;
+          const curScreenId = store.get('curScreenId');
+          const startDate = store.getIn([curScreenId, 'query', 'startDate']);
+          let endDate = data.value;
+          const curDate = moment().format('YYYY-MM-DD');
+          const overDate = moment(curDate).isBefore(endDate);
+          const diff = moment(endDate).isBefore(startDate);
+          if (diff) {
+            this.props.createModal({
+              type: 'alert',
+              text: __(
+                '%s should be the date of today or after %s !',
+                  __('End Date'),
+                  __('Start Date'),
+              ),
+            });
+            endDate = curDate;
+            this.props.changeScreenQuery({ endDate });
+          } else if (!diff && overDate) {
+            this.props.createModal({
+              type: 'alert',
+              text: __(
+                'Please choose the date of today or before today!',
+              ),
+            });
+            endDate = curDate;
+            this.props.changeScreenQuery({ endDate });
+          } else {
+            this.props.changeScreenQuery({ endDate });
+          }
         },
         isOutsideRange: () => false,
         saveOnChange: true,

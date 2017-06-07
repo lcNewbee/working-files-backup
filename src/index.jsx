@@ -40,7 +40,6 @@ if (prodConfig.appConfig) {
 function renderApp(renderRoutes) {
   const rootRoute = renderRoutes[0];
   const RootContainer = rootRoute.component;
-  console.log('rootRoute', rootRoute, RootContainer);
 
   // 主渲染入口
   ReactDOM.render(
