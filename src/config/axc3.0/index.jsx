@@ -165,23 +165,9 @@ const sNetworkTimeProtocol =
  * AAA 接入，认证，计费
  */
 const cAAA = require('../../screens/MainAxc/containers/AAA');
-const sRadiusTemplate =
-    require('../../screens/MainAxc/screens/Network/screens/RadiusTemplate');
-const sRadiusProxy =
-    require('../../screens/MainAxc/screens/Network/screens/RadiusProxy');
 const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA/index_new');
-const sPortalServer =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
-const sPortalRules =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
 const sPortalOverview =
     require('../../screens/MainAxc/screens/Portal/screens/Overview');
-const sPortalBase =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/Base');
-// const sPortalBas =
-    // require('../../screens/MainAxc/screens/Portal/screens/Access/Bas');
-// const sPortalUrlParams =
-//     require('../../screens/MainAxc/screens/Portal/screens/Access/UrlParams');
 const sPortalWeb =
     require('../../screens/MainAxc/screens/Portal/screens/Access/Web');
 const sPortalWeixin =
@@ -193,22 +179,9 @@ const sPortalSMSGateWay =
 const sPortalSMSLog =
     require('../../screens/MainAxc/screens/Portal/screens/Access/SMSLog');
 
-const sPortalApSetting =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/ApSetting');
-const sPortalSsid =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/SsidManagement');
-
-const sPortalNas =
-    require('../../screens/MainAxc/screens/Portal/screens/Radius/Nas');
-const sPortalOnline =
-    require('../../screens/MainAxc/screens/Portal/screens/Radius/Online');
-const sPortalConnectLog =
-    require('../../screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
 
 const sPortalAccountList =
     require('../../screens/MainAxc/screens/Portal/screens/Account/AccountList');
-const sPortalAccountListMac =
-    require('../../screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
 const sPortalConnectRecord =
     require('../../screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 const sPortalSendMessage =
@@ -347,33 +320,33 @@ const routes = [
                   },
                 ],
               },
-              // {
-              //   id: 'firewall',
-              //   isIndex: true,
-              //   path: '/main/network/firewall',
-              //   icon: 'dot-circle-o ',
-              //   text: __('Firewall'),
-              //   noTree: true,
-              //   component: SharedComponents.TabContainer,
-              //   indexPath: '/main/network/firewall/attackdefense',
-              //   routes: [
-              //     {
-              //       id: 'attackDefense',
-              //       isIndex: true,
-              //       formUrl: 'goform/network/firewall/attackdefense',
-              //       path: '/main/network/firewall/attackdefense',
-              //       text: __('Attack Defense'),
-              //       component: sAttackDefense.Screen,
-              //     }, {
-              //       id: 'firewallBlackList',
-              //       isIndex: true,
-              //       formUrl: 'goform/network/firewall/balcklist',
-              //       path: '/main/network/firewall/balcklist',
-              //       text: __('Black List'),
-              //       component: sFirewallBlackList.Screen,
-              //     },
-              //   ],
-              // },
+              {
+                id: 'firewall',
+                isIndex: true,
+                path: '/main/network/firewall',
+                icon: 'dot-circle-o ',
+                text: __('Firewall'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                indexPath: '/main/network/firewall/attackdefense',
+                routes: [
+                  {
+                    id: 'attackDefense',
+                    isIndex: true,
+                    formUrl: 'goform/network/firewall/attackdefense',
+                    path: '/main/network/firewall/attackdefense',
+                    text: __('Attack Defense'),
+                    component: sAttackDefense.Screen,
+                  }, {
+                    id: 'firewallBlackList',
+                    isIndex: true,
+                    formUrl: 'goform/network/firewall/balcklist',
+                    path: '/main/network/firewall/balcklist',
+                    text: __('Black List'),
+                    component: sFirewallBlackList.Screen,
+                  },
+                ],
+              },
             ],
           },
           {
@@ -585,37 +558,6 @@ const routes = [
                 text: __('Online Clients'),
                 component: sPortalOnlineList.Screen,
               },
-              // {
-              //   id: 'networkPortal',
-              //   icon: 'copy',
-              //   text: __('old page'),
-              //   noTree: true,
-              //   component: SharedComponents.TabContainer,
-              //   path: '/main/portal/old',
-              //   routes: [
-              //     {
-              //       id: 'portalServer',
-              //       path: '/main/portal/old/portal/server',
-              //       formUrl: 'goform/network/portal/server',
-              //       text: __('Portal Services'),
-              //       component: sPortalServer.Screen,
-              //     },
-              //     {
-              //       id: 'portalRules',
-              //       path: '/main/portal/old/portal/rules',
-              //       formUrl: 'goform/network/portal/rule',
-              //       text: __('Port Portal Rules'),
-              //       component: sPortalRules.Screen,
-              //     },
-              //     {
-              //       id: 'ridiusList',
-              //       path: '/main/portal/old/radius/list',
-              //       formUrl: 'goform/network/radius/template',
-              //       text: __('Radius Services'),
-              //       component: sRadiusTemplate.Screen,
-              //     },
-              //   ],
-              // },
               {
                 id: 'portalServices',
                 isIndex: true,
@@ -623,13 +565,6 @@ const routes = [
                 icon: 'user-o',
                 text: __('Local Server'),
                 routes: [
-                  // {
-                  //   id: 'portalRadiusNas',
-                  //   path: '/main/portal/local/radius',
-                  //   formUrl: 'goform/portal/radius/nas',
-                  //   text: __('Radius Server'),
-                  //   component: sPortalNas.Screen,
-                  // },
                   {
                     id: 'portalAccess',
                     isIndex: true,
@@ -645,13 +580,6 @@ const routes = [
                         text: __('Page Settings'),
                         component: sPortalWeb.Screen,
                       },
-                      // {
-                      //   id: 'portalAccessBase',
-                      //   path: '/main/portal/local/portal/config',
-                      //   formUrl: 'goform/portal/access/config',
-                      //   text: __('Base'),
-                      //   component: sPortalBase.Screen,
-                      // },
                       {
                         id: 'portalWechat',
                         path: '/main/portal/local/portal/weixin',
