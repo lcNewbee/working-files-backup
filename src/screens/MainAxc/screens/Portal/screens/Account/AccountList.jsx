@@ -17,17 +17,15 @@ function getCardCategoryName() {
   return utils.fetch('goform/portal/card/cardcategory', {
     size: 9999,
     page: 1,
-  })
-    .then(json => (
-      {
-        options: json.data.list.map(
-          item => ({
-            value: item.id,
-            label: item.name,
-          }),
-        ),
-      }
-    ),
+  }).then(json => (
+    {
+      options: json.data.list.map(
+        item => ({
+          value: item.id,
+          label: item.name,
+        }),
+      ),
+    }),
   );
 }
 function getCardInformation() {
@@ -53,6 +51,10 @@ const queryFormOptions = fromJS([
     type: 'select',
     label: __('Account Type'),
     options: [
+      {
+        value: '-1',
+        label: __('ALL'),
+      },
       {
         value: '0',
         label: __('Unavailability'),
@@ -698,6 +700,7 @@ const propTypes = {
   updateCurEditListItem: PropTypes.func,
   reportValidError: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
+  changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -725,6 +728,7 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
+    this.props.changeScreenQuery({ state: '-1' });
     getCardCategoryName()
       .then((data) => {
         this.setState({

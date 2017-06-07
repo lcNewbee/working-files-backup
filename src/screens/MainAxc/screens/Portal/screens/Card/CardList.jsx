@@ -48,6 +48,9 @@ const queryFormOptions = fromJS([
     label: __('Acc Type'),
     options: [
       {
+        value: '-1',
+        label: __('ALL'),
+      }, {
         value: '0',
         label: __('Unavailability'),
       }, {
@@ -75,6 +78,9 @@ const queryFormOptions = fromJS([
     label: __('Voucher Type'),
     options: [
       {
+        value: '-1',
+        label: __('ALL'),
+      }, {
         value: '0',
         label: __('Hourly Voucher'),
       }, {
@@ -377,6 +383,7 @@ const propTypes = {
   updateCurEditListItem: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   onListAction: PropTypes.func,
+  changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -393,6 +400,10 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
+    this.props.changeScreenQuery({
+      payType: '-1',
+      categoryType: '-1',
+    });
     getCardCategoryName()
       .then((data) => {
         this.setState({

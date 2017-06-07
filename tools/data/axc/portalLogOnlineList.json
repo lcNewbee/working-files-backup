@@ -18,7 +18,7 @@
       "octets":"3M",
       "basname":"werwe",
       "ssid":"fannyZhang",
-      "type":"微信认证",
+      "type":"1",
       "apmac":"unknow",
       "auto":"no",
       "agent":"Client"
@@ -36,7 +36,7 @@
       "octets":"-3M",
       "basname":"werwe",
       "ssid":"fannyZhang",
-      "type":"微信认证",
+      "type":"2",
       "apmac":"unknow",
       "auto":"no",
       "agent":"Client"

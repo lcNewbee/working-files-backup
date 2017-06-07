@@ -1,20 +1,19 @@
 import NotFound from 'shared/components/NotFound';
-// import b28n from 'shared/b28n';
+import b28n from 'shared/b28n';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
-//
 import 'shared/scss/styles.scss';
 import guiConfig from './config.json';
 // 多语言工具
-// const langCn = require('../lang/cn/core.json');
-// const apCn = require('../lang/cn/ap.json');
+const langCn = require('../lang/cn/core.json');
+const apCn = require('../lang/cn/ap.json');
 
-// b28n.addDict(langCn, 'cn');
-// b28n.addDict(apCn, 'cn');
+b28n.addDict(langCn, 'cn');
+b28n.addDict(apCn, 'cn');
 
-// window.CB = b28n.init({
-//   supportLang: ['en', 'cn'],
-// });
+window.CB = b28n.init({
+  supportLang: ['en', 'cn'],
+});
 // window.guiConfig = guiConfig;
 const baseComponents = {};
 // 公用，一般不会改变，没有必要写入baseComponents

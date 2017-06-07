@@ -1,18 +1,8 @@
-import b28n from 'shared/b28n';
 import 'shared/scss/styles.scss';
 import utils from 'shared/utils';
 import baseConf from '../baseConf/baseConfAp';
 import guiConfig from './config.json';
-// 多语言工具
-const langCn = require('../lang/cn/core.json');
-const apCn = require('../lang/cn/ap.json');
 
-b28n.addDict(langCn, 'cn');
-b28n.addDict(apCn, 'cn');
-
-window.CB = b28n.init({
-  supportLang: ['en', 'cn'],
-});
 window.guiConfig = guiConfig;
 
 

@@ -5,32 +5,32 @@ class CardList_Model extends CI_Model {
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $this->load->helper(array('array', 'db_operation'));
     }
-    function get_list($data) {        
+    function get_list($data) {
         $parameter = array(
-            'db' => $this->portalsql, 
-            'columns' => '*', 
-            'tablenames' => 'portal_card', 
-            'pageindex' => (int) element('page', $data, 1), 
-            'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "1=1", 
-            'joins' => array(), 
+            'db' => $this->portalsql,
+            'columns' => '*',
+            'tablenames' => 'portal_card',
+            'pageindex' => (int) element('page', $data, 1),
+            'pagesize' => (int) element('size', $data, 20),
+            'wheres' => "1=1",
+            'joins' => array(),
             'order' => array()
         );
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
         }
-        if(isset($data['payType'])){
+        if(isset($data['payType']) && $data['payType'] != '-1'){
             $parameter['wheres'] = $parameter['wheres'] . " AND payType='".$data['payType']."'";
         }
-        if(isset($data['categoryType'])){
+        if(isset($data['categoryType']) && $data['categoryType'] != '-1'){
             $parameter['wheres'] = $parameter['wheres'] . " AND categoryType='".$data['categoryType']."'";
-        }        
+        }
         $datalist = help_data_page_all($parameter);
 
         $htmdata = array();
         foreach($datalist['data'] as $row){
             $time = (int)$row['payTime'];
-            switch($row['categoryType']){  
+            switch($row['categoryType']){
                 case 0 : $row['payTime'] = ($time/1000/60/60).'H';
                     break;
                 case 1 : $row['payTime'] = ($time/24/60/60/1000).'D';
@@ -40,7 +40,7 @@ class CardList_Model extends CI_Model {
                 case 3 : $row['payTime'] = ($time/1000/60/60/24/31/12).'Year';
                     break;
                 case 4 : $row['payTime'] = ($time/1024/1024).'Mb';
-                    break;            
+                    break;
             }
             $htmdata[] = $row;
         }
@@ -54,7 +54,7 @@ class CardList_Model extends CI_Model {
         return json_encode($arr);
     }
 
-    function getPram($data){     
+    function getPram($data){
         $categoryType = element('categoryType',$data);
         switch($categoryType){
             case '0' : $categoryType = 2;
@@ -110,12 +110,12 @@ class CardList_Model extends CI_Model {
             'payTime' => $this->get_time($data['categoryName']),
             'accountDel' => element('accountDel',$data,''),
             'userDel' => element('userDel',$data,''),
-            'cdKey' => uniqid('',true),            
+            'cdKey' => uniqid('',true),
             'money' => element('money',$data,''),
             'maclimit' => 0,
             'maclimitcount' => element('maclimitcount',$data,1),
             'autologin' => element('autologin',$data,''),
-            'speed' => 1,//暂时默认给 1，就是1M    
+            'speed' => 1,//暂时默认给 1，就是1M
         );
         $cardCount = element('cardCount',$data,1);
         for($i = 0; $i < $cardCount; $i++){
@@ -150,7 +150,7 @@ class CardList_Model extends CI_Model {
         if($toname != ""){
             $query = $this->portalsql->query("select id,loginName from portal_account where loginName='".$toname."'");
             $row = $query->row();
-            $toid = $row->id;                        
+            $toid = $row->id;
         }
         $insertary = array(
             'title' => element('title',$data,''),// 标题
@@ -160,12 +160,12 @@ class CardList_Model extends CI_Model {
             'ip' => $_SERVER['SERVER_ADDR'],// 发送者ip
             'fromPos' => 0,// 发送者类型
             'fromid' => 1,// 发送者id 暂且默认写admin ID
-            'fromname' => 'admin',// 发送者名称            
+            'fromname' => 'admin',// 发送者名称
             'toid' => $toid,//接收者id
             'toPos' => 1,// 接收者类型，0-系统用户，1-接入用户
-            'toname' => $toname,// 接收者名称            
+            'toname' => $toname,// 接收者名称
             'delin' => 0,// 默认值0，值为1表示在收件箱中删除了此条记录
-            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录                    
+            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录
         );
         $result = $this->portalsql->insert('portal_message', $insertary);
         if($result){
@@ -175,14 +175,14 @@ class CardList_Model extends CI_Model {
             $result = json_no('sendMessage error');
             $result['state']['code'] = 6401;
         }
-        return json_encode($result);    
+        return json_encode($result);
     }
     private function get_time($id){
         $result = null;
         $query = $this->portalsql->query('select id,time,state,name from portal_cardcategory where id='.$id);
-        $row = $query->row();        
+        $row = $query->row();
         if(is_object($row)){
-            $time = $row->time;            
+            $time = $row->time;
             switch($row->state){
                 case 0 : $result = $time*1000*60*60;break;
                 case 1 : $result = $time*1000*60*60*24;break;
@@ -204,10 +204,10 @@ class CardList_Model extends CI_Model {
         return $result;
     }
     private function set_card_state($id){
-        $result = 0;       
+        $result = 0;
         $this->portalsql->set('state',1);
-        $this->portalsql->where('id', $id);        
-        $result = $this->portalsql->update('portal_card');        
+        $this->portalsql->where('id', $id);
+        $result = $this->portalsql->update('portal_card');
         return $result;
     }
 }

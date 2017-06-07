@@ -5,21 +5,21 @@ class CateGory_Model extends CI_Model {
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $this->load->helper(array('array', 'db_operation'));
     }
-    function get_list($data) {        
+    function get_list($data) {
         $parameter = array(
-            'db' => $this->portalsql, 
-            'columns' => '*', 
-            'tablenames' => 'portal_cardcategory', 
-            'pageindex' => (int) element('page', $data, 1), 
-            'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "1=1", 
-            'joins' => array(), 
+            'db' => $this->portalsql,
+            'columns' => '*',
+            'tablenames' => 'portal_cardcategory',
+            'pageindex' => (int) element('page', $data, 1),
+            'pagesize' => (int) element('size', $data, 20),
+            'wheres' => "1=1",
+            'joins' => array(),
             'order' => array()
         );
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
         }
-        if(isset($data['state'])){
+        if(isset($data['state']) && $data['state'] != '-1'){
             $parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
         }
         $datalist = help_data_page_all($parameter);
@@ -33,7 +33,7 @@ class CateGory_Model extends CI_Model {
         return json_encode($arr);
     }
 
-    private function getPram($data){        
+    private function getPram($data){
         $arr = array(
             'id'=> element('id',$data,null),
             'name' => element('name',$data),

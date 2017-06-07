@@ -15,6 +15,9 @@ const queryFormOptions = fromJS([
     label: __('Voucher Type'),
     options: [
       {
+        value: '-1',
+        label: __('ALL'),
+      }, {
         value: '0',
         label: __('Hourly Voucher'),
       }, {
@@ -240,9 +243,15 @@ const listOptions = fromJS([
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
+  changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
+
+  componentWillMount() {
+    this.props.changeScreenQuery({ state: '-1' });
+  }
+
   render() {
     return (
       <AppScreen

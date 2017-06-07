@@ -20,6 +20,9 @@ const queryFormOptions = fromJS([
     label: __('Acc Type'),
     options: [
       {
+        value: '-1',
+        label: __('ALL'),
+      }, {
         value: '0',
         label: __('Unavailability'),
       }, {
@@ -42,11 +45,14 @@ const queryFormOptions = fromJS([
     ],
     saveOnChange: true,
   }, {
-    id: 'type',
+    id: 'authType',
     type: 'select',
     label: __('Authentication Types'),
     options: [
       {
+        value: '-1',
+        label: __('ALL'),
+      }, {
         value: '0',
         label: __('One Key Authentication'),
       }, {
@@ -225,6 +231,36 @@ const listOptions = fromJS([
   }, {
     id: 'type',
     text: __('Authetication Type'),
+    options: [
+      {
+        value: '0',
+        label: __('One Key Authentication'),
+      }, {
+        value: '1',
+        label: __('Access User Authentication'),
+      }, {
+        value: '2',
+        label: __('Radius Authentication'),
+      }, {
+        value: '3',
+        label: __('App Authentication'),
+      }, {
+        value: '4',
+        label: __('Messages Authentication'),
+      }, {
+        value: '5',
+        label: __('Wechat Authentication'),
+      }, {
+        value: '6',
+        label: __('Public Platform Authentication'),
+      }, {
+        value: '7',
+        label: __('Visitor Authentication'),
+      }, {
+        value: '9',
+        label: __('Facebook Authentication'),
+      },
+    ],
     formProps: {
       required: true,
     },
@@ -263,6 +299,7 @@ const listActionBarButtons = [
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
+  changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -271,6 +308,10 @@ export default class OpenPortalBase extends React.Component {
     super(props);
 
     this.onAction = this.onAction.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.changeScreenQuery({ state: '-1', authType: '-1' });
   }
 
   onAction(no, type) {

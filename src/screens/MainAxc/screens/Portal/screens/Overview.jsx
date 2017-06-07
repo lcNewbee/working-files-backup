@@ -39,6 +39,10 @@ function getOnlineOption(serverData) {
     title: {
       text: __('Connection Status'),
       subtext: `${onlineCount} / ${outlineCount}`,
+      textStyle: {
+        fontFamily: 'Microsoft Yahei',
+        fontWeight: 'normal',
+      },
     },
     series: [
       {
@@ -66,8 +70,12 @@ function getApStatusOption(serverData) {
       x: '60%',
     },
     title: {
-      text: __('User Status'),
-      subtext: `${lockCount} / ${unlockCount}`,
+      text: __('Account Status'),
+      subtext: `${unlockCount} / ${lockCount}`,
+      textStyle: {
+        fontFamily: 'Microsoft Yahei',
+        fontWeight: 'normal',
+      },
     },
     series: [
       {
