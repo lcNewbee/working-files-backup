@@ -15,7 +15,7 @@ class OnlineList_Model extends CI_Model {
                 'pageIndex'=>(int)element('page',$data,1),
                 'ip' => element('search', $data, ''),
                 'state' => element('state', $data, ''),
-                'authType' => element('authType', $data, '')
+                'type' => element('authType', $data, '')
             )
         );
         $result = $this->notice_socket($socketarr);
