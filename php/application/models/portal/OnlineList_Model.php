@@ -12,7 +12,10 @@ class OnlineList_Model extends CI_Model {
             'resName'=>'online',
             'data'=>array(
                 'pageSize'=>(int)element('size',$data,20),
-                'pageIndex'=>(int)element('page',$data,1)
+                'pageIndex'=>(int)element('page',$data,1),
+                'ip' => element('search', $data, ''),
+                'state' => element('state', $data, ''),
+                'authType' => element('authType', $data, '')
             )
         );
         $result = $this->notice_socket($socketarr);
