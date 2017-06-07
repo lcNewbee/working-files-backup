@@ -238,12 +238,14 @@ class FormInput extends PureComponent {
         );
 
       case 'select':
-        return (<Select
-          {...inputProps}
-          className={classNames}
-          clearable={clearable || false}
-          searchable={searchable || false}
-        />);
+        return (
+          <Select
+            {...inputProps}
+            className={classNames}
+            clearable={clearable || false}
+            searchable={searchable || false}
+          />
+        );
       case 'switch':
         return (
           <Switchs
@@ -271,7 +273,7 @@ class FormInput extends PureComponent {
           timeValue = moment(timeValue);
         }
         if (!inputProps.id) {
-          inputProps.id = `data${Math.random()}`;
+          inputProps.id = `date${Math.random()}`;
         }
         return (
           <DatePicker.SingleDatePicker
@@ -293,7 +295,7 @@ class FormInput extends PureComponent {
         }
 
         if (!inputProps.id) {
-          inputProps.id = `data${Math.random()}`;
+          inputProps.id = `date${Math.random()}`;
         }
 
         return (

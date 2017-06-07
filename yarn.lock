@@ -5863,7 +5863,11 @@ modify-values@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/modify-values/download/modify-values-1.0.0.tgz#e2b6cdeb9ce19f99317a53722f3dbf5df5eaaab2"
 
-moment@2.x, moment@>=1.6.0, moment@^2.18.1, moment@^2.6.0:
+"moment@(2.10 - 2.14 || ^2.15.1)":
+  version "2.14.1"
+  resolved "http://registry.npm.taobao.org/moment/download/moment-2.14.1.tgz#b35b27c47e57ed2ddc70053d6b07becdb291741c"
+
+moment@2.x, moment@>=1.6.0, moment@^2.6.0:
   version "2.18.1"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
@@ -6193,7 +6197,7 @@ object.omit@^2.0.0:
     for-own "^0.1.4"
     is-extendable "^0.1.1"
 
-object.values@^1.0.3, object.values@^1.0.4:
+object.values@^1.0.3:
   version "1.0.4"
   resolved "http://registry.npm.taobao.org/object.values/download/object.values-1.0.4.tgz#e524da09b4f66ff05df457546ec72ac99f13069a"
   dependencies:
@@ -7085,19 +7089,19 @@ react-addons-test-utils@>=15.0.0:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-dates@^12.0.0:
-  version "12.1.1"
-  resolved "http://registry.npm.taobao.org/react-dates/download/react-dates-12.1.1.tgz#feeed868a30e72e5d8b6dbf38447620f619b781d"
+react-dates@10.2.0:
+  version "10.2.0"
+  resolved "http://registry.npm.taobao.org/react-dates/download/react-dates-10.2.0.tgz#9ddb5b0a9525f29a92513da73f2a9e372fbe174c"
   dependencies:
     airbnb-prop-types "^2.4.1"
+    array-includes "^3.0.2"
     classnames "^2.2.5"
     consolidated-events "^1.0.1"
     lodash.throttle "^4.1.1"
     object.assign "^4.0.4"
-    object.values "^1.0.4"
     prop-types "^15.5.6"
     react-moment-proptypes "^1.3.0"
-    react-portal "^3.1.0"
+    react-portal "^3.0.0"
 
 react-deep-force-update@^2.0.1:
   version "2.0.1"
@@ -7143,7 +7147,7 @@ react-moment-proptypes@^1.3.0:
   dependencies:
     moment ">=1.6.0"
 
-react-portal@^3.1.0:
+react-portal@^3.0.0:
   version "3.1.0"
   resolved "http://registry.npm.taobao.org/react-portal/download/react-portal-3.1.0.tgz#865c44fb72a1da106c649206936559ce891ee899"
   dependencies:

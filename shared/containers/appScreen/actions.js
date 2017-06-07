@@ -98,9 +98,14 @@ export function fetchScreenData(option) {
         ajaxOption.mode = option.mode;
       }
 
-      // 处理 ajax mode参数，是否跨域
+      // 处理 自定义 URL
       if (option.url) {
         myUrl = option.url;
+      }
+
+      // 处理完全自定义查询参数 query
+      if (option.query) {
+        query = option.query;
       }
     }
 
