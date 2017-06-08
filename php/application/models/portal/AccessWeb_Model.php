@@ -159,7 +159,13 @@ class AccessWeb_Model extends CI_Model {
             $result = $this->portalsql->replace('portal_web', $arr);
             if($result){
                 //解压
-                $filepath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$data['id'];
+                $file_str = (int)element('id', $data, 1);			
+				if($file_str == 1 ){
+					$file_str = '';						
+				}else{
+					$file_str = $file_str - 1;						
+				}
+				$filepath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$file_str;
                 if( file_exists($filepath) ){
                     $zip = new PHPZip();
                     $pathfile = "/var/conf/portalserver/portal_web_tmp.zip"; //需解压文件
@@ -196,8 +202,7 @@ class AccessWeb_Model extends CI_Model {
         return json_encode($result);
     }
     function web_download($data) {
-        $filesum = element('id', $data, 1);
-        $filesum = $filesum - 1;
+        $filesum = element('id', $data, 0);
         $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$filesum.'/';
         if($filesum == 0){
             $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/';
