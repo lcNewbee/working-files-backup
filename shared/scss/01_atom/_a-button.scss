@@ -19,6 +19,7 @@
   border: 1px solid transparent;
   border-radius: 3px;
   vertical-align: middle;
+  transition: background-color .3s ease-in-out;
 
   &:active {
     @include opacity(.8);
@@ -96,7 +97,10 @@ a.a-btn {
   background-color: $g-brand-primary;
 
   &:hover {
-    background-color: $g-brand-primary - #101010;
+    background-color: lighten($g-brand-primary, 5%);
+  }
+  &:active {
+    background-color: darken($g-brand-primary, 10%);
   }
 }
 .a-btn--success {
