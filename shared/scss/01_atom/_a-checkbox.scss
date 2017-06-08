@@ -28,7 +28,7 @@
       border-radius: 12px;
       /* cursor: pointer; */
       transition: background-color .3s ease-in-out,
-                  padding-left .15s ease-in-out;
+                  padding-left .25s ease-in-out;
 
       &::before {
         display: inline-block;
@@ -121,7 +121,8 @@
           content: "\2713";
           background-color: transparent;
           border-radius: 0;
-          transition: color .3s ease-in-out;
+          transform: scale(0.1);
+          transition: color .2s ease-in-out, transform .2s ease-in-out;
         }
       }
       &[disabled] {
@@ -138,6 +139,7 @@
           &::before {
             background-color: $g-brand-primary;
             color: #fff;
+            transform: scale(1);
           }
         }
 
