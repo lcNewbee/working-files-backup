@@ -81,6 +81,7 @@ function getTerminalTypeOption(serverData) {
         const num = dataList
           .find($$item => $$item.get('name') === name)
           .get('value') || 0;
+        if (!name) return null;
         if ((name.split('\n')).length > 1) {
           return `others: ${num}`;
         }
@@ -155,9 +156,10 @@ function getTerminalTypeOption(serverData) {
       }
       othermap = othermap.set('name', otherNameStr);
       othermap = othermap.set('value', num);
+      dataList = dataList.slice(0, 13);
+      dataList = dataList.push(othermap);
     }
-    dataList = dataList.slice(0, 13);
-    dataList = dataList.push(othermap);
+
 
     ret.legend.data = dataList.map(item => item.get('name')).toJS();
     ret.series[0].data = dataList.toJS();
