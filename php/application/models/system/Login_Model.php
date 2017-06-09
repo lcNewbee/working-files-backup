@@ -1,6 +1,6 @@
 <?php
 class Login_Model extends CI_Model {
-	public function __construct() {		
+	public function __construct() {
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->database();
@@ -18,12 +18,12 @@ class Login_Model extends CI_Model {
 			$result['data'] = array(
 				'purview'=>$datarow->purview,
 				'usertype'=>$datarow->usertype
-			);	
+			);
 			$sessiondata = array(
 				'username' => $username,
 				'purview' => $datarow->purview
 			);
-			$this->session->set_userdata($sessiondata);			
+			$this->session->set_userdata($sessiondata);
 			$logary = array(
 				'type'=>'login',
 				'operator'=>$username,
