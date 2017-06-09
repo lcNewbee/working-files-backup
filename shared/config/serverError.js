@@ -14,7 +14,7 @@ const ERROR_MSG_MAP = {
   6109: __('Interfaces with the same segment already exists'),
   6110: __('Please configure the appropriate IP addresses and mask on interfaces'),
   6111: __('Next hop IP must within interfaces segment'),
-  6112: __(''),
+  6112: __('Same mac already exists'),
   6113: __('Same mac already exists'),
 
   // AXC： AP组管理 6200 - 6299
