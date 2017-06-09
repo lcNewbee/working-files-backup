@@ -4,58 +4,99 @@
     "msg": "ok"
   },
   "data": {
-    "list": [
-      {
-        "groupname": "Default"
-      },
-      {
-        "groupname": "group231",
-        "ssid": "128",
-        "wifienable": "0/1",
-        "encryption": "none",
-        "password": "124567786",
-        "vlanenable": "0",
-        "vlanid": "23",
-        "country": "",
-        "channel": "12",
-        "channelsBandwidth": "20",
-        "channel5g": "6",
-        "channelsBandwidth5g": "40",
-        "downstream": "128",
-        "upstream": "64"
-      },
-      {
-        "groupname": "group33333",
-        "ssid": "128",
-        "wifienable": "0/1",
-        "encryption": "psk-mixed",
-        "password": "124567786",
-        "vlanenable": "1",
-        "vlanid": "32",
-        "country": "AR",
-        "channel": "12",
-        "channelsBandwidth": "20",
-        "channel5g": "7",
-        "channelsBandwidth5g": "40",
-        "downstream": "128",
-        "upstream": "64"
-      },
-      {
-        "groupname": "group33547",
-        "ssid": "128",
-        "wifienable": "0/1",
-        "encryption": "psk-mixed",
-        "password": "124567786",
-        "vlanenable": "1",
-        "vlanid": "33",
-        "country": "AM",
-        "channel": "12",
-        "channelsBandwidth": "20",
-        "channel5g": "7",
-        "channelsBandwidth5g": "40",
-        "downstream": "128",
-        "upstream": "64"
-      }
-    ]
+      "list":[
+        {
+          "groupname": "group231",
+          "radio2.4G":{
+              "ssid": "128",
+              "encryption": "none",
+              "password": "124567786",
+              "vlanenable": "0/1",
+              "vlanid": "1",
+              "country": "EN",
+              "channel": "12",
+              "channelsBandwidth": "20",
+              "downstream":"22",
+              "upstream":"22",
+              "txpower":"100%",
+              "ssidisolate":"1"
+          },
+          "radio5.8G":{
+              "ssid": "128",
+              "encryption": "none",
+              "password": "124567786",
+              "vlanenable": "0/1",
+              "vlanid": "1",
+              "country": "EN",
+              "channel": "12",
+              "channelsBandwidth": "20",
+              "downstream":"22",
+              "upstream":"22",
+              "txpower":"100%",
+              "ssidisolate":"1"
+          }
+        },{
+            "groupname": "group33333",
+            "radio2.4G":{
+                "ssid": "group33333.2.4g",
+                "encryption": "none",
+                "password": "124567786",
+                "vlanenable": "0/1",
+                "vlanid": "1",
+                "country": "EN",
+                "channel": "12",
+                "channelsBandwidth": "20",
+                "downstream":"22",
+                "upstream":"22",
+                "txpower":"100%",
+                "ssidisolate":"1"
+            },
+            "radio5.8G":{
+                "ssid": "group33333.5.8g",
+                "encryption": "none",
+                "password": "124567786",
+                "vlanenable": "0/1",
+                "vlanid": "1",
+                "country": "EN",
+                "channel": "12",
+                "channelsBandwidth": "20",
+                "downstream":"22",
+                "upstream":"22",
+                "txpower":"100%",
+                "ssidisolate":"1"
+            }
+          },{
+              "groupname": "group33547",
+              "radio2.4G":{
+                  "ssid": "group33547.2.4G",
+                  "encryption": "none",
+                  "password": "124567786",
+                  "vlanenable": "0/1",
+                  "vlanid": "1",
+                  "country": "EN",
+                  "channel": "12",
+                  "channelsBandwidth": "20",
+                  "downstream":"22",
+                  "upstream":"22",
+                  "txpower":"100%",
+                  "ssidisolate":"1"
+              },
+               "radio5.8G":{
+                  "ssid": "group33547.5.8G",
+                  "encryption": "none",
+                  "password": "124567786",
+                  "vlanenable": "0/1",
+                  "vlanid": "1",
+                  "country": "EN",
+                  "channel": "12",
+                  "channelsBandwidth": "20",
+                  "downstream":"22",
+                  "upstream":"22",
+                  "txpower":"100%",
+                  "ssidisolate":"1"
+              }
+            }
+
+      ]
   }
 }

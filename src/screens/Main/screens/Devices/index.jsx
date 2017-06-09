@@ -1,5 +1,6 @@
 import React from 'react';
 import utils from 'shared/utils';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
@@ -65,6 +66,19 @@ const selectOptions = [
   { value: 100, label: '100' },
 ];
 
+const propTypes = {
+  changeDevicesQuery: PropTypes.func,
+  selectRow: PropTypes.func,
+  fetchDevices: PropTypes.func,
+  createModal: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
+  saveDevicesAction: PropTypes.func,
+  leaveDevicesScreen: PropTypes.func,
+  validateOption: PropTypes.object,
+  app: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
+};
+
 // 原生的 react 页面
 export class Device extends PureComponent {
   constructor(props) {
@@ -129,7 +143,6 @@ export class Device extends PureComponent {
   }
   onRowSelect(index) {
     //  index {index: 0, selected: true, unselectableList: Array(0)};
-    console.log(index) ;
     this.props.selectRow(index);
   }
   // on Query changed
@@ -209,20 +222,68 @@ export class Device extends PureComponent {
 
   onMultiUpgradeDevice() {
     const warningMsgText = __('PLease choose devices to upgrade!');
-    this.props.createModal({
-      id: 'settings',
-      role: 'confirm',
-      text: warningMsgText,
-    });
+    const selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
+    const confirmMsgText = __('Upgrade need reboot Device, are you sure upgrade device of the %s item?', selectedListIndex);
+    const selectedListIndexArray = selectedListIndex.toJS();
+    const selectedListQuantity = selectedListIndex.size;
+    let i;
+    const macs = [];
+    for (i = 0; i < selectedListQuantity; i++) {
+      macs[i] = this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'mac']);
+    }
+    const data = {
+      action: 'upgrade',
+      macs,
+    };
+    if (selectedListQuantity === 0) {
+      this.props.createModal({
+        id: 'settings',
+        role: 'confirm',
+        text: warningMsgText,
+      });
+    } else {
+      this.props.createModal({
+        id: 'settings',
+        role: 'confirm',
+        text: confirmMsgText,
+        apply: function () {
+          this.props.saveDevicesAction(data);
+        }.bind(this),
+      });
+    }
   }
 
   onMultiLocateDevice() {
     const warningMsgText = __('PLease choose devices to locate!');
-    this.props.createModal({
-      id: 'settings',
-      role: 'confirm',
-      text: warningMsgText,
-    });
+    const selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
+    const confirmMsgText = __(' are you sure to locate device of the %s item?', selectedListIndex);
+    const selectedListIndexArray = selectedListIndex.toJS();
+    const selectedListQuantity = selectedListIndex.size;
+    let i;
+    const macs = [];
+    for (i = 0; i < selectedListQuantity; i++) {
+      macs[i] = this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'mac']);
+    }
+    const data = {
+      action: 'locate',
+      macs,
+    };
+    if (selectedListQuantity === 0) {
+      this.props.createModal({
+        id: 'settings',
+        role: 'confirm',
+        text: warningMsgText,
+      });
+    } else {
+      this.props.createModal({
+        id: 'settings',
+        role: 'confirm',
+        text: confirmMsgText,
+        apply: function () {
+          this.props.saveDevicesAction(data);
+        }.bind(this),
+      });
+    }
   }
   // onEdit
   showEditNetwork(mac) {
@@ -615,6 +676,7 @@ export class Device extends PureComponent {
   }
 }
 
+Device.propTypes = propTypes;
 function mapStateToProps(state) {
   return {
     store: state.devices,

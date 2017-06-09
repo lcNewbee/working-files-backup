@@ -5,15 +5,15 @@ import urls from 'shared/config/urls';
 // Fetch
 export function reqeustFetchGuest() {
   return {
-    type: "REQEUST_FETCH_GUEST"
-  }
+    type: 'REQEUST_FETCH_GUEST',
+  };
 }
 export function receiveGuest(data) {
   return {
-    type: "RECEIVE_GUEST",
+    type: 'RECEIVE_GUEST',
     updateAt: Date.now(),
-    data
-  }
+    data,
+  };
 }
 export function fetchGuestSettings() {
   return dispatch => {
@@ -31,28 +31,28 @@ export function fetchGuestSettings() {
 // handle user custom action
 export function changeGuestGroup(name) {
   return {
-    type: "CHANGE_GUEST_GROUP",
-    name
-  }
+    type: 'CHANGE_GUEST_GROUP',
+    name,
+  };
 }
 
 export function changeGuestSettings(data) {
   return {
-    type: "CHANGE_GUEST_SETTINGS",
-    data
-  }
+    type: 'CHANGE_GUEST_SETTINGS',
+    data,
+  };
 }
 
 // Set
 export function reqeustSetGuest() {
   return {
-    type: "REQEUST_SET_GUEST"
-  }
+    type: 'REQEUST_SET_GUEST',
+  };
 }
 export function receiveSetGuest() {
   return {
-    type: "RECEIVE_SET_GUEST"
-  }
+    type: 'RECEIVE_SET_GUEST',
+  };
 }
 export function setGuest() {
   return (dispatch, getState) => {

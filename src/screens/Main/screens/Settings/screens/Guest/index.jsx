@@ -62,7 +62,9 @@ const validOptions = Map({
 export class Guest extends PureComponent {
   constructor(props) {
     super(props);
-
+    this.state = {
+      frequency: '2.4G',
+    };
     utils.binds(this, [
       'onUpdate',
       'onChangeGroup',
@@ -88,11 +90,19 @@ export class Guest extends PureComponent {
   }
 
   onUpdate(name) {
-    return (data) => {
-      const settings = {};
-
-      settings[name] = data.value;
-      this.props.changeGuestSettings(settings);
+    return (item) => {
+      const data = {};
+      const radio5Object = {};
+      const radio2Object = {};
+      const modeVal = this.state.frequency;
+      if (modeVal === '5G') {
+        radio5Object[name] = item.value;
+      } else {
+        radio2Object[name] = item.value;
+      }
+      data['radio5.8G'] = radio5Object;
+      data['radio2.4G'] = radio2Object;
+      this.props.changeGuestSettings(data);
     };
   }
 
@@ -101,10 +111,18 @@ export class Guest extends PureComponent {
   }
 
   onChangeEncryption(item) {
-    const data = {
-      encryption: item.value,
-    };
-
+    const data = {};
+    const radio5Object = {};
+    const radio2Object = {};
+    const modeVal = this.state.frequency;
+    if (modeVal === '5G') {
+      radio5Object.encryption = item.value;
+    } else {
+      radio2Object.encryption = item.value;
+    }
+    data['radio5.8G'] = radio5Object;
+    data['radio2.4G'] = radio2Object;
+    console.log('data', data);
     this.props.changeGuestSettings(data);
   }
 
@@ -117,10 +135,19 @@ export class Guest extends PureComponent {
       });
   }
 
-  getCurrData(name, defaultVal) {
-    const myDefault = defaultVal || '';
-
-    return this.props.store.getIn(['data', 'curr', name]) || myDefault;
+  getCurrData(name) {
+    const modeVal = this.state.frequency;
+    let ret;
+    if (name !== 'groupname') {
+      if (modeVal === '5G') {
+        ret = this.props.store.getIn(['data', 'curr', 'radio5.8G', name]);
+      } else {
+        ret = this.props.store.getIn(['data', 'curr', 'radio2.4G', name]);
+      }
+    } else {
+      ret = this.props.store.getIn(['data', 'curr', name]);
+    }
+    return ret;
   }
 
   getGroupOptions() {
@@ -163,7 +190,31 @@ export class Guest extends PureComponent {
           value={getCurrData('groupname')}
           onChange={this.onChangeGroup}
         />
-
+        <h3>{ __('Current Frequency') }</h3>
+        <FormGroup
+          type="switch"
+          label={__('Frequency')}
+          inputStyle={{
+            width: '199px',
+          }}
+          options={[
+            {
+              value: '2.4G',
+              label: '2.4G',
+            }, {
+              value: '5G',
+              label: '5G',
+            },
+          ]}
+          value={this.state.frequency}
+          onChange={
+            data => this.setState(
+              {
+                frequency: data.value,
+              },
+            )
+          }
+        />
         <h3>{__('Guest Settings') }</h3>
         <FormGroup
           label={__('Enable Guest')}
@@ -249,12 +300,12 @@ export class Guest extends PureComponent {
             value={getCurrData('upstream')}
             {...upstream}
           >
-          <FormInput
-            type="checkbox"
-            value="64"
-            checked={getCurrData('upstream') === '' || getCurrData('upstream') > 0}
-            onChange={this.onUpdate('upstream')}
-          />
+            <FormInput
+              type="checkbox"
+              value="64"
+              checked={getCurrData('upstream') === '' || getCurrData('upstream') > 0}
+              onChange={this.onUpdate('upstream')}
+            />
             {__('limited to') + ' '}
             <FormInput
               type="number"

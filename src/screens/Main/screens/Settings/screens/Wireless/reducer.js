@@ -44,65 +44,69 @@ const defaultState = fromJS({
   },
 });
 
-function transformCountryData(settingData) {
+function transformCountryData(settingData, frequencyValue) {
   let ret;
-
-  ret = settingData.set('country', getCountry(settingData.get('country')));
-
+  let frequencyValuePath;
+  if (frequencyValue === '2.4G') {
+    frequencyValuePath = 'radio2.4G';
+  } else {
+    frequencyValuePath = 'radio5.8G';
+  }
+  console.log('frequencyValuePath', frequencyValuePath);
+  ret = settingData.mergeDeepIn([frequencyValuePath, 'country'], getCountry(settingData.getIn([frequencyValuePath, 'country'])));
   channelsList.forEach((item) => {
-    if (item.country === ret.get('country')) {
-      if (parseInt(ret.get('channel'), 10) > parseInt(item['2.4g'].substr(-2), 10)) {
-        ret = ret.set('channel', '0');
+    if (item.country === ret.getIn([frequencyValuePath, 'country'])) {
+      if (parseInt(ret.getIn([frequencyValuePath, 'channel']), 10) > parseInt(item['2.4g'].substr(-2), 10)) {
+        ret = ret.setIn([frequencyValuePath, 'channel'], '0');
       }
     }
   });
-
   return ret;
 }
 
-function receiveSettings(state, settingData) {
+function receiveSettings(state, settingData, frequencyValue) {
   const ret = state.update('data', data => data.merge(settingData));
   const currData = state.getIn(['data', 'curr']) || Map({});
   let listCurr;
-
   if (!currData.isEmpty()) {
-    listCurr = currData.merge(defaultSettings).merge(ret.getIn(['data', 'list']).find(function (item) {
+    listCurr = currData.merge(ret.getIn(['data', 'list']).find(function (item) {
       return currData.get('groupname') === item.get('groupname');
     }));
   } else {
-    listCurr = currData.merge(defaultSettings).merge(ret.getIn(['data', 'list', 0]));
+    listCurr = currData.merge(ret.getIn(['data', 'list', 0]));
   }
-
-  listCurr = transformCountryData(listCurr);
-
+  listCurr = transformCountryData(listCurr, frequencyValue);
   return ret.setIn(['data', 'curr'], listCurr)
     .set('fetching', false);
 }
 
-function changeGroup(state, groupname) {
-  const ret = state.mergeIn(['data', 'curr'], defaultSettings);
+function changeGroup(state, groupname, frequencyValue) {
+  const ret = state.mergeIn(['data', 'curr', 'radio2.4G'], defaultSettings).mergeIn(['data', 'curr', 'radio5.8G'], defaultSettings);
   let selectGroup = state.getIn(['data', 'list'])
     .find(item => item.get('groupname') === groupname);
-
-  selectGroup = transformCountryData(selectGroup);
-
+  selectGroup = transformCountryData(selectGroup, frequencyValue);
   return ret.mergeIn(['data', 'curr'], selectGroup);
 }
 
+function changeFrequency(state, frequencyValue) {
+  return state;
+}
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'REQEUST_FETCH_WIFI':
       return state.set('fetching', true);
 
     case 'RECEIVE_WIFI':
-      return receiveSettings(state, action.data);
+      return receiveSettings(state, action.data, action.frequencyValue);
 
     case 'CHANGE_WIFI_GROUP':
-      return changeGroup(state, action.name);
+      return changeGroup(state, action.name, action.frequencyValue);
 
     case 'CHANGE_WIFI_SETTINGS':
-      return state.mergeIn(['data', 'curr'], action.data);
+      return state.mergeDeepIn(['data', 'curr'], action.data);
 
+    case 'CHANGE_FREQUENCY':
+      return changeFrequency(state, action.frequencyValue);
     default:
 
   }
