@@ -32,12 +32,23 @@ class Button extends PureComponent {
     super(props);
 
     utils.binds(this, ['onClick']);
+    this.state = {
+      clicked: false,
+    };
   }
 
   onClick(e) {
     // loading 状态不响应点击事件
     if (!this.props.loading && this.props.onClick) {
       this.props.onClick(e);
+      this.setState({
+        clicked: true,
+      });
+      setTimeout(() => {
+        this.setState({
+          clicked: false,
+        });
+      }, 500);
     }
   }
 
@@ -68,6 +79,9 @@ class Button extends PureComponent {
     }
     if (loading) {
       classNames = `${classNames} a-btn--loading`;
+    }
+    if (this.state.clicked) {
+      classNames = `${classNames} a-btn--clicked`;
     }
 
     if (Component === 'button' || Component === 'input') {

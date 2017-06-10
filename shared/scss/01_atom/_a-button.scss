@@ -4,8 +4,19 @@
 //
 // Button
 // --------------------------------------------------
+@keyframes buttonEffect {
+  to {
+    opacity: 0;
+    top: -6px;
+    left: -6px;
+    bottom: -6px;
+    right: -6px;
+    border-width: 6px;
+  }
+}
 
 .a-btn {
+  position: relative;
   display: inline-block;
   padding: .5em 1em;
   font-size: $g-font-size;
@@ -42,6 +53,21 @@
   &.a-btn--loading {
     opacity: .8;
     cursor: not-allowed;
+  }
+  &.a-btn--clicked {
+    &:after {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      bottom: -1px;
+      right: -1px;
+      border-radius: inherit;
+      border: 0 solid $g-brand-primary;
+      opacity: 0.4;
+      animation: buttonEffect .4s;
+      display: block;
+    }
   }
 }
 
