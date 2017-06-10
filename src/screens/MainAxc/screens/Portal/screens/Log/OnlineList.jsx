@@ -12,7 +12,6 @@ let ret;
 let s;
 let subVal;
 const uptimeFilter = utils.filter('connectTime');
-const flowFilter = utils.filter('flowRate');
 const queryFormOptions = fromJS([
   {
     id: 'state',

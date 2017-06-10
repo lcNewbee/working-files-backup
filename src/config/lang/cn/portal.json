@@ -316,6 +316,18 @@
 
   "Item with the same SSID and access point MAC address already exists": "已存在相同 SSID 与 AP MAC 的项",
 
+
+  "Portal Auth Helper": "Portal网络接入认证",
+  "test account": "接入测试账户",
+  "Bring you to the New WLAN Age": "为您打开无线网络新世界",
+  "A302 Han's Innovation Building No.9018 Beihuan Ave,Nanshan District Shenzhen City,China": "深圳市南山区北环大道9018号大族创新大厦A区302",
+  "Hourly Payment": "1小时包时卡",
+  "Monthly Payment": "包月卡",
+  "Quarter Payment": "季度卡",
+  "Annual Payment": "年卡",
+  "100Mb": "100M流量卡",
+  "operator": "操作员",
+
   "Remote Radius Authentication Server": "远程Radius认证服务器",
   "Remote Radius Accounting Server": "远程Radius计费服务器",
   "Remote Radius Server Advanced Settings": "远程Radius服务器高级设置",

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
@@ -11,6 +11,9 @@ import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const propTypes = {
   route: PropTypes.object,
+  store: PropTypes.instanceOf(Map).isRequired,
+  save: PropTypes.func,
+  fetchScreenData: PropTypes.func,
 };
 
 export default class DPISettings extends React.Component {
@@ -23,7 +26,17 @@ export default class DPISettings extends React.Component {
     ]);
   }
   componentDidMount() {
-    this.initFormOptions();
+    this.initFormOptions(this.props);
+  }
+
+  componentWillUpdate(nextProps) {
+    const curScreenId = this.props.store.get('curScreenId');
+    const curEthNumber = this.props.store.getIn([curScreenId, 'data', 'settings', 'ethNumber']);
+    const nextEthNumber = nextProps.store.getIn([curScreenId, 'data', 'settings', 'ethNumber']);
+
+    if (curEthNumber !== nextEthNumber) {
+      this.initFormOptions(nextProps);
+    }
   }
 
   onChangeSettingData(data, val) {
@@ -41,7 +54,10 @@ export default class DPISettings extends React.Component {
     });
   }
 
-  initFormOptions() {
+  initFormOptions(props) {
+    const curScreenId = props.store.get('curScreenId');
+    const curEthNumber = props.store.getIn([curScreenId, 'data', 'settings', 'ethNumber']) || 4;
+
     this.$$formOptions = fromJS([
       {
         id: 'ndpiEnable',
@@ -107,8 +123,8 @@ export default class DPISettings extends React.Component {
       },
     ]);
 
-    if (this.props.app.get('version').indexOf('AXC1000') !== -1) {
-      this.formOptions = this.$$formOptions.delete(-1).delete(-1);
+    if (parseInt(curEthNumber, 10) <= 4) {
+      this.$$formOptions = this.$$formOptions.delete(-1).delete(-1);
     }
   }
 

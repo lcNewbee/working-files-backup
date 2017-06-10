@@ -150,10 +150,11 @@ export default class View extends React.Component {
           $$item => $$item.get('name') !== $$curListItem.get('name'),
         );
       }
-      console.log($$curList.toJS())
+      if (actionType === 'add' && $$curList.find($$item => $$curListItem.get('name') === $$item.get('name'))) {
+        return __('Same %s item already exists', __('name'));
+      }
       if ($$curList.find(
         ($$item) => {
-          console.log($$item.toJS(), $$item.get('mask'));
           return validator.combine.noSameSegment(
             startIp,
             mask,
@@ -166,7 +167,7 @@ export default class View extends React.Component {
           );
         },
       )) {
-        ret = __('Same %s item already exists', __('segment'));
+        return __('Same %s item already exists', __('segment'));
       }
     }
 
