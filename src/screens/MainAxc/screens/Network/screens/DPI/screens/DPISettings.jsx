@@ -11,6 +11,7 @@ import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const propTypes = {
   route: PropTypes.object,
+  app: PropTypes.instanceOf(Map).isRequired,
   store: PropTypes.instanceOf(Map).isRequired,
   save: PropTypes.func,
   fetchScreenData: PropTypes.func,
@@ -31,10 +32,12 @@ export default class DPISettings extends React.Component {
 
   componentWillUpdate(nextProps) {
     const curScreenId = this.props.store.get('curScreenId');
+    const curVersion = this.props.app.get('version');
+    const nextVersion = nextProps.app.get('version');
     const curEthNumber = this.props.store.getIn([curScreenId, 'data', 'settings', 'ethNumber']);
     const nextEthNumber = nextProps.store.getIn([curScreenId, 'data', 'settings', 'ethNumber']);
 
-    if (curEthNumber !== nextEthNumber) {
+    if (curEthNumber !== nextEthNumber || curVersion !== nextVersion) {
       this.initFormOptions(nextProps);
     }
   }
@@ -56,8 +59,15 @@ export default class DPISettings extends React.Component {
 
   initFormOptions(props) {
     const curScreenId = props.store.get('curScreenId');
-    const curEthNumber = props.store.getIn([curScreenId, 'data', 'settings', 'ethNumber']) || 4;
+    let defaultNumber = 4;
+    let curEthNumber = props.store.getIn([curScreenId, 'data', 'settings', 'ethNumber']);
 
+    if (props.app.get('version').indexOf('AXC3000') !== -1) {
+      defaultNumber = 6;
+    }
+    if (!curEthNumber) {
+      curEthNumber = defaultNumber;
+    }
     this.$$formOptions = fromJS([
       {
         id: 'ndpiEnable',

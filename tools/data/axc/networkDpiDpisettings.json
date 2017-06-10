@@ -10,8 +10,7 @@
       "eth1Enable": "0",
       "eth2Enable": "1",
       "eth3Enable": "0",
-      "eth4Enable": "1",
-      "ethNumber": 4
+      "eth4Enable": "1"
     }
   }
 }
