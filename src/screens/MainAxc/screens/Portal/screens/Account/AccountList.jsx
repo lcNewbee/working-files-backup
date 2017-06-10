@@ -86,19 +86,66 @@ const listOptions = fromJS([
     text: __('Expiration'),
     defaultValue: curDate.date,
     noForm: true,
+    render(val, $$data) {
+      const accountType = $$data.get('state');
+      let ret = val;
+
+       // 禁用
+      if (accountType === '0') {
+        ret = '-';
+
+      // 流量
+      } else if (accountType === '4') {
+        ret = __('Limitless');
+
+      // 免费
+      } else if (accountType === '1') {
+        ret = __('Limitless');
+      }
+
+      return ret;
+    },
   }, {
     id: 'time',
     text: __('Time Balance'),
     noForm: true,
-    render(val) {
-      return uptimeFilter.transform(val / 1000);
+    render(val, $$data) {
+      const accountType = $$data.get('state');
+      let ret = uptimeFilter.transform(val / 1000);
+
+      // 禁用
+      if (accountType === '0') {
+        ret = '-';
+
+      // 流量
+      } else if (accountType === '4') {
+        ret = __('Limitless');
+
+      // 免费
+      } else if (accountType === '1') {
+        ret = __('Limitless');
+      }
+
+      return ret;
     },
   }, {
     id: 'octets',
     text: __('Traffic Balance'),
     noForm: true,
-    render(val) {
-      return flowFilter.transform(val);
+    render(val, $$data) {
+      const accountType = $$data.get('state');
+      let ret = flowFilter.transform(val);
+
+       // 禁用
+      if (accountType === '0') {
+        ret = '-';
+
+      // 流量
+      } else if (accountType !== '4') {
+        ret = __('Limitless');
+      }
+
+      return ret;
     },
   }, {
     id: 'password',
