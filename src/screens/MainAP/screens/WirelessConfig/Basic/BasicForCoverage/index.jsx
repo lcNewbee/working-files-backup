@@ -431,9 +431,10 @@ export default class Basic extends React.Component {
     this.props.fetchSettings('goform/get_wl_all')
         .then(() => {
           const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          const curWirelessMode = this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']);
           let newRadioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'wirelessMode'], data.value);
           const securityMode = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList', 0, 'security', 'mode']);
-          if (data.value === 'repeater' && securityMode !== 'wep') {
+          if (curWirelessMode !== data.value || (data.value === 'repeater' && securityMode !== 'wep')) {
             newRadioList = newRadioList.setIn([radioId, 'vapList', 0, 'security', 'mode'], 'none');
           }
           this.props.updateItemSettings({ radioList: newRadioList });
@@ -454,13 +455,13 @@ export default class Basic extends React.Component {
     // const basicSettings = this.props.selfState.get('basicSettings');
     const preSecurity = curData.getIn(['radioList', radioId, 'vapList', '0', 'security']);
     const mode = data.value;
-    const Authentication = preSecurity.get('Authentication') || 'shared';
+    const auth = preSecurity.get('auth') || 'shared';
     const keyLength = preSecurity.get('keyLength') || '64';
     const keyType = preSecurity.get('keyType') || 'Hex';
     // const key = preSecurity.get('key') || '';
     const keyIndex = preSecurity.get('keyIndex') || '1';
     const cipher = preSecurity.get('cipher') || 'aes&tkip';
-    const afterSecurity = preSecurity.set('mode', mode).set('Authentication', Authentication)
+    const afterSecurity = preSecurity.set('mode', mode).set('auth', auth)
                           .set('keyType', keyType).set('keyLength', keyLength)
                           .set('keyIndex', keyIndex)
                           .set('cipher', cipher)
@@ -483,7 +484,7 @@ export default class Basic extends React.Component {
       security: {
         mode: 'none',
         cipher: 'aes&tkip',
-        Authentication: 'open',
+        auth: 'open',
         keyLength: '64',
         keyType: 'Hex',
         keyIndex: '1',
@@ -1704,10 +1705,10 @@ export default class Basic extends React.Component {
                               label={__('Authentication Type')}
                               type="select"
                               options={wepAuthenOptions}
-                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'Authentication'])}
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'auth'])}
                               onChange={(data) => {
                                 const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
-                                                .set('Authentication', data.value);
+                                                .set('auth', data.value);
                                 const radioList = curData.get('radioList')
                                                 .setIn([radioId, 'vapList', '0', 'security'], security);
                                 this.props.updateItemSettings({ radioList });
@@ -2073,7 +2074,7 @@ export default class Basic extends React.Component {
             onChange={(data) => {
               const securDefault = fromJS({
                 cipher: 'aes&tkip',
-                Authentication: 'shared',
+                auth: 'shared',
                 keyType: 'Hex',
                 keyIndex: '1',
               });
@@ -2131,10 +2132,10 @@ export default class Basic extends React.Component {
                   label={__('Authentication Type')}
                   type="select"
                   options={wepAuthenOptions}
-                  value={tableItemForSsid.getIn(['item', 'security', 'Authentication'])}
+                  value={tableItemForSsid.getIn(['item', 'security', 'auth'])}
                   onChange={(data) => {
                     const newItem = tableItemForSsid.get('item')
-                                    .setIn(['security', 'Authentication'], data.value);
+                                    .setIn(['security', 'auth'], data.value);
                     const newItemForSsid = tableItemForSsid.set('item', newItem);
                     this.props.changeTableItemForSsid(newItemForSsid);
                   }}
