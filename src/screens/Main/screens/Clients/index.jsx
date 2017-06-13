@@ -20,10 +20,10 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const clientsTableOptions = fromJS([
   {
     id: 'devicename',
-    text: __('MAC Address') + '/' + __('Name'),
-    render(val, item) {
-      return item.get('devicename') || item.get('mac');
-    },
+    text: __('Name'),
+  }, {
+    id: 'mac',
+    text: __('MAC Address'),
   }, {
     id: 'ip',
     text: __('IP Address'),
@@ -269,10 +269,11 @@ export class Clients extends PureComponent {
     const blockOption = fromJS([
       {
         id: 'devicename',
-        text: __('MAC Address') + '/' + __('Name'),
-        render(val, item) {
-          return item.get('devicename') || item.get('mac');
-        },
+        text: __('Name'),
+      },
+      {
+        id: 'mac',
+        text: __('MAC Address'),
       }, {
         id: 'vendor',
         text: __('Manufacturer'),

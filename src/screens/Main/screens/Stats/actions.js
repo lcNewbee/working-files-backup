@@ -111,7 +111,7 @@ export function deleteOfflineAp(mac) {
     dispatch(appActions.save(urls.deleteOfflineAp, subData))
       .then(function (json) {
         if (json.state && json.state.code === 2000) {
-          dispatch(fetchOfflineAp(5000))
+          dispatch(fetchOfflineAp(5000));
         }
       });
   };

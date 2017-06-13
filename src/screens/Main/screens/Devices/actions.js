@@ -66,7 +66,7 @@ export function fetchDevices() {
     const query = getState().devices.get('query').toJS();
     //  并没有找到edit;
     const isEdit = getState().devices.get('edit');
-
+    const seletedSize = getState().devices.getIn(['actionQuery', 'selectedList']).size;
     window.clearTimeout(refreshTimeout);
 
     dispatch(reqeustFetchDevices());
@@ -78,7 +78,7 @@ export function fetchDevices() {
           dispatch(reciveFetchDevices(json.data));
         }
 
-        if(refreshTime && refreshTime > 0 && !isEdit) {
+        if(refreshTime && refreshTime > 0 && !isEdit && seletedSize === 0) {
           refreshTimeout = window.setTimeout(function() {
             dispatch(fetchDevices())
           }, refreshTime)

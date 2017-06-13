@@ -1,0 +1,9 @@
+{
+  "state": {
+      "code": 2000,
+      "msg": "ok"
+  },
+  "data": {
+    "url": "scripts/vendors.bundle.js"
+  }
+}

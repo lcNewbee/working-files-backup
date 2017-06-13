@@ -80,6 +80,7 @@ class Button extends PureComponent {
     if (loading) {
       classNames = `${classNames} a-btn--loading`;
     }
+
     if (this.state.clicked) {
       classNames = `${classNames} a-btn--clicked`;
     }

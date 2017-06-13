@@ -18,7 +18,7 @@ const paths = {
   php: 'php/',
   pubWebPath: '/',
   pub: 'dist',
-  pubAc: '../win_ac/software/web/',
+  pubAc: '../softac/software/web/',
   pubAxc: '../axc_r1/web/web',
   pubAxcR1: '../axc_r1/web/web',
   pubAxcIndia: '../axc_branch_india/ac/apps/web/web',

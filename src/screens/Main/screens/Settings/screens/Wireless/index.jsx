@@ -29,6 +29,27 @@ const encryptionOptions = [
     label: __('STRONG'),
   },
 ];
+const txPowerOptions = [
+    {
+      value: '3%',
+      label: '3%',
+    }, {
+      value: '6%',
+      label: '6%',
+    }, {
+      value: '12%',
+      label: '12%',
+    }, {
+      value: '25%',
+      label: '25%',
+    }, {
+      value: '50%',
+      label: '50%',
+    }, {
+      value: '100%',
+      label: '100%',
+    },
+];
 const channelBandwidthOptions = fromJS([
   {
     value: '20',
@@ -314,6 +335,22 @@ export class Wireless extends PureComponent {
           id="ssid"
           onChange={this.onUpdateSettings('ssid')}
           {...ssid}
+        />
+        <FormGroup
+          label={__('SSID Isolation')}
+          id="ssidisolate"
+          required
+          type="checkbox"
+          checked={getCurrData('ssidisolate') === '1'}
+          onChange={this.onUpdate('ssidisolate')}
+        />
+        <FormGroup
+          type="select"
+          label={__('Tx Power')}
+          options={txPowerOptions}
+          value={getCurrData('txpower')}
+          id="txpower"
+          onChange={this.onUpdate('txpower')}
         />
         <FormGroup
           type="switch"

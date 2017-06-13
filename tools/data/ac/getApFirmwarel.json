@@ -1,0 +1,36 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "page": {
+      "start": 1,
+      "size": 20,
+      "currPage": 1,
+      "totalPage": 1,
+      "total": 11,
+      "pageCount": 11,
+      "nextPage": -1,
+      "lastPage": 1
+    },
+    "list": [
+      {
+        "id": 1,
+        "model": "ASW200",
+        "softVersion": "v1.2.3",
+        "fileName": "we.jpg",
+        "uploadPath": "/etc/ap_ver/we.jpg",
+        "active": 0
+      },
+      {
+        "id": 212,
+        "model": "p2p2000",
+        "softVersion": "v1.2.3",
+        "fileName": "we.jpg",
+        "uploadPath": "/etc/ap_ver/we.jpg",
+        "active": 1
+      }
+    ]
+  }
+}

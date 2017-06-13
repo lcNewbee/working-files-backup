@@ -2,7 +2,7 @@ import React from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { List, fromJS } from 'immutable';
-
+import Button from 'shared/components/Button/Button';
 // components
 import {
   Table, Switchs, Icon, Modal, EchartReact,
@@ -236,6 +236,7 @@ export class Status extends React.PureComponent {
       'getClientsListOption',
       'getApListOption',
       'getOfflineApListOption',
+      'onDeleteOfflineAp',
       'getClientNumberChartOption',
       'getApNumberChartOption',
       'getClientStatisticsChartOption',
@@ -286,6 +287,19 @@ export class Status extends React.PureComponent {
     this.props.fetchOfflineAp();
   }
 
+  onDeleteOfflineAp(mac) {
+    const comfirmText = __('Are you sure delete offline AP: %s?', mac);
+
+    this.props.createModal({
+      id: 'status',
+      mac,
+      role: 'confirm',
+      text: comfirmText,
+      apply: function () {
+        this.props.deleteOfflineAp(mac);
+      }.bind(this),
+    });
+  }
   createTimeTypeClass(type) {
     let ret = 'btn';
 
@@ -301,9 +315,6 @@ export class Status extends React.PureComponent {
       {
         id: 'hostname',
         text: __('Name'),
-        render(val, item) {
-          return val || item.get('macaddress');
-        },
       }, {
         id: 'ipaddress',
         text: __('IP Address'),
@@ -333,9 +344,6 @@ export class Status extends React.PureComponent {
       {
         id: 'devicename',
         text: __('Name'),
-        render(val, item) {
-          return val || item.get('macaddress');
-        },
       }, {
         id: 'ipaddress',
         text: __('IP Address'),
@@ -360,9 +368,9 @@ export class Status extends React.PureComponent {
       {
         id: 'devicename',
         text: __('Name'),
-        render(val, item) {
-          return val || item.get('mac');
-        },
+      }, {
+        id: 'mac',
+        text: __('MAC Address'),
       }, {
         id: 'model',
         text: __('Model'),
@@ -380,8 +388,21 @@ export class Status extends React.PureComponent {
           }
           return ret;
         },
-      },
-    ]);
+      }, {
+        id: 'op',
+        text: __('Actions'),
+        render: function (val, item) {
+          return (
+            <Button
+              id={item.get('id')}
+              icon="trash"
+              text={__('Delete')}
+              onClick={this.onDeleteOfflineAp.bind(this, item.get('mac'))}
+              size="sm"
+            />
+          );
+        }.bind(this),
+      }]);
 
     return ret;
   }

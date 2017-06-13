@@ -24,17 +24,8 @@ const msg = {
   devicesNum: __('Devices Number'),
 };
 
-const validOptions = Map({
-  groupname: validator({
-    rules: 'required',
-  }),
-  remarks: validator({
-    rules: 'required',
-  }),
-});
-
 // 原生的 react 页面
-export class GroupSettings extends PureComponent {
+export class ApMaintenance extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -50,7 +41,7 @@ export class GroupSettings extends PureComponent {
       'createLookFunc',
       'onCloseEditDialog',
 
-      'getGroupTableOptions',
+      'getTableOptions',
       'getDevicesTableOptions',
     ]);
   }
@@ -167,114 +158,80 @@ export class GroupSettings extends PureComponent {
     this.props.removeEditDeviceGroup();
   }
 
-  getGroupTableOptions() {
+  getTableOptions() {
     let ret = fromJS([
       {
-        id: 'groupname',
-        text: msg.groupname,
-        render (val) {
-          if (val === 'Default') {
-            val = __('Ungrouped Devices');
-          }
-          return val;
+        id: 'model',
+        text: __('AP Model'),
+        width: '120px',
+        formProps: {
+          type: 'select',
+          required: true,
+          notEditable: true,
         },
       }, {
-        id: 'num',
-        text: msg.devicesNum,
-    }, {
-      id: 'remark',
-      text: msg.remarks,
-    }, {
-      id: 'op',
-      text: msg.action,
-      width: 240,
-      render: function (val, item) {
-        if (item.get('groupname') === 'Default') {
-          return (<Button
-            icon="eye"
-            size="sm"
-            text={msg.look}
-            onClick={this.createLookFunc('Default')}
-          />);
-        }
-
-        return (
-          <div className="action-btns">
-            <Button
-              icon="eye"
-              size="sm"
-              text={msg.look}
-              onClick={this.createLookFunc(item.get('groupname'))}
-            />
-            <Button
-              onClick={this.onEditGroup.bind(this, item.get('groupname'))}
-              icon="edit"
-              text={msg.edit}
-              size="sm"
-            />
-
-            <Button
-              id={item.get('id')}
-              icon="trash"
-              onClick={this.onDeleteGroup.bind(this, item.get('groupname'))}
-              text={msg.delete}
-              size="sm"
-            />
-
-          </div>
-        );
-      }.bind(this),
-    }]);
-    const noControl = this.props.app.get('noControl');
-
-    if (noControl) {
-      ret = ret.delete(-1);
-    }
-
-    return ret;
-  }
-
-  getDevicesTableOptions() {
-    let ret = fromJS([{
-      id: 'devicename',
-      text: __('Name'),
-    }, {
-      id: 'mac',
-      text: __('MAC Address'),
-    }, {
-        id: 'ip',
-        text: __('IP Address'),
+        id: 'softVersion',
+        text: __('Firmware Version'),
+        defaultValue: '',
+        formProps: {
+          type: 'text',
+          maxLength: '31',
+          required: true,
+          notEditable: true,
+          validator: validator({
+            rules: 'utf8Len:[1, 31]',
+          }),
+        },
       }, {
-        id: 'status',
-        text: __('Status'),
-        filter: 'translate',
+        id: 'fileName',
+        text: __('Firmware File'),
+        defaultValue: '',
+        formProps: {
+          type: 'file',
+          required: true,
+          accept: '.bin',
+          validator: validator({}),
+        },
       }, {
-        id: 'groupname',
-        text: __('Current Group'),
-        render (val) {
-          if (val === 'Default') {
-            val = __('Ungrouped Devices');
-          }
-          return val;
+        id: 'uploadPath',
+        text: __('Firmware File'),
+        defaultValue: '',
+        noTable: true,
+        formProps: {
+          type: 'hidden',
+        },
+      }, {
+        id: 'active',
+        text: __('Active Status'),
+        actionName: 'active',
+        type: 'switch',
+        width: '100px',
+        formProps: {
+          type: 'checkbox',
+          value: 1,
         },
       }, {
         id: 'op',
-        text: __('Select'),
-        width: 50,
+        text: msg.action,
+        width: 240,
         render: function (val, item) {
-          let deviceMac;
-          let selectedDevices = this.props.edit.get('devices');
-
-          deviceMac = item.get('mac');
-
           return (
             <div className="action-btns">
-              <input
-                type="checkbox"
-                value={deviceMac}
-                onChange={this.onSelectDevice}
-                checked={selectedDevices.indexOf(deviceMac) !== -1}
+              <Button
+                onClick={this.onEditGroup.bind(this, item.get('model'))}
+                icon="edit"
+                text={msg.edit}
+                size="sm"
               />
+
+              <Button
+                id={item.get('id')}
+                icon="trash"
+                onClick={this.onDeleteGroup.bind(this, item.get('model'))}
+                text={msg.delete}
+                size="sm"
+              />
+
             </div>
           );
         }.bind(this),
@@ -284,12 +241,13 @@ export class GroupSettings extends PureComponent {
     if (noControl) {
       ret = ret.delete(-1);
     }
+
     return ret;
   }
 
   render() {
     const { groupname, remarks } = this.props.validateOption;
-    const groupTableOptions = this.getGroupTableOptions();
+    const tableOptions = this.getTableOptions();
     const devicesTableOptions = this.getDevicesTableOptions();
     const isLook = this.props.actionType === 'look';
     const noControl = this.props.app.get('noControl');
@@ -309,7 +267,6 @@ export class GroupSettings extends PureComponent {
 
     return (
       <div>
-        <h3>{__('Group List')}</h3>
         <div style={{ padding: '8px 0', overflow: 'auto' }}>
           {
             noControl ? null : (
@@ -326,7 +283,7 @@ export class GroupSettings extends PureComponent {
         <Table
           className="table"
           loading={this.props.fetching}
-          options={fromJS(groupTableOptions)}
+          options={fromJS(tableOptions)}
           list={this.props.data.get('list')}
         />
 
@@ -408,7 +365,7 @@ export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
   validator.mergeProps(validOptions),
-)(GroupSettings);
+)(ApMaintenance);
 
 export const settings = reducer;
 

@@ -229,7 +229,10 @@ export class Device extends PureComponent {
     let i;
     const macs = [];
     for (i = 0; i < selectedListQuantity; i++) {
-      macs[i] = this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'mac']);
+      if (this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'newest']) === '0') {
+        macs[i] = this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'mac']);
+        console.log('循环里的mac', macs[i]);
+      }
     }
     const data = {
       action: 'upgrade',
@@ -366,12 +369,10 @@ export class Device extends PureComponent {
       ret = fromJS([
         {
           id: 'devicename',
-          text: __('MAC Address') + '/' + __('Name'),
-          render(val, item) {
-            const deviceMac = item.get('mac');
-
-            return val || deviceMac;
-          },
+          text: __('Name'),
+        }, {
+          id: 'mac',
+          text: __('MAC Address'),
         }, {
           id: 'model',
           text: __('Model'),
@@ -419,16 +420,36 @@ export class Device extends PureComponent {
         },*/
         {
           id: 'devicename',
-          text: __('MAC Address') + '/' + __('Name'),
+          text: __('Name'),
           render: function (val, item) {
             const deviceMac = item.get('mac');
-            const name = item.get('devicename') || deviceMac;
+            const name = item.get('devicename');
+            const deviceStatus = item.get('status');
+            if (deviceStatus === 'disable' || noControl) {
+              return <span>{name}</span>;
+            }
+            return (
+              <span
+                className="link-text"
+                onClick={this.showEditNetwork(deviceMac)}
+                value={deviceMac}
+                title={__('MAC Address') + ': ' + deviceMac}
+              >
+                {name}
+              </span>
+            );
+          }.bind(this),
+        }, {
+          id: 'mac',
+          text: __('MAC Address'),
+          render: function (val, item) {
+            const deviceMac = item.get('mac');
+            const name = deviceMac;
             const deviceStatus = item.get('status');
 
             if (deviceStatus === 'disable' || noControl) {
               return <span>{name}</span>;
             }
-
             return (
               <span
                 className="link-text"

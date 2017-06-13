@@ -7,12 +7,27 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 
 import FormGroup from 'shared/components/Form/FormGroup';
-import SaveButton from 'shared/components/Button/SaveButton';
+import Icon from 'shared/components/Icon';
 import FileUpload from 'shared/components/FileUpload';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { getActionable } from 'shared/axc';
 
+function downloadFile(url) {
+  let elemIF = document.getElementById('dowloadIframe');
+
+  if (elemIF) {
+    document.body.removeChild(elemIF);
+  }
+  try {
+    elemIF = document.createElement('iframe');
+    elemIF.src = url;
+    elemIF.style.display = 'none';
+    document.body.appendChild(elemIF);
+  } catch (e) {}
+
+  window.open(url);
+}
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   route: PropTypes.object,
@@ -39,20 +54,41 @@ export default class View extends React.PureComponent {
 
     this.state = {
       isRestoring: false,
+      downloadUrl: '',
     };
     this.actionable = getActionable(props);
   }
 
+  componentWillMount() {
+    this.props.save('/goform/setBackup')
+        .then((json) => {
+          const backupUrl = json && json.data && json.data.url;
 
-  onBackup() {
-    if (this.actionable) {
-      window.location.href = '/goform/setBackup';
-    }
+          if (backupUrl) {
+            this.setState({
+              downloadUrl: backupUrl,
+            });
+          }
+        });
   }
+
+
+  // onBackup() {
+  //   if (this.actionable) {
+  //     this.props.save('/goform/setBackup')
+  //       .then((json) => {
+  //         const backupUrl = json && json.data && json.data.url;
+
+  //         if (backupUrl) {
+  //           downloadFile(backupUrl);
+  //         }
+  //       });
+  //   }
+  // }
 
   onRestore() {
     if (this.actionable) {
-      return this.props.save('/goform/getRestore');
+      this.props.save('/goform/getRestore');
     }
   }
 
@@ -114,13 +150,20 @@ export default class View extends React.PureComponent {
           <fieldset className="o-form__fieldset">
             <legend className="o-form__legend">{__('Configuration')}</legend>
             <FormGroup label={__('Backup Configuration')}>
-              <SaveButton
-                type="button"
-                icon="download"
-                text={__('')}
-                onClick={this.onBackup}
-                disabled={!this.actionable}
-              />
+              {
+                this.state.downloadUrl ? (
+                  <a
+                    href={this.state.downloadUrl}
+                    className="a-btn a-btn--primary a-btn--no-text"
+                    download
+                  >
+                    <Icon
+                      name="download"
+                    />
+                  </a>
+                ) : null
+              }
+
               <span className="help">
                 {
                   configUpdateAt ? `${__('Latest Configuration:')} ${moment.unix(configUpdateAt).format('YYYY-MM-DD HH:mm')}` : ''
