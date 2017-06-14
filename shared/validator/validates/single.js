@@ -213,6 +213,14 @@ var vaildate = {
     }
   },
 
+  phone: function (str) {
+    var rel = /(^[0-9]{3,4}-[0-9]{3,8}$)|(^[0-9]{3,8}$)|(^[0-9]{3,4}[0-9]{3,8}$)|(^0{0,1}1[0-9]{10}$)/;
+
+    if (!rel.test(str)) {
+      return __("Please input a valid valid phone number");
+    }
+  },
+
   email: function (str) {
     var rel = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!rel.test(str)) {

@@ -109,6 +109,13 @@ export function fetchScreenData(option) {
       }
     }
 
+    // 如果 Url 路径不存在，返回空 Promise
+    if (!myUrl) {
+      return new Promise((resolve) => {
+        resolve('Fetch url is need');
+      });
+    }
+
     return dispatch(appActions.fetch(myUrl, query, ajaxOption))
       .then((json) => {
         const curPage = json && json.data && json.data.page;
@@ -256,6 +263,13 @@ export function onListAction(option) {
       delete subData.groupid;
     }
 
+    // 如果 Url 路径不存在，返回空 Promise
+    if (!myUrl) {
+      return new Promise((resolve) => {
+        resolve('List action url is need');
+      });
+    }
+
     return dispatch(appActions.save(myUrl, subData, ajaxOption))
       .then((json) => {
         const ret = json;
@@ -346,6 +360,13 @@ export function saveScreenSettings(option) {
 
     if ($$curQuery.get('groupid') !== undefined) {
       $$subData = $$subData.set('groupid', $$curQuery.get('groupid'));
+    }
+
+    // 如果 Url 路径不存在，返回空 Promise
+    if (!saveUrl) {
+      return new Promise((resolve) => {
+        resolve('Settings url is need');
+      });
     }
 
     return dispatch(
