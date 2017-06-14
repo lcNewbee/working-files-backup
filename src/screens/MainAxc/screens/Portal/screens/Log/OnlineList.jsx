@@ -19,7 +19,7 @@ const queryFormOptions = fromJS([
     label: __('Acc Type'),
     options: [
       {
-        value: '-1',
+        value: '-100',
         label: __('ALL'),
       }, {
         value: '0',
@@ -49,7 +49,7 @@ const queryFormOptions = fromJS([
     label: __('Authentication Types'),
     options: [
       {
-        value: '-1',
+        value: '-100',
         label: __('ALL'),
       }, {
         value: '0',
@@ -120,7 +120,9 @@ const listOptions = fromJS([
       required: true,
     },
     render(val) {
-      return uptimeFilter.transform(val * 60);
+      if (val < 1) return '0m';
+      const timeStr = uptimeFilter.transform(val * 60);
+      return timeStr.replace(/0s/, '');
     },
   }, {
     id: 'state',
@@ -310,7 +312,7 @@ export default class OpenPortalBase extends React.Component {
   }
 
   componentWillMount() {
-    this.props.changeScreenQuery({ state: '-1', authType: '-1' });
+    this.props.changeScreenQuery({ state: '-100', authType: '-100' });
   }
 
   onAction(no, type) {

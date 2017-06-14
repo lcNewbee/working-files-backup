@@ -48,7 +48,7 @@ const queryFormOptions = fromJS([
     label: __('Acc Type'),
     options: [
       {
-        value: '-1',
+        value: '-100',
         label: __('ALL'),
       }, {
         value: '0',
@@ -78,7 +78,7 @@ const queryFormOptions = fromJS([
     label: __('Voucher Type'),
     options: [
       {
-        value: '-1',
+        value: '-100',
         label: __('ALL'),
       }, {
         value: '0',
@@ -407,8 +407,8 @@ export default class View extends React.Component {
 
   componentWillMount() {
     this.props.changeScreenQuery({
-      payType: '-1',
-      categoryType: '-1',
+      payType: '-100',
+      categoryType: '-100',
     });
     getCardCategoryName()
       .then((data) => {

@@ -15,7 +15,7 @@ const queryFormOptions = fromJS([
     label: __('Voucher Type'),
     options: [
       {
-        value: '-1',
+        value: '-100',
         label: __('ALL'),
       }, {
         value: '0',
@@ -249,7 +249,7 @@ const defaultProps = {};
 export default class View extends React.Component {
 
   componentWillMount() {
-    this.props.changeScreenQuery({ state: '-1' });
+    this.props.changeScreenQuery({ state: '-100' });
   }
 
   render() {

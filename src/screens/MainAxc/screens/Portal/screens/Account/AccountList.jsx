@@ -52,7 +52,7 @@ const queryFormOptions = fromJS([
     label: __('Account Type'),
     options: [
       {
-        value: '-1',
+        value: '-100',
         label: __('ALL'),
       },
       {
@@ -109,7 +109,7 @@ const listOptions = fromJS([
     id: 'time',
     text: __('Time Balance'),
     noForm: true,
-    render(val, $$data) {
+     render(val, $$data) {
       const accountType = $$data.get('state');
       let ret = uptimeFilter.transform(val / 1000);
 
@@ -500,10 +500,18 @@ export const advancedSetting = fromJS([
     label: __('Phone'),
     noTable: true,
     type: 'text',
-    maxLength: '19',
+    maxLength: '18',
     validator: validator({
       rules: 'utf8Len:[1,18]',
     }),
+    onChange: (data) => {
+      const phoneNumber = data.value;
+      const lastChar = phoneNumber.slice(-1);
+      if (/[0-9-]/.test(lastChar)) {
+        return data;
+      }
+      return Object.assign({}, data, { value: phoneNumber.slice(0, -1) });
+    },
   }, {
     id: 'address',
     label: __('Address'),
@@ -775,7 +783,7 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
-    this.props.changeScreenQuery({ state: '-1' });
+    this.props.changeScreenQuery({ state: '-100' });
     getCardCategoryName()
       .then((data) => {
         this.setState({
