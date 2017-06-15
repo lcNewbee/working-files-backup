@@ -17,10 +17,9 @@ const listOptions = fromJS([
     text: __('Bas IP'),
     defaultValue: '',
     width: '120px',
-    noForm: true,
     noTable: true,
     formProps: {
-      type: 'text',
+      type: 'hidden',
       required: true,
       validator: validator({
         rules: 'ip',
@@ -66,11 +65,10 @@ const listOptions = fromJS([
     id: 'domain',
     text: __('Domain'),
     noTable: true,
-    noForm: true,
     formProps: {
       noAdd: true,
       notEditable: true,
-      type: 'text',
+      type: 'hidden',
       maxLength: '129',
       required: true,
       validator: validator({
@@ -82,14 +80,13 @@ const listOptions = fromJS([
     text: __('Out Time'),
     help: __('Second'),
     noTable: true,
-    noForm: true,
     formProps: {
       notEditable: true,
       help: __('Second'),
       noAdd: true,
       min: '0',
       max: '99999999',
-      type: 'number',
+      type: 'hidden',
       validator: validator({
         rules: 'num:[0,999999999]',
       }),
@@ -109,6 +106,21 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[1, 128]',
       }),
+    },
+  }, {
+    id: 'qrcode',
+    text: __('QR Code'),
+    formProps: {
+      type: 'file',
+      name: 'qrcode',
+      accept: '.jpg, .png, .gif',
+    },
+  },
+  {
+    id: 'id',
+    text: __('ID'),
+    formProps: {
+      type: 'hidden',
     },
   },
 ]);
@@ -163,6 +175,10 @@ export default class View extends React.Component {
         }}
       >
         <FormContainer
+          id="weixinForm"
+          action="goform/portal/access/weixin"
+          method="POST"
+          component="form"
           options={$$formOptions}
           data={$$formData}
           onChangeData={($$data) => {
@@ -176,11 +192,12 @@ export default class View extends React.Component {
             this.props.validateAll()
               .then(($$msg) => {
                 if ($$msg.isEmpty()) {
-                  this.props.onListAction();
+                  this.props.saveFile('goform/portal/access/weixin', document.getElementById('weixinForm'));
                 }
               });
           }}
           hasSaveButton
+          hasFile
         />
       </AppScreen>
     );
