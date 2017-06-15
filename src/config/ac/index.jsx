@@ -63,8 +63,8 @@ const sGuest = require('../../screens/Main/screens/Settings/screens/Guest');
 const sVoip = require('../../screens/Main/screens/Settings/screens/Voip');
 const sMode = require('../../screens/Main/screens/Settings/screens/Mode');
 const sSystem = require('../../screens/Main/screens/Settings/screens/System');
-const sAPMaintenance = require('../../screens/Main/screens/Settings/screens/AP');
 const sAdmin = require('../../screens/Main/screens/Settings/screens/Admin');
+const sAPMaintenance = require('../../screens/Main/screens/Settings/screens/AP');
 
 const routes = [
   {
@@ -159,17 +159,11 @@ const routes = [
             routes: [
               {
                 id: 'systemSetting',
-                path: '/main/settings/system',
-                formUrl: 'goform/system',
-                text: __('System'),
+                path: '/main/system/setting',
+                text: __('Settings'),
                 component: sSystem.Screen,
-              }, {
-                id: 'apMaintenance',
-                path: '/main/settings/apMaintenance',
-                formUrl: '/goform/getApFirmware',
-                text: __('AP Maintenance'),
-                component: sAPMaintenance.Screen,
-              }, {
+              },
+              {
                 id: 'password',
                 path: '/main/system/admin',
                 text: __('Admin'),

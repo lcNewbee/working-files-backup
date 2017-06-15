@@ -59,7 +59,7 @@ const customModalOptions = fromJS([
 const listOptions = fromJS([
   {
     id: 'model',
-    label: __('AP Model'),
+    text: __('AP Model'),
     width: '120px',
     formProps: {
       type: 'select',
@@ -67,8 +67,8 @@ const listOptions = fromJS([
       notEditable: true,
     },
   }, {
-    id: 'subversion',
-    label: __('Firmware Version'),
+    id: 'softVersion',
+    text: __('Firmware Version'),
     defaultValue: '',
     formProps: {
       type: 'text',
@@ -80,8 +80,8 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'fm_name',
-    label: __('Firmware File'),
+    id: 'fileName',
+    text: __('Firmware File'),
     defaultValue: '',
     formProps: {
       type: 'file',
@@ -90,8 +90,8 @@ const listOptions = fromJS([
       validator: validator({}),
     },
   }, {
-    id: 'upd_path',
-    label: __('Firmware File'),
+    id: 'uploadPath',
+    text: __('Firmware File'),
     defaultValue: '',
     noTable: true,
     formProps: {
@@ -99,11 +99,12 @@ const listOptions = fromJS([
     },
   }, {
     id: 'active',
-    label: __('Active Status'),
+    text: __('Active Status'),
     actionName: 'active',
-    width: '100px',
     type: 'switch',
+    width: '100px',
     formProps: {
+      type: 'checkbox',
       value: 1,
     },
     // onClick: ($$data) => {
@@ -121,7 +122,7 @@ const listOptions = fromJS([
     // },
   }, {
     id: '__actions__',
-    label: __('Actions'),
+    text: __('Actions'),
     width: '100px',
     noForm: true,
   },
@@ -133,11 +134,9 @@ const propTypes = {
   changeScreenQuery: PropTypes.func,
   fetchScreenData: PropTypes.func,
   createModal: PropTypes.func,
-  saveFile: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   save: PropTypes.func.isRequired,
   fetch: PropTypes.func.isRequired,
-  changeScreenActionQuery: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -149,18 +148,10 @@ export default class View extends React.Component {
       'onBeforeSave',
       'renderCustomModal',
       'onAddSave',
-      'onEditSave',
     ]);
     this.state = {
       updateModel: false,
     };
-    this.editCustomModalOptions = customModalOptions.mergeIn(
-      [0], {
-        isLoading: true,
-        placeholder: __('Loading'),
-        options: [],
-      },
-    );
     this.editCustomModalOptions = customModalOptions.mergeIn(
       [0], {
         isLoading: true,
@@ -177,13 +168,14 @@ export default class View extends React.Component {
     let ret;
 
     if (actionType === 'add') {
-      ret = this.props.save('/goform/getApFirmware', $$actionQuery.merge($$curListItem).toJS())
+      ret = this.props.save('/goform/getApFirmwarel', $$actionQuery.merge($$curListItem).toJS())
         .then((json) => {
           const state = json && json.state;
           let newRet;
           if (state.code === 4000) {
             newRet = __("There's no active version of the model,it should be activated!");
           }
+
           return newRet;
         });
     }
@@ -254,13 +246,6 @@ export default class View extends React.Component {
             options,
           },
         );
-        this.editCustomModalOptions = customModalOptions.mergeIn(
-          [0], {
-            isLoading: false,
-            placeholder: undefined,
-            options,
-          },
-        );
       },
     );
   }
@@ -290,11 +275,23 @@ export default class View extends React.Component {
     if (isAdd) {
       return (
         <FormContainer
-          id="modalForm"
-          component="form"
-          action="/goform/addApFirmware"
-          method="POST"
-          options={this.editCustomModalOptions}
+          id="add"
+          options={this.myEditFormOptions}
+          data={store.getIn([route.id, 'curListItem'])}
+          onChangeData={this.props.updateCurEditListItem}
+          onSave={() => this.onAddSave()}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          isSaving={app.get('saving')}
+          savedText="ssss"
+          hasSaveButton
+        />
+      );
+    } else if (isDelete) {
+      return (
+        <FormContainer
+          id="delete"
+          options={this.myEditFormOptions}
           data={store.getIn([route.id, 'curListItem'])}
           onChangeData={this.props.updateCurEditListItem}
           onSave={() => this.onAddSave()}
@@ -306,6 +303,7 @@ export default class View extends React.Component {
         />
       );
     }
+
     return (
       <FormContainer
         id="modalForm"
@@ -340,19 +338,6 @@ export default class View extends React.Component {
             icon="edit"
             style={{
               marginRight: '10px',
-            }}
-            onClick={() => {
-              this.props.changeScreenActionQuery({
-                action: 'edit',
-                myTitle: __('Edit Message'),
-              });
-              this.props.updateCurEditListItem({
-                model: $$data.get('model'),
-                subversion: $$data.get('subversion'),
-                fm_name: $$data.get('fm_name'),
-                upd_path: $$data.get('upd_path'),
-                active: $$data.get('active'),
-              });
             }}
           />
           <Button
@@ -394,10 +379,6 @@ export default class View extends React.Component {
           key="addActionButton"
           icon="plus"
           theme="primary"
-          onClick={() => this.props.changeScreenActionQuery({
-            action: 'add',
-            myTitle: __('Add Message'),
-          })}
         />
         <Button
           text={__('Delete')}
@@ -432,7 +413,6 @@ export default class View extends React.Component {
         editFormOption={{
           hasFile: true,
         }}
-        listKey="allKeys"
         modalChildren={this.renderCustomModal()}
         actionBarChildren={listActionBarChildren}
         deleteable={false}

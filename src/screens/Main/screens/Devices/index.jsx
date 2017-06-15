@@ -202,11 +202,23 @@ export class Device extends PureComponent {
   }
 
   onMultiUpgradeDevice() {
-    const warningMsgText = __('PLease choose devices to upgrade!');
-    const selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
-    const confirmMsgText = __('Upgrade need reboot Device, are you sure upgrade device of the %s item?', selectedListIndex);
-    const selectedListQuantity = selectedListIndex.size;
-    if (selectedListQuantity === 0) {
+    const warningMsgText = __('Please choose devices to %s!', __('upgrade'));
+    const $$selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
+    const selectedListSize = $$selectedListIndex.size;
+    const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __('Upgrade'), __('upgrade'), selectedListSize);
+    const macs = [];
+    const data = {
+      action: 'upgrade',
+      macs,
+    };
+    $$selectedListIndex.forEach((index) => {
+      // 不是最新版本才需要升级
+      if (this.props.store.getIn(['data', 'list', index, 'newest']) === '0') {
+        macs.push(this.props.store.getIn(['data', 'list', index, 'mac']));
+      }
+    });
+
+    if (selectedListSize === 0) {
       this.props.createModal({
         id: 'settings',
         role: 'confirm',
@@ -218,11 +230,7 @@ export class Device extends PureComponent {
         role: 'confirm',
         text: confirmMsgText,
         apply: () => {
-          selectedListIndex.forEach((item) => {
-            if (this.props.store.getIn(['data', 'list', item, 'newest']) === '0') {
-              this.handleAction(this.props.store.getIn(['data', 'list', item, 'mac']), 'upgrade');
-            }
-          });
+          this.props.saveDevicesAction(data);
         },
       });
     }
@@ -598,24 +606,20 @@ export class Device extends PureComponent {
           />
 
         </div>
-        {
-          devicetype !== '4' ? (
-            <div className="m-action-bar">
-              <Button
-                text={__('Locate')}
-                size="sm"
-                icon="location-arrow"
-                onClick={this.onMultiLocateDevice}
-              />
-              <Button
-                text={__('Upgrade')}
-                size="sm"
-                icon="level-up"
-                onClick={this.onMultiUpgradeDevice}
-              />
-            </div>
-          ) : null
-        }
+        <div className="m-action-bar">
+          <Button
+            text={__('Locate')}
+            size="sm"
+            icon="location-arrow"
+            onClick={this.onMultiLocateDevice}
+          />
+          <Button
+            text={__('Upgrade')}
+            size="sm"
+            icon="level-up"
+            onClick={this.onMultiUpgradeDevice}
+          />
+        </div>
         <Table
           className="table"
           loading={this.props.store.get('fetching')}

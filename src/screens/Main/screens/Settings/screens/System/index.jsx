@@ -71,7 +71,7 @@ export default class View extends React.PureComponent {
 
   onRestore() {
     if (this.actionable) {
-      this.props.save('/goform/getRestore');
+      this.props.fetch('/goform/getRestore');
     }
   }
 
