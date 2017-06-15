@@ -179,6 +179,14 @@ const listOptions = fromJS([
     id: 'auths',
     formProps: {
       type: 'hidden',
+      initValue($$data) {
+        let ret = $$data.get('authentication');
+
+        if (!ret) {
+          ret = idToAuthMap[$$data.get('id')] || '-100';
+        }
+        return ret;
+      },
     },
   },
   {
