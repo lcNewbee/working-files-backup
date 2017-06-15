@@ -203,22 +203,22 @@ export class Device extends PureComponent {
 
   onMultiUpgradeDevice() {
     const warningMsgText = __('PLease choose devices to upgrade!');
-    const selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
-    const confirmMsgText = __('Upgrade need reboot Device, are you sure upgrade device of the %s item?', selectedListIndex);
-    const selectedListIndexArray = selectedListIndex.toJS();
-    const selectedListQuantity = selectedListIndex.size;
-    let i;
+    const $$selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
+    const selectedListSize = $$selectedListIndex.size;
+    const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __('Upgrade'), __('upgrade'), selectedListSize);
     const macs = [];
-    for (i = 0; i < selectedListQuantity; i++) {
-      if (this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'newest']) === '0') {
-        macs[i] = this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'mac']);
-      }
-    }
     const data = {
       action: 'upgrade',
       macs,
     };
-    if (selectedListQuantity === 0) {
+    $$selectedListIndex.forEach((index) => {
+      // 不是最新版本才需要升级
+      if (this.props.store.getIn(['data', 'list', index, 'newest']) === '0') {
+        macs.push(this.props.store.getIn(['data', 'list', index, 'mac']));
+      }
+    });
+
+    if (selectedListSize === 0) {
       this.props.createModal({
         id: 'settings',
         role: 'confirm',
@@ -238,20 +238,19 @@ export class Device extends PureComponent {
 
   onMultiLocateDevice() {
     const warningMsgText = __('PLease choose devices to locate!');
-    const selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
-    const confirmMsgText = __(' are you sure to locate device of the %s item?', selectedListIndex);
-    const selectedListIndexArray = selectedListIndex.toJS();
-    const selectedListQuantity = selectedListIndex.size;
-    let i;
+    const $$selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
+    const selectedListSize = $$selectedListIndex.size;
+    const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __('Locate'), __('locate'), selectedListSize);
     const macs = [];
-    for (i = 0; i < selectedListQuantity; i++) {
-      macs[i] = this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'mac']);
-    }
     const data = {
       action: 'locate',
       macs,
     };
-    if (selectedListQuantity === 0) {
+
+    $$selectedListIndex.forEach((index) => {
+      macs.push(this.props.store.getIn(['data', 'list', index, 'mac']));
+    });
+    if (selectedListSize === 0) {
       this.props.createModal({
         id: 'settings',
         role: 'confirm',

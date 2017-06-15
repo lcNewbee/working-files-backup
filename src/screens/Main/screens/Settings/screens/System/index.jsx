@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, List } from 'immutable';
+import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 
@@ -13,27 +13,10 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { getActionable } from 'shared/axc';
 
-function downloadFile(url) {
-  let elemIF = document.getElementById('dowloadIframe');
-
-  if (elemIF) {
-    document.body.removeChild(elemIF);
-  }
-  try {
-    elemIF = document.createElement('iframe');
-    elemIF.src = url;
-    elemIF.style.display = 'none';
-    document.body.appendChild(elemIF);
-  } catch (e) {}
-
-  window.open(url);
-}
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
-  save: PropTypes.func,
+  store: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
-  fetchScreenData: PropTypes.func,
+  changeModalState: PropTypes.func,
   createModal: PropTypes.func,
   closeModal: PropTypes.func,
   changeLoginStatus: PropTypes.func,
@@ -59,8 +42,8 @@ export default class View extends React.PureComponent {
     this.actionable = getActionable(props);
   }
 
-  componentWillMount() {
-    this.props.save('/goform/setBackup')
+  componentDidMount() {
+    this.props.fetch('/goform/setBackup')
         .then((json) => {
           const backupUrl = json && json.data && json.data.url;
 
@@ -88,7 +71,7 @@ export default class View extends React.PureComponent {
 
   onRestore() {
     if (this.actionable) {
-      this.props.save('/goform/getRestore');
+      this.props.fetch('/goform/getRestore');
     }
   }
 
@@ -126,7 +109,27 @@ export default class View extends React.PureComponent {
       });
     }
   }
+  checkSaveResult(isFirst) {
+    let timeoutTime = 5000;
 
+    if (!isFirst) {
+      this.props.fetch('goform/getAcInfo')
+        .then((json) => {
+          if (json && json.state && json.state.code === 2000) {
+            this.props.changeModalState({
+              loadingStep: 20,
+            });
+            clearTimeout(this.checkUpgradOkTimeout);
+          }
+        });
+    } else {
+      timeoutTime = 12000;
+    }
+
+    this.checkUpgradOkTimeout = setTimeout(() => {
+      this.checkSaveResult();
+    }, timeoutTime);
+  }
   render() {
     const restoreUrl = '/goform/getRestore';
     const { store } = this.props;
@@ -175,7 +178,7 @@ export default class View extends React.PureComponent {
             >
               <FileUpload
                 url={restoreUrl}
-                name="backupFile"
+                name="filename"
                 buttonIcon="undo"
                 buttonText={__('Restore Now')}
                 disabled={!this.actionable}
