@@ -7,7 +7,7 @@ import { fromJS, Map } from 'immutable';
 import validator from 'shared/validator';
 import Table from 'shared/components/Table';
 import {
-  Search, FormGroup, Button, Modal, Switchs, PureComponent,
+  Search, FormGroup, Button, Select, Modal, Switchs, PureComponent,
 } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
@@ -35,6 +35,8 @@ const typeArr = [
     label: __('IN OPERATION...'),
   },
 ];
+
+const labelPre = __('Items per page: ');
 
 const validOptions = Map({
   ip: validator({
@@ -116,11 +118,28 @@ export class Device extends PureComponent {
       this.handleSearch();
     }
   }
-
   // 离开页面时执行？
   componentWillUnmount() {
     this.props.resetVaildateMsg();
     this.props.leaveDevicesScreen();
+  }
+  // 从后台抓取数据
+  handleSearch() {
+    this.props.fetchDevices();
+  }
+
+  /**
+   * action: reboot | reset | locate
+   */
+  handleAction(mac, action) {
+    const data = {
+      action,
+      macs: [
+        mac,
+      ],
+    };
+
+    this.props.saveDevicesAction(data);
   }
   onRowSelect(index) {
     //  index {index: 0, selected: true, unselectableList: Array(0)};
@@ -157,27 +176,27 @@ export class Device extends PureComponent {
    */
 
   onResetDevice(mac) {
-    const msgText = __('Are you sure reset device: %s?', mac);
+    let msg_text = __('Are you sure reset device: %s?', mac);
 
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: msgText,
-      apply: () => {
+      text: msg_text,
+      apply: function () {
         this.handleAction(mac, 'reset');
-      },
+      }.bind(this),
     });
   }
   onRebootDevice(mac) {
-    const msgText = __('Are you sure reboot device: %s?', mac);
+    let msg_text = __('Are you sure reboot device: %s?', mac);
 
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: msgText,
-      apply: () => {
+      text: msg_text,
+      apply: function () {
         this.handleAction(mac, 'reboot');
-      },
+      }.bind(this),
     });
   }
   onLocateDevice(mac, isLocating) {
@@ -189,15 +208,15 @@ export class Device extends PureComponent {
     this.handleAction(mac, actionType);
   }
   onUpgradeDevice(mac) {
-    const msgText = __('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
+    const msg_text = __('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
 
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: msgText,
-      apply: () => {
+      text: msg_text,
+      apply: function () {
         this.handleAction(mac, 'upgrade');
-      },
+      }.bind(this),
     });
   }
 
@@ -205,7 +224,20 @@ export class Device extends PureComponent {
     const warningMsgText = __('PLease choose devices to upgrade!');
     const selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
     const confirmMsgText = __('Upgrade need reboot Device, are you sure upgrade device of the %s item?', selectedListIndex);
+    const selectedListIndexArray = selectedListIndex.toJS();
     const selectedListQuantity = selectedListIndex.size;
+    let i;
+    const macs = [];
+    for (i = 0; i < selectedListQuantity; i++) {
+      if (this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'newest']) === '0') {
+        macs[i] = this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'mac']);
+        console.log('循环里的mac', macs[i]);
+      }
+    }
+    const data = {
+      action: 'upgrade',
+      macs,
+    };
     if (selectedListQuantity === 0) {
       this.props.createModal({
         id: 'settings',
@@ -217,32 +249,29 @@ export class Device extends PureComponent {
         id: 'settings',
         role: 'confirm',
         text: confirmMsgText,
-        apply: () => {
-          selectedListIndex.forEach((item) => {
-            if (this.props.store.getIn(['data', 'list', item, 'newest']) === '0') {
-              this.handleAction(this.props.store.getIn(['data', 'list', item, 'mac']), 'upgrade');
-            }
-          });
-        },
+        apply: function () {
+          this.props.saveDevicesAction(data);
+        }.bind(this),
       });
     }
   }
 
   onMultiLocateDevice() {
-    const warningMsgText = __('Please choose devices to %s!', __('locate'));
-    const $$selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
-    const selectedListSize = $$selectedListIndex.size;
-    const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __('Locate'), __('locate'), selectedListSize);
+    const warningMsgText = __('PLease choose devices to locate!');
+    const selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
+    const confirmMsgText = __(' are you sure to locate device of the %s item?', selectedListIndex);
+    const selectedListIndexArray = selectedListIndex.toJS();
+    const selectedListQuantity = selectedListIndex.size;
+    let i;
     const macs = [];
+    for (i = 0; i < selectedListQuantity; i++) {
+      macs[i] = this.props.store.getIn(['data', 'list', selectedListIndexArray[i], 'mac']);
+    }
     const data = {
       action: 'locate',
       macs,
     };
-
-    $$selectedListIndex.forEach((index) => {
-      macs.push(this.props.store.getIn(['data', 'list', index, 'mac']));
-    });
-    if (selectedListSize === 0) {
+    if (selectedListQuantity === 0) {
       this.props.createModal({
         id: 'settings',
         role: 'confirm',
@@ -253,20 +282,41 @@ export class Device extends PureComponent {
         id: 'settings',
         role: 'confirm',
         text: confirmMsgText,
-        apply: () => {
+        apply: function () {
           this.props.saveDevicesAction(data);
-        },
+        }.bind(this),
       });
     }
   }
-
+  // onEdit
+  showEditNetwork(mac) {
+    return function (e) {
+      this.props.fetchDeviceNetwork(mac);
+    }.bind(this);
+  }
   onChangeDeviceNetwork(name) {
-    return (data) => {
-      const editObj = {};
+    return function (data) {
+      let editObj = {};
 
       editObj[name] = data.value;
       this.props.changeDeviceNetwork(editObj);
-    };
+    }.bind(this);
+  }
+
+  // 组合验证
+  combine() {
+    const { ip, mask, gateway, connect_type } = this.props.store.get('edit').toJS();
+    const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
+    const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
+    let ret;
+
+    if (connect_type === 'static') {
+      if (!ret && gateway) {
+        ret = validator.combine.needStaticIP(ip, mask, gateway);
+      }
+    }
+
+    return ret;
   }
 
   onSaveDeviceNetWork() {
@@ -284,24 +334,28 @@ export class Device extends PureComponent {
               role: 'alert',
               text: combineResult,
             });
-          } else if ((oriGateway && validator.combine.needStaticIP(ip, oriMask, oriGateway)) || oriMask !== mask) {
-            this.props.createModal({
-              title: __('DEVICES'),
-              role: 'confirm',
-              text: __('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
-              apply: () => this.props.saveDeviceNetwork(),
-            });
-          } else if (validator.combine.needStaticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
-            this.props.createModal({
-              title: __('DEVICES'),
-              role: 'confirm',
-              text: __('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
-              apply: () => {
-                this.props.saveDeviceNetwork();
-              },
-            });
           } else {
-            this.props.saveDeviceNetwork();
+            if ((oriGateway && validator.combine.needStaticIP(ip, oriMask, oriGateway)) || oriMask !== mask) {
+              this.props.createModal({
+                title: __('DEVICES'),
+                role: 'confirm',
+                text: __('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
+                apply: () => this.props.saveDeviceNetwork(),
+              });
+            } else {
+              if (validator.combine.needStaticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
+                this.props.createModal({
+                  title: __('DEVICES'),
+                  role: 'confirm',
+                  text: __('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
+                  apply: function () {
+                    this.props.saveDeviceNetwork();
+                  }.bind(this),
+                });
+              } else {
+                this.props.saveDeviceNetwork();
+              }
+            }
           }
         }
       });
@@ -314,10 +368,6 @@ export class Device extends PureComponent {
     if (this.props.store.getIn(['query', 'devicetype']) === '4') {
       ret = fromJS([
         {
-          id: 'index',
-          width: '50px',
-          text: __('Index'),
-        }, {
           id: 'devicename',
           text: __('Name'),
         }, {
@@ -330,12 +380,6 @@ export class Device extends PureComponent {
           id: 'softversion',
           text: __('Version'),
         }, {
-          id: 'channel2.4G',
-          text: __('Channel2.4G'),
-        }, {
-          id: 'channel5.8G',
-          text: __('Channel5.8G'),
-        }, {
           id: 'operationhours',
           text: __('Uptime'),
           filter: 'connectTime',
@@ -347,7 +391,7 @@ export class Device extends PureComponent {
       ]);
     } else {
       ret = fromJS([
-        /* {
+        /*{
           id: 'select',
           text: (() => {
             return (
@@ -375,14 +419,9 @@ export class Device extends PureComponent {
           }.bind(this),
         },*/
         {
-          id: 'index',
-          text: __('Index'),
-          width: '50px',
-        },
-        {
           id: 'devicename',
           text: __('Name'),
-          render: (val, item) => {
+          render: function (val, item) {
             const deviceMac = item.get('mac');
             const name = item.get('devicename');
             const deviceStatus = item.get('status');
@@ -394,16 +433,16 @@ export class Device extends PureComponent {
                 className="link-text"
                 onClick={this.showEditNetwork(deviceMac)}
                 value={deviceMac}
-                title={`${__('MAC Address')}: ${deviceMac}`}
+                title={__('MAC Address') + ': ' + deviceMac}
               >
                 {name}
               </span>
             );
-          },
+          }.bind(this),
         }, {
           id: 'mac',
           text: __('MAC Address'),
-          render: (val, item) => {
+          render: function (val, item) {
             const deviceMac = item.get('mac');
             const name = deviceMac;
             const deviceStatus = item.get('status');
@@ -416,18 +455,18 @@ export class Device extends PureComponent {
                 className="link-text"
                 onClick={this.showEditNetwork(deviceMac)}
                 value={deviceMac}
-                title={`${__('MAC Address')}: ${deviceMac}`}
+                title={__('MAC Address') + ': ' + deviceMac}
               >
                 {name}
               </span>
             );
-          },
+          }.bind(this),
         }, {
           id: 'ip',
           text: __('IP Address'),
-          render: (val, item) => {
-            const deviceMac = item.get('mac');
-            const deviceStatus = item.get('status');
+          render: function (val, item) {
+            let deviceMac = item.get('mac');
+            let deviceStatus = item.get('status');
 
             if (deviceStatus === 'disable' || noControl) {
               return <span>{item.get('ip') }</span>;
@@ -441,13 +480,7 @@ export class Device extends PureComponent {
                 {item.get('ip') }
               </span>
             );
-          },
-        }, {
-          id: 'channel2.4G',
-          text: __('Channel2.4G'),
-        }, {
-          id: 'channel5.8G',
-          text: __('Channel5.8G'),
+          }.bind(this),
         }, {
           id: 'status',
           text: __('Status'),
@@ -466,10 +499,10 @@ export class Device extends PureComponent {
           id: 'op',
           text: __('Actions'),
           width: 360,
-          render: (val, item) => {
-            const deviceMac = item.get('mac');
-            const deviceStatus = item.get('status');
-            const isLocating = item.get('locatestatus') === 'location';
+          render: function (val, item) {
+            let deviceMac = item.get('mac');
+            let deviceStatus = item.get('status');
+            let isLocating = item.get('locatestatus') === 'location';
             let upgradeBtn = null;
             let locationClassName = '';
 
@@ -483,30 +516,30 @@ export class Device extends PureComponent {
 
             if (item.get('newest') === '0') {
               upgradeBtn = (<Button
-                onClick={() => this.onUpgradeDevice(deviceMac)}
+                onClick={this.onUpgradeDevice.bind(this, deviceMac)}
                 text={__('Upgrade')}
                 size="sm"
                 icon="level-up"
-              />);
+                />);
             }
 
             return (
               <div className="action-btns">
                 <Button
-                  onClick={() => this.onRebootDevice(deviceMac)}
+                  onClick={this.onRebootDevice.bind(this, deviceMac)}
                   text={__('Reboot')}
                   size="sm"
                   icon="recycle"
                 />
                 <Button
                   className={locationClassName}
-                  onClick={() => this.onLocateDevice(deviceMac, isLocating)}
+                  onClick={this.onLocateDevice.bind(this, deviceMac, isLocating)}
                   text={__('Locate')}
                   size="sm"
                   icon="location-arrow"
                 />
                 <Button
-                  onClick={() => this.onResetDevice(deviceMac)}
+                  onClick={this.onResetDevice.bind(this, deviceMac)}
                   text={__('Reset')}
                   size="sm"
                   icon="reply-all"
@@ -514,7 +547,7 @@ export class Device extends PureComponent {
                 {upgradeBtn}
               </div>
             );
-          },
+          }.bind(this),
         }]);
     }
 
@@ -524,47 +557,7 @@ export class Device extends PureComponent {
 
     return ret;
   }
-  // onEdit
-  showEditNetwork(mac) {
-    return () => {
-      this.props.fetchDeviceNetwork(mac);
-    };
-  }
-  // 组合验证
-  combine() {
-    const { ip, mask, gateway, connect_type } = this.props.store.get('edit').toJS();
-    let ret;
 
-    if (connect_type === 'static') {
-      if (!ret && gateway) {
-        ret = validator.combine.needStaticIP(ip, mask, gateway);
-      }
-    }
-
-    return ret;
-  }
-
-  // 从后台抓取数据
-  handleSearch() {
-    clearTimeout(this.fetchTimeout);
-    this.fetchTimeout = setTimeout(() => {
-      this.props.fetchDevices();
-    }, 200);
-  }
-
-  /**
-   * action: reboot | reset | locate
-   */
-  handleAction(mac, action) {
-    const data = {
-      action,
-      macs: [
-        mac,
-      ],
-    };
-
-    this.props.saveDevicesAction(data);
-  }
   render() {
     const devicesTableOptions = this.getDevicesTableOptions();
     const typeOptions = fromJS([
@@ -598,24 +591,20 @@ export class Device extends PureComponent {
           />
 
         </div>
-        {
-          devicetype !== '4' ? (
-            <div className="m-action-bar">
-              <Button
-                text={__('Locate')}
-                size="sm"
-                icon="location-arrow"
-                onClick={this.onMultiLocateDevice}
-              />
-              <Button
-                text={__('Upgrade')}
-                size="sm"
-                icon="level-up"
-                onClick={this.onMultiUpgradeDevice}
-              />
-            </div>
-          ) : null
-        }
+        <div className="m-action-bar">
+          <Button
+            text={__('Locate')}
+            size="sm"
+            icon="location-arrow"
+            onClick={this.onMultiLocateDevice}
+          />
+          <Button
+            text={__('Upgrade')}
+            size="sm"
+            icon="level-up"
+            onClick={this.onMultiUpgradeDevice}
+          />
+        </div>
         <Table
           className="table"
           loading={this.props.store.get('fetching')}
@@ -631,7 +620,7 @@ export class Device extends PureComponent {
         />
 
         <Modal
-          isShow={!currData.isEmpty()}
+          isShow={currData.isEmpty() ? false : true}
           title={currData.get('mac')}
           onClose={this.props.closeDeviceEdit}
           onOk={this.onSaveDeviceNetWork}
@@ -727,7 +716,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions),
+  validator.mergeProps(validOptions)
 )(Device);
 
 export const devices = reducer;

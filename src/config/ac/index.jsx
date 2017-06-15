@@ -166,7 +166,7 @@ const routes = [
               }, {
                 id: 'apMaintenance',
                 path: '/main/settings/apMaintenance',
-                formUrl: '/goform/getApFirmwarel',
+                formUrl: '/goform/getApFirmware',
                 text: __('AP Maintenance'),
                 component: sAPMaintenance.Screen,
               }, {
