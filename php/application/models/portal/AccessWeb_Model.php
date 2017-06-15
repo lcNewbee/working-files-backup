@@ -202,16 +202,26 @@ class AccessWeb_Model extends CI_Model {
         return json_encode($result);
     }
     function web_download($data) {
+        exec('rm /var/conf/*.zip ');    
         $filesum = element('id', $data, 0);
         $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$filesum.'/';
         if($filesum == 0){
             $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/';
-        }
+        }        
         $path = '/var/conf/portal_web_tmp';//需压缩的目录（文件夹）
         $filename = "/var/conf/portal_web_tmp.zip"; //最终生成的文件名（含路径）
-
+        switch($filesum){
+            case '1' : $filename = "/var/conf/All.zip";break;
+            case '2' : $filename = "/var/conf/OneKey.zip";break;
+            case '3' : $filename = "/var/conf/AccessedUser.zip";break;
+            case '4' : $filename = "/var/conf/SMS.zip";break;
+            case '5' : $filename = "/var/conf/Wechat.zip";break;
+            case '6' : $filename = "/var/conf/Facebook.zip";break;            
+            default: $filename   = "/var/conf/default.zip";break;
+                break;
+        }        
         //1.清空
-		if(is_dir($path)){
+		if(is_dir($path)){            
 			system('rm -rf ' . $path);
 			mkdir($path,0777,true);
         }else{

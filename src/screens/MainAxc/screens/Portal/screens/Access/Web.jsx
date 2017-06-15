@@ -45,7 +45,7 @@ const idTownloadIdMap = {
 // ]);
 const $$authOptions = fromJS([
   {
-    value: '',
+    value: '-100',
     label: __('ALL'),
   },
   {

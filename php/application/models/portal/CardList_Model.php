@@ -19,10 +19,10 @@ class CardList_Model extends CI_Model {
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
         }
-        if(isset($data['payType']) && $data['payType'] != '-1'){
+        if(isset($data['payType']) && $data['payType'] != '-100'){
             $parameter['wheres'] = $parameter['wheres'] . " AND payType='".$data['payType']."'";
         }
-        if(isset($data['categoryType']) && $data['categoryType'] != '-1'){
+        if(isset($data['categoryType']) && $data['categoryType'] != '-100'){
             $parameter['wheres'] = $parameter['wheres'] . " AND categoryType='".$data['categoryType']."'";
         }
         $datalist = help_data_page_all($parameter);

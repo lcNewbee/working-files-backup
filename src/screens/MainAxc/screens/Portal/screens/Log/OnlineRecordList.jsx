@@ -17,6 +17,10 @@ const queryFormOptions = fromJS([
     label: __('Acc Type'),
     options: [
       {
+        value: '-100',
+        label: __('ALL'),
+      },
+      {
         value: '0',
         label: __('Unavailability'),
       }, {
@@ -43,6 +47,10 @@ const queryFormOptions = fromJS([
     type: 'select',
     label: __('Authentication Types'),
     options: [
+      {
+        value: '-100',
+        label: __('ALL'),
+      },
       {
         value: '0',
         label: __('One Key Authentication'),
@@ -219,6 +227,7 @@ const listOptions = fromJS([
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
+  changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -227,6 +236,10 @@ export default class OpenPortalBase extends React.Component {
     super(props);
 
     this.onAction = this.onAction.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.changeScreenQuery({ state: '-100', auth_type: '-100' });
   }
 
   onAction(no, type) {

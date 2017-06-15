@@ -115,6 +115,7 @@ class SystemMaintenance extends CI_Controller {
         Log_Record($this->db,$logary);
         //系统备份
         exec('cp /var/run/config.db /var/conf/config.db');
+        exec('sync');
         $result = array('state' => array('code' => 2000, 'msg' => 'OK'));
 
         $result = json_encode($result);
@@ -197,5 +198,5 @@ class SystemMaintenance extends CI_Controller {
             $result = array('state' => array('code' => 2000, 'msg' => 'OK'), 'data' => $data);
         }
         return $result;
-    }
+    }    
 }

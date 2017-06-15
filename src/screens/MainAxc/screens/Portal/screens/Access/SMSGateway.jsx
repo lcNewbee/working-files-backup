@@ -223,7 +223,7 @@ const queryFormOptions = fromJS([
     label: __('Type'),
     options: [
       {
-        value: '',
+        value: '-100',
         label: __('ALL'),
       },
       {
@@ -266,6 +266,7 @@ const queryFormOptions = fromJS([
 ]);
 
 const propTypes = {
+  changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -278,6 +279,11 @@ export default class View extends React.Component {
       ],
     );
   }
+
+  componentWillMount() {
+    this.props.changeScreenQuery({ gateway_type: '-100' });
+  }
+
   render() {
     return (
       <AppScreen

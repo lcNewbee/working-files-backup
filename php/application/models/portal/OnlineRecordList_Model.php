@@ -27,10 +27,10 @@ class OnlineRecordList_Model extends CI_Model {
 		if(isset($data['search'])){
 			$parameter['wheres'] = $parameter['wheres'] . " AND ip LIKE '%".$data['search']."%'";
 		}
-		if(isset($data['state'])){
+		if(isset($data['state']) && $data['state'] != '-100'){
 			$parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
 		}
-		if(isset($data['auth_type'])){
+		if(isset($data['auth_type']) && $data['auth_type'] != '-100'){
 			$parameter['wheres'] = $parameter['wheres'] . " AND methodtype='".$data['auth_type']."'";
 		}		
 		$datalist = help_data_page_all($parameter);

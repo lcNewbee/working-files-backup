@@ -19,7 +19,7 @@ class CateGory_Model extends CI_Model {
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
         }
-        if(isset($data['state']) && $data['state'] != '-1'){
+        if(isset($data['state']) && $data['state'] != '-100'){
             $parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
         }
         $datalist = help_data_page_all($parameter);
