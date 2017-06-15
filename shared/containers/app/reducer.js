@@ -43,6 +43,7 @@ const defaultState = fromJS({
 });
 const ajaxTypeMap = {
   save: 'saving',
+  saveFile: 'saving',
   fetch: 'fetching',
 };
 

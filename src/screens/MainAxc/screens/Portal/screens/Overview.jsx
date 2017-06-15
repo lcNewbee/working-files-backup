@@ -14,7 +14,7 @@ import { colors, $$commonPieOption } from 'shared/config/axc';
 
 const recordOptions = [
   {
-    id: 'recDate',
+    id: 'rec_date',
     text: __('Time'),
     render(timeStr) {
       return moment(timeStr).format('YYYY-MM-DD');

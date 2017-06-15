@@ -10,7 +10,7 @@ import { getActionable } from 'shared/axc';
 import SaveButton from 'shared/components/Button/SaveButton';
 
 import './web.scss';
-
+/* eslint-disable quote-props */
 const idToPageMap = {
   '1': '',
   '2': '/1',
@@ -145,6 +145,14 @@ const listOptions = fromJS([
       notEditable: true,
       multi: false,
       linkId: 'auths',
+      initValue($$data) {
+        let ret = $$data.get('authentication');
+
+        if (!ret) {
+          ret = idToAuthMap[$$data.get('id')] || '-100';
+        }
+        return ret;
+      },
     },
     render: (val, $$data) => {
       const valArr = val ? val.split(',') : [idToAuthMap[$$data.get('id')] || ''];

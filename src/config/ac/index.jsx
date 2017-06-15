@@ -101,58 +101,74 @@ const routes = [
             icon: 'file-text-o',
             text: __('LOGS'),
             component: sLogs.Screen,
-          }, {
+          },
+          {
             id: 'settings',
             path: '/main/settings',
-            icon: 'cog',
+            icon: 'cogs',
             text: __('SETTINGS'),
             component: SharedComponents.TabContainer,
-            indexPath: '/main/settings/group',
             routes: [
               {
                 path: '/main/settings/group',
                 text: __('Groups'),
                 component: sGroupSettings.Screen,
-              }, {
+              },
+              {
                 id: 'wireless',
                 path: '/main/settings/wireless',
                 text: __('Wireless'),
                 component: sWireless.Screen,
-              }, {
-                id: 'portal',
-                path: '/main/settings/portal',
-                text: __(__('Portal')),
-                component: sPortal.Screen,
-              }, {
+              },
+              {
                 id: 'guest',
                 path: '/main/settings/guest',
                 text: __('Guest'),
                 component: sGuest.Screen,
-              }, {
+              },
+              {
                 id: 'voip',
                 path: '/main/settings/voip',
                 text: __('VoIP'),
                 component: sVoip.Screen,
-              }, {
+              },
+              {
                 id: 'modeSetting',
                 path: '/main/settings/mode',
                 fetchUrl: 'goform/getApMode',
                 saveUrl: 'goform/setApMode',
                 text: __('AP Mode'),
                 component: sMode.Screen,
-              }, {
-                id: 'systemSetting',
-                path: '/main/settings/system',
-                text: __('System'),
+              },
+              {
+                id: 'portal',
+                path: '/main/settings/portal',
+                text: __(__('Portal')),
+                component: sPortal.Screen,
+              },
+            ],
+          }, {
+            id: 'system',
+            path: '/main/system',
+            icon: 'cog',
+            text: __('SYSTEM'),
+            component: SharedComponents.TabContainer,
+            routes: [
+              {
+                id: 'systemMaintenance',
+                path: '/main/system/maintenance',
+                text: __('Maintenance'),
                 component: sSystem.Screen,
-              }, {
+              },
+              {
                 id: 'password',
-                path: '/main/settings/admin',
+                path: '/main/system/admin',
                 text: __('Admin'),
                 component: sAdmin.Screen,
               },
             ],
-          }],
+          },
+        ],
       },
       {
         path: '/wizard',

@@ -30,25 +30,25 @@ const encryptionOptions = [
   },
 ];
 const txPowerOptions = [
-    {
-      value: '3%',
-      label: '3%',
-    }, {
-      value: '6%',
-      label: '6%',
-    }, {
-      value: '12%',
-      label: '12%',
-    }, {
-      value: '25%',
-      label: '25%',
-    }, {
-      value: '50%',
-      label: '50%',
-    }, {
-      value: '100%',
-      label: '100%',
-    },
+  {
+    value: '3%',
+    label: '3%',
+  }, {
+    value: '6%',
+    label: '6%',
+  }, {
+    value: '12%',
+    label: '12%',
+  }, {
+    value: '25%',
+    label: '25%',
+  }, {
+    value: '50%',
+    label: '50%',
+  }, {
+    value: '100%',
+    label: '100%',
+  },
 ];
 const channelBandwidthOptions = fromJS([
   {
@@ -59,6 +59,15 @@ const channelBandwidthOptions = fromJS([
     label: '40',
   },
 ]);
+const frequencyOptions = [
+  {
+    value: '2.4G',
+    label: '2.4G',
+  }, {
+    value: '5G',
+    label: '5G',
+  },
+];
 
 const validOptions = Map({
   password: validator({
@@ -90,7 +99,7 @@ function getCountryOptions() {
   ).toJS();
 }
 
-function getChannelsOptions(currCountry) {
+function getChannelsOptions(currCountry, currFrequency) {
   let i;
   let len;
   let channelsRange;
@@ -105,23 +114,33 @@ function getChannelsOptions(currCountry) {
   );
 
   if (channelsOption) {
-    channelsRange = channelsOption['2.4g'].split('-');
-    i = parseInt(channelsRange[0], 10);
-    len = parseInt(channelsRange[1], 10);
+    if (currFrequency === '5G') {
+      channelsRange = channelsOption['5g_40'].split(', ');
+      channelsRange.forEach((val) => {
+        channelsOptions.push({
+          value: `${val}`,
+          label: `${val}`,
+        });
+      });
+    } else {
+      channelsRange = channelsOption['2.4g'].split('-');
+      i = parseInt(channelsRange[0], 10);
+      len = parseInt(channelsRange[1], 10);
+      for (i; i <= len; i += 1) {
+        channelsOptions.push({
+          value: `${i}`,
+          label: `${i}`,
+        });
+      }
+    }
   } else {
     i = 1;
     len = 13;
   }
 
-  for (i; i <= len; i++) {
-    channelsOptions.push({
-      value: `${i}`,
-      label: `${i}`,
-    });
-  }
-
   return channelsOptions;
 }
+
 
 const propTypes = {
   fetchWifiSettings: PropTypes.func,
@@ -138,7 +157,7 @@ export class Wireless extends PureComponent {
     super(props);
 
     utils.binds(this, [
-      'onUpdate', 'onChangeGroup','onChangeFrequency', 'onChangeEncryption', 'onUpdateSettings',
+      'onUpdate', 'onChangeGroup', 'onChangeFrequency', 'onChangeEncryption', 'onUpdateSettings',
       'onSave', 'getCurrData', 'getGroupOptions', 'getChannelsOptions',
       'getChannelsValue',
     ]);
@@ -205,8 +224,9 @@ export class Wireless extends PureComponent {
       const radio2Object = {};
       const data = {};
       const currGroupName = this.props.store.getIn(['data', 'curr', 'groupname']);
-      data.groupname = currGroupName;
       const modeVal = this.state.frequency;
+
+      data.groupname = currGroupName;
       if (modeVal === '5G') {
         if (name === 'country') {
           radio5Object.channel = this.getChannelsValue(item.value) || myDefault;
@@ -229,6 +249,21 @@ export class Wireless extends PureComponent {
           this.props.setWifi();
         }
       });
+  }
+
+  fetchChannelsOptions(query) {
+    const subData = {
+      'radio2.4G': {
+        country: 'US',
+        phymode: '7',
+        channelsBandwidth: '20',
+      },
+      'radio5.8G': {
+        country: 'US',
+        phymode: '16',
+        channelsBandwidth: '20',
+      },
+    };
   }
 
   getCurrData(name) {
@@ -293,7 +328,7 @@ export class Wireless extends PureComponent {
     const groupOptions = this.getGroupOptions();
     const countryOptions = getCountryOptions();
     const getCurrData = this.getCurrData;
-    const channelsOptions = getChannelsOptions(getCurrData('country'));
+    const channelsOptions = getChannelsOptions(getCurrData('country'), this.state.frequency);
     const myChannelWidthOptions = this.getChannelWidthOptions();
     const noControl = this.props.app.get('noControl');
     return (
@@ -314,15 +349,7 @@ export class Wireless extends PureComponent {
           inputStyle={{
             width: '199px',
           }}
-          options={[
-            {
-              value: '2.4G',
-              label: '2.4G',
-            }, {
-              value: '5G',
-              label: '5G',
-            },
-          ]}
+          options={frequencyOptions}
           value={this.state.frequency}
           onChange={this.onChangeFrequency}
         />

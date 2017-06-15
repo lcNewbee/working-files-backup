@@ -202,7 +202,7 @@ export class Device extends PureComponent {
   }
 
   onMultiUpgradeDevice() {
-    const warningMsgText = __('PLease choose devices to upgrade!');
+    const warningMsgText = __('Please choose devices to %s!', __('upgrade'));
     const $$selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
     const selectedListSize = $$selectedListIndex.size;
     const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __('Upgrade'), __('upgrade'), selectedListSize);
@@ -237,7 +237,7 @@ export class Device extends PureComponent {
   }
 
   onMultiLocateDevice() {
-    const warningMsgText = __('PLease choose devices to locate!');
+    const warningMsgText = __('Please choose devices to %s!', __('locate'));
     const $$selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
     const selectedListSize = $$selectedListIndex.size;
     const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __('Locate'), __('locate'), selectedListSize);

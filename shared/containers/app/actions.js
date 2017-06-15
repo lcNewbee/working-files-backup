@@ -211,7 +211,6 @@ export function save(url, query, option) {
         } else if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
-
         return json;
       })
       .catch(errorFunc);
@@ -248,7 +247,6 @@ export function saveFile(url, formElem, option) {
         } else if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
-
         dispatch(receiveSave());
         return json;
       })
