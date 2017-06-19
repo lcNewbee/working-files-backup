@@ -3,6 +3,7 @@ import { reducer as toastrReducer } from 'react-redux-toastr';
 
 //
 import 'shared/scss/styles.scss';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import guiConfig from './config.json';
 
 // 多语言工具
@@ -63,7 +64,7 @@ const sVoip = require('../../screens/Main/screens/Settings/screens/Voip');
 const sMode = require('../../screens/Main/screens/Settings/screens/Mode');
 const sSystem = require('../../screens/Main/screens/Settings/screens/System');
 const sAdmin = require('../../screens/Main/screens/Settings/screens/Admin');
-
+const sAPMaintenance = require('../../screens/Main/screens/Settings/screens/AP');
 
 const routes = [
   {
@@ -113,38 +114,40 @@ const routes = [
                 path: '/main/settings/group',
                 text: __('Groups'),
                 component: sGroupSettings.Screen,
-              },
-              {
+              }, {
                 id: 'wireless',
                 path: '/main/settings/wireless',
                 text: __('Wireless'),
                 component: sWireless.Screen,
-              },
-              {
+              }, {
+                id: 'portal',
+                path: '/main/settings/portal',
+                text: __(__('Portal')),
+                component: sPortal.Screen,
+              }, {
                 id: 'guest',
                 path: '/main/settings/guest',
                 text: __('Guest'),
                 component: sGuest.Screen,
-              },
-              {
+              }, {
                 id: 'voip',
                 path: '/main/settings/voip',
                 text: __('VoIP'),
                 component: sVoip.Screen,
-              },
-              {
+              }, {
                 id: 'modeSetting',
                 path: '/main/settings/mode',
                 fetchUrl: 'goform/getApMode',
                 saveUrl: 'goform/setApMode',
                 text: __('AP Mode'),
                 component: sMode.Screen,
-              },
-              {
-                id: 'portal',
-                path: '/main/settings/portal',
-                text: __(__('Portal')),
-                component: sPortal.Screen,
+              }, {
+                id: 'apMaintenance',
+                path: '/main/settings/apMaintenance',
+                fetchUrl: '/goform/getApFirmware',
+                saveUrl: '/goform/modifyApFirmware',
+                text: __('AP Maintenance'),
+                component: sAPMaintenance.Screen,
               },
             ],
           }, {
@@ -155,9 +158,9 @@ const routes = [
             component: SharedComponents.TabContainer,
             routes: [
               {
-                id: 'systemMaintenance',
-                path: '/main/system/maintenance',
-                text: __('Maintenance'),
+                id: 'systemSetting',
+                path: '/main/system/setting',
+                text: __('Settings'),
                 component: sSystem.Screen,
               },
               {

@@ -6,40 +6,48 @@
     "data": {
         "page": {
             "start": 2,
-            "size": 2,
-            "currPage": 2,
+            "size": 6,
+            "currPage": 1,
             "totalPage": 4,
-            "total": 4,
+            "total": 233,
             "nextPage": 3,
             "lastPage": 4
         },
         "list": [
             {
-                "devicename": "神器",
+                "devicename": "神器1",
                 "mac": "12:33:44:55:66:78",
                 "model": "V2.2",
                 "softversion": "V1.1",
+                "channel2.4G":"3",
+                "channel5.8G":"----",
                 "channel": "0"
             },
             {
-                "devicename": "",
+                "devicename": "神器2",
                 "mac": "12:33:44:52:66:78",
                 "model": "V2.2",
                 "softversion": "V1.1",
+                "channel2.4G":"3",
+                "channel5.8G":"----",
                 "channel": "1"
             },
             {
-                "devicename": "",
+                "devicename": "神器3",
                 "mac": "12:33:44:34:66:78",
                 "model": "V2.2",
                 "softversion": "V1.1",
+                "channel2.4G":"3",
+                "channel5.8G":"----",
                 "channel": "1"
             },
             {
-               "devicename": "",
+               "devicename": "神器4",
                 "mac": "12:33:44:64:66:78",
                 "model": "V2.2",
                 "softversion": "V1.1",
+                "channel2.4G":"3",
+                "channel5.8G":"----",
                 "channel": "1"
             }
         ]

@@ -176,7 +176,7 @@ class AccessWeb_Model extends CI_Model {
                 }
             }
             //更改url重定向
-            if((int)$data['id'] > 1){
+            if(isset($data['url']) && isset($data['sessiontime']) && (int)$data['id'] > 1){
                 $this->editPortalBasauth($data['id'], $data['url'], $data['sessiontime']);
             }
 
@@ -188,7 +188,7 @@ class AccessWeb_Model extends CI_Model {
           $result = $this->portalsql->replace('portal_web', $arr);
 
           //更改url重定向
-          if((int)$data['id'] > 1){
+          if(isset($data['url']) && isset($data['sessiontime']) && (int)$data['id'] > 1){
               $this->editPortalBasauth($data['id'], $data['url'], $data['sessiontime'], $data['name']);
           }
         }
