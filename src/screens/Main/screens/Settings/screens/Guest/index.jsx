@@ -122,7 +122,6 @@ export class Guest extends PureComponent {
     }
     data['radio5.8G'] = radio5Object;
     data['radio2.4G'] = radio2Object;
-    console.log('data', data);
     this.props.changeGuestSettings(data);
   }
 

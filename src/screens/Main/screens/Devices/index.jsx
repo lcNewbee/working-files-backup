@@ -598,27 +598,24 @@ export class Device extends PureComponent {
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
           />
-
           <Switchs
             options={typeArr}
             value={devicetype}
             onChange={this.onChangeDevicesQuery}
           />
-
-        </div>
-        <div className="m-action-bar">
-          <Button
-            text={__('Locate')}
-            size="sm"
-            icon="location-arrow"
-            onClick={this.onMultiLocateDevice}
-          />
-          <Button
-            text={__('Upgrade')}
-            size="sm"
-            icon="level-up"
-            onClick={this.onMultiUpgradeDevice}
-          />
+          {
+            devicetype !== '4' ? (
+              <Button
+                text={__('Upgrade')}
+                style={{
+                  marginLeft: '12px',
+                }}
+                theme="primary"
+                icon="level-up"
+                onClick={this.onMultiUpgradeDevice}
+              />
+            ) : null
+          }
         </div>
         <Table
           className="table"

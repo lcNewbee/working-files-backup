@@ -349,7 +349,7 @@ export default class MacStatistic extends React.Component {
   //   //   index: data.index,
   //   //   selected: !ifSelected,
   //   // });
-  //   // if (!ifSelected) { // 单选，如果是勾选则将已经勾选的勾去
+  //   // if (!ifSelected) { // 单选，如果是勾将已经勾选的勾去
   //   //   list.forEach((item, index) => {
   //   //     if (index !== data.index) {
   //   //       this.props.selectListItem({

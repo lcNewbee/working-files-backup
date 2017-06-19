@@ -372,7 +372,7 @@ export class Wireless extends PureComponent {
           {...ssid}
         />
         <FormGroup
-          label={__('SSID Isolation')}
+          label={__('Terminal Isolation')}
           id="ssidisolate"
           required
           type="checkbox"

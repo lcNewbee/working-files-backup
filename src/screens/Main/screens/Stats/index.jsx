@@ -1,13 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { List, fromJS } from 'immutable';
 import Button from 'shared/components/Button/Button';
 // components
 import {
   Table, Switchs, Icon, Modal, EchartReact,
 } from 'shared/components';
-
+import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 import reducer from './reducer';
 
@@ -212,11 +214,9 @@ const eChartStyle = {
 };
 
 const propTypes = {
-
+  createModal: PropTypes.func,
 };
-
-const defaultProps = {
-};
+const defaultProps = {};
 
 // 原生的 react 页面
 export class Status extends React.PureComponent {
@@ -289,16 +289,15 @@ export class Status extends React.PureComponent {
 
   onDeleteOfflineAp(mac) {
     const comfirmText = __('Are you sure delete offline AP: %s?', mac);
-
     this.props.createModal({
       id: 'status',
-      mac,
       role: 'confirm',
       text: comfirmText,
-      apply: function () {
+      apply: () => {
         this.props.deleteOfflineAp(mac);
-      }.bind(this),
+      },
     });
+    // this.props.deleteOfflineAp(mac);
   }
   createTimeTypeClass(type) {
     let ret = 'btn';
@@ -665,11 +664,18 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    appActions,
+    actions,
+  ), dispatch);
+}
+
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  actions,
+  mapDispatchToProps,
 )(Status);
 
 export const status = reducer;

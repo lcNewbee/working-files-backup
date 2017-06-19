@@ -13,6 +13,10 @@
             "nextPage": 3,
             "lastPage": 4
         },
+        "query": {
+            "size": 6,
+            "page": 1
+        },
         "list": [
             {
                 "devicename": "神器1",
