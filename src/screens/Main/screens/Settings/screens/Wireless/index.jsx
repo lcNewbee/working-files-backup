@@ -116,8 +116,15 @@ export class Wireless extends PureComponent {
     super(props);
 
     utils.binds(this, [
-      'onUpdate', 'onChangeGroup','onChangeFrequency', 'onChangeEncryption', 'onUpdateSettings',
-      'onSave', 'getCurrData', 'getGroupOptions', 'getChannelsOptions',
+      'onUpdate',
+      'onChangeGroup',
+      'onChangeFrequency',
+      'onChangeEncryption',
+      'onUpdateSettings',
+      'onSave',
+      'getCurrData',
+      'getGroupOptions',
+      'getChannelsOptions',
       'fetchChannelsOptions',
     ]);
     this.state = {
@@ -287,7 +294,10 @@ export class Wireless extends PureComponent {
 
       this.props.save('/goform/getWifiChannel', subData)
         .then((json) => {
-          let thisCannelOptions = [];
+          let thisCannelOptions = [{
+            value: '0',
+            label: __('Automatic'),
+          }];
           if (json && json.data) {
             if (this.state.frequency === '5G') {
               thisCannelOptions = json.data['channel5.8g']
@@ -303,6 +313,12 @@ export class Wireless extends PureComponent {
                 }));
             }
             this.fetchChanneling = false;
+
+            // 添加自动信道选项
+            thisCannelOptions.unshift({
+              value: '0',
+              label: __('Automatic'),
+            });
             this.setState({
               channelOptions: thisCannelOptions,
             });
@@ -412,7 +428,7 @@ export class Wireless extends PureComponent {
           <span className="help">(2 - 4095)</span>
         </FormGroup>
         <FormGroup
-          label={__('SSID Isolation')}
+          label={__('Terminal Isolation')}
           id="ssidisolate"
           required
           type="checkbox"

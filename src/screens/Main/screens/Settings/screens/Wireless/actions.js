@@ -25,6 +25,8 @@ export function fetchWifiSettings(frequencyValue) {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveWifi(json.data, frequencyValue));
         }
+
+        return json;
       });
   };
 }
