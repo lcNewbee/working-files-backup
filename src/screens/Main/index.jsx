@@ -106,7 +106,7 @@ export default class Main extends React.PureComponent {
                   <Icon name="user-secret" className="icon-user" />
                 </div>
                 <div className="m-user-overview__controls">
-                  <a className="change-pas" href="#/main/settings/admin">
+                  <a className="change-pas" href="#/main/system/admin">
                     <Icon
                       name="key"
                     />

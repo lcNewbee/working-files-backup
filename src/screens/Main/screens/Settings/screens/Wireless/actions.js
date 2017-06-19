@@ -20,7 +20,7 @@ export function fetchWifiSettings(frequencyValue) {
   return (dispatch) => {
     dispatch(reqeustFetchWifi());
 
-    dispatch(appActions.fetch(urls.fetchWifi))
+    return dispatch(appActions.fetch(urls.fetchWifi))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveWifi(json.data, frequencyValue));

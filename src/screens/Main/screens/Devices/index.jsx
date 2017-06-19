@@ -602,20 +602,21 @@ export class Device extends PureComponent {
             value={devicetype}
             onChange={this.onChangeDevicesQuery}
           />
-
-        </div>
-        {
-          devicetype !== '4' ? (
-            <div className="m-action-bar">
+          {
+            devicetype !== '4' ? (
               <Button
+                style={{
+                  marginLeft: '12px',
+                }}
                 text={__('Upgrade')}
-                size="sm"
+                theme="primary"
                 icon="level-up"
                 onClick={this.onMultiUpgradeDevice}
               />
-            </div>
-          ) : null
-        }
+            ) : null
+          }
+        </div>
+
         <Table
           className="table"
           loading={this.props.store.get('fetching')}

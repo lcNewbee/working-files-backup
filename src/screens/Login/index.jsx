@@ -20,7 +20,9 @@ const validOptions = Map({
 
 const propTypes = {
   status: PropTypes.string,
-  history: PropTypes.array,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
   route: PropTypes.shape({
     mainPath: PropTypes.string,
   }),
