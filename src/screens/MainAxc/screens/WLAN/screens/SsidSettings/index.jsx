@@ -249,7 +249,7 @@ const listOptions = fromJS([
       required: true,
       notEditable: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 31]|remarkTxt:["\'\\\\"]',
       }),
     },
   }, {
@@ -426,7 +426,7 @@ const listOptions = fromJS([
   },
   {
     id: 'auth',
-    text: __('Authetication'),
+    text: __('Login Type'),
     noTable: noAuthTableCol,
     formProps: {
       type: 'select',

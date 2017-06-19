@@ -506,11 +506,8 @@ export const advancedSetting = fromJS([
     }),
     onChange: (data) => {
       const phoneNumber = data.value;
-      const lastChar = phoneNumber.slice(-1);
-      if (/[0-9-]/.test(lastChar)) {
-        return data;
-      }
-      return Object.assign({}, data, { value: phoneNumber.slice(0, -1) });
+      const newNumber = phoneNumber.replace(/[^0-9-]/g, '');
+      return Object.assign({}, data, { value: newNumber });
     },
   }, {
     id: 'address',

@@ -915,6 +915,9 @@ export default class View extends React.Component {
         selectable={
           ($$item, index) => (index !== 0)
         }
+        editable={
+          ($$item, index) => (index !== 0)
+        }
         actionable
       />
     );

@@ -50,39 +50,39 @@ const $$authOptions = fromJS([
   },
   {
     value: '0',
-    label: __('One Key Authentication'),
+    label: __('One Key Login'),
   },
   {
     value: '1',
-    label: __('Accessed User Authentication'),
+    label: __('Accessed User Login'),
   },
   // {
   //   value: '2',
-  //   label: __('Radius Authentication'),
+  //   label: __('Radius Login'),
   // },
   // {
   //   value: '3',
-  //   label: __('App Authentication'),
+  //   label: __('App Login'),
   // },
   {
     value: '4',
-    label: __('SMS Authentication'),
+    label: __('SMS Login'),
   },
   {
     value: '5',
-    label: __('Wechat Authentication'),
+    label: __('Wechat Login'),
   },
   // {
   //   value: '6',
-  //   label: __('Public Platform Authentication'),
+  //   label: __('Public Platform Login'),
   // },
   // {
   //   value: '7',
-  //   label: __('Visitor Authentication'),
+  //   label: __('Visitor Login'),
   // },
   {
     value: '9',
-    label: __('Facebook Authentication'),
+    label: __('Facebook Login'),
   },
 ]);
 /* eslint-disable quote-props */
@@ -136,7 +136,7 @@ const listOptions = fromJS([
   },
   {
     id: 'authentication',
-    label: __('Supported Authentication'),
+    label: __('Supported Login Types'),
     options: $$authOptions,
     width: '120px',
     multi: false,
@@ -377,7 +377,7 @@ export default class View extends React.Component {
           rel="noopener noreferrer"
           target="_blank"
         >
-          {__('Authentication')}
+          {__('Login')}
         </a>
         <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/ok.jsp?preview=1`} rel="noopener noreferrer" target="_blank">{__('Success')}</a>
         <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/out.jsp`} rel="noopener noreferrer" target="_blank">{__('Exit')}</a>

@@ -36,7 +36,7 @@ const listOptions = fromJS([
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 128]',
+        rules: 'utf8Len:[1, 128]|remarkTxt:["\'\\\\"]',
       }),
     },
   }, {

@@ -16,7 +16,7 @@ const queryFormOptions = fromJS([
   {
     id: 'state',
     type: 'select',
-    label: __('Acc Type'),
+    label: __('Account Type'),
     options: [
       {
         value: '-100',
@@ -46,38 +46,38 @@ const queryFormOptions = fromJS([
   }, {
     id: 'authType',
     type: 'select',
-    label: __('Authentication Types'),
+    label: __('Login Type'),
     options: [
       {
         value: '-100',
         label: __('ALL'),
       }, {
         value: '0',
-        label: __('One Key Authentication'),
+        label: __('One Key Login'),
       }, {
         value: '1',
-        label: __('Access User Authentication'),
+        label: __('Accessed User Login'),
       }, {
         value: '2',
-        label: __('Radius Authentication'),
+        label: __('Radius Login'),
       }, {
         value: '3',
-        label: __('App Authentication'),
+        label: __('App Login'),
       }, {
         value: '4',
-        label: __('Messages Authentication'),
+        label: __('Messages Login'),
       }, {
         value: '5',
-        label: __('Wechat Authentication'),
+        label: __('Wechat Login'),
       }, {
         value: '6',
-        label: __('Public Platform Authentication'),
+        label: __('Public Platform Login'),
       }, {
         value: '7',
-        label: __('Visitor Authentication'),
+        label: __('Visitor Login'),
       }, {
         value: '9',
-        label: __('Facebook Authentication'),
+        label: __('Facebook Login'),
       },
     ],
     saveOnChange: true,
@@ -126,7 +126,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'state',
-    text: __('Acc Type'),
+    text: __('Account Type'),
     options: [
       {
         value: '0',
@@ -231,35 +231,35 @@ const listOptions = fromJS([
     },
   }, {
     id: 'type',
-    text: __('Authetication Type'),
+    text: __('Login Type'),
     options: [
       {
         value: '0',
-        label: __('One Key Authentication'),
+        label: __('One Key Login'),
       }, {
         value: '1',
-        label: __('Access User Authentication'),
+        label: __('Accessed User Login'),
       }, {
         value: '2',
-        label: __('Radius Authentication'),
+        label: __('Radius Login'),
       }, {
         value: '3',
-        label: __('App Authentication'),
+        label: __('App Login'),
       }, {
         value: '4',
-        label: __('Messages Authentication'),
+        label: __('Messages Login'),
       }, {
         value: '5',
-        label: __('Wechat Authentication'),
+        label: __('Wechat Login'),
       }, {
         value: '6',
-        label: __('Public Platform Authentication'),
+        label: __('Public Platform Login'),
       }, {
         value: '7',
-        label: __('Visitor Authentication'),
+        label: __('Visitor Login'),
       }, {
         value: '9',
-        label: __('Facebook Authentication'),
+        label: __('Facebook Login'),
       },
     ],
     formProps: {

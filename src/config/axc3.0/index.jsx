@@ -584,14 +584,14 @@ const routes = [
                         id: 'portalWechat',
                         path: '/main/portal/local/portal/weixin',
                         formUrl: 'goform/portal/access/weixin',
-                        text: __('Wechat Authentication'),
+                        text: __('Wechat Login'),
                         component: sPortalWeixin.Screen,
                       },
                       {
                         id: 'portalFacebook',
                         path: '/main/portal/local/portal/facebook',
                         formUrl: 'goform/portal/access/facebook',
-                        text: __('Facebook Authentication'),
+                        text: __('Facebook Login'),
                         component: sPortalFacebook.Screen,
                       },
                       {
