@@ -323,6 +323,7 @@ export class Device extends PureComponent {
       ret = fromJS([
         {
           id: 'index',
+          width: '50px',
           text: __('Index'),
         }, {
           id: 'devicename',
@@ -384,6 +385,7 @@ export class Device extends PureComponent {
         {
           id: 'index',
           text: __('Index'),
+          width: '50px',
         },
         {
           id: 'devicename',

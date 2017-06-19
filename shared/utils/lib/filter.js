@@ -1,30 +1,33 @@
 var coreUtils = require('./core');
-var string = require('./string');
+var stringUtils = require('./string');
 var helper = {};
 var init;
+
 var filter = function (filterStr) {
   return new filter.fn.init(filterStr)
 };
-var _ = window._;
 
-if(!_) {
-  _ = string.format;
+function translate(str) {
+  var translateFunc = window.__ || stringUtils.format;
+
+  return translateFunc(str);
 }
 
 function transformComplex(num, unit) {
   var ret = unit;
 
+
   if(num > 1) {
-    ret = num + __(ret + 's');
+    ret = num + translate(ret + 's');
   } else {
-    ret = num + __(ret);
+    ret = num + translate(ret);
   }
 
   return ret;
 }
 
 helper = {
-  translate: _,
+  translate: translate,
 
   toDecimal: function(x, len) {
     var f = parseFloat(x);
@@ -39,10 +42,10 @@ helper = {
   },
 
   checkbox: function(val) {
-    var ret = __('Enabled');
+    var ret = translate('Enabled');
 
     if(!val || val == '0') {
-      ret = __('Disabled')
+      ret = translate('Disabled')
     }
 
     return ret;

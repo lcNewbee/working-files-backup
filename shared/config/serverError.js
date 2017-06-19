@@ -37,6 +37,10 @@ const ERROR_MSG_MAP = {
   6406: __('Item with the same SSID and access point MAC address already exists'),
   6407: __('Add AAA policy fail'),
 
+  // AC: 设置
+  8001: __('Same AP model and firmware version item already exists!'),
+  8002: __('The firmware version of this model has existed!'),
+
   9999: __('Sync Data Error'),
 };
 
