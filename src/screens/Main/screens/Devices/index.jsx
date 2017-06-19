@@ -322,6 +322,9 @@ export class Device extends PureComponent {
     if (this.props.store.getIn(['query', 'devicetype']) === '4') {
       ret = fromJS([
         {
+          id: 'index',
+          text: __('Index'),
+        }, {
           id: 'devicename',
           text: __('Name'),
         }, {
@@ -333,6 +336,12 @@ export class Device extends PureComponent {
         }, {
           id: 'softversion',
           text: __('Version'),
+        }, {
+          id: 'channel2.4G',
+          text: __('Channel2.4G'),
+        }, {
+          id: 'channel5.8G',
+          text: __('Channel5.8G'),
         }, {
           id: 'operationhours',
           text: __('Uptime'),
@@ -372,6 +381,10 @@ export class Device extends PureComponent {
             );
           }.bind(this),
         },*/
+        {
+          id: 'index',
+          text: __('Index'),
+        },
         {
           id: 'devicename',
           text: __('Name'),
@@ -435,6 +448,12 @@ export class Device extends PureComponent {
               </span>
             );
           },
+        }, {
+          id: 'channel2.4G',
+          text: __('Channel2.4G'),
+        }, {
+          id: 'channel5.8G',
+          text: __('Channel5.8G'),
         }, {
           id: 'status',
           text: __('Status'),
@@ -585,20 +604,18 @@ export class Device extends PureComponent {
           />
 
         </div>
-        <div className="m-action-bar">
-          <Button
-            text={__('Locate')}
-            size="sm"
-            icon="location-arrow"
-            onClick={this.onMultiLocateDevice}
-          />
-          <Button
-            text={__('Upgrade')}
-            size="sm"
-            icon="level-up"
-            onClick={this.onMultiUpgradeDevice}
-          />
-        </div>
+        {
+          devicetype !== '4' ? (
+            <div className="m-action-bar">
+              <Button
+                text={__('Upgrade')}
+                size="sm"
+                icon="level-up"
+                onClick={this.onMultiUpgradeDevice}
+              />
+            </div>
+          ) : null
+        }
         <Table
           className="table"
           loading={this.props.store.get('fetching')}

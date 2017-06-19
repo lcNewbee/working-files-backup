@@ -1,13 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { List, fromJS } from 'immutable';
 import Button from 'shared/components/Button/Button';
 // components
 import {
   Table, Switchs, Icon, Modal, EchartReact,
 } from 'shared/components';
-
+import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 import reducer from './reducer';
 
@@ -212,11 +214,9 @@ const eChartStyle = {
 };
 
 const propTypes = {
-
+  createModal: PropTypes.func,
 };
-
-const defaultProps = {
-};
+const defaultProps = {};
 
 // 原生的 react 页面
 export class Status extends React.PureComponent {
@@ -289,16 +289,15 @@ export class Status extends React.PureComponent {
 
   onDeleteOfflineAp(mac) {
     const comfirmText = __('Are you sure delete offline AP: %s?', mac);
-
     this.props.createModal({
       id: 'status',
-      mac,
       role: 'confirm',
       text: comfirmText,
-      apply: function () {
+      apply: () => {
         this.props.deleteOfflineAp(mac);
-      }.bind(this),
+      },
     });
+    // this.props.deleteOfflineAp(mac);
   }
   createTimeTypeClass(type) {
     let ret = 'btn';
@@ -366,6 +365,10 @@ export class Status extends React.PureComponent {
   getOfflineApListOption() {
     const ret = fromJS([
       {
+        id: 'index',
+        text: __('Index'),
+      },
+      {
         id: 'devicename',
         text: __('Name'),
       }, {
@@ -378,16 +381,11 @@ export class Status extends React.PureComponent {
         id: 'softversion',
         text: __('Version'),
       }, {
-        id: 'channel',
-        text: __('Channel'),
-        render(val, item) {
-          let ret = val;
-
-          if (val == 0) {
-            ret = __('auto');
-          }
-          return ret;
-        },
+        id: 'channel2.4G',
+        text: __('Channel2.4G'),
+      }, {
+        id: 'channel5.8G',
+        text: __('Channel5.8G'),
       }, {
         id: 'op',
         text: __('Actions'),
@@ -666,11 +664,18 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    appActions,
+    actions,
+  ), dispatch);
+}
+
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  actions,
+  mapDispatchToProps,
 )(Status);
 
 export const status = reducer;

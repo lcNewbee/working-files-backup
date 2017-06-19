@@ -32,6 +32,27 @@ function selectRow(state, action) {
     .setIn(['actionQuery', 'selectedList'], selectObject.selectedList);
 }
 
+function receiveDevicesData(state, updateAt, data) {
+  if (data && data.list) {
+    const dataList = data.list;
+    const dataPage = data.page;
+    let i = 0;
+    const size = data.list.length;
+    const startIndex = (dataPage.currPage - 1) * dataPage.size;
+    for (i; i < size; i += 1) {
+      dataList[i].index = startIndex + i + 1;
+    }
+    const newData = {};
+    newData.list = dataList;
+    newData.page = dataPage;
+    return state.set('fetching', false)
+          .set('updateAt', updateAt)
+          .mergeIn(['data'], newData);
+  }
+
+  return state;
+}
+
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'CHANGE_DEVICES_QUERY':
@@ -44,9 +65,10 @@ export default function (state = defaultState, action) {
       return selectRow(state, action);
 
     case 'RECIVE_FETCH_DEVICES':
-      return state.set('fetching', false)
-        .set('updateAt', action.updateAt)
-        .mergeIn(['data'], action.data);
+      return receiveDevicesData(state, action.updateAt, action.data);
+      // return state.set('fetching', false)
+      //   .set('updateAt', action.updateAt)
+      //   .mergeIn(['data'], action.data);
 
     case 'REQEUST_FETCH_DEVICE_NETWORK':
       return state.set('edit', Map({

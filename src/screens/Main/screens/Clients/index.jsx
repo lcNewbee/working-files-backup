@@ -19,6 +19,10 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 
 const clientsTableOptions = fromJS([
   {
+    id: 'index',
+    text: __('Index'),
+  },
+  {
     id: 'devicename',
     text: __('Name'),
   }, {

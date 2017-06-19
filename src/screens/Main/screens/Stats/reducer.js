@@ -28,6 +28,26 @@ const defaultState = fromJS({
   },
 });
 
+function receiveOffilineApData(state, data) {
+  if (data && data.list) {
+    const dataOfflineList = data.list;
+    const dataOfflineQuery = data.page;
+    let i = 0;
+    const size = data.list.length;
+    const startIndex = (dataOfflineQuery.currPage - 1) * dataOfflineQuery.size;
+    for (i; i < size; i += 1) {
+      dataOfflineList[i].index = startIndex + i + 1;
+    }
+    const newData = {};
+    newData.list = dataOfflineList;
+    newData.query = dataOfflineQuery;
+    return state.mergeIn(['offlineAp'], newData);
+  }
+
+  return state;
+}
+
+
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'REQEUST_STATS':
@@ -40,7 +60,8 @@ export default function (state = defaultState, action) {
       return state.mergeIn(['query'], action.data);
 
     case 'REVEVICE_FETCH_OFFLINE_AP':
-      return state.mergeIn(['offlineAp'], action.data);
+      return receiveOffilineApData(state, action.data);
+      // return state.mergeIn(['offlineAp'], action.data);
 
     case 'CHANGE_OFFLINE_AP_QUERY':
       return state.mergeIn(['offlineAp', 'query'], action.data);
