@@ -20,6 +20,10 @@ const validOptions = Map({
 
 const propTypes = {
   status: PropTypes.string,
+  history: PropTypes.array,
+  route: PropTypes.shape({
+    mainPath: PropTypes.string,
+  }),
   loginedAt: PropTypes.number,
   changeLoginState: PropTypes.func,
   save: PropTypes.func,
@@ -118,10 +122,11 @@ export default class Login extends React.PureComponent {
         };
         let result = __('Password Error');
 
-        if (json.state) {
+        if (json && json.state) {
           if (json.state.code === 2000) {
             result = 'ok';
 
+            // 处理权限问题
             if (json.data && json.data.purview) {
               utils.extend(loginState, json.data);
 
@@ -144,6 +149,7 @@ export default class Login extends React.PureComponent {
             result = guiConfig.hasUsername ? __(json.state.msg) : __(json.state.msg.replace('username or ', ''));
           }
         }
+
         loginState.msg = result;
 
         return loginState;

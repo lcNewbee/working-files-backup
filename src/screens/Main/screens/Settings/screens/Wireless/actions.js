@@ -5,8 +5,8 @@ import urls from 'shared/config/urls';
 // Fetch
 export function reqeustFetchWifi() {
   return {
-    type: "REQEUST_FETCH_WIFI"
-  }
+    type: 'REQEUST_FETCH_WIFI',
+  };
 }
 export function receiveWifi(data, frequencyValue) {
   return {
@@ -17,7 +17,7 @@ export function receiveWifi(data, frequencyValue) {
   };
 }
 export function fetchWifiSettings(frequencyValue) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(reqeustFetchWifi());
 
     dispatch(appActions.fetch(urls.fetchWifi))
@@ -46,7 +46,7 @@ export function changeWifiFrequency(frequencyValue) {
 }
 export function changeWifiSettings(data) {
   return {
-    type: "CHANGE_WIFI_SETTINGS",
+    type: 'CHANGE_WIFI_SETTINGS',
     data,
   };
 }
@@ -54,20 +54,20 @@ export function changeWifiSettings(data) {
 // Set
 export function reqeustSetWifi() {
   return {
-    type: "REQEUST_SET_WIFI"
-  }
+    type: 'REQEUST_SET_WIFI',
+  };
 }
 export function receiveSetWifi() {
   return {
-    type: "RECEIVE_SET_WIFI"
-  }
+    type: 'RECEIVE_SET_WIFI',
+  };
 }
 export function setWifi() {
   return (dispatch, getState) => {
     const data = getState().wireless.getIn(['data', 'curr']);
 
     dispatch(appActions.save(urls.saveWifi, data))
-      .then(function(json){
+      .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchWifiSettings());
         }

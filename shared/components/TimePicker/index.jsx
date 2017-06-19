@@ -15,7 +15,7 @@ const propTypes = {
 };
 const defaultProps = {
   isAsync: false,
-  placeholder: __('Please Select '),
+  placeholder: __('Please Select'),
 };
 
 class MyTimePicker extends PureComponent {

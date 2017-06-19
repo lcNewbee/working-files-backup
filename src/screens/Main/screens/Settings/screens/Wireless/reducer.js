@@ -69,13 +69,13 @@ function receiveSettings(state, settingData, frequencyValue) {
   const currData = state.getIn(['data', 'curr']) || Map({});
   let listCurr;
   if (!currData.isEmpty()) {
-    listCurr = currData.merge(ret.getIn(['data', 'list']).find(function (item) {
+    listCurr = currData.merge(ret.getIn(['data', 'list']).find((item) => {
       return currData.get('groupname') === item.get('groupname');
     }));
   } else {
     listCurr = currData.merge(ret.getIn(['data', 'list', 0]));
   }
-  listCurr = transformCountryData(listCurr, frequencyValue);
+  // listCurr = transformCountryData(listCurr, frequencyValue);
   return ret.setIn(['data', 'curr'], listCurr)
     .set('fetching', false);
 }
@@ -84,7 +84,7 @@ function changeGroup(state, groupname, frequencyValue) {
   const ret = state.mergeIn(['data', 'curr', 'radio2.4G'], defaultSettings).mergeIn(['data', 'curr', 'radio5.8G'], defaultSettings);
   let selectGroup = state.getIn(['data', 'list'])
     .find(item => item.get('groupname') === groupname);
-  selectGroup = transformCountryData(selectGroup, frequencyValue);
+  //selectGroup = transformCountryData(selectGroup, frequencyValue);
   return ret.mergeIn(['data', 'curr'], selectGroup);
 }
 

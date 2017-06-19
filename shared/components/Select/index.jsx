@@ -18,7 +18,7 @@ const defaultProps = {
   readOnly: false,
   disabled: false,
   onChange: () => {},
-  placeholder: __('Please Select '),
+  placeholder: __('Please Select'),
 };
 
 class MySelect extends PureComponent {

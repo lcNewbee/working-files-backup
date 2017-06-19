@@ -114,9 +114,6 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[1,128]',
       }),
-      render(val) {
-        return __(val);
-      },
     },
   }, {
     id: 'payType',
@@ -346,11 +343,11 @@ const listOptions = fromJS([
     id: 'decsription',
     noTable: true,
     text: __('Description'),
+    render(val) {
+      return __(val);
+    },
     formProps: {
       type: 'textarea',
-      render(val) {
-        return __(val);
-      },
     },
   }, {
     id: '__actions__',

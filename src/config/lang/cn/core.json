@@ -145,6 +145,10 @@
   "beta": "测试版",
   "A total of %s": "共 %s 条",
 
+  "Please Select": "请选择",
+  "Please Select ": "请选择",
+  "Please Select %s": "请选择%s",
+
   "Width": "宽度",
   "Length": "长度",
   "Meter": "米",

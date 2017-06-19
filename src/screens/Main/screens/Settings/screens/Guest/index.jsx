@@ -257,15 +257,6 @@ export class Guest extends PureComponent {
                 {...password}
               /> : null
           }
-          <FormGroup
-            type="checkbox"
-            label={__('Enable Portal')}
-            options={{
-              label: __('Enable'),
-            }}
-            checked={getCurrData('portalenable') == '1'}
-            onChange={this.onUpdate('portalenable')}
-          />
 
           <FormGroup
             label={__('VLAN')}
@@ -284,7 +275,7 @@ export class Guest extends PureComponent {
             { __('VLAN ID:') }
             <FormInput
               type="text"
-              style={{ 'marginLeft': '3px' }}
+              style={{ marginLeft: '3px', width: '115px' }}
               className="input-sm"
               disabled={getCurrData('vlanenable') != '1'}
               value={getCurrData('vlanid')}
@@ -311,6 +302,7 @@ export class Guest extends PureComponent {
               type="number"
               maxLength="6"
               size="sm"
+              style={{ width: '115px' }}
               disabled={getCurrData('upstream') === '0'}
               value={getCurrData('upstream')}
               onChange={this.onUpdate('upstream')}
@@ -338,11 +330,21 @@ export class Guest extends PureComponent {
               type="number"
               maxLength="6"
               size="sm"
+              style={{ width: '115px' }}
               disabled={getCurrData('downstream') === '0'}
               value={getCurrData('downstream')}
               onChange={this.onUpdate('downstream')}
             />
           </FormGroup>
+          <FormGroup
+            type="checkbox"
+            label={__('Enable Portal')}
+            options={{
+              label: __('Enable'),
+            }}
+            checked={getCurrData('portalenable') == '1'}
+            onChange={this.onUpdate('portalenable')}
+          />
         </div>
 
         <FormGroup role="save">

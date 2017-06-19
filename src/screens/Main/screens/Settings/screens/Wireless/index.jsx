@@ -8,7 +8,6 @@ import validator from 'shared/validator';
 import { actions as appActions } from 'shared/containers/app';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import { SaveButton } from 'shared/components';
-import Switchs from 'shared/components/Switchs';
 import channels from 'shared/config/country.json';
 import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
@@ -30,33 +29,43 @@ const encryptionOptions = [
   },
 ];
 const txPowerOptions = [
-    {
-      value: '3%',
-      label: '3%',
-    }, {
-      value: '6%',
-      label: '6%',
-    }, {
-      value: '12%',
-      label: '12%',
-    }, {
-      value: '25%',
-      label: '25%',
-    }, {
-      value: '50%',
-      label: '50%',
-    }, {
-      value: '100%',
-      label: '100%',
-    },
+  {
+    value: '3%',
+    label: '3%',
+  },
+  {
+    value: '6%',
+    label: '6%',
+  },
+  {
+    value: '12%',
+    label: '12%',
+  },
+  {
+    value: '25%',
+    label: '25%',
+  },
+  {
+    value: '50%',
+    label: '50%',
+  },
+  {
+    value: '100%',
+    label: '100%',
+  },
 ];
 const channelBandwidthOptions = fromJS([
   {
     value: '20',
-    label: '20',
-  }, {
-    value: '40',
-    label: '40',
+    label: 'HT20',
+  },
+  {
+    value: '30',
+    label: 'HT40-',
+  },
+  {
+    value: '50',
+    label: 'HT40+',
   },
 ]);
 
@@ -80,7 +89,6 @@ const validOptions = Map({
 
 const channelsList = List(channels);
 
-
 function getCountryOptions() {
   return channelsList.map(item =>
      ({
@@ -90,44 +98,14 @@ function getCountryOptions() {
   ).toJS();
 }
 
-function getChannelsOptions(currCountry) {
-  let i;
-  let len;
-  let channelsRange;
-  const channelsOptions = [
-    {
-      value: '0',
-      label: __('auto'),
-    },
-  ];
-  const channelsOption = channelsList.find(item =>
-     item.country === currCountry,
-  );
-
-  if (channelsOption) {
-    channelsRange = channelsOption['2.4g'].split('-');
-    i = parseInt(channelsRange[0], 10);
-    len = parseInt(channelsRange[1], 10);
-  } else {
-    i = 1;
-    len = 13;
-  }
-
-  for (i; i <= len; i++) {
-    channelsOptions.push({
-      value: `${i}`,
-      label: `${i}`,
-    });
-  }
-
-  return channelsOptions;
-}
-
 const propTypes = {
   fetchWifiSettings: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
   changeWifiGroup: PropTypes.func,
-  changeWifiFrequency: PropTypes.func,
+  changeWifiSettings: PropTypes.func,
+  save: PropTypes.func,
+  setWifi: PropTypes.func,
+  validateAll: PropTypes.func,
   validateOption: PropTypes.object,
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -140,15 +118,23 @@ export class Wireless extends PureComponent {
     utils.binds(this, [
       'onUpdate', 'onChangeGroup','onChangeFrequency', 'onChangeEncryption', 'onUpdateSettings',
       'onSave', 'getCurrData', 'getGroupOptions', 'getChannelsOptions',
-      'getChannelsValue',
+      'fetchChannelsOptions',
     ]);
     this.state = {
       frequency: '2.4G',
+      channelOptions: [],
     };
   }
   componentWillMount() {
     const frequencyValue = this.state.frequency;
-    this.props.fetchWifiSettings(frequencyValue);
+    this.props.fetchWifiSettings(frequencyValue)
+      .then((json) => {
+        if (json && json.data && json.data.list) {
+          this.fetchChannelsOptions(json.data.list[0]);
+        }
+      });
+
+    this.countryOptions = getCountryOptions();
   }
 
   componentDidUpdate(prevProps) {
@@ -181,13 +167,15 @@ export class Wireless extends PureComponent {
   onChangeGroup(item) {
     const modeVal = this.state.frequency;
     this.props.changeWifiGroup(item.value, modeVal);
+    this.fetchChannelsOptions();
   }
 
   onChangeFrequency(item) {
-    const frequencyValue = this.setState({
+    this.setState({
       frequency: item.value,
     });
     this.props.fetchWifiSettings(item.value);
+    this.fetchChannelsOptions();
   }
 
   // 没有用
@@ -205,20 +193,20 @@ export class Wireless extends PureComponent {
       const radio2Object = {};
       const data = {};
       const currGroupName = this.props.store.getIn(['data', 'curr', 'groupname']);
-      data.groupname = currGroupName;
       const modeVal = this.state.frequency;
+      data.groupname = currGroupName;
       if (modeVal === '5G') {
-        if (name === 'country') {
-          radio5Object.channel = this.getChannelsValue(item.value) || myDefault;
-        } else {
-          radio5Object[name] = item.value || myDefault;
-        }
+        radio5Object[name] = item.value || myDefault;
       } else {
         radio2Object[name] = item.value || myDefault;
       }
       data['radio5.8G'] = radio5Object;
       data['radio2.4G'] = radio2Object;
       this.props.changeWifiSettings(data);
+
+      if (name === 'country' || name === 'channelsBandwidth') {
+        this.fetchChannelsOptions();
+      }
     };
   }
 
@@ -234,6 +222,7 @@ export class Wireless extends PureComponent {
   getCurrData(name) {
     const modeVal = this.state.frequency;
     let ret;
+
     if (name !== 'groupname') {
       if (modeVal === '5G') {
         ret = this.props.store.getIn(['data', 'curr', 'radio5.8G', name]);
@@ -246,19 +235,10 @@ export class Wireless extends PureComponent {
     return ret;
   }
 
-  getChannelsValue(country) {
-    let ret = parseInt(this.getCurrData('channel'));
-    const maxChannel = getChannelsOptions(country).length - 1;
-    if (ret > maxChannel) {
-      ret = maxChannel.toString();
-    }
-
-    return `${ret}`;
-  }
   getGroupOptions() {
     return this.props.store
       .getIn(['data', 'list'])
-      .map((item, i) => {
+      .map((item) => {
         const groupname = item.get('groupname');
         let label = groupname;
 
@@ -279,23 +259,67 @@ export class Wireless extends PureComponent {
     if (modeVal === '5G') {
       $$ret = $$ret.push(fromJS({
         value: '80',
-        label: '80',
+        label: 'HT80',
       }));
     }
 
     return $$ret;
   }
+  fetchChannelsOptions() {
+    clearTimeout(this.fetchChannelTimeout);
 
+    this.fetchChanneling = true;
+    this.fetchChannelTimeout = setTimeout(() => {
+      const subData = (this.props.store.getIn(['data', 'curr']) || fromJS({
+        'radio2.4G': {
+          country: 'US',
+          phymode: '7',
+          channelsBandwidth: '20',
+        },
+        'radio5.8G': {
+          country: 'US',
+          phymode: '16',
+          channelsBandwidth: '20',
+        },
+      })).toJS();
+      subData['radio2.4G'].phymode = '7';
+      subData['radio5.8G'].phymode = '16';
+
+      this.props.save('/goform/getWifiChannel', subData)
+        .then((json) => {
+          let thisCannelOptions = [];
+          if (json && json.data) {
+            if (this.state.frequency === '5G') {
+              thisCannelOptions = json.data['channel5.8g']
+                .map(item => ({
+                  value: `${item}`,
+                  label: `${item}`,
+                }));
+            } else {
+              thisCannelOptions = json.data['channel2.4g']
+                .map(item => ({
+                  value: `${item}`,
+                  label: `${item}`,
+                }));
+            }
+            this.fetchChanneling = false;
+            this.setState({
+              channelOptions: thisCannelOptions,
+            });
+          }
+        });
+    }, 200);
+  }
   render() {
     const {
       password, vlanid, ssid, upstream, downstream,
     } = this.props.validateOption;
     const groupOptions = this.getGroupOptions();
-    const countryOptions = getCountryOptions();
     const getCurrData = this.getCurrData;
-    const channelsOptions = getChannelsOptions(getCurrData('country'));
+    // const channelsOptions = getChannelsOptions(getCurrData('country'), this.state.frequency);
     const myChannelWidthOptions = this.getChannelWidthOptions();
     const noControl = this.props.app.get('noControl');
+
     return (
       <div>
         <h3>{ __('Current Group') }</h3>
@@ -335,14 +359,6 @@ export class Wireless extends PureComponent {
           id="ssid"
           onChange={this.onUpdateSettings('ssid')}
           {...ssid}
-        />
-        <FormGroup
-          label={__('Terminal Isolation')}
-          id="ssidisolate"
-          required
-          type="checkbox"
-          checked={getCurrData('ssidisolate') === '1'}
-          onChange={this.onUpdate('ssidisolate')}
         />
         <FormGroup
           type="select"
@@ -387,7 +403,7 @@ export class Wireless extends PureComponent {
           { __('VLAN ID:') }
           <FormInput
             type="text"
-            style={{ marginLeft: '3px' }}
+            style={{ marginLeft: '3px', width: '115px' }}
             className="input-sm"
             disabled={getCurrData('vlanenable') != '1'}
             value={getCurrData('vlanid')}
@@ -395,40 +411,41 @@ export class Wireless extends PureComponent {
           />
           <span className="help">(2 - 4095)</span>
         </FormGroup>
+        <FormGroup
+          label={__('SSID Isolation')}
+          id="ssidisolate"
+          required
+          type="checkbox"
+          checked={getCurrData('ssidisolate') === '1'}
+          onChange={this.onUpdate('ssidisolate')}
+        />
         <h3>{__('Radio Settings')}</h3>
         <FormGroup
           type="select"
           label={__('Country')}
-          options={countryOptions}
+          placeholder={__('Please Select')}
+          options={this.countryOptions}
           value={getCurrData('country')}
           onChange={this.onUpdateSettings('country')}
+          required
         />
         <FormGroup
           type="select"
           label={__('Channel')}
-          options={channelsOptions}
+          isLoading={this.fetchChanneling}
+          options={this.state.channelOptions}
           value={getCurrData('channel')}
           onChange={this.onUpdateSettings('channel')}
+          required
         />
-        {
-          this.state.frequency === '5G' ? (
-            <FormGroup label={__('Channel Bandwidth')} >
-              <Switchs
-                options={myChannelWidthOptions}
-                value={getCurrData('channelsBandwidth')}
-                onChange={this.onUpdateSettings('channelsBandwidth')}
-              />
-            </FormGroup>
-            ) : (
-              <FormGroup label={__('Channel Bandwidth')} >
-                <Switchs
-                  options={channelBandwidthOptions}
-                  value={getCurrData('channelsBandwidth')}
-                  onChange={this.onUpdateSettings('channelsBandwidth')}
-                />
-              </FormGroup>
-            )
-        }
+        <FormGroup
+          label={__('Channel Bandwidth')}
+          type="switch"
+          value={getCurrData('channelsBandwidth')}
+          options={myChannelWidthOptions}
+          onChange={this.onUpdateSettings('channelsBandwidth')}
+          required
+        />
         <h3>{__('Bandwidth Control')}</h3>
         <FormGroup
           label={msg.upSpeed}
@@ -448,6 +465,7 @@ export class Wireless extends PureComponent {
             type="number"
             maxLength="6"
             size="sm"
+            style={{ width: '115px' }}
             disabled={getCurrData('upstream') === '0'}
             value={getCurrData('upstream')}
             onChange={this.onUpdate('upstream')}
@@ -474,6 +492,7 @@ export class Wireless extends PureComponent {
             type="number"
             maxLength="6"
             size="sm"
+            style={{ width: '115px' }}
             disabled={getCurrData('downstream') === '0'}
             value={getCurrData('downstream')}
             onChange={this.onUpdate('downstream')}
@@ -486,7 +505,7 @@ export class Wireless extends PureComponent {
               noControl ? null : (
                 <SaveButton
                   type="button"
-                  loading={this.props.app.get('saving')}
+                  loading={this.props.app.get('saving') && !this.fetchChanneling}
                   onClick={this.onSave}
                 />
               )

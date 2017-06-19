@@ -41,6 +41,9 @@ export default class Main extends React.PureComponent {
         this.onRefresh(e);
       }
     };
+    const { guiName } = props.app.toJS();
+
+    document.title = guiName;
   }
 
   onRefresh(e) {
