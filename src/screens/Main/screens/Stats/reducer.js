@@ -40,7 +40,7 @@ function receiveOffilineApData(state, data) {
     }
     const newData = {};
     newData.list = dataOfflineList;
-    newData.query = dataOfflineQuery;
+    newData.page = dataOfflineQuery;
     return state.mergeIn(['offlineAp'], newData);
   }
 
