@@ -16,8 +16,10 @@
 ``npm install gulp-cli -g``
 
 #### Yarn
-``yarn config set registry https://registry.npm.taobao.org``
-``yarn install``
+``
+  yarn config set registry https://registry.npm.taobao.org
+  yarn install
+``
 由于我们使用gulp，接下来安装 gulp-cli 
 ``yarn install gulp-cli -g``
 
