@@ -349,7 +349,7 @@ export class Clients extends PureComponent {
             value={this.props.query.get('text')}
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
-            placeholder={__('IP or MAC Address')}
+            placeholder={__('IP/MAC/Associated AP')}
           />
           <Switchs
             value={this.props.query.get('type')}
