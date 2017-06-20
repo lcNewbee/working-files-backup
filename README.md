@@ -14,18 +14,18 @@
     npm config set registry https://registry.npm.taobao.org  
     npm install
 > 由于我们使用 gulp，接下来安装 gulp-cli
-> ``npm install gulp-cli -g``
+    npm install gulp-cli -g
 
 #### Yarn
 > 在国内推荐使用 npm 淘宝镜像
-> ``yarn config set registry https://registry.npm.taobao.org``    
-> ``yarn install``     
+    yarn config set registry https://registry.npm.taobao.org  
+    yarn install     
 
 > 由于我们使用gulp，接下来安装 gulp-cli 
->``yarn install gulp-cli -g``
+    yarn install gulp-cli -g
 
 #### 在浏览器中查看效果
-``gulp``
+    gulp
 
 ## 原则
 在Comlanos前端平台设计与开发过程中我们尽量遵守以下原则
