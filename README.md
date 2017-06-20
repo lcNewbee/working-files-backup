@@ -10,9 +10,9 @@
 ### 依赖包安装
 安装依赖包
 #### npm
-> 接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像   
-> ``npm config set registry https://registry.npm.taobao.org``   
-> ``npm install``
+> 接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像
+    npm config set registry https://registry.npm.taobao.org  
+    npm install
 > 由于我们使用 gulp，接下来安装 gulp-cli
 > ``npm install gulp-cli -g``
 
