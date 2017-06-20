@@ -8,20 +8,30 @@
 首先确保安装node.js环境.
 
 ### 依赖包安装
-安装依赖包
 #### npm
 > 接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像
+<<<<<<< HEAD
     npm config set registry https://registry.npm.taobao.org  
+=======
+    npm config set registry https://registry.npm.taobao.org
+>>>>>>> Platform: 优化描述相关文件
     npm install
 > 由于我们使用 gulp，接下来安装 gulp-cli
     npm install gulp-cli -g
 
 #### Yarn
 > 在国内推荐使用 npm 淘宝镜像
+<<<<<<< HEAD
     yarn config set registry https://registry.npm.taobao.org  
     yarn install     
 
 > 由于我们使用gulp，接下来安装 gulp-cli 
+=======
+    yarn config set registry https://registry.npm.taobao.org 
+    yarn install 
+
+> 由于我们使用 gulp，接下来安装 gulp-cli 
+>>>>>>> Platform: 优化描述相关文件
     yarn install gulp-cli -g
 
 #### 在浏览器中查看效果
