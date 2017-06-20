@@ -10,19 +10,19 @@
 ### 依赖包安装
 安装依赖包
 #### npm
-> 接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像
-``npm config set registry https://registry.npm.taobao.org``   
-``npm install``
+> 接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像   
+> ``npm config set registry https://registry.npm.taobao.org``   
+> ``npm install``
 > 由于我们使用 gulp，接下来安装 gulp-cli
-``npm install gulp-cli -g``
+> ``npm install gulp-cli -g``
 
 #### Yarn
 > 在国内推荐使用 npm 淘宝镜像
-``yarn config set registry https://registry.npm.taobao.org``    
-``yarn install``     
+> ``yarn config set registry https://registry.npm.taobao.org``    
+> ``yarn install``     
 
 > 由于我们使用gulp，接下来安装 gulp-cli 
-``yarn install gulp-cli -g``
+>``yarn install gulp-cli -g``
 
 #### 在浏览器中查看效果
 ``gulp``
