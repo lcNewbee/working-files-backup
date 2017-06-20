@@ -9,16 +9,16 @@
 
 ### 依赖包安装
 安装依赖包
-npm
+#### npm
 接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像
 ``npm install``
 由于我们使用gulp，接下来安装 gulp-cli
 ``npm install gulp-cli -g``
 
-Yarn
-yarn config set registry https://registry.npm.taobao.org
+#### Yarn
+``yarn config set registry https://registry.npm.taobao.org``
 ``yarn install``
-由于我们使用gulp，接下来安装 gulp-cli
+由于我们使用gulp，接下来安装 gulp-cli 
 ``yarn install gulp-cli -g``
 
 在浏览器中查看效果
@@ -42,10 +42,4 @@ yarn config set registry https://registry.npm.taobao.org
 参考文档：[Docker libcontainer 原则][https://github.com/docker/libcontainer/blob/master/PRINCIPLES.md]
 
 ## 修改记录
-
-### 1.0.18(2016-7-8)
-- 初始版本发布
-- 使用 webpack，babel构建代码打包及编译打包环境
-- 测试使用 mocha与chai
-- 开发核心使用的前端库或框架如下：react, redux，immutable, react-router, react-redux，fetch等
-- 并实现了软AC的第一个版本
+查看 CHANGLOG.md 文件
