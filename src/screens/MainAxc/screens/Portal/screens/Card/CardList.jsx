@@ -45,7 +45,7 @@ const queryFormOptions = fromJS([
   {
     id: 'payType',
     type: 'select',
-    label: __('Acc Type'),
+    label: __('Account Type'),
     options: [
       {
         value: '-100',
@@ -120,7 +120,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'payType',
-    text: __('Acc Type'),
+    text: __('Account Type'),
     width: '120px',
     noForm: true,
     formProps: {
@@ -191,6 +191,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       min: 0,
+      required: true,
       validator: validator({
         rules: 'num:[0,9999]',
       }),
@@ -339,8 +340,15 @@ const listOptions = fromJS([
     id: 'money',
     text: __('Voucher Cost'),
     formProps: {
-      type: 'text',
+      type: 'number',
+      required: true,
+      min: '0.01',
+      max: '999999999',
+      validator: validator({
+        rules: 'range:[0.01,999999]',
+      }),
       help: __('$'),
+
     },
   }, {
     id: 'decsription',

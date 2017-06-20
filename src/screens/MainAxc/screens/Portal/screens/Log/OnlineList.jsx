@@ -65,7 +65,7 @@ const queryFormOptions = fromJS([
         label: __('App Login'),
       }, {
         value: '4',
-        label: __('Messages Login'),
+        label: __('SMS Login'),
       }, {
         value: '5',
         label: __('Wechat Login'),
@@ -247,7 +247,7 @@ const listOptions = fromJS([
         label: __('App Login'),
       }, {
         value: '4',
-        label: __('Messages Login'),
+        label: __('SMS Login'),
       }, {
         value: '5',
         label: __('Wechat Login'),

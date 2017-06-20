@@ -55,6 +55,26 @@ var vaildate = {
     }
   },
 
+  range: function (str, min, max, expand) {
+    var retStr = '';
+
+    if (!utilsString.isNumber(str)) {
+      return __("Must be number");
+    }
+    if (typeof expand !== 'undefined') {
+      if (parseFloat(str) === parseFloat(expand)) {
+        return ;
+      }
+    }
+
+    if (typeof min !== 'undefined' && typeof max !== 'undefined') {
+      if (parseFloat(str) < min || parseFloat(str) > max) {
+        retStr = typeof (expand) !== 'undefined' ? __("Range: %s or %s - %s", expand, min, max):__("Range: %s - %s", min, max);
+        return retStr;
+      }
+    }
+  },
+
   mac: {
     all: function (str) {
       var ret = this.specific(str);

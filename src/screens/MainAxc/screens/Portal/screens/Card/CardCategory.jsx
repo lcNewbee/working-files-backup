@@ -218,10 +218,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
-      min: '0',
+      min: '0.01',
       max: '999999999',
       validator: validator({
-        rules: 'num:[1,999999]',
+        rules: 'range:[0.01,999999]',
       }),
       help: __('$'),
     },

@@ -117,11 +117,12 @@
   "Only Support Wechat Login": "仅支持微信认证",
   "Only Support Facebook Login": "仅支持Facebook认证",
 
-  "Port-based authentication rules use this settings": "基于端口的认证规则使用此配置",
+  "Port-based Login rules use this settings": "基于端口的认证规则使用此配置",
   "This function is available only when the \"Rule Type\" is \"Port\",whice configured in \"AAA Policies\".": "此功能只在“AAA策略”列表中的“规则类型”为配置为端口时生效。",
 
-  "Public Platform Authentication":"公众号认证",
-  "Visitor Authentication":"访客认证",
+  "Public Platform Login":"公众号认证",
+  "Visitor Login":"访客认证",
+  "Default": "默认",
   "Redirect URL":"认证后重定向URL",
   "Limit Connect Duration":"限制上网时长",
   "minutes(0 means no limitation)":"分（0代表无限制）",
