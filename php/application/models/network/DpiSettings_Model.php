@@ -11,6 +11,7 @@ class DpiSettings_Model extends CI_Model {
             'state' => array('code'=>2000,'msg'=>'ok'),
             'data' => array(    
                 'settings' => array(
+                    'ethNumber' => $this->getPortSum(),
                     'ndpiEnable' => $this->get_ndpi_state()
                 ),                            
             )
@@ -78,4 +79,13 @@ class DpiSettings_Model extends CI_Model {
         }
 		return $arr;
 	}
+    private function getPortSum(){
+        $sum = 6;
+        $query = $this->db->query('select portid from port_table')
+                        ->result_array();
+        if(count($query) > 0){
+            return count($query);
+        }
+        return $sum;
+    }
 }

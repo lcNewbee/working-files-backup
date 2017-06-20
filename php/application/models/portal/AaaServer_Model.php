@@ -29,9 +29,9 @@ class AaaServer_Model extends CI_Model {
                 $row['portalRule'] = $this->getPortalRule($row['portal_template'], $row['portalServer']['interface_bind']);//获取portal 规则
 
                 if($row['portal_rule_type'] === 'ssid'){
-                    $sqlcmd = "select id,apmac,ssid,address,des,web from portal_ssid where ssid='{$row['ssid']}' and (apmac='' or apmac=null)";
+                    $sqlcmd = "select id,apmac,ssid,address,des,web from portal_ssid where BINARY ssid='{$row['ssid']}' and (apmac='' or apmac=null)";
                     if($row['mac'] != '' && $row['mac'] != ''){
-                        $sqlcmd = "select id,apmac,ssid,address,des,web from portal_ssid where ssid='{$row['ssid']}' and apmac='{$row['mac']}'";
+                        $sqlcmd = "select id,apmac,ssid,address,des,web from portal_ssid where BINARY ssid='{$row['ssid']}' and apmac='{$row['mac']}'";
                     }
                     $webquery = $this->portalsql->query($sqlcmd)->result_array();
                     if(count($webquery) > 0) {
@@ -170,7 +170,7 @@ class AaaServer_Model extends CI_Model {
                         } else {
                             //选择ssid 但未选择apmac 修改
                             //没有apmac  ->  修改数据库中匹配到ssid 当没apmac的记录，
-                            $ssid_data = $this->portalsql->query("select * from portal_ssid where ssid='{$ssid}' and apmac=''")->result_array();
+                            $ssid_data = $this->portalsql->query("select * from portal_ssid where BINARY ssid='{$ssid}' and apmac=''")->result_array();
                             if(count($ssid_data) > 0){
                                 $web_ins = array(
                                     'name' => 'local_ssid_' . element('name', $data),
@@ -181,8 +181,7 @@ class AaaServer_Model extends CI_Model {
                                     'ssid' => $ssid,
                                     'apmac' => $apmac
                                 );
-                                $this->portalsql->where("ssid='{$ssid}' AND apmac=''");
-                                $this->portalsql->update('portal_ssid', $web_ins);
+                                $ret = $this->editWebTemplate($web_ins, array('ssid'=>$ssid,'apmac'=>''));
                             }else{
                                 //没有就添加
                                 $web_ary = array(
@@ -482,8 +481,8 @@ class AaaServer_Model extends CI_Model {
                     'ssid' => element('ssid',$data['portalTemplate']),
                     'apmac' => element('apmac',$data['portalTemplate'], '')
                 );
-                $this->portalsql->where('name', 'local_ssid_' . $domain_name);
-                if( ! $this->portalsql->update('portal_ssid', $web_ary) ) {
+                //修改portal_ssid
+                if( !$this->editWebTemplate($web_ary, array('name'=>'local_ssid_'.$domain_name)) ){
                     return json_encode(json_no('edit web Template error'));
                 }
             } else {
@@ -543,8 +542,11 @@ class AaaServer_Model extends CI_Model {
                     $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
                 }
                 //5.删除web 网页模板
+                $ret = $this->delWebTemplate('local_ssid_' . $query[0]['name']);
+                /*
                 $this->portalsql->where('name', 'local_ssid_' . $query[0]['name']);
                 $this->portalsql->delete('portal_ssid');
+                */
                 //6.删除portal 配置
                 $this->db->where('name',$domain_name);
                 $this->db->delete('portal_config');
@@ -586,10 +588,8 @@ class AaaServer_Model extends CI_Model {
                 if($data_rule['interface_bind'] != '') {
                     $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
                 }
-                //5.删除web 网页模板
-                //$this->portalsql->where('ssid', $query[0]['ssid']);
-                $this->portalsql->where('name', 'local_ssid_' . $query[0]['name']);
-                $this->portalsql->delete('portal_ssid');
+                //5.删除web 网页模板                
+                $this->delWebTemplate('local_ssid_' . $query[0]['name']);                
                 //6.删除portal 配置
                 $this->db->where('name',$res);
                 $this->db->delete('portal_config');
@@ -880,8 +880,8 @@ class AaaServer_Model extends CI_Model {
     }
     // 5. web 网页模板
     private function delWebTemplate($name) {
-        $this->portalsql->where('name', $name);
-        if( $this->portalsql->delete('portal_ssid') ){
+        $sqlcmd = "DELETE FROM portal_ssid WHERE BINARY name='{$name}'";        
+        if( $this->portalsql->query($sqlcmd) ){
             return TRUE;
         }
         return FALSE;
@@ -925,8 +925,41 @@ class AaaServer_Model extends CI_Model {
         }
         return FALSE;
     }
-    // 5. web 网页模板
-
+    /** 5. web 网页模板
+     * @dataAry数据键值对（键名必须和数据库一致）array('address'=>"SZ",...)
+     * @whereAry 条件数组（键名必须和数据库一致）array('name'=>"admin",...)
+     */
+    private function editWebTemplate($dataAry, $whereAry) {
+        if(count($dataAry) > 0 && count($whereAry) > 0){
+            $sqlcmd = "update from portal_ssid set";
+            foreach($dataAry as $key=>$value){
+                switch($key){
+                    case "name" : $sqlcmd .= " name='{$value}',";break;
+                    case "address" : $sqlcmd .= " address='{$value}',";break;
+                    case "basip" : $sqlcmd .= " basip='{$value}',";break;
+                    case "des" : $sqlcmd .= " des='{$value}',";break;
+                    case "ssid" : $sqlcmd .= " ssid='{$value}',";break;
+                    case "apmac" : $sqlcmd .= " apmac='{$value}',";break;
+                    case "web" : $sqlcmd .= " web={$value},";break;
+                }
+            }
+            $sqlcmd = rtrim($sqlcmd, ',');//去掉最后一个逗号
+            $sqlcmd .= " where 1=1 ";
+            foreach($whereAry as $wkey=>$wvalue){
+                switch($wkey){
+                    case "id" : $sqlcmd .= " and id={$wvalue}";break;
+                    case "ssid" : $sqlcmd .= " and BINARY ssid='{$wvalue}'";break;
+                    case "name" : $sqlcmd .= " and BINARY name='{$wvalue}'";break;
+                    case "apmac" : $sqlcmd .= " and BINARY apmac='{$wvalue}'";break;
+                }
+            }
+            $ret = $this->portalsql->query($sqlcmd);
+            if($ret > 0){
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
     // 更新ap ssid
     private function editApSsid($ssid, $domain) {
         $groupid = 0;
@@ -1021,7 +1054,7 @@ class AaaServer_Model extends CI_Model {
     }
     //判断Web模板是否存在
     private function isWebTemplate($name) {
-        $ret = $this->portalsql->query("select * from portal_ssid where name='{$name}'")->result_array();
+        $ret = $this->portalsql->query("select * from portal_ssid where BINARY name='{$name}'")->result_array();
         if(count($ret) > 0 ){
             return TRUE;
         }
@@ -1032,7 +1065,7 @@ class AaaServer_Model extends CI_Model {
       $ssid = element('ssid', $templateData, '');
       $apmac = element('apmac', $templateData, '');
       $id = element('id', $templateData, '');
-      $ret = $this->portalsql->query("select * from portal_ssid where ssid='{$ssid}' and apmac='{$apmac}'")->result_array();
+      $ret = $this->portalsql->query("select * from portal_ssid where BINARY ssid='{$ssid}' and BINARY apmac='{$apmac}'")->result_array();
 
       if (count($ret) > 0) {
         // 添加时不需要判断ID
