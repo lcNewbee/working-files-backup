@@ -57,25 +57,29 @@ const queryFormOptions = fromJS([
       }, {
         value: '1',
         label: __('Accessed User Login'),
-      }, {
-        value: '2',
-        label: __('Radius Login'),
-      }, {
-        value: '3',
-        label: __('App Login'),
-      }, {
+      },
+      // {
+      //   value: '2',
+      //   label: __('Radius Login'),
+      // }, {
+      //   value: '3',
+      //   label: __('App Login'),
+      // },
+      {
         value: '4',
         label: __('SMS Login'),
       }, {
         value: '5',
         label: __('Wechat Login'),
-      }, {
-        value: '6',
-        label: __('Public Platform Login'),
-      }, {
-        value: '7',
-        label: __('Visitor Login'),
-      }, {
+      },
+      // {
+      //   value: '6',
+      //   label: __('Public Platform Login'),
+      // }, {
+      //   value: '7',
+      //   label: __('Visitor Login'),
+      // },
+      {
         value: '9',
         label: __('Facebook Login'),
       },
@@ -239,25 +243,29 @@ const listOptions = fromJS([
       }, {
         value: '1',
         label: __('Accessed User Login'),
-      }, {
-        value: '2',
-        label: __('Radius Login'),
-      }, {
-        value: '3',
-        label: __('App Login'),
-      }, {
+      },
+      // {
+      //   value: '2',
+      //   label: __('Radius Login'),
+      // }, {
+      //   value: '3',
+      //   label: __('App Login'),
+      // },
+      {
         value: '4',
         label: __('SMS Login'),
       }, {
         value: '5',
         label: __('Wechat Login'),
-      }, {
-        value: '6',
-        label: __('Public Platform Login'),
-      }, {
-        value: '7',
-        label: __('Visitor Login'),
-      }, {
+      },
+      // {
+      //   value: '6',
+      //   label: __('Public Platform Login'),
+      // }, {
+      //   value: '7',
+      //   label: __('Visitor Login'),
+      // },
+      {
         value: '9',
         label: __('Facebook Login'),
       },

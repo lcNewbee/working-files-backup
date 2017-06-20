@@ -109,7 +109,7 @@ const listOptions = fromJS([
     id: 'time',
     text: __('Time Balance'),
     noForm: true,
-     render(val, $$data) {
+    render(val, $$data) {
       const accountType = $$data.get('state');
       let ret = uptimeFilter.transform(val / 1000);
 
@@ -314,7 +314,12 @@ const listOptions = fromJS([
     render(val, $$item) {
       return (
         <span>
-          <a href={`/index.html#/main/portal/account/list/mac/${$$item.get('loginName')}`} className="tablelink">{__('MAC Management')}</a>
+          <a
+            href={`/index.html#/main/portal/account/list/mac/${$$item.get('loginName')}`}
+            className="tablelink"
+          >
+            {__('MAC Management')}
+          </a>
         </span>
       );
     },
@@ -891,11 +896,11 @@ export default class View extends React.Component {
     }
     return (
       <div className="o-box row">
-        <div className="o-box__cell">
-          <h3
-            style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox('isBaseShow')}
-          >
+        <div
+          className="o-box__cell"
+          onClick={() => this.toggleBox('isBaseShow')}
+        >
+          <h3 style={{ cursor: 'pointer' }}>
             <Icon
               name={this.state.isBaseShow ? 'minus-square' : 'plus-square'}
               size="lg"
@@ -924,11 +929,11 @@ export default class View extends React.Component {
             </div>
           ) : null
         }
-        <div className="o-box__cell">
-          <h3
-            style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox('isAdvancedShow')}
-          >
+        <div
+          className="o-box__cell"
+          onClick={() => this.toggleBox('isAdvancedShow')}
+        >
+          <h3 style={{ cursor: 'pointer' }}>
             <Icon
               name={this.state.isAdvancedShow ? 'minus-square' : 'plus-square'}
               size="lg"

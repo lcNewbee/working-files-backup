@@ -90,8 +90,9 @@ function getTerminalTypeOption(serverData) {
       tooltip: {
         show: true,
         formatter: (params) => {
-          const arr = params.name.split('\n');
           let str = '';
+          if (typeof params.name === 'undefined') return str;
+          const arr = params.name.split('\n');
           arr.forEach((item, index) => {
             if (index === arr.length - 1) str += `${item}`;
             else str += `${item}<br />`;
@@ -111,6 +112,7 @@ function getTerminalTypeOption(serverData) {
     tooltip: {
       show: true,
       formatter: (params) => {
+        if (typeof params.name === 'undefined') return null;
         const arr = params.name.split('\n');
         if (arr.length > 1) return `Type:<br /> others: ${params.value}`;
         return `Type:<br /> ${params.name}: ${params.value}`;
