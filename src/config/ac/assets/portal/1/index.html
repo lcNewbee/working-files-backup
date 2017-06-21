@@ -86,7 +86,6 @@
     function initPage(data) {
       var bodyWidth = $(document).width();
       var contentWidth = bodyWidth > 600 ? '600px' : bodyWidth + 'px';
-
       currData = data;
       document.title = data.title;
       $('#portalTitle').text(data.title);
@@ -120,7 +119,7 @@
       var portalUrl = getPortalUrl();
 
       // 本地测试代码
-      // portalUrl = '/goform/portalAath';
+      // portalUrl = '/goform/portalAuth';
 
       $.getJSON(portalUrl, function(data) {
         if (data.state.code === 2000) {

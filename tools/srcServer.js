@@ -14,16 +14,16 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import serverApiMiddleware from './middleware/api';
 import config from '../webpack.config.dev';
+import getCurAppName from './shared/getCurAppName';
 
 const bundler = webpack(config);
+
+const currAppName = getCurAppName();
 
 // Run Browsersync and use middleware for Hot Module Replacement
 browserSync({
   server: {
-    baseDir: 'src',
-    routes: {
-      '/': 'src/assets',
-    },
+    baseDir: ['src', 'src/assets', `src/config/${currAppName}/assets`],
     index: 'index.html',
     middleware: [
       {
