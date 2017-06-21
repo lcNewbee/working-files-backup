@@ -33,7 +33,7 @@ browserSync({
       webpackDevMiddleware(bundler, {
         // Dev middleware can't access config, so we provide publicPath
         publicPath: config.output.publicPath,
-
+       // lazy: true,
         // pretty colored output
         stats: { colors: true },
 

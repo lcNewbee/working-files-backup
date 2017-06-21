@@ -19,7 +19,7 @@ let GLOBALS = {
 let config = {
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-  devtool: 'eval-source-map',
+  devtool: 'cheap-eval-source-map',
 
   entry: {
     index: [
@@ -160,6 +160,7 @@ let config = {
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.ModuleConcatenationPlugin(),
   ],
 };
 

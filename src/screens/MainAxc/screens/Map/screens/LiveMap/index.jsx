@@ -324,12 +324,17 @@ export default class LiveMap extends React.PureComponent {
         this.props.updateScreenCustomProps({
           loadMapStatus: 'loading',
         });
-        window.initializeBaidu = () => {
-          this.renderBaiduMap();
-          this.props.updateScreenCustomProps({
-            loadMapStatus: 'ok',
-          });
-        };
+
+        // 只需要定义移除 初始化函数
+        if (!window.initializeBaidu) {
+           window.initializeBaidu = () => {
+            this.renderBaiduMap();
+            this.props.updateScreenCustomProps({
+              loadMapStatus: 'ok',
+            });
+          };
+        }
+
         utils.loadScript(
           'https://api.map.baidu.com/api?v=2.0&ak=po9QoGKxy9nyplgmTHh7SrEPGl48lzDE&callback=initializeBaidu',
           {
