@@ -1,7 +1,7 @@
-// "New Butterfat internationalization" (b28new.js)
+// "New Butterfat internationalization" (b28n.js)
 //  Released under the MIT License
 //  versions 3.0.0
-//  $Id: b28new.js 2014-12-23 ETw $
+//  $Id: b28n.js 2014-12-23 ETw $
 /** *********************************************************************************************
  ************************************************************************************************/
 const b28n = (function _b28n(doc, _win) {
@@ -316,7 +316,9 @@ const b28n = (function _b28n(doc, _win) {
   };
 
   /* eslint-disable no-underscore-dangle */
+  // 把 b28n 暴露到全局
   win.__ = localB28n.format;
+  win.b28n = localB28n;
 
   localB28n.langMap = {
     cn: '简体中文',
@@ -338,9 +340,8 @@ const b28n = (function _b28n(doc, _win) {
   return localB28n;
 }(document, window));
 
-window.b28n = b28n;
-
 // exports
 if (typeof module === 'object' && typeof module.exports === 'object') {
   module.exports = b28n;
 }
+

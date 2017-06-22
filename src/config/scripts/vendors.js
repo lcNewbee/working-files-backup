@@ -9,6 +9,7 @@ require('react-addons-shallow-compare');
 require('react-dom');
 require('react-redux');
 require('react-router');
+require('react-router-dom');
 require('redux');
 require('redux-thunk');
 require('moment');

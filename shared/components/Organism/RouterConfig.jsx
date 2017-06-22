@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Switch from 'react-router/Switch';
-import Route from 'react-router/Route';
 import { Redirect } from 'react-router-dom';
-import matchPath from 'react-router/matchPath';
-import Router from 'react-router/Router';
+import { Router, Route, Switch, matchPath } from 'react-router';
 
 // ensure we're using the exact code for default root match
 const { computeMatch } = Router.prototype;

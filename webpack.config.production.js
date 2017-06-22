@@ -22,22 +22,14 @@ var GLOBALS = {
 
 // 配置公用模块
 var vendorList = [
-  "es5-shim",
-  "es5-shim/es5-sham",
-  "es6-promise",
   "classnames",
-  "whatwg-fetch",
-  "console-polyfill",
   "immutable",
   "react",
-  "react-addons-css-transition-group",
-  "react-addons-pure-render-mixin",
+  "react-transition-group/CSSTransitionGroup",
+  "react-addons-shallow-compare",
   "react-dom",
   "react-redux",
   "react-router",
-  "react-select",
-  "react-dates",
-  "rc-time-picker",
   "redux",
   "redux-thunk",
   "moment",
@@ -73,6 +65,7 @@ var polyfillList = [
 module.exports = {
   entry: {
     app: ['./src/index_pub.jsx'],
+    //vendors: vendorList
   },
   module: {
     rules: [
@@ -186,6 +179,7 @@ module.exports = {
     chunkFilename: 'scripts/[id].bundle.js' //dundle生成的配置
   },
   plugins: [
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.LoaderOptionsPlugin({
       debug: false,
       cache: true,
@@ -196,9 +190,6 @@ module.exports = {
         context: __dirname,
       }
     }),
-    // new webpack.ProvidePlugin({
-    //   'fetch': 'isomorphic-fetch',
-    // }),
     new webpack.DllReferencePlugin({
       context: "dll",
       manifest: require("./src/config/scripts/vendors-manifest.json")
@@ -215,7 +206,6 @@ module.exports = {
       allChunks: true
     }),
     new webpack.optimize.UglifyJsPlugin(),
-
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['scripts/vendors.bundle.js'],
       append: false,

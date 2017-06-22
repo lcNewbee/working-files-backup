@@ -10,6 +10,33 @@ const getCurAppName = require('../shared/getCurAppName');
 
 const paths = gulp.paths;
 
+function webpackBuild(config, callback) {
+  webpack(config, (err, stats) => {
+    if (err) {
+      console.error(err.stack || err);
+
+      if (err.details) {
+        console.error(err.details);
+      }
+      return;
+    }
+
+    const info = stats.toJson();
+
+    if (stats.hasErrors()) {
+      console.error(info.errors);
+    }
+
+    if (stats.hasWarnings()) {
+      console.warn(info.warnings);
+    }
+    gutil.log('[webpack:production]', stats.toString({
+      colors: true,
+    }));
+    callback();
+  });
+}
+
 // 引用webpack对js进行操作
 gulp.task('webpack', (callback) => {
   gulp.appName = getCurAppName();
@@ -18,27 +45,11 @@ gulp.task('webpack', (callback) => {
   gutil.log(gutil.colors.cyan('正在构建的产品： '), gutil.colors.magenta(gulp.appName));
   gutil.log(gutil.colors.cyan('产品publicPath： '), gutil.colors.magenta(webpackConfig.output.publicPath));
 
-  webpack(webpackConfig, (err, stats) => {
-    if (err || stats.hasErrors()) {
-      throw new gutil.PluginError('webpack:production', err);
-    }
-    gutil.log('[webpack:production]', stats.toString({
-      colors: true,
-    }));
-    callback();
-  });
+  webpackBuild(webpackConfig, callback);
 });
 
 gulp.task('webpack:dll', (callback) => {
-  webpack(webpackConfigDll, (err, stats) => {
-    if (err || stats.hasErrors()) {
-      throw new gutil.PluginError('webpack:production', err);
-    }
-    gutil.log('[webpack:production]', stats.toString({
-      colors: true,
-    }));
-    callback();
-  });
+  webpackBuild(webpackConfigDll, callback);
 });
 
 // 处理静态资源
