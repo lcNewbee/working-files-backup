@@ -120,7 +120,7 @@ class Pagination extends PureComponent {
 
     return (
       <div className="m-pagination">
-        <span className="m-pagination__total">{__('A total of %s', total)}.</span>
+        { total > 0 ? (<span className="m-pagination__total">{__('A total of %s', total)}.</span>) : null}
         {
           this.props.sizeOptions && this.props.size ? (
             <div className="m-pagination__size">

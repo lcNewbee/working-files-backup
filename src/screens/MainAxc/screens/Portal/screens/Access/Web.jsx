@@ -431,14 +431,15 @@ export default class View extends React.Component {
         editFormOption={{
           hasFile: true,
         }}
-        noTitle
-        actionable
         // searchable
         searchProps={{
           placeholder: `${__('Name')}`,
         }}
         deleteable={false}
         addable={false}
+        noTitle
+        actionable
+        noPagination
       />
     );
   }

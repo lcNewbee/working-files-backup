@@ -51,6 +51,7 @@ const propTypes = {
   customModal: PropTypes.bool,
   customTable: PropTypes.bool,
   actionable: PropTypes.bool,
+  noPagination: PropTypes.bool,
   addable: PropTypes.bool,
   editable: PropTypes.oneOfType([
     PropTypes.bool, PropTypes.func,
@@ -747,7 +748,7 @@ class AppScreenList extends React.PureComponent {
     const leftChildrenNode = [];
     const totalListItem = store.getIn(['data', 'page', 'total']) || $$curList.size;
     let $$curActionBarButtons = actionBarButtons;
-    let rightChildrenNode = null;
+    const rightChildrenNode = null;
 
     // 处理列表操作相关按钮
     if (actionable) {
@@ -941,12 +942,12 @@ class AppScreenList extends React.PureComponent {
 
   render() {
     const {
-      store, listTitle, selectable, customTable,
+      store, listTitle, selectable, customTable, noPagination,
     } = this.props;
     const page = store.getIn(['data', 'page']);
     const list = store.getIn(['data', 'list']);
     const query = store.getIn(['query']);
-
+    const currPagination = noPagination ? false : page;
     return (
       <div className="t-list-info">
         {
@@ -963,7 +964,7 @@ class AppScreenList extends React.PureComponent {
               className="table"
               options={this.listTableOptions}
               list={list}
-              page={page}
+              page={currPagination}
               onPageChange={this.onPageChange}
               size={query.get('size')}
               onPageSizeChange={this.onChangeTableSize}

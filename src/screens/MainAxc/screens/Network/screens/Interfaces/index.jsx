@@ -153,6 +153,7 @@ export default class NetworkInterface extends React.Component {
           ($$item, index) => (index !== 0)
         }
         actionable
+        noPagination
       />
     );
   }

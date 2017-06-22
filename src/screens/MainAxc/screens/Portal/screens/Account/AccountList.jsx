@@ -601,7 +601,7 @@ const rechargeOptions = fromJS([
     type: 'text',
     form: 'recharge',
     disabled: true,
-    required: true,
+    noForm: true,
     maxLength: '33',
     validator: validator({
       rules: 'utf8Len:[1,32]',
@@ -650,8 +650,8 @@ const rechargeOptions = fromJS([
     disabled: true,
     type: 'select',
     required: true,
-    visible(data) {
-      return data.get('name') !== undefined;
+    visible() {
+      return false;
     },
     options: [
       {
@@ -670,8 +670,8 @@ const rechargeOptions = fromJS([
     type: 'number',
     required: true,
     min: 0,
-    visible(data) {
-      return data.get('name') !== undefined;
+    visible() {
+      return false;
     },
     validator: validator({
       rules: 'num:[0,9999]',
@@ -680,8 +680,8 @@ const rechargeOptions = fromJS([
     id: 'autologin',
     label: __('Auto Re-login'),
     disabled: true,
-    visible(data) {
-      return data.get('name') !== undefined;
+    visible() {
+      return false;
     },
     options: [
       {
@@ -701,8 +701,8 @@ const rechargeOptions = fromJS([
     form: 'recharge',
     type: 'select',
     required: true,
-    visible(data) {
-      return data.get('name') !== undefined;
+    visible() {
+      return false;
     },
     options: [
       {

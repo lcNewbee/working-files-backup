@@ -49,7 +49,7 @@ const listOptions = fromJS([
   {
     id: 'speed',
     text: __('Port Speed'),
-    options($$data) {
+    options() {
       const ret = [
         {
           value: '10',
@@ -157,6 +157,7 @@ export default class NetworkPort extends React.Component {
         addable={false}
         deleteable={false}
         actionable
+        noPagination
       />
     );
   }

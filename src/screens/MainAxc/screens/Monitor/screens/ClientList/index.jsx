@@ -42,6 +42,7 @@ const listOptions = fromJS([
     text: 'SSID',
   }, {
     id: 'authType',
+    noTable: true,
     text: __('Authentication Type'),
   }, {
     id: 'connectap',

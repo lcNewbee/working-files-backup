@@ -202,7 +202,7 @@ class Table extends PureComponent {
     const myList = this.state.myList;
     const myBodyChildren = this.renderBodyRow(myList);
     const unselectableLen = this.unselectableList.length;
-    let curPage = page;
+    let pagination = page;
     let myTableClassName = 'table';
     let isSelectAll = false;
 
@@ -219,8 +219,8 @@ class Table extends PureComponent {
       myTableClassName = `${myTableClassName} ${className}`;
     }
 
-    if (!curPage) {
-      curPage = {
+    if (!pagination && pagination !== false) {
+      pagination = {
         total: myList.size,
       };
     }
@@ -244,15 +244,17 @@ class Table extends PureComponent {
             { myBodyChildren }
           </tbody>
         </table>
-
-        <Pagination
-          page={curPage}
-          size={this.props.size}
-          sizeOptions={this.props.sizeOptions}
-          onPageChange={this.props.onPageChange}
-          onPageSizeChange={this.props.onPageSizeChange}
-        />
-
+        {
+          pagination ? (
+            <Pagination
+              page={pagination}
+              size={this.props.size}
+              sizeOptions={this.props.sizeOptions}
+              onPageChange={this.props.onPageChange}
+              onPageSizeChange={this.props.onPageSizeChange}
+            />
+          ) : null
+        }
         {
           loading ? (
             <div className="table-loading">
