@@ -84,19 +84,22 @@ const routes = [
             icon: 'bar-chart',
             text: __('STATISTICS'),
             component: sStatus.Screen,
-          }, {
+          },
+          {
             id: 'devices',
             path: '/main/devices',
             icon: 'bullseye',
             text: __('DEVICES'),
             component: sDevices.Screen,
-          }, {
+          },
+          {
             id: 'clients',
             path: '/main/clients',
             icon: 'desktop',
             text: __('CLIENTS'),
             component: sClients.Screen,
-          }, {
+          },
+          {
             id: 'logs',
             path: '/main/logs',
             icon: 'file-text-o',
@@ -114,34 +117,40 @@ const routes = [
                 path: '/main/settings/group',
                 text: __('Groups'),
                 component: sGroupSettings.Screen,
-              }, {
-                id: 'wireless',
-                path: '/main/settings/wireless',
-                text: __('Wireless'),
-                component: sWireless.Screen,
-              }, {
-                id: 'portal',
-                path: '/main/settings/portal',
-                text: __(__('Portal')),
-                component: sPortal.Screen,
-              }, {
-                id: 'guest',
-                path: '/main/settings/guest',
-                text: __('Guest'),
-                component: sGuest.Screen,
-              }, {
-                id: 'voip',
-                path: '/main/settings/voip',
-                text: __('VoIP'),
-                component: sVoip.Screen,
-              }, {
+              },
+              {
                 id: 'modeSetting',
                 path: '/main/settings/mode',
                 fetchUrl: 'goform/getApMode',
                 saveUrl: 'goform/setApMode',
                 text: __('AP Mode'),
                 component: sMode.Screen,
-              }, {
+              },
+              {
+                id: 'wireless',
+                path: '/main/settings/wireless',
+                text: __('Wireless'),
+                component: sWireless.Screen,
+              },
+              {
+                id: 'portal',
+                path: '/main/settings/portal',
+                text: __(__('Portal')),
+                component: sPortal.Screen,
+              },
+              {
+                id: 'guest',
+                path: '/main/settings/guest',
+                text: __('Guest'),
+                component: sGuest.Screen,
+              },
+              {
+                id: 'voip',
+                path: '/main/settings/voip',
+                text: __('VoIP'),
+                component: sVoip.Screen,
+              },
+              {
                 id: 'apMaintenance',
                 path: '/main/settings/apMaintenance',
                 fetchUrl: '/goform/getApFirmware',
