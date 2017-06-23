@@ -174,6 +174,14 @@ export default class ModeSettings extends React.Component {
           },
         }}
       >
+        <h3
+          style={{
+            color: 'red',
+            marginLeft: '25px',
+          }}
+        >
+          {__('Note: If Access Manager control is needed, please  set the mode of the current group as Fat AP')}
+        </h3>
         <FormContainer
           options={this.formOptions}
           data={$$curData}
