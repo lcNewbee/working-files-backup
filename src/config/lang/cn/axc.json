@@ -745,5 +745,7 @@
   "ICMP-Flood Attack Defense": "ICMP-Flood攻击防御",
   "Maxium ICMP Package Quantity": "最大ICMP包数量",
   "UDP-Flood Attack Defense": "UDP-Flood攻击防御",
-  "Maxium UDP Package Quantity": "最大UDP包数量"
+  "Maxium UDP Package Quantity": "最大UDP包数量",
+
+  "Dashboard": "概览"
 }

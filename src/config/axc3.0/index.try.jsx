@@ -80,8 +80,7 @@ const sNetworkRoutes = require('../../screens/MainAxc/screens/Network/screens/Ro
 const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
-const sPortalMac =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
+const sPortalMac = require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 
 
 /**

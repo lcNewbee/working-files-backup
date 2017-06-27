@@ -226,7 +226,7 @@ const routes = [
             routes: [
               {
                 id: 'networkdashboard',
-                icon: 'th',
+                icon: 'tachometer',
                 path: '/main/network/dashboard',
                 fetchUrl: 'goform/network/dashboard',
                 text: __('Dashboard'),

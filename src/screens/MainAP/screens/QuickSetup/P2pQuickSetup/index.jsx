@@ -1498,14 +1498,13 @@ export default class QuickSetup extends React.Component {
               }
               <div className="clearfix">
                 <FormGroup
-                  type="range"
+                  type="number"
                   className="fl"
                   label={__('Distance')}
                   value={distance}
                   min="1"
                   max="10"
                   step="0.1"
-                  hasTextInput
                   help="km"
                   disabled={autoAdjust === '1'}
                   onChange={(data) => {
