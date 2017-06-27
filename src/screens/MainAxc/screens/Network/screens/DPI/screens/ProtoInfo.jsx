@@ -15,6 +15,9 @@ const flowRateFilter = utils.filter('flowRate');
 const propTypes = {
   route: PropTypes.object,
   initScreen: PropTypes.func,
+  store: PropTypes.object,
+  changeScreenQuery: PropTypes.func,
+  fetchScreenData: PropTypes.func,
 };
 const msg = {
   days: __('Days'),
@@ -156,34 +159,32 @@ export default class ProtoInfo extends React.Component {
       }, {
         id: 'userNum',
         text: __('User Number'),
-        // render: (val, item) => {
-        //   return (
-        //     <span
-        //       className="link-text"
-        //       title={__('Click for details')}
-        //       onClick={() => {
-        //         // 找到traffic在options中的位置，然后改变traffic的text属性
-        //         // const optionsIndex = this.state.userModalOptions.findIndex(name => name.get('id') === 'traffic');
-        //         // const options = this.state.userModalOptions.setIn([optionsIndex, 'text'], `${item.get('attr_name')} ${__('Traffic')}`);
-        //         this.setState({
-        //           showModal: true,
-        //           // userModalOptions: options,
-        //         });
-        //         Promise.resolve().then(() => {
-        //           this.props.changeScreenQuery({
-        //             modalPage: '1',
-        //             modalSize: '20',
-        //             proto: item.get('attr_name'),
-        //           });
-        //         }).then(() => {
-        //           this.props.fetchScreenData();
-        //         });
-        //       }}
-        //     >
-        //       {val || '0'}
-        //     </span>
-        //   );
-        // },
+        render: (val, item) => (
+          <span
+            className="link-text"
+            title={__('Click for details')}
+            onClick={() => {
+              // 找到traffic在options中的位置，然后改变traffic的text属性
+              // const optionsIndex = this.state.userModalOptions.findIndex(name => name.get('id') === 'traffic');
+              // const options = this.state.userModalOptions.setIn([optionsIndex, 'text'], `${item.get('attr_name')} ${__('Traffic')}`);
+              this.setState({
+                showModal: true,
+                  // userModalOptions: options,
+              });
+              Promise.resolve().then(() => {
+                this.props.changeScreenQuery({
+                  modalPage: '1',
+                  modalSize: '20',
+                  proto: item.get('attr_name'),
+                });
+              }).then(() => {
+                this.props.fetchScreenData();
+              });
+            }}
+          >
+            {val || '0'}
+          </span>
+          ),
       }, {
         id: 'curRate',
         text: __('Current Rate'),

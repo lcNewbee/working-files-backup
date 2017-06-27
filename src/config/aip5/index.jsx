@@ -50,14 +50,14 @@ const funConfig = {
   // 无线高级设置页面
   advance: {
     ledThreshFun: true,        // 信号强度控制LED灯功能
-    beaconIntervalFun: false,    // Beacon帧间间隔
+    beaconIntervalFun: true,    // Beacon帧间间隔
     distanceFun: true,          // 距离调整
-    dtimIntervalFun: false,      // DTIM间隔
-    segmentThreshFun: false,     // 分片阈值
-    ampduFun: false,             // ampdu值
-    rateSetFun: false,           // 速率集
-    rssiLimitFun: false,         // rssi限制
-    airTimeFairnessFun: false,   // 时间公平性
+    dtimIntervalFun: true,      // DTIM间隔
+    segmentThreshFun: true,     // 分片阈值
+    ampduFun: true,             // ampdu值
+    rateSetFun: true,           // 速率集
+    rssiLimitFun: true,         // rssi限制
+    airTimeFairnessFun: true,   // 时间公平性
   },
   // 系统维护页面
   systemmaintenance: {

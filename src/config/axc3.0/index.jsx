@@ -74,14 +74,14 @@ const sMainAxc = require('../../screens/MainAxc');
  */
 const cNetwork = require('../../screens/MainAxc/containers/Network');
 const sInterfaces = require('../../screens/MainAxc/screens/Network/screens/Interfaces');
+const sNetworkDashbaord = require('../../screens/MainAxc/screens/Network/screens/Dashboard');
 const sDhcpList = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
 const sDhcpRelay = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
 const sNetworkRoutes = require('../../screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
-const sPortalMac =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
+const sPortalMac = require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 
 
 /**
@@ -222,8 +222,16 @@ const routes = [
             icon: 'sphere',
             text: __('Network '),
             component: cNetwork.Screen,
-            indexPath: '/main/network/interface',
+            indexPath: '/main/network/dashboard',
             routes: [
+              {
+                id: 'networkdashboard',
+                icon: 'th',
+                path: '/main/network/dashboard',
+                fetchUrl: 'goform/network/dashboard',
+                text: __('Dashboard'),
+                component: sNetworkDashbaord.Screen,
+              },
               {
                 id: 'networkInterface',
                 icon: 'th',

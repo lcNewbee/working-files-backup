@@ -91,20 +91,14 @@ const sSsidStatus = require('../../screens/MainAxc/screens/Monitor/screens/SsidS
 const sApList = require('../../screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/MainAxc/screens/Monitor/screens/SafeStatus');
 const sWirelessAcl = require('../../screens/MainAxc/screens/WLAN/screens/Acl');
-const sSsidSettings =
-    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
-const sSmartRf =
-    require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
-const sTimerPolicy =
-    require('../../screens/MainAxc/screens/WLAN/screens/TimerPolicy');
-const sWips =
-    require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
-const sEndpointProtection =
-  require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
+const sSsidSettings = require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
+const sSmartRf = require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
+const sTimerPolicy = require('../../screens/MainAxc/screens/WLAN/screens/TimerPolicy');
+const sWips = require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
+const sEndpointProtection = require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
 
 const sLiveMap = require('../../screens/MainAxc/screens/Map/screens/LiveMap');
-const sApPlanMap =
-    require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sApPlanMap = require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
 const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
@@ -114,18 +108,12 @@ const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens
  * 系统管理
  */
 const cSystem = require('../../screens/MainAxc/containers/System');
-const sSystemStatus =
-    require('../../screens/MainAxc/screens/System/screens/SystemStatus');
-const sSystemAdmin =
-    require('../../screens/MainAxc/screens/System/screens/SystemAdmin');
-const sAlarmEvents =
-    require('../../screens/MainAxc/screens/System/screens/AlarmEvents');
-const sLicense =
-    require('../../screens/MainAxc/screens/System/screens/License');
-const sSystemLogList =
-    require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
-const sSystemLogMaintenance =
-    require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/logMaintenance');
+const sSystemStatus = require('../../screens/MainAxc/screens/System/screens/SystemStatus');
+const sSystemAdmin = require('../../screens/MainAxc/screens/System/screens/SystemAdmin');
+const sAlarmEvents = require('../../screens/MainAxc/screens/System/screens/AlarmEvents');
+const sLicense = require('../../screens/MainAxc/screens/System/screens/License');
+const sSystemLogList = require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
+const sSystemLogMaintenance = require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/logMaintenance');
 // const sSNMP =
 //     require('../../screens/MainAxc/screens/System/screens/SNMP');
 // const sActiveStandby =

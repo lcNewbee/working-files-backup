@@ -1,0 +1,144 @@
+.ntw-dsb-section-block {
+  margin-top: 30px;
+}
+
+.ntw-dsb-section-title {
+  margin-bottom: 15px;
+  margin-top: 25px;
+}
+
+
+.container-grid {
+  min-width: 1120px;
+}
+
+
+.ntw-dsb-card {
+  position: relative;
+  width: 95%;
+  min-width: 262px;
+  height: 150px;
+  background-color: #0093dd;
+  margin: 0 auto;
+  border-radius: 7px;
+  padding: 10px;
+}
+
+
+.ntw-dsb-card-img {
+  position: absolute;
+  width: 40%;
+  right:10px;
+  bottom: 10px;
+}
+
+.ntw-dsb-card-title {
+  color: white;
+}
+
+.ntw-dsb-card-content {
+  position: absolute;
+  width: 140px;
+  height: 50px;
+  border-radius: 25px;
+  border: 2px solid white;
+  top: 30%;
+}
+
+.ntw-dsb-content-l {
+  height: 100%;
+  width: 50%;
+  border-right: 1px solid white;
+}
+
+.ntw-dsb-content-r {
+  height: 100%;
+  width: 50%;
+  border-left: 1px solid white;
+}
+
+
+.ntw-dsb-content-l div.fl,
+.ntw-dsb-content-r div.fl {
+  color: white;
+  font-size: 20px;
+  text-align: center;
+  width: 36px;
+}
+
+.ntw-dsb-content-l div p,
+.ntw-dsb-content-r div p {
+  font-size: 10px;
+  color: white;
+
+}
+
+.ntw-dsb-content-ll,
+.ntw-dsb-content-rl {
+  height: 50px;
+  line-height: 40px;
+}
+
+.ntw-dsb-content-lr,
+.ntw-dsb-content-rr {
+  height: 50px;
+  width: 30px;
+  background-size: 10px;
+  background-repeat: no-repeat;
+  background-position: 80% 5px;
+  padding-top: 30px;
+}
+
+.ntw-dsb-content-lr p,
+.ntw-dsb-content-rr p {
+  height: 15px;
+}
+.ntw-dsb-content-lr.down-bg {
+  background-image: url(Down@2x.png);
+}
+.ntw-dsb-content-rr.up-bg {
+  background-image: url(Up@2x.png);
+}
+
+
+.ntw-dsb-card-num {
+  font-size: 60px;
+  color: white;
+  padding-left: 10%;
+  text-decoration: underline;
+}
+
+
+.ntw-dsb-interface-wrap {
+  background-color: rgba(170, 170, 170, 0.27);
+  height: 130px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.ntw-dsb-interface-status,
+.ntw-dsb-interface-name,
+.ntw-dsb-interface {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.ntw-dsb-flowboard {
+  position: absolute;
+  width: 260px;
+  color: black;
+  font-size: 20px;
+  background-color: white;
+  box-shadow: 1px 2px #aaa;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 999;
+}
+
+.ntw-dsb-throughput-echart {
+  width: 100%;
+  height: 400px;
+}
+

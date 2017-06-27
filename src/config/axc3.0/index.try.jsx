@@ -94,20 +94,14 @@ const sSsidStatus = require('../../screens/MainAxc/screens/Monitor/screens/SsidS
 const sApList = require('../../screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/MainAxc/screens/Monitor/screens/SafeStatus');
 const sWirelessAcl = require('../../screens/MainAxc/screens/WLAN/screens/Acl');
-const sSsidSettings =
-    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
-const sSmartRf =
-    require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
-const sTimerPolicy =
-    require('../../screens/MainAxc/screens/WLAN/screens/TimerPolicy');
-const sWips =
-    require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
-const sEndpointProtection =
-  require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
+const sSsidSettings = require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
+const sSmartRf = require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
+const sTimerPolicy = require('../../screens/MainAxc/screens/WLAN/screens/TimerPolicy');
+const sWips = require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
+const sEndpointProtection = require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
 
 const sLiveMap = require('../../screens/MainAxc/screens/Map/screens/LiveMap');
-const sApPlanMap =
-    require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sApPlanMap = require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
 const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
@@ -122,43 +116,30 @@ const sProtoInfo = require('../../screens/MainAxc/screens/Network/screens/DPI/sc
 const sDPISettings = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPISettings');
 
 // 防火墙
-const sAttackDefense =
-    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
-const sFirewallBlackList =
-    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
+const sAttackDefense = require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
+const sFirewallBlackList = require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
 
 /**
  * 系统管理
  */
 const cSystem = require('../../screens/MainAxc/containers/System');
-const sSystemStatus =
-    require('../../screens/MainAxc/screens/System/screens/SystemStatus');
-const sSystemAdmin =
-    require('../../screens/MainAxc/screens/System/screens/SystemAdmin');
-const sAlarmEvents =
-    require('../../screens/MainAxc/screens/System/screens/AlarmEvents');
-const sLicense =
-    require('../../screens/MainAxc/screens/System/screens/License');
-const sSystemLogList =
-    require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
-const sSystemLogMaintenance =
-    require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/logMaintenance');
+const sSystemStatus = require('../../screens/MainAxc/screens/System/screens/SystemStatus');
+const sSystemAdmin = require('../../screens/MainAxc/screens/System/screens/SystemAdmin');
+const sAlarmEvents = require('../../screens/MainAxc/screens/System/screens/AlarmEvents');
+const sLicense = require('../../screens/MainAxc/screens/System/screens/License');
+const sSystemLogList = require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
+const sSystemLogMaintenance = require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/logMaintenance');
 // const sSNMP =
 //     require('../../screens/MainAxc/screens/System/screens/SNMP');
 // const sActiveStandby =
 //     require('../../screens/MainAxc/screens/System/screens/ActiveStandby');
 // const sSignatures =
 //     require('../../screens/MainAxc/screens/System/screens/Signatures');
-const sApVersion =
-    require('../../screens/MainAxc/screens/System/screens/ApVersion');
-const sApMaintenance =
-    require('../../screens/MainAxc/screens/System/screens/ApMaintenance');
-const sApModel =
-    require('../../screens/MainAxc/screens/System/screens/ApModel');
-const sAcMaintenance =
-    require('../../screens/MainAxc/screens/System/screens/AcMaintenance');
-const sNetworkTimeProtocol =
-    require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
+const sApVersion = require('../../screens/MainAxc/screens/System/screens/ApVersion');
+const sApMaintenance = require('../../screens/MainAxc/screens/System/screens/ApMaintenance');
+const sApModel = require('../../screens/MainAxc/screens/System/screens/ApModel');
+const sAcMaintenance = require('../../screens/MainAxc/screens/System/screens/AcMaintenance');
+const sNetworkTimeProtocol = require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
 
 /**
@@ -166,42 +147,25 @@ const sNetworkTimeProtocol =
  */
 const cAAA = require('../../screens/MainAxc/containers/AAA');
 const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA/index_new');
-const sPortalOverview =
-    require('../../screens/MainAxc/screens/Portal/screens/Overview');
-const sPortalWeb =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/Web');
-const sPortalWeixin =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/Weixin');
-const sPortalFacebook =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/Facebook');
-const sPortalSMSGateWay =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
-const sPortalSMSLog =
-    require('../../screens/MainAxc/screens/Portal/screens/Access/SMSLog');
+const sPortalOverview = require('../../screens/MainAxc/screens/Portal/screens/Overview');
+const sPortalWeb = require('../../screens/MainAxc/screens/Portal/screens/Access/Web');
+const sPortalWeixin = require('../../screens/MainAxc/screens/Portal/screens/Access/Weixin');
+const sPortalFacebook = require('../../screens/MainAxc/screens/Portal/screens/Access/Facebook');
+const sPortalSMSGateWay = require('../../screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
+const sPortalSMSLog = require('../../screens/MainAxc/screens/Portal/screens/Access/SMSLog');
 
 
-const sPortalAccountList =
-    require('../../screens/MainAxc/screens/Portal/screens/Account/AccountList');
-const sPortalConnectRecord =
-    require('../../screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
-const sPortalSendMessage =
-    require('../../screens/MainAxc/screens/Portal/screens/Message/SendMessage');
-const sPortalSendBox =
-    require('../../screens/MainAxc/screens/Portal/screens/Message/SendBox');
-const sPortalReceiveBox =
-    require('../../screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
+const sPortalAccountList = require('../../screens/MainAxc/screens/Portal/screens/Account/AccountList');
+const sPortalConnectRecord = require('../../screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
+const sPortalSendMessage = require('../../screens/MainAxc/screens/Portal/screens/Message/SendMessage');
+const sPortalSendBox = require('../../screens/MainAxc/screens/Portal/screens/Message/SendBox');
+const sPortalReceiveBox = require('../../screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
 
-
-const sPortalCardCategory =
-    require('../../screens/MainAxc/screens/Portal/screens/Card/CardCategory');
-const sPortalCardList =
-    require('../../screens/MainAxc/screens/Portal/screens/Card/CardList');
-const sPortalLogList =
-    require('../../screens/MainAxc/screens/Portal/screens/Log/LogList');
-const sPortalOnlineRecordList =
-    require('../../screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
-const sPortalOnlineList =
-    require('../../screens/MainAxc/screens/Portal/screens/Log/OnlineList');
+const sPortalCardCategory = require('../../screens/MainAxc/screens/Portal/screens/Card/CardCategory');
+const sPortalCardList = require('../../screens/MainAxc/screens/Portal/screens/Card/CardList');
+const sPortalLogList = require('../../screens/MainAxc/screens/Portal/screens/Log/LogList');
+const sPortalOnlineRecordList = require('../../screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
+const sPortalOnlineList = require('../../screens/MainAxc/screens/Portal/screens/Log/OnlineList');
 
 const formUrlConf = {
   app: 'goform/axcInfo',

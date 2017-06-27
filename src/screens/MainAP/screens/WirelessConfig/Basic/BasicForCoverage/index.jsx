@@ -849,7 +849,7 @@ export default class Basic extends React.Component {
       {
         id: 'operate',
         text: __('Select'),
-        transform: (val, item) => that.renderOperateRadio(val, item),
+        render: (val, item) => that.renderOperateRadio(val, item),
       },
       {
         id: 'mac',
@@ -862,7 +862,7 @@ export default class Basic extends React.Component {
       {
         id: 'security',
         text: __('Security Mode'),
-        render(val) {
+        render: (val) => {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
           else if (mode === 'wpa2') return 'WPA2-PSK';

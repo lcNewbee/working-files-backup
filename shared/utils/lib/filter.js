@@ -88,6 +88,7 @@ helper = {
 
   flowRate: function (rate, unitType) {
     var ret = 0;
+    var UNIT_TB = 1024 * 1024 * 1024 * 1024;
     var UNIT_GB = 1024 * 1024 * 1024;
     var UNIT_MB = 1024 * 1024;
     var UNIT_KB = 1024;
@@ -95,12 +96,16 @@ helper = {
     var unit;
 
     if(unitType === "KB") {
+      UNIT_TB = 1024 * 1024 * 1024;
       UNIT_GB = 1024 * 1024;
       UNIT_MB = 1024 ;
       UNIT_KB = 1;
     }
 
-    if(unitSize > UNIT_GB) {
+    if (unitSize > UNIT_TB) {
+      ret = unitSize / (UNIT_TB);
+      unit = 'TB';
+    } else if (unitSize > UNIT_GB) {
       ret = unitSize / (UNIT_GB);
       unit = 'GB';
     } else if(unitSize > UNIT_MB) {
