@@ -312,7 +312,6 @@ const reducers = {
   // 系统维护
   systemmaintenance: baseComponents.sSystemMaintenance.systemmaintenance,
   accountsettings: baseComponents.sAccountSettings.accountsettings,
-  timesettings: baseComponents.sTimeSettings.timesettings,
   // tools -> speedtest
   // speedtest: baseComponents.sSpeedTest.speedtest,
   sitesurvey: baseComponents.sSiteSurvey.sitesurvey,

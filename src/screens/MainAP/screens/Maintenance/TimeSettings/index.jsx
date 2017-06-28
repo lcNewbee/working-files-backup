@@ -8,33 +8,23 @@ import utils from 'shared/utils';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as settingsActions } from 'shared/containers/settings';
 import moment from 'moment';
-import * as selfActions from './actions';
-import reducer from './reducer';
-import { timezone } from './TimeZone';
+import { timezoneMap } from './TimeZone';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   fetchSettings: PropTypes.func,
-
-  fetch: PropTypes.func,
   updateItemSettings: PropTypes.func,
   initSettings: PropTypes.func,
-  changeTimeZone: PropTypes.func,
-  selfState: PropTypes.instanceOf(Map),
   save: PropTypes.func,
-  restoreSelfState: PropTypes.func,
   createModal: PropTypes.func,
 };
 
 function createTimezoneOption(zone) {
   const options = [];
   for (const key of zone.keys()) {
-    const option = {
-      value: key,
-      label: key,
-    };
+    const option = { value: key, label: key };
     options.push(option);
   }
   return options;
@@ -60,33 +50,16 @@ export default class TimeSettings extends Component {
 
   onTimeZoneChange(data) {
     const zoneName = data.value;
-    const timeZone = timezone.get(zoneName);
-    this.props.updateItemSettings({
-      zoneName,
-    });
-    this.props.changeTimeZone({
-      zoneName,
-      timeZone,
-    });
+    const timezone = timezoneMap.get(zoneName);
+    this.props.updateItemSettings({ zoneName, timezone });
   }
 
   onSaveTimeSettings() {
-    const timeZone = this.props.selfState.get('timeZone');
-    const saveData = this.props.store.get('curData').set('timeZone', timeZone)
-                      .delete('zoneName').toJS();
+    const saveData = this.props.store.get('curData').toJS();
     const ntpStrValid = saveData.ntpServer.match(/^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/);
     const ntpIpValid = saveData.ntpServer.match(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/);
     const ntpEnable = this.props.store.getIn(['curData', 'ntpEnable']);
-    // if (!ntpIpValid && ntpStrValid && ntpStrValid[0] === saveData.ntpServer) {
-    //   console.log('ntp valid');
-    //   this.props.save('goform/set_ntp', saveData);
-    // } else {
-    //   console.log('ntp not valid');
-    //   this.props.createModal({
-    //     role: 'alert',
-    //     text: __('Please input a valid ntp server!'),
-    //   });
-    // }
+
     function validIp(str) {
       const ipArr = str.split('.');
       const ipHead = ipArr[0];
@@ -123,19 +96,11 @@ export default class TimeSettings extends Component {
         ntpEnable: '0',
       },
     });
-    this.props.fetchSettings('goform/get_ntp_info')
-        .then(() => {
-          const zoneName = this.props.store.getIn(['curData', 'zoneName']);
-          this.props.changeTimeZone({
-            zoneName,
-            timeZone: timezone.get(zoneName),
-          });
-        });
+    this.props.fetchSettings('goform/get_ntp_info');
   }
 
   render() {
-    const timezoneOptions = createTimezoneOption(timezone);
-    // console.log('timezone', timezone);
+    const timezoneOptions = createTimezoneOption(timezoneMap);
     const { ntpEnable, ntpServer } = this.props.store.get('curData').toJS();
     return (
       <div>
@@ -174,9 +139,7 @@ export default class TimeSettings extends Component {
             displayFormat="YYYY-MM-DD"
             disabled={ntpEnable === '1'}
             value={this.props.store.getIn(['curData', 'date'])}
-            onChange={data => this.props.updateItemSettings({
-              date: data.value,
-            })}
+            onChange={data => this.props.updateItemSettings({ date: data.value })}
           />
           <FormGroup
             type="time"
@@ -190,12 +153,8 @@ export default class TimeSettings extends Component {
               )
             }
             format="HH:mm:ss"
-            onChange={data => this.props.updateItemSettings({
-              time: data.value,
-            })}
-            inputStyle={{
-              width: '110px',
-            }}
+            onChange={data => this.props.updateItemSettings({ time: data.value })}
+            inputStyle={{ width: '110px' }}
           />
         </div>
         <FormGroup>
@@ -221,14 +180,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    utils.extend({}, appActions, settingsActions, selfActions),
-    dispatch
+    utils.extend({}, appActions, settingsActions),
+    dispatch,
   );
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(TimeSettings);
-
-export const timesettings = reducer;

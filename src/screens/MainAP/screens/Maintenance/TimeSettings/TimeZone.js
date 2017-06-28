@@ -1,4 +1,4 @@
-export const timezone = new Map([
+export const timezoneMap = new Map([
     ['Africa/Abidjan', 'GMT0'],
     ['Africa/Accra', 'GMT0'],
     ['Africa/Addis Ababa', 'EAT-3'],

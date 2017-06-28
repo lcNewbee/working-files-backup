@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
-import { EchartReact, FormGroup, Select } from 'shared/components/';
+import { EchartReact, Select } from 'shared/components/';
 import echarts from 'echarts/lib/echarts';
 
 import './index.scss';
-import portsusedimg from './PortsUsed@2x.png';
+import dhcpclientimg from './DHCPClient@2x.png';
 import throughputimg from './Throughput@2x.png';
-import dhcpimg from './DHCP@2x.png';
+import dhcppoolimg from './DHCPPool@2x.png';
 import natstrategyimg from './NATstrategy@2x.png';
 import onportimg from './OnPort@2x.png';
 import offportimg from './OffPort@2x.png';
@@ -89,12 +89,8 @@ export default class NetWorkDashBoard extends React.Component {
       }
       return 0;
     }).slice(1);
-    console.log('flowData', flowData);
-    console.log('ratePerInterval', ratePerInterval);
     const maxRate = Math.max.apply(null, ratePerInterval); // 速率最大值
-    console.log('maxRate', maxRate);
     const unit = getUnit(maxRate);
-    console.log('unit', unit);
     // 速率统一为最大值对应的单位
     const data = ratePerInterval.map((val) => {
       const rate = (val / unit.value).toFixed(2);
@@ -216,9 +212,9 @@ export default class NetWorkDashBoard extends React.Component {
 
             <div className="ntw-dsb-card-wrap cols col-3">
               <div className="ntw-dsb-card">
-                <h2 className="ntw-dsb-card-title">{__('DHCP Pool Counts')}</h2>
+                <h2 className="ntw-dsb-card-title">{__('DHCP Pool')}</h2>
                 <img
-                  src={portsusedimg}
+                  src={dhcppoolimg}
                   alt="portsused"
                   className="ntw-dsb-card-img"
                 />
@@ -229,9 +225,9 @@ export default class NetWorkDashBoard extends React.Component {
 
             <div className="ntw-dsb-card-wrap cols col-3">
               <div className="ntw-dsb-card">
-                <h2 className="ntw-dsb-card-title">{__('DHCP Pool Usage')}</h2>
+                <h2 className="ntw-dsb-card-title">{__('DHCP Usage')}</h2>
                 <img
-                  src={dhcpimg}
+                  src={dhcpclientimg}
                   alt="dhcp"
                   className="ntw-dsb-card-img"
                 />
@@ -258,7 +254,7 @@ export default class NetWorkDashBoard extends React.Component {
 
             <div className="ntw-dsb-card-wrap cols col-3">
               <div className="ntw-dsb-card">
-                <h2 className="ntw-dsb-card-title">{__('NAT Strategy Counts')}</h2>
+                <h2 className="ntw-dsb-card-title">{__('NAT Strategy')}</h2>
                 <img
                   src={natstrategyimg}
                   alt="natstrategy"
