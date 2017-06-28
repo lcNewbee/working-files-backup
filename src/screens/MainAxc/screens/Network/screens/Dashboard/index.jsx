@@ -80,7 +80,6 @@ export default class NetWorkDashBoard extends React.Component {
       if (i > 0) return (new Date(val) - new Date(timeData[i - 1])) / 1000;
       return 9999;
     }).slice(1);
-    console.log('timeInterval', timeInterval);
     // 计算速率值
     const ratePerInterval = flowData.map((val, i) => {
       if (i > 0) {
@@ -100,8 +99,12 @@ export default class NetWorkDashBoard extends React.Component {
     const option = {
       tooltip: {
         trigger: 'axis',
-        position(pt) {
-          return [pt[0], '10%'];
+        position(pt, params, dom, rect, size) {
+          let diff = 0;
+          if (pt[0] > size.viewSize[0] / 2) {
+            diff = 160;
+          }
+          return [pt[0] - diff, '10%'];
         },
         formatter: `{b} <br/> {a}: {c} ${unit.str}/s`,
       },
