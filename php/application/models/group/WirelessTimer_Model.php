@@ -44,6 +44,8 @@ class WirelessTimer_Model extends CI_Model {
                     $arya['objects_templateid'] = $reso['attr_value'];//操作模板id
                 }elseif($reso['attr_name'] === 'tempalte_switch'){
                     $arya['objects_templateswitch'] = $reso['attr_value'];//操作类型
+                }elseif($reso['attr_name'] === 'tempalte_group'){
+                    $arya['objects_templgroup'] = $reso['attr_value'];//分组
                 }
             }
             $htmdata[] = $arya;
@@ -64,6 +66,7 @@ class WirelessTimer_Model extends CI_Model {
         $arr['objects_templatename'] = element('objects_templatename',$data,'');   //操作模板名（ssid 或 ap的mac地址）
         $arr['objects_templateid'] = (string)element('objects_templateid',$data,'');//element('objects_templateid',$data,' ');        //操作模板id（ssid 属性id 或者 ap的radio网卡id）
         $arr['objects_templateswitch'] = (string)element('objects_templateswitch',$data,'1');//执行事件（禁用或启用 （0或1））
+        $arr['objects_templategroup'] = (string)element('groupid', $data, '0');
         $result = policy_add_profile_id(json_encode($arr));
         //log
         $cgiObj = json_decode($result);
@@ -103,7 +106,7 @@ class WirelessTimer_Model extends CI_Model {
         return $result;
     }
     public function up_timer_policy($data) {
-        $result = null;
+        $result = null;        
         $arr['policy_id'] = (string)element('policy_id',$data,'-1');
         $arr['policy_enable'] = element('policy_enbale',$data,'1');
         $arr['policy_type'] = element('policy_type',$data,'Once');
@@ -112,6 +115,7 @@ class WirelessTimer_Model extends CI_Model {
         $arr['objects_templatename'] = element('objects_templatename',$data,'');
         $arr['objects_templateid'] = (string)element('objects_templateid',$data,'');//element('objects_templateid',$data,' ');
         $arr['objects_templateswitch'] = (string)element('objects_templateswitch',$data,'1');
+        $arr['objects_templategroup'] = (string)element('groupid', $data, '0');
         $result = policy_edit_profile_id(json_encode($arr));
         //log
         $cgiObj = json_decode($result);
