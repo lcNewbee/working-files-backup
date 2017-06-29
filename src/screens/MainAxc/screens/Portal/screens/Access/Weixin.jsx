@@ -156,6 +156,11 @@ export default class View extends React.Component {
     const { store, app } = this.props;
     const curScreenId = store.get('curScreenId');
     const $$formData = store.getIn([curScreenId, 'curListItem']);
+    const $$myFormOptions = $$formOptions.push(fromJS({
+      id: 'action',
+      type: 'hidden',
+      value: store.getIn([curScreenId, 'actionQuery', 'action']),
+    }));
 
     return (
       <AppScreen
@@ -179,7 +184,7 @@ export default class View extends React.Component {
           action="goform/portal/access/weixin"
           method="POST"
           component="form"
-          options={$$formOptions}
+          options={$$myFormOptions}
           data={$$formData}
           onChangeData={($$data) => {
             this.props.updateCurEditListItem($$data);
