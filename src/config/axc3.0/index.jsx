@@ -222,11 +222,12 @@ const routes = [
             icon: 'sphere',
             text: __('Network '),
             component: cNetwork.Screen,
-            indexPath: '/main/network/dashboard',
+            indexPath: '/main/network/interface',
             routes: [
               {
                 id: 'networkdashboard',
                 icon: 'tachometer',
+                noNav: true, // 暂时隐藏未完成的功能
                 path: '/main/network/dashboard',
                 fetchUrl: 'goform/network/dashboard',
                 text: __('Dashboard'),
