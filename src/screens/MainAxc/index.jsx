@@ -92,10 +92,10 @@ export default class Main extends React.PureComponent {
    */
   onRefreshProductInfo(props) {
     this.companyTitle = props.app.get('title') || '';
-    this.companyName = props.app.get('companyname') || 'axilspot';
+    this.companyName = props.app.get('companyname') || '';
 
     // 'sales@axilspot.com'
-    this.emailUrl = props.app.get('email') || 'sales@axilspot.com';
+    this.emailUrl = props.app.get('email') || '';
 
     document.title = `${this.companyTitle} Access Manager`;
   }
