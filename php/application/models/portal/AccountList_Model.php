@@ -12,7 +12,7 @@ class AccountList_Model extends CI_Model {
 			'columns' => '*',
 			'tablenames' => 'portal_account',
 			'pageindex' => (int) element('page', $data, 1),
-			'pagesize' => (int) element('size', $data, 20),
+			'pagesize' => (int) element('size', $data, 20000),
 			'wheres' => "1=1",
 			'joins' => array(),
 			'order' => array()
