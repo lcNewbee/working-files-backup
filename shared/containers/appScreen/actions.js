@@ -283,7 +283,10 @@ export function onListAction(option) {
         dispatch(fetchScreenData({
           url: fetchUrl,
         }));
-        ret.subData = subData;
+
+        if (ret) {
+          ret.subData = subData;
+        }
 
         return ret;
       });
@@ -378,7 +381,10 @@ export function saveScreenSettings(option) {
         dispatch(fetchScreenData({
           url: fetchUrl,
         }));
-        ret.subData = $$subData.toJS();
+
+        if (ret) {
+          ret.subData = $$subData.toJS();
+        }
 
         return ret;
       });

@@ -4,17 +4,18 @@ class WirelessTimer_Model extends CI_Model {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
-        $this->load->helper(array('array', 'my_customfun_helper'));
+        $this->load->helper(array('array', 'array_page_helper', 'my_customfun_helper'));
     }
-    public function get_timer_list($data) {       
+    public function get_timer_list($data) {
         //时段	操作对象	重复	备注	开始时间	结束时间	状态
         $columns = '*';
         $tablenames = 'objects_list';
         $pageindex = (int)element('page', $data, 1);
         $pagesize = (int)element('size', $data, 20);
-        $datalist = help_data_page($this->db,$columns,$tablenames,$pageindex,$pagesize);      
+        //$datalist = help_data_page($this->db,$columns,$tablenames,$pageindex,$pagesize);
+        $datalist = $this->db->select('*')->from('objects_list')->get()->result_array();
         $htmdata = array();
-        foreach($datalist['data'] as $row) {
+        foreach($datalist as $row) {
             $this->db->select('*');
             $this->db->from('policy_params');
             $this->db->join('policy_attr','policy_params.attr_id=policy_attr.id','left');
@@ -48,12 +49,17 @@ class WirelessTimer_Model extends CI_Model {
                     $arya['objects_templgroup'] = $reso['attr_value'];//分组
                 }
             }
-            $htmdata[] = $arya;
+
+            // 只添加请求组的 项
+            if (element('groupid', $data) === element('objects_templgroup', $arya)) {
+              $htmdata[] = $arya;
+            }
         }
+        $paged_result = array_page($htmdata, $pageindex, $pagesize);
         $arr['state'] = array("code"=>2000,"msg"=>"ok");
         $arr['data'] = array(
-            "page"=>$datalist['page'],
-            "list"=>$htmdata            
+            "page"=>$paged_result['page'],
+            "list"=>$paged_result['data']
         );
         return json_encode($arr);
     }
@@ -106,7 +112,7 @@ class WirelessTimer_Model extends CI_Model {
         return $result;
     }
     public function up_timer_policy($data) {
-        $result = null;        
+        $result = null;
         $arr['policy_id'] = (string)element('policy_id',$data,'-1');
         $arr['policy_enable'] = element('policy_enbale',$data,'1');
         $arr['policy_type'] = element('policy_type',$data,'Once');
