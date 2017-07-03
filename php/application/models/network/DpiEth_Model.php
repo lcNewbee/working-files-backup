@@ -121,7 +121,7 @@ class DpiEth_Model extends CI_Model {
             $macAry = array();
             foreach($dataary['data']['list'] as $row){
                 $row['application'] =  explode('/',$row['proto']);
-                $row['trafficPercent'] = $row['flow_account'];
+                $row['trafficPercent'] = ($row['flow_account'] * 100 ) . '%';;
                 $row['curRate'] = $row['bytes_rate'];
                 $row['mac'] = $row['mac'];
                 $row['ip'] = $row['ip'];

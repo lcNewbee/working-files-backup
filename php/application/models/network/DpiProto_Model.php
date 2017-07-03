@@ -48,7 +48,7 @@ class DpiProto_Model extends CI_Model {
 					'attr_name' => $row['proto'],
 					'curRate' => $row['bytes_rate'],
 					'userNum' => $row['usernum'],
-					'trafficPercent' => $row['flow_account']
+					'trafficPercent' => ($row['flow_account'] * 100 ) . '%'
 				);
 			}
 		}
@@ -88,7 +88,7 @@ class DpiProto_Model extends CI_Model {
 					'osType' => '--',
 					'ethx_name' => '--',
 					'curRate' => $row['bytes_rate'],
-					'trafficPercent' => $row['flow_account']
+					'trafficPercent' => ($row['flow_account'] * 100 ) . '%'
 				);
 			}			
 		}

@@ -32,7 +32,7 @@ class DpiMac_Model extends CI_Model {
                 $mary['mac'] = $row['mac'];
                 $mary['ip'] = $row['ip'];            
                 $mary['curRate'] = $row['bytes_rate'];
-                $mary['trafficPercent'] = $row['flow_account'];
+                $mary['trafficPercent'] = ($row['flow_account'] * 100 ) . '%';
                 $mary['application'] = explode("/", $row['proto']);
                 $mary['name'] = '--';
                 $retdata[] = $mary;                      
