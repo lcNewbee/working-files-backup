@@ -26,5 +26,6 @@
   "Are you sure to delete the choosed items?":"你确定要删除选中的记录吗？",
   "Same AP model and firmware version item already exists!":"已存在相同的AP型号和固件版本",
   "The firmware version of this model has existed!":"该型号固件版本已经存在",
+  "Are you sure delete offline AP: %s?":"你确定删除离线AP:%s?",
   "Restoring..., Do not shutdown device":"恢复中...请不要关闭设备"
 }

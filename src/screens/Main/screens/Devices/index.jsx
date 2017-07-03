@@ -586,14 +586,14 @@ export class Device extends PureComponent {
     ]);
     const currData = this.props.store.get('edit') || Map({});
     const { ip, mask, gateway, main_dns, second_dns } = this.props.validateOption;
-    const { text, devicetype, size } = this.props.store.get('query').toJS();
+    const { search, devicetype, size } = this.props.store.get('query').toJS();
     return (
       <div>
         <h2>{__('Devices Info') }</h2>
         <div className="m-action-bar">
           <Search
             className="search fl"
-            value={text}
+            value={search}
             placeholder={__('IP or MAC Address')}
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}

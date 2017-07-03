@@ -430,14 +430,6 @@ export class Wireless extends PureComponent {
           />
           <span className="help">(2 - 4095)</span>
         </FormGroup>
-        <FormGroup
-          label={__('Terminal Isolation')}
-          id="ssidisolate"
-          required
-          type="checkbox"
-          checked={getCurrData('ssidisolate') === '1'}
-          onChange={this.onUpdate('ssidisolate')}
-        />
         <h3>{__('Radio Settings')}</h3>
         <FormGroup
           type="select"
@@ -446,6 +438,7 @@ export class Wireless extends PureComponent {
           options={this.countryOptions}
           value={getCurrData('country')}
           onChange={this.onUpdateSettings('country')}
+          disabled
           required
         />
         <FormGroup

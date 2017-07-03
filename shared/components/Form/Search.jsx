@@ -73,7 +73,6 @@ class Search extends PureComponent {
 
   render() {
     const inputProps = utils.extend({}, this.props);
-
     delete inputProps.onSearch;
     delete inputProps.Component;
     delete inputProps.searchOnChange;
