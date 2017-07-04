@@ -346,7 +346,7 @@ export class Clients extends PureComponent {
         <h2>{msg.TITLE}</h2>
         <div className="m-action-bar">
           <Search
-            value={this.props.query.get('text')}
+            value={this.props.query.get('search')}
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
             placeholder={__('IP/MAC/Associated AP')}

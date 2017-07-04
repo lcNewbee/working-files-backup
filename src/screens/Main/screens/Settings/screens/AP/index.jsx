@@ -130,7 +130,10 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
+  validateAll: PropTypes.func,
+  reportValidError: PropTypes.func,
   changeScreenQuery: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
   fetchScreenData: PropTypes.func,
   createModal: PropTypes.func,
   saveFile: PropTypes.func,
@@ -165,6 +168,10 @@ export default class View extends React.Component {
   componentWillMount() {
     this.getApModelList();
   }
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
+  }
+
   onBeforeSave($$actionQuery, $$curListItem) {
     const actionType = $$actionQuery.getIn(['action']);
     let ret;
@@ -185,42 +192,52 @@ export default class View extends React.Component {
   onAddSave() {
     const { store, route } = this.props;
     const $$curListItem = store.getIn([route.id, 'curListItem']);
-    this.props.save(
-      '/goform/addApFirmware',
-      $$curListItem.toJS(),
-    ).then((json) => {
-      if (json && json.state && json.state.code === 2000) {
-        this.props.saveFile(
-          '/goform/uploadApBin',
-          document.getElementById('modalForm'),
-          $$curListItem.toJS(),
-        );
-        this.props.changeScreenActionQuery({
-          action: '',
-        });
-        this.props.fetchScreenData();
-      }
-    });
+    this.props.validateAll()
+      .then((invalid) => {
+        if (invalid.isEmpty()) {
+          this.props.save(
+            '/goform/addApFirmware',
+            $$curListItem.toJS(),
+          ).then((json) => {
+            if (json && json.state && json.state.code === 2000) {
+              this.props.saveFile(
+                '/goform/uploadApBin',
+                document.getElementById('modalForm'),
+                $$curListItem.toJS(),
+              );
+              this.props.changeScreenActionQuery({
+                action: '',
+              });
+              this.props.fetchScreenData();
+            }
+          });
+        }
+      });
   }
   onEditSave() {
     const { store, route } = this.props;
     const $$curListItem = store.getIn([route.id, 'curListItem']);
-    this.props.save(
-      '/goform/modifyApFirmware',
-      $$curListItem.toJS(),
-    ).then((json) => {
-      if (json && json.state && json.state.code === 2000) {
-        this.props.saveFile(
-          '/goform/uploadApBin',
-          document.getElementById('modalForm'),
-          $$curListItem.toJS(),
-        );
-        this.props.changeScreenActionQuery({
-          action: '',
-        });
-        this.props.fetchScreenData();
-      }
-    });
+    this.props.validateAll()
+      .then((invalid) => {
+        if (invalid.isEmpty()) {
+          this.props.save(
+            '/goform/modifyApFirmware',
+            $$curListItem.toJS(),
+          ).then((json) => {
+            if (json && json.state && json.state.code === 2000) {
+              this.props.saveFile(
+                '/goform/uploadApBin',
+                document.getElementById('modalForm'),
+                $$curListItem.toJS(),
+              );
+              this.props.changeScreenActionQuery({
+                action: '',
+              });
+              this.props.fetchScreenData();
+            }
+          });
+        }
+      });
   }
   getApModelList() {
     this.props.fetch('/goform/getApModel', {
@@ -286,8 +303,8 @@ export default class View extends React.Component {
           onSave={() => this.onAddSave()}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
+          onValidError={this.props.reportValidError}
           isSaving={app.get('saving')}
-          savedText="ssss"
           hasSaveButton
         />
       );

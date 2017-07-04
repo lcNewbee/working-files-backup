@@ -36,6 +36,8 @@ const urls = {
 
   // 管理员设置
   saveAdmin: 'goform/setAdmin',
+  fetchCountryData: 'goform/getSystem',
+  saveCountryData: 'goform/setSystem',
 
   // 组设置
   fetchGroups: 'goform/getDevGroups',

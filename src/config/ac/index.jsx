@@ -150,14 +150,6 @@ const routes = [
                 text: __('VoIP'),
                 component: sVoip.Screen,
               },
-              {
-                id: 'apMaintenance',
-                path: '/main/settings/apMaintenance',
-                fetchUrl: '/goform/getApFirmware',
-                saveUrl: '/goform/modifyApFirmware',
-                text: __('AP Maintenance'),
-                component: sAPMaintenance.Screen,
-              },
             ],
           }, {
             id: 'system',
@@ -166,6 +158,14 @@ const routes = [
             text: __('SYSTEM'),
             component: SharedComponents.TabContainer,
             routes: [
+              {
+                id: 'apMaintenance',
+                path: '/main/system/apMaintenance',
+                fetchUrl: '/goform/getApFirmware',
+                saveUrl: '/goform/modifyApFirmware',
+                text: __('AP Maintenance'),
+                component: sAPMaintenance.Screen,
+              },
               {
                 id: 'systemSetting',
                 path: '/main/system/setting',

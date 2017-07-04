@@ -9,6 +9,18 @@ import validator from 'shared/validator';
 import { actions as appActions } from 'shared/containers/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
+import channels from 'shared/config/country.json';
+
+const channelsList = List(channels);
+
+function getCountryOptions() {
+  return channelsList.map(item =>
+     ({
+       value: item.country,
+       label: b28n.getLang() === 'cn' ? __(item.cn) : __(item.en),
+     }),
+  ).toJS();
+}
 
 const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
   {
@@ -35,6 +47,8 @@ const propTypes = {
   savePassword: PropTypes.func,
   changeLoginStatus: PropTypes.func,
   changePasswordSettings: PropTypes.func,
+  setCountry: PropTypes.func,
+  fetchCountryData: PropTypes.func,
   createModal: PropTypes.func,
   validateOption: PropTypes.object,
   store: PropTypes.instanceOf(Map),
@@ -47,16 +61,23 @@ export default class Admin extends PureComponent {
     super(props);
 
     utils.binds(this, [
-      'onSave', 'onUpdate', 'combine',
+      'onSave', 'onUpdate', 'combine', 'getCurrData', 'onSetCountry',
       'onChangeLang', 'onChangeLang', 'getSetting',
     ]);
   }
-
+  componentWillMount() {
+    this.props.fetchCountryData();
+    this.countryOptions = getCountryOptions();
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.props.fetchCountryData();
+    }
+  }
   componentWillUnmount() {
     this.props.resetVaildateMsg();
     this.props.resetPassword();
   }
-
   onSave() {
     this.props.validateAll()
       .then((invalid) => {
@@ -71,18 +92,22 @@ export default class Admin extends PureComponent {
 
   onUpdate(name, data) {
     const settings = {};
-
     settings[name] = data.value;
     this.props.changePasswordSettings(settings);
   }
-
+  onSetCountry(data) {
+    this.props.setCountry({ country: data.value });
+  }
   onChangeLang(data) {
     if (b28n.getLang() !== data.value) {
       b28n.setLang(data.value);
       window.location.reload();
     }
   }
-
+  getCurrData(name) {
+    const ret = this.props.store.getIn(['countryData', 'data', name]);
+    return ret;
+  }
   getSetting(name) {
     return this.props.store.getIn(['data', name]);
   }
@@ -106,7 +131,7 @@ export default class Admin extends PureComponent {
   render() {
     const { oldpasswd, newpasswd, confirmpasswd } = this.props.validateOption;
     const noControl = this.props.app.get('noControl');
-
+    const getCurrData = this.getCurrData;
     return (
       <form>
         <h3>{__('Change Password') }</h3>
@@ -163,7 +188,13 @@ export default class Admin extends PureComponent {
         </div>
 
         <h3>{__('System Settings') }</h3>
-
+        <FormGroup
+          label={__('Country')}
+          type="select"
+          options={this.countryOptions}
+          value={getCurrData('country')}
+          onChange={this.onSetCountry}
+        />
         <FormGroup
           label={__('Select Language')}
           type="select"

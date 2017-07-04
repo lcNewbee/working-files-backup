@@ -7,6 +7,12 @@ const defaultState = fromJS({
     newpasswd: '',
     confirmpasswd: '',
   },
+  countryData: {
+    fetching: false,
+    data: {
+      country: 'CN',
+    },
+  },
 });
 
 export default function (state = defaultState, action) {
@@ -31,6 +37,11 @@ export default function (state = defaultState, action) {
     case 'SET_PASSWORD_ERROR':
       return state.set('state', fromJS(action.state));
 
+    case 'REQEUST_FETCH_COUNTRYDATA':
+      return state.setIn(['countryData', 'fetching'], true);
+    case 'RECEIVE_COUNTRYDATA':
+      return state.setIn(['countryData', 'fetching'], false)
+          .mergeDeepIn(['countryData', 'data'], action.data);
     default:
 
   }
