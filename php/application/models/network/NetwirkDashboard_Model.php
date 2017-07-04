@@ -12,12 +12,13 @@ class NetwirkDashboard_Model extends CI_Model {
 
         $interfaceList = $this->getInterfaceState();
         $flowary = $this->getNetworkFlow();
+        $dhcpary = $this->getAllDhcp();
         $arr = array(
             'state' => array('code' => 2000, 'msg' => 'ok'),
             'data' => array(
-                'dhcpTotal' => 100,//dhcp地址池总数
-                'dhcpUsed' => 52,//已经分配的dhcp
-                'dhcpPool' => $this->getDhcpSum(),// dhcp地址池数量（注意不是可分配地址个数）
+                'dhcpTotal' => $dhcpary['all'],//dhcp地址池总数
+                'dhcpUsed' => $dhcpary['use'],//已经分配的dhcp
+                'dhcpPool' => $this->getDhcpNumber(),// dhcp地址池数量（注意不是可分配地址个数）
                 'upFlow' => $flowary['upFlow'],//外部网络数据上传总量，单位：B（字节）
                 'downFlow' => $flowary['downFlow'],// 外部网络数据下载总量，单位：B（字节）
                 'natNum' => $this->getNatSum(),
@@ -25,11 +26,10 @@ class NetwirkDashboard_Model extends CI_Model {
                 'rateHis' => $this->getSpecifiedInfo($portName, $timeRange)
             )
         );
-
         return json_encode($arr);
 	}
     //获取dhcp个数
-    private function getDhcpSum(){
+    private function getDhcpNumber(){
         $query = $this->db->query('select id from pool_list')->result_array();
         if(count($query) > 0){
             return count($query);
@@ -143,4 +143,18 @@ class NetwirkDashboard_Model extends CI_Model {
         }
         return array('upFlow' => $upFlow, 'downFlow' => $downFlow);
     }
+
+    //获取dhcp总数和分配出去的数量
+    private function getAllDhcp() {
+        $dhcp_sum = 0;
+        $dhcp_use = 0;
+        $str = dhcpd_get_ippool_info();
+        $ary = json_decode($str, true);
+        foreach ($ary['data']['list'] as $row) {
+            $dhcp_sum = $dhcp_sum + $row['ippoolall'];
+            $dhcp_use = $dhcp_use + $row['ippooluse'];
+        }
+        return array('all' => $dhcp_sum, 'use' => $dhcp_use);
+    }
+
 }
