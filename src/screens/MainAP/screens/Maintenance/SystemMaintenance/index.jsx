@@ -153,7 +153,8 @@ export default class SystemMaintenance extends Component {
             step.then(() => {
               const barInfo = that.props.selfState.get('progressBarInfo')
                               .set('title', __('The configuration is restoring now, please wait ...'))
-                              .set('time', 120).set('isShow', true).set('start', false);
+                              .set('time', 120).set('isShow', true)
+                              .set('start', false);
               that.props.changeProgressBarInfo(barInfo);
             }).then(() => {
               const barInfo = that.props.selfState.get('progressBarInfo').set('start', true);
@@ -317,9 +318,7 @@ export default class SystemMaintenance extends Component {
           action="/cgi-bin/upload_settings.cgi"
           method="POST"
           encType="multipart/form-data"
-          ref={(refs) => {
-            this.restoreForm = refs;
-          }}
+          ref={(refs) => { this.restoreForm = refs; }}
           className="clearfix"
         >
           <FormGroup
@@ -350,7 +349,7 @@ export default class SystemMaintenance extends Component {
         />
 
         {
-          this.props.route.funConfig.poeOutFun ? (
+          this.props.route.funConfig.poeOutFun && (
             <div>
               <div className="o-form__legend">
                 {__('POE')}
@@ -366,9 +365,7 @@ export default class SystemMaintenance extends Component {
                   ]}
                   minWidth="80px"
                   value={this.props.selfState.get('poeOut')}
-                  onChange={(data) => {
-                    this.props.changePoeOut(data.value);
-                  }}
+                  onChange={(data) => { this.props.changePoeOut(data.value); }}
                 />
                 <SaveButton
                   loading={this.props.app.get('saving')}
@@ -379,7 +376,7 @@ export default class SystemMaintenance extends Component {
                 />
               </div>
             </div>
-            ) : null
+            )
         }
 
         {
@@ -398,9 +395,7 @@ export default class SystemMaintenance extends Component {
                 ]}
                 minWidth="99px"
                 value={this.props.selfState.get('voipEnable')}
-                onChange={(data) => {
-                  this.props.changeVoipEnable(data.value);
-                }}
+                onChange={(data) => { this.props.changeVoipEnable(data.value); }}
               />
               <SaveButton
                 className="fl"
@@ -412,9 +407,7 @@ export default class SystemMaintenance extends Component {
                   };
                   this.props.save('goform/set_voip', query);
                 }}
-                style={{
-                  marginLeft: '7px',
-                }}
+                style={{ marginLeft: '7px' }}
               />
             </div>
             ) : null
@@ -455,19 +448,13 @@ export default class SystemMaintenance extends Component {
               this.props.resetSelfState();
             }}
             start={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'start'])}
-            style={{
-              borderRadius: '10px',
-              overflow: 'hidden',
-            }}
+            style={{ borderRadius: '10px', overflow: 'hidden' }}
           />
         </Modal>
         <Modal
           className="excUpgradeBar"
           isShow={this.props.selfState.getIn(['progressBarInfo', 'isShow'])}
-          style={{
-            top: '200px',
-            borderRadius: '20px',
-          }}
+          style={{ top: '200px', borderRadius: '20px' }}
           noFooter
           draggable
         >
@@ -479,10 +466,7 @@ export default class SystemMaintenance extends Component {
               this.props.resetSelfState();
             }}
             start={this.props.selfState.getIn(['progressBarInfo', 'start'])}
-            style={{
-              borderRadius: '10px',
-              overflow: 'hidden',
-            }}
+            style={{ borderRadius: '10px', overflow: 'hidden' }}
           />
         </Modal>
       </div>

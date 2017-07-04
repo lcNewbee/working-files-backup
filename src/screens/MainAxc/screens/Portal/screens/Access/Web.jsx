@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
+import { Icon } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
@@ -44,10 +45,10 @@ const idTownloadIdMap = {
 //   },
 // ]);
 const $$authOptions = fromJS([
-  {
-    value: '-100',
-    label: __('ALL'),
-  },
+  // {
+  //   value: '-100',
+  //   label: __('ALL'),
+  // },
   {
     value: '0',
     label: __('One Key Login'),
@@ -104,7 +105,8 @@ const listOptions = fromJS([
       type: 'hidden',
       required: true,
     },
-  }, {
+  },
+  {
     id: 'name',
     text: __('Name'),
     width: '120px',
@@ -120,70 +122,138 @@ const listOptions = fromJS([
     render: val => __(val),
   },
   {
-    id: 'description',
-    text: __('Description'),
-    width: '120px',
-    formProps: {
-      type: 'textarea',
-      maxLength: '257',
-      notEditable: true,
-      validator: validator({
-        rules: 'utf8Len:[0, 256]',
-      }),
-      rows: '3',
-    },
-    render: val => __(val),
-  },
-  {
     id: 'authentication',
     label: __('Supported Login Types'),
     options: $$authOptions,
-    width: '120px',
+    width: '150px',
     multi: false,
     formProps: {
       type: 'select',
-      notEditable: true,
-      multi: false,
+      // notEditable: true,
+      required: true,
+      multi: true,
       linkId: 'auths',
       initValue($$data) {
         let ret = $$data.get('authentication');
 
         if (!ret) {
-          ret = idToAuthMap[$$data.get('id')] || '-100';
+          // 如果没有默认的认证模式，则支持所有的认证模式
+          // ret = Object.values(idToAuthMap).join(',');
+          ret = ' ';
         }
         return ret;
       },
     },
     render: (val, $$data) => {
       const valArr = val ? val.split(',') : [idToAuthMap[$$data.get('id')] || ''];
-      let ret = '';
+      const validValArr = fromJS(valArr).filter(v => $$authOptions.find(item => item.get('value') === v));
 
-      ret = valArr.map(
-        (itemVal) => {
-          let valRet = $$authOptions.find(
-            $$myMap => $$myMap.get('value') === itemVal,
-          );
-
-          if (valRet) {
-            valRet = valRet.get('label');
+      function generateClassName(id) {
+        let clsName = '';
+        switch (id) {
+          case '0': clsName = 'dot-circle-o'; break;
+          case '1': clsName = 'user'; break;
+          case '4': clsName = 'envelope'; break;
+          case '5': clsName = 'weixin'; break;
+          case '9': clsName = 'facebook-official'; break;
+          default:
+        }
+        return clsName;
+      }
+      return (
+        <ul>
+          {
+            $$authOptions.map((item) => {
+              if (validValArr.includes(item.get('value'))) {
+                return (
+                  <Icon
+                    name={`${generateClassName(item.get('value'))}`}
+                    title={item.get('label')}
+                    className={`web-login-icon ${generateClassName(item.get('value'))}-active`}
+                    key={item.get('label')}
+                  />
+                );
+              }
+              return (
+                <Icon
+                  name={`${generateClassName(item.get('value'))}`}
+                  title={item.get('label')}
+                  className={'web-login-icon'}
+                  key={item.get('label')}
+                />
+              );
+            }).toJS()
           }
-
-          return valRet;
-        },
-      ).join(', ');
-
-      return ret || '';
+        </ul>
+      );
+    },
+  },
+  {
+    id: 'title',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      label: __('Title'),
+      required: true,
+      validator: validator({
+        rules: 'utf8Len:[0, 255]',
+      }),
+    },
+  },
+  {
+    id: 'subTitle',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      label: __('Sub Title'),
+      required: true,
+      validator: validator({
+        rules: 'utf8Len:[0, 255]',
+      }),
+    },
+  },
+  {
+    id: 'logo',
+    noTable: true,
+    formProps: {
+      type: 'file',
+      label: __('Logo'),
+    },
+  },
+  {
+    id: 'backgroundImg',
+    noTable: true,
+    formProps: {
+      type: 'file',
+      label: __('Background Image'),
+    },
+  },
+  {
+    id: 'copyright',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      label: __('Copyright'),
+    },
+  },
+  {
+    id: 'copyrightUrl',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      label: __('Copyright Link'),
     },
   },
   {
     id: 'auths',
+    noTable: true,
     formProps: {
       type: 'hidden',
       initValue($$data) {
         let ret = $$data.get('authentication');
 
         if (!ret) {
-          ret = idToAuthMap[$$data.get('id')] || '-100';
+          ret = Object.values(idToAuthMap).join(',');
         }
         return ret;
       },
@@ -197,17 +267,12 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
-      visible: $$data => $$data.get('id') > 2,
     },
-    render: (val, $$data) => {
-      const id = $$data.get('id');
+    render: (val) => {
+      // const id = $$data.get('id');
       let ret = val;
 
-      // 所有认证 与 默认 项没有自己的重定向 URL
-      if (id === '2' || id === '1') {
-        ret = '-';
-      }
-
+      if (!ret) ret = '-';
       return ret;
     },
   },
@@ -217,26 +282,23 @@ const listOptions = fromJS([
     defaultValue: '0',
     formProps: {
       help: __('minutes(0 means no limitation)'),
+      required: true,
       type: 'number',
       min: '0',
       max: '99999',
       validator: validator({
         rules: 'num:[0,99999]',
       }),
-      visible: $$data => $$data.get('id') > 2 && $$data.get('id') !== '4',
+      // visible: $$data => $$data.get('id') > 2 && $$data.get('id') !== '4',
     },
-    render: (val, $$data) => {
+    render: (val) => {
       let ret = val;
-      const id = $$data.get('id');
+      // const id = $$data.get('id');
 
       if (val === '0' || val === 0) {
         ret = __('Limitless');
       } else if (val !== '-') {
         ret = `${ret} ${__('Minutes')}`;
-      }
-
-      if (id === '4' || id === '1' || id === '2') {
-        ret = '-';
       }
 
       return ret;
@@ -259,7 +321,8 @@ const listOptions = fromJS([
       type: 'select',
       required: true,
     },
-  }, {
+  },
+  {
     id: 'countShow',
     text: __('Show Times'),
     defaultValue: '150',
@@ -273,7 +336,8 @@ const listOptions = fromJS([
         rules: 'num:[0,999999999]',
       }),
     },
-  }, {
+  },
+  {
     id: 'countAuth',
     text: __('Click Times'),
     defaultValue: '100',
@@ -289,15 +353,39 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'file',
-    text: __('Template Zip File'),
-    noTable: true,
-    defaultValue: '',
+    id: 'description',
+    text: __('Description'),
+    width: '120px',
     formProps: {
-      type: 'file',
-      //required: true,
+      type: 'textarea',
+      maxLength: '257',
+      // notEditable: true,
+      validator: validator({
+        rules: 'utf8Len:[0, 256]',
+      }),
+      rows: '3',
     },
-  }, {
+    render: (val) => {
+      if (typeof val === 'undefined') return '';
+      const len = val.length;
+      if (len > 43) {
+        const desc = val.substring(0, 40);
+        return <span title={val}>{`${desc}...`}</span>;
+      }
+      return <span>{val}</span>;
+    },
+  },
+  // {
+  //   id: 'file',
+  //   text: __('Template Zip File'),
+  //   noTable: true,
+  //   defaultValue: '',
+  //   formProps: {
+  //     type: 'file',
+  //     // required: true,
+  //   },
+  // },
+  {
     id: '__actions__',
     text: __('Actions'),
     noForm: true,
@@ -389,7 +477,7 @@ export default class View extends React.Component {
         >
           {__('Wechat')}
         </a>
-        <SaveButton
+        {/* <SaveButton
           type="button"
           icon="download"
           text={__('')}
@@ -398,7 +486,7 @@ export default class View extends React.Component {
             () => (this.onBackup($$data))
           }
           disabled={!this.actionable}
-        />
+        />*/}
       </span>
     ));
 
@@ -435,8 +523,9 @@ export default class View extends React.Component {
         searchProps={{
           placeholder: `${__('Name')}`,
         }}
-        deleteable={false}
-        addable={false}
+        deleteable={(item, index) => !(index === '0' || index === 0)}
+        selectable={(item, index) => !(index === '0' || index === 0)}
+        addable
         noTitle
         actionable
         noPagination

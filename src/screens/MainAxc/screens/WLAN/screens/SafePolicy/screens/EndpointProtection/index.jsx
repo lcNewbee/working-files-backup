@@ -85,7 +85,17 @@ export default class View extends React.Component {
         actionable={this.actionable}
         hasSettingsSaveButton={this.actionable}
         noTitle
-      />
+      >
+        {
+          !this.actionable && (
+          <div style={{ margin: '30px 30px', fontSize: '14px' }}>
+            <span style={{ fontWeight: 'bold', marginRight: '10px', color: 'red' }}>{__('Notice:')}</span>
+            <span style={{ marginRight: '10px' }}>{__('The activation of functions here needs the Black List to be actived first')}</span>
+            <span style={{ marginRight: '10px' }}><a href="#/main/group/acl"><i>{__('Go to Black List page')}</i></a></span>
+          </div>
+          )
+        }
+      </AppScreen>
     );
   }
 }

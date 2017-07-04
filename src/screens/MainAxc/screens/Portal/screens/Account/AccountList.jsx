@@ -758,6 +758,7 @@ const propTypes = {
   reportValidError: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   changeScreenQuery: PropTypes.func,
+  createModal: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -777,6 +778,7 @@ export default class View extends React.Component {
       'toggleBox',
       'getDefaultEditData',
       'onBeforeSave',
+      'onBeforeSync',
     ]);
     this.state = {
       isBaseShow: true,
@@ -811,12 +813,48 @@ export default class View extends React.Component {
       this.props.validateAll(formId)
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
-            this.props.onListAction({
-              needMerge: true,
-            });
+            const store = this.props.store;
+            const myScreenId = store.get('curScreenId');
+            const $$myScreenStore = store.get(myScreenId);
+            const $$curData = $$myScreenStore.get('curListItem');
+            const $$actionQuery = $$myScreenStore.get('actionQuery');
+            const str = this.onBeforeSync($$actionQuery, $$curData);
+            if (str) {
+              this.props.createModal({
+                role: 'alert',
+                customBackdrop: true,
+                text: str,
+              });
+            } else {
+              this.props.onListAction({
+                needMerge: true,
+              });
+            }
           }
         });
     }
+  }
+
+  onBeforeSync($$actionQuery, $$curListItem) {
+    const { store, route } = this.props;
+    const actionType = $$actionQuery.get('action');
+    const editIndex = $$actionQuery.get('index');
+    // const loginName = $$curListItem.get('loginName');
+    let $$curList = store.getIn([route.id, 'data', 'list']);
+    let ret = '';
+    if (actionType === 'add' || actionType === 'edit') {
+      // 过滤正在编辑的项
+      if (actionType === 'edit') {
+        $$curList = $$curList.delete(editIndex);
+      }
+
+      // 检测是否有相同登录名
+      if ($$curList.find($$item => $$curListItem.get('loginName') === $$item.get('loginName'))) {
+        ret = __('User name exists already!');
+      }
+    }
+
+    return ret;
   }
   // getDefaultEditData() {
   //   const myDefaultEditData = {};

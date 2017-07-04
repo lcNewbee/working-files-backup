@@ -91,12 +91,14 @@ const settingsFormOptions = fromJS([
     defaultValue: 30,
     required: true,
     help: __('Seconds'),
-  }, {
+  },
+  {
     id: 'chlnum',
     label: __('Channel Set'),
     help: __('e.g. %s', '1,5,8'),
     defaultValue: '',
-  }, {
+  },
+  {
     id: 'enable2g4chl',
     label: __('Auto Channel'),
     type: 'checkbox',

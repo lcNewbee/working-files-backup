@@ -35,6 +35,8 @@
             ],
             "maxClients": "15",
             "vlanId": "1",
+            "iptvEnable": "1",
+            "iptvVlanId": "1",
             "security":{
               "mode":"none"
             },

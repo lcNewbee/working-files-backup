@@ -36,11 +36,13 @@
   "ethxClientList": [{
 		"mac": "11:22:33:44:55:66",
 		"ethx": "eth0",
-		"ip": "192.168.1.1"
+		"ip": "192.168.1.1",
+    "application":	["DHCP", "UDP", "Apple", "HTTP_Proxy", "AppleiCloud", "QQ", "Unknown", "AppleiTunes", "DNS", "Fackbook", "ssl", "DHCP", "UDP", "Apple", "HTTP_Proxy", "AppleiCloud", "QQ", "Unknown", "AppleiTunes", "DNS", "Fackbook", "ssl"]
 	}, {
 		"mac": "22:22:33:44:55:66",
 		"ethx": "eth0",
-		"ip": "192.168.1.2"
+		"ip": "192.168.1.2",
+    "application":	["DHCP", "UDP", "Apple", "HTTP_Proxy", "AppleiCloud", "QQ", "Unknown", "AppleiTunes", "DNS", "Fackbook", "ssl", "DHCP", "UDP", "Apple", "HTTP_Proxy", "AppleiCloud", "QQ", "Unknown", "AppleiTunes", "DNS", "Fackbook", "ssl"]
 	}]
 }
 }
