@@ -24,6 +24,16 @@
   color: #888;
 }
 
+.web-login-icon-form {
+  margin: 0px 15px 15px 15px;
+  font-size: 35px;
+  color: #888;
+}
+
+// #logintypes {
+//   margin-left: 140px;
+// }
+
 .dot-circle-o-active {
   color: rgb(140, 84, 223);
 }
@@ -41,5 +51,25 @@
 }
 
 .envelope-active {
+  color: #eebe22;
+}
+
+.dot-circle-o.active {
+  color: rgb(140, 84, 223);
+}
+
+.user.active {
+  color: #f67080;
+}
+
+.weixin.active {
+  color: rgb(135, 199, 7);
+}
+
+.facebook-official.active {
+  color: rgb(58, 88, 152);
+}
+
+.envelope.active {
   color: #eebe22;
 }

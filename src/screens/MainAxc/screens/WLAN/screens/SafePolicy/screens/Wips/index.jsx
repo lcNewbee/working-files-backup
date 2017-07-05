@@ -93,10 +93,14 @@ const settingsFormOptions = fromJS([
     help: __('Seconds'),
   },
   {
-    id: 'chlnum',
-    label: __('Channel Set'),
-    help: __('e.g. %s', '1,5,8'),
-    defaultValue: '',
+    id: 'scanSpectrum',
+    label: __('Scanning Spectrum'),
+    type: 'checkboxs',
+    required: true,
+    options: [{ label: '5G', value: '5' }, { label: '2.4G', value: '2' }],
+    defaultValue: '2,5',
+    value: '2,5',
+    boxStyle: { marginRight: '20px' },
   },
   {
     id: 'enable2g4chl',
@@ -114,16 +118,17 @@ const settingsFormOptions = fromJS([
     dataType: 'number',
     defaultValue: '1',
     value: '1',
-  }, {
-    id: 'adjafactor2g4',
-    label: __('Neighbor Coefficient'),
-    linkId: 'adjafactor5g',
-    min: 1,
-    max: 255,
-    type: 'number',
-    dataType: 'number',
-    defaultValue: '1',
   },
+  // {
+  //   id: 'adjafactor2g4',
+  //   label: __('Neighbor Coefficient'),
+  //   linkId: 'adjafactor5g',
+  //   min: 1,
+  //   max: 255,
+  //   type: 'number',
+  //   dataType: 'number',
+  //   defaultValue: '1',
+  // },
 ]);
 
 const propTypes = {

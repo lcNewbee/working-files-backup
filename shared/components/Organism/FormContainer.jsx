@@ -176,7 +176,7 @@ class FormContainer extends PureComponent {
     } = this.props;
     const index = $$option.get('__index__') !== undefined ? $$option.get('__index__') : '';
     const myProps = $$option.delete('__index__').toJS();
-    const render = myProps.component;
+    const render = myProps.render;
     const checkboxValue = myProps.value || '1';
     const linkId = myProps.linkId;
     let formGroupId = myProps.id;

@@ -4,13 +4,26 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import { Icon } from 'shared/components';
+import { Icon, FormGroup, FormInput } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
 import SaveButton from 'shared/components/Button/SaveButton';
 
 import './web.scss';
+
+function generateClassName(id) {
+  let clsName = '';
+  switch (id) {
+    case '0': clsName = 'dot-circle-o'; break;
+    case '1': clsName = 'user'; break;
+    case '4': clsName = 'envelope'; break;
+    case '5': clsName = 'weixin'; break;
+    case '9': clsName = 'facebook-official'; break;
+    default:
+  }
+  return clsName;
+}
 /* eslint-disable quote-props */
 const idToPageMap = {
   '1': '',
@@ -122,73 +135,6 @@ const listOptions = fromJS([
     render: val => __(val),
   },
   {
-    id: 'authentication',
-    label: __('Supported Login Types'),
-    options: $$authOptions,
-    width: '150px',
-    multi: false,
-    formProps: {
-      type: 'select',
-      // notEditable: true,
-      required: true,
-      multi: true,
-      linkId: 'auths',
-      initValue($$data) {
-        let ret = $$data.get('authentication');
-
-        if (!ret) {
-          // 如果没有默认的认证模式，则支持所有的认证模式
-          // ret = Object.values(idToAuthMap).join(',');
-          ret = ' ';
-        }
-        return ret;
-      },
-    },
-    render: (val, $$data) => {
-      const valArr = val ? val.split(',') : [idToAuthMap[$$data.get('id')] || ''];
-      const validValArr = fromJS(valArr).filter(v => $$authOptions.find(item => item.get('value') === v));
-
-      function generateClassName(id) {
-        let clsName = '';
-        switch (id) {
-          case '0': clsName = 'dot-circle-o'; break;
-          case '1': clsName = 'user'; break;
-          case '4': clsName = 'envelope'; break;
-          case '5': clsName = 'weixin'; break;
-          case '9': clsName = 'facebook-official'; break;
-          default:
-        }
-        return clsName;
-      }
-      return (
-        <ul>
-          {
-            $$authOptions.map((item) => {
-              if (validValArr.includes(item.get('value'))) {
-                return (
-                  <Icon
-                    name={`${generateClassName(item.get('value'))}`}
-                    title={item.get('label')}
-                    className={`web-login-icon ${generateClassName(item.get('value'))}-active`}
-                    key={item.get('label')}
-                  />
-                );
-              }
-              return (
-                <Icon
-                  name={`${generateClassName(item.get('value'))}`}
-                  title={item.get('label')}
-                  className={'web-login-icon'}
-                  key={item.get('label')}
-                />
-              );
-            }).toJS()
-          }
-        </ul>
-      );
-    },
-  },
-  {
     id: 'title',
     noTable: true,
     formProps: {
@@ -210,6 +156,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
+
     },
   },
   {
@@ -218,6 +165,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'file',
       label: __('Logo'),
+      required: true,
     },
   },
   {
@@ -226,6 +174,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'file',
       label: __('Background Image'),
+      required: true,
     },
   },
   {
@@ -279,10 +228,10 @@ const listOptions = fromJS([
   {
     id: 'sessiontime',
     label: __('Limit Connect Duration'),
-    defaultValue: '0',
     formProps: {
       help: __('minutes(0 means no limitation)'),
       required: true,
+      defaultValue: '0',
       type: 'number',
       min: '0',
       max: '99999',
@@ -366,7 +315,7 @@ const listOptions = fromJS([
       rows: '3',
     },
     render: (val) => {
-      if (typeof val === 'undefined') return '';
+      if (!val || typeof val === 'undefined') return '';
       const len = val.length;
       if (len > 43) {
         const desc = val.substring(0, 40);
@@ -385,6 +334,97 @@ const listOptions = fromJS([
   //     // required: true,
   //   },
   // },
+  {
+    id: 'authentication',
+    label: __('Supported Login Types'),
+    options: $$authOptions,
+    width: '150px',
+    multi: false,
+    formProps: {
+      type: 'select',
+      // notEditable: true,
+      required: true,
+      multi: true,
+      linkId: 'auths',
+      initValue($$data) {
+        let ret = $$data.get('authentication');
+
+        if (!ret) {
+          // 如果没有默认的认证模式，则支持所有的认证模式
+          // ret = Object.values(idToAuthMap).join(',');
+          ret = ' ';
+        }
+        return ret;
+      },
+      render: (propsObj, listData) => {
+        const valArr = listData.get('authentication') ? listData.get('authentication').split(',') : [];
+        const validValArr = fromJS(valArr).filter(v => $$authOptions.find(item => item.get('value') === v));
+
+        const changeIconStatus = (item) => {
+          let newArr = validValArr;
+          if (newArr.includes(item.get('value'))) {
+            newArr = newArr.filter(v => item.get('value') !== v).toJS();
+          } else {
+            newArr = newArr.push(item.get('value')).toJS();
+          }
+          const newVal = newArr.join(',');
+          propsObj.onChange({ value: newVal });
+        };
+        return (
+          <div className="form-group">
+            <label htmlFor="logintypes">{__(propsObj.label)}</label>
+            <div id="logintypes" className="cols col-8 col-offset-2">
+              {
+                $$authOptions.map((item) => {
+                  let clsName = '';
+                  if (validValArr.includes(item.get('value'))) clsName = 'active';
+                  return (
+                    <div className="cols col-2" style={{ textAlign: 'center' }} key={item.get('label')}>
+                      <Icon
+                        name={`${generateClassName(item.get('value'))}`}
+                        title={item.get('label')}
+                        className={`web-login-icon-form ${generateClassName(item.get('value'))} ${clsName}`}
+                        onClick={() => { changeIconStatus(item); }}
+                      />
+                      <div>
+                        <input
+                          type="radio"
+                          checked={clsName === 'active'}
+                          onClick={() => { changeIconStatus(item); }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+        );
+      },
+    },
+    render: (val) => {
+      const valArr = val ? val.split(',') : [];
+      const validValArr = fromJS(valArr).filter(v => $$authOptions.find(item => item.get('value') === v));
+      return (
+        <ul>
+          {
+            $$authOptions.map((item) => {
+              let clsName = '';
+              if (validValArr.includes(item.get('value'))) clsName = 'active';
+              return (
+                <Icon
+                  name={`${generateClassName(item.get('value'))}`}
+                  title={item.get('label')}
+                  className={`web-login-icon ${generateClassName(item.get('value'))} ${clsName}`}
+                  key={item.get('label')}
+                />
+              );
+            }).toJS()
+          }
+        </ul>
+      );
+    },
+  },
   {
     id: '__actions__',
     text: __('Actions'),
@@ -519,6 +559,7 @@ export default class View extends React.Component {
         editFormOption={{
           hasFile: true,
         }}
+
         // searchable
         searchProps={{
           placeholder: `${__('Name')}`,

@@ -108,15 +108,15 @@ const listOptions = fromJS([
       }),
     },
   },
-  // {
-  //   id: 'qrcode',
-  //   text: __('QR Code'),
-  //   formProps: {
-  //     type: 'file',
-  //     name: 'qrcode',
-  //     accept: '.jpg, .png, .gif',
-  //   },
-  // },
+  {
+    id: 'qrcode',
+    text: __('QR Code'),
+    formProps: {
+      type: 'file',
+      name: 'qrcode',
+      accept: '.jpg, .png, .gif',
+    },
+  },
   {
     id: 'id',
     text: __('ID'),
