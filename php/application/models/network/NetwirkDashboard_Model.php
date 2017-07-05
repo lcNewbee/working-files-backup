@@ -46,8 +46,7 @@ class NetwirkDashboard_Model extends CI_Model {
             $sqlcmd .= " where a.Timer=(select MAX(ac_interface_description.Timer) from ac_interface_description)";  
             $sqlcmd .= " group by a.Mac_Address";
             $open_ary = $this->mysql->query($sqlcmd)->result_array();
-            foreach($query as $row){
-                $state = 0;
+            foreach($query as $row){                                
                 $mac = '';
                 $negoSpeed = 0;
                 $inbound = 0;
@@ -55,13 +54,13 @@ class NetwirkDashboard_Model extends CI_Model {
                 //对比得到接口状态
                 foreach($open_ary as $rowst){
                     if($row['port_name'] == $rowst['Description']){
-                        $state = 1;
                         $mac = $rowst['Mac_Address'];
                         $negoSpeed = $rowst['Speed'];
                         $inbound = $rowst['Inbound'];
                         $outbound = $rowst['Outbound'];
                     }
                 }
+                $state = $this->getNetworkState($row['port_name']);
                 $arr[] = array(
                     'name' => $row['port_name'],
                     'enable' => (string)$state,
@@ -157,4 +156,12 @@ class NetwirkDashboard_Model extends CI_Model {
         return array('all' => $dhcp_sum, 'use' => $dhcp_use);
     }
 
+    //判断网卡连接状态ethtool eth4|grep detected
+    private function getNetworkState($name){
+        $ret = exec("ethtool {$name}|grep detected");
+        if(strstr($ret, 'yes')){
+            return true;
+        }
+        return false;
+    }
 }
