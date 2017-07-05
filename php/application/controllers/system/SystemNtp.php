@@ -31,9 +31,13 @@ class SystemNtp extends CI_Controller {
                 $retadr['ac_timezone'] = $row['attr_value'];
             }
         }
-        $arr['state'] = array('code'=>2000,'msg'=>'ok');
-        $arr['data'] = array(
-            'settings'=>$retadr
+        date_default_timezone_set('Asia/Shanghai');
+        $retadr['ac_manual_time'] = (string)exec('date "+%Y-%m-%d %H:%M:%S"');
+        $arr = array(
+            'state' => array('code'=>2000,'msg'=>'ok'),
+            'data' => array(
+                'settings' => $retadr
+            )
         );
         echo json_encode($arr);
     }
@@ -53,6 +57,10 @@ class SystemNtp extends CI_Controller {
                 'mysql_time_zone'=>(string)element('mysql_time_zone',$data,''),
             );
             $result = ntptime_msg_from_web(json_encode($arr));
+            if($state == 'off'){
+                //自定义时间
+                exec("date -s '{$data['ac_manual_time']}'");
+            }
             //log
             $cgiObj = json_decode($result);
             if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
