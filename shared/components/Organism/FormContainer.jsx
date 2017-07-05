@@ -176,7 +176,7 @@ class FormContainer extends PureComponent {
     } = this.props;
     const index = $$option.get('__index__') !== undefined ? $$option.get('__index__') : '';
     const myProps = $$option.delete('__index__').toJS();
-    const myComponent = myProps.component;
+    const render = myProps.component;
     const checkboxValue = myProps.value || '1';
     const linkId = myProps.linkId;
     let formGroupId = myProps.id;
@@ -319,8 +319,8 @@ class FormContainer extends PureComponent {
       myProps.disabled = myProps.disabled($$data);
     }
 
-    if (myComponent) {
-      return myComponent(myProps, $$data, actionQuery);
+    if (render) {
+      return render(myProps, $$data, actionQuery);
     }
 
     return isShow ? (

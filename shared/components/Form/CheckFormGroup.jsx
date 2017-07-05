@@ -32,7 +32,7 @@ function CheckFormGroup(props) {
   } = props;
   const myProps = props.option.toJS();
   const groupId = myProps.id;
-  const myComponent = myProps.component;
+  const render = myProps.render;
   const checkboxValue = myProps.checkedValue || '1';
   let isShow = true;
   let data = props.data;
@@ -93,8 +93,8 @@ function CheckFormGroup(props) {
     myProps.value = checkboxValue;
   }
 
-  if (myComponent) {
-    return myComponent(myProps, data, actionQuery);
+  if (render) {
+    return render(myProps, data, actionQuery);
   }
 
   return isShow ? (
