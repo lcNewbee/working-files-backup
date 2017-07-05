@@ -49,12 +49,19 @@ class AccessWeixin_Model extends CI_Model {
         return json_encode($result);
     }
     function Edit($data) {
-        $result = null;
-        $updata = $this->getPram($data);
-        $updata ['id'] = element('id',$updata);
-        $result = $this->portalsql->replace('portal_weixin_wifi',$updata,array('id'=>$updata['id']));
-        $result ? $result = json_ok() : $result = json_no('update error');
-        return json_encode($result);
+        //上传
+        $upload_data = $this->uploadWxImg('qrcode');
+        if($upload_data['state']['code']==2000){
+            $updata = $this->getPram($data);
+            $updata ['id'] = element('id',$updata);
+            $result = $this->portalsql->replace('portal_weixin_wifi',$updata,array('id'=>$updata['id']));
+            if($result){
+                return json_encode(json_ok());
+            }
+        }else{
+            return json_encode(json_no($this->upload->display_errors()));
+        }        
+        return json_encode(json_no('update error'));
     }
 
     private function getPram($data){   
@@ -91,5 +98,31 @@ class AccessWeixin_Model extends CI_Model {
             return $data[0]['ip1'];
         }
         return  $_SERVER['SERVER_ADDR'];
+    }
+    private function uploadWxImg($upload_name) {
+        $config['upload_path'] = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/weixin';
+        $config['overwrite'] = true;
+        $config['max_size'] = 0;
+        $config['allowed_types'] = 'gif|png|jpg|jpeg';
+        $config['file_name'] = 'logo.jpg';
+        $this->load->library('upload'); //重点
+        $this->upload->initialize($config); // 重点
+        if (!$this->upload->do_upload($upload_name)) {
+            $error = array(
+                'error' => $this->upload->display_errors()
+            );
+            $result = array(
+                'state' => array('code' => 4000, 'msg' => $error)
+            );
+        } else {
+            $data = array(
+                'upload_data' => $this->upload->data()
+            );
+            $result = array(
+                'state' => array('code' => 2000, 'msg' => 'OK'), 
+                'data' => $data
+            );
+        }
+        return $result;
     }
 }
