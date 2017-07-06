@@ -103,27 +103,27 @@ const listOptions = fromJS([
     validator: validator({
       rules: 'utf8Len:[1,31]',
     }),
-  }, {
+  },
+  {
     id: 'ip',
     width: 160,
     text: __('IP Address'),
-  }, {
+  },
+  {
     id: 'mac',
     width: 160,
     text: __('MAC Address'),
-  }, {
-    id: 'status',
-    text: __('Status'),
-    defaultValue: 'unkown',
-    options: apStatus,
-  }, {
+  },
+  {
     id: 'model',
     text: __('AP Model'),
-  }, {
+  },
+  {
     id: 'connectedNumbers',
     width: 80,
     text: __('Clients'),
-  }, {
+  },
+  {
     id: 'bandwidth',
     width: 80,
     text: __('Data'),
@@ -133,11 +133,18 @@ const listOptions = fromJS([
 
       return `${upRate}↑/${downRate}↓`;
     },
-  }, {
+  },
+  {
     id: 'operationhours',
     text: __('Uptime'),
     width: 80,
     filter: 'connectTime',
+  },
+  {
+    id: 'status',
+    text: __('Status'),
+    defaultValue: 'unkown',
+    options: apStatus,
   },
 ]);
 const listActionBarButtons = [

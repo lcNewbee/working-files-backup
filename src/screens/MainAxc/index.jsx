@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import utils from 'shared/utils';
 import classNamesUtils from 'classnames';
+import { getActionable } from 'shared/axc'
 import { SaveButton, Icon, PopOver, Navbar } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import {
@@ -16,6 +17,7 @@ import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
 
+const SAVE_BUTTON_TEXT = __('Save Configuration');
 const propTypes = {
   refreshAll: PropTypes.func,
   save: PropTypes.func,
@@ -72,6 +74,7 @@ export default class Main extends React.PureComponent {
       this.props.history.push('/login');
     }
     this.onRefreshProductInfo(this.props);
+    this.actionable = getActionable(this.props);
   }
   componentWillUpdate(nextProps) {
     if (this.props.app.get('companyname') !== nextProps.app.get('companyname')) {
@@ -210,13 +213,20 @@ export default class Main extends React.PureComponent {
       <div className={mainClassName}>
         <Navbar version={version}>
           <div className="aside">
-            <SaveButton
-              type="button"
-              icon="save"
-              loading={saving && this.state.isSaveConfig}
-              text={__('Save Configuration')}
-              onClick={this.onSaveConfiguration}
-            />
+            {
+              this.actionable ? (
+                <SaveButton
+                  type="button"
+                  icon="save"
+                  loading={saving && this.state.isSaveConfig}
+                  text={SAVE_BUTTON_TEXT}
+                  savingText={SAVE_BUTTON_TEXT}
+                  savedText={SAVE_BUTTON_TEXT}
+                  onClick={this.onSaveConfiguration}
+                />
+              ) : null
+            }
+
             <button className="as-control" onClick={this.onRefresh} >
               <Icon name="refresh" className="icon" />
               <span>{__('Refresh')}</span>
