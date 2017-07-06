@@ -8,7 +8,8 @@ import { Icon, FormGroup, FormInput } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
-import SaveButton from 'shared/components/Button/SaveButton';
+
+import Preview from '../../components/Preview';
 
 import './web.scss';
 
@@ -446,6 +447,7 @@ export default class View extends React.Component {
       advSelectPlaceholder: __('Loading'),
       advIsloading: true,
       advOptions: [],
+      testType: 'out',
     };
   }
 
@@ -568,7 +570,24 @@ export default class View extends React.Component {
         noTitle
         actionable
         noPagination
-      />
+      >
+        <Preview
+          type={this.state.testType}
+          data={{
+            title: 'test',
+            auths: '0,1,4',
+            logo: 'images/logo.png',
+            backgroundImg: '',
+            copyright: 'sadsda sadasdadas sadsa',
+            copyrightUrl: 'www.axilspot.com',
+          }}
+          onChangeType={(name) => {
+            this.setState({
+              testType: name,
+            });
+          }}
+        />
+      </AppScreen>
     );
   }
 }

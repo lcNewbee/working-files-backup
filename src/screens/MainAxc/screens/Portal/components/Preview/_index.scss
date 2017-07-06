@@ -1,0 +1,286 @@
+.portal {
+  min-height: 100%;
+  height: 100%;
+  width: 375px;
+  height: 667px;
+  position: relative;
+  border: 1px solid #333;
+  overflow: auto;
+
+  .a-btn {
+    color: #fff;
+
+    .icon {
+      font-size: 18px;
+    }
+  }
+
+  .a-btn--dark {
+    background-color: #AAAAAA;
+
+    &:hover {
+      background-color: #bbb;
+    }
+  }
+
+  /* a-icon */
+  .a-icon {
+    height: 20px;
+  }
+
+  /* Form Group */
+  .p-form-group {
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  .p-form-control {
+    border-radius: 7px;
+    padding: 16px 8px;
+    border: 1px solid #95989A;
+  }
+
+  .p-form-group .icon,
+  .p-form-group .a-icon {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    margin-top: -10px;
+    color: #95989A;
+    font-size: 18px;
+    line-height: 20px;
+    width: 20px;
+  }
+
+  .p-form-group > .p-form-control {
+    display: block;
+    width: 100%;
+  }
+
+  .p-form-group--icon .p-form-control {
+    padding-left: 36px;
+  }
+
+  /* 手机验证码输出框 与 获取手机验证码按钮 */
+  .p-input-group {
+    overflow: auto;
+  }
+
+  .p-input-group > .p-input-group-input {
+    float: left;
+    width: 100%;
+    padding-right: 188px;
+  }
+
+  .p-input-group > .p-input-group-input input {
+    display: block;
+    width: 100%;
+  }
+
+  .p-input-group > .a-btn {
+    float: left;
+    width: 180px;
+    margin-left: -180px;
+    padding: 14px;
+    margin-bottom: 0;
+  }
+}
+
+.portal-banner {
+  margin-right: 400px;
+  min-height: 100%;
+  background: #666 no-repeat center top fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.portal-banner .portal-banner-warp {
+  height: 100%;
+  background-color: #666;
+}
+
+.portal-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px;
+  min-height: 100%;
+  text-align: center;
+  padding-bottom: 120px;
+}
+
+.portal-content-header,
+.portal-content-body,
+.portal-content-footer {
+  width: 100%;
+  padding: 0 32px;
+}
+
+.portal-content-header {
+  padding-top: 42px;
+}
+
+.portal-content-header h1 {
+  font-size: 21px;
+  font-weight: normal;
+}
+
+.portal-content-header h2 {
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 3px;
+}
+
+.portal-content-header hr {
+  margin: 20px 0;
+}
+
+.portal-content-body .a-btn--lg {
+  margin-bottom: 8px;
+  padding: 13px;
+  border-radius: 7px;
+}
+
+.portal-content-body .a-btn--block {
+  display: block;
+  width: 100%;
+}
+
+.portal-content-body .header-img {
+  margin: 14px auto;
+  height: 42px;
+}
+
+.portal-content-body .header-description {
+  margin-bottom: 12px;
+}
+
+.portal-content-footer {
+  position: absolute;
+  bottom: 24px;
+}
+
+.portal-content-footer > a {
+  color: #458CCA;
+  font-size: 12px;
+}
+
+.portal-content-body .a-btn {
+  line-height: 20px;
+}
+.portal-content-body .a-btn > img {
+  height: 20px;
+  margin-right: 6px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.portal-content-body>form {
+  margin-top: 28px;
+}
+
+.portal-content-body-section {
+  display: none;
+}
+
+.portal-content-body-section.active {
+  display: block;
+}
+
+
+/* p-list-group */
+.p-list-group {
+  margin: 10px auto;
+}
+
+.p-list-group-item {
+  float: left;
+  width: 100%;
+  padding: 14px 6px;
+  color: #A5A5A5;
+  border: 1px solid #95989A;
+  border-radius: 7px;
+  margin-bottom: 8px;
+
+  .icon {
+    font-size: 20px;
+    width: 20px;
+  }
+}
+
+.p-list-group--inline {
+  overflow: hidden;
+  width: 60%;
+  border-radius: 30px;
+  border: 1px solid #95989A;
+}
+
+.p-list-group--inline .p-list-group-item {
+  width: auto;
+  padding: 6px 0;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+
+.p-list-group--inline .p-list-group-item.frist {
+  border-right: 1px solid #95989A;
+}
+
+.p-list-group-item a {
+  display: block;
+  color: #C8C8C8;
+}
+
+.a-brand {
+  height: 50px;
+}
+.a-btn--user {
+  background-color: #F67080;
+}
+
+.a-btn--user:hover {
+  background-color: #F66660;
+}
+.a-btn--facebook {
+  background-color: #3b5998;
+}
+
+.a-btn--facebook:hover {
+  background-color: #4e69a2;
+}
+.a-btn.more {
+  display: none;
+}
+
+/* 手机屏幕 */
+.portal--mobile .portal-banner {
+  position: absolute;
+  margin-right: 0;
+  width: 100%;
+  height: 320px;
+  min-height: 320px;
+}
+.portal--mobile .portal-content {
+  width: 100%;
+}
+.portal--mobile .portal-content-header {
+  height: 330px;
+  color: #fff;
+}
+.portal--mobile .portal-content-header .a-brand {
+  margin-bottom: 10px;
+}
+.portal--mobile.portal--ok .portal-content-header,
+.portal--mobile.portal--ok .portal-banner,
+.portal.portal--mobile hr,
+.portal--mobile .portal-content-body .header-img {
+  display: none;
+}
+
+.portal--mobile.portal--ok .portal-content-body .header-img,
+.portal--mobile.portal--out .portal-content-body .header-img {
+  display: block;
+}
