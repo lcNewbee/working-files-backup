@@ -21,7 +21,7 @@ const authToIcon = {
 };
 function LoginBody(props) {
   const { auths, section, onChangeSection, onLoginOk } = props;
-  const authArr = auths.split(',');
+  const authArr = auths ? auths.split(',') : [];
 
   return (
     <div className="portal-content-body">
@@ -245,7 +245,7 @@ export default class PortalPreview extends React.Component {
     const {
       title, subTitle, auths, logo, backgroundImg, copyright, copyrightUrl,
     } = this.props.data;
-    const authArr = auths.split(',');
+    const authArr = auths ? auths.split(',') : [];
     let classNames = 'portal portal--mobile';
 
     if (type) {

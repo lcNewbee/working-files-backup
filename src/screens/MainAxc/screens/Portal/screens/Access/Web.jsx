@@ -8,6 +8,7 @@ import { Icon, FormGroup, FormInput } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
+import { SaveButton, Button } from 'shared/components/Button';
 
 import Preview from '../../components/Preview';
 
@@ -30,6 +31,40 @@ function onBeforeSync($$actionQuery, $$curListItem) {
   const selectedLoginType = $$curListItem.get('auths');
   if (!selectedLoginType) return __('Please select at least one Login Type!');
   return '';
+}
+
+function previewFile(file) {
+  const retPromise = new Promise((resolve) => {
+    let retUrl = '';
+    let reader = null;
+
+    // 如果支持 createObjectURL
+    if (URL && URL.createObjectURL) {
+      const img = new Image();
+      retUrl = URL.createObjectURL(file);
+      img.src = retUrl;
+
+      img.onload = () => {
+        resolve(retUrl);
+        // URL.revokeObjectURL(retUrl);
+      };
+
+    // 如果支持 FileReader
+    } else if (window.FileReader) {
+      reader = new FileReader();
+      reader.onload = (e) => {
+        retUrl = e.target.result;
+        resolve(retUrl);
+      };
+      reader.readAsDataURL(file);
+
+    // 其他放回 Flase
+    } else {
+      resolve(retUrl);
+    }
+  });
+
+  return retPromise;
 }
 /* eslint-disable quote-props */
 const idToPageMap = {
@@ -107,6 +142,11 @@ const $$authOptions = fromJS([
   },
 ]);
 
+function bindListOPtionsToThis(that) {
+
+}
+
+
 const listOptions = fromJS([
   {
     id: 'id',
@@ -160,20 +200,10 @@ const listOptions = fromJS([
   {
     id: 'logo',
     noTable: true,
-    formProps: {
-      type: 'file',
-      label: __('Logo'),
-      required: true,
-    },
   },
   {
     id: 'backgroundImg',
     noTable: true,
-    formProps: {
-      type: 'file',
-      label: __('Background Image'),
-      required: true,
-    },
   },
   {
     id: 'copyright',
@@ -232,7 +262,6 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'num:[0,99999]',
       }),
-      // visible: $$data => $$data.get('id') > 2 && $$data.get('id') !== '4',
     },
     render: (val) => {
       let ret = val;
@@ -318,16 +347,6 @@ const listOptions = fromJS([
       return <span>{val}</span>;
     },
   },
-  // {
-  //   id: 'file',
-  //   text: __('Template Zip File'),
-  //   noTable: true,
-  //   defaultValue: '',
-  //   formProps: {
-  //     type: 'file',
-  //     // required: true,
-  //   },
-  // },
   {
     id: 'authentication',
     label: __('Supported Login Types'),
@@ -335,10 +354,7 @@ const listOptions = fromJS([
     width: '150px',
     multi: false,
     formProps: {
-      type: 'select',
       // notEditable: true,
-      required: true,
-      multi: true,
       linkId: 'auths',
       initValue($$data) {
         let ret = $$data.get('authentication');
@@ -447,12 +463,23 @@ export default class View extends React.Component {
       advSelectPlaceholder: __('Loading'),
       advIsloading: true,
       advOptions: [],
-      testType: 'out',
+      testType: 'login',
+      logoImgUrl: '',
+      backgroundImgUrl: '',
     };
   }
 
   componentWillMount() {
     this.getAdsPage();
+  }
+  componentWillReceiveProps(nextProps) {
+    const myScreenId = nextProps.store.get('curScreenId');
+    const $$myScreenStore = this.props.store.get(myScreenId);
+    const $$nextScreenStore = nextProps.store.get(myScreenId);
+    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    const nextActionType = $$nextScreenStore.getIn(['actionQuery', 'action']);
+
+    if (actionType !== nextActionType) this.setState({ logoImgUrl: '', backgroundImgUrl: '' });
   }
   // onBackup($$data) {
   //   if (this.actionable) {
@@ -463,30 +490,29 @@ export default class View extends React.Component {
   //     }
   //   }
   // }
+
   getAdsPage() {
     this.props.fetch('goform/portal/access/web/webPage', {
       page: 1,
       size: 500,
-    })
-      .then((json) => {
-        let options = [];
+    }).then((json) => {
+      let options = [];
 
-        if (json && json.data && json.data.list) {
-          options = json.data.list.map(
-            item => ({
-              value: item.id,
-              label: item.name,
-            }),
-          );
-        }
+      if (json && json.data && json.data.list) {
+        options = json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.name,
+          }),
+        );
+      }
 
-        this.setState({
-          advSelectPlaceholder: undefined,
-          advIsloading: false,
-          advOptions: options,
-        });
-      },
-    );
+      this.setState({
+        advSelectPlaceholder: undefined,
+        advIsloading: false,
+        advOptions: options,
+      });
+    });
   }
   initListOptions() {
     const { store } = this.props;
@@ -494,6 +520,19 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const $$curListItem = $$myScreenStore.getIn(['curListItem']);
+    let $$newCurListItem = $$curListItem;
+
+    if (this.state.logoImgUrl) {
+      $$newCurListItem = $$newCurListItem.merge({
+        logo: this.state.logoImgUrl,
+      });
+    }
+    if (this.state.backgroundImgUrl) {
+      $$newCurListItem = $$newCurListItem.merge({
+        backgroundImg: this.state.backgroundImgUrl,
+      });
+    }
+    // 添加操作栏按钮
     this.curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
       <span>
         <a
@@ -525,7 +564,66 @@ export default class View extends React.Component {
           disabled={!this.actionable}
         />*/}
       </span>
+    )).push( // 添加预览页面
+      fromJS({
+        id: '__preview__',
+        noTable: true,
+        formProps: {
+          type: 'textarea',
+          render: () => (
+            <div className="portal-templates-preview">
+              <div className="portal-preview-head">
+                <h4>PREVIEW</h4>
+              </div>
+              <div className="portal-preview-body">
+                <Preview
+                  type={this.state.testType}
+                  data={$$newCurListItem.toJS()}
+                  onChangeType={(name) => {
+                    this.setState({
+                      testType: name,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          ),
+        },
+      }),
+    );
+
+    // 修改背景图片上传项的formProps
+    const bgPos = this.curListOptions.findIndex(item => item.get('id') === 'backgroundImg');
+    this.curListOptions = this.curListOptions.setIn([bgPos, 'formProps'], fromJS(
+      {
+        type: 'file',
+        label: __('Background Image'),
+        required: true,
+        onChange: (data, formData, e) => {
+          const file = e.target.files[0];
+          previewFile(file).then((imgSrc) => {
+            this.setState({ backgroundImgUrl: imgSrc });
+          });
+          return data;
+        },
+      },
     ));
+
+    //  修改logo图片上传项的formProps
+    const logoPos = this.curListOptions.findIndex(item => item.get('id') === 'logo');
+    this.curListOptions = this.curListOptions.setIn([logoPos, 'formProps'], fromJS(
+      {
+        type: 'file',
+        label: __('Logo'),
+        required: true,
+        onChange: (data, formData, e) => {
+          const file = e.target.files[0];
+          previewFile(file).then((imgSrc) => {
+            this.setState({ logoImgUrl: imgSrc });
+          });
+          return data;
+        },
+      }));
 
     if (actionType === 'edit' && $$curListItem.get('id') === '1') {
       this.curListOptions = this.curListOptions.map(
@@ -549,6 +647,10 @@ export default class View extends React.Component {
   }
 
   render() {
+    // const { store } = this.props;
+    // const myScreenId = store.get('curScreenId');
+    // const $$myScreenStore = store.get(myScreenId);
+    // const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     this.initListOptions();
     return (
       <AppScreen
@@ -591,7 +693,6 @@ function mapDispatchToProps(dispatch) {
     screenActions,
   ), dispatch);
 }
-
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(

@@ -2,10 +2,25 @@
   min-height: 100%;
   height: 100%;
   width: 375px;
-  height: 667px;
+  height: 610px;
   position: relative;
   border: 1px solid #333;
+  border-radius: 6px;
+  margin: 10px auto;
   overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0,0,0,0.1);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  }
 
   .a-btn {
     color: #fff;
@@ -89,7 +104,7 @@
 .portal-banner {
   margin-right: 400px;
   min-height: 100%;
-  background: #666 no-repeat center top fixed;
+  background: #666 no-repeat center top;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -260,14 +275,14 @@
   position: absolute;
   margin-right: 0;
   width: 100%;
-  height: 320px;
-  min-height: 320px;
+  height: 270px;
+  min-height: 270px;
 }
 .portal--mobile .portal-content {
   width: 100%;
 }
 .portal--mobile .portal-content-header {
-  height: 330px;
+  height: 280px;
   color: #fff;
 }
 .portal--mobile .portal-content-header .a-brand {

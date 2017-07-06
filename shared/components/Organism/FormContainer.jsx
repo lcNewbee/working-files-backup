@@ -258,7 +258,7 @@ class FormContainer extends PureComponent {
 
     // change
     if (typeof $$option.get('onChange') === 'function') {
-      myProps.onChange = (myData) => {
+      myProps.onChange = (myData, e) => {
         let customChangeData = null;
         let changeData = myData;
 
@@ -267,7 +267,7 @@ class FormContainer extends PureComponent {
           changeData.index = index;
         }
 
-        customChangeData = $$option.get('onChange')(changeData, $$data.toJS());
+        customChangeData = $$option.get('onChange')(changeData, $$data.toJS(), e);
         changeData = customChangeData || changeData;
 
         this.changeFormGoupData({

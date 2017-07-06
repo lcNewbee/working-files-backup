@@ -28,6 +28,7 @@
   margin: 0px 15px 15px 15px;
   font-size: 35px;
   color: #888;
+  cursor: pointer;
 }
 
 .dot-circle-o.active {
@@ -48,4 +49,43 @@
 
 .envelope.active {
   color: #eebe22;
+}
+
+
+.portal-templates-preview {
+  position: absolute;
+  left: 100px;
+  background-color: white;
+  box-shadow: 2px 4px 8px #555;
+  border-radius: 6px;
+  left: 660px;
+  top: -48px;
+  width: 450px;
+  height: 694px;
+}
+
+.portal-preview-head {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 10px;
+  border-bottom: 1px solid #999;
+}
+
+.portal-preview-body {
+  height: 580px;
+}
+
+.portal-preview-footer {
+  padding: 0px 20px;
+}
+
+.preview-button-group {
+  border-top: 1px solid #ccc;
+  padding: 10px 0;
+  margin-right: -5px;
+}
+
+.portal-preview-background {
+  width: 100%;
+  height: 100%;
 }

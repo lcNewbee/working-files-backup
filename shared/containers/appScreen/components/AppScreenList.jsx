@@ -911,6 +911,7 @@ class AppScreenList extends React.PureComponent {
           onClose={this.onCloseEditModal}
           size={modalSize}
           noFooter
+          draggable
         >
           {
             !modalChildren ? (
