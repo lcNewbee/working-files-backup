@@ -417,7 +417,7 @@ const listOptions = fromJS([
   },
   {
     id: 'auth',
-    text: __('Login Type'),
+    text: __('Portal Template'),
     noTable: noAuthTableCol,
     formProps: {
       type: 'select',

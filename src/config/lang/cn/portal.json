@@ -98,7 +98,7 @@
   "Closed":"关闭",
   "Open":"开启",
   "Portal Server IP":"Portal服务器IP",
-  "Page Settings": "页面配置",
+  "Portal Template": "Portal模板",
   "User MAC Address":"用户MAC地址",
   "Supported Login Types": "支持的认证类型",
 
@@ -328,5 +328,6 @@
   "When did you graduate from primary school?": "你小学毕业是什么时候？",
   "What's your pet's name?": "你宠物的名字是什么？",
   "What's your favorite sport?": "你最喜欢的运动是什么？",
-  "IP/Login name": "IP/登录名"
+  "IP/Login name": "IP/登录名",
+  "Please select at least one Login Type!": "请选择至少一种认证方式!"
 }

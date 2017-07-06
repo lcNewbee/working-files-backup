@@ -24,6 +24,12 @@ function generateClassName(id) {
   }
   return clsName;
 }
+
+function onBeforeSync($$actionQuery, $$curListItem) {
+  const selectedLoginType = $$curListItem.get('auths');
+  if (!selectedLoginType) return __('Please select at least one Login Type!');
+  return '';
+}
 /* eslint-disable quote-props */
 const idToPageMap = {
   '1': '',
@@ -99,14 +105,6 @@ const $$authOptions = fromJS([
     label: __('Facebook Login'),
   },
 ]);
-/* eslint-disable quote-props */
-const idToAuthMap = {
-  '3': '0',
-  '4': '1',
-  '5': '4',
-  '6': '5',
-  '7': '9',
-};
 
 const listOptions = fromJS([
   {
@@ -156,7 +154,6 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
-
     },
   },
   {
@@ -199,11 +196,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'hidden',
       initValue($$data) {
-        let ret = $$data.get('authentication');
-
-        if (!ret) {
-          ret = Object.values(idToAuthMap).join(',');
-        }
+        const ret = $$data.get('authentication') || '';
         return ret;
       },
     },
@@ -350,8 +343,6 @@ const listOptions = fromJS([
         let ret = $$data.get('authentication');
 
         if (!ret) {
-          // 如果没有默认的认证模式，则支持所有的认证模式
-          // ret = Object.values(idToAuthMap).join(',');
           ret = ' ';
         }
         return ret;
@@ -379,18 +370,21 @@ const listOptions = fromJS([
                   let clsName = '';
                   if (validValArr.includes(item.get('value'))) clsName = 'active';
                   return (
-                    <div className="cols col-2" style={{ textAlign: 'center' }} key={item.get('label')}>
+                    <div
+                      className="cols col-2"
+                      style={{ textAlign: 'center' }}
+                      key={item.get('label')}
+                      onClick={() => { changeIconStatus(item); }}
+                    >
                       <Icon
                         name={`${generateClassName(item.get('value'))}`}
                         title={item.get('label')}
                         className={`web-login-icon-form ${generateClassName(item.get('value'))} ${clsName}`}
-                        onClick={() => { changeIconStatus(item); }}
                       />
                       <div>
                         <input
                           type="radio"
                           checked={clsName === 'active'}
-                          onClick={() => { changeIconStatus(item); }}
                         />
                       </div>
                     </div>
@@ -443,7 +437,8 @@ export default class View extends React.Component {
 
     utils.binds(this, [
       'getAdsPage',
-      'onBackup',
+      // 'onBackup',
+      'onBeforeSync',
       'initListOptions',
     ]);
     this.actionable = getActionable(props);
@@ -457,15 +452,15 @@ export default class View extends React.Component {
   componentWillMount() {
     this.getAdsPage();
   }
-  onBackup($$data) {
-    if (this.actionable) {
-      if (idTownloadIdMap[$$data.get('id')]) {
-        window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
-      } else {
-        window.location.href = 'goform/portal/access/download/';
-      }
-    }
-  }
+  // onBackup($$data) {
+  //   if (this.actionable) {
+  //     if (idTownloadIdMap[$$data.get('id')]) {
+  //       window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
+  //     } else {
+  //       window.location.href = 'goform/portal/access/download/';
+  //     }
+  //   }
+  // }
   getAdsPage() {
     this.props.fetch('goform/portal/access/web/webPage', {
       page: 1,
@@ -550,12 +545,15 @@ export default class View extends React.Component {
 
     return this.curListOptions;
   }
+
   render() {
     this.initListOptions();
     return (
       <AppScreen
         {...this.props}
         listOptions={this.curListOptions}
+        modalSize="max"
+        onBeforeSync={onBeforeSync}
         editFormOption={{
           hasFile: true,
         }}
