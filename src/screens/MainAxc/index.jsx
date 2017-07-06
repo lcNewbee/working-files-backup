@@ -6,9 +6,7 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import utils from 'shared/utils';
 import classNamesUtils from 'classnames';
-import Icon from 'shared/components/Icon';
-import PopOver from 'shared/components/PopOver';
-import Navbar from 'shared/components/Navbar';
+import { SaveButton, Icon, PopOver, Navbar } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import {
   actions as propertiesActions,
@@ -20,6 +18,7 @@ import myReducer from './reducer';
 
 const propTypes = {
   refreshAll: PropTypes.func,
+  save: PropTypes.func,
   changeLoginStatus: PropTypes.func,
   toggleMainPopOver: PropTypes.func,
   togglePropertyContainer: PropTypes.func,
@@ -53,6 +52,7 @@ export default class Main extends React.PureComponent {
       'onToggleMainPopOver',
       'renderPopOverContent',
       'onRefreshProductInfo',
+      'onSaveConfiguration',
     ]);
 
     document.onkeydown = (e) => {
@@ -134,6 +134,23 @@ export default class Main extends React.PureComponent {
       });
     }
   }
+  onSaveConfiguration() {
+    let ret = null;
+
+    if (this.actionable) {
+      this.setState({
+        isSaveConfig: true,
+      });
+      ret = this.props.save('goform/system/saveConfig')
+        .then(() => {
+          this.setState({
+            isSaveConfig: false,
+          });
+        });
+    }
+
+    return ret;
+  }
 
   showUserPopOver() {
     this.onToggleMainPopOver({
@@ -174,7 +191,7 @@ export default class Main extends React.PureComponent {
   }
 
   render() {
-    const { version } = this.props.app.toJS();
+    const { version, saving } = this.props.app.toJS();
     const { popOver, nav } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
     const isMainNavShow = nav.show;
@@ -193,6 +210,13 @@ export default class Main extends React.PureComponent {
       <div className={mainClassName}>
         <Navbar version={version}>
           <div className="aside">
+            <SaveButton
+              type="button"
+              icon="save"
+              loading={saving && this.state.isSaveConfig}
+              text={__('Save Configuration')}
+              onClick={this.onSaveConfiguration}
+            />
             <button className="as-control" onClick={this.onRefresh} >
               <Icon name="refresh" className="icon" />
               <span>{__('Refresh')}</span>
