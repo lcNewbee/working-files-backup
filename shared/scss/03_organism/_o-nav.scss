@@ -40,6 +40,9 @@ $main-blue: #0093dd;
       vertical-align: middle;
       transition: .3s transform ease-in-out;
     }
+    .o-nav__icon-toggle {
+      font-size: 12px;
+    }
     .o-nav__label {
       position: absolute;
       top: 50%;
@@ -69,7 +72,7 @@ $main-blue: #0093dd;
     }
     &.is-open {
       .o-nav__icon-toggle {
-        transform: rotate(90deg);
+        transform: rotate(45deg);
       }
     }
   }
@@ -82,7 +85,7 @@ $main-blue: #0093dd;
 
       .o-nav__icon-tabs,
       .o-nav__icon-toggle {
-        left: 23px;
+        left: 30px;
       }
 
       &.active {
