@@ -199,17 +199,31 @@ class AccessWeb_Model extends CI_Model {
         ); 
         $query = $this->portalsql->query('select id,name,logo,bg_img from portal_web where id=' . $data['id'])->result_array();
         //1.上传图片
+        //logo
         $upload_data = $this->do_upload_img($logo_name, 'logo');        
-        $upload_data2 = $this->do_upload_img($bg_name, 'backgroundImg');        
-        if($upload_data['state']['code'] == 2000 && $upload_data2['state']['code'] == 2000){
+        if($upload_data['state']['code'] == 2000){
             //上传成功后删除原图片            
             if(count($query) > 0){
-                unlink('/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['logo']);
-                unlink('/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['bg_img']);                
+                $dellogo = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['logo'];
+                if(is_file($dellogo)){
+                    unlink($dellogo);
+                }                               
+            }
+        }else{
+            $db_ary['logo'] = $query[0]['logo'];
+        }
+        //bg
+        $upload_data2 = $this->do_upload_img($bg_name, 'backgroundImg');        
+        if($upload_data2['state']['code'] == 2000){
+            //上传成功后删除原图片            
+            if(count($query) > 0){                
+                $delbg = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['bg_img'];   
+                if(is_file($delbg)){                    
+                    unlink($delbg);
+                }                              
             }
         }else{
             if(count($query) > 0){
-                $db_ary['logo'] = $query[0]['logo'];
                 $db_ary['bgImg'] = $query[0]['bg_img'];                
             }
         }
