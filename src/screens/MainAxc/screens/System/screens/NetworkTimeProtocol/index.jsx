@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
+import { FormInput } from 'shared/components';
 import TIME_ZONE from 'shared/config/timeZone';
 import validator from 'shared/validator';
 
@@ -40,6 +41,7 @@ const settingsOptions = fromJS([
     validator: validator({
       rules: 'domainIP',
     }),
+    disabled: item => item.get('ac_onoff') === '0',
   },
   {
     id: 'ac_referral_server',
@@ -49,6 +51,7 @@ const settingsOptions = fromJS([
     validator: validator({
       rules: 'domainIP',
     }),
+    disabled: item => item.get('ac_onoff') === '0',
   },
   {
     id: 'ac_TimeInterval',
@@ -62,6 +65,7 @@ const settingsOptions = fromJS([
     validator: validator({
       rules: 'num[5,50000]',
     }),
+    disabled: item => item.get('ac_onoff') === '0',
   },
   {
     id: 'ac_timezone',
@@ -80,17 +84,66 @@ const settingsOptions = fromJS([
 
       return data;
     },
+    disabled: item => item.get('ac_onoff') === '0',
+  },
+  {
+    id: 'ac_manual_time',
+    fieldset: 'acTime',
+    label: __('Manual Time'),
+    type: 'text',
+    help: __('Example: 1970-1-1 10:10:10'),
+    disabled: item => item.get('ac_onoff') === '1',
   },
 ]).groupBy(item => item.get('fieldset'))
 .toList();
 
+function onBeforeSave($$actionQuery, $$curSettings) {
+  const fullTimeStr = $$curSettings.get('ac_manual_time');
+  const fullTime = new Date(fullTimeStr);
+  if (fullTime.toString() === 'Invalid Date') return __('Invalid Manual Time!');
+
+  const date = fullTimeStr.split(/\s+/)[0];
+  const time = fullTimeStr.split(/\s+/)[1];
+  if (!date || !time) return __('Invalid Manual Time!');
+
+  const dateArr = date.split('-');
+  const timeArr = time.split(':');
+  if (dateArr.length > 3 || timeArr.length > 3) return __('Invalid Manual Time!');
+
+  const originYear = parseInt(dateArr[0].replace(/(^\s*)|(\s*$)/g, ''), 10);
+  const originMonth = parseInt(dateArr[1].replace(/(^\s*)|(\s*$)/g, ''), 10);
+  const originDay = parseInt(dateArr[2].replace(/(^\s*)|(\s*$)/g, ''), 10);
+  const originHour = parseInt(timeArr[0].replace(/(^\s*)|(\s*$)/g, ''), 10);
+  const originMinute = parseInt(timeArr[1].replace(/(^\s*)|(\s*$)/g, ''), 10);
+  const originSecond = parseInt(timeArr[2].replace(/(^\s*)|(\s*$)/g, ''), 10);
+  if (!(originYear && originMonth && originDay) || !(typeof originYear !== 'undefined' &&
+        typeof originMinute !== 'undefined' && typeof originSecond !== 'undefined')) {
+    return __('Invalid Manual Time!');
+  }
+
+  const year = fullTime.getFullYear();
+  const month = fullTime.getMonth() + 1;
+  const day = fullTime.getDate();
+  const hour = fullTime.getHours();
+  const minute = fullTime.getMinutes();
+  const second = fullTime.getSeconds();
+
+  if (!(originYear === year && originMonth === month && originDay === day &&
+        originHour === hour && originMinute === minute && originSecond === second)) {
+    return __('Invalid Manual Time!');
+  }
+
+  return '';
+}
 
 export default class View extends React.Component {
+
   render() {
     return (
       <AppScreen
         {...this.props}
         settingsFormOptions={settingsOptions}
+        onBeforeSave={onBeforeSave}
         hasSettingsSaveButton
         noTitle
       />

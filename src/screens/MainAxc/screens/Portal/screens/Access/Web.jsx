@@ -4,12 +4,33 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
+import { Icon, FormGroup, FormInput } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
-import SaveButton from 'shared/components/Button/SaveButton';
+
+import Preview from '../../components/Preview';
 
 import './web.scss';
+
+function generateClassName(id) {
+  let clsName = '';
+  switch (id) {
+    case '0': clsName = 'dot-circle-o'; break;
+    case '1': clsName = 'user'; break;
+    case '4': clsName = 'envelope'; break;
+    case '5': clsName = 'weixin'; break;
+    case '9': clsName = 'facebook-official'; break;
+    default:
+  }
+  return clsName;
+}
+
+function onBeforeSync($$actionQuery, $$curListItem) {
+  const selectedLoginType = $$curListItem.get('auths');
+  if (!selectedLoginType) return __('Please select at least one Login Type!');
+  return '';
+}
 /* eslint-disable quote-props */
 const idToPageMap = {
   '1': '',
@@ -44,10 +65,10 @@ const idTownloadIdMap = {
 //   },
 // ]);
 const $$authOptions = fromJS([
-  {
-    value: '-100',
-    label: __('ALL'),
-  },
+  // {
+  //   value: '-100',
+  //   label: __('ALL'),
+  // },
   {
     value: '0',
     label: __('One Key Login'),
@@ -85,14 +106,6 @@ const $$authOptions = fromJS([
     label: __('Facebook Login'),
   },
 ]);
-/* eslint-disable quote-props */
-const idToAuthMap = {
-  '3': '0',
-  '4': '1',
-  '5': '4',
-  '6': '5',
-  '7': '9',
-};
 
 const listOptions = fromJS([
   {
@@ -104,7 +117,8 @@ const listOptions = fromJS([
       type: 'hidden',
       required: true,
     },
-  }, {
+  },
+  {
     id: 'name',
     text: __('Name'),
     width: '120px',
@@ -120,71 +134,70 @@ const listOptions = fromJS([
     render: val => __(val),
   },
   {
-    id: 'description',
-    text: __('Description'),
-    width: '120px',
+    id: 'title',
+    noTable: true,
     formProps: {
-      type: 'textarea',
-      maxLength: '257',
-      notEditable: true,
+      type: 'text',
+      label: __('Title'),
+      required: true,
       validator: validator({
-        rules: 'utf8Len:[0, 256]',
+        rules: 'utf8Len:[0, 255]',
       }),
-      rows: '3',
     },
-    render: val => __(val),
   },
   {
-    id: 'authentication',
-    label: __('Supported Login Types'),
-    options: $$authOptions,
-    width: '120px',
-    multi: false,
+    id: 'subTitle',
+    noTable: true,
     formProps: {
-      type: 'select',
-      notEditable: true,
-      multi: false,
-      linkId: 'auths',
-      initValue($$data) {
-        let ret = $$data.get('authentication');
-
-        if (!ret) {
-          ret = idToAuthMap[$$data.get('id')] || '-100';
-        }
-        return ret;
-      },
+      type: 'text',
+      label: __('Sub Title'),
+      required: true,
+      validator: validator({
+        rules: 'utf8Len:[0, 255]',
+      }),
     },
-    render: (val, $$data) => {
-      const valArr = val ? val.split(',') : [idToAuthMap[$$data.get('id')] || ''];
-      let ret = '';
-
-      ret = valArr.map(
-        (itemVal) => {
-          let valRet = $$authOptions.find(
-            $$myMap => $$myMap.get('value') === itemVal,
-          );
-
-          if (valRet) {
-            valRet = valRet.get('label');
-          }
-
-          return valRet;
-        },
-      ).join(', ');
-
-      return ret || '';
+  },
+  {
+    id: 'logo',
+    noTable: true,
+    formProps: {
+      type: 'file',
+      label: __('Logo'),
+      required: true,
+    },
+  },
+  {
+    id: 'backgroundImg',
+    noTable: true,
+    formProps: {
+      type: 'file',
+      label: __('Background Image'),
+      required: true,
+    },
+  },
+  {
+    id: 'copyright',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      label: __('Copyright'),
+    },
+  },
+  {
+    id: 'copyrightUrl',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      label: __('Copyright Link'),
     },
   },
   {
     id: 'auths',
+    noTable: true,
     formProps: {
       type: 'hidden',
       initValue($$data) {
-        let ret = $$data.get('authentication');
-
-        if (!ret) {
-          ret = idToAuthMap[$$data.get('id')] || '-100';
-        }
+        const ret = $$data.get('authentication') || '';
         return ret;
       },
     },
@@ -197,46 +210,38 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
-      visible: $$data => $$data.get('id') > 2,
     },
-    render: (val, $$data) => {
-      const id = $$data.get('id');
+    render: (val) => {
+      // const id = $$data.get('id');
       let ret = val;
 
-      // 所有认证 与 默认 项没有自己的重定向 URL
-      if (id === '2' || id === '1') {
-        ret = '-';
-      }
-
+      if (!ret) ret = '-';
       return ret;
     },
   },
   {
     id: 'sessiontime',
     label: __('Limit Connect Duration'),
-    defaultValue: '0',
     formProps: {
       help: __('minutes(0 means no limitation)'),
+      required: true,
+      defaultValue: '0',
       type: 'number',
       min: '0',
       max: '99999',
       validator: validator({
         rules: 'num:[0,99999]',
       }),
-      visible: $$data => $$data.get('id') > 2 && $$data.get('id') !== '4',
+      // visible: $$data => $$data.get('id') > 2 && $$data.get('id') !== '4',
     },
-    render: (val, $$data) => {
+    render: (val) => {
       let ret = val;
-      const id = $$data.get('id');
+      // const id = $$data.get('id');
 
       if (val === '0' || val === 0) {
         ret = __('Limitless');
       } else if (val !== '-') {
         ret = `${ret} ${__('Minutes')}`;
-      }
-
-      if (id === '4' || id === '1' || id === '2') {
-        ret = '-';
       }
 
       return ret;
@@ -259,7 +264,8 @@ const listOptions = fromJS([
       type: 'select',
       required: true,
     },
-  }, {
+  },
+  {
     id: 'countShow',
     text: __('Show Times'),
     defaultValue: '150',
@@ -273,7 +279,8 @@ const listOptions = fromJS([
         rules: 'num:[0,999999999]',
       }),
     },
-  }, {
+  },
+  {
     id: 'countAuth',
     text: __('Click Times'),
     defaultValue: '100',
@@ -289,15 +296,131 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'file',
-    text: __('Template Zip File'),
-    noTable: true,
-    defaultValue: '',
+    id: 'description',
+    text: __('Description'),
+    width: '120px',
     formProps: {
-      type: 'file',
-      //required: true,
+      type: 'textarea',
+      maxLength: '257',
+      // notEditable: true,
+      validator: validator({
+        rules: 'utf8Len:[0, 256]',
+      }),
+      rows: '3',
     },
-  }, {
+    render: (val) => {
+      if (!val || typeof val === 'undefined') return '';
+      const len = val.length;
+      if (len > 43) {
+        const desc = val.substring(0, 40);
+        return <span title={val}>{`${desc}...`}</span>;
+      }
+      return <span>{val}</span>;
+    },
+  },
+  // {
+  //   id: 'file',
+  //   text: __('Template Zip File'),
+  //   noTable: true,
+  //   defaultValue: '',
+  //   formProps: {
+  //     type: 'file',
+  //     // required: true,
+  //   },
+  // },
+  {
+    id: 'authentication',
+    label: __('Supported Login Types'),
+    options: $$authOptions,
+    width: '150px',
+    multi: false,
+    formProps: {
+      type: 'select',
+      // notEditable: true,
+      required: true,
+      multi: true,
+      linkId: 'auths',
+      initValue($$data) {
+        let ret = $$data.get('authentication');
+
+        if (!ret) {
+          ret = ' ';
+        }
+        return ret;
+      },
+      render: (propsObj, listData) => {
+        const valArr = listData.get('authentication') ? listData.get('authentication').split(',') : [];
+        const validValArr = fromJS(valArr).filter(v => $$authOptions.find(item => item.get('value') === v));
+
+        const changeIconStatus = (item) => {
+          let newArr = validValArr;
+          if (newArr.includes(item.get('value'))) {
+            newArr = newArr.filter(v => item.get('value') !== v).toJS();
+          } else {
+            newArr = newArr.push(item.get('value')).toJS();
+          }
+          const newVal = newArr.join(',');
+          propsObj.onChange({ value: newVal });
+        };
+        return (
+          <div className="form-group">
+            <label htmlFor="logintypes">{__(propsObj.label)}</label>
+            <div id="logintypes" className="cols col-8 col-offset-2">
+              {
+                $$authOptions.map((item) => {
+                  let clsName = '';
+                  if (validValArr.includes(item.get('value'))) clsName = 'active';
+                  return (
+                    <div
+                      className="cols col-2"
+                      style={{ textAlign: 'center' }}
+                      key={item.get('label')}
+                      onClick={() => { changeIconStatus(item); }}
+                    >
+                      <Icon
+                        name={`${generateClassName(item.get('value'))}`}
+                        title={item.get('label')}
+                        className={`web-login-icon-form ${generateClassName(item.get('value'))} ${clsName}`}
+                      />
+                      <div>
+                        <input
+                          type="radio"
+                          checked={clsName === 'active'}
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+        );
+      },
+    },
+    render: (val) => {
+      const valArr = val ? val.split(',') : [];
+      const validValArr = fromJS(valArr).filter(v => $$authOptions.find(item => item.get('value') === v));
+      return (
+        <ul>
+          {
+            $$authOptions.map((item) => {
+              let clsName = '';
+              if (validValArr.includes(item.get('value'))) clsName = 'active';
+              return (
+                <Icon
+                  name={`${generateClassName(item.get('value'))}`}
+                  title={item.get('label')}
+                  className={`web-login-icon ${generateClassName(item.get('value'))} ${clsName}`}
+                  key={item.get('label')}
+                />
+              );
+            }).toJS()
+          }
+        </ul>
+      );
+    },
+  },
+  {
     id: '__actions__',
     text: __('Actions'),
     noForm: true,
@@ -315,7 +438,8 @@ export default class View extends React.Component {
 
     utils.binds(this, [
       'getAdsPage',
-      'onBackup',
+      // 'onBackup',
+      'onBeforeSync',
       'initListOptions',
     ]);
     this.actionable = getActionable(props);
@@ -323,21 +447,22 @@ export default class View extends React.Component {
       advSelectPlaceholder: __('Loading'),
       advIsloading: true,
       advOptions: [],
+      testType: 'out',
     };
   }
 
   componentWillMount() {
     this.getAdsPage();
   }
-  onBackup($$data) {
-    if (this.actionable) {
-      if (idTownloadIdMap[$$data.get('id')]) {
-        window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
-      } else {
-        window.location.href = 'goform/portal/access/download/';
-      }
-    }
-  }
+  // onBackup($$data) {
+  //   if (this.actionable) {
+  //     if (idTownloadIdMap[$$data.get('id')]) {
+  //       window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
+  //     } else {
+  //       window.location.href = 'goform/portal/access/download/';
+  //     }
+  //   }
+  // }
   getAdsPage() {
     this.props.fetch('goform/portal/access/web/webPage', {
       page: 1,
@@ -389,7 +514,7 @@ export default class View extends React.Component {
         >
           {__('Wechat')}
         </a>
-        <SaveButton
+        {/* <SaveButton
           type="button"
           icon="download"
           text={__('')}
@@ -398,7 +523,7 @@ export default class View extends React.Component {
             () => (this.onBackup($$data))
           }
           disabled={!this.actionable}
-        />
+        />*/}
       </span>
     ));
 
@@ -422,21 +547,26 @@ export default class View extends React.Component {
 
     return this.curListOptions;
   }
+
   render() {
     this.initListOptions();
     return (
       <AppScreen
         {...this.props}
         listOptions={this.curListOptions}
+        modalSize="max"
+        onBeforeSync={onBeforeSync}
         editFormOption={{
           hasFile: true,
         }}
+
         // searchable
         searchProps={{
           placeholder: `${__('Name')}`,
         }}
-        deleteable={false}
-        addable={false}
+        deleteable={(item, index) => !(index === '0' || index === 0)}
+        selectable={(item, index) => !(index === '0' || index === 0)}
+        addable
         noTitle
         actionable
         noPagination

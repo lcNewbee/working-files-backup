@@ -351,7 +351,7 @@ export default class OpenPortalBase extends React.Component {
         deleteable={false}
         searchable
         searchProps={{
-          placeholder: `${__('IP')}`,
+          placeholder: `${__('IP/Login name')}`,
         }}
       />
     );

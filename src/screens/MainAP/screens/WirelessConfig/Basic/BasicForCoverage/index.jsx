@@ -1281,6 +1281,37 @@ export default class Basic extends React.Component {
                         </div>
                         ) : null
                     }
+                    {
+                      curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' &&
+                      this.props.route.funConfig.hasIptvFun && (
+                        <div>
+                          <FormGroup
+                            type="checkbox"
+                            label={__('IPTV Enable')}
+                            checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'iptvEnable']) === '1'}
+                            onChange={(data) => {
+                              const radioList = curData.get('radioList')
+                                        .setIn([radioId, 'vapList', '0', 'iptvEnable'], data.value);
+                              this.props.updateItemSettings({ radioList });
+                            }}
+                          />
+                          {
+                            curData.getIn(['radioList', radioId, 'vapList', '0', 'iptvEnable']) === '1' && (
+                              <FormGroup
+                                type="number"
+                                label={__('IPTV Vlan')}
+                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'iptvVlanId'])}
+                                onChange={(data) => {
+                                  const radioList = curData.get('radioList')
+                                            .setIn([radioId, 'vapList', '0', 'iptvVlanId'], data.value);
+                                  this.props.updateItemSettings({ radioList });
+                                }}
+                              />
+                            )
+                          }
+                        </div>
+                      )
+                    }
                     { // SSID输入框**repeater模式**
                       curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
                         <div className="clearfix">

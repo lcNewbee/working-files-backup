@@ -98,18 +98,23 @@ const userModalOptions = fromJS([
     text: __('Applications'),
     render(val) {
       if (typeof (val) === 'undefined' || val.size === 0) return '--';
+      const numPerLine = 6;
       const len = val.size;
-      const n1 = len / 10;
-      const n2 = len % 10;
-      let div = [];
+      const n1 = len / numPerLine;
+      const n2 = len % numPerLine;
+      const div = [];
       for (let i = 0; i < n1; i++) {
-        const start = i * 10;
-        const end = i * 10 + 10;
+        const start = i * numPerLine;
+        const end = (i * numPerLine) + numPerLine;
         const arrStr = val.slice(start, end).join(', ');
-        div.push(<span>{arrStr}<br /></span>)
+        if (i !== n1 - 1) {
+          div.push(<span>{arrStr}<br /></span>);
+        } else if (i === n1 - 1) {
+          div.push(<span>{arrStr}</span>);
+        }
       }
-      const lastArrStr = n2 === 0 ? '' : val.slice(n1 * 10, len).join(', ');
-      div.push(<span>{lastArrStr}</span>);
+      const lastArrStr = n2 === 0 ? '' : val.slice(n1 * numPerLine, len).join(', ');
+      if (lastArrStr) div.push(<span><br />{lastArrStr}</span>);
       return div;
     },
   }, {
@@ -414,18 +419,20 @@ export default class EthStatistic extends React.Component {
         text: __('Applications'),
         render(val) {
           if (typeof (val) === 'undefined' || val.size === 0) return '--';
+          const numPerLine = 10;
           const len = val.size;
-          const n1 = len / 10;
-          const n2 = len % 10;
+          const n1 = len / numPerLine;
+          const n2 = len % numPerLine;
           const div = [];
           for (let i = 0; i < n1; i++) {
-            const start = i * 10;
-            const end = (i * 10) + 10;
+            const start = i * numPerLine;
+            const end = (i * numPerLine) + numPerLine;
             const arrStr = val.slice(start, end).join(', ');
-            div.push(<span>{arrStr}<br /></span>);
+            if (i !== n1 - 1) div.push(<span>{arrStr}<br /></span>);
+            else if (i === n1 - 1) div.push(<span>{arrStr}</span>);
           }
-          const lastArrStr = n2 === 0 ? '' : val.slice(n1 * 10, len).join(', ');
-          div.push(<span>{lastArrStr}</span>);
+          const lastArrStr = n2 === 0 ? '' : val.slice(n1 * numPerLine, len).join(', ');
+          if (lastArrStr) div.push(<span><br />{lastArrStr}</span>);
           return div;
         },
       }, {

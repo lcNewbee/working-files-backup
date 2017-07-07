@@ -227,7 +227,7 @@ const routes = [
               {
                 id: 'networkdashboard',
                 icon: 'tachometer',
-                noNav: true, // 暂时隐藏未完成的功能
+                // noNav: true, // 暂时隐藏未完成的功能
                 path: '/main/network/dashboard',
                 fetchUrl: 'goform/network/dashboard',
                 text: __('Dashboard'),
@@ -479,7 +479,7 @@ const routes = [
                     id: 'cientsTrace',
                     path: '/main/group/map/clients_trace',
                     text: __('Clients Statistics'),
-                    icon: 'bar-chart',
+                    // icon: 'bar-chart',
                     noTree: true,
                     component: SharedComponents.TabContainer,
                     routes: [
@@ -586,7 +586,7 @@ const routes = [
                         id: 'portalAccessWeb',
                         path: '/main/portal/local/portal/web',
                         formUrl: 'goform/portal/access/web',
-                        text: __('Page Settings'),
+                        text: __('Portal Template'),
                         component: sPortalWeb.Screen,
                       },
                       {

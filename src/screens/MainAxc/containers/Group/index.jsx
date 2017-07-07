@@ -610,8 +610,10 @@ export default class MainGroup extends React.Component {
         render(val, $$data) {
           return val || $$data.get('mac');
         },
-      },
-      {
+      }, {
+        id: 'model',
+        text: __('Model'),
+      }, {
         id: 'mac',
         text: __('MAC Address'),
       },

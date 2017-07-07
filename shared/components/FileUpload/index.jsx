@@ -18,7 +18,10 @@ const propTypes = {
   buttonText: PropTypes.string,
   placeholder: PropTypes.string,
   buttonIcon: PropTypes.string,
-  acceptExt: PropTypes.string,
+  acceptExt: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
   onChange: PropTypes.func,
   onBeforeUpload: PropTypes.func,
   onUploaded: PropTypes.func,
@@ -177,7 +180,7 @@ class FileUpload extends React.Component {
   }
 
   render() {
-    const { url, target, buttonText, name, buttonIcon, disabled } = this.props;
+    const { url, target, buttonText, name, buttonIcon, disabled, placeholder } = this.props;
     const { imageStatus } = this.state;
     const curButtonText = buttonText || __('Upload Image');
     let displayStyle = 'none';
@@ -223,6 +226,7 @@ class FileUpload extends React.Component {
           theme={imageStatus === 'selected' ? 'primary' : undefined}
           onClick={this.onUploadImage}
           disabled={disabled}
+          placeholder={placeholder}
         />
       </form>
     );

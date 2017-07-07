@@ -160,6 +160,14 @@ class Row extends Component {
 
                         if (typeof curRender === 'function') {
                           retVal = curRender();
+                        } else if ($$currItem.get('color')) {
+                          retVal = (
+                            <span
+                              style={{
+                                color: $$currItem.get('color'),
+                              }}
+                            >{$$currItem.get('label')}</span>
+                          );
                         } else {
                           retVal = $$currItem.get('label');
                         }
@@ -174,6 +182,7 @@ class Row extends Component {
                 ).filter( // 过滤空值
                   curVal => !!curVal,
                 );
+
               }
 
               // 如果 node列表长度大于0，需要添加分割符 ','
@@ -191,6 +200,7 @@ class Row extends Component {
               } else if (currValArr.length === 1) {
                 currVal = currValArr[0];
               }
+
             // 显示默认值
             } else {
               currVal = $$curTdOption.get('defaultValue') || '';

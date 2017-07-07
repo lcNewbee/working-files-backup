@@ -747,5 +747,11 @@
   "UDP-Flood Attack Defense": "UDP-Flood攻击防御",
   "Maxium UDP Package Quantity": "最大UDP包数量",
 
-  "Dashboard": "概览"
+  "Dashboard": "概览",
+  "Notice:": "注意：",
+  "The activation of functions here needs the Black List to be actived first": "本页功能只有在黑名单启用的情况下才能使用。",
+  "Go to Black List page": "去设置黑名单",
+  "User name exists already!": "已存在相同用户名！",
+  "Manual Time": "手动设置时间",
+  "Invalid Manual Time!": "手动时间格式错误！"
 }

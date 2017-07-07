@@ -20,7 +20,8 @@
       "adjafactor5g": 0,
       "attacttime" : 0,
       "attactcnt": 5,
-      "dyaging": 10
+      "dyaging": 10,
+      "scanSpectrum": "2,5"
     }
   }
 }

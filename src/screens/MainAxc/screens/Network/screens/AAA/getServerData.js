@@ -34,16 +34,6 @@ export function getPortList() {
   );
 }
 
-const idToAuthMap = {
-  '1': '0',
-  '2': '1',
-  '3': '2',
-  '4': '3',
-  '5': '4',
-  '6': '5',
-  '7': '6',
-};
-
 export function getWebTemplate() {
   return utils.fetch('goform/portal/access/web', {
     size: 9999,
@@ -53,7 +43,7 @@ export function getWebTemplate() {
       {
         options: json.data.list.map(
           item => ({
-            value: idToAuthMap[item.id],
+            value: item.id,
             label: __(item.name),
           }),
         ),

@@ -32,6 +32,7 @@ const funConfig = {
       { value: 'repeater', label: __('Repeater') },  // Repeater模式
     ],
     radioMaxClientsLimit: false,    // 射频最大客户端限制
+    hasIptvFun: false, // 是否有IPTV的配置项
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     // 决定哪些功能在ssid配置表格上出现
     ssidTableKeys: [

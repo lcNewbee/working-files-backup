@@ -207,7 +207,7 @@
       "ip": "192.168.5.53",
       "mac": "12:33:44:55:66:78",
       "status": "run",
-      "model": "V2.2",
+      "model": "ASW120",
       "softversion": "V1.1",
       "channel": "auto",
       "operationhours": 3600,

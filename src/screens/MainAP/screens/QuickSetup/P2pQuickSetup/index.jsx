@@ -662,7 +662,7 @@ export default class QuickSetup extends React.Component {
               >
                 <h3>{__('User Protocol')}</h3>
                 <span>
-                  {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                  {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio\'s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                 </span>
                 <FormGroup
                   type="radio"

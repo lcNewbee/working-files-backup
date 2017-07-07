@@ -9,6 +9,8 @@
       "name": "Default",
       "countShow": "0",
       "countAuth": "0",
+      "title": "default title",
+      "subTitle": "default sub title",
       "authentication": "0,4,5",
       "description": "Port-based authentication rules use this settings",
       "adv": null,

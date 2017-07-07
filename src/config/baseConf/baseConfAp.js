@@ -70,6 +70,7 @@ const funConfig = {
   // 无线设置页面
   basic: {
     radioMaxClientsLimit: true,  // 射频客户端限制
+    hasIptvFun: false, // 是否有IPTV的配置项
     devicemodeOptions: [
       { value: 'ap', label: __('AP') },
       { value: 'sta', label: __('Station') },
@@ -89,7 +90,7 @@ const funConfig = {
       'delete',         // 删除按钮
       'portalEnable',         // portal功能开关
     ],
-    portalFun: true,        //是否有portal功能
+    portalFun: true,        // 是否有portal功能
   },
   advance: {
     ledThreshFun: true, // 信号强度控制LED灯功能

@@ -118,16 +118,7 @@ const $$accessTypeSeletOptions = fromJS([
   },
 ]);
 const flowRateFilter = utils.filter('flowRate:["KB"]');
-/* eslint-disable quote-props */
-const idToAuthMap = {
-  '1': '0',
-  '2': '1',
-  '3': '2',
-  '4': '3',
-  '5': '4',
-  '6': '5',
-  '7': '6',
-};
+
 const defaultQuery = {};
 const noPortal = window.guiConfig.noPortal;
 const noAAA = window.guiConfig.noAAA;
@@ -197,7 +188,7 @@ function getWebTemplateName() {
       {
         options: json.data.list.map(
           item => ({
-            value: idToAuthMap[item.id],
+            value: item.id,
             label: __(item.name),
           }),
         ),
@@ -426,7 +417,7 @@ const listOptions = fromJS([
   },
   {
     id: 'auth',
-    text: __('Login Type'),
+    text: __('Portal Template'),
     noTable: noAuthTableCol,
     formProps: {
       type: 'select',

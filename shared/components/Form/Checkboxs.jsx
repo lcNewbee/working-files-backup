@@ -10,6 +10,7 @@ const propTypes = {
   splitStr: PropTypes.string,
   value: PropTypes.string,
   maxChecked: PropTypes.number,
+  boxStyle: PropTypes.object,
 };
 
 const defaultProps = {
@@ -30,6 +31,7 @@ class Checkboxs extends PureComponent {
 
   onChange(e, index, $$item) {
     const isChecked = e.target.checked;
+    console.log('isChecked', isChecked);
     const label = $$item.get('label');
     let curValue = '';
     const checkedNum = this.valueArrState.filter(state => state).length;
@@ -85,6 +87,7 @@ class Checkboxs extends PureComponent {
                   value={thisVal}
                   text={__($$item.get('label'))}
                   checked={isChecked}
+                  style={this.props.boxStyle}
                   onChange={
                     e => this.onChange(e, i, $$item)
                   }
