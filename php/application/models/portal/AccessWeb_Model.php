@@ -143,7 +143,7 @@ class AccessWeb_Model extends CI_Model {
         }else{
             $result = json_no('upload img error !');
         }
-        //return json_encode($result);               
+        return json_encode($result);               
     }
     function Delete($data) {        
         $result = FALSE;
