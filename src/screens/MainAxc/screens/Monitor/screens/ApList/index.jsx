@@ -119,6 +119,10 @@ const listOptions = fromJS([
     text: __('AP Model'),
   },
   {
+    id: 'softversion',
+    text: __('Firmware Version'),
+  },
+  {
     id: 'connectedNumbers',
     width: 80,
     text: __('Clients'),

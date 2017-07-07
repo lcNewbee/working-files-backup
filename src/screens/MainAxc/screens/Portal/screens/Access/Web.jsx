@@ -570,24 +570,7 @@ export default class View extends React.Component {
         noTitle
         actionable
         noPagination
-      >
-        <Preview
-          type={this.state.testType}
-          data={{
-            title: 'test',
-            auths: '0,1,4',
-            logo: 'images/logo.png',
-            backgroundImg: '',
-            copyright: 'sadsda sadasdadas sadsa',
-            copyrightUrl: 'www.axilspot.com',
-          }}
-          onChangeType={(name) => {
-            this.setState({
-              testType: name,
-            });
-          }}
-        />
-      </AppScreen>
+      />
     );
   }
 }
