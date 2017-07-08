@@ -94,9 +94,9 @@ class Pagination extends PureComponent {
     }
   }
   render() {
-    const { currPage, nextPage, totalPage, total } = this.getPageOptions();
-    const prevClassName = +currPage === 1 ? 'disabled' : '';
-    const nextClassName = +nextPage === -1 ? 'disabled' : '';
+    const { currPage, totalPage, total } = this.getPageOptions();
+    const prevClassName = parseInt(currPage, 10) === 1 ? 'disabled' : '';
+    const nextClassName = parseInt(totalPage, 10) === currPage ? 'disabled' : '';
     const list = [];
     let key;
     let i;
