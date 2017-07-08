@@ -476,10 +476,20 @@ export default class View extends React.Component {
     const myScreenId = nextProps.store.get('curScreenId');
     const $$myScreenStore = this.props.store.get(myScreenId);
     const $$nextScreenStore = nextProps.store.get(myScreenId);
+    const $$nextCurItem = $$nextScreenStore.get('curListItem');
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const nextActionType = $$nextScreenStore.getIn(['actionQuery', 'action']);
 
-    if (actionType !== nextActionType) this.setState({ logoImgUrl: '', backgroundImgUrl: '' });
+    if (actionType !== nextActionType) {
+      if (nextActionType === 'edit') {
+        this.setState({
+          logoImgUrl: `${window.location.origin.replace('8888', '8080')}/${$$nextCurItem.get('logo')}`,
+          backgroundImgUrl: `${window.location.origin.replace('8888', '8080')}/${$$nextCurItem.get('backgroundImg')}`,
+        });
+      } else {
+        this.setState({ logoImgUrl: '', backgroundImgUrl: '' });
+      }
+    }
   }
   // onBackup($$data) {
   //   if (this.actionable) {
