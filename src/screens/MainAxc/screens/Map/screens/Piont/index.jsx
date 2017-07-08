@@ -237,14 +237,23 @@ export default class View extends React.Component {
     });
   }
 
-  onChangeMac(value) {
+  /**
+   *
+   *
+   * @param {string} value MAC地址
+   * @param {bool} noFetch 不需要更新数据
+   * @memberof View
+   */
+  onChangeMac(value, noFetch) {
     Promise.resolve().then(() => {
       this.props.changeScreenQuery(fromJS({ mac: value }));
       this.setState({
         curDubiouMac: value,
       });
     }).then(() => {
-      this.props.fetchScreenData();
+      if (!noFetch) {
+        this.props.fetchScreenData();
+      }
     });
   }
 
@@ -634,13 +643,13 @@ export default class View extends React.Component {
             onChange={data => this.onChangeMapId(data.value)}
           />
           <FormGroup
-            type="select"
+            type="text"
             className="fl"
             label={__('可疑客户端')}
             options={this.$$dubiousOptions.toJS()}
             value={this.state.curDubiouMac}
             onChange={(data) => {
-              this.onChangeMac(data.value);
+              this.onChangeMac(data.value, true);
             }}
           />
           <FormGroup

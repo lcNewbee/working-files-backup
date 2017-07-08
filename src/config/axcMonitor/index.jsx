@@ -358,7 +358,7 @@ const routes = [
                     id: 'cientsTrace',
                     path: '/main/group/map/clients_trace',
                     text: __('Clients Statistics'),
-                    icon: 'bar-chart',
+                    // icon: 'bar-chart',
                     noTree: true,
                     component: SharedComponents.TabContainer,
                     routes: [
