@@ -49,18 +49,15 @@ class AccessWeixin_Model extends CI_Model {
         return json_encode($result);
     }
     function Edit($data) {
-        //上传
-        $upload_data = $this->uploadWxImg('qrcode');
-        if($upload_data['state']['code']==2000){
-            $updata = $this->getPram($data);
-            $updata ['id'] = element('id',$updata);
-            $result = $this->portalsql->replace('portal_weixin_wifi',$updata,array('id'=>$updata['id']));
-            if($result){
-                return json_encode(json_ok());
-            }
-        }else{
-            return json_encode(json_no($this->upload->display_errors()));
-        }        
+        //上传不检测结果
+        $upload_data = $this->uploadWxImg('qrcode');           
+        //继续配置
+        $updata = $this->getPram($data);
+        $updata ['id'] = element('id',$updata);
+        $result = $this->portalsql->replace('portal_weixin_wifi',$updata,array('id'=>$updata['id']));
+        if($result){
+            return json_encode(json_ok());
+        }     
         return json_encode(json_no('update error'));
     }
 
