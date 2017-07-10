@@ -756,5 +756,10 @@
   "Go to Black List page": "去设置黑名单",
   "User name exists already!": "已存在相同用户名！",
   "Manual Time": "手动设置时间",
-  "Invalid Manual Time!": "手动时间格式错误！"
+  "Invalid Manual Time!": "手动时间格式错误！",
+  "The Past Hours": "统计时长",
+  "DHCP Pool": "DHCP地址池数",
+  "DHCP Usage": "DHCP使用情况",
+  "NAT Strategy": "NAT策略数",
+  "Throughput ": "流量统计"
 }

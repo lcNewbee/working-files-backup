@@ -169,7 +169,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'more',
-    text: __('Multi Terminal Log'),
+    text: __('Multi-Terminal Log'),
     formProps: {
       type: 'select',
       defaultValue: '1',

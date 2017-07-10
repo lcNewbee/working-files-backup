@@ -454,6 +454,7 @@ export default class View extends React.Component {
           backgroundImgUrl: `${window.location.origin.replace('8888', '8080')}/${$$nextCurItem.get('backgroundImg')}`,
         });
       } else {
+        // 除编辑操作外，其它操作变动都将图片URL置为空
         this.setState({ logoImgUrl: '', backgroundImgUrl: '' });
       }
     }

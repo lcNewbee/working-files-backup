@@ -186,7 +186,7 @@ export default class NetWorkDashBoard extends React.Component {
 
             <div className="ntw-dsb-card-wrap cols col-3">
               <div className="ntw-dsb-card">
-                <h2 className="ntw-dsb-card-title">{__('External Throughput')}</h2>
+                <h2 className="ntw-dsb-card-title">{__('Throughput ')}</h2>
                 <img
                   src={throughputimg}
                   alt="throughput"

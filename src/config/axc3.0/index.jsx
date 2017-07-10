@@ -222,6 +222,7 @@ const routes = [
             icon: 'sphere',
             text: __('Network '),
             component: cNetwork.Screen,
+            indexPath: '/main/network/dashboard',
             routes: [
               {
                 id: 'networkdashboard',
