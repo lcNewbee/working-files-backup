@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
-
+import SaveButton from 'shared/components/Button/SaveButton';
 import FormGroup from 'shared/components/Form/FormGroup';
 import Icon from 'shared/components/Icon';
 import FileUpload from 'shared/components/FileUpload';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { getActionable } from 'shared/axc';
+
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -55,19 +56,12 @@ export default class View extends React.PureComponent {
         });
   }
 
+  onBackup() {
+    if (this.actionable) {
+      require('downloadjs')(this.state.downloadUrl);
+    }
+  }
 
-  // onBackup() {
-  //   if (this.actionable) {
-  //     this.props.save('/goform/setBackup')
-  //       .then((json) => {
-  //         const backupUrl = json && json.data && json.data.url;
-
-  //         if (backupUrl) {
-  //           downloadFile(backupUrl);
-  //         }
-  //       });
-  //   }
-  // }
 
   onRestore() {
     if (this.actionable) {
@@ -155,15 +149,13 @@ export default class View extends React.PureComponent {
             <FormGroup label={__('Backup Configuration')}>
               {
                 this.state.downloadUrl ? (
-                  <a
-                    href={this.state.downloadUrl}
-                    className="a-btn a-btn--primary a-btn--no-text"
-                    download
-                  >
-                    <Icon
-                      name="download"
-                    />
-                  </a>
+                  <SaveButton
+                    type="button"
+                    icon="download"
+                    text={__('')}
+                    onClick={this.onBackup}
+                    disabled={!this.actionable}
+                  />
                 ) : null
               }
 
