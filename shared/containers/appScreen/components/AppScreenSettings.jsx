@@ -199,7 +199,7 @@ class AppSettings extends React.PureComponent {
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
           onValidError={this.props.reportValidError}
-          isSaving={app.get('saving')}
+          isSaving={store.get('saving')}
           actionable={actionable}
           hasSaveButton={hasSettingsSaveButton}
           saveText={this.props.saveText}

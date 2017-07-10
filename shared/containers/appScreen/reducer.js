@@ -3,6 +3,7 @@ import ACTION_TYPES from './actionTypes';
 
 const defaultItem = fromJS({
   fetching: false,
+  saving: false,
   query: {
     type: '0',
     size: 20,
@@ -220,6 +221,9 @@ export default function (state = defaultState, action) {
       .setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'))
       .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]))
       .setIn([curScreenName, 'actionQuery', 'action'], '');
+
+    case ACTION_TYPES.CHANGE_SAVE_STATUS:
+      return state.setIn([curScreenName, 'saving'], action.payload);
 
     case ACTION_TYPES.REQUEST_FETCH_DATA:
       return state.setIn([curScreenName, 'fetching'], true);

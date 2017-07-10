@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
@@ -7,8 +8,7 @@ import validator from 'shared/validator';
 
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
-import { Button } from 'shared/components/Button';
-import FormContainer from 'shared/components/Organism/FormContainer';
+import { FormContainer, Button } from 'shared/components/';
 
 function getCardCategoryName() {
   return utils.fetch('goform/portal/card/cardcategory', {
@@ -107,6 +107,9 @@ const listOptions = fromJS([
     id: 'name',
     text: __('Coupon Name'),
     width: '120px',
+    render(val) {
+      return __(val);
+    },
     formProps: {
       type: 'text',
       required: true,
@@ -114,11 +117,9 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'utf8Len:[1,128]',
       }),
-      render(val) {
-        return __(val);
-      },
     },
-  }, {
+  },
+  {
     id: 'payType',
     text: __('Account Type'),
     width: '120px',
@@ -149,7 +150,8 @@ const listOptions = fromJS([
         label: __('Outside User'),
       },
     ],
-  }, {
+  },
+  {
     id: 'categoryName',
     text: __('Voucher Name'),
     noTable: true,
@@ -184,7 +186,8 @@ const listOptions = fromJS([
         label: __('Traffic Voucher'),
       },
     ],
-  }, {
+  },
+  {
     id: 'cardCount',
     text: __('Voucher Number'),
     noTable: true,
@@ -359,9 +362,6 @@ const listOptions = fromJS([
     },
     formProps: {
       type: 'textarea',
-      render(val) {
-        return __(val);
-      },
     },
   }, {
     id: '__actions__',
@@ -531,7 +531,6 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={curListOptions}
         queryFormOptions={queryFormOptions}
-        modalChildren={this.renderSendMessageModal()}
         noTitle
         actionable
         selectable

@@ -48,6 +48,12 @@ export function changeScreenActionQuery(payload) {
     payload,
   };
 }
+export function changeScreenSaveStatus(payload) {
+  return {
+    type: ACTION_TYPES.CHANGE_SAVE_STATUS,
+    payload,
+  };
+}
 export function updateScreenCustomProps(payload) {
   return {
     type: ACTION_TYPES.UPDATE_CUSTOM_PROPS,
@@ -270,10 +276,12 @@ export function onListAction(option) {
       });
     }
 
+    dispatch(changeScreenSaveStatus(true));
     return dispatch(appActions.save(myUrl, subData, ajaxOption))
       .then((json) => {
         const ret = json;
 
+        dispatch(changeScreenSaveStatus(false));
         if (json && json.state) {
           if (json.state.code <= 6000) {
             dispatch(closeListItemModal());
@@ -287,7 +295,6 @@ export function onListAction(option) {
         if (ret) {
           ret.subData = subData;
         }
-
         return ret;
       });
   };
@@ -372,12 +379,14 @@ export function saveScreenSettings(option) {
       });
     }
 
+    dispatch(changeScreenSaveStatus(true));
     return dispatch(
       appActions.save(saveUrl, $$subData.toJS(), ajaxOption),
     )
       .then((json) => {
         const ret = json;
 
+        dispatch(changeScreenSaveStatus(false));
         dispatch(fetchScreenData({
           url: fetchUrl,
         }));
