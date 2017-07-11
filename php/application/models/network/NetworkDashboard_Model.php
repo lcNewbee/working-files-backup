@@ -139,15 +139,22 @@ class NetworkDashboard_Model extends CI_Model {
         $query = $this->db->query('select * from nat_table')->result_array();
         foreach($query as $row){
             if($row['pubifname'] != null && $row['pubifname'] != ''){
-                $sqlcmd  = "select SUM(InBytes) as downFlow,SUM(OutBytes) as upFlow from ac_interface_information";
-                $sqlcmd .= " where IfIndex=(select IfIndex from ac_interface_description";
-                $sqlcmd .= " where Timer=(select MAX(Timer) from ac_interface_description)";
-                $sqlcmd .= " and Description='{$row['pubifname']}' group by Mac_Address)";
+                //{$row['pubifname']}
+                /*
+                $sqlcmd  = "select * from (select * from ac_interface_information order by Id desc) as t1";
+                $sqlcmd .= " where IfIndex=(select MAX(IfIndex) from ac_interface_description where Timer=(";
+                $sqlcmd .= " select Timer from ac_interface_description where id=(select MAX(Id) from ac_interface_description)";
+                $sqlcmd .= " ) and Description='{$row['pubifname']}')  group by IfIndex";
+                */
+                $sqlcmd  = "select * from (select * from ac_interface_information order by Id desc) as t1";
+                $sqlcmd .= " where IfIndex=(";
+                $sqlcmd .= "select MAX(IfIndex) from ac_interface_description where  Description='{$row['pubifname']}'";
+                $sqlcmd .= ") group by IfIndex";
 
                 $data = $this->mysql->query($sqlcmd)->result_array();
-                foreach($data as $nrow){
-                    $downFlow = $downFlow + (int)$nrow['downFlow'];
-                    $upFlow = $upFlow + (int)$nrow['upFlow'];                    
+                if(count($data) > 0){
+                    $downFlow = $downFlow + $data[0]['InBytes'];
+                    $upFlow = $upFlow + $data[0]['OutBytes'];                    
                 }
             }
         }
