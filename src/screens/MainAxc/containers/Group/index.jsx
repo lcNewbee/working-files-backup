@@ -741,11 +741,17 @@ export default class MainGroup extends React.Component {
               <Table
                 className="table"
                 options={tableOption}
-                selectable
                 list={product.getIn(['group', 'devices'])}
                 onRowSelect={(data) => {
                   this.props.selectManageGroupAp(data);
                 }}
+                page={product.getIn(['group', 'devicesPage'])}
+                onPageChange={(data) => {
+                  this.props.fetchGroupAps(selectGroupId, {
+                    page: data,
+                  });
+                }}
+                selectable
               />
             </div>
             <div className="o-list cols col-4">
@@ -979,11 +985,11 @@ export default class MainGroup extends React.Component {
                 className="table"
                 options={tableOption}
                 selectable
-                page={product.getIn(['group', 'devicesPage'])}
                 list={$$mannageGroupAps}
                 onRowSelect={(data) => {
                   this.props.selectManageGroupAp(data);
                 }}
+                page={product.getIn(['group', 'devicesPage'])}
                 onPageChange={(data) => {
                   this.props.fetchGroupAps(selectGroupId, {
                     page: data,
