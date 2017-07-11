@@ -69,7 +69,7 @@ class Pagination extends PureComponent {
   }
 
   onGoEnd(e) {
-    const page = this.getPageOptions().lastPage;
+    const page = this.getPageOptions().totalPage;
     e.preventDefault();
     this.goPage(page);
   }

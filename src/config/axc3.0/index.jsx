@@ -222,7 +222,6 @@ const routes = [
             icon: 'sphere',
             text: __('Network '),
             component: cNetwork.Screen,
-            indexPath: '/main/network/interface',
             routes: [
               {
                 id: 'networkdashboard',
@@ -230,7 +229,7 @@ const routes = [
                 // noNav: true, // 暂时隐藏未完成的功能
                 path: '/main/network/dashboard',
                 fetchUrl: 'goform/network/dashboard',
-                text: __('Dashboard'),
+                text: __('Overview'),
                 component: sNetworkDashbaord.Screen,
               },
               {
@@ -552,7 +551,7 @@ const routes = [
             routes: [
               {
                 id: 'portalOverview',
-                icon: 'home',
+                icon: 'tachometer',
                 path: '/main/portal/overview',
                 formUrl: 'goform/portal/overview',
                 mode: 'cors',
@@ -756,10 +755,10 @@ const routes = [
             routes: [
               {
                 id: 'systemStatus',
-                icon: 'area-chart',
+                icon: 'tachometer',
                 path: '/main/system/status',
                 formUrl: '/goform/system/status',
-                text: __('System Status'),
+                text: __('Overview'),
                 component: sSystemStatus.Screen,
               }, {
                 id: 'alarmEvents',

@@ -43,7 +43,8 @@ const listOptions = fromJS([
     options: purviewOptions,
     multi: true,
     formProps: {
-      component(option, ...rest) {
+      type: 'select',
+      render(option, ...rest) {
         const myProps = option;
 
         if (rest[0].get('userType') !== 1) {
