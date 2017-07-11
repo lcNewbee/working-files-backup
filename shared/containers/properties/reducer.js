@@ -26,7 +26,7 @@ const defaultItem = fromJS({
       },
     }, {
       panelKey: 'radioBase',
-      text: 'Radio Base',
+      text: 'Radio Basic',
       module: 'radio',
       data: {
         activeIndex: 0,

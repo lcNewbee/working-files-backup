@@ -17,7 +17,7 @@ import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
 
-const SAVE_BUTTON_TEXT = __('Save Configuration');
+const SAVE_BUTTON_TEXT = __('Save');
 const propTypes = {
   refreshAll: PropTypes.func,
   save: PropTypes.func,

@@ -29,7 +29,7 @@ function LoginBody(props) {
         section === 'home' ? (
           <div className="portal-content-body-section active" id="authHome">
             <img src={wifiIcon} className="header-img" alt="wifi" />
-            <p className="header-description b28n">Please select the type</p>
+            <p className="header-description">{__('Please select the type')}</p>
             {
               authArr.indexOf('0') !== -1 ? (
                 <button
@@ -39,7 +39,7 @@ function LoginBody(props) {
                   onClick={onLoginOk}
                 >
                   <Icon name={authToIcon['0']} />
-                  <span>One-click Sign In</span>
+                  <span>{__('One-click Sign In')}</span>
                 </button>
               ) : null
             }
@@ -52,7 +52,7 @@ function LoginBody(props) {
                   onClick={onLoginOk}
                 >
                   <Icon name={authToIcon['5']} />
-                  <span>Sign in with Wechat</span>
+                  <span>{__('Sign in with Wechat')}</span>
                 </button>
               ) : null
             }
@@ -67,7 +67,7 @@ function LoginBody(props) {
                   }}
                 >
                   <Icon name={authToIcon['4']} />
-                  <span className="b28n">Sign in with SMS</span>
+                  <span className="b28n">{__('Sign in with SMS')}</span>
                 </button>
               ) : null
             }
@@ -82,7 +82,7 @@ function LoginBody(props) {
                   }}
                 >
                   <Icon name={authToIcon['1']} />
-                  <span className="b28n">Sign in with Account</span>
+                  <span className="b28n">{__('Sign in with Account')}</span>
                 </button>
               ) : null
             }
@@ -92,9 +92,10 @@ function LoginBody(props) {
                   id="facebookLogin"
                   type="button"
                   className="a-btn a-btn--lg a-btn--facebook a-btn--block"
+                  onClick={onLoginOk}
                 >
                   <Icon name={authToIcon['9']} />
-                  <span className="b28n">Sign in with Facebook</span>
+                  <span className="b28n">{__('Sign in with Facebook')}</span>
                 </button>
               ) : null
             }
@@ -106,13 +107,13 @@ function LoginBody(props) {
           <form className="portal-content-body-section active" id="userLogin">
             <div className="p-form-group p-form-group--icon">
               <Icon name="user" />
-              <input type="text" className="p-form-control" id="InputAccount" name="usr" placeholder="UserName" />
+              <input type="text" className="p-form-control" id="InputAccount" name="usr" placeholder={__('Username')} />
             </div>
             <div className="p-form-group p-form-group--icon">
               <Icon name="ellipsis-h" />
-              <input type="password" className="p-form-control" id="InputPassword" name="pwd" placeholder="Password" />
+              <input type="password" className="p-form-control" id="InputPassword" name="pwd" placeholder={__('Password')} />
             </div>
-            <button id="btnAcpassword" type="button" className="b28n a-btn a-btn--lg a-btn--primary a-btn--block" onClick={onLoginOk}>Login</button>
+            <button id="btnAcpassword" type="button" className="b28n a-btn a-btn--lg a-btn--primary a-btn--block" onClick={onLoginOk}>{__('Login')}</button>
             {
               auths !== '1' ? (
                 <button
@@ -122,7 +123,7 @@ function LoginBody(props) {
                     onChangeSection('home');
                   }}
                 >
-                  Return
+                  {__('Return')}
                 </button>
               ) : null
             }
@@ -135,19 +136,19 @@ function LoginBody(props) {
           <form className="portal-content-body-section active" id="smsLoginForm">
             <div className="p-form-group p-form-group--icon">
               <Icon name="phone" />
-              <input type="text" className="p-form-control" id="InputPhone" placeholder="Mobile Phone Number" />
+              <input type="text" className="p-form-control" id="InputPhone" placeholder={__('Mobile Phone Number')} />
             </div>
             <div className="p-form-group p-form-group--icon">
               <div className="p-input-group">
                 <div className="p-input-group-input">
                   <Icon name="ellipsis-h" />
-                  <input type="text" className="p-form-control" id="InputYZM" placeholder="Auth Code" />
+                  <input type="text" className="p-form-control" id="InputYZM" placeholder={__('Auth Code')} />
                 </div>
-                <button type="button" id="getSms" className="b28n a-btn a-btn--lg a-btn--primary">Get Verification Code</button>
+                <button type="button" id="getSms" className="b28n a-btn a-btn--lg a-btn--primary">{__('Get Verification Code')}</button>
               </div>
             </div>
             <button id="btnSms" type="button" className="a-btn a-btn--lg a-btn--primary a-btn--block" onClick={onLoginOk}>
-              <span>Login</span>
+              <span>{__('Login')}</span>
             </button>
             {
               auths !== '4' ? (
@@ -158,7 +159,7 @@ function LoginBody(props) {
                     onChangeSection('home');
                   }}
                 >
-                  <span>Return</span>
+                  <span>{__('Return')}</span>
                 </button>
               ) : null
             }
@@ -262,7 +263,11 @@ export default class PortalPreview extends React.Component {
         />
         <div className="portal-content">
           <div className="portal-content-header">
-            <img src={logo} alt="logo" className="a-brand" />
+            {
+              logo ? (
+                <img src={logo} alt="logo" className="a-brand" />
+              ) : null
+            }
             <hr />
             <h1>{title}</h1>
             <h2>{subTitle}</h2>
@@ -284,11 +289,11 @@ export default class PortalPreview extends React.Component {
             type === 'ok' ? (
               <div className="portal-content-body" id="authHome">
                 <img src={wifiIcon} className="header-img" alt="wifi" />
-                <p className="header-description b28n">Congrats,Authentication Succeeded</p>
+                <p className="header-description b28n">{__('Congrats,Authentication Succeeded')}</p>
                 <ul className="p-list-group">
                   <li className="p-list-group-item">
                     <Icon name="user" className="a-icon" />
-                    <span className="b28n" data-params="['<%=username%>']">UserName: login username</span>
+                    <span >{__('Useruame: login username')}</span>
                   </li>
                   <li className="p-list-group-item">
                     <Icon name="clock-o" className="a-icon" />
@@ -296,12 +301,12 @@ export default class PortalPreview extends React.Component {
                   </li>
                   <li className="p-list-group-item">
                     <img src={ipIcon} className="a-icon" alt="icon" />
-                    <span>IP: 0.0.0.0</span>
+                    <span>{__('IP: %s', '0.0.0.0')}</span>
                   </li>
                 </ul>
                 <button id="goURL" type="button" className="a-btn a-btn--lg a-btn--primary a-btn--block">
                   <img src={reloginIcon} className="a-icon" alt="icon" />
-                  <span className="b28n">Continue</span>
+                  <span>{__('Continue')}</span>
                 </button>
                 <button
                   id="LoginOut"
@@ -310,7 +315,7 @@ export default class PortalPreview extends React.Component {
                   onClick={() => this.onChangeType('out')}
                 >
                   <Icon name="times-circle-o" className="a-icon" />
-                  <span className="b28n">Logout</span>
+                  <span className="b28n">{__('Logout')}</span>
                 </button>
               </div>
             ) : null
@@ -320,7 +325,7 @@ export default class PortalPreview extends React.Component {
             type === 'out' ? (
               <div className="portal-content-body" id="authHome">
                 <img src={wifiIcon} className="header-img" alt="wifi" />
-                <p className="header-description b28n">Logout Succeeded</p>
+                <p className="header-description b28n">{__('Logout Succeeded')}</p>
                 <button
                   id="goauth"
                   type="button"
@@ -328,7 +333,7 @@ export default class PortalPreview extends React.Component {
                   onClick={() => this.onChangeType('login')}
                 >
                   <img src={reloginIcon} className="a-icon" alt="logo" />
-                  <span >Relogin</span>
+                  <span >{__('Relogin')}</span>
                 </button>
               </div>
             ) : null
@@ -341,16 +346,16 @@ export default class PortalPreview extends React.Component {
                     className="p-list-group-item frist"
                     style={styleObj}
                   >
-                    <a >Contact Admin</a>
+                    <a >{__('Contact Admin')}</a>
                   </li>
                   <li className="p-list-group-item" style={styleObj}>
-                    <a target="_blank">Help Center</a>
+                    <a target="_blank">{__('Help Center')}</a>
                   </li>
                 </ul>
               ) : (
                 <ul className="p-list-group p-list-group--inline">
                   <li className="p-list-group-item" style={{ width: '100%' }}>
-                    <a target="_blank">Contact Admin</a>
+                    <a target="_blank">{__('Contact Admin')}</a>
                   </li>
                 </ul>
               )

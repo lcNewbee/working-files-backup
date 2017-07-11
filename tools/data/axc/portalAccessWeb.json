@@ -18,60 +18,29 @@
       "sessiontime": "60",
       "logo": "xxx/xxx/xxx.jpg",
       "backgroundImg": "yyy/yyy/yyy.png"
-    }, {
+    },
+    {
       "id": "2",
-      "name": "ALL Auth",
+      "name": "Market",
       "countShow": "0",
       "countAuth": "0",
       "description": "Support One Key, Accessed User, SMS, Wechat, Facebook Auth",
       "adv": null,
+      "authentication": "0,1,4,5,9",
       "url": "",
       "sessiontime": ""
-    }, {
+    },
+    {
       "id": "3",
-      "name": "One Key Auth",
+      "name": "Home",
       "countShow": "0",
       "countAuth": "0",
-      "description": "Only Support One Key Auth",
+      "authentication": "4",
+      "description": "username",
       "adv": null,
       "url": "http:\/\/www.qq.com",
       "sessiontime": "60"
-    }, {
-      "id": "4",
-      "name": "Accessed User Auth",
-      "countShow": "0",
-      "countAuth": "0",
-      "description": "Only Support Accessed User Auth",
-      "adv": null,
-      "url": "http:\/\/www.baidu.com",
-      "sessiontime": "2"
-    }, {
-      "id": "5",
-      "name": "SMS Auth",
-      "countShow": "0",
-      "countAuth": "0",
-      "description": "Only Support SMS Auth",
-      "adv": null,
-      "url": "http:\/\/www.baidu.com",
-      "sessiontime": "8"
-    }, {
-      "id": "6",
-      "name": "Wechat Auth",
-      "countShow": "0",
-      "countAuth": "0",
-      "description": "Only Support Wechat Auth",
-      "adv": null,
-      "url": "http:\/\/www.baidu.com",
-      "sessiontime": "0"
-    }, {
-      "id": "7",
-      "name": "Facebook Auth",
-      "countShow": "0",
-      "countAuth": "0",
-      "description": "Only Support Facebook Auth",
-      "adv": null,
-      "url": "http:\/\/www.baidu.com",
-      "sessiontime": "0"
-    }]
+    }
+    ]
   }
 }
