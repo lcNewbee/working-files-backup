@@ -5,20 +5,20 @@ class NetwirkDashboard extends CI_Controller {
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('array');
-		$this->load->model('network/NetwirkDashboard_Model');
+		$this->load->model('network/NetworkDashboard_Model');
 	}
 	function fetch() {
-		return $this->NetwirkDashboard_Model->get_list($_GET);
+		return $this->NetworkDashboard_Model->get_list($_GET);
 	}
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
-			$result = $this->NetwirkDashboard_Model->add($data);
+			$result = $this->NetworkDashboard_Model->add($data);
 		} elseif ($actionType === 'edit') {
-			$result = $this->NetwirkDashboard_Model->exit($data);
+			$result = $this->NetworkDashboard_Model->exit($data);
 		} elseif ($actionType === 'delete') {
-            $result = $this->NetwirkDashboard_Model->delete($data);
+            $result = $this->NetworkDashboard_Model->delete($data);
 		}
 		return $result;
 	}

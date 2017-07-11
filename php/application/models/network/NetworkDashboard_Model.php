@@ -1,5 +1,5 @@
 <?php
-class NetwirkDashboard_Model extends CI_Model {
+class NetworkDashboard_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
