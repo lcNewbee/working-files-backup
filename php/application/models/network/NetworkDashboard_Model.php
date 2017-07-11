@@ -139,15 +139,15 @@ class NetworkDashboard_Model extends CI_Model {
         $query = $this->db->query('select * from nat_table')->result_array();
         foreach($query as $row){
             if($row['pubifname'] != null && $row['pubifname'] != ''){
-                $sqlcmd  = "select SUM(InBytes) as upFlow,SUM(OutBytes) as downFlow from ac_interface_information";
+                $sqlcmd  = "select SUM(InBytes) as downFlow,SUM(OutBytes) as upFlow from ac_interface_information";
                 $sqlcmd .= " where IfIndex=(select IfIndex from ac_interface_description";
                 $sqlcmd .= " where Timer=(select MAX(Timer) from ac_interface_description)";
                 $sqlcmd .= " and Description='{$row['pubifname']}' group by Mac_Address)";
 
                 $data = $this->mysql->query($sqlcmd)->result_array();
                 foreach($data as $nrow){
-                    $upFlow = $upFlow + (int)$nrow['upFlow'];
                     $downFlow = $downFlow + (int)$nrow['downFlow'];
+                    $upFlow = $upFlow + (int)$nrow['upFlow'];                    
                 }
             }
         }
