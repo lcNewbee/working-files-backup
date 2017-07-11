@@ -258,10 +258,12 @@ const listOptions = fromJS([
   {
     id: 'storeForwardPattern',
     options: storeForwardOption,
+    noTable: true,
     text: __('Forwarding Mode'),
     defaultValue: 'local',
     formProps: {
       type: 'select',
+      noForm: true,
     },
   },
   {

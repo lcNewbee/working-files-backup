@@ -512,7 +512,7 @@ const routes = [
                 id: 'wirelessSafePolicy',
                 icon: 'certificate',
                 path: '/main/group/safe',
-                text: __('Safe Policy'),
+                text: __('WIPS/WIDS'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 routes: [
