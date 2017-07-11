@@ -58,8 +58,10 @@ class SystemNtp extends CI_Controller {
             );
             $result = ntptime_msg_from_web(json_encode($arr));
             if($state == 'off'){
-                //自定义时间
+                //自定义系统时间
                 exec("date -s '{$data['ac_manual_time']}'");
+                //让硬件时间同步系统时间
+                exec("hwclock --systohc");
             }
             //log
             $cgiObj = json_decode($result);

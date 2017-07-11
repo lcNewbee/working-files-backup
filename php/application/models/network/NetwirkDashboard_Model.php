@@ -36,7 +36,7 @@ class NetwirkDashboard_Model extends CI_Model {
         }
         return 0;
     }
-    private function getInterfaceState(){
+    private function getInterfaceState(){        
         $arr = array();
         $query = $this->db->query('select portid,port_name,ip1,adminstate,mgifname from port_table')->result_array();
         if(count($query) > 0){      
@@ -73,14 +73,28 @@ class NetwirkDashboard_Model extends CI_Model {
                 );                                
             }
         }
-        return $arr;
+
+        //获取用户数
+        $result = array();
+        $dhcpary = $this->getAllDhcp();        
+        foreach($arr as $row){            
+            foreach($dhcpary['data'] as $nrow){
+                if($row['ip'] == $nrow['ippoolnet']){
+                    $row['users'] = $row['users'] + $nrow['ippooluse'];
+                }
+            }
+            $result[] = $row;
+        }
+
+        return $result;
     }
 
     private function getSpecifiedInfo($portName, $timeRange){
         $ifIndex = null;
         $arr = array(
             'timeInterval' => 0,
-            'flowData' => array(),
+            'uploadRateData' => array(),//上行速率
+            'downRateData' => array(),//下行速率
             'timeData' => array()
         );
         //获取扫描周期
@@ -102,11 +116,8 @@ class NetwirkDashboard_Model extends CI_Model {
             $sql_fow .= " and IfIndex={$ifIndex}";
             $fow_ary = $this->mysql->query($sql_fow)->result_array();
             foreach($fow_ary as $row){
-                /*
-                array_push($arr['flowData'], $row['InBytes']);
-                array_push($arr['timeData'], $row['Timer']);
-                */
-                $arr['flowData'][] = $row['InBytes'];
+                $arr['uploadRateData'][] = $row['Outbound'];
+                $arr['downRateData'][] = $row['Inbound'];
                 $arr['timeData'][] = $row['Timer'];
             }
         }
@@ -144,16 +155,20 @@ class NetwirkDashboard_Model extends CI_Model {
     }
 
     //获取dhcp总数和分配出去的数量
-    private function getAllDhcp() {
+    private function getAllDhcp() { 
+        $data = array();       
         $dhcp_sum = 0;
         $dhcp_use = 0;
         $str = dhcpd_get_ippool_info();
         $ary = json_decode($str, true);
-        foreach ($ary['data']['list'] as $row) {
-            $dhcp_sum = $dhcp_sum + $row['ippoolall'];
-            $dhcp_use = $dhcp_use + $row['ippooluse'];
+        if($ary['state']['code'] == 2000){
+            $data = $ary['data']['list'];
+            foreach ($ary['data']['list'] as $row) {
+                $dhcp_sum = $dhcp_sum + $row['ippoolall'];
+                $dhcp_use = $dhcp_use + $row['ippooluse'];
+            }            
         }
-        return array('all' => $dhcp_sum, 'use' => $dhcp_use);
+        return array('data' => $data, 'all' => $dhcp_sum, 'use' => $dhcp_use);
     }
 
     //判断网卡连接状态ethtool eth4|grep detected

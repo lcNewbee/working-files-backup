@@ -111,38 +111,42 @@ class AccessWeb_Model extends CI_Model {
         $result = json_no('add error !');
         $logo_name = date('YmdHis') . rand(10000000,99999999) . '.jpg';
         $bg_name = date('YmdHis') . rand(10000000,99999999) . '.jpg';    
+        $logo_img = '';
+        $bg_img = '';
         //1.上传图片
         $upload_data = $this->do_upload_img($logo_name, 'logo');        
         $upload_data2 = $this->do_upload_img($bg_name, 'backgroundImg');        
-        if($upload_data['state']['code'] == 2000 && $upload_data2['state']['code'] == 2000){
-            //2.操作数据库
-            $db_ary = array(
-                'name' => element('name', $data, ''),
-                'title' => element('title', $data, ''),
-                'subTitle' => element('subTitle', $data, ''),            
-                'authMethod' => element('auths', $data, ''),
-                'logo' => 'dist/css/img/' . $logo_name,
-                'bgImg' => 'dist/css/img/' . $bg_name,
-                'copyRight' => element('copyright', $data, ''),
-                'copyRightUrl' => element('copyrightUrl', $data, ''),
-                'description' => element('description', $data, ''),
-                'url' => element('url', $data, 'http://'),
-                'sessiontime' => element('sessiontime', $data, 0)
-            );
-            //send java
-            $socketarr = array(
-                'action'=>'add',
-                'resName'=>'web_template',
-                'data'=> array(
-                    $db_ary
-                )
-            );
-            if( $this->noticeSocket($socketarr) ){
-                return json_encode(json_ok());
-            }
-        }else{
-            $result = json_no('upload img error !');
+        if($upload_data['state']['code'] == 2000){
+            $logo_img = 'dist/css/img/' . $logo_name;
         }
+        if($upload_data2['state']['code'] == 2000){
+            $bg_img = 'dist/css/img/' . $bg_name;
+        }        
+        //2.操作数据库
+        $db_ary = array(
+            'name' => element('name', $data, ''),
+            'title' => element('title', $data, ''),
+            'subTitle' => element('subTitle', $data, ''),            
+            'authMethod' => element('auths', $data, ''),
+            'logo' => $logo_img,
+            'bgImg' => $bg_img,
+            'copyRight' => element('copyright', $data, ''),
+            'copyRightUrl' => element('copyrightUrl', $data, ''),
+            'description' => element('description', $data, ''),
+            'url' => element('url', $data, 'http://'),
+            'sessiontime' => element('sessiontime', $data, 0)
+        );
+        //send java
+        $socketarr = array(
+            'action'=>'add',
+            'resName'=>'web_template',
+            'data'=> array(
+                $db_ary
+            )
+        );
+        if( $this->noticeSocket($socketarr) ){
+            return json_encode(json_ok());
+        }    
         return json_encode($result);               
     }
     function Delete($data) {        
@@ -210,6 +214,7 @@ class AccessWeb_Model extends CI_Model {
                 }                               
             }
         }else{
+            //否则将需要修改的logo名字 改回原数据库存储的值
             $db_ary['logo'] = $query[0]['logo'];
         }
         //bg
