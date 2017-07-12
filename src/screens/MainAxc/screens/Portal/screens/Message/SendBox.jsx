@@ -39,7 +39,6 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'select',
-      required: true,
     },
     options: [
       {
@@ -56,22 +55,17 @@ const listOptions = fromJS([
     type: 'text',
     formProps: {
       type: 'select',
-      required: true,
     },
   },
   {
     id: 'title',
     text: __('Title'),
-    formProps: {
-      required: true,
-    },
+    formProps: {},
   }, {
     id: 'date',
     text: __('Date'),
     noForm: true,
-    formProps: {
-      required: true,
-    },
+    formProps: {},
   }, {
     id: 'description',
     text: __('Content'),
@@ -200,21 +194,18 @@ const viewMessageOptions = fromJS([
     label: __('Date'),
     type: 'plain-text',
     form: 'viewMessage',
-    required: true,
   },
   {
     id: 'ip',
     label: __('IP'),
     form: 'viewMessage',
     type: 'plain-text',
-    required: true,
   },
   {
     id: 'title',
     label: __('Title'),
     form: 'viewMessage',
     type: 'plain-text',
-    required: true,
   },
   {
     id: 'description',
@@ -223,7 +214,6 @@ const viewMessageOptions = fromJS([
     type: 'textarea',
     readOnly: true,
     rows: '5',
-    required: true,
   },
 ]);
 
@@ -302,8 +292,6 @@ export default class SendBox extends React.Component {
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
           isSaving={app.get('saving')}
-          savedText="ssss"
-          hasSaveButton
         />
       );
     }

@@ -39,6 +39,7 @@
   "Forbidden":"禁止",
   "Local Server List": "本地服务器列表",
   "AAA Policies": "AAA 策略",
+  "User Access Policies": "用户访问策略",
 
   "User IP":"用户IP",
   "User MAC":"用户MAC",
@@ -190,6 +191,7 @@
   "MAC Management":"MAC地址管理",
   "Reset Password":"重置密码",
 
+  "Message":"消息",
   "SMS Options":"消息",
   "Send Message":"发送消息",
   "Outbox":"发件箱",
@@ -305,10 +307,10 @@
   "test account": "接入测试账户",
   "Bring you to the New WLAN Age": "为您打开无线网络新世界",
 
-  "Remote Radius Authentication Server": "远程Radius认证服务器",
-  "Remote Radius Accounting Server": "远程Radius计费服务器",
-  "Remote Radius Server Advanced Settings": "远程Radius服务器高级设置",
-  "Remote Portal Server": "远程Portal服务器",
+  "External Radius Authentication Server": "远程Radius认证服务器",
+  "External Radius Accounting Server": "远程Radius计费服务器",
+  "External Radius Server Advanced Settings": "远程Radius服务器高级设置",
+  "External Portal Server": "远程Portal服务器",
   "Portal Server Type": "Portal 服务器类型",
   "Radius Server Type": "Radius 服务器类型",
   "Portal Rule Port": "Portal 规则端口",

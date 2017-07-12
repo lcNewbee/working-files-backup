@@ -56,7 +56,7 @@ const listOptions = fromJS([
       },
       {
         value: 'radius-scheme',
-        label: `${__('Remote')}`,
+        label: `${__('External')}`,
       },
     ],
   }, {

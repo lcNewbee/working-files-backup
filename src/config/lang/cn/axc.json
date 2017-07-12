@@ -183,7 +183,7 @@
   "Radius Template": "Radius 模板",
   "Server Type":"服务器类型",
   "Local Server":"本地服务器",
-  "Remote Server":"远程服务器",
+  "External Server":"远程服务器",
   "Radius Setting":"Radius设置",
   "No data, please go to the %s-->%s page to add nas data!":"没有数据，请先前往 %s-->%s 增加nas列表数据",
   "Authentication Server Settings": "认证服务器设置",
@@ -237,7 +237,7 @@
   "Authentication Service": "认证服务",
   "Accounting Service": "计费服务",
   "Local": "本地",
-  "Remote": "远程",
+  "External": "远程",
 
   "Auto Re-login":"二次免认证",
   "Portal Policy": "Portal策略",

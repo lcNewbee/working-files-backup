@@ -39,7 +39,6 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'select',
-      required: true,
     },
     options: [
       {
@@ -56,7 +55,6 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'select',
-      required: true,
     },
   }, {
     id: 'fromid',
@@ -64,7 +62,7 @@ const listOptions = fromJS([
     noForm: true,
     noTable: true,
     formProps: {
-      required: true,
+      type: 'text',
     },
   }, {
     id: 'fromPos',
@@ -73,7 +71,6 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'select',
-      required: true,
     },
   }, {
     id: 'fromname',
@@ -200,23 +197,20 @@ const viewMessageOptions = fromJS([
   {
     id: 'date',
     label: __('Date'),
-    type: 'text',
+    type: 'plain-text',
     form: 'viewMessage',
-    required: true,
   },
   {
     id: 'ip',
     label: __('IP'),
     form: 'viewMessage',
-    type: 'text',
-    required: true,
+    type: 'plain-text',
   },
   {
     id: 'title',
     label: __('Title'),
     form: 'viewMessage',
-    type: 'text',
-    required: true,
+    type: 'plain-text',
   },
   {
     id: 'description',
@@ -224,7 +218,7 @@ const viewMessageOptions = fromJS([
     form: 'viewMessage',
     type: 'textarea',
     rows: '5',
-    required: true,
+    readOnly: true,
   },
 ]);
 
@@ -303,7 +297,6 @@ export default class OpenPortalBase extends React.Component {
           validateAt={app.get('validateAt')}
           isSaving={app.get('saving')}
           savedText="ssss"
-          hasSaveButton
         />
       );
     }
@@ -466,7 +459,6 @@ export default class OpenPortalBase extends React.Component {
         }}
         queryFormOptions={queryFormOptions}
         listOptions={curListOptions}
-        actionBarChildren={listActionBarChildren}
         modalChildren={this.renderSendMessageModal()}
         actionable
         selectable
