@@ -136,6 +136,7 @@ export default class TimeSettings extends Component {
           <FormGroup
             type="date"
             label={__('Date')}
+            hideKeyboardShortcutsPanel
             displayFormat="YYYY-MM-DD"
             disabled={ntpEnable === '1'}
             value={this.props.store.getIn(['curData', 'date'])}

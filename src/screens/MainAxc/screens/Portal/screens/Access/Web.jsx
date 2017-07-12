@@ -29,6 +29,15 @@ function generateClassName(id) {
 function onBeforeSync($$actionQuery, $$curListItem) {
   const selectedLoginType = $$curListItem.get('auths');
   if (!selectedLoginType) return __('Please select at least one Login Type!');
+
+  const logo = $$curListItem.get('logo');
+  const backgroundImg = $$curListItem.get('backgroundImg');
+  const logoType = logo.toLowerCase().split('.').slice(-1)[0];
+  const backgroundImgType = backgroundImg.toLowerCase().split('.').slice(-1)[0];
+  const supportedType = fromJS(['jpg', 'png', 'gif', 'jpeg']);
+  if (!supportedType.includes(logoType) || !supportedType.includes(backgroundImgType)) {
+    return __('Invalid image type! Only jpg/png/gif/jpeg are supported.');
+  }
   return '';
 }
 
@@ -151,7 +160,7 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'text',
-      label: __('Sub Title'),
+      label: __('Subtitle'),
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
@@ -538,7 +547,7 @@ export default class View extends React.Component {
           render: () => (
             <div className="portal-templates-preview">
               <div className="portal-preview-head">
-                <h4>PREVIEW</h4>
+                <h4>{__('PREVIEW')}</h4>
               </div>
               <div className="portal-preview-body">
                 <Preview

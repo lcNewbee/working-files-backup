@@ -355,7 +355,6 @@
 	"Logout Succeeded": "您已经成功下线",
 	"Welcome to use free wi-fi": "欢迎使用免费Wi-Fi",
 	"Get Verification Code": "获取验证码",
-  "Please select the type": "请选择类型",
   "Useruame: login username": "用户名：登录的用户名",
 
 	"Contact Admin": "联系管理员",
@@ -374,5 +373,20 @@
 	"Online Record": "上网记录",
 	"Payment Record": "充值记录",
 	"Get Auth Code": "获取验证码",
-	"Password Change via SMS": "短信改密"
+	"Password Change via SMS": "短信改密",
+  "When is your father's birthday?": "你父亲的生日是什么时候？",
+  "What's your mother's name?": "你母亲的名字是什么？",
+  "When did you graduate from primary school?": "你小学毕业是什么时候？",
+  "What's your pet's name?": "你宠物的名字是什么？",
+  "What's your favorite sport?": "你最喜欢的运动是什么？",
+  "IP/Login name": "IP/登录名",
+  "Please select at least one Login Type!": "请选择至少一种认证方式!",
+  "Subtitle": "副标题",
+  "Logo": "商标图片",
+  "Background Image": "背景图片",
+  "Copyright": "版权申明",
+  "Copyright Link": "版权申明链接",
+  "Please select the type": "请选择登录方式",
+  "PREVIEW": "预览",
+  "Invalid image type! Only jpg/png/gif/jpeg are supported.": "图片格式无效！仅支持jpg/png/gif/jpeg图片格式"
 }

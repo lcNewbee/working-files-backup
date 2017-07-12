@@ -29,7 +29,7 @@ function LoginBody(props) {
         section === 'home' ? (
           <div className="portal-content-body-section active" id="authHome">
             <img src={wifiIcon} className="header-img" alt="wifi" />
-            <p className="header-description">{__('Please select the type')}</p>
+            <p className="header-description b28n">{__('Please select the type')}</p>
             {
               authArr.indexOf('0') !== -1 ? (
                 <button
