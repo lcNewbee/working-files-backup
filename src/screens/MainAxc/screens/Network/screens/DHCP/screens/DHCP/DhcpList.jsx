@@ -101,7 +101,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'opt60',
-    text: __('Vendor ID'),
+    text: __('Brand ID'),
     noTable: true,
     formProps: {
       type: 'number',

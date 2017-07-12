@@ -57,7 +57,7 @@ const authTypeSeletOptions = [
   // },
   {
     value: 'radius-scheme',
-    label: `${__('Remote')}`,
+    label: `${__('External')}`,
   },
 ];
 

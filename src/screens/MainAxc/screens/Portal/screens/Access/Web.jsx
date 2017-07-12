@@ -110,7 +110,7 @@ const $$authOptions = fromJS([
   },
   {
     value: '1',
-    label: __('Accessed User Login'),
+    label: __('User Password Login'),
   },
   // {
   //   value: '2',

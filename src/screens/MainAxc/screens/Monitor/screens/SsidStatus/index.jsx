@@ -52,7 +52,7 @@ const ssidListOptions = fromJS([
   }, {
     id: 'onlineNumber',
     width: 140,
-    text: __('Online Numbers'),
+    text: __('Onlines'),
   }, {
     id: 'apNumber',
     width: 140,

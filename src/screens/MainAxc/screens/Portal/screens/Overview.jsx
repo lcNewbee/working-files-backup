@@ -59,7 +59,7 @@ function getOnlineOption(serverData) {
   return ret;
 }
 function getApStatusOption(serverData) {
-  const lockText = __('Unavailability');
+  const lockText = __('Deactivated');
   const unlockText = __('Normal');
   const lockCount = serverData.get('lockCount') || 0;
   const unlockCount = serverData.get('trueCount') || 0;

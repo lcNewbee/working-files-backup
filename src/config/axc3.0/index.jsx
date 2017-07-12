@@ -184,8 +184,8 @@ const sPortalAccountList =
     require('../../screens/MainAxc/screens/Portal/screens/Account/AccountList');
 const sPortalConnectRecord =
     require('../../screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
-const sPortalSendMessage =
-    require('../../screens/MainAxc/screens/Portal/screens/Message/SendMessage');
+// const sPortalSendMessage =
+//     require('../../screens/MainAxc/screens/Portal/screens/Message/SendMessage');
 const sPortalSendBox =
     require('../../screens/MainAxc/screens/Portal/screens/Message/SendBox');
 const sPortalReceiveBox =
@@ -290,7 +290,7 @@ const routes = [
                 icon: 'copy',
                 // label: __('beta'),
                 path: '/main/network/dpi',
-                text: __('Application Analyze'),
+                text: __('Application Analsys'),
                 indexPath: '/main/network/dpi/dpioverview',
                 routes: [
                   {
@@ -670,7 +670,7 @@ const routes = [
                     id: 'portalMessage',
                     isIndex: true,
                     path: '/main/portal/local/message',
-                    text: __('SMS Options'),
+                    text: __('Message'),
                     noTree: true,
                     component: SharedComponents.TabContainer,
                     routes: [
@@ -686,13 +686,14 @@ const routes = [
                         formUrl: 'goform/portal/message/send',
                         text: __('Outbox'),
                         component: sPortalSendBox.Screen,
-                      }, {
-                        id: 'portalSendMessage',
-                        path: '/main/portal/local/message/sendmessage',
-                        formUrl: 'goform/portal/message/sendmessage',
-                        text: __('Send Message'),
-                        component: sPortalSendMessage.Screen,
                       },
+                      // {
+                      //   id: 'portalSendMessage',
+                      //   path: '/main/portal/local/message/sendmessage',
+                      //   formUrl: 'goform/portal/message/sendmessage',
+                      //   text: __('Send Message'),
+                      //   component: sPortalSendMessage.Screen,
+                      // },
                     ],
                   },
                   {
@@ -740,7 +741,7 @@ const routes = [
                 icon: 'link',
                 path: '/main/portal/aaa/list',
                 formUrl: 'goform/portal/Aaa',
-                text: __('AAA Policies'),
+                text: __('User Access Policies'),
                 component: sNetworkAaa.Screen,
               },
             ],

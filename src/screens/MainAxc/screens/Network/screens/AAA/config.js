@@ -16,7 +16,7 @@ export const $$radiusServerChoices = fromJS([
     options: [
       {
         value: 'remote',
-        label: __('Remote Server'),
+        label: __('External Server'),
       }, {
         value: 'local',
         label: __('Local Server'),

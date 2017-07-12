@@ -16,18 +16,18 @@ const listOptions = fromJS([
   {
     id: 'userType',
     width: 160,
-    text: __('User Type'),
+    text: __('User Role'),
     defaultValue: 1,
     options: [
       {
         value: 0,
-        label: __('Admin'),
+        label: __('Super Admin'),
       }, {
         value: 1,
-        label: __('Manager(Branch)'),
+        label: __('Operator Admin'),
       }, {
         value: 2,
-        label: __('Manager(Read-only)'),
+        label: __('Monitoring Admin'),
       },
     ],
     formProps: {
@@ -38,7 +38,7 @@ const listOptions = fromJS([
   }, {
     id: 'purview',
     width: 160,
-    text: __('Purview'),
+    text: __('AC administration'),
     defaultValue: '',
     options: purviewOptions,
     multi: true,

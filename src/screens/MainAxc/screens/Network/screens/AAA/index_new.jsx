@@ -64,7 +64,7 @@ const authTypeSeletOptions = [
   },
   {
     value: 'radius-scheme',
-    label: `${__('Remote')}`,
+    label: `${__('External')}`,
   },
 ];
 const serverType = [
@@ -74,7 +74,7 @@ const serverType = [
   },
   {
     value: 'remote',
-    label: `${__('Remote')}`,
+    label: `${__('External')}`,
   },
 ];
 
@@ -548,7 +548,7 @@ export default class View extends React.Component {
                 marginRight: '5px',
               }}
             /> */}
-            {__('Remote Radius Authentication Server')}
+            {__('External Radius Authentication Server')}
           </h3>
         </div>
         {
@@ -585,7 +585,7 @@ export default class View extends React.Component {
               }}
               onClick={() => this.toggleBox(RADIUS_ACC_SERVER_KEY)}
             />*/}
-            {__('Remote Radius Accounting Server')}
+            {__('External Radius Accounting Server')}
           </h3>
         </div>
         {
@@ -621,7 +621,7 @@ export default class View extends React.Component {
               }}
               onClick={() => this.toggleBox(RADIUS_ADVANCE_SETTING_KEY)}
             />*/}
-            {__('Remote Radius Server Advanced Settings')}
+            {__('External Radius Server Advanced Settings')}
           </h3>
         </div>
         {
@@ -669,7 +669,7 @@ export default class View extends React.Component {
               }}
               onClick={() => this.toggleBox(PORTAL_SERVER_KEY)}
             />*/}
-            {__('Remote Portal Server')}
+            {__('External Portal Server')}
           </h3>
         </div>
         {

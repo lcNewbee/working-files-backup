@@ -31,7 +31,7 @@ const listOptions = fromJS([
     text: __('IP Address'),
   }, {
     id: 'vendor',
-    text: __('Vendor'),
+    text: __('Brand'),
   },
   // {
   //   id: 'terminalType',

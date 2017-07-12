@@ -213,7 +213,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ssidisolate',
-    text: __('Terminal Isolation'),
+    text: __('Wireless Client Isolation'),
     defaultValue: '1',
     options: checkboxOptions,
     formProps: {

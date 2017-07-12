@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PureComponent from '../Base/PureComponent';
+import utils from 'shared/utils';
 import Select from '../Select';
 
 import './index.scss';
@@ -10,6 +10,20 @@ const sizeOptions = [
   { value: 50, label: '50' },
   { value: 100, label: '100' },
 ];
+
+function getPageOptions(props) {
+  let ret = {};
+
+  if (props.page) {
+    if (props.page.toJS) {
+      ret = props.page.toJS();
+    } else {
+      ret = props.page;
+    }
+  }
+
+  return ret;
+}
 
 const propTypes = {
   onPageChange: PropTypes.func,
@@ -24,40 +38,65 @@ const defaultProps = {
   sizeOptions,
 };
 
-class Pagination extends PureComponent {
+class Pagination extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onGoPage = this.onGoPage.bind(this);
-    this.onPrev = this.onPrev.bind(this);
-    this.onNext = this.onNext.bind(this);
-    this.onGoFrist = this.onGoFrist.bind(this);
-    this.onGoEnd = this.onGoEnd.bind(this);
-    this.getPageOptions = this.getPageOptions.bind(this);
-    this.goPage = this.goPage.bind(this);
+    utils.binds(this, [
+      'onGoPage',
+      'onPrev',
+      'onPrevFivePage',
+      'onNext',
+      'onNextFivePage',
+      'onGoFrist',
+      'onGoEnd',
+      'getPageOptions',
+      'goPage',
+      'onGotoKeyup',
+    ]);
+    this.pageOptions = getPageOptions(props);
+    this.state = {
+      goPage: this.pageOptions.currPage,
+      pageOptions: this.pageOptions,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.page !== this.props.page) {
+      this.pageOptions = getPageOptions(nextProps);
+
+      this.setState({
+        goPage: this.pageOptions.currPage,
+        pageOptions: this.pageOptions,
+      });
+    }
   }
 
   onGoPage(e) {
-    const page = window.parseInt(e.target.innerHTML);
+    const page = parseInt(e.target.innerHTML, 10);
 
     e.preventDefault();
     this.goPage(page);
   }
+  onGotoKeyup(e) {
+    const page = parseInt(e.target.value, 10);
+
+    if (e.which === 13) {
+      e.preventDefault();
+      this.goPage(page);
+    }
+  }
 
   onPrev(e) {
-    let page;
+    const page = this.state.pageOptions.currPage - 1;
 
     e.preventDefault();
-
-    page = this.getPageOptions().currPage - 1;
-
-    page = page > 0 ? page : 1;
-
     this.goPage(page);
   }
 
   onNext(e) {
-    const page = this.getPageOptions().nextPage;
+    const pageOptions = this.state.pageOptions;
+    const page = parseInt(pageOptions.currPage, 10) + 1;
 
     e.preventDefault();
     this.goPage(page);
@@ -69,42 +108,44 @@ class Pagination extends PureComponent {
   }
 
   onGoEnd(e) {
-    const page = this.getPageOptions().totalPage;
+    const pageOptions = this.state.pageOptions;
+    const page = pageOptions.totalPage || pageOptions.lastPage;
+
     e.preventDefault();
     this.goPage(page);
   }
-
-  getPageOptions() {
-    let ret = {};
-
-    if (this.props.page) {
-      if (this.props.page.toJS) {
-        ret = this.props.page.toJS();
-      } else {
-        ret = this.props.page;
-      }
-    }
-    return ret;
+  onPrevFivePage() {
+    const curPage = parseInt(this.state.pageOptions.currPage, 10);
+    this.goPage(curPage - 5);
   }
-  goPage(i) {
-    if (this.props.onPageChange) {
-      if (this.getPageOptions().currPage !== i && i > 0) {
-        this.props.onPageChange(i);
-      }
-    }
+
+  onNextFivePage() {
+    const curPage = parseInt(this.state.pageOptions.currPage, 10);
+
+    this.goPage(curPage + 5);
   }
-  render() {
-    const { currPage, totalPage, total } = this.getPageOptions();
-    const prevClassName = parseInt(currPage, 10) === 1 ? 'disabled' : '';
-    const nextClassName = parseInt(totalPage, 10) === currPage ? 'disabled' : '';
+
+  getPageList(pageOptions) {
+    const { currPage, totalPage } = pageOptions;
     const list = [];
     let key;
     let i;
 
-    const startPage = (currPage < 5) || (totalPage < 8) ? 1 : (currPage - 4);
-    let endPage = startPage + 8;
+    const startPage = (currPage <= 5) || (totalPage <= 6) ? 1 : (currPage - 2);
+    let endPage = startPage + 4;
 
     endPage = endPage > totalPage ? totalPage : endPage;
+
+    if (startPage > 1) {
+      list.push(<li key="page.1" ><a onClick={this.onGoPage}>1</a></li>);
+    }
+    if (startPage > 2) {
+      list.push((
+        <li key="page.prev" className="jump-prev">
+          <span title={__('Previous 5 Pages')} onClick={this.onPrevFivePage} className="fa" />
+        </li>
+      ));
+    }
 
     for (i = startPage; i <= endPage; i += 1) {
       key = `pager_${i}`;
@@ -117,6 +158,35 @@ class Pagination extends PureComponent {
         </li>);
       }
     }
+    if (endPage < totalPage - 1) {
+      list.push(<li key="page.next" className="jump-next"><span title={__('Next 5 Pages')} onClick={this.onNextFivePage} className="fa" /></li>);
+    }
+    if (endPage < totalPage) {
+      list.push(<li key="page.last"><a href="#/" onClick={this.onGoPage}>{totalPage}</a></li>);
+    }
+
+    return list;
+  }
+  goPage(i) {
+    let gotoPageNum = parseInt(i, 10);
+
+    if (this.props.onPageChange) {
+      if (gotoPageNum < 1) {
+        gotoPageNum = 1;
+      } else if (gotoPageNum > this.state.pageOptions.totalPage) {
+        gotoPageNum = this.state.pageOptions.totalPage;
+      }
+
+      if (this.state.pageOptions.currPage !== gotoPageNum) {
+        this.props.onPageChange(gotoPageNum);
+      }
+    }
+  }
+  render() {
+    const { currPage, totalPage, total } = this.state.pageOptions;
+    const prevClassName = parseInt(currPage, 10) === 1 ? 'prev disabled' : 'prev';
+    const nextClassName = parseInt(totalPage, 10) === currPage ? 'next disabled' : 'next';
+    const pageList = this.getPageList(this.state.pageOptions);
 
     return (
       <div className="m-pagination">
@@ -145,12 +215,46 @@ class Pagination extends PureComponent {
 
         {
           totalPage && totalPage > 1 ? (
-            <ul className="pagination">
-              <li className={prevClassName}><a href="#/" onClick={this.onGoFrist}>{__('First')}</a></li>
-              <li className={prevClassName}><a href="#/" onClick={this.onPrev}>{__('<')}</a></li>
-              {list}
-              <li className={nextClassName}><a href="#/" onClick={this.onNext}>{__('>')}</a></li>
-              <li className={nextClassName}><a href="#/" onClick={this.onGoEnd}>{__('Last')}</a></li>
+            <ul className="m-pagination__pages">
+              <li className={prevClassName}><span title={__('Previous')} onClick={this.onPrev} className="fa" /></li>
+              {pageList}
+              <li className={nextClassName}><span title={__('Next')} onClick={this.onNext} className="fa" /></li>
+              {
+                // 超过7页，才显示
+                totalPage > 7 ? (
+                  <li className="pages-goto">
+                    <label
+                      htmlFor="gotoPage"
+                    >
+                      {__('Go to')}
+                    </label>
+                    <input
+                      type="number"
+                      value={this.state.goPage}
+                      id="gotoPage"
+                      className=""
+                      min="1"
+                      max={totalPage}
+                      onChange={(e) => {
+                        let gotoPageVal = parseInt(e.target.value, 10);
+
+                        if (gotoPageVal > totalPage) {
+                          gotoPageVal = totalPage;
+                        } else if (gotoPageVal < 1) {
+                          gotoPageVal = 1;
+                        } else if (isNaN(gotoPageVal)) {
+                          gotoPageVal = '';
+                        }
+
+                        this.setState({
+                          goPage: gotoPageVal,
+                        });
+                      }}
+                      onKeyUp={this.onGotoKeyup}
+                    />
+                  </li>
+                ) : null
+              }
             </ul>
           ) : null
         }
