@@ -73,7 +73,7 @@ function getTerminalTypeOption(serverData) {
   let dataList = serverData.get('terminalType');
   const ret = $$commonPieOption.mergeDeep({
     title: {
-      text: __('Online Number'),
+      text: __('Online'),
       subtext: `${serverData.get('clientsNumber') || 0}`,
     },
     legend: {

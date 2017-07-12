@@ -182,7 +182,7 @@ export default class Main extends React.PureComponent {
                 <Icon
                   name="sign-out"
                 />
-                {__('Login Out')}
+                {__('Logout')}
               </a>
             </div>
           </div>

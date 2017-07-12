@@ -290,7 +290,7 @@ const routes = [
                 icon: 'copy',
                 // label: __('beta'),
                 path: '/main/network/dpi',
-                text: __('Application Analyze'),
+                text: __('Application Analsys'),
                 indexPath: '/main/network/dpi/dpioverview',
                 routes: [
                   {

@@ -57,14 +57,14 @@ const queryFormOptions = fromJS([
       },
       {
         value: '0',
-        label: __('Unavailability'),
+        label: __('Deactivated'),
       }, {
         value: '1',
-        label: __('Free of Charge'),
+        label: __('Free'),
       },
       {
         value: '2',
-        label: __('Timekeeping'),
+        label: __('Time-based'),
       }, {
         value: '3',
         label: __('Buy Out'),
@@ -107,7 +107,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'time',
-    text: __('Time Balance'),
+    text: __('Time Quota'),
     noForm: true,
     render(val, $$data) {
       const accountType = $$data.get('state');
@@ -130,7 +130,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'octets',
-    text: __('Traffic Balance'),
+    text: __('Data Quota'),
     noForm: true,
     render(val, $$data) {
       const accountType = $$data.get('state');
@@ -168,20 +168,20 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Unavailability'),
+        label: __('Deactivated'),
       }, {
         value: '1',
-        label: __('Free of Charge'),
+        label: __('Free'),
       },
       {
         value: '2',
-        label: __('Timekeeping'),
+        label: __('Time-based'),
       }, {
         value: '3',
         label: __('Buy Out'),
       }, {
         value: '4',
-        label: __('Traffic'),
+        label: __('Data-based'),
       },
     ],
     defaultValue: '0',
@@ -351,14 +351,14 @@ export const baseSetting = fromJS([
     options: [
       {
         value: '0',
-        label: __('Unavailability'),
+        label: __('Deactivated'),
       }, {
         value: '1',
-        label: __('Free of Charge'),
+        label: __('Free'),
       },
       {
         value: '2',
-        label: __('Timekeeping'),
+        label: __('Time-based'),
       }, {
         value: '3',
         label: __('Buy Out'),

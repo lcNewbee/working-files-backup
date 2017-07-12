@@ -22,14 +22,14 @@ const queryFormOptions = fromJS([
       },
       {
         value: '0',
-        label: __('Unavailability'),
+        label: __('Deactivated'),
       }, {
         value: '1',
-        label: __('Free of Charge'),
+        label: __('Free'),
       },
       {
         value: '2',
-        label: __('Timekeeping'),
+        label: __('Time-based'),
       }, {
         value: '3',
         label: __('Buy Out'),
@@ -132,14 +132,14 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Unavailability'),
+        label: __('Deactivated'),
       }, {
         value: '1',
         label: __('Free'),
       },
       {
         value: '2',
-        label: __('Timekeeping'),
+        label: __('Time-based'),
       }, {
         value: '3',
         label: __('Buy Out'),

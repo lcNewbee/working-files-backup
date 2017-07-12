@@ -22,7 +22,7 @@ const queryFormOptions = fromJS([
         label: __('Hourly Voucher'),
       }, {
         value: '1',
-        label: __('Dayly Voucher'),
+        label: __('Daily Voucher'),
       },
       {
         value: '2',
@@ -65,7 +65,7 @@ const listOptions = fromJS([
         label: __('Hourly Voucher'),
       }, {
         value: '1',
-        label: __('Dayly Voucher'),
+        label: __('Daily Voucher'),
       },
       {
         value: '2',

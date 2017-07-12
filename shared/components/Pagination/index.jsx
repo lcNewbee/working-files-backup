@@ -219,37 +219,42 @@ class Pagination extends React.Component {
               <li className={prevClassName}><span title={__('Previous')} onClick={this.onPrev} className="fa" /></li>
               {pageList}
               <li className={nextClassName}><span title={__('Next')} onClick={this.onNext} className="fa" /></li>
-              <li className="pages-goto">
-                <label
-                  htmlFor="gotoPage"
-                >
-                  {__('Go to')}
-                </label>
-                <input
-                  type="number"
-                  value={this.state.goPage}
-                  id="gotoPage"
-                  className=""
-                  min="1"
-                  max={totalPage}
-                  onChange={(e) => {
-                    let gotoPageVal = parseInt(e.target.value, 10);
+              {
+                // 超过7页，才显示
+                totalPage > 7 ? (
+                  <li className="pages-goto">
+                    <label
+                      htmlFor="gotoPage"
+                    >
+                      {__('Go to')}
+                    </label>
+                    <input
+                      type="number"
+                      value={this.state.goPage}
+                      id="gotoPage"
+                      className=""
+                      min="1"
+                      max={totalPage}
+                      onChange={(e) => {
+                        let gotoPageVal = parseInt(e.target.value, 10);
 
-                    if (gotoPageVal > totalPage) {
-                      gotoPageVal = totalPage;
-                    } else if (gotoPageVal < 1) {
-                      gotoPageVal = 1;
-                    } else if (isNaN(gotoPageVal)) {
-                      gotoPageVal = '';
-                    }
+                        if (gotoPageVal > totalPage) {
+                          gotoPageVal = totalPage;
+                        } else if (gotoPageVal < 1) {
+                          gotoPageVal = 1;
+                        } else if (isNaN(gotoPageVal)) {
+                          gotoPageVal = '';
+                        }
 
-                    this.setState({
-                      goPage: gotoPageVal,
-                    });
-                  }}
-                  onKeyUp={this.onGotoKeyup}
-                />
-              </li>
+                        this.setState({
+                          goPage: gotoPageVal,
+                        });
+                      }}
+                      onKeyUp={this.onGotoKeyup}
+                    />
+                  </li>
+                ) : null
+              }
             </ul>
           ) : null
         }

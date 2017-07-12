@@ -52,14 +52,14 @@ const queryFormOptions = fromJS([
         label: __('ALL'),
       }, {
         value: '0',
-        label: __('Unavailability'),
+        label: __('Deactivated'),
       }, {
         value: '1',
-        label: __('Free of Charge'),
+        label: __('Free'),
       },
       {
         value: '2',
-        label: __('Timekeeping'),
+        label: __('Time-based'),
       }, {
         value: '3',
         label: __('Buy Out'),
@@ -85,7 +85,7 @@ const queryFormOptions = fromJS([
         label: __('Hourly Voucher'),
       }, {
         value: '1',
-        label: __('Dayly Voucher'),
+        label: __('Daily Voucher'),
       },
       {
         value: '2',
@@ -131,14 +131,14 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('Unavailability'),
+        label: __('Deactivated'),
       }, {
         value: '1',
-        label: __('Free of Charge'),
+        label: __('Free'),
       },
       {
         value: '2',
-        label: __('Timekeeping'),
+        label: __('Time-based'),
       }, {
         value: '3',
         label: __('Buy Out'),
@@ -173,7 +173,7 @@ const listOptions = fromJS([
         label: __('Hourly Voucher'),
       }, {
         value: '1',
-        label: __('Dayly Voucher'),
+        label: __('Daily Voucher'),
       },
       {
         value: '2',
@@ -488,7 +488,7 @@ export default class View extends React.Component {
             x = __('Hourly Voucher');
             break;
           case 1:
-            x = __('Dayly Voucher');
+            x = __('Daily Voucher');
             break;
           case 2:
             x = __('Monthly Voucher');
