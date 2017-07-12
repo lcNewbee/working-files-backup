@@ -33,10 +33,13 @@
   > input[type='file'],
   .a-input-file__file {
     position: absolute;
+    right: 0;
     cursor: pointer;
     line-height: 0;
+    padding: 0;
     height: 100%;
-    width: 100%;
+    min-width: 100%;
+    font-size: 120px;
     z-index: 2;
 
     @include opacity(0);

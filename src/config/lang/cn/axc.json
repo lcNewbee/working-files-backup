@@ -478,7 +478,7 @@
 
   "Report": "报表",
   "Date Range": "时间段",
-  "Users Number": "用户数量",
+  "Sessions": "会话数",
   "App Flow": "应用流量",
   "Current App": "当前应用",
   "Flow Trend": "流量趋势",
@@ -761,5 +761,6 @@
   "DHCP Pool": "DHCP地址池数",
   "DHCP Usage": "DHCP使用情况",
   "NAT Strategy": "NAT策略数",
-  "Throughput ": "流量统计"
+  "Throughput ": "流量统计",
+  "Graphic Type": "图表类型"
 }

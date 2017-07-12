@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import { Icon, FormGroup, FormInput } from 'shared/components';
+import { Icon } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
-import { SaveButton, Button } from 'shared/components/Button';
 
 import Preview from '../../components/Preview';
 
@@ -34,24 +33,24 @@ function onBeforeSync($$actionQuery, $$curListItem) {
 }
 
 /* eslint-disable quote-props */
-const idToPageMap = {
-  '1': '',
-  '2': '/1',
-  '3': '/2',
-  '4': '/3',
-  '5': '/4',
-  '6': '/5',
-  '7': '/6',
-};
-const idTownloadIdMap = {
-  '1': '',
-  '2': '1',
-  '3': '2',
-  '4': '3',
-  '5': '4',
-  '6': '5',
-  '7': '6',
-};
+// const idToPageMap = {
+//   '1': '',
+//   '2': '/1',
+//   '3': '/2',
+//   '4': '/3',
+//   '5': '/4',
+//   '6': '/5',
+//   '7': '/6',
+// };
+// const idTownloadIdMap = {
+//   '1': '',
+//   '2': '1',
+//   '3': '2',
+//   '4': '3',
+//   '5': '4',
+//   '6': '5',
+//   '7': '6',
+// };
 // const queryFormOptions = fromJS([
 //   {
 //     id: 'adv',
@@ -109,11 +108,6 @@ const $$authOptions = fromJS([
   },
 ]);
 
-function bindListOPtionsToThis(that) {
-
-}
-
-
 const listOptions = fromJS([
   {
     id: 'id',
@@ -158,7 +152,6 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       label: __('Sub Title'),
-      required: true,
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
@@ -449,9 +442,11 @@ export default class View extends React.Component {
 
     if (actionType !== nextActionType) {
       if (nextActionType === 'edit') {
+        const winLoc = window.location;
+        const origin = `http://${winLoc.host}:8080`;
         this.setState({
-          logoImgUrl: `${window.location.origin.replace('8888', '8080')}/${$$nextCurItem.get('logo')}`,
-          backgroundImgUrl: `${window.location.origin.replace('8888', '8080')}/${$$nextCurItem.get('backgroundImg')}`,
+          logoImgUrl: `${origin}/${$$nextCurItem.get('logo')}`,
+          backgroundImgUrl: `${origin}/${$$nextCurItem.get('backgroundImg')}`,
         });
       } else {
         // 除编辑操作外，其它操作变动都将图片URL置为空
@@ -459,15 +454,6 @@ export default class View extends React.Component {
       }
     }
   }
-  // onBackup($$data) {
-  //   if (this.actionable) {
-  //     if (idTownloadIdMap[$$data.get('id')]) {
-  //       window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
-  //     } else {
-  //       window.location.href = 'goform/portal/access/download/';
-  //     }
-  //   }
-  // }
 
   getAdsPage() {
     this.props.fetch('goform/portal/access/web/webPage', {
@@ -511,38 +497,39 @@ export default class View extends React.Component {
       });
     }
     // 添加操作栏按钮
-    this.curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
-      <span>
-        <a
-          className="tablelink"
-          href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/auth.jsp`}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {__('Login')}
-        </a>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/ok.jsp?preview=1`} rel="noopener noreferrer" target="_blank">{__('Success')}</a>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/out.jsp`} rel="noopener noreferrer" target="_blank">{__('Exit')}</a>
-        <a
-          className="tablelink"
-          href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/wx.jsp`}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {__('Wechat')}
-        </a>
-        {/* <SaveButton
-          type="button"
-          icon="download"
-          text={__('')}
-          theme="default"
-          onClick={
-            () => (this.onBackup($$data))
-          }
-          disabled={!this.actionable}
-        />*/}
-      </span>
-    )).push( // 添加预览页面
+    // .setIn([-1, 'render'], (val, $$data) => (
+    //   <span>
+    //     <a
+    //       className="tablelink"
+    //       href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/auth.jsp`}
+    //       rel="noopener noreferrer"
+    //       target="_blank"
+    //     >
+    //       {__('Login')}
+    //     </a>
+    //     <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/ok.jsp?preview=1`} rel="noopener noreferrer" target="_blank">{__('Success')}</a>
+    //     <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/out.jsp`} rel="noopener noreferrer" target="_blank">{__('Exit')}</a>
+    //     <a
+    //       className="tablelink"
+    //       href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/wx.jsp`}
+    //       rel="noopener noreferrer"
+    //       target="_blank"
+    //     >
+    //       {__('Wechat')}
+    //     </a>
+    //     {/* <SaveButton
+    //       type="button"
+    //       icon="download"
+    //       text={__('')}
+    //       theme="default"
+    //       onClick={
+    //         () => (this.onBackup($$data))
+    //       }
+    //       disabled={!this.actionable}
+    //     />*/}
+    //   </span>
+    // ))
+    this.curListOptions = listOptions.push( // 添加预览页面
       fromJS({
         id: '__preview__',
         noTable: true,
@@ -576,7 +563,6 @@ export default class View extends React.Component {
       {
         type: 'file',
         label: __('Background Image'),
-        required: true,
         onChange: (data, formData, e) => {
           const file = e.target.files[0];
           utils.dom.previewFile(file).then((imgSrc) => {
@@ -593,7 +579,6 @@ export default class View extends React.Component {
       {
         type: 'file',
         label: __('Logo'),
-        required: true,
         onChange: (data, formData, e) => {
           const file = e.target.files[0];
           utils.dom.previewFile(file).then((imgSrc) => {
