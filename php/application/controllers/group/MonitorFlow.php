@@ -8,14 +8,11 @@ class MonitorFlow extends CI_Controller {
 		$this->load->helper('array');
 	}
 
-	function fetch(){
-		$retdata = array(
-      'groupid'=>(int)element('groupid', $_GET, -100),
-    );
-		$result=axc_get_flow(json_encode($retdata));
-
-		return $result;
-	}
+	function fetch() {
+        $retdata = array('groupid' => (int)element('groupid', $_GET, -100),);
+        $result = axc_get_flow(json_encode($retdata));
+        return $result;
+    }
 
 	function onAction($data) {
 		// 		$result = null;
@@ -34,30 +31,26 @@ class MonitorFlow extends CI_Controller {
 		// }
 		// 		return $result;
 	}
-
-  public function user() {
-      $result = null;
-			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-				$data = json_decode(file_get_contents("php://input"), true);
-				$result = $this->onAction($data);
-				echo $result;
-			}
-			elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-				$result = $this->fetch();
-				echo $result;
-			}
-  }
-  public function app() {
-          $result = null;
-			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-				$data = json_decode(file_get_contents("php://input"), true);
-				$result = $this->onAction($data);
-				echo $result;
-			}
-			elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-				$result = $this->fetch();
-				echo $result;
-			}
-  }
+    public function user() {
+        $result = null;
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = json_decode(file_get_contents("php://input"), true);
+            $result = $this->onAction($data);
+            echo $result;
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $result = $this->fetch();
+            echo $result;
+        }
+    }
+    public function app() {
+        $result = null;
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = json_decode(file_get_contents("php://input"), true);
+            $result = $this->onAction($data);
+            echo $result;
+        } elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $result = $this->fetch();
+            echo $result;
+        }
+    }
 }

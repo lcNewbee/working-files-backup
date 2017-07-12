@@ -6,63 +6,46 @@ class AccessWeb_Model extends CI_Model {
         $this->load->helper(array('array', 'db_operation'));
         $this->load->library('PortalSocket');
     }
-    function get_list($data) {
-        $parameter = array(
-            'db' => $this->portalsql,
-            'columns' => 'portal_web.id,portal_web.name,portal_web.title,
-                                portal_web.sub_title as subTitle,
-                                portal_web.auth_method as auths, 
-                                portal_web.auth_method as authentication,                                
-                                portal_web.logo,
-                                portal_web.bg_img as backgroundImg,
-                                portal_web.copy_right copyright,
-                                portal_web.copy_right_url as copyrightUrl,
-                                portal_web.page_style,
-                                portal_web.countShow,
-                                portal_web.countAuth,
-                                portal_web.description,
-                                adv_adv.name as adv',                                
-            'tablenames' => 'portal_web',
-            'pageindex' => (int) element('page', $data, 1),
-            'pagesize' => (int) element('size', $data, 20),
-            'wheres' => "1=1",
-            'joins' => array(
-                array('adv_adv','portal_web.adv=adv_adv.id','left')                
-            ),
-            'order' => array()
-        ); 
-        /*       
-            if(isset($data['search'])){
-                $parameter['wheres'] = $parameter['wheres'] . " AND portal_web.name LIKE '%".$data['search']."%'";
-            }
-            if(isset($data['adv'])){
-                //广告页面搜索
-            $parameter['wheres'] = $parameter['wheres']." AND adv_adv.id =".$data['adv'];
-            }
-        */
-        $datalist = help_data_page_all($parameter);                
-        $portalBasauth = $this->portalsql->query("select webid,type,url,sessiontime from portal_basauth")->result_array();
-        $ret = array();
-        foreach($datalist['data'] as $row){
-            $row['url'] = 'http://';
-            $row['sessiontime'] = 0;            
-            foreach($portalBasauth as $nrow){
-                if($row['id'] === $nrow['webid']){
-                    $row['url'] = $nrow['url'];
-                    $row['sessiontime'] = $nrow['sessiontime'];
-                    break;//取一个就好。默认一个模版url都一样
-                }
-            }   
-            $ret[] = $row;
-        }    
-        $arr = array(
-            'state'=>array('code'=>2000,'msg'=>'ok'),
-            'data'=>array(
-                //'page'=>$datalist['page'],
-                'list' => $ret
+    function get_list($data) {            
+        //send java   
+        $socketarr = array(
+            'action'=>'get',
+            'resName'=>'web_template',
+            'data'=> array(
+                $data
             )
-        );
-        return json_encode($arr);
+        );        
+        $ret = $this->getListSocket($socketarr);        
+        if(count($ret) > 0){ 
+            $ret_data = array();
+            $ary = array();                      
+            foreach($ret as $row){
+                $ary['id'] = $row['id'];
+                $ary['name'] = $row['name'];
+                $ary['title'] = $row['title'];
+                $ary['subTitle'] = $row['subTitle'];
+                $ary['authentication'] = $row['authMethod'];
+                $ary['auths'] = $row['authMethod'];
+                $ary['logo'] = $row['logo'];
+                $ary['backgroundImg'] = $row['bgImg'];
+                $ary['copyright'] = $row['copyRight'];
+                $ary['copyrightUrl'] = $row['copyRightUrl'];
+                $ary['pageStyle'] = $row['pageStyle'];
+                $ary['description'] = $row['description'];
+                $ary['url'] = $row['url'];
+                $ary['sessiontime'] = $row['sessiontime'];
+                $ret_data[] = $ary;
+            } 
+            $arr = array(
+                'state' => array('code'=>2000, 'msg'=>'ok'),
+                'data' => array(
+                    'list' => $ret_data
+                )
+            ); 
+            return json_encode($arr);                      
+        }
+
+        return json_encode(json_no('error'));
     }
     function get_web_page(){
         $result = null;
@@ -256,5 +239,14 @@ class AccessWeb_Model extends CI_Model {
             return TRUE;
         }
         return FALSE;
+    }
+    private function getListSocket($data){
+        $result = null;
+        $portal_socket = new PortalSocket();
+        $result = $portal_socket->portal_socket(json_encode($data));          
+        if($result['state']['code'] === 2000){
+            return $result['data']['list'];
+        }
+        return json_no('java server error !');
     }
 }
