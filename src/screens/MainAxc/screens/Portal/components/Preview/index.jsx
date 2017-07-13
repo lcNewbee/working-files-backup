@@ -39,7 +39,7 @@ function LoginBody(props) {
                   onClick={onLoginOk}
                 >
                   <Icon name={authToIcon['0']} />
-                  <span>{__('One-click Sign In')}</span>
+                  <span>{__('Click-through Sign In')}</span>
                 </button>
               ) : null
             }
@@ -82,7 +82,7 @@ function LoginBody(props) {
                   }}
                 >
                   <Icon name={authToIcon['1']} />
-                  <span className="b28n">{__('Sign in with Account')}</span>
+                  <span className="b28n">{__('Username/Password Sign In')}</span>
                 </button>
               ) : null
             }
