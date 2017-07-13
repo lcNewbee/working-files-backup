@@ -306,7 +306,7 @@ export default class PortalPreview extends React.Component {
                 </ul>
                 <button id="goURL" type="button" className="a-btn a-btn--lg a-btn--primary a-btn--block">
                   <img src={reloginIcon} className="a-icon" alt="icon" />
-                  <span>{__('Continue')}</span>
+                  <span className="b28n">{__('Continue')}</span>
                 </button>
                 <button
                   id="LoginOut"
@@ -325,7 +325,7 @@ export default class PortalPreview extends React.Component {
             type === 'out' ? (
               <div className="portal-content-body" id="authHome">
                 <img src={wifiIcon} className="header-img" alt="wifi" />
-                <p className="header-description b28n">{__('Logout Succeeded')}</p>
+                <p className="header-description b28n">{__('Logout Succeed!')}</p>
                 <button
                   id="goauth"
                   type="button"

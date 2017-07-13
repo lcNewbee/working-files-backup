@@ -415,6 +415,7 @@ const listOptions = fromJS([
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
+  createModal: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -426,6 +427,7 @@ export default class View extends React.Component {
       // 'onBackup',
       'onBeforeSync',
       'initListOptions',
+      'onAfterSync',
     ]);
     this.actionable = getActionable(props);
     this.state = {
@@ -461,6 +463,17 @@ export default class View extends React.Component {
         // 除编辑操作外，其它操作变动都将图片URL置为空
         this.setState({ logoImgUrl: '', backgroundImgUrl: '' });
       }
+    }
+  }
+
+  onAfterSync(json) {
+    const code = json.state.code;
+    const msg = json.state.msg;
+    if (code === 4000) {
+      this.props.createModal({
+        role: 'alert',
+        text: __('Can\'t delete template in use. Check template(s) below: %s', msg),
+      });
     }
   }
 
@@ -633,7 +646,7 @@ export default class View extends React.Component {
         editFormOption={{
           hasFile: true,
         }}
-
+        onAfterSync={this.onAfterSync}
         // searchable
         searchProps={{
           placeholder: `${__('Name')}`,

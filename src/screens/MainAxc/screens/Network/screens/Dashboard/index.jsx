@@ -261,7 +261,7 @@ export default class NetWorkDashBoard extends React.Component {
 
           </div>
 
-          <h2 className="element t-overview__header ntw-dsb-section-title">{__('Interface')}</h2>
+          <h2 className="element t-overview__header ntw-dsb-section-title">{__('Ports')}</h2>
           <div className="t-overview__section">
             <div className="row">
               <div

@@ -762,5 +762,12 @@
   "DHCP Usage": "DHCP使用情况",
   "NAT Strategy": "NAT策略数",
   "Throughput ": "流量统计",
-  "Graphic Type": "图表类型"
+  "Graphic Type": "图表类型",
+  "Upload Rate": "上传速率",
+  "Download Rate": "下载速率",
+
+  "1 Hour": "1 小时",
+  "10 Hours": "10 小时",
+  "24 Hours": "24 小时",
+  "48 Hours": "48 小时"
 }
