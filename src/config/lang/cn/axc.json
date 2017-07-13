@@ -29,6 +29,8 @@
 
   "Radio ": "射频管理",
   "SSID Management": "SSID 管理",
+  "WLANs": "WLAN管理",
+  "Radio Settings": "射频设置",
   "Advance Settings": "高级配置",
   "Radio Basic": "射频基本配置",
   "Radio Advance": "射频高级配置",
@@ -711,7 +713,7 @@
   "This ap will fully support the counter function, stop the normal business, you sure to open?": "此ap将全力支持反制功能，停止正常业务，你确定要开启？",
   "Start Date": "开始日期",
   "Observe Radius": "观察半径",
-  "Orbit Trace": "行动轨迹图",
+  "Client Path Analysis": "行动轨迹图",
   "User Times": "用户次数",
   "Total User": "用户总人数",
   "Total Times": "用户总人次",
