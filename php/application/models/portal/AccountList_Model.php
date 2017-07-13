@@ -1,39 +1,43 @@
 <?php
 class AccountList_Model extends CI_Model {
-	public function __construct() {
-		parent::__construct();
-		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'db_operation'));
+    public function __construct() {
+        parent::__construct();
+        $this->portalsql = $this->load->database('mysqlportal', TRUE);
+        $this->load->helper(array('array', 'db_operation'));
         $this->load->library('PortalSocket');
-	}
-	function get_account_list($data) {
+    }
+    function get_account_list($data) {
         $parameter = array(
-			'db' => $this->portalsql,
-			'columns' => '*',
-			'tablenames' => 'portal_account',
-			'pageindex' => (int) element('page', $data, 1),
-			'pagesize' => (int) element('size', $data, 20000),
-			'wheres' => "1=1",
-			'joins' => array(),
-			'order' => array()
-		);
-      if(isset($data['search'])){
-          $parameter['wheres'] = $parameter['wheres'] . " AND loginName LIKE '%".$data['search']."%'";
-      }
-      if(isset($data['state']) && $data['state'] != '-100'){
-          $parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
-      }
-      $datalist = help_data_page_all($parameter);
-		$arr = array(
-			'state'=>array('code'=>2000,'msg'=>'ok'),
-			'data'=>array(
-				'page'=>$datalist['page'],
-				'list' => $datalist['data']
-			)
-		);
-		return json_encode($arr);
-	}
+            'db' => $this->portalsql,
+            'columns' => '*',
+            'tablenames' => 'portal_account',
+            'pageindex' => (int) element('page', $data, 1),
+            'pagesize' => (int) element('size', $data, 20000),
+            'wheres' => "1=1",
+            'joins' => array(),
+            'order' => array()
+        );
+        if(isset($data['search'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND loginName LIKE '%".$data['search']."%'";
+        }
+        if(isset($data['state']) && $data['state'] != '-100'){
+            $parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
+        }
+        $datalist = help_data_page_all($parameter);
+        $arr = array(
+            'state'=>array('code'=>2000,'msg'=>'ok'),
+            'data'=>array(
+                'page'=>$datalist['page'],
+                'list' => $datalist['data']
+            )
+        );
+        return json_encode($arr);
+    }
     function add_account($data) {
+        //检测重复
+        if( is_columns($this->portalsql, 'id', 'portal_account', "where loginName='{$data['loginName']}'") ){
+            return json_encode(json_no('The user already exists !'));
+        }
         $result = null;
         $insertary = $this->getDbParam($data);
         $result = $this->portalsql->insert('portal_account', $insertary);
@@ -46,18 +50,23 @@ class AccountList_Model extends CI_Model {
         if($this->notice_socket($this->get_socket_pramse('delete',$selectedList))) {
             foreach($selectedList as $row){
                 $this->portalsql->where('id', $row['id']);
-			    $result = $this->portalsql->delete('portal_account');
+                $result = $this->portalsql->delete('portal_account');
                 if($result){
                     //del portal_accountmacs
                     $this->portalsql->where('accountId', $row['id']);
-			        $this->portalsql->delete('portal_accountmacs');
+                    $this->portalsql->delete('portal_accountmacs');
                 }
-		    }
+            }
         }
-		$result ? $result = json_ok() : $result = json_no('delete fail');
-		return json_encode($result);
+        $result ? $result = json_ok() : $result = json_no('delete fail');
+        return json_encode($result);
     }
     function edit_account($data) {
+        //检测重复
+        if( is_columns($this->portalsql, 'id', 'portal_account', 
+        "where loginName='{$data['loginName']}' and id !={$data['id']}") ){
+            return json_encode(json_no('The user already exists !'));
+        }
         $result = null;
         $updata = $this->getDbParam($data);
         $updata['id'] = element('id',$data,0);
