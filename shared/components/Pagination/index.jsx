@@ -131,10 +131,13 @@ class Pagination extends React.Component {
     let key;
     let i;
 
-    const startPage = (currPage <= 5) || (totalPage <= 6) ? 1 : (currPage - 2);
+    let startPage = (currPage <= 5) || (totalPage <= 6) ? 1 : (currPage - 2);
     let endPage = startPage + 4;
 
-    endPage = endPage > totalPage ? totalPage : endPage;
+    if (endPage > totalPage) {
+      startPage = totalPage - 4;
+      endPage = totalPage;
+    }
 
     if (startPage > 1) {
       list.push(<li key="page.1" ><a onClick={this.onGoPage}>1</a></li>);
