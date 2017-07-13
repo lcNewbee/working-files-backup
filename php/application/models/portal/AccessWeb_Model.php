@@ -135,36 +135,54 @@ class AccessWeb_Model extends CI_Model {
     function Delete($data) {        
         $result = FALSE;
         $dellist = $data['selectedList'];
+        $failure_name = '';//记录删除失败的模版名称
+        $del_switch = true;//默认可以删除
         foreach($dellist as $row) {
-            //send java  
-            $socketarr = array(
-                'action' => 'delete',
-                'resName' => 'web_template',
-                'data' => array(
-                    array(
-                        'id' => element('id', $row),
-                        'name' => element('name', $row, ''),
-                        'title' => element('title', $row, ''),
-                        'subTitle' => element('subTitle', $row, ''),            
-                        'authMethod' => element('auths', $row, ''),
-                        'logo' => element('logo', $row, ''),
-                        'bgImg' => element('backgroundImg', $row, ''),
-                        'copyRight' => element('copyright', $row, ''),
-                        'copyRightUrl' => element('copyrightUrl', $row, ''),
-                        'description' => element('description', $row, ''),
-                        'url' => element('url', $row, 'http://'),
-                        'sessiontime' => element('sessiontime', $row, 0)
-                    )
-                )
-            );
-            if( $this->noticeSocket($socketarr) ){
-                //delete file
-                unlink('/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $row['logo']);
-                unlink('/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $row['backgroundImg']);
-                return json_encode(json_ok());
-            }            
+            if($this->isSsidEmploy($row['id'])){
+                $del_switch = false;
+                $failure_name = $failure_name .''.$row['name'].'/';
+                continue;
+            }                        
         }
-        return json_encode(json_no('delete error')); 
+        if($del_switch){
+            foreach($dellist as $drow){
+                //send java  
+                $socketarr = array(
+                    'action' => 'delete',
+                    'resName' => 'web_template',
+                    'data' => array(
+                        array(
+                            'id' => element('id', $drow),
+                            'name' => element('name', $drow, ''),
+                            'title' => element('title', $drow, ''),
+                            'subTitle' => element('subTitle', $drow, ''),            
+                            'authMethod' => element('auths', $drow, ''),
+                            'logo' => element('logo', $drow, ''),
+                            'bgImg' => element('backgroundImg', $drow, ''),
+                            'copyRight' => element('copyright', $drow, ''),
+                            'copyRightUrl' => element('copyrightUrl', $drow, ''),
+                            'description' => element('description', $drow, ''),
+                            'url' => element('url', $drow, 'http://'),
+                            'sessiontime' => element('sessiontime', $drow, 0)
+                        )
+                    )
+                );
+                if( $this->noticeSocket($socketarr) ){
+                    //delete file
+                    $logo_path = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $drow['logo'];
+                    $bgm_path = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $drow['backgroundImg'];
+                    if(is_file($logo_path)){
+                        unlink($logo_path);
+                    }
+                    if(is_file($bgm_path)){
+                        unlink($bgm_path);
+                    }
+                }
+            }
+            return json_encode(json_ok()); 
+        }     
+           
+        return json_encode(json_no(rtrim($failure_name,"/"))); 
     }
     function Edit($data){
         date_default_timezone_set("PRC");  
@@ -229,8 +247,15 @@ class AccessWeb_Model extends CI_Model {
         }
         return json_encode(json_no('edit error !'));
     }
-    
-     //socket portal
+    //检测ssid是否使用中
+    private function isSsidEmploy($id){
+        $query = $this->portalsql->query('select id from portal_ssid where web=' . $id)->result_array();
+        if(count($query) > 0){
+            return true;
+        }
+        return false;
+    }
+    //socket portal
     private function noticeSocket($data){
         $result = null;
         $portal_socket = new PortalSocket();
