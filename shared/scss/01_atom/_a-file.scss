@@ -15,6 +15,21 @@
     padding-left: 25px;
   }
 
+  .a-input-file__clear {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    margin-top: -8px;
+    z-index: 4;
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+
+    &:hover {
+      color: #666;
+    }
+  }
+
   > input[type='file'],
   .a-input-file__file {
     position: absolute;

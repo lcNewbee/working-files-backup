@@ -92,7 +92,19 @@ class File extends PureComponent {
     });
   }
 
-  resetInput() {
+  resetInput(e) {
+    if (this.fileElem) {
+      this.fileElem.value = '';
+      if (!/safari/i.test(navigator.userAgent)) {
+        this.fileElem.type = '';
+        this.fileElem.type = 'file';
+      }
+      e.target = this.fileElem;
+      if (this.props.onChange) {
+        this.props.onChange(e, '');
+      }
+    }
+
     this.setState({
       showText: '',
     });
@@ -131,9 +143,11 @@ class File extends PureComponent {
           className="a-input-file_file"
           ref={
             (fileElem) => {
+              if (fileElem && fileElem.myRef) {
+                this.fileElem = fileElem.myRef;
+              }
               if (onRef) {
                 onRef(fileElem);
-
                 if (fileElem && fileElem.myRef) {
                   this.setState({
                     showText: transformShowText(fileElem.myRef.value),
@@ -153,6 +167,11 @@ class File extends PureComponent {
             }
           }
         />
+        {
+          value ? (
+            <Icon className="a-input-file__clear" name="times-circle-o" onClick={this.resetInput} />
+          ) : null
+        }
       </div>
     );
   }

@@ -202,7 +202,6 @@ class FormInput extends PureComponent {
     }
 
     data.value = rawValue !== undefined ? rawValue : val;
-
     if (this.props.dataType === 'number' && data.value !== '') {
       data.value = Number(data.value, 10);
     }
