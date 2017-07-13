@@ -33,39 +33,6 @@ function onBeforeSync($$actionQuery, $$curListItem) {
   return '';
 }
 
-function previewFile(file) {
-  const retPromise = new Promise((resolve) => {
-    let retUrl = '';
-    let reader = null;
-
-    // 如果支持 createObjectURL
-    if (URL && URL.createObjectURL) {
-      const img = new Image();
-      retUrl = URL.createObjectURL(file);
-      img.src = retUrl;
-
-      img.onload = () => {
-        resolve(retUrl);
-        // URL.revokeObjectURL(retUrl);
-      };
-
-    // 如果支持 FileReader
-    } else if (window.FileReader) {
-      reader = new FileReader();
-      reader.onload = (e) => {
-        retUrl = e.target.result;
-        resolve(retUrl);
-      };
-      reader.readAsDataURL(file);
-
-    // 其他放回 Flase
-    } else {
-      resolve(retUrl);
-    }
-  });
-
-  return retPromise;
-}
 /* eslint-disable quote-props */
 const idToPageMap = {
   '1': '',
@@ -611,7 +578,7 @@ export default class View extends React.Component {
         required: true,
         onChange: (data, formData, e) => {
           const file = e.target.files[0];
-          previewFile(file).then((imgSrc) => {
+          utils.dom.previewFile(file).then((imgSrc) => {
             this.setState({ backgroundImgUrl: imgSrc });
           });
           return data;
@@ -628,7 +595,7 @@ export default class View extends React.Component {
         required: true,
         onChange: (data, formData, e) => {
           const file = e.target.files[0];
-          previewFile(file).then((imgSrc) => {
+          utils.dom.previewFile(file).then((imgSrc) => {
             this.setState({ logoImgUrl: imgSrc });
           });
           return data;

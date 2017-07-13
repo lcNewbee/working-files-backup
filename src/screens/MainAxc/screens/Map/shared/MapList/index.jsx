@@ -10,40 +10,6 @@ import {
 // @@product(axcMonitor):
 let isMoniterAc = false;
 
-function previewFile(file) {
-  const retPromise = new Promise((resolve) => {
-    let retUrl = '';
-    let reader = null;
-
-    // 如果支持 createObjectURL
-    if (URL && URL.createObjectURL) {
-      const img = new Image();
-      retUrl = URL.createObjectURL(file);
-      img.src = retUrl;
-
-      img.onload = () => {
-        resolve(retUrl);
-        // URL.revokeObjectURL(retUrl);
-      };
-
-    // 如果支持 FileReader
-    } else if (window.FileReader) {
-      reader = new FileReader();
-      reader.onload = (e) => {
-        retUrl = e.target.result;
-        resolve(retUrl);
-      };
-      reader.readAsDataURL(file);
-
-    // 其他放回 Flase
-    } else {
-      resolve(retUrl);
-    }
-  });
-
-  return retPromise;
-}
-
 // @@product(axcMonitor):
 if (window.guiConfig.versionCode >= 30900 && window.guiConfig.versionCode < 30949) {
   isMoniterAc = true;
@@ -433,7 +399,7 @@ export default class MapList extends React.PureComponent {
                 this.setState({
                   mapImg: data.value,
                 });
-                previewFile(selectFile).then(
+                utils.dom.previewFile(selectFile).then(
                   (url) => {
                     if (url) {
                       this.setState({
