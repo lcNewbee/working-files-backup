@@ -30,14 +30,24 @@ function onBeforeSync($$actionQuery, $$curListItem) {
   const selectedLoginType = $$curListItem.get('auths');
   if (!selectedLoginType) return __('Please select at least one Login Type!');
 
-  const logo = $$curListItem.get('logo');
-  const backgroundImg = $$curListItem.get('backgroundImg');
-  const logoType = logo.toLowerCase().split('.').slice(-1)[0];
-  const backgroundImgType = backgroundImg.toLowerCase().split('.').slice(-1)[0];
   const supportedType = fromJS(['jpg', 'png', 'gif', 'jpeg']);
-  if (!supportedType.includes(logoType) || !supportedType.includes(backgroundImgType)) {
-    return __('Invalid image type! Only jpg/png/gif/jpeg are supported.');
+
+  const logo = $$curListItem.get('logo');
+  if (logo) {
+    const logoType = logo.toLowerCase().split('.').slice(-1)[0];
+    if (!supportedType.includes(logoType)) {
+      return __('Invalid image type! Only jpg/png/gif/jpeg are supported.');
+    }
   }
+
+  const backgroundImg = $$curListItem.get('backgroundImg');
+  if (backgroundImg) {
+    const backgroundImgType = backgroundImg.toLowerCase().split('.').slice(-1)[0];
+    if (!supportedType.includes(backgroundImgType)) {
+      return __('Invalid image type! Only jpg/png/gif/jpeg are supported.');
+    }
+  }
+
   return '';
 }
 

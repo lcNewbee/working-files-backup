@@ -464,7 +464,13 @@ class AppScreenList extends React.PureComponent {
           this.props.fetchScreenData({
             url: option.formUrl,
           });
-          this.props.closeListItemModal();
+
+          if (json && json.state) {
+            if (json.state.code <= 6000) {
+              this.props.closeListItemModal();
+            }
+          }
+
           this.props.onAfterSync(json);
         });
     // 无文件提交
