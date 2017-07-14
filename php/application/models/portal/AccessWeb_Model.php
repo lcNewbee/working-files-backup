@@ -9,42 +9,48 @@ class AccessWeb_Model extends CI_Model {
     function get_list($data) {            
         //send java   
         $socketarr = array(
-            'action'=>'get',
-            'resName'=>'web_template',
-            'data'=> array(
-                $data
+            'action' => 'get', 
+            'resName' => 'web_template', 
+            'data' => array(
+                'page' => array(
+                    'currPage' => element('page', $data, 1),
+                    'size' => element('size', $data, 20)
+                ),
+                'list' => array()
             )
-        );        
-        $ret = $this->getListSocket($socketarr);        
-        if(count($ret) > 0){ 
-            $ret_data = array();
-            $ary = array();                      
-            foreach($ret as $row){
-                $ary['id'] = $row['id'];
-                $ary['name'] = $row['name'];
-                $ary['title'] = $row['title'];
-                $ary['subTitle'] = $row['subTitle'];
-                $ary['authentication'] = $row['authMethod'];
-                $ary['auths'] = $row['authMethod'];
-                $ary['logo'] = $row['logo'];
-                $ary['backgroundImg'] = $row['bgImg'];
-                $ary['copyright'] = $row['copyRight'];
-                $ary['copyrightUrl'] = $row['copyRightUrl'];
-                $ary['pageStyle'] = $row['pageStyle'];
-                $ary['description'] = $row['description'];
-                $ary['url'] = $row['url'];
-                $ary['sessiontime'] = $row['sessiontime'];
-                $ret_data[] = $ary;
-            } 
-            $arr = array(
-                'state' => array('code'=>2000, 'msg'=>'ok'),
-                'data' => array(
-                    'list' => $ret_data
-                )
-            ); 
-            return json_encode($arr);                      
-        }
-
+        );
+        $portal_socket = new PortalSocket();
+        $ret_ary = $portal_socket->portal_socket(json_encode($socketarr));
+        if($ret_ary['state']['code'] === 2000) {
+            if(count($ret_ary['data']['list']) > 0){ 
+                $ret_data = array();
+                $ary = array();                      
+                foreach($ret_ary['data']['list'] as $row){
+                    $ary['id'] = $row['id'];
+                    $ary['name'] = $row['name'];
+                    $ary['title'] = $row['title'];
+                    $ary['subTitle'] = $row['subTitle'];
+                    $ary['authentication'] = $row['authMethod'];
+                    $ary['auths'] = $row['authMethod'];
+                    $ary['logo'] = $row['logo'];
+                    $ary['backgroundImg'] = $row['bgImg'];
+                    $ary['copyright'] = $row['copyRight'];
+                    $ary['copyrightUrl'] = $row['copyRightUrl'];
+                    $ary['pageStyle'] = $row['pageStyle'];
+                    $ary['description'] = $row['description'];
+                    $ary['url'] = $row['url'];
+                    $ary['sessiontime'] = $row['sessiontime'];
+                    $ret_data[] = $ary;
+                } 
+                $arr = array(
+                    'state' => array('code'=>2000, 'msg'=>'ok'),
+                    'data' => array(
+                        'list' => $ret_data
+                    )
+                ); 
+                return json_encode($arr);                      
+            }
+        }    
         return json_encode(json_no('error'));
     }
     function get_web_page(){
@@ -62,7 +68,7 @@ class AccessWeb_Model extends CI_Model {
         $config['upload_path'] = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/dist/css/img';
         $config['overwrite'] = true;
         $config['max_size'] = 0;
-        $config['allowed_types'] = 'gif|png|jpg|jpeg';
+        $config['allowed_types'] = 'gif|jpg|png';
         $config['file_name'] = $file_name;
         //$this->load->library('upload', $config);        
         //上传多张时采用以下写法
@@ -90,8 +96,7 @@ class AccessWeb_Model extends CI_Model {
         return $result;
     }
     function Add($data){  
-        date_default_timezone_set("PRC");  
-        $result = json_no('add error !');
+        date_default_timezone_set("PRC");          
         $logo_name = date('YmdHis') . rand(10000000,99999999) . '.jpg';
         $bg_name = date('YmdHis') . rand(10000000,99999999) . '.jpg';    
         $logo_img = '';
@@ -106,7 +111,7 @@ class AccessWeb_Model extends CI_Model {
             $bg_img = 'dist/css/img/' . $bg_name;
         }        
         //2.操作数据库
-        $db_ary = array(
+        $socketarr = array(
             'name' => element('name', $data, ''),
             'title' => element('title', $data, ''),
             'subTitle' => element('subTitle', $data, ''),            
@@ -120,17 +125,10 @@ class AccessWeb_Model extends CI_Model {
             'sessiontime' => element('sessiontime', $data, 0)
         );
         //send java
-        $socketarr = array(
-            'action'=>'add',
-            'resName'=>'web_template',
-            'data'=> array(
-                $db_ary
-            )
-        );
-        if( $this->noticeSocket($socketarr) ){
+        if ($this->noticeSocket($this->getSocketPramse('add', array($socketarr)))) {
             return json_encode(json_ok());
-        }    
-        return json_encode($result);               
+        }           
+        return json_encode(json_no('add error !'));               
     }
     function Delete($data) {        
         $result = FALSE;
@@ -148,26 +146,20 @@ class AccessWeb_Model extends CI_Model {
             foreach($dellist as $drow){
                 //send java  
                 $socketarr = array(
-                    'action' => 'delete',
-                    'resName' => 'web_template',
-                    'data' => array(
-                        array(
-                            'id' => element('id', $drow),
-                            'name' => element('name', $drow, ''),
-                            'title' => element('title', $drow, ''),
-                            'subTitle' => element('subTitle', $drow, ''),            
-                            'authMethod' => element('auths', $drow, ''),
-                            'logo' => element('logo', $drow, ''),
-                            'bgImg' => element('backgroundImg', $drow, ''),
-                            'copyRight' => element('copyright', $drow, ''),
-                            'copyRightUrl' => element('copyrightUrl', $drow, ''),
-                            'description' => element('description', $drow, ''),
-                            'url' => element('url', $drow, 'http://'),
-                            'sessiontime' => element('sessiontime', $drow, 0)
-                        )
-                    )
+                    'id' => element('id', $drow),
+                    'name' => element('name', $drow, ''),
+                    'title' => element('title', $drow, ''),
+                    'subTitle' => element('subTitle', $drow, ''),            
+                    'authMethod' => element('auths', $drow, ''),
+                    'logo' => element('logo', $drow, ''),
+                    'bgImg' => element('backgroundImg', $drow, ''),
+                    'copyRight' => element('copyright', $drow, ''),
+                    'copyRightUrl' => element('copyrightUrl', $drow, ''),
+                    'description' => element('description', $drow, ''),
+                    'url' => element('url', $drow, 'http://'),
+                    'sessiontime' => element('sessiontime', $drow, 0)
                 );
-                if( $this->noticeSocket($socketarr) ){
+                if ($this->noticeSocket($this->getSocketPramse('delete', array($socketarr)))) {
                     //delete file
                     $logo_path = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $drow['logo'];
                     $bgm_path = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $drow['backgroundImg'];
@@ -188,7 +180,7 @@ class AccessWeb_Model extends CI_Model {
         date_default_timezone_set("PRC");  
         $logo_name = date('YmdHis') . rand(10000000,99999999) . '.jpg';
         $bg_name = date('YmdHis') . rand(10000000,99999999) . '.jpg'; 
-        $db_ary = array(
+        $socketarr = array(
             'id' => element('id', $data),
             'name' => element('name', $data, ''),
             'title' => element('title', $data, ''),
@@ -216,7 +208,7 @@ class AccessWeb_Model extends CI_Model {
             }
         }else{
             //否则将需要修改的logo名字 改回原数据库存储的值
-            $db_ary['logo'] = $query[0]['logo'];
+            $socketarr['logo'] = $query[0]['logo'];
         }
         //bg
         $upload_data2 = $this->do_upload_img($bg_name, 'backgroundImg');        
@@ -230,21 +222,14 @@ class AccessWeb_Model extends CI_Model {
             }
         }else{
             if(count($query) > 0){
-                $db_ary['bgImg'] = $query[0]['bg_img'];                
+                $socketarr['bgImg'] = $query[0]['bg_img'];                
             }
         }
         //2.操作数据库        
         //send java
-        $socketarr = array(
-            'action' => 'edit',
-            'resName' => 'web_template',
-            'data' => array(
-                $db_ary
-            )
-        );
-        if( $this->noticeSocket($socketarr) ){
+        if ($this->noticeSocket($this->getSocketPramse('edit', array($socketarr)))) {
             return json_encode(json_ok());
-        }
+        } 
         return json_encode(json_no('edit error !'));
     }
     //检测ssid是否使用中
@@ -256,6 +241,8 @@ class AccessWeb_Model extends CI_Model {
         return false;
     }
     //socket portal
+    private function getDbParams($data){
+    }
     private function noticeSocket($data){
         $result = null;
         $portal_socket = new PortalSocket();
@@ -265,13 +252,15 @@ class AccessWeb_Model extends CI_Model {
         }
         return FALSE;
     }
-    private function getListSocket($data){
-        $result = null;
-        $portal_socket = new PortalSocket();
-        $result = $portal_socket->portal_socket(json_encode($data));          
-        if($result['state']['code'] === 2000){
-            return $result['data']['list'];
-        }
-        return json_no('java server error !');
+    private function getSocketPramse($type, $data) {
+         $socketarr = array(
+            'action' => $type,
+            'resName' => 'web_template',
+            'data' => array(
+                'page' => array('pageIndex' => 1,'pageSize' => 20),
+                'list' => $data
+            )
+        );
+        return $socketarr;
     }
 }

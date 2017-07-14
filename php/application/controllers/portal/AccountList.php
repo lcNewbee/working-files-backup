@@ -19,17 +19,17 @@ class AccountList extends CI_Controller {
 		}
 	}
 	function fetch() {
-		return $this->AccountList_Model->get_account_list($_GET);
+		return $this->AccountList_Model->get_list($_GET);
 	}
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
 		switch($actionType) {
-            case 'add' : $result = $this->AccountList_Model->add_account($data);
+            case 'add' : $result = $this->AccountList_Model->add($data);
                 break;
-            case 'delete' : $result = $this->AccountList_Model->del_account($data);
+            case 'delete' : $result = $this->AccountList_Model->delete($data);
                 break;
-            case 'edit' : $result = $this->AccountList_Model->edit_account($data);
+            case 'edit' : $result = $this->AccountList_Model->edit($data);
                 break;
 			case 'reset' : $result = $this->AccountList_Model->reset($data);
 				break;

@@ -77,12 +77,14 @@ class WirelessSsid_Model extends CI_Model {
                          $row['accessControl'] = 'portal';
                     }
                     $ssid = addslashes($row['ssid']);//特殊字符转义
-                    $sql = "SELECT * FROM `portal_ssid` WHERE BINARY `ssid`='{$ssid}' AND `apmac`=''";
-                    //$sql = "SELECT * FROM `portal_ssid` WHERE BINARY `ssid`='{$row['ssid']}' AND `apmac`=''";                                        
+                    //$sql = "SELECT * FROM `portal_ssid` LEFT JOIN `portal_web` WHERE BINARY `ssid`='{$ssid}' AND `apmac`=''";
+                    $sql  =  "SELECT portal_ssid.web,portal_web.name FROM `portal_ssid`"; 
+                    $sql .= " LEFT JOIN `portal_web` on portal_ssid.web=portal_web.id";
+                    $sql .= " WHERE BINARY `ssid`='{$ssid}' AND `apmac`=''";
                     $query = $this->portalsql->query($sql)->result_array();
                     if(count($query) > 0){
                         $row['accessControl'] = 'portal';
-                        $row['auth'] = $query[0]['web'];
+                        $row['auth'] = $query[0]['name'];
                         $row['portalTemplate'] = 'local';
                     }
                     $list[] = $row;
