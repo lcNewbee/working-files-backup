@@ -36,6 +36,9 @@ class Button extends PureComponent {
       clicked: false,
     };
   }
+  componentWillUnmount() {
+    clearTimeout(this.clickTimeout);
+  }
 
   onClick(e) {
     // loading 状态不响应点击事件
@@ -44,7 +47,7 @@ class Button extends PureComponent {
       this.setState({
         clicked: true,
       });
-      setTimeout(() => {
+      this.clickTimeout = setTimeout(() => {
         this.setState({
           clicked: false,
         });

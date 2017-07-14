@@ -324,21 +324,18 @@ export default class LiveMap extends React.PureComponent {
         this.props.updateScreenCustomProps({
           loadMapStatus: 'loading',
         });
-
-        // 只需要定义移除 初始化函数
-        if (!window.initializeBaidu) {
-           window.initializeBaidu = () => {
-            this.renderBaiduMap();
-            this.props.updateScreenCustomProps({
-              loadMapStatus: 'ok',
-            });
-          };
-        }
-
+        window.initializeBaidu = null;
+        window.initializeBaidu = () => {
+          this.renderBaiduMap();
+          this.props.updateScreenCustomProps({
+            loadMapStatus: 'ok',
+          });
+        };
         utils.loadScript(
           'https://api.map.baidu.com/api?v=2.0&ak=po9QoGKxy9nyplgmTHh7SrEPGl48lzDE&callback=initializeBaidu',
           {
             timeout: 8000,
+            id: 'baidu',
           },
         )
         .then(
@@ -608,28 +605,41 @@ export default class LiveMap extends React.PureComponent {
     const store = this.props.store;
     const list = getCurAppScreenState(store, 'list');
     const $$settings = getCurAppScreenState(store, 'settings');
+    const geolocation = new BMap.Geolocation();
     const markers = [];
     let center = {
       lat: 39.915,
       lng: 116.404,
     };
+    let curMap = null;
 
     if (!BMap.Map) {
       return;
-    }
-
-    if (list.size > 0) {
-      center = {
-        lat: list.getIn([0, 'lat']),
-        lng: list.getIn([0, 'lng']),
-      };
     }
 
     // Create a map object and specify the DOM element for display.
     if (!this.map) {
       this.map = new BMap.Map(this.mapContent);
     }
-    this.map.centerAndZoom(new BMap.Point(center.lng, center.lat), 13);
+    if (list.size > 0) {
+      center = {
+        lat: list.getIn([0, 'lat']),
+        lng: list.getIn([0, 'lng']),
+      };
+      this.map.centerAndZoom(new BMap.Point(center.lng, center.lat), 13);
+    } else {
+      curMap = this.map;
+
+      geolocation.getCurrentPosition(function(r) {
+        if (this.getStatus() === BMAP_STATUS_SUCCESS) {
+          curMap.centerAndZoom(new BMap.Point(r.point.lng, r.point.lat), 13);
+        } else {
+          curMap.centerAndZoom(new BMap.Point(center.lng, center.lat), 13);
+        }
+      });
+    }
+
+
     this.map.addControl(new BMap.NavigationControl());
     this.map.addControl(new BMap.ScaleControl());
     this.map.addControl(new BMap.GeolocationControl());
