@@ -143,6 +143,7 @@ export default class NetworkInterface extends React.Component {
         editFormId="port"
         listKey="allKeys"
         maxListSize="24"
+        paginationType="none"
         deleteable={
           ($$item, index) => (index !== 0)
         }
@@ -153,7 +154,6 @@ export default class NetworkInterface extends React.Component {
           ($$item, index) => (index !== 0)
         }
         actionable
-        noPagination
       />
     );
   }
