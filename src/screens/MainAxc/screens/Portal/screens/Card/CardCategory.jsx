@@ -4,9 +4,17 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-
+import { FormInput } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
+
+function onBeforeSync(actionQuery, list) {
+  const moneyUnit = list.get('moneyUnit');
+  if (!moneyUnit) {
+    return __('Money unit is required!');
+  }
+  return '';
+}
 
 const queryFormOptions = fromJS([
   {
@@ -223,7 +231,11 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'range:[0.01,999999]',
       }),
-      help: __('$'),
+    },
+
+    render(val, data) {
+      const moneyUnit = data.get('moneyUnit') || ' ';
+      return `${moneyUnit} ${val}`;
     },
   }, {
     id: 'description',
@@ -244,12 +256,49 @@ const listOptions = fromJS([
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   changeScreenQuery: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.listOptions = fromJS([]);
+    this.initListOptions = this.initListOptions.bind(this);
+  }
+
   componentWillMount() {
     this.props.changeScreenQuery({ state: '-100' });
+    this.initListOptions(listOptions);
+  }
+
+  initListOptions(options) {
+    const pos = options.findIndex(item => item.get('id') === 'money');
+    this.listOptions = options.setIn([pos, 'formProps', 'help'], () => {
+      const curScreenId = this.props.store.get('curScreenId');
+      const $$curListItem = this.props.store.getIn([curScreenId, 'curListItem']);
+      return (
+        <FormInput
+          type="select"
+          options={[
+            { value: '$', label: `$ (${__('Dollar')})` },
+            { value: 'AED', label: `AED (${__('Dirham')})` },
+            { value: '€', label: `€ (${__('Euro')})` },
+            { value: '₽', label: `₽ (${__('Ruble')})` },
+            { value: 'Rs.', label: `Rs. (${__('Rupee')})` },
+            { value: '£', label: `£ (${__('Pound')})` },
+            { value: '฿', label: `฿ (${__('THB')})` },
+            { value: '￥', label: `￥ (${__('Yuan')})` },
+          ]}
+          required
+          value={$$curListItem.get('moneyUnit')}
+          style={{ width: '100px' }}
+          onChange={(data) => {
+            this.props.updateCurEditListItem(fromJS({ moneyUnit: data.value }));
+          }}
+        />
+      );
+    });
   }
 
   render() {
@@ -257,7 +306,8 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         queryFormOptions={queryFormOptions}
-        listOptions={listOptions}
+        listOptions={this.listOptions}
+        onBeforeSync={onBeforeSync}
         noTitle
         actionable
         selectable

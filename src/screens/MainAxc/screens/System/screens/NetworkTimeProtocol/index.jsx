@@ -91,7 +91,7 @@ const settingsOptions = fromJS([
     fieldset: 'acTime',
     label: __('Manual Time'),
     type: 'text',
-    help: __('Example: 1970-1-1 10:10:10'),
+    help: `${__('Example')}: 1970-1-1 10:10:10`,
     disabled: item => item.get('ac_onoff') === '1',
   },
 ]).groupBy(item => item.get('fieldset'))

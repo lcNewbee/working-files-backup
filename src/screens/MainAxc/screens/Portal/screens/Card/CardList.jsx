@@ -8,7 +8,15 @@ import validator from 'shared/validator';
 
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
-import { FormContainer, Button } from 'shared/components/';
+import { FormContainer, Button, FormInput } from 'shared/components/';
+
+function onBeforeSync(actionQuery, list) {
+  const moneyUnit = list.get('moneyUnit');
+  if (!moneyUnit) {
+    return __('Money unit is required!');
+  }
+  return '';
+}
 
 function getCardCategoryName() {
   return utils.fetch('goform/portal/card/cardcategory', {
@@ -350,8 +358,10 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'range:[0.01,999999]',
       }),
-      help: __('$'),
-
+    },
+    render(val, data) {
+      const moneyUnit = data.get('moneyUnit') || ' ';
+      return `${moneyUnit} ${val}`;
     },
   }, {
     id: 'decsription',
@@ -478,7 +488,7 @@ export default class View extends React.Component {
     );
   }
   render() {
-    const curListOptions = listOptions
+    let curListOptions = listOptions
       .setIn([2, 'options'], this.state.categoryTypeOptions)
       .setIn([-1, 'render'], (val, $$data) => {
         const type = $$data.get('categoryType');
@@ -526,11 +536,39 @@ export default class View extends React.Component {
             icon="mail-forward"
           />);
       });
+    // 添加金额单位选择框
+    const pos = curListOptions.findIndex(item => item.get('id') === 'money');
+    curListOptions = curListOptions.setIn([pos, 'formProps', 'help'], () => {
+      const curScreenId = this.props.store.get('curScreenId');
+      const $$curListItem = this.props.store.getIn([curScreenId, 'curListItem']);
+      return (
+        <FormInput
+          type="select"
+          options={[
+            { value: '$', label: `$ (${__('Dollar')})` },
+            { value: 'AED', label: `AED (${__('Dirham')})` },
+            { value: '€', label: `€ (${__('Euro')})` },
+            { value: '₽', label: `₽ (${__('Ruble')})` },
+            { value: 'Rs.', label: `Rs. (${__('Rupee')})` },
+            { value: '£', label: `£ (${__('Pound')})` },
+            { value: '฿', label: `฿ (${__('THB')})` },
+            { value: '￥', label: `￥ (${__('Yuan')})` },
+          ]}
+          required
+          value={$$curListItem.get('moneyUnit')}
+          style={{ width: '100px' }}
+          onChange={(data) => {
+            this.props.updateCurEditListItem(fromJS({ moneyUnit: data.value }));
+          }}
+        />
+      );
+    });
     return (
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
         queryFormOptions={queryFormOptions}
+        onBeforeSync={onBeforeSync}
         noTitle
         actionable
         selectable

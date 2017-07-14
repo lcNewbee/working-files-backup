@@ -19,7 +19,7 @@ const ERROR_MSG_MAP = {
 
   // AXC： AP组管理 6200 - 6299
   6200: __(''),
-  6201: __('Already exists with the same name SSID'),
+  6201: __('The same SSID name already exists'),
   6202: __('Group with the same name already exists'),
   6203: __('AP with the same name already exists'),
 
@@ -36,7 +36,11 @@ const ERROR_MSG_MAP = {
   6405: __('Item with the same name already exists'),
   6406: __('Item with the same SSID and access point MAC address already exists'),
   6407: __('Add AAA policy fail'),
-
+  6408: __('Account type must be modefied before recharge!'),
+  6409: __('Free account don\'t need recharge!'),
+  6410: __('Only \'Hourly Voucher\' type is available to Time-based account!'),
+  6411: __('\'Hourly Voucher\' and \'Traffic Voucher\' type are NOT available to \'Buy Out\' account!'),
+  6412: __('Only \'Traffic Voucher\' type is available to \'Traffic\' account!'),
   // AC: 设置
   8001: __('Same AP model and firmware version item already exists!'),
   8002: __('The firmware version of this model has existed!'),

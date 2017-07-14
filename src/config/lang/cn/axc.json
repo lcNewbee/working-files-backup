@@ -414,7 +414,7 @@
   "Terminal Release": "终端防粘",
   "Wireless Client Isolation": "终端隔离",
   "Please select ssid":"请选择ssid",
-  "Already exists with the same name SSID": "已存在同名的SSID",
+  "The same SSID name already exists": "已存在同名的SSID",
 
   "AP Work Mode": "接入点工作模式",
   "Scan Type": "扫描类型",
@@ -766,6 +766,8 @@
   "Graphic Type": "图表类型",
   "Upload Rate": "上传速率",
   "Download Rate": "下载速率",
+  "Scanning Band": "扫描频段",
+  "Example": "举例",
 
   "1 Hour": "1 小时",
   "10 Hours": "10 小时",

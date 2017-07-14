@@ -392,5 +392,20 @@
   "Invalid image type! Only jpg/png/gif/jpeg are supported.": "图片格式无效！仅支持jpg/png/gif/jpeg图片格式",
   "Congrats,Login Succeed!": "恭喜，登录成功!",
   "Logout Succeed!": "登出成功！",
-  "Can't delete template in use. Check template(s) below: %s": "不能删除正在使用的模板。请检查以下模板：%s"
+  "Can't delete template in use. Check template(s) below: %s": "不能删除正在使用的模板。请检查以下模板：%s",
+  "Money unit is required!": "请选择金额单位",
+  "Dollar": "美元",
+  "Yuan": "元",
+  "Pound": "英镑",
+  "Euro": "欧元",
+  "Rupee": "卢比",
+  "Ruble": "卢布",
+  "THB": "泰铢",
+  "Dirham": "迪拉姆",
+
+  "Account type must be modefied before recharge!": "充值之前请先修改账户类型!",
+  "Free account don't need recharge!": "免费账户无需充值!",
+  "Only 'Hourly Voucher' type is available to Time-based account!": "计时账户只能使用‘包时卡’充值！",
+  "'Hourly Voucher' and 'Traffic Voucher' type are NOT available to 'Buy Out' account!": "买断账户不能使用‘包时卡’和‘流量卡’充值！",
+  "Only 'Traffic Voucher' type is available to 'Traffic' account!": "流量账户只能使用‘流量卡’充值！"
 }

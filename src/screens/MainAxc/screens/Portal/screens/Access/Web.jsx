@@ -464,7 +464,8 @@ export default class View extends React.Component {
     if (actionType !== nextActionType) {
       if (nextActionType === 'edit') {
         const winLoc = window.location;
-        const origin = `http://${winLoc.host}:8080`;
+        // 注意：开发环境无法预览，实测才有效。
+        const origin = `http://${winLoc.hostname}:8080`;
         this.setState({
           logoImgUrl: `${origin}/${$$nextCurItem.get('logo')}`,
           backgroundImgUrl: `${origin}/${$$nextCurItem.get('backgroundImg')}`,

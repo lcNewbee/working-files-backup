@@ -24,6 +24,7 @@
       "maclimit":"0",
       "maclimitcount":"1",
       "autologin":"0",
+      "moneyUnit": "$",
       "ex1":null,
       "ex2":null,
       "ex3":null,

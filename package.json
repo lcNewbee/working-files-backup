@@ -108,6 +108,7 @@
     "node-sass": "^4.5.3",
     "object.assign": "^4.0.4",
     "prop-types": "^15.5.8",
+    "rc-calendar": "^8.4.6",
     "rc-time-picker": "^2.3.5",
     "react": "^15.3.2",
     "react-addons-shallow-compare": "^15.4.2",

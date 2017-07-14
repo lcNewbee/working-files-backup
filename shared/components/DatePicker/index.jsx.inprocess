@@ -1,0 +1,88 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import Calendar from 'rc-calendar';
+import TimePickerPanel from 'rc-time-picker/lib/Panel';
+import 'rc-time-picker/assets/index.css';
+import DatePicker from 'rc-calendar/lib/Picker';
+import moment from 'moment';
+// import PureComponent from '../Base/PureComponent';
+import './_index.scss';
+
+const propTypes = {
+  showSecond: PropTypes.bool,
+  formatter: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string, PropTypes.object,
+  ]),
+
+  showTime: PropTypes.bool, // 是否显示时间
+  showDateInput: PropTypes.bool, // 是否显示手动输入框
+  disabled: PropTypes.bool, // 是否禁用日期时间输入组件
+
+};
+
+const format = 'YYYY-MM-DD HH:mm:ss';
+function getFormat(time) {
+  return time ? format : 'YYYY-MM-DD';
+}
+
+const defaultProps = {
+  isAsync: false,
+  placeholder: __('Please Select'),
+};
+
+const timePickerElement = <TimePickerPanel defaultValue={moment('00:00:00', 'HH:mm:ss')} />;
+
+class MyTimePicker extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.renderCalendar = this.renderCalendar.bind(this);
+  }
+
+  renderCalendar() {
+    const props = this.props;
+    return (
+      <Calendar
+        style={{ zIndex: 1000 }}
+        dateInputPlaceholder="please input"
+        formatter={getFormat(props.showTime)}
+        disabledTime={props.showTime ? disabledTime : null}
+        timePicker={props.showTime ? timePickerElement : null}
+        defaultValue={props.defaultCalendarValue}
+        showDateInput={props.showDateInput}
+        disabledDate={disabledDate}
+      />
+    );
+  }
+
+
+
+  render() {
+    const { showSecond, value, formatter } = this.props;
+    const ThisComponent = TimePicker;
+    let timeValue = value;
+    // 这句是不是不需要的？
+    let timeFormat = 'HH:mm:ss';
+    if (formatter) {
+      timeFormat = formatter;
+    } else if (!showSecond) {
+      timeFormat = 'HH:mm';
+    }
+
+    if (!moment.isMoment(timeValue)) {
+      timeValue = moment(timeValue, timeFormat);
+    }
+
+    return (
+      <ThisComponent
+        {...this.props}
+        value={timeValue}
+      />
+    );
+  }
+}
+MyTimePicker.propTypes = propTypes;
+MyTimePicker.defaultProps = defaultProps;
+
+export default MyTimePicker;

@@ -94,7 +94,7 @@ const settingsFormOptions = fromJS([
   },
   {
     id: 'scanSpectrum',
-    label: __('Scanning Spectrum'),
+    label: __('Scanning Band'),
     type: 'checkboxs',
     required: true,
     options: [{ label: '5G', value: '5' }, { label: '2.4G', value: '2' }],
