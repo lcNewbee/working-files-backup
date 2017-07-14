@@ -9,11 +9,58 @@ import Row from './Row';
 
 const THEAD_INDEX = -1;
 
+function getPageObject($$list, pageQuery) {
+  const ret = {};
+  const page = {};
+  const starIndex = ((pageQuery.page - 1) * pageQuery.size);
+  let endIndex = pageQuery.page * pageQuery.size;
+  let $$newList = $$list;
+
+  page.total = $$list.size;
+
+  // 总数大于每页显示条数
+  if ($$list.size > pageQuery.size) {
+    if (endIndex > $$list.size) {
+      endIndex = $$list.size;
+    }
+    $$newList = $$list.slice(
+      starIndex,
+      endIndex,
+    );
+
+    page.currPage = pageQuery.page < 1 ? 1 : pageQuery.page;
+    page.totalPage = parseInt($$list.size / pageQuery.size, 10);
+
+    if ($$list.size % pageQuery.size > 0) {
+      page.totalPage += 1;
+    }
+  }
+
+  ret.page = page;
+  ret.$$newList = $$newList;
+
+  return ret;
+}
+
 const propTypes = {
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   list: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   page: PropTypes.object,
-  pageOptions: PropTypes.array,
+  paginationType: PropTypes.oneOf([
+    // 无分页
+    'none',
+
+    // 不对分页对象做处理
+    'default',
+
+    // 自动计算分页对象
+    'auto',
+  ]),
+  pageQuery: PropTypes.shape({
+    size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    page: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }),
+  sizeOptions: PropTypes.array,
   loading: PropTypes.bool,
   className: PropTypes.string,
   onPageChange: PropTypes.func,
@@ -27,7 +74,7 @@ const propTypes = {
 
 const defaultProps = {
   isTh: false,
-  page: null,
+  pageQuery: {},
   list: fromJS([]),
 };
 
@@ -197,19 +244,15 @@ class Table extends PureComponent {
 
   render() {
     const {
-      className, page, loading, selectable, onRowClick,
+      className, page, loading, selectable, onRowClick, paginationType, pageQuery,
     } = this.props;
-    const myList = this.state.myList;
-    const myBodyChildren = this.renderBodyRow(myList);
-    const unselectableLen = this.unselectableList.length;
-    let pagination = page;
+    let unselectableLen = 0;
+    let newPageObject = page;
+    let myList = this.state.myList;
+    let myBodyChildren = null;
+    let myPagination = page;
     let myTableClassName = 'table';
     let isSelectAll = false;
-
-    if (myList && myList.size > 0 && this.selectedList.length > 0 &&
-        ((this.selectedList.length + unselectableLen) === myList.size)) {
-      isSelectAll = true;
-    }
 
     if (onRowClick) {
       myTableClassName = `${myTableClassName} table--pionter`;
@@ -219,10 +262,19 @@ class Table extends PureComponent {
       myTableClassName = `${myTableClassName} ${className}`;
     }
 
-    if (!pagination && pagination !== false) {
-      pagination = {
-        total: myList.size,
-      };
+    // 需要自己计算计算，分页相关
+    if (paginationType === 'auto') {
+      newPageObject = getPageObject(myList, pageQuery);
+      myPagination = newPageObject.page;
+      myList = newPageObject.$$newList;
+    }
+
+    myBodyChildren = this.renderBodyRow(myList);
+    unselectableLen = this.unselectableList.length;
+
+    if (myList && myList.size > 0 && this.selectedList.length > 0 &&
+        ((this.selectedList.length + unselectableLen) === myList.size)) {
+      isSelectAll = true;
     }
 
     return (
@@ -245,10 +297,10 @@ class Table extends PureComponent {
           </tbody>
         </table>
         {
-          pagination ? (
+          myPagination ? (
             <Pagination
-              page={pagination}
-              size={this.props.size}
+              page={myPagination}
+              size={pageQuery.size}
               sizeOptions={this.props.sizeOptions}
               onPageChange={this.props.onPageChange}
               onPageSizeChange={this.props.onPageSizeChange}
