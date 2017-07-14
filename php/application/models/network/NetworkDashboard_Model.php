@@ -15,7 +15,7 @@ class NetworkDashboard_Model extends CI_Model {
         $dhcpary = $this->getAllDhcp();
         $arr = array(
             'state' => array('code' => 2000, 'msg' => 'ok'),
-            'data' => array(
+            'data' => array(                
                 'dhcpTotal' => $dhcpary['all'],//dhcp地址池总数
                 'dhcpUsed' => $dhcpary['use'],//已经分配的dhcp
                 'dhcpPool' => $this->getDhcpNumber(),// dhcp地址池数量（注意不是可分配地址个数）
@@ -67,7 +67,7 @@ class NetworkDashboard_Model extends CI_Model {
                     'ip' => $row['ip1'],
                     'mac' => $mac,
                     'users' => 0,
-                    'negoSpeed' => 0,
+                    'negoSpeed' => $negoSpeed,                    
                     'downRate' => $inbound,
                     'upRate' => $outbound
                 );                                

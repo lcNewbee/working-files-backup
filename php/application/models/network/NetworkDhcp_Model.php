@@ -2,11 +2,12 @@
 class NetworkDhcp_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
+        $this->load->library('session');
         $this->load->database();
-        $this->load->helper(array('array', 'my_customfun_helper'));
+        $this->load->helper(array('array', 'db_operation'));
     }
 
-    function get_dhcp_list() {
+    function get_list() {
         $query = $this->db->select('pool_id,pool_name,attr_name,attr_value')
                             ->from('pool_params')
                             ->join('pool_attr','pool_attr.id=pool_params.attr_id')
@@ -48,9 +49,52 @@ class NetworkDhcp_Model extends CI_Model {
         );
         return $result;        
     }
-
-    function getCgiParam($data) {
-        $retData = array(
+    function add($data) {
+		$result = null;
+		$temp_data = $this->getCgiParam($data);
+		$result = dhcpd_add_pool_name(json_encode($temp_data));
+        $loginfo = array(
+			'type' => 'Add', 
+			'operator' => element('username', $_SESSION, ''), 
+			'operationCommand' => "add  dhcp", 
+			'operationResult' => $result, 
+			'description' => json_encode($temp_data)
+		);
+		Log_Record($this->db, $loginfo);
+		return $result;
+	}
+	function delete($data) {
+		$result = null;
+		$arr = $data['selectedList'];
+		$pool_list_arr = str_replace("dhcp_name_", "pool_name", $arr);
+		$temp_data = array('pool_list' => $pool_list_arr);
+		$result = dhcpd_del_pool_name(json_encode($temp_data));
+        $loginfo = array(
+			'type' => 'Delete', 
+			'operator' => element('username', $_SESSION, ''), 
+			'operationCommand' => "del  dhcp", 
+			'operationResult' => $result, 
+			'description' => json_encode($temp_data)
+		);
+		Log_Record($this->db, $loginfo);
+		return $result;
+	}    
+	function edit($data) {
+		$result = null;
+		$temp_data = $this->getCgiParam($data);
+		$result = dhcpd_edit_pool_name(json_encode($temp_data));
+        $loginfo = array(
+			'type' => 'Edit', 
+			'operator' => element('username', $_SESSION, ''), 
+			'operationCommand' => "edit dhcp", 
+			'operationResult' => $result, 
+			'description' => json_encode($temp_data)
+		);
+		Log_Record($this->db, $loginfo);
+		return $result;
+	}
+    private function getCgiParam($data) {
+        $arr = array(
             'pool_name' => element('name', $data, ''), 
             'pool_ipaddr' => element('startIp', $data, ''), 
             'pool_mask' => element('mask', $data, ''), 
@@ -62,29 +106,6 @@ class NetworkDhcp_Model extends CI_Model {
             'pool_opt43' => element('opt43', $data, ''), 
             'pool_opt60' => element('opt60', $data, '')
         );
-        return $retData;
+        return $arr;
     }
-
-    function add_dhcp($data) {
-		$result = null;
-		$temp_data = $this->getCgiParam($data);
-		$result = dhcpd_add_pool_name(json_encode($temp_data));
-		return $result;
-	}
-
-	function del_dhcp($data) {
-		$result = null;
-		$arr = $data['selectedList'];
-		$pool_list_arr = str_replace("dhcp_name_", "pool_name", $arr);
-		$temp_data = array('pool_list' => $pool_list_arr);
-		$result = dhcpd_del_pool_name(json_encode($temp_data));
-		return $result;
-	}
-    
-	function edit_dhcp($data) {
-		$result = null;
-		$temp_data = $this->getCgiParam($data);
-		$result = dhcpd_edit_pool_name(json_encode($temp_data));
-		return $result;
-	}
 }

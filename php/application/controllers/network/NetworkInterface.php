@@ -18,22 +18,20 @@ class NetworkInterface extends CI_Controller {
         }
     }
 
-    function fetch() {
-        $result = null;
-        $result = $this->NetworkInterface_Model->get_interface_list();
-        return $result;
+    private function fetch() {
+        return $this->NetworkInterface_Model->get_list($_GET);
     }
     
-    function onAction($data) {
+    private function onAction($data) {
         $result = null;
         $actionType = element('action', $data);
         $selectList = element('selectedList', $data);
         switch($actionType) {
-            case 'add' : $result = $this->NetworkInterface_Model->add_interface($data);
+            case 'add' : $result = $this->NetworkInterface_Model->add($data);
                 break;
-            case 'delete' : $result = $this->NetworkInterface_Model->del_interface($selectList);
+            case 'delete' : $result = $this->NetworkInterface_Model->delete($selectList);
                 break;
-            case 'edit' : $result = $this->NetworkInterface_Model->edit_interface($data);
+            case 'edit' : $result = $this->NetworkInterface_Model->edit($data);
                 break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;

@@ -20,18 +20,18 @@ class NetworkDhcp extends CI_Controller {
     }
 
     function fetch(){
-        return $this->NetworkDhcp_Model->get_dhcp_list();
+        return $this->NetworkDhcp_Model->get_list();
     }
 
     function onAction($data) {
         $result = null;
         $actionType = element('action', $data);
         switch($actionType) {
-            case 'add' : $result = $this->NetworkDhcp_Model->add_dhcp($data);
+            case 'add' : $result = $this->NetworkDhcp_Model->add($data);
                 break;
-            case 'delete' : $result = $this->NetworkDhcp_Model->del_dhcp($data);
+            case 'delete' : $result = $this->NetworkDhcp_Model->delete($data);
                 break;
-            case 'edit' : $result = $this->NetworkDhcp_Model->edit_dhcp($data);
+            case 'edit' : $result = $this->NetworkDhcp_Model->edit($data);
                 break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
