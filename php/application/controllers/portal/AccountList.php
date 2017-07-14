@@ -33,7 +33,7 @@ class AccountList extends CI_Controller {
                 break;
 			case 'reset' : $result = $this->AccountList_Model->reset($data);
 				break;
-			case 'recharge' : $result = $this->AccountList_Model->r($data);
+			case 'recharge' : $result = $this->AccountList_Model->recharge($data);
 				break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
