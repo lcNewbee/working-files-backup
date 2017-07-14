@@ -28,7 +28,11 @@ function parseJSON(response) {
 }
 
 function handleServerError(json) {
-  if (!json.state || (json.state && json.state.code !== 2000)) {
+  if(!json) {
+    warning('Not return json', json);
+  } else if (!json.state) {
+    warning('Not state object', json);
+  } else if (json.state && json.state.code !== 2000) {
     warning('State code not 2000', json.state);
   }
   return json;

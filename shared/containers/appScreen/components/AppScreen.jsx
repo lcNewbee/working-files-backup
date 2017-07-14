@@ -18,6 +18,14 @@ const loadingStyle = {
   fontSize: '24px',
   color: '#0093DD',
 };
+const loadingWarpStyle = {
+  position: 'absolute',
+  top: '0',
+  bottom: 0,
+  width: '100%',
+  backgroundColor: '#fff',
+  opacity: 0.2,
+};
 
 const propTypes = {
   app: PropTypes.instanceOf(Map).isRequired,
@@ -338,9 +346,12 @@ export default class AppScreen extends React.Component {
         }
         {
           this.state.loading ? (
-            <div style={loadingStyle}>
-              <Icon name="spinner" spin />
-            </div>
+            <div style={loadingWarpStyle} />
+          ) : null
+        }
+        {
+          this.state.loading ? (
+            <Icon style={loadingStyle} name="spinner" spin />
           ) : null
         }
       </div>

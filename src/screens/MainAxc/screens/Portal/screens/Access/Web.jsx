@@ -651,6 +651,7 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={this.curListOptions}
+        paginationType="none"
         modalSize="max"
         onBeforeSync={onBeforeSync}
         editFormOption={{
@@ -666,7 +667,6 @@ export default class View extends React.Component {
         addable
         noTitle
         actionable
-        noPagination
       />
     );
   }

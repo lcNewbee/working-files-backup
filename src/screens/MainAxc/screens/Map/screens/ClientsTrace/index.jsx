@@ -38,6 +38,23 @@ const queryFormOptions = fromJS([
     options: [],
   },
 ]);
+const formOptions = fromJS([
+  {
+    id: 'enable',
+    label: __('Enable'),
+    type: 'checkbox',
+    required: true,
+  }, {
+    id: 'reporttime',
+    label: __('Data Report Time'),
+    type: 'number',
+    help: __('Seconds'),
+    min: 0,
+    defaultValue: 60,
+    max: 65535,
+    required: true,
+  },
+]);
 
 const propTypes = {
   fetch: PropTypes.func,
@@ -100,8 +117,14 @@ export default class View extends React.PureComponent {
     return (
       <AppScreen
         {...this.props}
+        title={__('Settings')}
         listOptions={listOptions}
+        listTitle={__('Clients Statistics')}
+        settingsFormOptions={formOptions}
         queryFormOptions={this.queryFormOptions}
+        paginationType="auto"
+        noTitle={false}
+        hasSettingsSaveButton
       />
     );
   }

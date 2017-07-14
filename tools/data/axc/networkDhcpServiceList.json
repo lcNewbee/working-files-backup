@@ -34,20 +34,6 @@
         "opt43": "192.168.0.1",
         "opt60": "22221",
         "domain": "ww.baidu.com"
-      },
-      {
-        "id": "3",
-        "name": "ds",
-        "startIp": "192.168.0.1",
-        "endIp": "192.168.0.78",
-        "gateway": "192.168.0.1",
-        "mask": "255.255.255.0",
-        "mainDns": "8.8.8.8",
-        "secondDns": "1",
-        "releaseTime": "3000",
-        "opt43": "192.168.0.1",
-        "opt60": "22221",
-        "domain": "ww.baidu.com"
       }
     ]
   }

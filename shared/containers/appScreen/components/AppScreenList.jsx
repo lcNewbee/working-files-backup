@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Map, List, fromJS } from 'immutable';
 import utils from 'shared/utils';
 import { FormInput, Search } from 'shared/components/Form';
-import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import { Button } from 'shared/components/Button';
@@ -51,7 +50,16 @@ const propTypes = {
   customModal: PropTypes.bool,
   customTable: PropTypes.bool,
   actionable: PropTypes.bool,
-  noPagination: PropTypes.bool,
+  paginationType: PropTypes.oneOf([
+    // 不对分页对象做处理,直接使用传入的分页对象
+    'default',
+
+    // 无分页
+    'none',
+
+    // 自动计算分页对象
+    'auto',
+  ]),
   addable: PropTypes.bool,
   editable: PropTypes.oneOfType([
     PropTypes.bool, PropTypes.func,
@@ -107,6 +115,7 @@ const propTypes = {
 const defaultProps = {
   actionable: false,
   listKey: 'allKeys',
+  paginationType: 'default',
   addable: true,
   editable: true,
   deleteable: true,
@@ -176,11 +185,28 @@ class AppScreenList extends React.PureComponent {
       type: data.value,
     }, true);
   }
+  onPageChange(i) {
+    let needRefresh = true;
+
+    if (this.props.paginationType === 'auto') {
+      needRefresh = false;
+    }
+    this.onChangeQuery({
+      page: i,
+    }, needRefresh);
+  }
   onChangeTableSize(data) {
+    let needRefresh = true;
+
+    // 自动计算分页不需要更新数据
+    if (this.props.paginationType === 'auto') {
+      needRefresh = false;
+    }
+
     this.onChangeQuery({
       size: data.value,
       page: 1,
-    }, true);
+    }, needRefresh);
   }
   onBeforeSync(callback) {
     const { onBeforeSync, store } = this.props;
@@ -244,11 +270,6 @@ class AppScreenList extends React.PureComponent {
     if (this.props.resetVaildateMsg) {
       this.props.resetVaildateMsg();
     }
-  }
-  onPageChange(i) {
-    this.onChangeQuery({
-      page: i,
-    }, true);
   }
   onRemoveItem(i) {
     const store = this.props.store;
@@ -949,12 +970,12 @@ class AppScreenList extends React.PureComponent {
 
   render() {
     const {
-      store, listTitle, selectable, customTable, noPagination,
+      store, listTitle, selectable, customTable, paginationType,
     } = this.props;
     const page = store.getIn(['data', 'page']);
     const list = store.getIn(['data', 'list']);
     const query = store.getIn(['query']);
-    const currPagination = noPagination ? false : page;
+    const currPagination = paginationType ? null : page;
     return (
       <div className="t-list-info">
         {
@@ -973,9 +994,10 @@ class AppScreenList extends React.PureComponent {
               list={list}
               page={currPagination}
               onPageChange={this.onPageChange}
-              size={query.get('size')}
+              pageQuery={query.toJS()}
               onPageSizeChange={this.onChangeTableSize}
               sizeOptions={sizeOptions}
+              paginationType={paginationType}
 
               // 必须要父级 AppScreen 已处理加载状态后
               // 且 AppScreen 不是加载中，

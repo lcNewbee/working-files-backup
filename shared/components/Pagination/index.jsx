@@ -139,6 +139,10 @@ class Pagination extends React.Component {
       endPage = totalPage;
     }
 
+    if (startPage < 1) {
+      startPage = 1;
+    }
+
     if (startPage > 1) {
       list.push(<li key="page.1" ><a onClick={this.onGoPage}>1</a></li>);
     }

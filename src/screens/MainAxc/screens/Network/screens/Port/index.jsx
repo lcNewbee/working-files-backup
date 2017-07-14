@@ -156,8 +156,8 @@ export default class NetworkPort extends React.Component {
         listOptions={listOptions}
         addable={false}
         deleteable={false}
+        paginationType="none"
         actionable
-        noPagination
       />
     );
   }
