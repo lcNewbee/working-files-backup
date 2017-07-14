@@ -222,6 +222,7 @@ const routes = [
             icon: 'sphere',
             text: __('Network '),
             component: cNetwork.Screen,
+            indexPath: '/main/network/dashboard',
             routes: [
               {
                 id: 'networkdashboard',
@@ -418,7 +419,7 @@ const routes = [
                 component: SharedComponents.TabContainer,
 
                 // 不要删除空格
-                text: __('SSID Management'),
+                text: __('WLANs'),
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -430,7 +431,7 @@ const routes = [
                     id: 'smartRf',
                     path: '/main/group/wireless/smart',
                     formUrl: 'goform/group/smartRf',
-                    text: __('Advance Settings'),
+                    text: __('Radio Settings'),
                     component: sSmartRf.Screen,
                   },
                 ],
@@ -467,14 +468,6 @@ const routes = [
                     component: sHeatMap.Screen,
                   },
                   {
-                    id: 'orbitTrace',
-                    path: '/main/group/map/orbittrace',
-                    formUrl: '/goform/group/map/orbittrace',
-                    fetchUrl: '/goform/group/map/orbittrace',
-                    text: __('Orbit Trace'),
-                    component: sOrbitTrace.Screen,
-                  },
-                  {
                     id: 'cientsTrace',
                     path: '/main/group/map/clients_trace',
                     text: __('Clients Statistics'),
@@ -496,6 +489,14 @@ const routes = [
                         component: sClientsTraceSettings.Screen,
                       },
                     ],
+                  },
+                  {
+                    id: 'orbitTrace',
+                    path: '/main/group/map/orbittrace',
+                    formUrl: '/goform/group/map/orbittrace',
+                    fetchUrl: '/goform/group/map/orbittrace',
+                    text: __('Client Path Analysis'),
+                    component: sOrbitTrace.Screen,
                   },
                 ],
               },

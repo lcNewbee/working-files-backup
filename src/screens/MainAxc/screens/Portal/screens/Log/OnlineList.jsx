@@ -53,10 +53,10 @@ const queryFormOptions = fromJS([
         label: __('ALL'),
       }, {
         value: '0',
-        label: __('One Key Login'),
+        label: __('Click-through Login'),
       }, {
         value: '1',
-        label: __('User Password Login'),
+        label: __('User/Password Login'),
       },
       // {
       //   value: '2',
@@ -239,10 +239,10 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: __('One Key Login'),
+        label: __('Click-through Login'),
       }, {
         value: '1',
-        label: __('User Password Login'),
+        label: __('User/Password Login'),
       },
       // {
       //   value: '2',

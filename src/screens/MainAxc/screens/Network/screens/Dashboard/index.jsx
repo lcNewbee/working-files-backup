@@ -7,7 +7,7 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
 import { EchartReact, Select } from 'shared/components/';
 import echarts from 'echarts/lib/echarts';
-
+import { fromJS } from 'immutable';
 import './index.scss';
 import dhcpclientimg from './DHCPClient@2x.png';
 import throughputimg from './Throughput@2x.png';
@@ -62,6 +62,7 @@ export default class NetWorkDashBoard extends React.Component {
       onHoverId: '',
       flowLeft: 0,
       flowTop: 0,
+      graphicType: 'down', // 'down' or 'up'
     };
 
     this.generateEchartOption = this.generateEchartOption.bind(this);
@@ -72,26 +73,14 @@ export default class NetWorkDashBoard extends React.Component {
     const rateHis = this.props.store.getIn([curScreenId, 'data', 'rateHis']);
     if (!rateHis) return null;
 
-    const { flowData, timeData } = rateHis.toJS();
-    // 时间轴数据
-    const date = timeData.map(val => val.split(' ')[1]).slice(1);
-    // 计算两个时间之间的时间差，单位为秒
-    const timeInterval = timeData.map((val, i) => {
-      if (i > 0) return (new Date(val) - new Date(timeData[i - 1])) / 1000;
-      return 9999;
-    }).slice(1);
-    // 计算速率值
-    const ratePerInterval = flowData.map((val, i) => {
-      if (i > 0) {
-        const flow = (val - flowData[i - 1]) > 0 ? (val - flowData[i - 1]) : 0;
-        return (flow / timeInterval[i - 1]).toFixed(2);
-      }
-      return 0;
-    }).slice(1);
-    const maxRate = Math.max.apply(null, ratePerInterval); // 速率最大值
+    const { uploadRateData, downRateData, timeData } = rateHis.toJS();
+    // // 时间轴数据
+    const date = timeData.map(val => val.replace(/-/g, '/'));
+    const rateData = this.state.graphicType === 'down' ? downRateData : uploadRateData;
+    const maxRate = Math.max.apply(null, rateData); // 速率最大值
     const unit = getUnit(maxRate);
     // 速率统一为最大值对应的单位
-    const data = ratePerInterval.map((val) => {
+    const data = rateData.map((val) => {
       const rate = (val / unit.value).toFixed(2);
       return rate;
     });
@@ -123,7 +112,7 @@ export default class NetWorkDashBoard extends React.Component {
         type: 'category',
         boundaryGap: false,
         data: date,
-        name: 'Time',
+        name: __('Time'),
       },
       yAxis: {
         type: 'value',
@@ -164,7 +153,10 @@ export default class NetWorkDashBoard extends React.Component {
 
   render() {
     const curScreenId = this.props.store.get('curScreenId');
-    const interfaceList = this.props.store.getIn([curScreenId, 'data', 'interfaceList']);
+    const interfaceList = this.props.store.getIn([curScreenId, 'data', 'interfaceList']) || fromJS([]);
+
+    const interfaceNum = interfaceList.size;
+    const widthPercent = `${((1 / interfaceNum) * 100)}%`;
     const upFlow = this.props.store.getIn([curScreenId, 'data', 'upFlow']) || '0';
     const downFlow = this.props.store.getIn([curScreenId, 'data', 'downFlow']) || '0';
     const query = this.props.store.getIn([curScreenId, 'query']);
@@ -186,7 +178,7 @@ export default class NetWorkDashBoard extends React.Component {
 
             <div className="ntw-dsb-card-wrap cols col-3">
               <div className="ntw-dsb-card">
-                <h2 className="ntw-dsb-card-title">{__('External Throughput')}</h2>
+                <h2 className="ntw-dsb-card-title">{__('Throughput ')}</h2>
                 <img
                   src={throughputimg}
                   alt="throughput"
@@ -195,18 +187,18 @@ export default class NetWorkDashBoard extends React.Component {
                 <div className="ntw-dsb-card-content clearfix">
                   <div className="ntw-dsb-content-l fl clearfix">
                     <div className="ntw-dsb-content-ll fl">
-                      {translateBytesToReadable(upFlow).num}
+                      {translateBytesToReadable(downFlow).num}
                     </div>
                     <div className="ntw-dsb-content-lr down-bg fr">
-                      <p>{translateBytesToReadable(upFlow).unit}</p>
+                      <p>{translateBytesToReadable(downFlow).unit}</p>
                     </div>
                   </div>
                   <div className="ntw-dsb-content-r fr clearfix">
                     <div className="ntw-dsb-content-rl fl">
-                      {translateBytesToReadable(downFlow).num}
+                      {translateBytesToReadable(upFlow).num}
                     </div>
                     <div className="ntw-dsb-content-rr up-bg fr">
-                      <p>{translateBytesToReadable(downFlow).unit}</p>
+                      <p>{translateBytesToReadable(upFlow).unit}</p>
                     </div>
                   </div>
                 </div>
@@ -269,7 +261,7 @@ export default class NetWorkDashBoard extends React.Component {
 
           </div>
 
-          <h2 className="element t-overview__header ntw-dsb-section-title">{__('Interface')}</h2>
+          <h2 className="element t-overview__header ntw-dsb-section-title">{__('Ports')}</h2>
           <div className="t-overview__section">
             <div className="row">
               <div
@@ -278,12 +270,18 @@ export default class NetWorkDashBoard extends React.Component {
               >
                 <div className="cols col-10 col-offset-1">
                   {
-                    [0, 1, 2, 3, 4, 5].map((i) => {
-                      const status = interfaceList ? interfaceList.getIn([i, 'enable']) : '0';
+                    interfaceList.map((item, index) => {
+                      const status = item.get('enable');
                       return (
-                        <div className="cols col-2" key={interfaceList ? interfaceList.getIn([i, 'name']) : i}>
+                        <div
+                          className="fl"
+                          key={item.get('name')}
+                          style={{
+                            width: widthPercent,
+                          }}
+                        >
                           <div className="ntw-dsb-interface-name">
-                            {__(`ETH${i}`)}
+                            {__(`ETH${index}`)}
                           </div>
                           <div className="ntw-dsb-interface">
                             <img
@@ -293,7 +291,7 @@ export default class NetWorkDashBoard extends React.Component {
                                 const position = utils.dom.getAbsPoint(e.target);
                                 const wrapPosition = utils.dom.getAbsPoint(this.wrap);
                                 this.setState({
-                                  onHoverId: i,
+                                  onHoverId: index,
                                   flowLeft: (position.x - wrapPosition.x) + e.target.offsetWidth,
                                   flowTop: (position.y - wrapPosition.y) + e.target.offsetHeight,
                                 });
@@ -309,8 +307,7 @@ export default class NetWorkDashBoard extends React.Component {
                           </div>
                           <div className="ntw-dsb-interface-status">
                             {
-                              interfaceList && interfaceList.getIn([i, 'enable']) === '1' ?
-                                interfaceList.getIn([i, 'negoSpeed']) : __('DOWN')
+                              item.get('enable') === '1' ? item.get('negoSpeed') : __('DOWN')
                             }
                           </div>
                         </div>
@@ -337,14 +334,14 @@ export default class NetWorkDashBoard extends React.Component {
                         </dl>
                         <dl className="o-description-list-row">
                           <dt>{__('Upload Rate')}</dt>
-                          <dd>{interfaceList.getIn([this.state.onHoverId, 'upRate'])}</dd>
+                          <dd>{`${flowRateFilter.transform(interfaceList.getIn([this.state.onHoverId, 'upRate']))}/s`}</dd>
                         </dl>
                         <dl className="o-description-list-row">
                           <dt>{__('Download Rate')}</dt>
-                          <dd>{interfaceList.getIn([this.state.onHoverId, 'downRate'])}</dd>
+                          <dd>{`${flowRateFilter.transform(interfaceList.getIn([this.state.onHoverId, 'downRate']))}/s`}</dd>
                         </dl>
                         <dl className="o-description-list-row">
-                          <dt>{__('Users Number')}</dt>
+                          <dt>{__('Sessions')}</dt>
                           <dd>{interfaceList.getIn([this.state.onHoverId, 'users'])}</dd>
                         </dl>
                       </div>
@@ -395,6 +392,23 @@ export default class NetWorkDashBoard extends React.Component {
                     this.props.changeScreenQuery({ timeRange: data.value });
                     this.props.fetchScreenData();
                   }}
+                  clearable={false}
+                />
+                <span
+                  style={{
+                    marginRight: '16px',
+                    marginLeft: '30px',
+                  }}
+                >
+                  {__('Graphic Type')}
+                </span>
+                <Select
+                  options={[
+                    { value: 'down', label: __('Download') },
+                    { value: 'up', label: __('Upload') },
+                  ]}
+                  value={this.state.graphicType}
+                  onChange={(data) => { this.setState({ graphicType: data.value }); }}
                   clearable={false}
                 />
                 <span

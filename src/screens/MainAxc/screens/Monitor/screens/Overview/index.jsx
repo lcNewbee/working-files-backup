@@ -251,10 +251,10 @@ function getFlowOption(serverData, timeType) {
       formatter: (params) => {
         function convertFlowBackToOrigin(val) {
           const origin = val * utilObj.val;
-          const ret = getFlowUnit(origin);
+          const ret = getFlowUnit(origin, 1);
           const label = ret.label;
-          const valWidthUnit = `${parseFloat(Number(origin / ret.val)).toFixed(1)} ${label}`;
-          return valWidthUnit;
+          const valWithUnit = `${parseFloat(Number(origin / ret.val)).toFixed(2)} ${label}`;
+          return valWithUnit;
         }
 
         let ret = `${params[0].name}<br />`;

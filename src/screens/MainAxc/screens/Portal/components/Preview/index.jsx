@@ -29,7 +29,7 @@ function LoginBody(props) {
         section === 'home' ? (
           <div className="portal-content-body-section active" id="authHome">
             <img src={wifiIcon} className="header-img" alt="wifi" />
-            <p className="header-description">{__('Please select the type')}</p>
+            <p className="header-description b28n">{__('Please select the type')}</p>
             {
               authArr.indexOf('0') !== -1 ? (
                 <button
@@ -39,7 +39,7 @@ function LoginBody(props) {
                   onClick={onLoginOk}
                 >
                   <Icon name={authToIcon['0']} />
-                  <span>{__('One-click Sign In')}</span>
+                  <span>{__('Click-through Sign In')}</span>
                 </button>
               ) : null
             }
@@ -82,7 +82,7 @@ function LoginBody(props) {
                   }}
                 >
                   <Icon name={authToIcon['1']} />
-                  <span className="b28n">{__('Sign in with Account')}</span>
+                  <span className="b28n">{__('Username/Password Sign In')}</span>
                 </button>
               ) : null
             }
@@ -306,7 +306,7 @@ export default class PortalPreview extends React.Component {
                 </ul>
                 <button id="goURL" type="button" className="a-btn a-btn--lg a-btn--primary a-btn--block">
                   <img src={reloginIcon} className="a-icon" alt="icon" />
-                  <span>{__('Continue')}</span>
+                  <span className="b28n">{__('Continue')}</span>
                 </button>
                 <button
                   id="LoginOut"
@@ -325,7 +325,7 @@ export default class PortalPreview extends React.Component {
             type === 'out' ? (
               <div className="portal-content-body" id="authHome">
                 <img src={wifiIcon} className="header-img" alt="wifi" />
-                <p className="header-description b28n">{__('Logout Succeeded')}</p>
+                <p className="header-description b28n">{__('Logout Succeed!')}</p>
                 <button
                   id="goauth"
                   type="button"

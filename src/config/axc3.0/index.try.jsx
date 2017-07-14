@@ -434,7 +434,7 @@ const routes = [
                 component: SharedComponents.TabContainer,
 
                 // 不要删除空格
-                text: __('SSID Management'),
+                text: __('WLANs'),
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -446,7 +446,7 @@ const routes = [
                     id: 'smartRf',
                     path: '/main/group/wireless/smart',
                     formUrl: formUrlConf.sSmartRf,
-                    text: __('Advance Settings'),
+                    text: __('Radio Settings'),
                     component: sSmartRf.Screen,
                   },
                 ],
@@ -487,7 +487,7 @@ const routes = [
                     path: '/main/group/map/orbittrace',
                     formUrl: formUrlConf.sOrbitTrace,
                     fetchUrl: formUrlConf.sOrbitTrace,
-                    text: __('Orbit Trace'),
+                    text: __('Client Path Analysis'),
                     component: sOrbitTrace.Screen,
                   },
                   {

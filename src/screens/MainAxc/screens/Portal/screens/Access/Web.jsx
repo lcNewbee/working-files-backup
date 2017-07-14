@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import { Icon, FormGroup, FormInput } from 'shared/components';
+import { Icon } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
-import { SaveButton, Button } from 'shared/components/Button';
 
 import Preview from '../../components/Preview';
 
@@ -30,28 +29,47 @@ function generateClassName(id) {
 function onBeforeSync($$actionQuery, $$curListItem) {
   const selectedLoginType = $$curListItem.get('auths');
   if (!selectedLoginType) return __('Please select at least one Login Type!');
+
+  const supportedType = fromJS(['jpg', 'png', 'gif', 'jpeg']);
+
+  const logo = $$curListItem.get('logo');
+  if (logo) {
+    const logoType = logo.toLowerCase().split('.').slice(-1)[0];
+    if (!supportedType.includes(logoType)) {
+      return __('Invalid image type! Only jpg/png/gif/jpeg are supported.');
+    }
+  }
+
+  const backgroundImg = $$curListItem.get('backgroundImg');
+  if (backgroundImg) {
+    const backgroundImgType = backgroundImg.toLowerCase().split('.').slice(-1)[0];
+    if (!supportedType.includes(backgroundImgType)) {
+      return __('Invalid image type! Only jpg/png/gif/jpeg are supported.');
+    }
+  }
+
   return '';
 }
 
 /* eslint-disable quote-props */
-const idToPageMap = {
-  '1': '',
-  '2': '/1',
-  '3': '/2',
-  '4': '/3',
-  '5': '/4',
-  '6': '/5',
-  '7': '/6',
-};
-const idTownloadIdMap = {
-  '1': '',
-  '2': '1',
-  '3': '2',
-  '4': '3',
-  '5': '4',
-  '6': '5',
-  '7': '6',
-};
+// const idToPageMap = {
+//   '1': '',
+//   '2': '/1',
+//   '3': '/2',
+//   '4': '/3',
+//   '5': '/4',
+//   '6': '/5',
+//   '7': '/6',
+// };
+// const idTownloadIdMap = {
+//   '1': '',
+//   '2': '1',
+//   '3': '2',
+//   '4': '3',
+//   '5': '4',
+//   '6': '5',
+//   '7': '6',
+// };
 // const queryFormOptions = fromJS([
 //   {
 //     id: 'adv',
@@ -73,11 +91,11 @@ const $$authOptions = fromJS([
   // },
   {
     value: '0',
-    label: __('One Key Login'),
+    label: __('Click-through Login'),
   },
   {
     value: '1',
-    label: __('User Password Login'),
+    label: __('User/Password Login'),
   },
   // {
   //   value: '2',
@@ -108,11 +126,6 @@ const $$authOptions = fromJS([
     label: __('Facebook Login'),
   },
 ]);
-
-function bindListOPtionsToThis(that) {
-
-}
-
 
 const listOptions = fromJS([
   {
@@ -157,8 +170,7 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'text',
-      label: __('Sub Title'),
-      required: true,
+      label: __('Subtitle'),
       validator: validator({
         rules: 'utf8Len:[0, 255]',
       }),
@@ -413,6 +425,7 @@ const listOptions = fromJS([
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
+  createModal: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -424,6 +437,7 @@ export default class View extends React.Component {
       // 'onBackup',
       'onBeforeSync',
       'initListOptions',
+      'onAfterSync',
     ]);
     this.actionable = getActionable(props);
     this.state = {
@@ -449,24 +463,29 @@ export default class View extends React.Component {
 
     if (actionType !== nextActionType) {
       if (nextActionType === 'edit') {
+        const winLoc = window.location;
+        const origin = `http://${winLoc.host}:8080`;
         this.setState({
-          logoImgUrl: `${window.location.origin.replace('8888', '8080')}/${$$nextCurItem.get('logo')}`,
-          backgroundImgUrl: `${window.location.origin.replace('8888', '8080')}/${$$nextCurItem.get('backgroundImg')}`,
+          logoImgUrl: `${origin}/${$$nextCurItem.get('logo')}`,
+          backgroundImgUrl: `${origin}/${$$nextCurItem.get('backgroundImg')}`,
         });
       } else {
+        // 除编辑操作外，其它操作变动都将图片URL置为空
         this.setState({ logoImgUrl: '', backgroundImgUrl: '' });
       }
     }
   }
-  // onBackup($$data) {
-  //   if (this.actionable) {
-  //     if (idTownloadIdMap[$$data.get('id')]) {
-  //       window.location.href = `goform/portal/access/download/?id=${idTownloadIdMap[$$data.get('id')]}`;
-  //     } else {
-  //       window.location.href = 'goform/portal/access/download/';
-  //     }
-  //   }
-  // }
+
+  onAfterSync(json) {
+    const code = json.state.code;
+    const msg = json.state.msg;
+    if (code === 4000) {
+      this.props.createModal({
+        role: 'alert',
+        text: __('Can\'t delete template in use. Check template(s) below: %s', msg),
+      });
+    }
+  }
 
   getAdsPage() {
     this.props.fetch('goform/portal/access/web/webPage', {
@@ -510,38 +529,39 @@ export default class View extends React.Component {
       });
     }
     // 添加操作栏按钮
-    this.curListOptions = listOptions.setIn([-1, 'render'], (val, $$data) => (
-      <span>
-        <a
-          className="tablelink"
-          href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/auth.jsp`}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {__('Login')}
-        </a>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/ok.jsp?preview=1`} rel="noopener noreferrer" target="_blank">{__('Success')}</a>
-        <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/out.jsp`} rel="noopener noreferrer" target="_blank">{__('Exit')}</a>
-        <a
-          className="tablelink"
-          href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/wx.jsp`}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {__('Wechat')}
-        </a>
-        {/* <SaveButton
-          type="button"
-          icon="download"
-          text={__('')}
-          theme="default"
-          onClick={
-            () => (this.onBackup($$data))
-          }
-          disabled={!this.actionable}
-        />*/}
-      </span>
-    )).push( // 添加预览页面
+    // .setIn([-1, 'render'], (val, $$data) => (
+    //   <span>
+    //     <a
+    //       className="tablelink"
+    //       href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/auth.jsp`}
+    //       rel="noopener noreferrer"
+    //       target="_blank"
+    //     >
+    //       {__('Login')}
+    //     </a>
+    //     <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/ok.jsp?preview=1`} rel="noopener noreferrer" target="_blank">{__('Success')}</a>
+    //     <a className="tablelink" href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/out.jsp`} rel="noopener noreferrer" target="_blank">{__('Exit')}</a>
+    //     <a
+    //       className="tablelink"
+    //       href={`http://${window.location.hostname}:8080${idToPageMap[$$data.get('id')]}/wx.jsp`}
+    //       rel="noopener noreferrer"
+    //       target="_blank"
+    //     >
+    //       {__('Wechat')}
+    //     </a>
+    //     {/* <SaveButton
+    //       type="button"
+    //       icon="download"
+    //       text={__('')}
+    //       theme="default"
+    //       onClick={
+    //         () => (this.onBackup($$data))
+    //       }
+    //       disabled={!this.actionable}
+    //     />*/}
+    //   </span>
+    // ))
+    this.curListOptions = listOptions.push( // 添加预览页面
       fromJS({
         id: '__preview__',
         noTable: true,
@@ -550,7 +570,7 @@ export default class View extends React.Component {
           render: () => (
             <div className="portal-templates-preview">
               <div className="portal-preview-head">
-                <h4>PREVIEW</h4>
+                <h4>{__('PREVIEW')}</h4>
               </div>
               <div className="portal-preview-body">
                 <Preview
@@ -575,7 +595,6 @@ export default class View extends React.Component {
       {
         type: 'file',
         label: __('Background Image'),
-        required: true,
         onChange: (data, formData, e) => {
           const file = e.target.files[0];
           utils.dom.previewFile(file).then((imgSrc) => {
@@ -592,7 +611,6 @@ export default class View extends React.Component {
       {
         type: 'file',
         label: __('Logo'),
-        required: true,
         onChange: (data, formData, e) => {
           const file = e.target.files[0];
           utils.dom.previewFile(file).then((imgSrc) => {
@@ -638,7 +656,7 @@ export default class View extends React.Component {
         editFormOption={{
           hasFile: true,
         }}
-
+        onAfterSync={this.onAfterSync}
         // searchable
         searchProps={{
           placeholder: `${__('Name')}`,

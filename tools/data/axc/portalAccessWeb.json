@@ -15,11 +15,8 @@
       "description": "Port-based authentication rules use this settings",
       "adv": null,
       "url": "http:\/\/www.qq.com",
-      "sessiontime": "60",
-      "logo": "xxx/xxx/xxx.jpg",
-      "backgroundImg": "yyy/yyy/yyy.png"
-    },
-    {
+      "sessiontime": "60"
+    }, {
       "id": "2",
       "name": "Market",
       "countShow": "0",
