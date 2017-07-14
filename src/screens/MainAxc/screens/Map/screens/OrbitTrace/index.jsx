@@ -212,6 +212,7 @@ export default class View extends React.Component {
         'onSave',
         'renderCurMap',
         'updateState',
+        'fetchBuildingList',
         'onChangeBuilding',
         'onChangeMapId',
         'onSearch',
@@ -229,19 +230,7 @@ export default class View extends React.Component {
     utils.extend(defaultQuery, locationQuery);
   }
   componentWillMount() {
-    const locationQuery = utils.getQuery(this.props.location.search);
-
-    this.props.fetch('goform/group/map/building', { groupid: this.props.groupid }).then((json) => {
-      if (json.state && json.state.code === 2000) {
-        this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
-      }
-      if (typeof locationQuery.buildId === 'undefined') {
-        this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
-      } else {
-        this.onChangeBuilding(locationQuery.buildId, locationQuery);
-      }
-    });
-
+    this.fetchBuildingList(this.props);
     // MAC地址输入错误提示初始化，不显示（当this.preNoticeFlag和this.state.noticeFlag不相等的时候显示）
     this.preNoticeFlag = this.state.noticeFlag;
   }
@@ -250,6 +239,11 @@ export default class View extends React.Component {
     const curScreenId = this.props.store.get('curScreenId');
     const thisData = this.props.store.getIn([curScreenId, 'data']);
     const nextData = nextProps.store.getIn([curScreenId, 'data']);
+
+    if (this.props.groupid !== nextProps.groupid) {
+      this.fetchBuildingList(nextProps);
+    }
+
     if (thisData !== nextData) {
       cancelAnimationFrame(this.drawAnimationFrame);
     }
@@ -271,7 +265,6 @@ export default class View extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const locationQuery = utils.getQuery(this.props.location.search);
     const store = this.props.store;
     const preScreenId = prevProps.store.get('curScreenId');
     const curScreenId = store.get('curScreenId');
@@ -398,11 +391,30 @@ export default class View extends React.Component {
       this.preNoticeFlag = this.state.noticeFlag;
     }, 100);
   }
+
   getNaturalWidthAndHeight(url) {
     const image = new Image();
     image.src = url;
     this.naturalWidth = image.width;
     this.naturalHeight = image.height;
+  }
+
+  fetchBuildingList(props) {
+    const locationQuery = utils.getQuery(this.props.location.search);
+
+    if (props.groupid) {
+      this.props.fetch('goform/group/map/building', { groupid: props.groupid })
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
+          }
+          if (typeof locationQuery.buildId === 'undefined') {
+            this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
+          } else {
+            this.onChangeBuilding(locationQuery.buildId, locationQuery);
+          }
+        });
+    }
   }
   handleChangeQuery(name, data) {
     this.props.receiveScreenData(fromJS({

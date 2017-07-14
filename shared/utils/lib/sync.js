@@ -21,10 +21,20 @@ function parseJSON(response) {
 
   return ret;
 }
-
+/**
+ *
+ *
+ * @param {any} json
+ * @returns
+ */
 function handleServerError(json) {
-  if (!json.state || (json.state && json.state.code !== 2000)) {
-    core.warning('State code not 2000', json.state);
+  /* eslint-disable no-console */
+  if(!json) {
+    console.warn('Not return json', json);
+  } else if (!json.state) {
+    console.warn('Not state object', json);
+  } else if (json.state && json.state.code !== 2000) {
+    console.warn('State code not 2000', json.state);
   }
   return json;
 }
