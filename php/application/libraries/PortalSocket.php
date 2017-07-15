@@ -16,7 +16,7 @@ class PortalSocket {
         $socketserver = config_item('portal_socket_info');
         if(count($socketserver) > 0){
             //$host = $socketserver['ip'];
-            $host = $_SERVER['SERVER_ADDR'];//获取本机IP
+            $host = '192.168.100.139';//$_SERVER['SERVER_ADDR'];//获取本机IP
             $port = $socketserver['port'];
         }
         $message = $data ."\n";//PS 要有\n结尾

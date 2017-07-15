@@ -23,12 +23,11 @@ class NetworkNat extends CI_Controller {
   
     function onAction($data) {
         $result = null;
-        $actionType = element('action', $data);
-        $selectList = element('selectedList', $data);
+        $actionType = element('action', $data);        
         switch($actionType) {
             case 'add' : $result = $this->NetworkNat_Model->add($data);
                 break;
-            case 'delete' : $result = $this->NetworkNat_Model->delete($selectList);
+            case 'delete' : $result = $this->NetworkNat_Model->delete($data);
                 break;
             case 'edit' : $result = $this->NetworkNat_Model->edit($data);
                 break;

@@ -44,8 +44,9 @@ class NetworkNat_Model extends CI_Model {
     }
     function delete($data) {
         $result = null;
-        foreach($data as $item) {
-        $deleteItem = $this->getCgiParams($item);
+        $arr = element('selectedList', $data);
+        foreach($arr as $item) {            
+            $deleteItem = $this->getCgiParams($item);
             $result = acnetmg_del_nat(json_encode($deleteItem));
             $loginfo = array(
                 'type' => 'Delete', 
