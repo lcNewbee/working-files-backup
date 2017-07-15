@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import utils from 'shared/utils';
+import downloadjs from 'downloadjs';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import SaveButton from 'shared/components/Button/SaveButton';
 import FormGroup from 'shared/components/Form/FormGroup';
-import Icon from 'shared/components/Icon';
 import FileUpload from 'shared/components/FileUpload';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
@@ -58,7 +58,7 @@ export default class View extends React.PureComponent {
 
   onBackup() {
     if (this.actionable) {
-      require('downloadjs')(this.state.downloadUrl);
+      downloadjs(this.state.downloadUrl);
     }
   }
 
