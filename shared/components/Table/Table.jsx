@@ -74,6 +74,7 @@ const propTypes = {
 
 const defaultProps = {
   isTh: false,
+  paginationType: 'default',
   pageQuery: {},
   list: fromJS([]),
 };
@@ -245,10 +246,14 @@ class Table extends PureComponent {
   render() {
     const {
       className, page, loading, selectable, onRowClick, paginationType, pageQuery,
+      sizeOptions,
     } = this.props;
+    let mySizeOptions = sizeOptions;
     let unselectableLen = 0;
-    let newPageObject = page;
-    let myList = this.state.myList;
+    let newPageObject = {
+      page,
+    };
+    let $$myList = this.state.myList;
     let myBodyChildren = null;
     let myPagination = page;
     let myTableClassName = 'table';
@@ -264,16 +269,23 @@ class Table extends PureComponent {
 
     // 需要自己计算计算，分页相关
     if (paginationType === 'auto') {
-      newPageObject = getPageObject(myList, pageQuery);
+      newPageObject = getPageObject($$myList, pageQuery);
       myPagination = newPageObject.page;
-      myList = newPageObject.$$newList;
+      $$myList = newPageObject.$$newList;
+
+    // 如如果是默认
+    } else if (paginationType === 'default' && !page) {
+      myPagination = {
+        total: $$myList.size,
+      };
+      mySizeOptions = null;
     }
 
-    myBodyChildren = this.renderBodyRow(myList);
+    myBodyChildren = this.renderBodyRow($$myList);
     unselectableLen = this.unselectableList.length;
 
-    if (myList && myList.size > 0 && this.selectedList.length > 0 &&
-        ((this.selectedList.length + unselectableLen) === myList.size)) {
+    if ($$myList && $$myList.size > 0 && this.selectedList.length > 0 &&
+        ((this.selectedList.length + unselectableLen) === $$myList.size)) {
       isSelectAll = true;
     }
 
@@ -301,7 +313,7 @@ class Table extends PureComponent {
             <Pagination
               page={myPagination}
               size={pageQuery.size}
-              sizeOptions={this.props.sizeOptions}
+              sizeOptions={mySizeOptions}
               onPageChange={this.props.onPageChange}
               onPageSizeChange={this.props.onPageSizeChange}
             />

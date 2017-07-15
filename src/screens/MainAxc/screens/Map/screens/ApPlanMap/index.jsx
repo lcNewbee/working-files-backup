@@ -404,7 +404,11 @@ export default class View extends React.PureComponent {
   }
   renderCurMap($$list, curMapId, myZoom) {
     const backgroundImgUrl = this.curMapItem && this.curMapItem.backgroundImg;
+    const mapName = this.curMapItem && this.curMapItem.mapName;
 
+    if (!this.curMapItem) {
+      return null;
+    }
     return (
       <div
         className="o-map-container"
@@ -433,7 +437,7 @@ export default class View extends React.PureComponent {
         <img
           src={backgroundImgUrl}
           draggable="false"
-          alt={this.curMapItem.mapName}
+          alt={mapName}
         />
         {
           $$list ?

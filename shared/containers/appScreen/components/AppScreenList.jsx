@@ -975,7 +975,8 @@ class AppScreenList extends React.PureComponent {
     const page = store.getIn(['data', 'page']);
     const list = store.getIn(['data', 'list']);
     const query = store.getIn(['query']);
-    const currPagination = paginationType ? null : page;
+    const currPagination = paginationType !== 'default' ? null : page;
+
     return (
       <div className="t-list-info">
         {

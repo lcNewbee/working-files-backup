@@ -417,8 +417,6 @@ const routes = [
                 icon: 'wifi',
                 noTree: true,
                 component: SharedComponents.TabContainer,
-
-                // 不要删除空格
                 text: __('WLANs'),
                 routes: [
                   {
