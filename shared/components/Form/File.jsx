@@ -169,7 +169,7 @@ class File extends PureComponent {
         />
         {
           value ? (
-            <Icon className="a-input-file__clear" name="times-circle-o" onClick={this.resetInput} />
+            <Icon title={__('Clear')} className="a-input-file__clear" name="times-circle-o" onClick={this.resetInput} />
           ) : null
         }
       </div>
