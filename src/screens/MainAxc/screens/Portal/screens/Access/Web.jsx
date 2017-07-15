@@ -159,9 +159,8 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       label: __('Title'),
-      required: true,
       validator: validator({
-        rules: 'utf8Len:[0, 255]',
+        rules: 'utf8Len:[0, 60]',
       }),
     },
   },
@@ -172,7 +171,7 @@ const listOptions = fromJS([
       type: 'text',
       label: __('Subtitle'),
       validator: validator({
-        rules: 'utf8Len:[0, 255]',
+        rules: 'utf8Len:[0, 120]',
       }),
     },
   },
@@ -198,6 +197,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       label: __('Copyright Link'),
+      validator: validator({
+        rules: 'utf8Len:[0, 100]',
+      }),
     },
   },
   {
@@ -214,27 +216,29 @@ const listOptions = fromJS([
   {
     id: 'url',
     label: __('Redirect URL'),
+    width: '250px',
     formProps: {
       type: 'text',
       validator: validator({
-        rules: 'utf8Len:[0, 255]',
+        rules: 'utf8Len:[0, 100]',
       }),
     },
     render: (val) => {
       // const id = $$data.get('id');
       let ret = val;
 
-      if (!ret) ret = '-';
+      if (!ret) ret = '--';
       return ret;
     },
   },
   {
     id: 'sessiontime',
     label: __('Limit Connect Duration'),
+    defaultValue: '0',
+    width: '200px',
     formProps: {
       help: __('minutes(0 means no limitation)'),
       required: true,
-      defaultValue: '0',
       type: 'number',
       min: '0',
       max: '99999',
@@ -317,7 +321,7 @@ const listOptions = fromJS([
       rows: '3',
     },
     render: (val) => {
-      if (!val || typeof val === 'undefined') return '';
+      if (!val || typeof val === 'undefined') return '--';
       const len = val.length;
       if (len > 43) {
         const desc = val.substring(0, 40);

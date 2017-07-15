@@ -91,8 +91,8 @@ const listOptions = fromJS([
       let ret = val;
 
        // 禁用
-      if (accountType === '0') {
-        ret = '-';
+      if (accountType === '0' || accountType === '2') {
+        ret = '--';
 
       // 流量
       } else if (accountType === '4') {
@@ -114,8 +114,8 @@ const listOptions = fromJS([
       let ret = uptimeFilter.transform(val / 1000);
 
       // 禁用
-      if (accountType === '0') {
-        ret = '-';
+      if (accountType === '0' || accountType === '3') {
+        ret = '--';
 
       // 流量
       } else if (accountType === '4') {
