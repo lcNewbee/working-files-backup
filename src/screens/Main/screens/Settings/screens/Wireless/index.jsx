@@ -80,6 +80,9 @@ const validOptions = Map({
   downstream: validator({
     rules: 'num:[32, 102400, 0]',
   }),
+  channel: validator({
+    rules: 'remarkTxt:["\'\\\\"]',
+  }),
 });
 
 const channelsList = List(channels);
@@ -206,8 +209,18 @@ export class Wireless extends PureComponent {
       data['radio2.4G'] = radio2Object;
       this.props.changeWifiSettings(data);
 
-      if (name === 'country' || name === 'channelsBandwidth') {
+      if (name === 'channelsBandwidth') {
         this.fetchChannelsOptions();
+        if (item.value === '30') {
+          if (modeVal === '5G') {
+            radio5Object.channel = ' ';
+          } else {
+            radio2Object.channel = ' ';
+          }
+          data['radio5.8G'] = radio5Object;
+          data['radio2.4G'] = radio2Object;
+          this.props.changeWifiSettings(data);
+        }
       }
     };
   }
@@ -323,7 +336,7 @@ export class Wireless extends PureComponent {
   }
   render() {
     const {
-      password, vlanid, ssid, upstream, downstream,
+      password, vlanid, ssid, upstream, downstream, channel,
     } = this.props.validateOption;
     const groupOptions = this.getGroupOptions();
     const getCurrData = this.getCurrData;
@@ -449,6 +462,7 @@ export class Wireless extends PureComponent {
           value={getCurrData('channel')}
           onChange={this.onUpdateSettings('channel')}
           required
+          {...channel}
         />
         <FormGroup
           label={__('Channel Bandwidth')}
