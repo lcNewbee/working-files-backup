@@ -17,13 +17,13 @@ class NetworkDhcpRelay extends CI_Controller {
         }
     }
     function fetch() {
-        return $this->NetworkDhcpRelay_Model->get_dhcp_relay_list();
+        return $this->NetworkDhcpRelay_Model->get_list();
     }
     function onAction($data) {
         $result = null;
         $actionType = element('action', $data);
         if ($actionType === 'setting') {
-            $result = $this->NetworkDhcpRelay_Model->set_dhcp_relay($data);
+            $result = $this->NetworkDhcpRelay_Model->setting($data);
         } 
         return $result;
     }

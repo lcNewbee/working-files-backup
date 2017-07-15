@@ -18,7 +18,7 @@ class NetworkNat extends CI_Controller {
         }
     }
     function fetch(){        
-        return 	$this->NetworkNat_Model->get_net_list();
+        return 	$this->NetworkNat_Model->get_list();
     }
   
     function onAction($data) {
@@ -26,13 +26,13 @@ class NetworkNat extends CI_Controller {
         $actionType = element('action', $data);
         $selectList = element('selectedList', $data);
         switch($actionType) {
-            case 'add' : $result = $this->NetworkNat_Model->add_net($data);
+            case 'add' : $result = $this->NetworkNat_Model->add($data);
                 break;
-            case 'delete' : $result = $this->NetworkNat_Model->del_net($selectList);
+            case 'delete' : $result = $this->NetworkNat_Model->delete($selectList);
                 break;
-            case 'edit' : $result = $this->NetworkNat_Model->edit_net($data);
+            case 'edit' : $result = $this->NetworkNat_Model->edit($data);
                 break;
-            case 'setting' : $result = $this->NetworkNat_Model->setting_net($data);
+            case 'setting' : $result = $this->NetworkNat_Model->setting($data);
                 break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;

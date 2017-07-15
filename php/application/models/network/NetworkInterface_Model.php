@@ -51,7 +51,7 @@ class NetworkInterface_Model extends CI_Model {
 			'type' => 'Add', 
 			'operator' => element('username', $_SESSION, ''), 
 			'operationCommand' => "add  interface", 
-			'operationResult' => $result, 
+			'operationResult' => preg_replace('#\s+#', '',trim($result)),
 			'description' => json_encode($addItem)
 		);
 		Log_Record($this->db, $loginfo);		
@@ -66,7 +66,7 @@ class NetworkInterface_Model extends CI_Model {
 				'type' => 'Delete', 
 				'operator' => element('username', $_SESSION, ''), 
 				'operationCommand' => "del  interface", 
-				'operationResult' => $result, 
+				'operationResult' => preg_replace('#\s+#', '',trim($result)),
 				'description' => json_encode($deleteItem)
 			);
 			Log_Record($this->db, $loginfo);
@@ -88,7 +88,7 @@ class NetworkInterface_Model extends CI_Model {
 			'type' => 'Edit', 
 			'operator' => element('username', $_SESSION, ''), 
 			'operationCommand' => "edit  interface", 
-			'operationResult' => $result, 
+			'operationResult' => preg_replace('#\s+#', '',trim($result)),
 			'description' => json_encode($cgiParams)
 		);
 		Log_Record($this->db, $loginfo);

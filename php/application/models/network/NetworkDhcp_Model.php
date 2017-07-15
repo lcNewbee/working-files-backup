@@ -57,7 +57,7 @@ class NetworkDhcp_Model extends CI_Model {
 			'type' => 'Add', 
 			'operator' => element('username', $_SESSION, ''), 
 			'operationCommand' => "add  dhcp", 
-			'operationResult' => $result, 
+			'operationResult' => preg_replace('#\s+#', '',trim($result)),
 			'description' => json_encode($temp_data)
 		);
 		Log_Record($this->db, $loginfo);
@@ -73,7 +73,7 @@ class NetworkDhcp_Model extends CI_Model {
 			'type' => 'Delete', 
 			'operator' => element('username', $_SESSION, ''), 
 			'operationCommand' => "del  dhcp", 
-			'operationResult' => $result, 
+			'operationResult' => preg_replace('#\s+#', '',trim($result)),
 			'description' => json_encode($temp_data)
 		);
 		Log_Record($this->db, $loginfo);
@@ -85,9 +85,9 @@ class NetworkDhcp_Model extends CI_Model {
 		$result = dhcpd_edit_pool_name(json_encode($temp_data));
         $loginfo = array(
 			'type' => 'Edit', 
-			'operator' => element('username', $_SESSION, ''), 
+			'operator' => element('username', $_SESSION, ''),
 			'operationCommand' => "edit dhcp", 
-			'operationResult' => $result, 
+			'operationResult' => preg_replace('#\s+#', '',trim($result)),
 			'description' => json_encode($temp_data)
 		);
 		Log_Record($this->db, $loginfo);

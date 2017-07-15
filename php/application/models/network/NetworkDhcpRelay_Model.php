@@ -4,9 +4,9 @@ class NetworkDhcpRelay_Model extends CI_Model {
 		parent::__construct();
         $this->load->library('session');
 		$this->load->database();
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
 	}
-	function get_dhcp_relay_list() {
+	function get_list() {
         $result = null;
         $arr = array();
         $querydata = $this->db->select('dhcprelay_params.attr_value,dhcprelay_attr.attr_name')
@@ -32,7 +32,7 @@ class NetworkDhcpRelay_Model extends CI_Model {
         return $result;
     }
 
-    function set_dhcp_relay($data) {
+    function setting($data) {
         $result = null;
         $cgiary = array(
             'switch' => $data['relay_enable'] == '1' ? "on" : "off",
@@ -42,18 +42,15 @@ class NetworkDhcpRelay_Model extends CI_Model {
             'op82_sbu2' => (string)element('option82_2',$data,'')
         );
         $result = dhcprelay_msg_from_web(json_encode($cgiary));
-        //log
-        $cgiObj = json_decode($result);			
-        if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            $logary = array(
-                'type'=>'Setting',
-                'operator'=>element('username',$_SESSION,''),
-                'operationCommand'=>"Setting DHCP Relay".$cgiary['server_name'],
-                'operationResult'=>'ok',
-                'description'=>""
-            );
-            Log_Record($this->db,$logary);
-        }
+        //log     
+        $loginfo = array(
+            'type' => 'Setting', 
+            'operator' => element('username', $_SESSION, ''), 
+            'operationCommand' => "Setting  DHCP Relay", 
+            'operationResult' => preg_replace('#\s+#', '',trim($result)),
+            'description' => json_encode($cgiary)
+        );
+        Log_Record($this->db,$loginfo);
         return $result;
     }
 }
