@@ -97,7 +97,6 @@ const propTypes = {
   onOk: PropTypes.func,
   children: PropTypes.any,
 };
-
 const defaultProps = {
   title: '',
   role: 'dialog',
@@ -309,7 +308,7 @@ class Modal extends PureComponent {
                               className="a-btn a-btn-default"
                               onClick={this.onClose}
                             >
-                              {cancelText}
+                              {b28n.format('Cancel')}
                             </button>
                           ) : null
                         }
@@ -321,7 +320,7 @@ class Modal extends PureComponent {
                               className="a-btn a-btn--primary"
                               onClick={this.onOk}
                             >
-                              {okText}
+                              {b28n.format('OK')}
                             </button>
                           ) : null
                         }

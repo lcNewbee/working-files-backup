@@ -1,4 +1,3 @@
-import NotFound from 'shared/components/NotFound';
 import b28n from 'shared/b28n';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
@@ -20,6 +19,8 @@ const baseComponents = {};
 const app = require('shared/containers/app');
 const settings = require('shared/containers/settings');
 const SharedComponents = require('shared/components');
+
+const NotFound = SharedComponents.NotFound;
 
 baseComponents.pMainAP = require('../../screens/MainAP');
 baseComponents.sWizard = require('../../screens/MainAP/Wizard');
