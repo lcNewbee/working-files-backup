@@ -187,7 +187,7 @@ function getApStatusOption(serverData) {
         }
         return `${name}: ${num}`;
       },
-      data: [__('Offline'), __('Online')],
+      data: [__('Online'), __('Offline')],
     },
     series: [
       {
@@ -197,8 +197,8 @@ function getApStatusOption(serverData) {
   }).toJS();
 
   ret.series[0].data = [
-    { value: offlineNum, name: __('Offline') },
     { value: onlineNum, name: __('Online') },
+    { value: offlineNum, name: __('Offline') },
   ];
 
   return ret;

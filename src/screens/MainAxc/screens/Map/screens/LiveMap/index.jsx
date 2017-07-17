@@ -206,7 +206,7 @@ export default class LiveMap extends React.PureComponent {
     const thisLiveMapType = store.getIn([curScreenId, 'curSettings', 'liveMapType']);
 
     // 实时地图
-    if (curType === '0' && this.mapContent) {
+    if (curType === '0') {
       if ($$thisData !== $$prevData || curType !== prevProps.store.getIn([curScreenId, 'curSettings', 'type'])) {
         this.map = null;
         this.loadMapScript();
@@ -293,7 +293,7 @@ export default class LiveMap extends React.PureComponent {
         utils.loadScript(
           'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places,geocoder',
           {
-            timeout: 8000,
+            timeout: 9000,
           },
         )
         .then(
@@ -324,17 +324,20 @@ export default class LiveMap extends React.PureComponent {
         this.props.updateScreenCustomProps({
           loadMapStatus: 'loading',
         });
-        window.initializeBaidu = null;
-        window.initializeBaidu = () => {
-          this.renderBaiduMap();
-          this.props.updateScreenCustomProps({
-            loadMapStatus: 'ok',
-          });
-        };
+        // window.initializeBaidu = null;
+        if (!window.initializeBaidu) {
+          window.initializeBaidu = () => {
+            this.renderBaiduMap();
+            this.props.updateScreenCustomProps({
+              loadMapStatus: 'ok',
+            });
+          };
+        }
+
         utils.loadScript(
           'https://api.map.baidu.com/api?v=2.0&ak=po9QoGKxy9nyplgmTHh7SrEPGl48lzDE&callback=initializeBaidu',
           {
-            timeout: 8000,
+            timeout: 15000,
             id: 'baidu',
           },
         )
