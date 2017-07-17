@@ -198,9 +198,9 @@ class AccessWeb_Model extends CI_Model {
         //1.上传图片
         //logo
         $upload_data = $this->do_upload_img($logo_name, 'logo');        
-        if($upload_data['state']['code'] == 2000){
+        if($upload_data['state']['code'] == 2000){            
             //上传成功后删除原图片            
-            if(count($query) > 0){
+            if(count($query) > 0 && $query[0]['logo'] != 'dist/css/img/logo.png'){
                 $dellogo = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['logo'];
                 if(is_file($dellogo)){
                     unlink($dellogo);
@@ -214,7 +214,7 @@ class AccessWeb_Model extends CI_Model {
         $upload_data2 = $this->do_upload_img($bg_name, 'backgroundImg');        
         if($upload_data2['state']['code'] == 2000){
             //上传成功后删除原图片            
-            if(count($query) > 0){                
+            if(count($query) > 0 && $query[0]['bg_img'] != 'dist/css/img/bg.jpg'){                
                 $delbg = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['bg_img'];   
                 if(is_file($delbg)){                    
                     unlink($delbg);
