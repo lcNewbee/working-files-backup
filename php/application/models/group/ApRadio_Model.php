@@ -38,15 +38,15 @@ class ApRadio_Model extends CI_Model {
     function set_def_apradio($data) {
         $result = null;
         $result = axc_set_apradio(json_encode($data));
-        //l			og
+        //log
         $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
             $logary = array(
-                'type'=>'Setting',
-                'operator'=>element('username',$_SESSION,''),
-                'operationCommand'=>"Setting Radio ".$data['mac'],
-                'operationResult'=>'ok',
-                'description'=>json_encode($data)
+                'type' => 'Setting',
+                'operator' => element('username',$_SESSION,''),
+                'operationCommand' => "Setting Radio ".$data['mac'],
+                'operationResult' => $result,
+                'description' => json_encode($data)
             );
             Log_Record($this->db,$logary);
         }

@@ -2,8 +2,9 @@
 class DpiSettings_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
+        $this->load->library('session');
 		$this->load->database();
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
 	}
 	function get_list($data) {
 		$result = null; 
@@ -29,6 +30,14 @@ class DpiSettings_Model extends CI_Model {
             'onoff'=>$value
         );
         $result = ndpi_set_switch_to_config(json_encode($cgiprm));
+        $loginfo = array(
+            'type' => 'Setting', 
+            'operator' => element('username', $_SESSION, ''), 
+            'operationCommand' => "Setting  DPI switch:" . $value, 
+            'operationResult' => preg_replace('#\s+#', '',trim($result)),
+            'description' => json_encode($cgiprm)
+        );
+        Log_Record($this->db, $loginfo);
         return $result;
     }
     function active($data){
@@ -41,6 +50,14 @@ class DpiSettings_Model extends CI_Model {
 		if($state === "0"){
 			$result = ndpi_del_interface_from_config(json_encode($arr));
 		}
+        $loginfo = array(
+            'type' => 'Setting', 
+            'operator' => element('username', $_SESSION, ''), 
+            'operationCommand' => "Setting  DPI->interface switch:" . $state, 
+            'operationResult' => preg_replace('#\s+#', '',trim($result)),
+            'description' => json_encode($arr)
+        );
+        Log_Record($this->db, $loginfo);
         return $result;
     }
 

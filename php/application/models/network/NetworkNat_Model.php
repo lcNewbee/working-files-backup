@@ -1,8 +1,8 @@
 <?php
 class NetworkNat_Model extends CI_Model {
-	public function __construct() {
-        $this->load->library('session');
+	public function __construct() {        
 		parent::__construct();
+        $this->load->library('session');
 		$this->load->database();
 		$this->load->helper(array('array', 'db_operation'));
 	}

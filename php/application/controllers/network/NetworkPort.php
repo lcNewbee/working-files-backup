@@ -1,4 +1,3 @@
-
 <?php
 class NetworkPort extends CI_Controller {
     public function __construct() {
@@ -20,14 +19,14 @@ class NetworkPort extends CI_Controller {
     }
 
     function fetch() {
-		return $this->NetworkPort_Model->get_port_list();
+		return $this->NetworkPort_Model->get_list($_GET);
 	}
 
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'edit' || $actionType === 'active') {
-			$result = $this->NetworkPort_Model->add_port($data);
+			$result = $this->NetworkPort_Model->edit($data);
 		} elseif ($actionType === 'delete') {
             /*
 			$keys = array("portname");
