@@ -59,7 +59,13 @@ const listOptions = fromJS([
 
       return `${upRate}/${downRate}`;
     },
-  }, {
+  },
+  {
+    id: 'operationhours',
+    text: __('Connection Duration'),
+    filter: 'connectTime',
+  },
+  {
     id: 'rssi',
     text: __('RSSI'),
     render(val, item) {
@@ -92,11 +98,8 @@ const listOptions = fromJS([
       );
       // return val;
     },
-  }, {
-    id: 'operationhours',
-    text: __('Connection Duration'),
-    filter: 'connectTime',
-  }, {
+  },
+  {
     id: '__action__',
     text: __('Actions'),
   },

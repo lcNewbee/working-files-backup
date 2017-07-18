@@ -45,19 +45,18 @@ const ssidListOptions = fromJS([
     text: 'SSID',
     width: 180,
 
-  }, {
-    id: 'enabled',
-    text: __('Status'),
-    options: checkboxOptions,
-  }, {
+  },
+  {
     id: 'onlineNumber',
     width: 140,
     text: __('Onlines'),
-  }, {
+  },
+  {
     id: 'apNumber',
     width: 140,
     text: __('AP Number'),
-  }, {
+  },
+  {
     id: 'bandwidth',
     text: __('UP/Down Traffic'),
     render(val, item) {
@@ -66,6 +65,11 @@ const ssidListOptions = fromJS([
 
       return `${upRate}/${downRate}`;
     },
+  },
+  {
+    id: 'enabled',
+    text: __('Status'),
+    options: checkboxOptions,
   },
 ]);
 const apNumberIndex = ssidListOptions.findIndex(
