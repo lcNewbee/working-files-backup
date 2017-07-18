@@ -396,16 +396,12 @@ export default class MapList extends React.PureComponent {
               type="file"
               onChange={(data, evt) => {
                 const selectFile = evt.target.files[0];
-                this.setState({
-                  mapImg: data.value,
-                });
                 utils.dom.previewFile(selectFile).then(
                   (url) => {
-                    if (url) {
-                      this.setState({
-                        backgroundImgUrl: url,
-                      });
-                    }
+                    this.setState({
+                      mapImg: data.value,
+                      backgroundImgUrl: url,
+                    });
                   },
                 );
               }}
@@ -431,6 +427,7 @@ export default class MapList extends React.PureComponent {
                     }}
                     onLoad={
                       () => {
+                        // 清除图片预览缓存
                         if (typeof URL.revokeObjectURL === 'function') {
                           URL.revokeObjectURL(this.state.backgroundImgUrl);
                         }
