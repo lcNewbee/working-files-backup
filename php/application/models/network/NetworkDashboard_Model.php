@@ -103,16 +103,14 @@ class NetworkDashboard_Model extends CI_Model {
             $arr['timeInterval'] = $cycle[0]['acstatistime'];
         }        
         //获取流量集合        
-        $sqlcmd  = "select IfIndex from ac_interface_description where Timer=(select MAX(Timer) from ac_interface_description)";
-        $sqlcmd .= "  and Description='{$portName}' group by Mac_Address";
-        
+        $sqlcmd  = "select IfIndex from ac_interface_description where Description='{$portName}' order by Id desc limit 1";        
         $query = $this->mysql->query($sqlcmd)->result_array();        
         if(count($query) > 0){
             $ifIndex = $query[0]['IfIndex'];
         }             
         if($ifIndex > 0){
-            $sql_fow  = "select * from ac_interface_information";
-            $sql_fow .= " where Timer>=date_sub((select MAX(Timer) from ac_interface_description),interval {$timeRange}  HOUR)";
+            $sql_fow  = "select * from ac_interface_information where";
+            $sql_fow .= " Timer>=date_sub((select Timer from ac_interface_information where IfIndex=1 order by Id desc limit 1),interval {$timeRange}  HOUR)";
             $sql_fow .= " and IfIndex={$ifIndex}";
             $fow_ary = $this->mysql->query($sql_fow)->result_array();
             foreach($fow_ary as $row){
