@@ -2,7 +2,7 @@ $_height: 28px;
 
 .Select {
   display: inline-block;
-  width: 200px;
+  width: auto;
   max-width: 100%;
   min-width: 60px;
   font-size: 12px;
@@ -11,6 +11,7 @@ $_height: 28px;
   .Select-input,
   .Select-control {
     height: $_height;
+    width: 200px;
   }
 
   &.is-disabled {

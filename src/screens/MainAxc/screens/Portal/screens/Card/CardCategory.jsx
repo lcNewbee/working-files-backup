@@ -292,7 +292,7 @@ export default class View extends React.Component {
           ]}
           required
           value={$$curListItem.get('moneyUnit')}
-          style={{ width: '100px' }}
+          style={{ width: '110px' }}
           onChange={(data) => {
             this.props.updateCurEditListItem(fromJS({ moneyUnit: data.value }));
           }}
@@ -308,7 +308,6 @@ export default class View extends React.Component {
         queryFormOptions={queryFormOptions}
         listOptions={this.listOptions}
         onBeforeSync={onBeforeSync}
-        noTitle
         actionable
         selectable
         searchable
