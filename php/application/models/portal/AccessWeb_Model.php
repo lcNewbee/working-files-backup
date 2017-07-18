@@ -126,6 +126,7 @@ class AccessWeb_Model extends CI_Model {
         );
         //send java
         if ($this->noticeSocket($this->getSocketPramse('add', array($socketarr)))) {
+            $this->DirectorySave();
             return json_encode(json_ok());
         }           
         return json_encode(json_no('add error !'));               
@@ -171,6 +172,7 @@ class AccessWeb_Model extends CI_Model {
                     }
                 }
             }
+            $this->DirectorySave();
             return json_encode(json_ok()); 
         }     
            
@@ -228,6 +230,7 @@ class AccessWeb_Model extends CI_Model {
         //2.操作数据库        
         //send java
         if ($this->noticeSocket($this->getSocketPramse('edit', array($socketarr)))) {
+            $this->DirectorySave();
             return json_encode(json_ok());
         } 
         return json_encode(json_no('edit error !'));
@@ -262,5 +265,17 @@ class AccessWeb_Model extends CI_Model {
             )
         );
         return $socketarr;
+    }
+
+    private function DirectorySave(){
+        if(!is_dir('/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/dist/css/img')){
+            return;
+        }
+        if(!is_dir('/var/netmanager/img')){
+            mkdir('/var/netmanager/img', 0777, true);
+        }
+        //清空
+        exec('rm -rf /var/netmanager/img/*');
+        exec('cp /usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/dist/css/img/* /var/netmanager/img');
     }
 }
