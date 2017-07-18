@@ -463,8 +463,8 @@ export default class MacStatistic extends React.Component {
           fetchIntervalTime: 10000,
           query: {
             timeType: '0',
-            size: '50',
-            page: '1',
+            size: 50,
+            page: 1,
           },
         }}
         // listTitle={__('Statistics Within 30 Seconds')}
@@ -484,6 +484,9 @@ export default class MacStatistic extends React.Component {
                 value={store.getIn([curScreenId, 'query', 'timeType'])}
                 onChange={this.onChangeTimeType}
                 clearable={false}
+                style={{
+                  width: '180px',
+                }}
               />
               <span
                 style={{
@@ -499,14 +502,6 @@ export default class MacStatistic extends React.Component {
                 onChange={this.onChangeSearchMac}
                 placeholder={__('Complete MAC Address')}
               />
-              <FormGroup
-                type="select"
-                className="fr"
-                label={__('View')}
-                options={viewOptions.toJS()}
-                value={store.getIn([curScreenId, 'query', 'size'])}
-                onChange={this.onChangeView}
-              />
             </h3>
           </div>
           <div className="t-overview__section">
@@ -517,7 +512,11 @@ export default class MacStatistic extends React.Component {
               // list={this.newList}
               list={store.getIn([curScreenId, 'data', 'list'])}
               page={store.getIn([curScreenId, 'data', 'page'])}
+              pageQuery={{
+                size: store.getIn([curScreenId, 'query', 'size']),
+              }}
               onPageChange={this.onChangePage}
+              onPageSizeChange={this.onChangeView}
               // onRowSelect={this.onSelectRow}
             />
           </div>

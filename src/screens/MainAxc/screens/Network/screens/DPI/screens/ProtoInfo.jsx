@@ -173,8 +173,8 @@ export default class ProtoInfo extends React.Component {
               });
               Promise.resolve().then(() => {
                 this.props.changeScreenQuery({
-                  modalPage: '1',
-                  modalSize: '20',
+                  modalPage: 1,
+                  modalSize: 20,
                   proto: item.get('attr_name'),
                 });
               }).then(() => {
@@ -208,59 +208,13 @@ export default class ProtoInfo extends React.Component {
             fetchIntervalTime: 10000,
             query: {
               timeType: '0',
-              size: '50',
-              page: '1',
+              size: 50,
+              page: 1,
             },
           }}
           // listTitle={__('Statistics Within 30 Seconds')}
         >
           <div className="t-overview">
-            <Modal
-              isShow={this.state.showModal}
-              title={`${__('Clients List')}`}
-              cancelButton={false}
-              draggable
-              size="lg"
-              onOk={() => {
-                this.setState({
-                  showModal: false,
-                });
-              }}
-              onClose={() => {
-                this.setState({
-                  showModal: false,
-                });
-              }}
-            >
-              <div className="t-overview">
-                <div className="element t-overview__section-header">
-                  <span
-                    style={{
-                      marginRight: '5px',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    {__('View')}
-                  </span>
-                  <FormInput
-                    label={__('View')}
-                    options={viewOptions.toJS()}
-                    type="select"
-                    value={store.getIn([curScreenId, 'query', 'modalSize'])}
-                    onChange={this.onChangeModalView}
-                  />
-                </div>
-                <div className="t-overview__section">
-                  <Table
-                    options={userModalOptions}
-                    list={store.getIn([curScreenId, 'data', 'protoClientList'])}
-                    className="table"
-                    page={store.getIn([curScreenId, 'data', 'clientPage'])}
-                    onPageChange={this.onChangeModalPage}
-                  />
-                </div>
-              </div>
-            </Modal>
             <div className="element t-overview__section-header">
               <h3>
                 <span
@@ -275,14 +229,9 @@ export default class ProtoInfo extends React.Component {
                   value={store.getIn([curScreenId, 'query', 'timeType'])}
                   onChange={this.onChangeTimeType}
                   clearable={false}
-                />
-                <FormGroup
-                  type="select"
-                  className="fr"
-                  label={__('View')}
-                  options={viewOptions.toJS()}
-                  value={store.getIn([curScreenId, 'query', 'size'])}
-                  onChange={this.onChangeView}
+                  style={{
+                    width: '180px',
+                  }}
                 />
               </h3>
             </div>
@@ -292,10 +241,43 @@ export default class ProtoInfo extends React.Component {
                 options={listOptions}
                 list={store.getIn([curScreenId, 'data', 'list'])}
                 page={store.getIn([curScreenId, 'data', 'page'])}
+                pageQuery={{
+                  size: store.getIn([curScreenId, 'query', 'size']),
+                }}
                 onPageChange={this.onChangePage}
+                onPageSizeChange={this.onChangeView}
               />
             </div>
           </div>
+          <Modal
+            isShow={this.state.showModal}
+            title={`${__('Clients List')}`}
+            cancelButton={false}
+            draggable
+            size="lg"
+            onOk={() => {
+              this.setState({
+                showModal: false,
+              });
+            }}
+            onClose={() => {
+              this.setState({
+                showModal: false,
+              });
+            }}
+          >
+            <Table
+              options={userModalOptions}
+              list={store.getIn([curScreenId, 'data', 'protoClientList'])}
+              className="table"
+              page={store.getIn([curScreenId, 'data', 'clientPage'])}
+              pageQuery={{
+                size: store.getIn([curScreenId, 'query', 'modalSize']),
+              }}
+              onPageChange={this.onChangeModalPage}
+              onPageSizeChange={this.onChangeModalView}
+            />
+          </Modal>
         </AppScreen>
       </div>
     );

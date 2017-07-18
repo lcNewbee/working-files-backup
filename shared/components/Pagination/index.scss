@@ -5,6 +5,12 @@
 .m-pagination {
   margin: $g-distance 0;
   color: #666;
+
+  .Select {
+    .Select-control {
+      width: 100%;
+    }
+  }
 }
 
 .m-pagination__total {

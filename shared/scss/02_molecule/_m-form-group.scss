@@ -65,6 +65,13 @@ $boder-color:         #ccc;
       line-height: 30px;
     }
 
+    .Select {
+      .Select-input,
+      .Select-control {
+        width: 200px;
+      }
+    }
+
     .text {
       width: 200px;
       line-height: 16px;

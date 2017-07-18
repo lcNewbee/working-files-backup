@@ -9,6 +9,12 @@ import Row from './Row';
 
 const THEAD_INDEX = -1;
 
+const defaultSizeOptions = [
+  { value: 20, label: '20' },
+  { value: 50, label: '50' },
+  { value: 100, label: '100' },
+];
+
 function getPageObject($$list, pageQuery) {
   const ret = {};
   const page = {};
@@ -75,6 +81,7 @@ const propTypes = {
 const defaultProps = {
   isTh: false,
   paginationType: 'default',
+  sizeOptions: defaultSizeOptions,
   pageQuery: {},
   list: fromJS([]),
 };
@@ -245,8 +252,8 @@ class Table extends PureComponent {
 
   render() {
     const {
-      className, page, loading, selectable, onRowClick, paginationType, pageQuery,
-      sizeOptions,
+      className, page, loading, selectable, onRowClick, paginationType,
+      pageQuery, sizeOptions,
     } = this.props;
     let mySizeOptions = sizeOptions;
     let unselectableLen = 0;

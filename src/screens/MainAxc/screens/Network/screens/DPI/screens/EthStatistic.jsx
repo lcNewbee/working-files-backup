@@ -129,13 +129,6 @@ const userModalOptions = fromJS([
   },
 ]);
 
-const viewOptions = fromJS([
-  { label: '20', value: '20' },
-  { label: '50', value: '50' },
-  { label: '100', value: '100' },
-  { label: '150', value: '150' },
-]);
-
 
 function getFlowUnit(val) {
   let ret = {};
@@ -402,8 +395,8 @@ export default class EthStatistic extends React.Component {
                 Promise.resolve().then(() => {
                   this.props.changeScreenQuery({
                     ethx: `eth${this.state.ethId}`,
-                    page: '1',
-                    size: '20',
+                    page: 1,
+                    size: 20,
                   });
                 }).then(() => {
                   this.props.fetchScreenData();
@@ -494,38 +487,39 @@ export default class EthStatistic extends React.Component {
         // listTitle={__('Statistics Within 30 Seconds')}
       >
         <div className="t-overview">
-          <div className="t-overview__section">
-            <div className="element t-overview__section-header">
-              <h3>
-                <span
-                  style={{
-                    marginRight: '10px',
-                  }}
-                >
-                  {__('Time')}
-                </span>
-                <Select
-                  options={timeTypeSwitchs.toJS()}
-                  value={store.getIn([curScreenId, 'query', 'timeType'])}
-                  onChange={this.onChangeTimeType}
-                  clearable={false}
-                />
-                {/* <span
-                  style={{
-                    marginRight: '10px',
-                    marginLeft: '20px',
-                  }}
-                >
-                  {__('Interface')}
-                </span>
-                <Select
-                  options={interfaceSwitchs.toJS()}
-                  value={store.getIn([curScreenId, 'query', 'ethx'])}
-                  onChange={this.onChangeInterface}
-                  clearable={false}
-                />*/}
-              </h3>
-            </div>
+          <div className="element t-overview__section-header">
+            <h3>
+              <span
+                style={{
+                  marginRight: '10px',
+                }}
+              >
+                {__('Time')}
+              </span>
+              <Select
+                options={timeTypeSwitchs.toJS()}
+                value={store.getIn([curScreenId, 'query', 'timeType'])}
+                onChange={this.onChangeTimeType}
+                style={{
+                  width: '180px',
+                }}
+                clearable={false}
+              />
+              {/* <span
+                style={{
+                  marginRight: '10px',
+                  marginLeft: '20px',
+                }}
+              >
+                {__('Interface')}
+              </span>
+              <Select
+                options={interfaceSwitchs.toJS()}
+                value={store.getIn([curScreenId, 'query', 'ethx'])}
+                onChange={this.onChangeInterface}
+                clearable={false}
+              />*/}
+            </h3>
           </div>
           {/* <div className="element">
             <EchartReact
@@ -559,34 +553,17 @@ export default class EthStatistic extends React.Component {
             });
           }}
         >
-          <div className="t-overview">
-            <div className="element t-overview__section-header">
-              <span
-                style={{
-                  marginRight: '5px',
-                  fontWeight: 'bold',
-                }}
-              >
-                {__('View')}
-              </span>
-              <FormInput
-                label={__('View')}
-                options={viewOptions.toJS()}
-                type="select"
-                value={store.getIn([curScreenId, 'query', 'size'])}
-                onChange={this.onChangeView}
-              />
-            </div>
-            <div className="t-overview__section">
-              <Table
-                options={userModalOptions}
-                list={store.getIn([curScreenId, 'data', 'ethxClientList'])}
-                className="table"
-                page={store.getIn([curScreenId, 'data', 'page'])}
-                onPageChange={this.onChangePage}
-              />
-            </div>
-          </div>
+          <Table
+            options={userModalOptions}
+            list={store.getIn([curScreenId, 'data', 'ethxClientList'])}
+            className="table"
+            pageQuery={{
+              size: store.getIn([curScreenId, 'query', 'size']),
+            }}
+            page={store.getIn([curScreenId, 'data', 'page'])}
+            onPageChange={this.onChangePage}
+            onPageSizeChange={this.onChangeView}
+          />
         </Modal>
       </AppScreen>
     );
