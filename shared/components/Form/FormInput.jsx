@@ -14,6 +14,7 @@ import Checkboxs from './Checkboxs';
 import Switchs from '../Switchs';
 import TimePicker from '../TimePicker';
 import DatePicker from '../DatePicker';
+import DateTimePicker from './DateTimePicker';
 import utils from '../../utils';
 
 const propTypes = {
@@ -50,6 +51,9 @@ const propTypes = {
   // Time or Date
   formatter: PropTypes.string,
   displayFormat: PropTypes.string,
+
+  // DateTimePicker
+  showTime: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -75,6 +79,7 @@ class FormInput extends PureComponent {
       'onTimeChange',
       'renderCustomInput',
       'onDateFocusChange',
+      'onDateTimeChange',
     ]);
   }
 
@@ -164,6 +169,25 @@ class FormInput extends PureComponent {
     data.value = momentObj.format(formatOption);
 
     // 数据更新
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange(data, momentObj);
+    }
+
+    // 值为空是进行数据验证
+    if (typeof this.props.checkClearValue === 'function' && this.props.disabled &&
+        data.value === '') {
+      this.props.checkClearValue(data.value);
+    }
+  }
+
+  onDateTimeChange(momentObj) {
+    const formatOption = this.props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
+    const data = {
+      label: this.props.label,
+    };
+    if (momentObj) data.value = momentObj.format(formatOption);
+    else data.value = moment().format(formatOption);
+
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(data, momentObj);
     }
@@ -306,6 +330,18 @@ class FormInput extends PureComponent {
             onDatesChange={this.onDatesChange}
             focusedInput={this.state.focusedInput}
             showDefaultInputIcon
+          />
+        );
+
+      case 'datetime':
+        if (!moment.isMoment(timeValue)) {
+          timeValue = moment(timeValue);
+        }
+
+        return (
+          <DateTimePicker
+            {...inputProps}
+            onChange={this.onDateTimeChange}
           />
         );
 

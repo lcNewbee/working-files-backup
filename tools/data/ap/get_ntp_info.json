@@ -8,6 +8,7 @@
     "ntpServer":"0.openwrt.pool.ntp.org",
     "zoneName":"Africa/Accra",
     "date": "2015-9-05",
-    "time": "11:29:39"
+    "time": "11:29:39",
+    "fulltime": "2017-07-17 16:51:21"
   }
 }
