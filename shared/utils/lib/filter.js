@@ -16,7 +16,6 @@ function translate(str) {
 function transformComplex(num, unit) {
   var ret = unit;
 
-
   if(num > 1) {
     ret = num + translate(ret + 's');
   } else {

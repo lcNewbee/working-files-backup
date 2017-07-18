@@ -1,6 +1,12 @@
 var stringUtils = require('./string');
 var dom;
 
+/**
+ * 获取元素的绝对位置
+ *
+ * @param {Mouse Event} e 鼠标事件
+ * @returns 返回当前元素的左上角，距离html的左上角的距离单位PX
+ */
 function getAbsPoint(e) {
   var elem = e;
   var x = e.offsetLeft;
@@ -15,6 +21,12 @@ function getAbsPoint(e) {
   return { 'x': x, 'y': y };
 }
 
+/**
+ * 把html字符串 转换为 DocumentFragment 对象
+ *
+ * @param {any} html html字符串
+ * @returns 转换后的DocumentFragment
+ */
 function fragment(html) {
   var elt = document.createElement('div');
   var frag = document.createDocumentFragment();
@@ -27,6 +39,13 @@ function fragment(html) {
   return frag;
 }
 
+/**
+ * 为Dom元素添加Classname
+ *
+ * @param {dom} elem 你要添加Class的dom元素
+ * @param {string} addClassName 你要添加的 classname
+ * @returns 返回添加新 classname 后的Dom元素
+ */
 function addClass(elem, addClassName) {
   var retElem = elem;
 
@@ -36,6 +55,30 @@ function addClass(elem, addClassName) {
 
   return retElem;
 }
+
+/**
+ * 删除Dom元素中的Classname
+ *
+ * @param {any} elem 你要删除Class的dom元素
+ * @param {any} removeClassName 你要添删除 classname
+ * @returns 返回删除 classname 后的Dom元素
+ */
+function removeClass(elem, removeClassName) {
+  var retElem = elem;
+
+  if(retElem) {
+    retElem.className = stringUtils.removeClassName(retElem.className, removeClassName);
+  }
+
+  return retElem;
+}
+
+/**
+ * 获取本地可预览的文件URL
+ *
+ * @param {file} file 文件对象
+ * @returns 返回本地预览的图片URL
+ */
 function previewFile(file) {
   var retPromise = new Promise(function(resolve) {
     var retUrl = '';
@@ -74,16 +117,6 @@ function previewFile(file) {
   });
 
   return retPromise;
-}
-
-function removeClass(elem, removeClassName) {
-  var retElem = elem;
-
-  if(retElem) {
-    retElem.className = stringUtils.removeClassName(retElem.className, removeClassName);
-  }
-
-  return retElem;
 }
 
 dom = {
