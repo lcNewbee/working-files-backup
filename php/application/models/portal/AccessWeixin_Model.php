@@ -8,29 +8,31 @@ class AccessWeixin_Model extends CI_Model {
         $this->load->helper(array('array', 'db_operation'));  
         $this->load->library('PortalSocket');      
     }
-    function get_list($data) {
-        $parameter = array(
-            'db' => $this->portalsql, 
-            'columns' => 'portal_weixin_wifi.id,portal_weixin_wifi.basip,portal_weixin_wifi.ssid,portal_weixin_wifi.shopId,portal_weixin_wifi.appId,portal_weixin_wifi.secretKey,portal_weixin_wifi.domain,portal_weixin_wifi.outTime', 
-            'tablenames' => 'portal_weixin_wifi', 
-            'pageindex' => (int) element('page', $data, 1), 
-            'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "1=1", 
-            'joins' => array(), 
-            'order' => array()
-        );
-        if(isset($data['search'])){
-            $parameter['wheres'] = $parameter['wheres'] . " AND basip LIKE '%".$data['search']."%' or ssid Like '%".$data['search']."%'";
-        }
-        $datalist = help_data_page_all($parameter);
-        $arr = array(
-            'state'=>array('code'=>2000,'msg'=>'ok'),
-            'data'=>array(
-                'page'=>$datalist['page'],
-                'list' => $datalist['data']
+    function get_list($data) {        
+        $socketarr = array(
+            'action' => 'get', 
+            'resName' => 'weixin', 
+            'data' => array(
+                'page' => array(
+                    'currPage' => element('page', $data, 1),
+                    'size' => element('size', $data, 20)
+                ),
+                'list' => array()
             )
         );
-        return json_encode($arr);
+        $portal_socket = new PortalSocket();
+        $socket_data = $portal_socket->portal_socket(json_encode($socketarr));
+        if ($socket_data['state']['code'] === 2000) {
+            $arr = array(
+                'state' => array('code' => 2000, 'msg' => 'ok'), 
+                'data' => array(
+                    'page' => $socket_data['data']['page'], 
+                    'list' => $socket_data['data']['list']
+                )
+            );
+            return json_encode($arr);
+        }
+        return json_encode(json_no('error !'));
     }
     
     function Edit($data) {
