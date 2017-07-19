@@ -167,6 +167,7 @@ class SystemMaintenance extends CI_Controller {
                 $result = json_encode($result);
             }
         } else {
+            /*
             //恢复出厂设置
             if(file_exists('/var/conf/config.db')) {
                 unlink('/var/conf/config.db');
@@ -176,6 +177,8 @@ class SystemMaintenance extends CI_Controller {
             }
             exec('sysreset');
             exec('/sbin/reboot');
+            */
+            axc_set_sysreset();
         }
 
         return $result;
