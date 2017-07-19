@@ -159,7 +159,7 @@ class AccountList_Model extends CI_Model {
             'action' => $type,
             'resName' => 'account',
             'data' => array(
-                'page' => array('pageIndex' => 1,'pageSize' => 20),
+                'page' => array('currPage' => 1,'size' => 20),
                 'list' => $data
             )
         );

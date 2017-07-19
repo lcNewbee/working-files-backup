@@ -260,7 +260,7 @@ class AccessWeb_Model extends CI_Model {
             'action' => $type,
             'resName' => 'web_template',
             'data' => array(
-                'page' => array('pageIndex' => 1,'pageSize' => 20),
+                'page' => array('currPage' => 1,'size' => 20),
                 'list' => $data
             )
         );

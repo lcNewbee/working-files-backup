@@ -2,9 +2,11 @@
 class AccessWeixin_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
+        $this->load->library('session');
         $this->load->database();
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
-        $this->load->helper(array('array', 'db_operation'));        
+        $this->load->helper(array('array', 'db_operation'));  
+        $this->load->library('PortalSocket');      
     }
     function get_list($data) {
         $parameter = array(
@@ -30,62 +32,49 @@ class AccessWeixin_Model extends CI_Model {
         );
         return json_encode($arr);
     }
-
-    function Add($data) {
-        $result = FALSE;
-        $insertary = $this->getPram($data);
-        $result = $this->portalsql->insert('portal_weixin_wifi', $insertary);
-        $result ? $result = json_ok() : $result = json_no('insert error');
-        return json_encode($result);
-    }
-    function Delete($data) {
-        $result = FALSE;
-        $dellist = $data['selectedList'];
-        foreach($dellist as $row) {
-            $this->portalsql->where('id', $row['id']);
-            $result = $this->portalsql->delete('portal_weixin_wifi');
-        }
-        $result = $result ? json_ok() : json_no('delete error');
-        return json_encode($result);
-    }
+    
     function Edit($data) {
+        $result = json_encode(json_no('edit error'));
         //上传不检测结果
-        $upload_data = $this->uploadWxImg('qrcode');           
+        $upload_data = $this->uploadWxImg('qrcode');
         //继续配置
-        $updata = $this->getPram($data);
-        $updata ['id'] = element('id',$updata);
-        $result = $this->portalsql->replace('portal_weixin_wifi',$updata,array('id'=>$updata['id']));
-        if($result){
-            return json_encode(json_ok());
-        }     
-        return json_encode(json_no('update error'));
+        $updata = $this->getParams($data);
+        $updata['id'] = element('id', $updata);
+        //send java
+        if ($this->noticeSocket($this->getSocketPramse('edit', array($updata)))) {
+            $result = json_encode(json_ok());
+        }
+        $loginfo = array(
+            'type' => 'Edit', 
+            'operator' => element('username', $_SESSION, ''), 
+            'operationCommand' => "Edit portal->weixin", 
+            'operationResult' => preg_replace('#\s+#', '', trim($result)), 
+            'description' => json_encode($updata)
+        );
+        Log_Record($this->db, $loginfo);
+        return $result;
     }
 
-    private function getPram($data){   
+    private function getParams($data){   
         if(!isset($data['basip'])){
             $data['basip'] = $this->getInterface();
         }    
-        $default_domain = $this->portalsql->select('domain')
-                                ->from('config')
-                                ->get()->result_array();
+        /*
         $default_outTime = $this->portalsql->select('outTime')
                         ->from('portal_weixin_wifi')
                         ->where('id=1')
                         ->get()->result_array();
+        */
         $arr = array(
-            'id'=> element('id',$data),
-            'basip' => element('basip',$data, ''),
-            'ssid' => element('ssid',$data),
-            'shopId' => element('shopId',$data),
-            'appId' => element('appId',$data),
-            'secretKey' => element('secretKey',$data),
-            //'domain' => element('domain',$data,$default_domain['0']['domain']),
-            'domain' => 'http://'.$data['basip'].':8080',
-            'outTime' => element('outTime',$data,$default_outTime['0']['outTime'])
+            'id' => element('id', $data),
+            'ssid' => element('ssid', $data),
+            'shopId' => element('shopId', $data),
+            'appId' => element('appId', $data),
+            'secretKey' => element('secretKey', $data),
+            'outTime' => ''//element('outTime', $data, $default_outTime['0']['outTime'])
         );        
         return $arr;
     }
-
     private function getInterface() {
         $data = $this->db->select('port_name,ip1')
                 ->from('port_table')
@@ -121,5 +110,25 @@ class AccessWeixin_Model extends CI_Model {
             );
         }
         return $result;
+    }
+    private function noticeSocket($data){
+        $result = null;
+        $portal_socket = new PortalSocket();
+        $result = $portal_socket->portal_socket(json_encode($data));
+        if($result['state']['code'] === 2000){
+            return TRUE;
+        }
+        return FALSE;
+    }
+    private function getSocketPramse($type, $data) {
+         $socketarr = array(
+            'action' => $type,
+            'resName' => 'weixin',
+            'data' => array(
+                'page' => array('currPage' => 1,'size' => 20),
+                'list' => $data
+            )
+        );
+        return $socketarr;
     }
 }
