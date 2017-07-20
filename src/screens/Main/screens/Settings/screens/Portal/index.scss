@@ -1,0 +1,78 @@
+.images-list {
+  margin: 10px;
+
+  img {
+    width: 150px;
+    height: 150px;
+    margin-right: 5px;
+  }
+}
+.form-group.portal_file{
+    display: inline-block;
+}
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background-color: #ccc;
+
+  img {
+    width: 100%;
+    height: 160px;
+  }
+  .carousel-indicators {
+    position: absolute;
+    bottom: 5px;
+    overflow: auto;
+    left: 50%;
+    margin-left: -39px;
+    z-index: 2;
+
+    li {
+      float: left;
+      margin: 0 4px;
+      padding: 3px;
+      width: 18px;
+      line-height: 1em;
+      border-radius: 10px;
+      background-color: #fff;
+      cursor: pointer;
+
+      &.active {
+        background-color: #0083cd;
+        color: #fff;
+      }
+    }
+  }
+}
+.o-preview-iphone {
+  background: url(images/iphone.png) center top ;
+  margin: 1px auto;
+  padding-top: 1px;
+  width: 280px;
+  height: 485px;
+  background-size: 100%;
+
+  .o-preview-iphone__body {
+    width: 240px;
+    height: 350px;
+    margin: 0 auto;
+    margin-top: 70px;
+    background-color: #eee;
+    text-align: center;
+
+    .a-btn {
+      margin-top: 20px;
+    }
+  }
+  .o-preview-iphone__body-title {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 20px;
+    overflow: hidden;
+    padding: 6px;
+    word-break: break-all;
+    max-height: 90px;
+  }
+}
