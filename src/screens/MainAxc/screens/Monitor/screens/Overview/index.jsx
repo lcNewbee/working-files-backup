@@ -635,9 +635,10 @@ export default class GroupOverview extends React.Component {
               page={serverData.getIn(['aroundAps', 'page'])}
             />
           </div>
+
         </div>
         <Modal
-          id="AppScreenListModal"
+          id="AppScreenModal"
           isShow={$$actionQuery.get('action') === 'edit'}
           title={$$actionQuery.get('myTitle')}
           onClose={() => {

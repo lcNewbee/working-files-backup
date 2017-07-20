@@ -374,7 +374,7 @@ const routes = [
                 text: __('Monitor'),
                 routes: [
                   {
-                    id: 'overview',
+                    id: 'groupOverview',
                     path: '/main/group/monitor/overview',
                     formUrl: 'goform/group/overview',
                     text: __('Overview'),

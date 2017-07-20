@@ -548,7 +548,7 @@ export default class MainGroup extends React.Component {
                     <Icon
                       name="cog"
                       size="2x"
-                      onClick={() => {
+                      onClick={(e) => {
                         this.props.fetchGroupAps(manageGroupId);
                         this.props.showMainModal({
                           title: __('Manage AP Groups'),
@@ -559,28 +559,6 @@ export default class MainGroup extends React.Component {
                       }}
                     />
                   </Tooltip>
-                  {/* <Tooltip
-                    title={__('Add AP Group')}
-                  >
-                    <Icon
-                      name="plus"
-                      size="2x"
-                      className="fl"
-                      onClick={() => {
-                        this.props.fetchGroupAps();
-                        this.props.updateAddApGroup({
-                          groupname: '',
-                          remark: '',
-                        });
-                        this.props.showMainModal({
-                          title: __('Add AP Group'),
-                          isShow: true,
-                          size: 'lg',
-                          name: 'groupAdd',
-                        });
-                      }}
-                    />
-                  </Tooltip>*/}
                 </div>
               ) : null
             }
@@ -610,20 +588,18 @@ export default class MainGroup extends React.Component {
         render(val, $$data) {
           return val || $$data.get('mac');
         },
-      }, {
+      },
+      {
         id: 'model',
         text: __('Model'),
-      }, {
+      },
+      {
         id: 'mac',
         text: __('MAC Address'),
       },
       {
         id: 'ip',
         text: __('IP Address'),
-      },
-      {
-        id: 'model',
-        text: __('Model'),
       },
       {
         id: 'status',

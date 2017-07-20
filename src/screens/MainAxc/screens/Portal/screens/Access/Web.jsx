@@ -657,8 +657,8 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={this.curListOptions}
         paginationType="none"
-        modalSize="max"
         onBeforeSync={onBeforeSync}
+        className="t-portal-web"
         editFormOption={{
           hasFile: true,
         }}

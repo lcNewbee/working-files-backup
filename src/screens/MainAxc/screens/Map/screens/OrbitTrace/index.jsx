@@ -223,7 +223,6 @@ export default class View extends React.Component {
         'drawLinePath',
         'drawCurveAnimPath',
         'updateCanvas',
-        'onRequestMacData',
       ],
     );
 
@@ -266,12 +265,9 @@ export default class View extends React.Component {
 
   componentDidUpdate(prevProps) {
     const store = this.props.store;
-    const preScreenId = prevProps.store.get('curScreenId');
     const curScreenId = store.get('curScreenId');
     const $$pathList = store.getIn([curScreenId, 'data', 'list']);
     const $$prevPathList = prevProps.store.getIn([curScreenId, 'data', 'list']);
-
-    /** *********hack: 暂时解决store中curScreenId更新不及时引起的bug**********/
 
     // 只有单列表点改变时，才画canvas
     if ($$prevPathList !== $$pathList || !this.mapMouseDown) {
@@ -379,19 +375,6 @@ export default class View extends React.Component {
     }, 100);
   }
 
-  onRequestMacData() {
-    const curScreenId = this.props.store.get('curScreenId');
-    const mac = this.props.store.getIn([curScreenId, 'query', 'mac']);
-    if (!(/^([0-9a-fA-F]{2}(:|-)){5}[0-9a-fA-F]{2}$/).test(mac)) {
-      this.setState({ noticeFlag: -1 * this.preNoticeFlag });
-    } else {
-      this.props.fetchScreenData();
-    }
-    setTimeout(() => {
-      this.preNoticeFlag = this.state.noticeFlag;
-    }, 100);
-  }
-
   getNaturalWidthAndHeight(url) {
     const image = new Image();
     image.src = url;
@@ -441,14 +424,24 @@ export default class View extends React.Component {
   drawCurveAnimPath(ctx, curvePath) {
     const len = curvePath.length;
     const colorsLen = this.colors.length;
+    // 每帧连多少个点，默认一个点
+    let animationFramePiontsLen = 1;
+    let prevPiont = null;
+    let loopStep = null;
 
     // 当超过一个点时，才画线
     if (len > 0) {
-      // 每帧连多少个点， 默认动画为 90 帧，1.5秒
-      let animationFramePiontsLen = parseInt(len / DRAW_TIMES, 10);
-      let prevPiont = curvePath[0];
-      let curIndex = 0;
-      let loopStep = null;
+      prevPiont = curvePath[0];
+
+      // 当点数超过默认的 DRAW_TIMES 1.5倍时
+      if (len >= DRAW_TIMES * 1.5) {
+        animationFramePiontsLen = parseInt(len / DRAW_TIMES, 10);
+      }
+
+      // 考虑到动画时间，每一帧最多画 MAX_FRAME_PIONTS 个点
+      if (animationFramePiontsLen > MAX_FRAME_PIONTS) {
+        animationFramePiontsLen = MAX_FRAME_PIONTS;
+      }
 
       // 画线前先清除 以前划线定时器
       cancelAnimationFrame(this.drawAnimationFrame);
@@ -457,11 +450,9 @@ export default class View extends React.Component {
       ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
       ctx.lineWidth = 1.5;
 
-      // 考虑到时间，每一帧最多画100个点
-      animationFramePiontsLen = animationFramePiontsLen > MAX_FRAME_PIONTS ? MAX_FRAME_PIONTS : animationFramePiontsLen;
-
-      loopStep = () => {
-        let distIndex = curIndex + animationFramePiontsLen;
+      loopStep = (startIndex = 0) => {
+        let distIndex = startIndex + animationFramePiontsLen;
+        let curIndex = startIndex;
         let curPoint;
 
         if (distIndex > len) {
@@ -469,26 +460,30 @@ export default class View extends React.Component {
         }
 
         // 画线的轨迹
-        for (curIndex; curIndex < distIndex; curIndex += 1) {
+        for (curIndex = startIndex; curIndex < distIndex; curIndex += 1) {
           curPoint = curvePath[curIndex];
 
           ctx.moveTo(prevPiont[0], prevPiont[1]);
           ctx.lineTo(curPoint[0], curPoint[1]);
           prevPiont = curPoint;
         }
-
         // 注意：性能考虑，每一帧只执行一次划线
         ctx.stroke();
 
         // 如果没有画完继续请求下一帧
         if (curIndex < len) {
-          this.drawAnimationFrame = requestAnimationFrame(loopStep);
+          this.drawAnimationFrame = requestAnimationFrame(() => {
+            loopStep(curIndex);
+          });
+        } else {
+          // 释放内存
+          loopStep = null;
         }
       };
 
-      curIndex = 0;
-
-      this.drawAnimationFrame = requestAnimationFrame(loopStep);
+      this.drawAnimationFrame = requestAnimationFrame(() => {
+        loopStep(0);
+      });
     }
   }
   drawMap($$pathList) {
@@ -531,18 +526,22 @@ export default class View extends React.Component {
     const curItem = mapList.find(item => item.get('id') === curMapId);
     if (typeof curItem === 'undefined') return null;
 
-    // 经纬度转换为画布上的像素
-    const pathListPixel = $$pathList.toJS().map(($$point) => {
-      const ret = gps.getOffsetFromGpsPoint($$point, curItem.toJS());
-      let x = Math.floor((ret.x * this.state.mapWidth) / 100);
-      let y = Math.floor((ret.y * this.state.mapHeight) / 100);
-      // 若超出画布范围，则调整数据
-      x = x <= this.state.mapWidth ? x : this.state.mapWidth;
-      y = y <= this.state.mapHeight ? y : this.state.mapHeight;
-      const time = $$point.time;
-      // console.log('point', $$point);
-      return { x, y, time };
-    });
+    // 经纬度转换为画布上的像素, 并清除超出画布的点
+    const pathListPixel = $$pathList
+      .map(($$point) => {
+        const pointOffset = gps.getOffsetFromGpsPoint($$point.toJS(), curItem.toJS());
+        let ret = null;
+        if (pointOffset.x <= 100 && pointOffset.y <= 100) {
+          ret = {
+            x: Math.floor((pointOffset.x * this.state.mapWidth) / 100),
+            y: Math.floor((pointOffset.y * this.state.mapHeight) / 100),
+            time: $$point.get('time'),
+          };
+        }
+        return ret;
+      })
+      .filterNot($newItem => !$newItem)
+      .toJS();
 
     stationaryPoint(ctx, pathListPixel);
 
@@ -559,7 +558,6 @@ export default class View extends React.Component {
       const crvPoints = getPointList(item, arr[index + 1]);
       this.curvePath = this.curvePath.concat(crvPoints);
     });
-
     // 依据点显示动画
     this.drawCurveAnimPath(ctx, this.curvePath);
   }
@@ -652,7 +650,6 @@ export default class View extends React.Component {
     const { store } = this.props;
     const curScreenId = store.get('curScreenId');
     const $$screenQuery = store.getIn([curScreenId, 'query']);
-    if (!this.mapList) return null;
 
     return (
       <AppScreen
@@ -742,7 +739,9 @@ export default class View extends React.Component {
             minWidth: '850px',
           }}
         >
-          {this.renderCurMap(this.mapList, $$screenQuery.get('curMapId'), this.state.zoom)}
+          {
+            this.mapList ? this.renderCurMap(this.mapList, $$screenQuery.get('curMapId'), this.state.zoom) : null
+          }
           <div className="o-map-zoom-bar">
             <Icon
               name="minus"
