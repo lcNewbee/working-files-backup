@@ -106,7 +106,7 @@ export default class View extends React.Component {
         store={store}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
-        actionBarChildren={__('This function is available only when the "Rule Type" is "Port",whice configured in "AAA Policies".')}
+        actionBarChildren={__('This function is available only when the "Rule Type" is "Port",whice configured in "User Access Policies".')}
         editable={false}
         actionable
         selectable

@@ -732,7 +732,7 @@ const routes = [
                 icon: 'link',
                 path: '/main/portal/aaa/list',
                 formUrl: 'goform/portal/Aaa',
-                text: __('AAA Policies'),
+                text: __('User Access Policies'),
                 component: sNetworkAaa.Screen,
               },
             ],
