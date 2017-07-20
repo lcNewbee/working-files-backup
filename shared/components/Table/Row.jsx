@@ -94,11 +94,11 @@ class Row extends Component {
     const { item, index, options } = this.props;
 
     return options.map(
-        ($$curTdOption) => {
+        ($$curTdOption, i) => {
           const id = $$curTdOption.get('id');
           const $$valuePath = $$curTdOption.get('valuePath');
           const filterObj = $$curTdOption.get('filterObj');
-          const thisKey = `tableRow${id}`;
+          const thisKey = `tableRow${i}`;
           let currVal = item.get(id);
           let currItemArr = [];
           let currValArr = [];
