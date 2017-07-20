@@ -280,7 +280,7 @@ class Table extends PureComponent {
       myPagination = newPageObject.page;
       $$myList = newPageObject.$$newList;
 
-    // 如如果是默认
+    // 如果是默认,但没有分页对象
     } else if (paginationType === 'default' && !page) {
       myPagination = {
         total: $$myList.size,

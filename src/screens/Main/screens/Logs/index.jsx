@@ -219,7 +219,9 @@ export class Logs extends PureComponent {
           options={options}
           list={data.get('list')}
           page={data.get('page')}
-          size={query.get('size')}
+          pageQuery={{
+            size: query.get('size'),
+          }}
           onPageChange={onPageChange}
           onPageSizeChange={onChangeTableSize}
           loading={fetching}

@@ -623,7 +623,9 @@ export class Device extends PureComponent {
           options={devicesTableOptions}
           list={this.props.store.getIn(['data', 'list'])}
           page={this.props.store.getIn(['data', 'page'])}
-          size={size}
+          pageQuery={{
+            size,
+          }}
           onPageSizeChange={this.onChangeTableSize}
           sizeOptions={selectOptions}
           onPageChange={this.onPageChange}

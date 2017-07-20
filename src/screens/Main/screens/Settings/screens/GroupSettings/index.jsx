@@ -52,6 +52,7 @@ export class GroupSettings extends PureComponent {
 
       'getGroupTableOptions',
       'getDevicesTableOptions',
+      'renderEditTable',
     ]);
   }
 
@@ -251,7 +252,7 @@ export class GroupSettings extends PureComponent {
       }, {
         id: 'groupname',
         text: __('Current Group'),
-        render (val) {
+        render(val) {
           if (val === 'Default') {
             val = __('Ungrouped Devices');
           }
@@ -261,11 +262,9 @@ export class GroupSettings extends PureComponent {
         id: 'op',
         text: __('Select'),
         width: 50,
-        render: function (val, item) {
-          let deviceMac;
-          let selectedDevices = this.props.edit.get('devices');
-
-          deviceMac = item.get('mac');
+        render: (val, $$item) => {
+          const selectedDevices = this.props.edit.get('devices');
+          const deviceMac = $$item.get('mac');
 
           return (
             <div className="action-btns">
@@ -277,7 +276,7 @@ export class GroupSettings extends PureComponent {
               />
             </div>
           );
-        }.bind(this),
+        },
       }]);
     const noControl = this.props.app.get('noControl');
 
@@ -286,11 +285,53 @@ export class GroupSettings extends PureComponent {
     }
     return ret;
   }
-
-  render() {
-    const { groupname, remarks } = this.props.validateOption;
-    const groupTableOptions = this.getGroupTableOptions();
+  renderEditTable(isLook) {
     const devicesTableOptions = this.getDevicesTableOptions();
+    const { groupname, remarks } = this.props.validateOption;
+
+    return (
+      <div>
+        {
+          isLook ? (
+            <Table
+              className="table"
+              options={fromJS(devicesTableOptions).delete(-1)}
+              list={this.props.seeDevices}
+            />
+          ) : (
+            <div>
+              <FormGroup
+                label={msg.groupname}
+                required
+                value={this.getEditVal('groupname')}
+                maxLength="24"
+                id="groupname"
+                onChange={this.onChangeGroupSettings('groupname')}
+                {...groupname}
+              />
+              <FormGroup
+                label={msg.remarks}
+                required
+                maxLength="31"
+                value={this.getEditVal('remark')}
+                id="remark"
+                onChange={this.onChangeGroupSettings('remark')}
+                {...remarks}
+              />
+              <Table
+                className="table"
+                options={fromJS(devicesTableOptions)}
+                list={this.props.devices.get('list')}
+                page={this.props.page}
+              />
+            </div>
+          )
+        }
+      </div>
+    );
+  }
+  render() {
+    const groupTableOptions = this.getGroupTableOptions();
     const isLook = this.props.actionType === 'look';
     const noControl = this.props.app.get('noControl');
     let modalTitle = this.getEditVal('orignName');
@@ -340,40 +381,7 @@ export class GroupSettings extends PureComponent {
           draggable
         >
           {
-            isLook ? (
-              <Table
-                className="table"
-                options={fromJS(devicesTableOptions).delete(-1)}
-                list={this.props.seeDevices}
-              />
-            ) : (
-              <div>
-                <FormGroup
-                  label={msg.groupname}
-                  required
-                  value={this.getEditVal('groupname')}
-                  maxLength="24"
-                  id="groupname"
-                  onChange={this.onChangeGroupSettings('groupname')}
-                  {...groupname}
-                />
-                <FormGroup
-                  label={msg.remarks}
-                  required
-                  maxLength="31"
-                  value={this.getEditVal('remark')}
-                  id="remark"
-                  onChange={this.onChangeGroupSettings('remark')}
-                  {...remarks}
-                />
-                <Table
-                  className="table"
-                  options={fromJS(devicesTableOptions)}
-                  list={this.props.devices.get('list')}
-                  page={this.props.page}
-                />
-              </div>
-            )
+            this.props.edit ? this.renderEditTable(isLook) : null
           }
         </Modal>
       </div>
