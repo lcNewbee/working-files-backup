@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import ReactCSSTransition from 'react-transition-group/CSSTransition';
 import classNames from 'classnames';
 import b28n from 'shared/b28n';
 import utils from '../../utils';
@@ -46,7 +46,7 @@ function renderBackdrop(isShow, transitionEnter, transitionLeave) {
       );
     }
 
-  // 隐藏Backdrop, 并显示动画
+    // 隐藏Backdrop, 并显示动画
   } else if (transitionLeave) {
     setTimeout(
       () => {
@@ -71,7 +71,7 @@ function renderBackdrop(isShow, transitionEnter, transitionLeave) {
         }
       }, 500);
 
-  // 隐藏并无动画
+    // 隐藏并无动画
   } else if (modalBackdropElem) {
     document.body.removeChild(modalBackdropElem);
   }
@@ -100,8 +100,6 @@ const propTypes = {
 const defaultProps = {
   title: '',
   role: 'dialog',
-  okText: b28n.format('OK'),
-  cancelText: b28n.format('Cancel'),
   transitionEnter: true,
   transitionLeave: true,
   okButton: true,
@@ -204,7 +202,7 @@ class Modal extends PureComponent {
       modalClassName = `${modalClassName} o-modal--${size}`;
     }
 
-    // ReactCSSTransitionGroup need key value
+    // ReactCSSTransition need key value
     if (id) {
       keyVal = `${id}Key`;
     }
@@ -215,125 +213,126 @@ class Modal extends PureComponent {
     } else if (role === 'confirm') {
       hasCloseBtn = false;
 
-    // when role is "alert" no cancelButton
+      // when role is "alert" no cancelButton
     } else if (role === 'alert') {
       cancelButton = false;
     }
 
     return (
-      <ReactCSSTransitionGroup
-        component="div"
-        transitionName="fade-down"
-        transitionEnter={transitionEnter}
-        transitionLeave={transitionLeave}
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={300}
+      <div
+        className={modalClassName}
+        role={role}
+        style={{
+          display: isShow ? 'block' : 'none',
+        }}
+        onDragOver={(e) => { e.preventDefault(); }} // 拖放事件：允许放置
+        onDrop={(e) => { // 拖放事件：放置事件
+          if (draggable) {
+            const positionStyle = Object.assign({},
+              this.state.modalStyle,
+              {
+                top: `${e.clientY - this.diffY}px`,
+                left: `${e.clientX - this.diffX}px`,
+                position: 'absolute',
+              },
+            );
+            this.setState({
+              modalStyle: positionStyle,
+            });
+          }
+        }}
       >
         {
-          isShow ? (
-            <div
-              key={keyVal}
-              className={modalClassName}
-              role={role}
-              onDragOver={(e) => { e.preventDefault(); }} // 拖放事件：允许放置
-              onDrop={(e) => { // 拖放事件：放置事件
-                if (draggable) {
-                  const positionStyle = Object.assign({},
-                  this.state.modalStyle,
-                    {
-                      top: `${e.clientY - this.diffY}px`,
-                      left: `${e.clientX - this.diffX}px`,
-                      position: 'absolute',
-                    },
-                  );
-                  this.setState({
-                    modalStyle: positionStyle,
-                  });
-                }
-              }}
-            >
-              {
-                customBackdrop && isShow ? (
-                  <div className="o-modal__backdrop in" />
-                ) : null
-              }
-              <div
-                className={contentClassNames}
-                style={this.state.modalStyle}
-                ref={(ref) => {
-                  this.moveDiv = ref;
-                }}
-              >
-                <div
-                  className="o-modal__content"
-                >
-                  {
-                    title ? ( // 只有Modal的标题部分允许拖动
-                      <div
-                        className="o-modal__header"
-                        draggable={draggable}
-                        onDragStart={(e) => { // 拖放事件：拖放准备
-                          this.diffX = e.clientX - this.moveDiv.offsetLeft;
-                          this.diffY = e.clientY - this.moveDiv.offsetTop;
-                        }}
-                      >
-                        {
-                          hasCloseBtn ? (
-                            <span
-                              role="button"
-                              className="close fr"
-                              onClick={this.onClose}
-                            >
-                              &times;
-                            </span>
-                          ) : null
-                        }
-                        <h4 className="o-modal__title" id="myModalLabel">
-                          {title}
-                        </h4>
-                      </div>
-                    ) : null
-                  }
-
-                  <div className="o-modal__body">
-                    {this.props.children}
-                  </div>
-                  {
-                    !noFooter ? (
-                      <div className="o-modal__footer">
-                        {
-                          cancelButton ? (
-                            <button
-                              type="button"
-                              className="a-btn a-btn-default"
-                              onClick={this.onClose}
-                            >
-                              {b28n.format('Cancel')}
-                            </button>
-                          ) : null
-                        }
-
-                        {
-                          okButton ? (
-                            <button
-                              type="button"
-                              className="a-btn a-btn--primary"
-                              onClick={this.onOk}
-                            >
-                              {b28n.format('OK')}
-                            </button>
-                          ) : null
-                        }
-
-                      </div>
-                    ) : null
-                  }
-                </div>
-              </div>
-            </div>
+          customBackdrop && isShow ? (
+            <div className="o-modal__backdrop in" />
           ) : null
         }
-      </ReactCSSTransitionGroup>
+        <ReactCSSTransition
+          key={keyVal}
+          in={isShow}
+          classNames="fade-down"
+          enter={transitionEnter}
+          exit={transitionLeave}
+          timeout={{
+            enter: 500,
+            exit: 300,
+          }}
+        >
+          <div
+            key={keyVal}
+            className={contentClassNames}
+            style={this.state.modalStyle}
+            ref={(ref) => {
+              this.moveDiv = ref;
+            }}
+          >
+            <div
+              className="o-modal__content"
+            >
+              {
+                title ? ( // 只有Modal的标题部分允许拖动
+                  <div
+                    className="o-modal__header"
+                    draggable={draggable}
+                    onDragStart={(e) => { // 拖放事件：拖放准备
+                      this.diffX = e.clientX - this.moveDiv.offsetLeft;
+                      this.diffY = e.clientY - this.moveDiv.offsetTop;
+                    }}
+                  >
+                    {
+                      hasCloseBtn ? (
+                        <span
+                          className="close fr"
+                          onClick={this.onClose}
+                        >
+                          &times;
+                        </span>
+                      ) : null
+                    }
+                    <h4 className="o-modal__title" id="myModalLabel">
+                      {title}
+                    </h4>
+                  </div>
+                ) : null
+              }
+
+              <div className="o-modal__body">
+                {this.props.children}
+              </div>
+              {
+                !noFooter ? (
+                  <div className="o-modal__footer">
+                    {
+                      cancelButton ? (
+                        <button
+                          type="button"
+                          className="a-btn a-btn-default"
+                          onClick={this.onClose}
+                        >
+                          {cancelText || b28n.format('Cancel')}
+                        </button>
+                      ) : null
+                    }
+
+                    {
+                      okButton ? (
+                        <button
+                          type="button"
+                          className="a-btn a-btn--primary"
+                          onClick={this.onOk}
+                        >
+                          {okText || b28n.format('OK')}
+                        </button>
+                      ) : null
+                    }
+
+                  </div>
+                ) : null
+              }
+            </div>
+          </div>
+        </ReactCSSTransition>
+      </div>
     );
   }
 }

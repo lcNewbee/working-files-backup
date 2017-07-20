@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
-import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import ReactCSSTransition from 'react-transition-group/CSSTransition';
 import utilsCore from 'shared/utils/lib/core';
 import PureComponent from '../Base/PureComponent';
 
@@ -228,13 +228,15 @@ class WizardContainer extends PureComponent {
             }
           </ul>
         </div>
-        <ReactCSSTransitionGroup
+        <ReactCSSTransition
           component="div"
-          transitionName={`slide-${direction}`}
-          transitionEnter={this.props.animation}
-          transitionLeave={false}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={0}
+          classNames={`slide-${direction}`}
+          enter={this.props.animation}
+          exit={false}
+          timeout={{
+            enter: 500,
+            exit: 0,
+          }}
         >
           <div key={`wizardStep${currStep}`} className="o-wizard__content" >
             {
@@ -249,7 +251,7 @@ class WizardContainer extends PureComponent {
               ) : null
             }
           </div>
-        </ReactCSSTransitionGroup>
+        </ReactCSSTransition>
         <div className="o-wizard__footer">
           {
             currStep > 0 ? (

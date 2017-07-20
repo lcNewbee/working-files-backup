@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import immutable, { List, Map } from 'immutable';
 import utils, { immutableUtils } from 'shared/utils';
 import { getActionable } from 'shared/axc';
-import Icon from 'shared/components/Icon';
+import { Icon } from 'shared/components';
 import AppScreenList from './AppScreenList';
 import AppScreenSettings from './AppScreenSettings';
 
@@ -340,19 +340,17 @@ export default class AppScreen extends React.Component {
             />
           ) : null
         }
-
-        {
+        <div>
+          {
           this.props.children
         }
+        </div>
+
         {
-          this.state.loading ? (
-            <div style={loadingWarpStyle} />
-          ) : null
-        }
-        {
-          this.state.loading ? (
-            <Icon style={loadingStyle} name="spinner" spin />
-          ) : null
+          this.state.loading ? [
+            <div key="appLoadingWarp" style={loadingWarpStyle} />,
+            <Icon key="appLoadingIcon" style={loadingStyle} name="spinner" spin />
+          ] : null
         }
       </div>
     );

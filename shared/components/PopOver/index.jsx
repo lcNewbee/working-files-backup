@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import ReactCSSTransition from 'react-transition-group/CSSTransition';
 import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
@@ -57,20 +57,28 @@ class PopOver extends PureComponent {
     const { transitionLeave, transitionEnter, isShow } = this.props;
 
     return (
-      <ReactCSSTransitionGroup
-        component="section"
-        transitionName="fade-up"
-        transitionEnter={transitionEnter}
-        transitionLeave={transitionLeave}
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={300}
+      <ReactCSSTransition
+        classNames="fade-up"
+        enter={transitionEnter}
+        exit={transitionLeave}
+        timeout={{
+          enter: 500,
+          exit: 300,
+        }}
       >
-        {
-          isShow ? (
-            this.renderContent()
-          ) : null
-        }
-      </ReactCSSTransitionGroup>
+        <div
+          key="onlyPopOver"
+          style={{
+            display: isShow ? 'block' : 'none',
+          }}
+        >
+          {
+            isShow ? (
+              this.renderContent()
+            ) : null
+          }
+        </div>
+      </ReactCSSTransition>
     );
   }
 }
