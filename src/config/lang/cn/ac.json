@@ -20,6 +20,7 @@
   "Tx Power": "发射功率",
   "Channel2.4G":"2.4G信道",
   "Channel5.8G":"5.8G信道",
+  "Frequency":"频段",
   "Note: If Access Manager control is needed, please  set the mode of the current group as Fat AP":"注意：若需要开启AC控制功能，请设置当前组的模式为胖AP模式",
   "IP/MAC/Associated AP":"IP/MAC/关联AP",
   "Are you sure to delete the item?":"你确定要删除该条记录吗？",
