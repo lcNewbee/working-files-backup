@@ -3,7 +3,6 @@ import { fromJS } from 'immutable';
 const defaultState = fromJS({
   popOver: {
     isShow: false,
-    transitionName: 'fade-up',
 
     // 'vlanAsider' 'groupAsider' 'topMenu'
     name: 'topMenu',

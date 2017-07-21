@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
 import { actions as appActions } from 'shared/containers/app';
-import Navbar from 'shared/components/Navbar';
-import Button from 'shared/components/Button/Button';
-import FormGroup from 'shared/components/Form/FormGroup';
+import { Navbar, Button, FormGroup } from 'shared/components';
 
 const validOptions = Map({
   username: validator({

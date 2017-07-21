@@ -2,19 +2,14 @@ import React from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import PureComponent from 'shared/components/Base/PureComponent';
 import { fromJS } from 'immutable';
 
 // components
-import Table from 'shared/components/Table';
-import Button from 'shared/components/Button/Button';
-import { Search } from 'shared/components/Form';
-import Select from 'shared/components/Select';
-import Switchs from 'shared/components/Switchs';
+import { PureComponent, Table, Button, Switchs } from 'shared/components';
+import { actions as appActions } from 'shared/containers/app';
 
 // custom
 import * as actions from './actions';
-import { actions as appActions } from 'shared/containers/app';
 import reducer from './reducer';
 
 const logsTableOptions = fromJS([

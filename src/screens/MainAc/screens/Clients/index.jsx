@@ -4,12 +4,7 @@ import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 
 // components
-import Table from 'shared/components/Table';
-import Button from 'shared/components/Button/Button';
-import { Search } from 'shared/components/Form';
-import Select from 'shared/components/Select';
-import Switchs from 'shared/components/Switchs';
-import PureComponent from 'shared/components/Base/PureComponent';
+import { Table, Button, Search, Switchs, PureComponent } from 'shared/components';
 
 // custom
 import * as actions from './actions';

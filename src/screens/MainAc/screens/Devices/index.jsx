@@ -5,9 +5,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import validator from 'shared/validator';
-import Table from 'shared/components/Table';
 import {
-  Search, FormGroup, Button, Modal, Switchs, PureComponent,
+  Search, FormGroup, Button, Modal, Switchs, PureComponent, Table,
 } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
