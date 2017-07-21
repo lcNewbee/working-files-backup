@@ -67,7 +67,7 @@ class NetworkDashboard_Model extends CI_Model {
                     'ip' => $row['ip1'],
                     'mac' => $mac,
                     'users' => 0,
-                    'negoSpeed' => $negoSpeed,                    
+                    'negoSpeed' => $this->getNetworkRate($row['port_name']),//$negoSpeed,                    
                     'downRate' => $inbound,
                     'upRate' => $outbound
                 );                                
@@ -183,5 +183,14 @@ class NetworkDashboard_Model extends CI_Model {
             return true;
         }
         return false;
+    }
+    //获取网卡速率 ethtool eth0|grep Speed
+    private function getNetworkRate($name){
+        $ret = exec("ethtool {$name}|grep -w 'Speed' |awk '{print $2}'");
+        $ret = rtrim($ret, "Mb/s");
+        if($ret != null && $ret != ""){
+            return $ret;
+        }
+        return '';
     }
 }

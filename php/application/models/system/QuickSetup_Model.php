@@ -2,7 +2,7 @@
 class QuickSetup_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
-		$this->portalsql = $this->load->database('mysqlportal', TRUE);
+		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));
 		$this->load->library('PortalSocket');
 	}
@@ -10,7 +10,7 @@ class QuickSetup_Model extends CI_Model {
         $arr = array(
             'state' => array('code' => 2000, 'msg' => 'ok'),
             'data' => array(
-                'restoreState' => '1',
+                'restoreState' => $this->getRestoreState(),
                 'interfaceList' => array(
                     array('name' => 'eth0'),
                     array('name' => 'eth1'),
@@ -19,7 +19,11 @@ class QuickSetup_Model extends CI_Model {
                     array('name' => 'eth4')
                 )
             )
-        );		
+        );	
+        $query = $this->db->query('select port_name as name from port_table')->result_array();
+        if(count($query) > 0){
+            $arr['data']['interfaceList'] = $query;
+        }	
 		return json_encode($arr);
 	}
     function quick_setup($data){
@@ -45,12 +49,19 @@ class QuickSetup_Model extends CI_Model {
                     $dhcp = $this->getCgiParamDhcp($row);
                     $dhcp['pool_route'] = $gateway;
                     $result = dhcpd_add_pool_name(json_encode($dhcp));
-                }
-                /*
+                }                
                 //net
-                $cgiParams = $this->getCgiParamsNet($row);
-                $result = acnetmg_add_nat(json_encode($cgiParams));
-                */   
+                if(!$this->getNetState()){
+                    $this->setNet();
+                }
+                if(isset($row['type']) && $row['type'] === 'lan'){
+                    $netarr = $this->getCgiParamsNet($row);
+                    $netarr['natipaddr'] = $gateway;
+                    $netarr['ip'] = $netarr['ipaddr'] . '/' . $this->getMaskLength($row['mask']);
+                    $result = acnetmg_add_nat(json_encode($netarr));
+                }
+                // set state
+                $this->setRestoreState('0');
             }
         }		
         return json_encode(json_ok());
@@ -84,11 +95,60 @@ class QuickSetup_Model extends CI_Model {
     private function getCgiParamsNet($data) {
         $ret = array(
             'id'=>element('id', $data),
-            'type'=>element('type', $data),
-            'ipaddr'=>element('addr', $data),
-            'natipaddr'=>element('nataddr', $data),
-            'ifname'=>element('pubifname', $data),
+            'type'=>'snat',
+            'ipaddr'=>element('ip', $data),
+            'natipaddr'=>'',//这里使用WAN地址
+            'ifname'=>element('name', $data)
         );
         return $ret;
+    }
+
+    //检测net是否开启
+    private function getNetState(){
+        $data = $this->db->select('enable')
+                                ->from('natenable')
+                                ->get()->result_array();
+        if(count($data) > 0){
+            return $data[0]['enable'];
+        }
+        return 0;
+    }
+    private function setNet(){
+        $result = null;
+        $cgiParams = array('enable' => 1);
+        $result = acnetmg_nat_enable(json_encode($cgiParams));
+    }
+
+    //计算掩码长度
+    private function getMaskLength($netmask) {
+        $len = 0;
+        //$netmask="255.255.255.0";
+        $split_mask = explode('.', $netmask);
+        foreach ($split_mask as $v) {
+            $len+= 8 - log(256 - $v, 2);
+        }
+        return $len;
+    }
+
+    private function getRestoreState(){
+        $filename = "/var/license/is_sysreset";
+        if(is_file($filename)){
+            $myfile = fopen($filename, "r");
+            $str = fread($myfile, filesize($filename));
+            fclose($myfile);
+            if(trim($str, "\n") == '1'){
+                return '1';
+            }
+        }
+        return '0';
+    }
+
+    private function setRestoreState($value){
+        $filename = "/var/license/is_sysreset";
+        if(is_file($filename)){
+            $myfile = fopen($filename, "w") or die("Unable to open file!");
+            fwrite($myfile, $value);        
+            fclose($myfile);
+        }        
     }
 }
