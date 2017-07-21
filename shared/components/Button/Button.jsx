@@ -96,6 +96,7 @@ class Button extends PureComponent {
       delete componentProps.loading;
       delete componentProps.theme;
       delete componentProps.actionName;
+      delete componentProps.needConfirm;
 
       componentProps.type = type;
     }

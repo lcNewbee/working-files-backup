@@ -32,6 +32,7 @@ export { default as TabContainer } from './Organism/TabContainer';
 export { default as FormContainer } from './Organism/FormContainer';
 export { default as WizardContainer } from './Organism/WizardContainer';
 export { default as NavContainer } from './Organism/NavContainer';
+export { default as RouterConfig } from './Organism/RouterConfig';
 
 // Templates
 export { default as NotFound } from './NotFound';

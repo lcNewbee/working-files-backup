@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import Select from '../Select';
+import PureComponent from '../Base/PureComponent';
 
 import './index.scss';
 
@@ -38,7 +39,7 @@ const defaultProps = {
   sizeOptions,
 };
 
-class Pagination extends React.Component {
+class Pagination extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -252,10 +253,11 @@ class Pagination extends React.Component {
                         } else if (isNaN(gotoPageVal)) {
                           gotoPageVal = '';
                         }
-
-                        this.setState({
-                          goPage: gotoPageVal,
-                        });
+                        if(gotoPageVal !== this.state.goPage) {
+                          this.setState({
+                            goPage: gotoPageVal,
+                          });
+                        }
                       }}
                       onKeyUp={this.onGotoKeyup}
                     />

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import utils from 'utils';
+import utils from 'shared/utils';
 import { Map, List, fromJS } from 'immutable';
 import PureComponent from '../Base/PureComponent';
 import FormGroup from '../Form/FormGroup';

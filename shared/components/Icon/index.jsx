@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import 'font-awesome/css/font-awesome.css';
+import PureComponent from '../Base/PureComponent';
 import utils from '../../utils';
 import './_index.scss';
 

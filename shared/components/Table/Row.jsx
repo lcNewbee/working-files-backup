@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Checkbox from 'shared/components/Form/Checkbox';
-import { fromJS, List } from 'immutable';
-import Icon from 'shared/components/Icon';
 import utilsCore from 'shared/utils/lib/core';
+import Checkbox from '../Form/Checkbox';
+import Icon from '../Icon';
+import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
   options: PropTypes.object.isRequired,
@@ -29,7 +29,7 @@ const defaultProps = {
   index: -1,
 };
 
-class Row extends Component {
+class Row extends PureComponent {
   constructor(props) {
     super(props);
     utilsCore.binds(this, [

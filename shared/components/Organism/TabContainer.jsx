@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tab from 'shared/components/Tab';
-import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
+import Tab from '../Tab';
+import { RouteSwitches } from './RouterConfig';
 
 const propTypes = {
   route: PropTypes.shape({

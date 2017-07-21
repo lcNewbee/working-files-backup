@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactCSSTransition from 'react-transition-group/CSSTransition';
 import classNames from 'classnames';
 import b28n from 'shared/b28n';
-import utils from '../../utils';
+import utils from 'shared/utils';
 import PureComponent from '../Base/PureComponent';
 
 let curModelShowNum = 0;
@@ -112,8 +112,12 @@ class Modal extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.onClose = this.onClose.bind(this);
-    this.onOk = this.onOk.bind(this);
+    utils.binds(this, [
+      'onClose',
+      'onOk',
+      'onShow',
+      'onHide',
+    ]);
     this.state = {
       modalStyle: props.style,
     };
@@ -219,47 +223,46 @@ class Modal extends PureComponent {
     }
 
     return (
-      <div
-        className={modalClassName}
-        role={role}
-        style={{
-          display: isShow ? 'block' : 'none',
+      <ReactCSSTransition
+        key={keyVal}
+        in={isShow}
+        classNames="fade-down"
+        enter={transitionEnter}
+        exit={transitionLeave}
+        timeout={{
+          enter: 500,
+          exit: 300,
         }}
-        onDragOver={(e) => { e.preventDefault(); }} // 拖放事件：允许放置
-        onDrop={(e) => { // 拖放事件：放置事件
-          if (draggable) {
-            const positionStyle = Object.assign({},
-              this.state.modalStyle,
-              {
-                top: `${e.clientY - this.diffY}px`,
-                left: `${e.clientX - this.diffX}px`,
-                position: 'absolute',
-              },
-            );
-            this.setState({
-              modalStyle: positionStyle,
-            });
-          }
-        }}
+        mountOnEnter
+        unmountOnExit
       >
-        {
-          customBackdrop && isShow ? (
-            <div className="o-modal__backdrop in" />
-          ) : null
-        }
-        <ReactCSSTransition
+        <div
+          className={modalClassName}
           key={keyVal}
-          in={isShow}
-          classNames="fade-down"
-          enter={transitionEnter}
-          exit={transitionLeave}
-          timeout={{
-            enter: 500,
-            exit: 300,
+          role={role}
+          onDragOver={(e) => { e.preventDefault(); }} // 拖放事件：允许放置
+          onDrop={(e) => { // 拖放事件：放置事件
+            if (draggable) {
+              const positionStyle = Object.assign({},
+                this.state.modalStyle,
+                {
+                  top: `${e.clientY - this.diffY}px`,
+                  left: `${e.clientX - this.diffX}px`,
+                  position: 'absolute',
+                },
+              );
+              this.setState({
+                modalStyle: positionStyle,
+              });
+            }
           }}
         >
+          {
+            customBackdrop && isShow ? (
+              <div className="o-modal__backdrop in" />
+            ) : null
+          }
           <div
-            key={keyVal}
             className={contentClassNames}
             style={this.state.modalStyle}
             ref={(ref) => {
@@ -331,8 +334,8 @@ class Modal extends PureComponent {
               }
             </div>
           </div>
-        </ReactCSSTransition>
-      </div>
+        </div>
+      </ReactCSSTransition>
     );
   }
 }

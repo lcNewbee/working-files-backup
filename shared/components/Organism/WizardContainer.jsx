@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
 import ReactCSSTransition from 'react-transition-group/CSSTransition';
-import utilsCore from 'shared/utils/lib/core';
+import utils from 'shared/utils';
 import PureComponent from '../Base/PureComponent';
 
 import {
@@ -36,7 +36,7 @@ const defaultProps = {
   options: List([]),
   nextDisabled: false,
   animation: false,
-  onBeforeStep: utilsCore.emptyFunc,
+  onBeforeStep: utils.emptyFunc,
 };
 
 class WizardContainer extends PureComponent {
@@ -49,7 +49,7 @@ class WizardContainer extends PureComponent {
       status: 'ok',
       direction: 'left',
     };
-    utilsCore.binds(
+    utils.binds(
       this,
       ['onNext', 'onPrev', 'updateState', 'onChangeStep'],
     );
@@ -57,14 +57,14 @@ class WizardContainer extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const newState = {};
     if (this.props.initStep !== nextProps.initStep || this.props.reinitAt !== nextProps.reinitAt) {
-      utilsCore.extend(newState, {
+      utils.extend(newState, {
         currStep: nextProps.initStep,
         maxStep: nextProps.options.size,
       });
     }
 
     if (this.props.options !== nextProps.options) {
-      utilsCore.extend({
+      utils.extend({
         maxStep: this.props.options.size,
       });
     }
@@ -118,7 +118,7 @@ class WizardContainer extends PureComponent {
       }
 
       // 如果 onBeforeNext 为 Promise 对象
-      if (beforeStepResult && utilsCore.isPromise(beforeStepResult)) {
+      if (beforeStepResult && utils.isPromise(beforeStepResult)) {
         this.onBeforeSteping = true;
         beforeStepResult.then((result) => {
           handleChange(result);
@@ -181,7 +181,7 @@ class WizardContainer extends PureComponent {
   }
 
   updateState(data) {
-    this.setState(utilsCore.extend({}, this.state, data));
+    this.setState(utils.extend({}, this.state, data));
   }
 
   render() {

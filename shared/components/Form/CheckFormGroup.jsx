@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
-import FormGroup from 'shared/components/Form/FormGroup';
 import { actions as appActions } from 'shared/containers/app';
+import FormGroup from './FormGroup';
 
 const propTypes = {
   id: PropTypes.string,
@@ -18,7 +18,6 @@ const propTypes = {
   data: PropTypes.oneOfType([
     PropTypes.instanceOf(Map), PropTypes.object,
   ]),
-  actionQuery: PropTypes.instanceOf(Map),
   invalidMsg: PropTypes.instanceOf(Map),
 };
 

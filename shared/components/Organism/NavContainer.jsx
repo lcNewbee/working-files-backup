@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Nav from 'shared/components/Nav';
-import Icon from 'shared/components/Icon';
-import { RouteSwitches } from 'shared/components/Organism/RouterConfig';
+import Nav from '../Nav';
+import Icon from '../Icon';
+import { RouteSwitches } from './RouterConfig';
 
 const propTypes = {
   route: PropTypes.shape({

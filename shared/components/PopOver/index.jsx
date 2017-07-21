@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactCSSTransition from 'react-transition-group/CSSTransition';
+import utils from 'shared/utils';
 import PureComponent from '../Base/PureComponent';
 
 const propTypes = {
@@ -8,6 +9,7 @@ const propTypes = {
   overlay: PropTypes.bool,
   transitionLeave: PropTypes.bool,
   transitionEnter: PropTypes.bool,
+  transitionName: PropTypes.string,
   children: PropTypes.any,
   onClose: PropTypes.func,
 };
@@ -15,7 +17,7 @@ const propTypes = {
 const defaultProps = {
   transitionEnter: true,
   transitionLeave: true,
-  transitionName: 'fade-up',
+  transitionName: 'zoom-top-right',
   overlay: true,
 };
 
@@ -23,8 +25,9 @@ class PopOver extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.onClose = this.onClose.bind(this);
-    this.renderContent = this.renderContent.bind(this);
+    utils.binds(this, [
+      'onClose',
+    ]);
   }
 
   onClose() {
@@ -33,51 +36,39 @@ class PopOver extends PureComponent {
     }
   }
 
-  renderContent() {
-    const { overlay } = this.props;
-    const keyVal = 'onlyPopOver';
-    let ret = this.props.children;
-
-    if (overlay) {
-      ret = (
-        <div key={keyVal} className="o-pop-over">
-          <div
-            className="o-pop-over__overlay"
-            onClick={this.onClose}
-          />
-
-          {this.props.children}
-        </div>
-      );
-    }
-    return ret;
-  }
-
   render() {
-    const { transitionLeave, transitionEnter, isShow } = this.props;
+    const { transitionLeave, transitionEnter, isShow, overlay, transitionName } = this.props;
+    const keyVal = 'onlyPopOver';
 
     return (
       <ReactCSSTransition
-        classNames="fade-up"
+        classNames={transitionName}
         enter={transitionEnter}
         exit={transitionLeave}
         timeout={{
           enter: 500,
           exit: 300,
         }}
+        in={isShow}
+        mountOnEnter
+        unmountOnExit
       >
-        <div
-          key="onlyPopOver"
-          style={{
-            display: isShow ? 'block' : 'none',
-          }}
-        >
-          {
-            isShow ? (
-              this.renderContent()
-            ) : null
-          }
-        </div>
+        {
+          overlay ? (
+            <div key={keyVal} className="o-pop-over">
+              <div
+                className="o-pop-over__overlay"
+                onClick={this.onClose}
+              />
+
+              {this.props.children}
+            </div>
+          ) : (
+            <div key={keyVal}>
+              {this.props.children}
+            </div>
+          )
+        }
       </ReactCSSTransition>
     );
   }
