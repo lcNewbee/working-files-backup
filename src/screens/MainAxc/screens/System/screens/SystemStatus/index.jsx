@@ -16,7 +16,7 @@ function getCpuOption(serverData) {
   const usedValue = serverData.get('cpuUsed');
   const freeValue = serverData.get('cpuTotal') - usedValue;
   const usedName = `${__('Used')}: ${usedValue}%`;
-  const freeName = `${__('Free')}: ${freeValue}%`;
+  const freeName = `${__('Unused')}: ${freeValue}%`;
   const ret = $$commonPieOption.mergeDeep({
     color: [colors[1], colors[7]],
     legend: {
@@ -45,7 +45,7 @@ function getMemoryOption(serverData) {
   const usedValue = serverData.get('cpuUsed');
   const freeValue = serverData.get('cpuTotal') - usedValue;
   const usedName = `${__('Used')}: ${usedValue}%`;
-  const freeName = `${__('Free')}: ${freeValue}%`;
+  const freeName = `${__('Unused')}: ${freeValue}%`;
   const ret = $$commonPieOption.mergeDeep({
     color: [colors[1], colors[7]],
     title: {
@@ -82,7 +82,7 @@ function getStoreOption(serverData) {
       },
     },
     legend: {
-      data: [__('Used'), __('Free')],
+      data: [__('Used'), __('Unused')],
     },
     grid: {
       left: '3%',
@@ -111,7 +111,7 @@ function getStoreOption(serverData) {
         data: [serverData.get('storeUsed')],
       },
       {
-        name: __('Free'),
+        name: __('Unused'),
         type: 'bar',
         stack: __('Store'),
         data: [serverData.get('storeTotal') - serverData.get('storeUsed')],
