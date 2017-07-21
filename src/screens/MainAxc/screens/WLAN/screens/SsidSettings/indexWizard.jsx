@@ -2735,6 +2735,9 @@ style={{
           }, {
             value: '11',
             label: __('China Telicome ESMS'),
+          }, {
+            value: '12',
+            label: __('Textlocal'),
           },
         ],
       }, {
