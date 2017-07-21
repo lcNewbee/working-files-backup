@@ -770,5 +770,13 @@
   "1 Hour": "1 小时",
   "10 Hours": "10 小时",
   "24 Hours": "24 小时",
-  "48 Hours": "48 小时"
+  "48 Hours": "48 小时",
+
+  "WAN Settings": "WAN口设置",
+  "LAN Settings": "LAN口设置",
+  "Confirm Settings": "配置确认",
+  "WAN Select": "WAN口选择",
+  "LAN Select": "LAN口选择",
+  "DHCP Enable": "DHCP开关",
+  "Next Hoop": "下一跳"
 }
