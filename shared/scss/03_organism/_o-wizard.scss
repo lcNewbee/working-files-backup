@@ -85,19 +85,6 @@ $nav-line-size: 4px;
       }
 
       &.completed {
-        color: $g-brand-success;
-        border-top-color: $g-brand-success;
-
-        @include opacity(1);
-
-        .icon {
-          &::before {
-            content: "\F00C";
-            border: $nav-line-size solid $g-brand-success;
-          }
-        }
-      }
-      &.active {
         color: $g-main-color;
         border-top-color: $g-main-color;
 
@@ -105,8 +92,21 @@ $nav-line-size: 4px;
 
         .icon {
           &::before {
-            content: "\F0C9";
+            content: "\F00C";
             border: $nav-line-size solid $g-main-color;
+          }
+        }
+      }
+      &.active {
+        color: $g-brand-success;
+        border-top-color: $g-brand-success;
+
+        @include opacity(1);
+
+        .icon {
+          &::before {
+            content: "\F0C9";
+            border: $nav-line-size solid $g-brand-success;
           }
         }
       }
@@ -185,14 +185,14 @@ $nav-line-size: 4px;
           &.completed {
             .icon {
               &::before {
-                border: $nav-line-size solid $g-brand-success;
+                border: $nav-line-size solid $g-main-color;
               }
             }
           }
           &.active {
             .icon {
               &::before {
-                border: $nav-line-size solid $g-main-color;
+                border: $nav-line-size solid $g-brand-success;
               }
             }
           }

@@ -319,7 +319,7 @@ $map-distance-y: $map-distance * .75;
   top: 10px;
   right: 0;
   bottom: 10px;
-  width: 172px;
+  width: 188px;
   max-width: 0;
   padding: 0;
   padding-bottom: 36px;
@@ -367,7 +367,7 @@ $map-distance-y: $map-distance * .75;
 
   &.active {
     right: 10px;
-    max-width: 160px;
+    max-width: 188px;
     border: 1px solid #333;
 
     .toggle-button {
