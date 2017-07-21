@@ -41,8 +41,8 @@ const listOptions = fromJS([
     id: 'ssid',
     text: 'SSID',
   }, {
-    id: 'authType',
-    noTable: true,
+    id: 'authtype',
+    // noTable: true,
     text: __('Authentication Type'),
   }, {
     id: 'connectap',
@@ -133,10 +133,7 @@ export default class Clients extends React.Component {
     super(props);
 
     utils.binds(
-      this, [
-        'onAction',
-        'initListOptions',
-      ],
+      this, ['onAction', 'initListOptions'],
     );
   }
 
@@ -187,7 +184,7 @@ export default class Clients extends React.Component {
                     icon="unlock"
                     size="sm"
                     text={msg.unlock}
-                    //disabled={props.selectedGroup.get('aclType') === 'disable'}
+                    // disabled={props.selectedGroup.get('aclType') === 'disable'}
                     style={styles.actionButton}
                     onClick={() => this.onAction(mac, 'unlock')}
                   />
@@ -196,7 +193,7 @@ export default class Clients extends React.Component {
                     icon="lock"
                     size="sm"
                     text={msg.lock}
-                    //disabled={props.selectedGroup.get('aclType') === 'disable'}
+                    // disabled={props.selectedGroup.get('aclType') === 'disable'}
                     style={styles.actionButton}
                     onClick={() => this.onAction(mac, 'lock')}
                   />
@@ -224,7 +221,7 @@ export default class Clients extends React.Component {
         listOptions={this.listOptions}
         searchable
         searchProps={{
-          placeholder: 'MAC'
+          placeholder: 'MAC',
         }}
       />
     );

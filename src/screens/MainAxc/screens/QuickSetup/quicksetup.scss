@@ -1,0 +1,71 @@
+.quicksetup-card-adding {
+  display: inline-block;
+  margin: 10px 20px;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.quicksetup-setting-card {
+  display: none;
+}
+
+.quicksetup-setting-card.active-card {
+  background-color: #ccc;
+  width: 30%;
+  min-width: 360px;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 10px 20px;
+  box-shadow: 10px 10px 10px;
+}
+
+.quicksetup-confirm-card-container {
+  text-align: center;
+}
+
+.quicksetup-confirm-card {
+  background-color: #ccc;
+  display: inline-block;
+  width: 30%;
+  padding: 20px;
+  margin: 10px 10px;
+  border-radius: 4px;
+  min-width: 320px;
+  box-shadow: 10px 10px 10px;
+}
+
+.quicksetup-confirm-card dl dt,
+.quicksetup-confirm-card dl dd {
+  float: left;
+  width: 50%;
+  padding-top: 10px;
+  font-size: 14px;
+}
+
+.quicksetup-confirm-card dl dt {
+  text-align: right;
+  padding-right: 50px;
+  min-width: 138px;
+}
+
+.quicksetup-confirm-card dl dd {
+  text-align: left;
+}
+
+.quicksetup-lan-setting-form {
+  margin-left: -40px;
+}
+
+.quicksetup-lan-card-close {
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  background-color: white;
+  border-radius: 9px;
+  margin: 5px 5px;
+  cursor: pointer;
+}

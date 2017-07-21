@@ -160,7 +160,8 @@ const sAcMaintenance =
 const sNetworkTimeProtocol =
     require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
-
+// quicksetup
+const sQuickSetup = require('../../screens/MainAxc/screens/QuickSetup');
 /**
  * AAA 接入，认证，计费
  */
@@ -880,9 +881,16 @@ const routes = [
         component: sWizard.Screen,
       },
       {
+        id: 'quicksetup',
+        path: '/quicksetup',
+        fetchUrl: 'goform/quicksetup',
+        mainPath: '/main/group/monitor/overview',
+        component: sQuickSetup.Screen,
+      },
+      {
         id: 'login',
         path: '/login',
-        mainPath: '/main/group/monitor/overview',
+        mainPath: '/quicksetup',
         component: sLogin.Screen,
       },
       {
