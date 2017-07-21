@@ -53,6 +53,7 @@ $route['default_controller'] = 'login';
 $route['404_override'] = '';
 $route['goform/login'] = 'login';
 $route['goform/axcInfo'] = 'axcInfo';
+$route['goform/quicksetup'] = 'system/quickSetup';
 
 // 网络设置
 $route['goform/network/port'] = 'network/networkPort';
@@ -76,7 +77,6 @@ $route['goform/network/dpi/dpisettings'] = 'network/dpiSettings';
 $route['goform/network/firewall/attackdefense'] = 'network/networkFirewallAttackDefense';
 $route['goform/network/firewall/balcklist'] = 'network/networkFirewallBlackList';
 $route['goform/network/dashboard'] = 'network/netwirkDashboard';
-
 // AP组管理
 $route['goform/group'] = 'group/group';
 $route['goform/group/overview'] = 'group/groupOverview';
@@ -108,9 +108,6 @@ $route['goform/group/map/point'] = 'group/mapPoint';
 $route['goform/alarm_map_chunk_pos'] = 'group/mapAreaInfo';
 $route['goform/change_priority_settings'] = 'group/mapAreaInfo/settings';
 $route['goform/group/map/alarmmap'] = 'group/mapArea';
-
-
-
 // 系统设置
 $route['goform/system/version/upload'] = 'system/systemVersion/upload';
 $route['goform/system/version/upgrade'] = 'system/systemVersion/upgrade';
@@ -129,7 +126,6 @@ $route['goform/system/saveConfig'] = 'system/systemMaintenance/saveConfig';
 $route['goform/system/reboot'] = 'system/systemMaintenance/reboot';
 $route['goform/system/license'] = 'system/systemLicense';
 $route['goform/system/networktimeprotocol'] = 'system/systemNtp';
-
 //Portal
 $route['goform/portal/overview'] = 'portal/overview';
 $route['goform/portal/radius/nas'] = 'portal/RadiusNas';
@@ -144,7 +140,6 @@ $route['goform/portal/access/urlParameter'] = 'portal/AccessUrl';
 $route['goform/portal/access/web'] = 'portal/AccessWeb';
 $route['goform/portal/access/web/webPage'] = 'portal/AccessWeb/webPage';
 $route['goform/portal/access/download'] = 'portal/AccessWeb/download';
-//$route['goform/portal/access/upload'] = 'portal/AccessDefault/upload';
 $route['goform/portal/access/weixin'] = 'portal/AccessWeixin';
 $route['goform/portal/access/defaultweb'] = 'portal/AccessDefault';
 $route['goform/portal/access/smsgateWay'] = 'portal/AccessSms';
@@ -154,9 +149,6 @@ $route['goform/portal/access/ap'] = 'portal/AccessSsid/apmac';
 $route['goform/portal/access/facebook'] = 'portal/AccessFacebook';
 $route['goform/portal/Aaa'] = 'portal/AaaServer';
 $route['goform/portal/AaaTemplate'] = 'portal/AaaTemplate';
-
-
-
 $route['goform/portal/system/user'] = 'portal/systemUser';
 $route['goform/portal/system/role'] = 'portal/systemRole';
 $route['goform/portal/system/classification'] = 'portal/systemClassify';
@@ -168,7 +160,6 @@ $route['goform/portal/card/cardcategory'] = 'portal/cateGory';
 $route['goform/portal/message/receive'] = 'portal/messageReceive';
 $route['goform/portal/message/send'] = 'portal/messageSend';
 $route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
-
 $route['goform/portal/advertisement/stores'] = 'portal/advStores';
 $route['goform/portal/advertisement/adv'] = 'portal/advManagement';
 

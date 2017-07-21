@@ -2,83 +2,73 @@
 class AccessFacebook_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
+        $this->load->library('session');
 		$this->portalsql = $this->load->database('mysqlportal', TRUE);
 		$this->load->helper(array('array', 'db_operation'));
+        $this->load->library('PortalSocket');  
 	}
-	function get_list($data) {   
-        $list = array();
-        $parameter = array(
-            'db' => $this->portalsql, 
-            'columns' => '*', 
-            'tablenames' => 'portal_facebook', 
-            'pageindex' => (int) element('page', $data, 1), 
-            'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "1=1", 
-            'joins' => array(), 
-            'order' => array(array('id','ASC'))
+	function get_list($data) {           
+        $socketarr = array(
+            'action' => 'get', 
+            'resName' => 'facebook', 
+            'data' => array(
+                'page' => array(
+                    'currPage' => element('page', $data, 1),
+                    'size' => element('size', $data, 20)
+                ),
+                'list' => array()
+            )
         );
-        if(isset($data['search'])){
-            $parameter['wheres'] = $parameter['wheres'] . " AND app_id LIKE '%".$data['search']."%'";
-        }
-        $datalist = help_data_page_all($parameter);
-
-        foreach($datalist['data'] as $row)	{
-            $list[] = array(
-                'id'=>element('id',$row),
-                'appId'=>element('app_id',$row),
-                'appSecret'=>element('app_secret',$row,''),
-                'appVersion'=>element('app_version',$row),
-                'state'=>element('state',$row)
+        $portal_socket = new PortalSocket();
+        $socket_data = $portal_socket->portal_socket(json_encode($socketarr));
+        if ($socket_data['state']['code'] === 2000) {
+            $arr = array(
+                'state' => array('code' => 2000, 'msg' => 'ok'), 
+                'data' => array(
+                    'page' => $socket_data['data']['page'], 
+                    'list' => $socket_data['data']['list']
+                )
             );
+            return json_encode($arr);
         }
-		$arr = array(
-			'state'=>array('code'=>2000,'msg'=>'ok'),
-			'data'=>array(
-				'page'=>$datalist['page'],
-				'list' =>$list
-			)
-		);               
-		return json_encode($arr);
+        return json_encode(json_no('error !'));
 	}
     function add($data){
         $result = 0;
-        $arr = $this->params($data);
-        $result = $this->portalsql->insert('portal_facebook',$arr);
-        if($result == 1 && $data['state'] == 1){
+        $socketarr = $this->params($data);
+        if ($this->noticeSocket($this->getSocketPramse('add', array($socketarr)))) {
             //关闭其他网关
-            $this->close_sms($this->portalsql->insert_id());
-        }
-        $result = $result ? json_ok() : json_no('delete error');
-        return json_encode($result);
+            //$this->close_sms($this->portalsql->insert_id());
+            return json_encode(json_ok());
+        }        
+        return json_encode(json_no('delete error'));
     }    
     function delete($data){
         $result = FALSE;
         $dellist = $data['selectedList'];       
-        foreach($dellist as $row) {
-            $this->portalsql->where('id', $row['id']);
-            $result = $this->portalsql->delete('portal_facebook');
+        foreach($dellist as $row) {            
+            $this->noticeSocket($this->getSocketPramse('delete', array($row)));
         }     
-        $result = $result ? json_ok() : json_on('delete error');
-        return json_encode($result);
+        return json_encode(json_ok());
     }
     function edit($data){
         $result = 0;
-        $arr = $this->params($data);        
-        $this->portalsql->where('id', $data['id']);
-        $result = $this->portalsql->update('portal_facebook', $arr);
-        if($result == 1 && $data['state'] == 1){
+        $socketarr = $this->params($data);  
+        $socketarr['id'] = $data['id'];
+        if ($this->noticeSocket($this->getSocketPramse('edit', array($socketarr)))) {
             //关闭其他网关
-            $this->close_sms($data['id']);
-        }
-        $result = $result ? json_ok() : json_no('edit error');
-        return json_encode($result);
+            //$this->close_sms($data['id']);
+            return json_encode(json_ok());
+        } 
+        return json_encode(json_no('edit error'));
     }    
     private function params($data){
         $arr = array(
-            'app_id'=>element('appId',$data),
-            'app_secret'=>element('appSecret',$data,''),
-            'app_version'=>element('appVersion',$data),
-            'state'=>element('state',$data)
+            'appId' => element('appId',$data),
+            'appSecret' => element('appSecret',$data,''),
+            'appVersion' => element('appVersion',$data),
+            'state' => element('state',$data),
+            'outTime' => ''
         );
         return $arr;
     }
@@ -89,5 +79,26 @@ class AccessFacebook_Model extends CI_Model {
             return 1;
         }        
         return 0;
+    }
+    //
+    private function noticeSocket($data){
+        $result = null;
+        $portal_socket = new PortalSocket();
+        $result = $portal_socket->portal_socket(json_encode($data));
+        if($result['state']['code'] === 2000){
+            return TRUE;
+        }
+        return FALSE;
+    }
+    private function getSocketPramse($type, $data) {
+         $socketarr = array(
+            'action' => $type,
+            'resName' => 'facebook',
+            'data' => array(
+                'page' => array('currPage' => 1,'size' => 20),
+                'list' => $data
+            )
+        );
+        return $socketarr;
     }
 }

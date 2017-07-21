@@ -134,7 +134,7 @@ class NetworkDashboard_Model extends CI_Model {
         $upFlow = 0;
         $downFlow = 0;
         //获取所有net
-        $query = $this->db->query('select * from nat_table')->result_array();
+        $query = $this->db->query('select * from nat_table group by pubifname')->result_array();
         foreach($query as $row){
             if($row['pubifname'] != null && $row['pubifname'] != ''){
                 //{$row['pubifname']}
