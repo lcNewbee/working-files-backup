@@ -80,10 +80,6 @@ function changeModalState(state, option) {
     myOption.cancelButton = true;
   }
 
-  if (myOption.size === undefined) {
-    myOption.size = 'md';
-  }
-
   targetModal = targetModal.merge(myOption);
 
   // 如果是打开窗口

@@ -229,7 +229,6 @@ class WizardContainer extends PureComponent {
           </ul>
         </div>
         <ReactCSSTransition
-          component="div"
           classNames={`slide-${direction}`}
           enter={this.props.animation}
           exit={false}

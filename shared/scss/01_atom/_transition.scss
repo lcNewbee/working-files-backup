@@ -22,7 +22,7 @@
   opacity: 0;
   transform: translate(0, -50px);
   //transform: scale(0, 0);
-  transition: opacity .5s ease-in-out, transform  .5s ease-in-out;
+  transition: opacity .3s ease-in-out, transform  .5s ease-in-out;
 
   &.fade-down-enter-active {
     opacity: 1;
@@ -33,7 +33,7 @@
 .fade-down-exit {
   opacity: 1;
   transform: translate(0, 0);
-  transition: opacity .3s ease-in-out, transform  .3s ease-in-out;
+  transition: opacity .5s ease-in-out, transform  .3s ease-in-out;
 
   &.fade-down-exit-active {
     opacity: 0;

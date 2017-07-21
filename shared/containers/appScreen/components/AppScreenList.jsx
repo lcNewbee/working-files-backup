@@ -921,7 +921,7 @@ class AppScreenList extends React.PureComponent {
     const syncCode = app.getIn(['state', 'code']);
 
     // 判断是否显示修改或添加 model
-    if (actionType === 'edit' || actionType === 'add' || !!modalChildren) {
+    if (actionType === 'edit' || actionType === 'add' || (!!modalChildren && actionType)) {
       isEditModelshow = true;
 
       if (syncCode >= 6000) {

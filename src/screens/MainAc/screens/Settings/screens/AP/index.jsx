@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
@@ -6,8 +7,7 @@ import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
-import { Button } from 'shared/components/Button';
-import FormContainer from 'shared/components/Organism/FormContainer';
+import { Button, FormContainer } from 'shared/components';
 
 const customModalOptions = fromJS([
   {
@@ -132,7 +132,6 @@ const propTypes = {
   route: PropTypes.object,
   validateAll: PropTypes.func,
   reportValidError: PropTypes.func,
-  changeScreenQuery: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
   fetchScreenData: PropTypes.func,
   createModal: PropTypes.func,
@@ -143,7 +142,8 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func,
 };
 const defaultProps = {};
-export default class View extends React.Component {
+
+export default class ApMantance extends React.Component {
   constructor(props) {
     super(props);
     utils.binds(this, [
@@ -272,24 +272,25 @@ export default class View extends React.Component {
     const isAdd = store.getIn([route.id, 'actionQuery', 'action']) === 'add';
     const isEdit = store.getIn([route.id, 'actionQuery', 'action']) === 'edit';
     const readOnlyEditModalOptions = this.editCustomModalOptions.map(
-        ($$item) => {
-          const itemId = $$item.get('id');
-          switch (itemId) {
-            case 'model':return $$item.set('readOnly', true);
-            case 'subversion':return $$item.set('readOnly', true);
-            case 'fm_name':
-            case 'upd_path':
-            case 'active':
-            default:
-              break;
-          }
+      ($$item) => {
+        const itemId = $$item.get('id');
+        switch (itemId) {
+          case 'model': return $$item.set('readOnly', true);
+          case 'subversion': return $$item.set('readOnly', true);
+          case 'fm_name':
+          case 'upd_path':
+          case 'active':
+          default:
+            break;
+        }
 
-          return $$item;
-        },
-      );
+        return $$item;
+      },
+    );
     if (!isAdd && !isEdit) {
       return null;
     }
+
     if (isAdd) {
       return (
         <FormContainer
@@ -330,13 +331,10 @@ export default class View extends React.Component {
   render() {
     const warningMsgText = __('Are you sure to delete the choosed items?');
     const { store, route } = this.props;
-    const $$curListItem = store.getIn([route.id, 'curListItem']);
     const selectedListIndex = store.getIn([route.id, 'actionQuery', 'selectedList']);
-    const isDelete = store.getIn([route.id, 'actionQuery', 'action']) === 'delete';
-
     const curListOptions = listOptions
       .setIn([-1, 'render'], (val, $$data) => (
-        <span>
+        <div>
           <Button
             text={__('Edit')}
             key="editActionButton"
@@ -371,7 +369,7 @@ export default class View extends React.Component {
                 id: 'settings',
                 role: 'confirm',
                 text: __('Are you sure to delete the item?'),
-                apply: function () {
+                apply: () => {
                   this.props.save(
                     '/goform/delApFirmware',
                     {
@@ -383,15 +381,15 @@ export default class View extends React.Component {
                     },
                   );
                   this.props.fetchScreenData();
-                }.bind(this),
+                },
               });
             }}
           />
-        </span>),
-      )
-      ;
+        </div>
+      ),
+    );
     const listActionBarChildren = (
-      <span>
+      <div key="apActionBar">
         <Button
           text={__('Add')}
           key="addActionButton"
@@ -415,18 +413,17 @@ export default class View extends React.Component {
               id: 'settings',
               role: 'confirm',
               text: warningMsgText,
-              apply: function () {
+              apply: () => {
                 selectedListIndex.forEach((item) => {
                   const selectedList = store.getIn([route.id, 'data', 'list', item]);
                   this.props.save('/goform/delApFirmware', selectedList);
                 });
                 this.props.fetchScreenData();
-              }.bind(this),
+              },
             });
           }}
         />
-      </span>
-
+      </div>
     );
     return (
       <AppScreen
@@ -449,8 +446,8 @@ export default class View extends React.Component {
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+ApMantance.propTypes = propTypes;
+ApMantance.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -471,4 +468,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(View);
+)(ApMantance);

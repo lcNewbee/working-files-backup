@@ -42,7 +42,7 @@ const sWizard = require('../../screens/Wizard');
 const Main = require('../../screens/MainAc').Screen;
 
 // 热点统计
-const sStatus = require('../../screens/MainAc/screens/Stats');
+const sOverview = require('../../screens/MainAc/screens/Overview');
 
 // 设备
 const sDevices = require('../../screens/MainAc/screens/Devices');
@@ -76,14 +76,13 @@ const routes = [
       {
         path: '/main',
         component: Main,
-        indexPath: '/main/status',
         routes: [
           {
             id: 'status',
-            path: '/main/status',
-            icon: 'bar-chart',
-            text: __('STATISTICS'),
-            component: sStatus.Screen,
+            path: '/main/overview',
+            icon: 'tachometer',
+            text: __('OVERVIEW'),
+            component: sOverview.Screen,
           },
           {
             id: 'devices',
@@ -189,7 +188,7 @@ const routes = [
       {
         id: 'login',
         path: '/login',
-        mainPath: '/main/status',
+        mainPath: '/main/overview',
         component: sLogin.Screen,
       },
     ],
@@ -202,7 +201,7 @@ const reducers = {
   app: app.reducer,
   screens: appScreen.reducer,
 
-  status: sStatus.status,
+  status: sOverview.status,
   devices: sDevices.devices,
   clients: sClients.clients,
   logs: sLogs.logs,

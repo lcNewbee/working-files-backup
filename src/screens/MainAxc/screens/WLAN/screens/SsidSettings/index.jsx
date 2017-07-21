@@ -643,12 +643,24 @@ export default class View extends React.Component {
         });
     }
   }
+
   componentDidMount() {
     this.props.changeScreenActionQuery({
       groupid: this.props.groupid,
     });
 
     this.fetchMandatoryDomainList();
+  }
+  componentWillUpdate(nextProps) {
+    const myScreenId = this.props.store.get('curScreenId');
+    const thisActionType = this.props.store.getIn([myScreenId, 'actionQuery', 'action']);
+    const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
+
+    if (thisActionType === 'copy' && (thisActionType !== nextActionType)) {
+      this.isCloseCopyList = true;
+    } else if (nextActionType && nextActionType !== 'copy') {
+      this.isCloseCopyList = false;
+    }
   }
   onSave(type) {
     const { store } = this.props;
@@ -876,7 +888,7 @@ export default class View extends React.Component {
     const selectGroupId = $$group.getIn(['selected', 'id']);
     const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
-    const isCopySsid = actionQuery.get('action') === 'copy';
+
     const ssidTableOptions = [
       {
         id: 'ssid',
@@ -928,7 +940,7 @@ export default class View extends React.Component {
       },
     ];
 
-    if (!isCopySsid) {
+    if (actionQuery.get('action') !== 'copy' && !this.isCloseCopyList) {
       return null;
     }
 
@@ -996,7 +1008,7 @@ export default class View extends React.Component {
   render() {
     const { store, route } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
-    const isCopySsid = actionQuery.get('action') === 'copy';
+    const notEditListItem = actionQuery.get('action') === 'copy' || this.isCloseCopyList;
     const curListOptions = this.listOptions.map(($$item) => {
       let $$retItem = $$item;
 
@@ -1007,6 +1019,7 @@ export default class View extends React.Component {
       }
       return $$retItem;
     });
+
     return (
       <AppScreen
         {...this.props}
@@ -1020,7 +1033,7 @@ export default class View extends React.Component {
           },
           query: defaultQuery,
         }}
-        modalSize={isCopySsid ? 'lg' : 'md'}
+        modalSize={notEditListItem ? 'lg' : 'md'}
         modalChildren={this.renderCopySsid()}
         actionable
         selectable

@@ -255,6 +255,9 @@ export default function (state = defaultState, action) {
         myTitle: __('Add'),
       });
 
+    case ACTION_TYPES.ACTIVE_LIST_ITEM:
+      return activeListItem(state, curScreenName, action);
+
     case ACTION_TYPES.SELECT_LIST_ITEM:
       return selectedListItem(state, action, curScreenName);
 
@@ -267,12 +270,8 @@ export default function (state = defaultState, action) {
         action.payload,
       );
 
-    case ACTION_TYPES.ACTIVE_LIST_ITEM:
-      return activeListItem(state, curScreenName, action);
-
     case ACTION_TYPES.CLOSE_LIST_ITEM_MODAL:
-      return state.setIn([curScreenName, 'curListItem'], fromJS({}))
-        .setIn([curScreenName, 'actionQuery', 'action'], '');
+      return state.setIn([curScreenName, 'actionQuery', 'action'], '');
 
     default:
 

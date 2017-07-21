@@ -229,10 +229,7 @@ class Modal extends PureComponent {
         classNames="fade-down"
         enter={transitionEnter}
         exit={transitionLeave}
-        timeout={{
-          enter: 500,
-          exit: 300,
-        }}
+        timeout={500}
         mountOnEnter
         unmountOnExit
       >
