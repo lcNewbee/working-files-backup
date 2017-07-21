@@ -730,7 +730,7 @@ const rechargeOptions = fromJS([
     disabled: true,
     type: 'text',
     required: true,
-    help: __('$'),
+    help: (val, $$data) => $$data.get('moneyUnit'),
     visible(data) {
       return data.get('name') !== undefined;
     },

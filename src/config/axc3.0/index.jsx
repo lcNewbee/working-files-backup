@@ -111,7 +111,7 @@ const sApPlanMap =
 const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
-const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
+// const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 
 
 // ndpi
@@ -122,10 +122,10 @@ const sProtoInfo = require('../../screens/MainAxc/screens/Network/screens/DPI/sc
 const sDPISettings = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPISettings');
 
 // 防火墙
-const sAttackDefense =
-    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
-const sFirewallBlackList =
-    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
+// const sAttackDefense =
+//     require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
+// const sFirewallBlackList =
+//     require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
 
 /**
  * 系统管理
@@ -161,7 +161,8 @@ const sNetworkTimeProtocol =
     require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
 // quicksetup
-const sQuickSetup = require('../../screens/MainAxc/screens/QuickSetup');
+// const sQuickSetup = require('../../screens/MainAxc/screens/QuickSetup');
+
 /**
  * AAA 接入，认证，计费
  */
@@ -880,17 +881,17 @@ const routes = [
         path: '/wizard',
         component: sWizard.Screen,
       },
-      {
-        id: 'quicksetup',
-        path: '/quicksetup',
-        fetchUrl: 'goform/quicksetup',
-        mainPath: '/main/group/monitor/overview',
-        component: sQuickSetup.Screen,
-      },
+      // {
+      //   id: 'quicksetup',
+      //   path: '/quicksetup',
+      //   fetchUrl: 'goform/quicksetup',
+      //   mainPath: '/main/group/monitor/overview',
+      //   component: sQuickSetup.Screen,
+      // },
       {
         id: 'login',
         path: '/login',
-        mainPath: '/quicksetup',
+        mainPath: '/main/group/monitor/overview',
         component: sLogin.Screen,
       },
       {

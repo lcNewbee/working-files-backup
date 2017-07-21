@@ -76,7 +76,7 @@ describe('MainAxc index reducer', () => {
     expect(nextState).toEqual(fromJS({
       modal: {
         isShow: true,
-        size: 'md',
+        size: 'lg',
         name: 'group',
         okButton: true,
         cancelButton: true,
@@ -84,7 +84,7 @@ describe('MainAxc index reducer', () => {
       modalList: [
         {
           isShow: true,
-          size: 'md',
+          size: 'lg',
           name: 'group',
           okButton: true,
           cancelButton: true,
@@ -113,7 +113,7 @@ describe('MainAxc index reducer', () => {
     expect(nextState).toEqual(fromJS({
       modal: {
         isShow: true,
-        size: 'md',
+        size: 'lg',
         name: 'group',
         okButton: true,
         cancelButton: false,
@@ -121,7 +121,7 @@ describe('MainAxc index reducer', () => {
       modalList: [
         {
           isShow: true,
-          size: 'md',
+          size: 'lg',
           name: 'group',
           okButton: true,
           cancelButton: false,
