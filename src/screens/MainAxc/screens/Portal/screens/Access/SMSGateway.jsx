@@ -148,6 +148,9 @@ const listOptions = fromJS([
       }, {
         value: '11',
         label: __('China Telicome ESMS'),
+      }, {
+        value: '12',
+        label: __('Textlocal'),
       },
     ],
   }, {
@@ -259,6 +262,9 @@ const queryFormOptions = fromJS([
       }, {
         value: '11',
         label: __('China Telicome ESMS'),
+      }, {
+        value: '12',
+        label: __('Textlocal'),
       },
     ],
     saveOnChange: true,

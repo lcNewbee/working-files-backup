@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 import utilsCore from 'shared/utils/lib/core';
-import { FormGroup, Icon } from 'shared/components';
+import { FormGroup, FormInput, Icon, Table } from 'shared/components';
 import validator from 'shared/validator';
 
 import { actions as screenActions } from 'shared/containers/appScreen';
@@ -218,7 +218,7 @@ export default class AxcQuickSetup extends React.Component {
   renderWanSettingPage() {
     const list = this.state.interfaceList;
     if (typeof list === 'undefined') return null;
-    const wanOptions = list && list.map(item => ({ label: item.get('name'), value: item.get('name') })).toJS();
+    const wanOptions = list && list.map(item => ({ label: item.get('name').toUpperCase(), value: item.get('name') })).toJS();
     const wanPos = list && list.findIndex(it => it.get('type') === 'wan');
     const { validWanIp, validWanMask, validGateway } = this.props.validateOption;
     return (
@@ -276,7 +276,7 @@ export default class AxcQuickSetup extends React.Component {
       </div>
     );
   }
-
+  // 卡片形式
   // renderLanSettingPage() {
   //   // 找出不是WAN口，且enable状态为1的接口，渲染成一张卡片
   //   const list = this.state.interfaceList;
@@ -290,7 +290,7 @@ export default class AxcQuickSetup extends React.Component {
   //           cardList.map((item, index) => {
   //             // 选择框中的项目为，既不是WAN口，也不在卡片当中的接口
   //             const selectList = list.filter(it => (it.get('type') !== 'wan' && it.get('enable') !== '1') || it.get('name') === item.get('name'));
-  //             const selectOptions = selectList.map(it => ({ label: it.get('name'), value: it.get('name') }));
+  //             const selectOptions = selectList.map(it => ({ label: it.get('name').toUpperCase(), value: it.get('name') }));
   //             const pos = list.findIndex(it => item.get('name') === it.get('name')); // 找出当前项在interfaceList中的位置
   //             const clsName = `quicksetup-setting-card ${item.get('enable') === '1' ? 'active-card' : ''}`;
   //             return (
@@ -385,109 +385,96 @@ export default class AxcQuickSetup extends React.Component {
   //   );
   // }
 
+  // 表格形式
   renderLanSettingPage() {
-    // 找出不是WAN口，且enable状态为1的接口，渲染成一张卡片
     const list = this.state.interfaceList;
-    // const cardList = list.filter(item => (item.get('type') !== 'wan' && item.get('enable') === '1'));
     const cardList = list.filter(item => (item.get('type') !== 'wan'));
-    console.log('cardlist', cardList.toJS(), list.toJS());
+    const lanTableOptions = fromJS([
+      {
+        id: 'enable',
+        text: __('Enable'),
+        render: (val, item) => (
+          <FormInput
+            type="radio"
+            checked={val === '1'}
+            onClick={() => {
+              const name = item.get('name');
+              const enable = item.get('enable') === '1' ? '0' : '1';
+              const pos = list.findIndex(it => it.get('name') === name);
+              const newList = list.setIn([pos, 'enable'], enable);
+              this.setState(() => ({ interfaceList: newList }));
+            }}
+          />
+        ),
+      },
+      {
+        id: 'name',
+        text: __('Name'),
+        render: val => val.toUpperCase(),
+      },
+      {
+        id: 'ip',
+        text: __('IP'),
+        render: (val, item) => (
+          <FormInput
+            type="text"
+            value={val}
+            onChange={(data) => {
+              const name = item.get('name');
+              const pos = list.findIndex(it => it.get('name') === name);
+              const newList = list.setIn([pos, 'ip'], data.value);
+              this.setState(() => ({ interfaceList: newList }));
+            }}
+          />
+        ),
+      },
+      {
+        id: 'mask',
+        text: __('Subnet Mask'),
+        render: (val, item) => (
+          <FormInput
+            type="text"
+            value={val}
+            onChange={(data) => {
+              const name = item.get('name');
+              const pos = list.findIndex(it => it.get('name') === name);
+              const newList = list.setIn([pos, 'mask'], data.value);
+              this.setState(() => ({ interfaceList: newList }));
+            }}
+          />
+        ),
+      },
+      {
+        id: 'dhcpEnable',
+        text: __('DHCP Enable'),
+        render: (val, item) => (
+          <FormInput
+            type="checkbox"
+            checked={val === '1'}
+            onChange={(data) => {
+              const name = item.get('name');
+              const pos = list.findIndex(it => it.get('name') === name);
+              const newList = list.setIn([pos, 'dhcpEnable'], data.value);
+              this.setState(() => ({ interfaceList: newList }));
+            }}
+          />
+        ),
+      },
+    ]);
     return (
       <div className="lan-card-row row">
-        <div className="cols col-10 col-offset-1">
-          {
-            cardList.map((item, index) => {
-              // 选择框中的项目为，既不是WAN口，也不在卡片当中的接口
-              const selectList = list.filter(it => (it.get('type') !== 'wan' && it.get('enable') !== '1') || it.get('name') === item.get('name'));
-              const selectOptions = selectList.map(it => ({ label: it.get('name'), value: it.get('name') }));
-              const pos = list.findIndex(it => item.get('name') === it.get('name')); // 找出当前项在interfaceList中的位置
-              const clsName = `quicksetup-setting-card ${item.get('enable') === '1' ? 'active-card' : ''}`;
-              return (
-                <div
-                  className={clsName}
-                  key={item.get('name')}
-                >
-                  <div
-                    className="quicksetup-lan-card-close"
-                    onClick={() => {
-                      // if (cardList.size > 1) {
-                      const newList = list.setIn([pos, 'enable'], '0');
-                      this.setState(() => ({ interfaceList: newList }));
-                      // }
-                    }}
-                  >
-                    <Icon
-                      name="times"
-                      // disabled={cardList.size === 1}
-                      style={{ fontSize: '14px' }}
-                    />
-                  </div>
-                  <FormGroup
-                    className="quicksetup-lan-setting-form"
-                    type="select"
-                    label={__('LAN Select')}
-                    value={item.get('name')}
-                    options={selectOptions && selectOptions.toJS()}
-                    onChange={(data) => {
-                      const newPos = list.findIndex(it => it.get('name') === data.value);
-                      const newList = list.setIn([pos, 'enable'], '0').setIn([newPos, 'enable'], '1');
-                      this.setState(() => ({ interfaceList: newList }));
-                    }}
-                    required
-                  />
-                  <FormGroup
-                    className="quicksetup-lan-setting-form"
-                    type="text"
-                    label={__('IP')}
-                    value={item.get('ip')}
-                    onChange={(data) => {
-                      const newList = list.setIn([pos, 'ip'], data.value);
-                      this.setState(() => ({ interfaceList: newList }));
-                    }}
-                    required
-                    {...this.props.validateOption[`validLanIp${index}`]}
-                  />
-                  <FormGroup
-                    className="quicksetup-lan-setting-form"
-                    type="text"
-                    label={__('Subnet Mask')}
-                    value={item.get('mask')}
-                    onChange={(data) => {
-                      const newList = list.setIn([pos, 'mask'], data.value);
-                      this.setState(() => ({ interfaceList: newList }));
-                    }}
-                    required
-                    {...this.props.validateOption[`validLanMask${index}`]}
-                  />
-                  <FormGroup
-                    className="quicksetup-lan-setting-form"
-                    type="checkbox"
-                    label={__('DHCP Enable')}
-                    checked={item.get('dhcpEnable') === '1'}
-                    onChange={(data) => {
-                      const newList = list.setIn([pos, 'dhcpEnable'], data.value);
-                      this.setState(() => ({ interfaceList: newList }));
-                    }}
-                  />
-                </div>
-              );
-            })
-          }
-          {
-            list.filter(item => item.get('type') !== 'wan' && item.get('enable') !== '1').size > 0 && (
-              <div className="quicksetup-card-adding">
-                <Icon
-                  name="plus"
-                  style={{ fontSize: '40px', cursor: 'pointer' }}
-                  onClick={() => {
-                    const pos = list.findIndex(item => item.get('type') !== 'wan' && item.get('enable') !== '1');
-                    const newList = list.setIn([pos, 'enable'], '1');
-
-                    this.setState(() => ({ interfaceList: newList }));
-                  }}
-                />
-              </div>
-            )
-          }
+        <div className="cols col-8 col-offset-2">
+          <Table
+            options={lanTableOptions}
+            list={cardList}
+            // selectable
+            // onRowSelect={(index) => {
+            //  const interfaceList = this.state.interfaceList;
+            //  const selected =
+            //  .setIn([index, '__selected__'], true)
+            //                            .setIn([index, 'enable'], '1');
+            // }}
+          />
         </div>
       </div>
     );
@@ -507,12 +494,12 @@ export default class AxcQuickSetup extends React.Component {
               >
                 <dl className="clearfix">
                   <dt>{__('Name')}</dt>
-                  <dd>{item.get('name')}</dd>
+                  <dd>{item.get('name').toUpperCase()}</dd>
                 </dl>
 
                 <dl className="clearfix">
                   <dt>{__('Type')}</dt>
-                  <dd>{item.get('type')}</dd>
+                  <dd>{item.get('type').toUpperCase()}</dd>
                 </dl>
 
                 <dl className="clearfix">
@@ -536,7 +523,7 @@ export default class AxcQuickSetup extends React.Component {
                   item.get('type') === 'lan' && (
                     <dl className="clearfix">
                       <dt>{__('DHCP Enable')}</dt>
-                      <dd>{item.get('dhcpEnable') === '1' ? 'Enabled' : 'Disabled'}</dd>
+                      <dd>{item.get('dhcpEnable') === '1' ? __('Enabled') : __('Disabled')}</dd>
                     </dl>
                   )
                 }
