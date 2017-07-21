@@ -101,7 +101,10 @@ export class Device extends PureComponent {
       'handleAction',
       'onSelectDevice',
       'onRowSelect',
+      'onMultiOptionAction',
       'onMultiUpgradeDevice',
+      'onMultiRebootDevice',
+      'onMultiResetDevice',
       'onMultiLocateDevice',
     ]);
   }
@@ -158,7 +161,6 @@ export class Device extends PureComponent {
 
   onResetDevice(mac) {
     const msgText = __('Are you sure reset device: %s?', mac);
-
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
@@ -170,7 +172,6 @@ export class Device extends PureComponent {
   }
   onRebootDevice(mac) {
     const msgText = __('Are you sure reboot device: %s?', mac);
-
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
@@ -182,7 +183,6 @@ export class Device extends PureComponent {
   }
   onLocateDevice(mac, isLocating) {
     let actionType = 'location';
-
     if (isLocating) {
       actionType = 'unlocation';
     }
@@ -201,23 +201,29 @@ export class Device extends PureComponent {
     });
   }
 
-  onMultiUpgradeDevice() {
-    const warningMsgText = __('Please choose devices to %s!', __('upgrade'));
+
+  onMultiOptionAction(a, b) {
+    const warningMsgText = __('Please choose devices to %s!', __(b));
     const $$selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
     const selectedListSize = $$selectedListIndex.size;
-    const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __('Upgrade'), __('upgrade'), selectedListSize);
+    const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __(a), __(b), selectedListSize);
     const macs = [];
     const data = {
-      action: 'upgrade',
+      action: b,
       macs,
     };
-    $$selectedListIndex.forEach((index) => {
-      // 不是最新版本才需要升级
-      if (this.props.store.getIn(['data', 'list', index, 'newest']) === '0') {
+    if (b === 'upgrade') {
+      $$selectedListIndex.forEach((index) => {
+        // 不是最新版本才需要升级
+        if (this.props.store.getIn(['data', 'list', index, 'newest']) === '0') {
+          macs.push(this.props.store.getIn(['data', 'list', index, 'mac']));
+        }
+      });
+    } else {
+      $$selectedListIndex.forEach((index) => {
         macs.push(this.props.store.getIn(['data', 'list', index, 'mac']));
-      }
-    });
-
+      });
+    }
     if (selectedListSize === 0) {
       this.props.createModal({
         id: 'settings',
@@ -236,36 +242,21 @@ export class Device extends PureComponent {
     }
   }
 
-  onMultiLocateDevice() {
-    const warningMsgText = __('Please choose devices to %s!', __('locate'));
-    const $$selectedListIndex = this.props.store.getIn(['actionQuery', 'selectedList']);
-    const selectedListSize = $$selectedListIndex.size;
-    const confirmMsgText = __('%s need reboot Device, are you sure %s selected %s devices?', __('Locate'), __('locate'), selectedListSize);
-    const macs = [];
-    const data = {
-      action: 'locate',
-      macs,
-    };
+  onMultiUpgradeDevice() {
+    const a = 'Upgrade';
+    const b = 'upgrade';
+    this.onMultiOptionAction(a, b);
+  }
+  onMultiRebootDevice() {
+    const a = 'Reboot';
+    const b = 'reboot';
+    this.onMultiOptionAction(a, b);
+  }
 
-    $$selectedListIndex.forEach((index) => {
-      macs.push(this.props.store.getIn(['data', 'list', index, 'mac']));
-    });
-    if (selectedListSize === 0) {
-      this.props.createModal({
-        id: 'settings',
-        role: 'confirm',
-        text: warningMsgText,
-      });
-    } else {
-      this.props.createModal({
-        id: 'settings',
-        role: 'confirm',
-        text: confirmMsgText,
-        apply: () => {
-          this.props.saveDevicesAction(data);
-        },
-      });
-    }
+  onMultiResetDevice() {
+    const a = 'Reset';
+    const b = 'reset';
+    this.onMultiOptionAction(a, b);
   }
 
   onChangeDeviceNetwork(name) {
@@ -605,15 +596,31 @@ export class Device extends PureComponent {
           />
           {
             devicetype !== '4' ? (
-              <Button
-                text={__('Upgrade')}
-                style={{
-                  marginLeft: '12px',
-                }}
-                theme="primary"
-                icon="level-up"
-                onClick={this.onMultiUpgradeDevice}
-              />
+              <span>
+                <Button
+                  text={__('Upgrade')}
+                  style={{
+                    marginLeft: '12px',
+                  }}
+                  theme="primary"
+                  icon="level-up"
+                  onClick={this.onMultiUpgradeDevice}
+                />
+                <Button
+                  text={__('Reboot')}
+                  theme="primary"
+                  size="sm"
+                  icon="recycle"
+                  onClick={this.onMultiRebootDevice}
+                />
+                <Button
+                  text={__('Reset')}
+                  theme="primary"
+                  size="sm"
+                  icon="reply-all"
+                  onClick={this.onMultiResetDevice}
+                />
+              </span>
             ) : null
           }
         </div>
