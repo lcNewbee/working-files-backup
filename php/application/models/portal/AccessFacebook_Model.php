@@ -37,8 +37,6 @@ class AccessFacebook_Model extends CI_Model {
         $result = 0;
         $socketarr = $this->params($data);
         if ($this->noticeSocket($this->getSocketPramse('add', array($socketarr)))) {
-            //关闭其他网关
-            //$this->close_sms($this->portalsql->insert_id());
             return json_encode(json_ok());
         }        
         return json_encode(json_no('delete error'));
@@ -56,8 +54,6 @@ class AccessFacebook_Model extends CI_Model {
         $socketarr = $this->params($data);  
         $socketarr['id'] = $data['id'];
         if ($this->noticeSocket($this->getSocketPramse('edit', array($socketarr)))) {
-            //关闭其他网关
-            //$this->close_sms($data['id']);
             return json_encode(json_ok());
         } 
         return json_encode(json_no('edit error'));
@@ -71,14 +67,6 @@ class AccessFacebook_Model extends CI_Model {
             'outTime' => ''
         );
         return $arr;
-    }
-    private function close_sms($id){
-        $this->portalsql->set('state',0);
-        $this->portalsql->where('id !=',$id);
-        if($this->portalsql->update('portal_facebook')){
-            return 1;
-        }        
-        return 0;
     }
     //
     private function noticeSocket($data){

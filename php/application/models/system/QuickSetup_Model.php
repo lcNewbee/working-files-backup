@@ -16,7 +16,8 @@ class QuickSetup_Model extends CI_Model {
                     array('name' => 'eth1'),
                     array('name' => 'eth2'),
                     array('name' => 'eth3'),
-                    array('name' => 'eth4')
+                    array('name' => 'eth4'),
+                    array('name' => 'eth5')
                 )
             )
         );	
