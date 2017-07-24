@@ -9,6 +9,7 @@ export { default as SaveButton } from './Button/SaveButton';
 export { default as Checkbox } from './Form/Checkbox';
 export { default as Radios } from './Form/Radios';
 export { default as Select } from './Select';
+export { default as Loading } from './Loading';
 
 // Molecule
 export { default as Nav } from './Nav';

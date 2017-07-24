@@ -16,7 +16,7 @@ const settingsFormOptions = fromJS([
     defaultValue: '0',
   }, {
     id: 'attacttime',
-    label: __('Harass Attact Time'),
+    label: __('Harass Attack Time'),
     min: 1,
     type: 'number',
     dataType: 'number',

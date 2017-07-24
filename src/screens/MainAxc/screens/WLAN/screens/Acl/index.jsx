@@ -1,20 +1,18 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import { SaveButton, Button } from 'shared/components/Button';
+import { SaveButton, Button, Loading, Table } from 'shared/components';
 
-import Table from 'shared/components/Table';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 import { fetchApGroup } from '../../../../actions';
 
 import './_acl.scss';
-
-let ret;
 
 const listTypeMap = {};
 const $$listTypeOptions = fromJS([
@@ -77,7 +75,6 @@ const listOptions = fromJS([
     formProps: {
       type: 'textarea',
       maxLength: 255,
-      required: true,
       validator: validator({
         rules: 'utf8Len[1,255]',
       }),

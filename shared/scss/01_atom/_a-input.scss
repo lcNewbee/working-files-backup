@@ -1,4 +1,6 @@
-$boder-color: #eee;
+$readyonly-backgrund-color: #eee;
+$normal-backgrund-color: #fff;
+
 .a-text,
 textarea,
 input[type=text],
@@ -9,18 +11,20 @@ input[type=number] {
   padding: .5em .75em;
   font-size: 12px;
   line-height: 14px;
-  background: #fff;
+  background: $normal-backgrund-color;
   border: 1px solid #ccc;
   border-radius: 4px;
   outline: 0;
+  transition: background-color .3s ease-in-out;
+
   &:disabled {
-    background-color: $boder-color;
+    background-color: $readyonly-backgrund-color;
   }
   &:read-only {
-    background-color: $boder-color;
+    background-color: $readyonly-backgrund-color;
   }
   &[readonly] {
-    background-color: $boder-color;
+    background-color: $readyonly-backgrund-color;
   }
   &:focus {
     border: 1px solid $g-brand-primary;
@@ -28,7 +32,7 @@ input[type=number] {
 
   // For IE
   &[readonly] {
-    background-color: $boder-color;
+    background-color: $readyonly-backgrund-color;
   }
 }
 
@@ -54,9 +58,12 @@ input[type="number"]{
 
 input.ant-calendar-picker-input {
   &:read-only {
-    background-color: #fff;
+    background-color: $normal-backgrund-color;
   }
   &[readonly] {
-    background-color: #fff;
+    background-color: $normal-backgrund-color;
+  }
+  &:disabled {
+    background-color: $readyonly-backgrund-color;
   }
 }

@@ -13,7 +13,8 @@ $_height: 28px;
     height: $_height;
   }
   .Select-control {
-    width: 180px;
+    width: 200px;
+    transition: background-color .3s ease-in-out;
   }
 
   &.is-disabled {

@@ -4,24 +4,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { colors } from 'shared/config/axc';
-import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
-import Modal from 'shared/components/Modal';
-import FormInput from 'shared/components/Form/FormInput';
-// import EchartReact from 'shared/components/EchartReact';
 
 import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
-const propTypes = {
-  store: PropTypes.object,
-};
-
-// const flowChartStyle = {
-//   width: '100%',
-//   minHeight: '300px',
-// };
 
 const msg = {
   days: __('Days'),
@@ -52,29 +40,29 @@ const timeTypeSwitchs = fromJS([
     label: `30 ${msg.days}`,
   },
 ]);
-// const interfaceSwitchs = fromJS([
-//   {
-//     value: 'eth0',
-//     label: 'Eth0',
-//   },
-//   {
-//     value: 'eth1',
-//     label: 'Eth1',
-//   },
-//   {
-//     value: 'eth2',
-//     label: 'Eth2',
-//   },
-//   {
-//     value: 'eth3',
-//     label: 'Eth3',
-//   },
-//   {
-//     value: 'eth4',
-//     label: 'Eth4',
-//   },
-// ]);
+function renderApplication(val) {
+  if (typeof (val) === 'undefined' || val.size === 0) return '--';
+  const numPerLine = 6;
+  const len = val.size;
+  const n1 = len / numPerLine;
+  const n2 = len % numPerLine;
+  const ret = [];
 
+  for (let i = 0; i < n1; i += 1) {
+    const start = i * numPerLine;
+    const end = (i * numPerLine) + numPerLine;
+    const arrStr = val.slice(start, end).join(', ');
+    if (i !== n1 - 1) {
+      ret.push(<span key={`application${i}`}>{arrStr}<br /></span>);
+    } else if (i === n1 - 1) {
+      ret.push(<span key={`application${i}`}>{arrStr}</span>);
+    }
+  }
+  const lastArrStr = n2 === 0 ? '' : val.slice(n1 * numPerLine, len).join(', ');
+  if (lastArrStr) ret.push(<span key="applicationLast"><br />{lastArrStr}</span>);
+
+  return ret;
+}
 const userModalOptions = fromJS([
   {
     id: 'mac',
@@ -83,40 +71,10 @@ const userModalOptions = fromJS([
     id: 'ip',
     text: __('IP'),
   },
-  // {
-  //   id: 'osType',
-  //   text: __('OS Type'),
-  //   render(val) {
-  //     if (val === '' || val === undefined) {
-  //       return '--';
-  //     }
-  //     return val;
-  //   },
-  // },
   {
     id: 'application',
     text: __('Applications'),
-    render(val) {
-      if (typeof (val) === 'undefined' || val.size === 0) return '--';
-      const numPerLine = 6;
-      const len = val.size;
-      const n1 = len / numPerLine;
-      const n2 = len % numPerLine;
-      const div = [];
-      for (let i = 0; i < n1; i++) {
-        const start = i * numPerLine;
-        const end = (i * numPerLine) + numPerLine;
-        const arrStr = val.slice(start, end).join(', ');
-        if (i !== n1 - 1) {
-          div.push(<span>{arrStr}<br /></span>);
-        } else if (i === n1 - 1) {
-          div.push(<span>{arrStr}</span>);
-        }
-      }
-      const lastArrStr = n2 === 0 ? '' : val.slice(n1 * numPerLine, len).join(', ');
-      if (lastArrStr) div.push(<span><br />{lastArrStr}</span>);
-      return div;
-    },
+    render: renderApplication,
   }, {
     id: 'curRate',
     text: __('Current Rate'),
@@ -308,16 +266,22 @@ function getFlowOption(serverData, timeType) {
   return option;
 }
 
+const propTypes = {
+  store: PropTypes.object,
+  changeScreenQuery: PropTypes.func,
+  fetchScreenData: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
+};
+
 export default class EthStatistic extends React.Component {
   constructor(props) {
     super(props);
 
     utils.binds(this, [
       'initOptions',
-      'onChangeTimeType',
-      'onChangeInterface',
       'onChangePage',
       'onChangeView',
+      'renderViewUsers',
     ]);
     this.state = {
       showModal: false,
@@ -326,6 +290,53 @@ export default class EthStatistic extends React.Component {
   }
   componentWillMount() {
     this.initOptions(this.props);
+    this.listOptions = fromJS([
+      {
+        id: 'ethx_name',
+        text: __('Ports'),
+      },
+      {
+        id: 'userNum',
+        text: __('User Number'),
+        render: (val, item) => (
+          <span
+            className="link-text"
+            title={__('Click for details')}
+            onClick={() => {
+              const eth = item.get('ethx_name');
+
+              Promise.resolve().then(() => {
+                this.props.changeScreenQuery({
+                  ethx: eth,
+                  page: 1,
+                  size: 20,
+                });
+              }).then(() => {
+                this.props.fetchScreenData();
+                this.props.changeScreenActionQuery({
+                  action: 'viewUsers',
+                  myTitle: `${eth} ${__('Clients List')}`,
+                });
+              });
+            }}
+          >
+            {val || '0'}
+          </span>
+        ),
+      },
+      {
+        id: 'application',
+        text: __('Applications'),
+        render: renderApplication,
+      },
+      {
+        id: 'curRate',
+        text: __('Current Rate'),
+        render(val) {
+          return `${flowRateFilter.transform(val)}/s`;
+        },
+      },
+    ]);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -335,19 +346,16 @@ export default class EthStatistic extends React.Component {
       this.initOptions(nextProps);
     }
   }
+  componentWillUpdate(nextProps) {
+    const myScreenId = this.props.store.get('curScreenId');
+    const thisActionType = this.props.store.getIn([myScreenId, 'actionQuery', 'action']);
+    const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
 
-  onChangeTimeType(data) {
-    this.props.changeScreenQuery({
-      timeType: data.value,
-    });
-    this.props.fetchScreenData();
-  }
-
-  onChangeInterface(data) {
-    this.props.changeScreenQuery({
-      ethx: data.value,
-    });
-    this.props.fetchScreenData();
+    if (thisActionType === 'viewUsers' && (thisActionType !== nextActionType)) {
+      this.isCloseCustomModal = true;
+    } else if (nextActionType && nextActionType !== 'viewUsers') {
+      this.isCloseCustomModal = false;
+    }
   }
 
   onChangePage(data) {
@@ -366,111 +374,41 @@ export default class EthStatistic extends React.Component {
 
     this.serverData = serverData;
     this.flowOption = getFlowOption(serverData, store.getIn([curScreenId, 'query', 'timeType']));
+
   }
-  render() {
-    // const flowOption = this.flowOption;
+  renderViewUsers() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
-    const serverData = store.getIn([curScreenId, 'data']);
-    const listOptions = fromJS([
-      {
-        id: 'ethx_name',
-        text: __('Ports'),
-      }, {
-        id: 'userNum',
-        text: __('User Number'),
-        render: function (val, item) {
-          return (
-            <span
-              className="link-text"
-              title={__('Click for details')}
-              onClick={() => {
-                const ethList = store.getIn([curScreenId, 'data', 'list']);
-                const eth = item.get('ethx_name');
-                const index = ethList.findIndex(listItem => listItem.get('ethx_name') === eth);
-                this.setState({
-                  showModal: true,
-                  ethId: index,
-                });
-                Promise.resolve().then(() => {
-                  this.props.changeScreenQuery({
-                    ethx: `eth${this.state.ethId}`,
-                    page: 1,
-                    size: 20,
-                  });
-                }).then(() => {
-                  this.props.fetchScreenData();
-                });
-              }}
-            >
-              {val || '0'}
-            </span>
-          );
-        }.bind(this),
-      }, {
-        id: 'application',
-        text: __('Applications'),
-        render(val) {
-          if (typeof (val) === 'undefined' || val.size === 0) return '--';
-          const numPerLine = 10;
-          const len = val.size;
-          const n1 = len / numPerLine;
-          const n2 = len % numPerLine;
-          const div = [];
-          for (let i = 0; i < n1; i++) {
-            const start = i * numPerLine;
-            const end = (i * numPerLine) + numPerLine;
-            const arrStr = val.slice(start, end).join(', ');
-            if (i !== n1 - 1) div.push(<span>{arrStr}<br /></span>);
-            else if (i === n1 - 1) div.push(<span>{arrStr}</span>);
-          }
-          const lastArrStr = n2 === 0 ? '' : val.slice(n1 * numPerLine, len).join(', ');
-          if (lastArrStr) div.push(<span><br />{lastArrStr}</span>);
-          return div;
-        },
-      }, {
-        id: 'curRate',
-        text: __('Current Rate'),
-        render(val) {
-          return `${flowRateFilter.transform(val)}/s`;
-        },
-      },
-      /*{
-        id: 'active_eth',
-        text: __('Active Status'),
-        actionName: 'active',
-        type: 'switch',
-        render: function(val, item) {
-          return (
-            <FormInput
-              type="checkbox"
-              checked={val === '1'}
-              onChange={() => {
-                let nextStatus = '1';
-                if (val === '1') nextStatus = '0';
-                Promise.resolve().then(() => {
-                  this.props.changeScreenActionQuery({
-                    action: 'active',
-                    active_eth: nextStatus,
-                    ethx_name: item.get('ethx_name'),
-                  });
-                }).then(() => {
-                  const url = this.props.route.formUrl;
-                  const query = this.props.store.getIn([curScreenId, 'actionQuery']).toJS();
-                  this.props.save(url, query);
-                }).then(() => {
-                  this.props.fetchScreenData();
-                });
-              }}
-            />
-          );
-        }.bind(this),
-      },*/
-    ]);
+    const actionType = store.getIn([curScreenId, 'actionQuery', 'action']);
+
+    if (actionType !== 'viewUsers' && !this.isCloseCustomModal) {
+      return null;
+    }
+
+    return (
+      <Table
+        options={userModalOptions}
+        list={store.getIn([curScreenId, 'data', 'ethxClientList'])}
+        className="table"
+        pageQuery={{
+          size: store.getIn([curScreenId, 'query', 'size']),
+        }}
+        page={store.getIn([curScreenId, 'data', 'page'])}
+        onPageChange={this.onChangePage}
+        onPageSizeChange={this.onChangeView}
+      />
+    );
+  }
+  render() {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const notEditListItem = store.getIn([curScreenId, 'actionQuery', 'action']) === 'viewUsers' || this.isCloseCustomModal;
+
     return (
       <AppScreen
         {...this.props}
-        // listOptions={listOptions}
+        listOptions={this.listOptions}
+        paginationType="none"
         initOption={{
           isFetchInfinite: true,
           fetchIntervalTime: 5000,
@@ -479,93 +417,18 @@ export default class EthStatistic extends React.Component {
             ethx: 'eth0',
           },
         }}
-        // actionable
-        // addable={false}
-        // editable={false}
-        // deleteable={false}
-        // listKey="ethx_name"
-        // listTitle={__('Statistics Within 30 Seconds')}
-      >
-        <div className="t-overview">
-          <div className="element t-overview__section-header">
-            <h3>
-              <span
-                style={{
-                  marginRight: '10px',
-                }}
-              >
-                {__('Time')}
-              </span>
-              <Select
-                options={timeTypeSwitchs.toJS()}
-                value={store.getIn([curScreenId, 'query', 'timeType'])}
-                onChange={this.onChangeTimeType}
-                style={{
-                  width: '180px',
-                }}
-                clearable={false}
-              />
-              {/* <span
-                style={{
-                  marginRight: '10px',
-                  marginLeft: '20px',
-                }}
-              >
-                {__('Interface')}
-              </span>
-              <Select
-                options={interfaceSwitchs.toJS()}
-                value={store.getIn([curScreenId, 'query', 'ethx'])}
-                onChange={this.onChangeInterface}
-                clearable={false}
-              />*/}
-            </h3>
-          </div>
-          {/* <div className="element">
-            <EchartReact
-              option={flowOption}
-              className="o-box__canvas"
-              style={flowChartStyle}
-            />
-          </div>*/}
-          <div className="t-overview__section">
-            <Table
-              className="table"
-              options={listOptions}
-              list={serverData.get('list')}
-            />
-          </div>
-        </div>
-        <Modal
-          isShow={this.state.showModal}
-          title={`Eth${this.state.ethId} ${__('Clients List')}`}
-          cancelButton={false}
-          size="lg"
-          draggable
-          onOk={() => {
-            this.setState({
-              showModal: false,
-            });
-          }}
-          onClose={() => {
-            this.setState({
-              showModal: false,
-            });
-          }}
-        >
-          <Table
-            options={userModalOptions}
-            list={store.getIn([curScreenId, 'data', 'ethxClientList'])}
-            className="table"
-            pageQuery={{
-              size: store.getIn([curScreenId, 'query', 'size']),
-            }}
-            page={store.getIn([curScreenId, 'data', 'page'])}
-            onPageChange={this.onChangePage}
-            onPageSizeChange={this.onChangeView}
-          />
-        </Modal>
-      </AppScreen>
+        queryFormOptions={fromJS([
+          {
+            id: 'timeType',
+            label: __('Time'),
+            type: 'select',
+            options: timeTypeSwitchs,
+            saveOnChange: true,
+          },
+        ])}
+        modalSize={notEditListItem ? 'lg' : 'md'}
+        modalChildren={this.renderViewUsers()}
+      />
     );
   }
 }

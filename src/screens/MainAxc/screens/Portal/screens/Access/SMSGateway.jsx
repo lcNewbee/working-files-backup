@@ -10,6 +10,46 @@ import { actions as appActions } from 'shared/containers/app';
 import './smsgateway.scss';
 
 let ret;
+const smsTypeOptions = fromJS([
+  {
+    value: '1',
+    label: __('iKuai'),
+  }, {
+    value: '2',
+    label: __('Alidayu'),
+  }, {
+    value: '3',
+    label: __('Sucker Ducker'),
+  }, {
+    value: '4',
+    label: __('China Mobile ESMS'),
+  }, {
+    value: '5',
+    label: __('China Unicome OSMS'),
+  }, {
+    value: '6',
+    label: __('China Mobile OpenMas'),
+  }, {
+    value: '7',
+    label: __('Submail'),
+  }, {
+    value: '8',
+    label: __('Carrier Message'),
+  }, {
+    value: '9',
+    label: __('China Telicome SMGP'),
+  }, {
+    value: '10',
+    label: __('Huaxin Message System'),
+  }, {
+    value: '11',
+    label: __('China Telicome ESMS'),
+  }, {
+    value: '12',
+    label: __('Textlocal'),
+  },
+]);
+
 const listOptions = fromJS([
   {
     id: 'name',
@@ -22,19 +62,17 @@ const listOptions = fromJS([
         rules: 'utf8Len:[1, 128]',
       }),
     },
-  }, {
-    id: 'url',
-    text: __('URL'),
-    noTable: true,
+  },
+  {
+    id: 'type',
+    text: __('Type'),
     formProps: {
-      type: 'text',
+      type: 'select',
       required: true,
-      maxLength: '256',
-      validator: validator({
-        rules: 'utf8Len:[1, 255]',
-      }),
     },
-  }, {
+    options: smsTypeOptions,
+  },
+  {
     id: 'appkey',
     text: __('App Key'),
     formProps: {
@@ -46,7 +84,21 @@ const listOptions = fromJS([
         rules: 'utf8Len:[1, 128]',
       }),
     },
-  }, {
+  },
+  {
+    id: 'url',
+    text: __('URL'),
+    noTable: true,
+    formProps: {
+      type: 'text',
+      required: true,
+      maxLength: '256',
+      validator: validator({
+        rules: 'utf8Len:[1, 255]',
+      }),
+    },
+  },
+  {
     id: 'appsecret',
     text: __('Password'),
     noTable: true,
@@ -70,7 +122,8 @@ const listOptions = fromJS([
         rules: 'utf8Len:[1, 255]',
       }),
     },
-  }, {
+  },
+  {
     id: 'smssign',
     text: __('Signature ID'),
     formProps: {
@@ -81,7 +134,8 @@ const listOptions = fromJS([
         rules: 'utf8Len:[1, 32]',
       }),
     },
-  }, {
+  },
+  {
     id: 'company',
     text: __('Company Name'),
     formProps: {
@@ -92,7 +146,8 @@ const listOptions = fromJS([
         rules: 'utf8Len:[1, 32]',
       }),
     },
-  }, {
+  },
+  {
     id: 'count',
     text: __('Used Times'),
     noForm: true,
@@ -107,87 +162,8 @@ const listOptions = fromJS([
         rules: 'num:[0,99999]',
       }),
     },
-  }, {
-    id: 'type',
-    text: __('Type'),
-    formProps: {
-      type: 'select',
-      required: true,
-    },
-    options: [
-      {
-        value: '1',
-        label: __('iKuai'),
-      }, {
-        value: '2',
-        label: __('Alidayu'),
-      }, {
-        value: '3',
-        label: __('Sucker Ducker'),
-      }, {
-        value: '4',
-        label: __('China Mobile ESMS'),
-      }, {
-        value: '5',
-        label: __('China Unicome OSMS'),
-      }, {
-        value: '6',
-        label: __('China Mobile OpenMas'),
-      }, {
-        value: '7',
-        label: __('Submail'),
-      }, {
-        value: '8',
-        label: __('Carrier Message'),
-      }, {
-        value: '9',
-        label: __('China Telicome SMGP'),
-      }, {
-        value: '10',
-        label: __('Huaxin Message System'),
-      }, {
-        value: '11',
-        label: __('China Telicome ESMS'),
-      }, {
-        value: '12',
-        label: __('Textlocal'),
-      },
-    ],
-  }, {
-    id: 'state',
-    text: __('State'),
-    formProps: {
-      type: 'select',
-      defaultValue: '1',
-      required: true,
-    },
-    options: [
-      {
-        value: '1',
-        label: __('Enable'),
-      }, {
-        value: '0',
-        label: __('Disable'),
-      },
-    ],
-  }, {
-    id: 'more',
-    text: __('Multi-Terminal Log'),
-    formProps: {
-      type: 'select',
-      defaultValue: '1',
-      required: true,
-    },
-    options: [
-      {
-        value: '0',
-        label: __('Enable'),
-      }, {
-        value: '1',
-        label: __('Disable'),
-      },
-    ],
-  }, {
+  },
+  {
     id: 'time',
     text: __('Release Time'),
     formProps: {
@@ -204,7 +180,8 @@ const listOptions = fromJS([
       ret = `${val}m`;
       return ret;
     },
-  }, {
+  },
+  {
     id: 'text',
     text: __('Message Content'),
     noTable: true,
@@ -217,6 +194,40 @@ const listOptions = fromJS([
       }),
     },
   },
+  {
+    id: 'state',
+    text: __('State'),
+    formProps: {
+      type: 'checkbox',
+      defaultValue: '1',
+    },
+    options: [
+      {
+        value: '1',
+        label: __('Enable'),
+      }, {
+        value: '0',
+        label: __('Disable'),
+      },
+    ],
+  },
+  {
+    id: 'more',
+    text: __('Multi-Terminal Log'),
+    formProps: {
+      type: 'checkbox',
+      defaultValue: '1',
+    },
+    options: [
+      {
+        value: '0',
+        label: __('Enable'),
+      }, {
+        value: '1',
+        label: __('Disable'),
+      },
+    ],
+  },
 ]);
 
 const queryFormOptions = fromJS([
@@ -224,49 +235,12 @@ const queryFormOptions = fromJS([
     id: 'gateway_type',
     type: 'select',
     label: __('Type'),
-    options: [
-      {
-        value: '-100',
-        label: __('ALL'),
-      },
-      {
-        value: '1',
-        label: __('iKuai'),
-      }, {
-        value: '2',
-        label: __('Alidayu'),
-      }, {
-        value: '3',
-        label: __('Sucker Ducker'),
-      }, {
-        value: '4',
-        label: __('China Mobile ESMS'),
-      }, {
-        value: '5',
-        label: __('China Unicome OSMS'),
-      }, {
-        value: '6',
-        label: __('China Mobile OpenMas'),
-      }, {
-        value: '7',
-        label: __('Submail'),
-      }, {
-        value: '8',
-        label: __('Carrier Message'),
-      }, {
-        value: '9',
-        label: __('China Telicome SMGP'),
-      }, {
-        value: '10',
-        label: __('Huaxin Message System'),
-      }, {
-        value: '11',
-        label: __('China Telicome ESMS'),
-      }, {
-        value: '12',
-        label: __('Textlocal'),
-      },
-    ],
+
+    // 需要添加 ALL 类型
+    options: smsTypeOptions.unshift(fromJS({
+      value: '-100',
+      label: __('ALL'),
+    })),
     saveOnChange: true,
   },
 ]);

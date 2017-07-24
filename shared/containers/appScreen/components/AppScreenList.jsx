@@ -769,7 +769,6 @@ class AppScreenList extends React.PureComponent {
       editFormId, queryFormOptions, actionBarButtons,
       actionBarChildren, maxListSize,
     } = this.props;
-    const page = store.getIn(['data', 'page']);
     const $$curList = store.getIn(['data', 'list']) || List([]);
     const query = store.getIn(['query']);
     const leftChildrenNode = [];
