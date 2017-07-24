@@ -16,7 +16,9 @@ class AccessFacebook_Model extends CI_Model {
                     'currPage' => element('page', $data, 1),
                     'size' => element('size', $data, 20)
                 ),
-                'list' => array()
+                'list' => array(
+                    array('appId' => element('search', $data, ''))
+                )
             )
         );
         $portal_socket = new PortalSocket();
@@ -34,15 +36,13 @@ class AccessFacebook_Model extends CI_Model {
         return json_encode(json_no('error !'));
 	}
     function add($data){
-        $result = 0;
         $socketarr = $this->params($data);
         if ($this->noticeSocket($this->getSocketPramse('add', array($socketarr)))) {
             return json_encode(json_ok());
         }        
-        return json_encode(json_no('delete error'));
+        return json_encode(json_no('add error'));
     }    
     function delete($data){
-        $result = FALSE;
         $dellist = $data['selectedList'];       
         foreach($dellist as $row) {            
             $this->noticeSocket($this->getSocketPramse('delete', array($row)));
@@ -50,7 +50,6 @@ class AccessFacebook_Model extends CI_Model {
         return json_encode(json_ok());
     }
     function edit($data){
-        $result = 0;
         $socketarr = $this->params($data);  
         $socketarr['id'] = $data['id'];
         if ($this->noticeSocket($this->getSocketPramse('edit', array($socketarr)))) {
