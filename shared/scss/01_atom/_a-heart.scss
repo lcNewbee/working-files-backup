@@ -1,34 +1,15 @@
-$g-brand-primary:           #0093DD !default;
-$g-brand-primary-dark:      #0070d2 !default;
-$g-brand-primary-darker:    #005fb2 !default;
-$g-brand-primary-darkest:   #00396b !default;
-$g-brand-success:           #4BC076 !default;
-$g-brand-info:              #62B7ED !default;
-$g-brand-warning:           #F7B64B !default;
-$g-brand-danger:            #C23934 !default;
-
-$g-main-color:               #141a23 !default;
-
-.flex-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-.heart {
+.a-heart {
   position: relative;
   font-size: 0;
   width: 138px;
+  margin-top: 40px;
+  height: 60px;
+
+  &.a-heart--sm {
+    margin: 0 auto;
+    height: 30px;
+    transform: scale(.4, .4);
+  }
 }
 [class*="heart-piece-"] {
   position: absolute;
@@ -37,82 +18,82 @@ $g-main-color:               #141a23 !default;
   height: 10px;
   border-radius: 5px;
 }
-.heart-piece-4 {
-  -webkit-animation: piece-4 3.2s infinite;
-          animation: piece-4 3.2s infinite;
+.a-heart-piece-4 {
+  -webkit-animation: piece-4 2.4s infinite;
+          animation: piece-4 2.4s infinite;
 }
-.heart-piece-3,
-.heart-piece-5 {
-  -webkit-animation: piece-3 3.2s infinite;
-          animation: piece-3 3.2s infinite;
+.a-heart-piece-3,
+.a-heart-piece-5 {
+  -webkit-animation: piece-3 2.4s infinite;
+          animation: piece-3 2.4s infinite;
 }
-.heart-piece-2,
-.heart-piece-6 {
-  -webkit-animation: piece-2 3.2s infinite;
-          animation: piece-2 3.2s infinite;
+.a-heart-piece-2,
+.a-heart-piece-6 {
+  -webkit-animation: piece-2 2.4s infinite;
+          animation: piece-2 2.4s infinite;
 }
-.heart-piece-1,
-.heart-piece-7 {
-  -webkit-animation: piece-1 3.2s infinite;
-          animation: piece-1 3.2s infinite;
+.a-heart-piece-1,
+.a-heart-piece-7 {
+  -webkit-animation: piece-1 2.4s infinite;
+          animation: piece-1 2.4s infinite;
 }
-.heart-piece-0,
-.heart-piece-8 {
-  -webkit-animation: piece-0 3.2s infinite;
-          animation: piece-0 3.2s infinite;
+.a-heart-piece-0,
+.a-heart-piece-8 {
+  -webkit-animation: piece-0 2.4s infinite;
+          animation: piece-0 2.4s infinite;
 }
-.heart-piece-0 {
+.a-heart-piece-0 {
   left: 0px;
   -webkit-animation-delay: 0s;
           animation-delay: 0s;
   background-color: $g-main-color;
 }
-.heart-piece-1 {
+.a-heart-piece-1 {
   left: 16px;
-  -webkit-animation-delay: 0.15s;
-          animation-delay: 0.15s;
+  -webkit-animation-delay: 0.1s;
+          animation-delay: 0.1s;
   background-color: $g-main-color;
 }
-.heart-piece-2 {
+.a-heart-piece-2 {
   left: 32px;
+  -webkit-animation-delay: 0.2s;
+          animation-delay: 0.2s;
+  background-color: $g-brand-primary;
+}
+.a-heart-piece-3 {
+  left: 48px;
   -webkit-animation-delay: 0.3s;
           animation-delay: 0.3s;
   background-color: $g-brand-primary;
 }
-.heart-piece-3 {
-  left: 48px;
-  -webkit-animation-delay: 0.45s;
-          animation-delay: 0.45s;
+.a-heart-piece-4 {
+  left: 64px;
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
   background-color: $g-brand-primary;
 }
-.heart-piece-4 {
-  left: 64px;
+.a-heart-piece-5 {
+  left: 80px;
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
+  background-color: $g-brand-primary;
+}
+.a-heart-piece-6 {
+  left: 96px;
   -webkit-animation-delay: 0.6s;
           animation-delay: 0.6s;
   background-color: $g-brand-primary;
 }
-.heart-piece-5 {
-  left: 80px;
-  -webkit-animation-delay: 0.75s;
-          animation-delay: 0.75s;
-  background-color: $g-brand-primary;
-}
-.heart-piece-6 {
-  left: 96px;
-  -webkit-animation-delay: 0.9s;
-          animation-delay: 0.9s;
-  background-color: $g-brand-primary;
-}
-.heart-piece-7 {
+.a-heart-piece-7 {
   left: 112px;
-  -webkit-animation-delay: 1.05s;
-          animation-delay: 1.05s;
+  -webkit-animation-delay: .7s;
+          animation-delay: .7s;
   background-color: $g-main-color;
 }
-.heart-piece-8 {
+.a-heart-piece-8 {
   left: 128px;
-  -webkit-animation-delay: 1.2s;
-          animation-delay: 1.2s;
+  -webkit-animation-delay: .8s;
+          animation-delay: .8s;
   background-color: $g-main-color;
 }
 @-webkit-keyframes piece-4 {

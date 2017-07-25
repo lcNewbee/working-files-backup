@@ -6,13 +6,9 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  Icon, FormGroup, Button,
+  Icon, FormGroup, Button, Loading, FormContainer, Table, Modal, Switchs,
 } from 'shared/components';
 import { getActionable } from 'shared/axc';
-import FormContainer from 'shared/components/Organism/FormContainer';
-import Table from 'shared/components/Table';
-import Modal from 'shared/components/Modal';
-import Switchs from 'shared/components/Switchs';
 
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
@@ -1096,7 +1092,7 @@ export default class LiveMap extends React.PureComponent {
                 {
                   loadMapStatus === 'loading' ? (
                     <div className="o-map__body-loading">
-                      <Icon name="spinner" size="2x" spin />
+                      <Loading size="sm" />
                     </div>
                   ) : null
                 }

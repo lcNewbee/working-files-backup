@@ -656,7 +656,6 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={this.curListOptions}
-        paginationType="none"
         onBeforeSync={onBeforeSync}
         className="t-portal-web"
         editFormOption={{

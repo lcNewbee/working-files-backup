@@ -77,6 +77,6 @@ if (module.hot) {
 }
 
 if (process.env.NODE_ENV !== 'production' && window.dev) {
-  const {whyDidYouUpdate} = require('why-did-you-update')
-  whyDidYouUpdate(React)
+  const { whyDidYouUpdate } = require('why-did-you-update');
+  whyDidYouUpdate(React);
 }

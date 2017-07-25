@@ -243,6 +243,10 @@ $map-distance-y: $map-distance * .75;
     margin-top: -1em;
     margin-left: -1em;
     color: #0093dd;
+
+    .a-heart {
+      margin-left: -37px;
+    }
   }
 
   .m-map__marker-infowindow {

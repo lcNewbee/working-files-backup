@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import immutable, { List, Map } from 'immutable';
 import utils, { immutableUtils } from 'shared/utils';
 import { getActionable } from 'shared/axc';
-import { Icon } from 'shared/components';
+import { Loading } from 'shared/components';
 import AppScreenList from './AppScreenList';
 import AppScreenSettings from './AppScreenSettings';
 
@@ -13,7 +13,7 @@ const loadingStyle = {
   position: 'absolute',
   top: '40%',
   marginTop: '-12px',
-  marginLeft: '-12px',
+  marginLeft: '-55px',
   left: '50%',
   fontSize: '24px',
   color: '#0093DD',
@@ -349,7 +349,7 @@ export default class AppScreen extends React.Component {
         {
           this.state.loading ? [
             <div key="appLoadingWarp" style={loadingWarpStyle} />,
-            <Icon key="appLoadingIcon" style={loadingStyle} name="spinner" spin />
+            <Loading size="sm" style={loadingStyle} />,
           ] : null
         }
       </div>

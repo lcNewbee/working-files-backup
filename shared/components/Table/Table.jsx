@@ -4,8 +4,8 @@ import { fromJS, List } from 'immutable';
 import PureComponent from '../Base/PureComponent';
 import utils from '../../utils';
 import Pagination from '../Pagination';
-import Icon from '../Icon';
 import Row from './Row';
+import Loading from '../Loading';
 
 const THEAD_INDEX = -1;
 
@@ -331,7 +331,12 @@ class Table extends PureComponent {
             <div className="table-loading">
               <div className="backdrop" />
               <div className="table-loading-content">
-                <Icon name="spinner" spin />
+                <Loading
+                  size="sm"
+                  style={{
+                    marginLeft: '-44px',
+                  }}
+                />
               </div>
             </div>
           ) : null

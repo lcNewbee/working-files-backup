@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import { SaveButton, Button, Loading, Table } from 'shared/components';
+import { SaveButton, Button, Table } from 'shared/components';
 
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
