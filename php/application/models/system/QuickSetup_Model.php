@@ -2,8 +2,9 @@
 class QuickSetup_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
+        $this->load->library('session');
 		$this->load->database();
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
 		$this->load->library('PortalSocket');
 	}
 	function get_list($data) {
@@ -35,6 +36,14 @@ class QuickSetup_Model extends CI_Model {
                 //1.设置接口
                 $interface = $this->getCgiParamInteface($row);
                 $result = acnetmg_add_portip(json_encode($interface));
+                $interface_log = array(
+                    'type' => 'Add', 
+                    'operator' => element('username', $_SESSION, ''), 
+                    'operationCommand' => "add  interface", 
+                    'operationResult' => preg_replace('#\s+#', '',trim($result)),
+                    'description' => json_encode($interface)
+                );
+                Log_Record($this->db, $interface_log);
                 //WAN 设置WAN口就是设置一个路由
                 if($row['type'] === 'wan') {
                     $gateway = $row['gateway'];
@@ -44,22 +53,46 @@ class QuickSetup_Model extends CI_Model {
                         'mask'    => element('mask', $row), 
                     );
                     $result = acnetmg_add_route(json_encode($route));	
+                    $route_log = array(
+                        'type' => 'Add', 
+                        'operator' => element('username', $_SESSION, ''), 
+                        'operationCommand' => "add  route", 
+                        'operationResult' => preg_replace('#\s+#', '',trim($result)),
+                        'description' => json_encode($route)
+                    );
+                    Log_Record($this->db, $route_log);
                 }
                 //dhcp
                 if(isset($row['dhcpEnable'])  && $row['dhcpEnable'] === '1') {
                     $dhcp = $this->getCgiParamDhcp($row);
                     $dhcp['pool_route'] = $gateway;
                     $result = dhcpd_add_pool_name(json_encode($dhcp));
+                    $dhcp_log = array(
+                        'type' => 'Add', 
+                        'operator' => element('username', $_SESSION, ''), 
+                        'operationCommand' => "add  dhcp", 
+                        'operationResult' => preg_replace('#\s+#', '',trim($result)),
+                        'description' => json_encode($dhcp)
+                    );
+                    Log_Record($this->db, $dhcp_log);
                 }                
                 //net
                 if(!$this->getNetState()){
-                    $this->setNet();
+                    $this->setNet();                    
                 }
                 if(isset($row['type']) && $row['type'] === 'lan'){
                     $netarr = $this->getCgiParamsNet($row);
                     $netarr['natipaddr'] = $gateway;
                     $netarr['ip'] = $netarr['ipaddr'] . '/' . $this->getMaskLength($row['mask']);
                     $result = acnetmg_add_nat(json_encode($netarr));
+                    $net_log = array(
+                        'type' => 'Add', 
+                        'operator' => element('username', $_SESSION, ''), 
+                        'operationCommand' => "add  dhcp", 
+                        'operationResult' => preg_replace('#\s+#', '',trim($result)),
+                        'description' => json_encode($netarr)
+                    );
+                    Log_Record($this->db, $net_log);
                 }
                 // set state
                 $this->setRestoreState('0');
@@ -118,6 +151,14 @@ class QuickSetup_Model extends CI_Model {
         $result = null;
         $cgiParams = array('enable' => 1);
         $result = acnetmg_nat_enable(json_encode($cgiParams));
+        $net_log = array(
+            'type' => 'Add', 
+            'operator' => element('username', $_SESSION, ''), 
+            'operationCommand' => "Activate  net Server", 
+            'operationResult' => preg_replace('#\s+#', '',trim($result)),
+            'description' => json_encode($cgiParams)
+        );
+        Log_Record($this->db, $net_log);
     }
 
     //计算掩码长度
