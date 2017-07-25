@@ -25,7 +25,7 @@ class AccessSms_Model extends CI_Model {
             )
         );
         $portal_socket = new PortalSocket();
-        $socket_data = $portal_socket->portal_socket(json_encode($socketarr));
+        $socket_data = $portal_socket->portal_socket(json_encode($socketarr));        
         return json_encode($socket_data);
 	}
     function Add($data){
@@ -50,21 +50,21 @@ class AccessSms_Model extends CI_Model {
         } 
         return json_encode(json_no('edit error'));
     }
-    private function params($data){
+    private function params($data) {
         $arr = array(
-            'name' => element('name',$data),
-            'url' => element('url',$data,''),
-            'count' => element('count',$data),//已使用次数
-            'state' => element('state',$data),//状态，启用/停用
-            'type' => element('type',$data),//类型，1-虚拟网关 2-前海智讯
-            'more' => element('more',$data),//多终端登录 0-允许 1-禁止
-            'time' => element('time',$data),//验证码过期时长 分钟
-            'text' => element('text',$data),//短信内容
-            'appkey' => element('appkey',$data),// 短信网关用户名
-            'appsecret' => element('appsecret',$data),// 短信网关密码
-            'smssign' => element('smssign',$data),//签名
-            'smstemplate' => element('smstemplate',$data),//模板ID
-            'company' => element('company',$data)//公司名称
+            'name' => element('name', $data), 
+            'url' => element('url', $data, ''), 
+            'count' => element('count', $data), //已使用次数
+            'state' => element('state', $data), //状态，启用/停用
+            'type' => element('type', $data), //类型，1-虚拟网关 2-前海智讯
+            'more' => element('more', $data), //多终端登录 0-允许 1-禁止
+            'time' => element('time', $data), //验证码过期时长 分钟
+            'text' => element('text', $data), //短信内容
+            'appkey' => element('appkey', $data), // 短信网关用户名
+            'appsecret' => element('appsecret', $data), // 短信网关密码
+            'smssign' => element('smssign', $data), //签名
+            'smstemplate' => element('smstemplate', $data), //模板ID
+            'company' => element('company', $data) //公司名称
         );
         return $arr;
     }
