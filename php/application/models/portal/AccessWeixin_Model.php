@@ -43,7 +43,7 @@ class AccessWeixin_Model extends CI_Model {
         $updata = $this->getParams($data);
         $updata['id'] = element('id', $updata);
         //send java
-        if ($this->noticeSocket($this->getSocketPramse('edit', array($updata)))) {
+        if ($this->noticeSocket('edit', array($updata))) {
             $result = json_encode(json_ok());
         }
         $loginfo = array(
@@ -113,24 +113,22 @@ class AccessWeixin_Model extends CI_Model {
         }
         return $result;
     }
-    private function noticeSocket($data){
+    private function noticeSocket($action, $data){
         $result = null;
         $portal_socket = new PortalSocket();
-        $result = $portal_socket->portal_socket(json_encode($data));
+
+        $socket_req = array(
+            'action' => $action, 
+            'resName' => 'weixin', 
+            'data' => array(
+                'page' => array('currPage' => 1, 'size' => 20), 
+                'list' => $data
+            )
+        );
+        $result = $portal_socket->portal_socket(json_encode($socket_req));
         if($result['state']['code'] === 2000){
             return TRUE;
         }
         return FALSE;
-    }
-    private function getSocketPramse($type, $data) {
-         $socketarr = array(
-            'action' => $type,
-            'resName' => 'weixin',
-            'data' => array(
-                'page' => array('currPage' => 1,'size' => 20),
-                'list' => $data
-            )
-        );
-        return $socketarr;
     }
 }

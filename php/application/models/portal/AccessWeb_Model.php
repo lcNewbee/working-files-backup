@@ -126,7 +126,7 @@ class AccessWeb_Model extends CI_Model {
             'sessiontime' => element('sessiontime', $data, 0)
         );
         //send java
-        if ($this->noticeSocket($this->getSocketPramse('add', array($socketarr)))) {
+        if ($this->noticeSocket('add', array($socketarr))) {
             $this->DirectorySave();
             return json_encode(json_ok());
         }           
@@ -161,7 +161,7 @@ class AccessWeb_Model extends CI_Model {
                     'url' => element('url', $drow, 'http://'),
                     'sessiontime' => element('sessiontime', $drow, 0)
                 );
-                if ($this->noticeSocket($this->getSocketPramse('delete', array($socketarr)))) {
+                if ($this->noticeSocket('delete', array($socketarr))) {
                     //delete file
                     $logo_path = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $drow['logo'];
                     $bgm_path = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $drow['backgroundImg'];
@@ -230,7 +230,7 @@ class AccessWeb_Model extends CI_Model {
         }
         //2.操作数据库        
         //send java
-        if ($this->noticeSocket($this->getSocketPramse('edit', array($socketarr)))) {
+        if ($this->noticeSocket('edit', array($socketarr))) {
             $this->DirectorySave();
             return json_encode(json_ok());
         } 
@@ -247,25 +247,22 @@ class AccessWeb_Model extends CI_Model {
     //socket portal
     private function getDbParams($data){
     }
-    private function noticeSocket($data){
+    private function noticeSocket($action, $data){
         $result = null;
         $portal_socket = new PortalSocket();
-        $result = $portal_socket->portal_socket(json_encode($data));
+        $socket_req = array(
+            'action' => $action, 
+            'resName' => 'web_template', 
+            'data' => array(
+                'page' => array('currPage' => 1, 'size' => 20), 
+                'list' => $data
+            )
+        );
+        $result = $portal_socket->portal_socket(json_encode($socket_req));
         if($result['state']['code'] === 2000){
             return TRUE;
         }
         return FALSE;
-    }
-    private function getSocketPramse($type, $data) {
-         $socketarr = array(
-            'action' => $type,
-            'resName' => 'web_template',
-            'data' => array(
-                'page' => array('currPage' => 1,'size' => 20),
-                'list' => $data
-            )
-        );
-        return $socketarr;
     }
 
     private function DirectorySave(){

@@ -30,7 +30,7 @@ class AccessSms_Model extends CI_Model {
 	}
     function Add($data){
         $socketarr = $this->params($data);
-        if ($this->noticeSocket($this->getSocketPramse('add', array($socketarr)))) {
+        if ($this->noticeSocket('add', array($socketarr))) {
             return json_encode(json_ok());
         }        
         return json_encode(json_no('add error'));
@@ -38,14 +38,14 @@ class AccessSms_Model extends CI_Model {
     function Delete($data){
         $dellist = $data['selectedList'];       
         foreach($dellist as $row) {            
-            $this->noticeSocket($this->getSocketPramse('delete', array($row)));
+            $this->noticeSocket('delete', array($row));
         }     
         return json_encode(json_ok());
     }
     function Edit($data){
         $socketarr = $this->params($data);  
         $socketarr['id'] = $data['id'];
-        if ($this->noticeSocket($this->getSocketPramse('edit', array($socketarr)))) {
+        if ($this->noticeSocket('edit', array($socketarr))) {
             return json_encode(json_ok());
         } 
         return json_encode(json_no('edit error'));
@@ -69,24 +69,21 @@ class AccessSms_Model extends CI_Model {
         return $arr;
     }
     //
-    private function noticeSocket($data){
+    private function noticeSocket($action, $data) {
         $result = null;
         $portal_socket = new PortalSocket();
-        $result = $portal_socket->portal_socket(json_encode($data));
-        if($result['state']['code'] === 2000){
-            return TRUE;
-        }
-        return FALSE;
-    }
-    private function getSocketPramse($type, $data) {
-         $socketarr = array(
-            'action' => $type,
-            'resName' => 'sms',
+        $socket_req = array(
+            'action' => $action, 
+            'resName' => 'sms', 
             'data' => array(
-                'page' => array('currPage' => 1,'size' => 20),
+                'page' => array('currPage' => 1, 'size' => 20), 
                 'list' => $data
             )
         );
-        return $socketarr;
-    }
+        $result = $portal_socket->portal_socket(json_encode($socket_req));
+        if ($result['state']['code'] === 2000) {
+            return TRUE;
+        }
+        return FALSE;
+    }    
 }
