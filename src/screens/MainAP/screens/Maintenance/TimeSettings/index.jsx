@@ -63,11 +63,8 @@ export default class TimeSettings extends Component {
     function validIp(str) {
       const ipArr = str.split('.');
       const ipHead = ipArr[0];
-      if (ipArr[0] === '127') {
-        return __('IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233');
-      }
-      if (ipArr[0] > 223) {
-        return __('IP Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
+      if (ipArr[0] > 223 || ipArr[0] === '127') {
+        return __('IP address begin with %s is invalid!', ipHead);
       }
       return '';
     }

@@ -26,6 +26,7 @@ const paths = {
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: './webpack.config.dev.js',
   pubWebpack: './webpack.config.production.js',
+  pubAIP3: '../svn/AIP3web',
   pubAIP5: '../svn/AIP5_web',
   pubAIP10: '../svn/AIP10_web',
   pubAIP10L: '../svn/AIP10L_web',
@@ -34,6 +35,7 @@ const paths = {
   pubASW3: '../svn/ASW3_web',
   pubASC175: '../svn/ASC175_web',
   pubASC120: '../svn/ASC120_web',
+  pubASC120L: '../svn/ASC120L_web',
   pubAEC60: '../svn/AEC60_web',
   pubASC3: '../svn/ASC3_web',
   pubASC6: '../svn/ASC6_web',
@@ -116,6 +118,7 @@ function noBrandTitle() {
       .pipe(gulp.dest(paths.build));
 }
 
+gulp.task('changeAIP3Title', () => changeTitle('Bridge'));
 gulp.task('changeAIP5Title', () => changeTitle('Bridge'));
 gulp.task('changeAIP10Title', () => changeTitle('AP'));
 gulp.task('changeAIP10LTitle', () => changeTitle('AP'));
@@ -124,6 +127,7 @@ gulp.task('changeAEC175Title', () => changeTitle('AP'));
 gulp.task('changeASC175Title', () => changeTitle('AP'));
 gulp.task('changeASW3Title', () => changeTitle('AP'));
 gulp.task('changeASC120Title', () => changeTitle('AP'));
+gulp.task('changeASC120LTitle', () => changeTitle('AP'));
 gulp.task('changeAEC60Title', () => changeTitle('AP'));
 gulp.task('changeASC3Title', () => changeTitle('AP'));
 gulp.task('changeASC6Title', () => changeTitle('AP'));
