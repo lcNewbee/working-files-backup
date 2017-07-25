@@ -210,8 +210,8 @@ class AccessWeb_Model extends CI_Model {
                 }                               
             }
         }else{
-            //否则将需要修改的logo名字 改回原数据库存储的值
-            $socketarr['logo'] = $query[0]['logo'];
+            //否则将需要修改的logo 路径置空
+            $socketarr['logo'] = '';//$query[0]['logo'];//否则将需要修改的logo名字 改回原数据库存储的值。
         }
         //bg
         $upload_data2 = $this->do_upload_img($bg_name, 'backgroundImg');        
@@ -225,7 +225,7 @@ class AccessWeb_Model extends CI_Model {
             }
         }else{
             if(count($query) > 0){
-                $socketarr['bgImg'] = $query[0]['bg_img'];                
+                $socketarr['bgImg'] = '';//$query[0]['bg_img'];                
             }
         }
         //2.操作数据库        
