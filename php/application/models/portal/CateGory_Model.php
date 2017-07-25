@@ -4,33 +4,55 @@ class CateGory_Model extends CI_Model {
         parent::__construct();
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
         $this->load->helper(array('array', 'db_operation'));
+        $this->load->library('PortalSocket');
     }
-    function get_list($data) {
-        $parameter = array(
-            'db' => $this->portalsql,
-            'columns' => '*',
-            'tablenames' => 'portal_cardcategory',
-            'pageindex' => (int) element('page', $data, 1),
-            'pagesize' => (int) element('size', $data, 20),
-            'wheres' => "1=1",
-            'joins' => array(),
-            'order' => array()
-        );
-        if(isset($data['search'])){
-            $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
-        }
-        if(isset($data['state']) && $data['state'] != '-100'){
-            $parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
-        }
-        $datalist = help_data_page_all($parameter);
-        $arr = array(
-            'state'=>array('code'=>2000,'msg'=>'ok'),
-            'data'=>array(
-                'page'=>$datalist['page'],
-                'list'=>$datalist['data']
+    function get_list($data) {        
+        //send java   
+        $socketarr = array(
+            'action' => 'get', 
+            'resName' => 'cardcategory', 
+            'data' => array(
+                'page' => array(
+                    'currPage' => element('page', $data, 1),
+                    'size' => element('size', $data, 20)
+                ),
+                'list' => array(
+                    array(
+                        'name' => element('search', $data, ''),
+                        'state' => element('state', $data, '')
+                    )
+                )
             )
         );
-        return json_encode($arr);
+        $portal_socket = new PortalSocket();
+        $socket_data = $portal_socket->portal_socket(json_encode($socketarr));        
+        return json_encode($socket_data);
+    }
+
+    function Add($data) {
+        $result = FALSE;
+        $socketarr = $this->getPram($data);
+        if ($this->noticeSocket('add', array($socketarr))) {
+            return json_encode(json_ok());
+        }
+        return json_encode(json_no('add error'));
+    }
+    function Delete($data) {
+        $result = FALSE;
+        $dellist = $data['selectedList'];
+        foreach($dellist as $row) {
+            $this->noticeSocket('delete', array($row));
+        }
+        return json_encode(json_ok());
+    }
+    function Edit($data) {
+        $result = null;
+        $socketarr = $this->getPram($data);
+        $socketarr['id'] = element('id',$data);
+        if ($this->noticeSocket('edit', array($socketarr))) {
+            return json_encode(json_ok());
+        } 
+        return json_encode(json_no('edit error'));
     }
 
     private function getPram($data){
@@ -41,35 +63,29 @@ class CateGory_Model extends CI_Model {
             'time' => element('time',$data),
             'state' => element('state',$data),
             'money' => element('money',$data),
+            'moneyUnit' => element('moneyUnit', $data, ''),
             'maclimit' => 0,
             'maclimitcount' => 0,
             'autologin' => 0
         );
         return $arr;
     }
-    function Add($data) {
-        $result = FALSE;
-        $insertary = $this->getPram($data);
-        $result = $this->portalsql->insert('portal_cardcategory', $insertary);
-        $result ? $result = json_ok() : $result = json_no('insert error');
-        return json_encode($result);
-    }
-    function Delete($data) {
-        $result = FALSE;
-        $dellist = $data['selectedList'];
-        foreach($dellist as $row) {
-            $this->portalsql->where('id', $row['id']);
-            $result = $this->portalsql->delete('portal_cardcategory');
-        }
-        $result = $result ? json_ok() : json_no('delete error');
-        return json_encode($result);
-    }
-    function Edit($data) {
+    //
+    private function noticeSocket($action, $data) {
         $result = null;
-        $updata = $this->getPram($data);
-        $updata ['id'] = element('id',$updata);
-        $result = $this->portalsql->replace('portal_cardcategory',$updata,array('id'=>$updata['id']));
-        $result ? $result = json_ok() : $result = json_no('update error');
-        return json_encode($result);
-    }
+        $portal_socket = new PortalSocket();
+        $socket_req = array(
+            'action' => $action, 
+            'resName' => 'cardcategory', 
+            'data' => array(
+                'page' => array('currPage' => 1, 'size' => 20), 
+                'list' => $data
+            )
+        );
+        $result = $portal_socket->portal_socket(json_encode($socket_req));
+        if ($result['state']['code'] === 2000) {
+            return TRUE;
+        }
+        return FALSE;
+    } 
 }
