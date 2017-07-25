@@ -21,6 +21,7 @@ const SAVE_BUTTON_TEXT = __('Save');
 const propTypes = {
   refreshAll: PropTypes.func,
   save: PropTypes.func,
+  fetch: PropTypes.func,
   changeLoginStatus: PropTypes.func,
   toggleMainPopOver: PropTypes.func,
   togglePropertyContainer: PropTypes.func,
@@ -68,6 +69,15 @@ export default class Main extends React.PureComponent {
     const locationQuery = utils.getQuery(this.props.location.search);
     const purview = this.props.app.getIn(['login', 'purview']);
     const appId = locationQuery && locationQuery.appId;
+
+    // // 判断是否恢复出厂状态，再决定跳转页面
+    // this.props.fetch('goform/quicksetup').then((json) => {
+    //   if (json.state && json.state.code === 2000) {
+    //     if (json.data.restoreState === '0') {
+    //       window.location.hash = '/quicksetup';
+    //     }
+    //   }
+    // });
 
     // 如果权限为空自动跳转到 登录Screen
     if (purview === 'none' && appId !== 'ad30a4a05ac6855c64074246948fbf9c') {

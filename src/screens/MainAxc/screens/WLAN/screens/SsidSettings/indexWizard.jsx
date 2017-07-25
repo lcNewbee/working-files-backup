@@ -1516,15 +1516,15 @@ export default class View extends React.Component {
         disabled: true,
         required: true,
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addRadiusServer"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isCreateNewRadiusServer')}
-            />
+          <Button
+            type="button"
+            text={__('New')}
+            key="addRadiusServer"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isCreateNewRadiusServer')}
+          />
           ),
       },
     ]);
@@ -1551,15 +1551,15 @@ export default class View extends React.Component {
           rules: 'ip',
         }),
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addLocalRadiusServer"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isCreateNewLocalRadiusServer')}
-            />
+          <Button
+            type="button"
+            text={__('New')}
+            key="addLocalRadiusServer"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isCreateNewLocalRadiusServer')}
+          />
           ),
       },
     ]);
@@ -1688,15 +1688,15 @@ export default class View extends React.Component {
         required: true,
         disabled: true,
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addPortalServer"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isCreateNewPortalServer')}
-            />
+          <Button
+            type="button"
+            text={__('New')}
+            key="addPortalServer"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isCreateNewPortalServer')}
+          />
           ),
       },
     ]);
@@ -2120,15 +2120,15 @@ export default class View extends React.Component {
         required: true,
         type: 'select',
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addPortalAccount"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isCreateNewPortalAccount')}
-            />
+          <Button
+            type="button"
+            text={__('New')}
+            key="addPortalAccount"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isCreateNewPortalAccount')}
+          />
           ),
       },
     ]);
@@ -2140,15 +2140,15 @@ export default class View extends React.Component {
         required: true,
         type: 'select',
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addCardCategory"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isCreateCardCategory')}
-            />
+          <Button
+            type="button"
+            text={__('New')}
+            key="addCardCategory"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isCreateCardCategory')}
+          />
           ),
       },
     ]);
@@ -2160,15 +2160,15 @@ export default class View extends React.Component {
         required: true,
         type: 'select',
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addCardCategory"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isCreateNewWechat')}
-            />
+          <Button
+            type="button"
+            text={__('New')}
+            key="addCardCategory"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isCreateNewWechat')}
+          />
           ),
       },
     ]);
@@ -2306,86 +2306,85 @@ export default class View extends React.Component {
                 }}
               >
                 <div className="account">
-                <h3>Account</h3>
-                <div>
-                  <FormContainer
-                    id="portalAccountChoice"
-                    className="o-form--compassed"
-                    options={$$curPortalAccount}
-                    data={$$curWizardData}
-                    onChangeData={(data) => {
-                      this.props.updateScreenCustomProps(data);
-                    }}
-                    onSave={() => this.onSave('portalAccountChoice')}
-                    invalidMsg={app.get('invalid')}
-                    validateAt={app.get('validateAt')}
-                    onValidError={this.props.reportValidError}
-                    isSaving={app.get('saving')}
-                  />
-                  {
-                    this.state.isCreateNewPortalAccount ? (
-                      <FormContainer
-                        id="newPortalAccount"
-                        className="o-form--compassed"
-                        options={baseSetting}
-                        data={$$curWizardData}
-                        onChangeData={(data) => {
-                          this.props.updateScreenCustomProps(data);
-                        }}
-                        onSave={() => this.onSave('newPortalAccount')}
-                        invalidMsg={app.get('invalid')}
-                        validateAt={app.get('validateAt')}
-                        onValidError={this.props.reportValidError}
-                        isSaving={app.get('saving')}
-                        hasSaveButton
-                      />
-                    ) : null
-                  }
+                  <h3>Account</h3>
+                  <div>
+                    <FormContainer
+                      id="portalAccountChoice"
+                      className="o-form--compassed"
+                      options={$$curPortalAccount}
+                      data={$$curWizardData}
+                      onChangeData={(data) => {
+                        this.props.updateScreenCustomProps(data);
+                      }}
+                      onSave={() => this.onSave('portalAccountChoice')}
+                      invalidMsg={app.get('invalid')}
+                      validateAt={app.get('validateAt')}
+                      onValidError={this.props.reportValidError}
+                      isSaving={app.get('saving')}
+                    />
+                    {
+                      this.state.isCreateNewPortalAccount ? (
+                        <FormContainer
+                          id="newPortalAccount"
+                          className="o-form--compassed"
+                          options={baseSetting}
+                          data={$$curWizardData}
+                          onChangeData={(data) => {
+                            this.props.updateScreenCustomProps(data);
+                          }}
+                          onSave={() => this.onSave('newPortalAccount')}
+                          invalidMsg={app.get('invalid')}
+                          validateAt={app.get('validateAt')}
+                          onValidError={this.props.reportValidError}
+                          isSaving={app.get('saving')}
+                          hasSaveButton
+                        />
+                      ) : null
+                    }
+                  </div>
                 </div>
-              </div>
                 <div className="recharge">
-                <h3
-style={{
-                  marginTop: '20px',
-                }}
-                >Recharge</h3>
-                <div>
-                  <FormContainer
-                    id="rechargeForm"
-                    className="o-form--compassed"
-                    options={$$curRechargeOptions}
-                    data={$$curWizardData}
-                    onChangeData={(data) => {
-                      this.props.updateScreenCustomProps(data);
+                  <h3
+                    style={{
+                      marginTop: '20px',
                     }}
-                    onSave={() => this.onSave('rechargeForm')}
-                    invalidMsg={app.get('invalid')}
-                    validateAt={app.get('validateAt')}
-                    onValidError={this.props.reportValidError}
-                    isSaving={app.get('saving')}
-                  />
-                  {
-                    this.state.isCreateCardCategory ? (
-                      <FormContainer
-                        id="createCardCategory"
-                        className="o-form--compassed"
-                        options={cardCategoryOptions}
-                        data={$$curWizardData}
-                        onChangeData={(data) => {
-                          this.props.updateScreenCustomProps(data);
-                        }}
-                        onSave={() => this.onSave('createCardCategory')}
-                        invalidMsg={app.get('invalid')}
-                        validateAt={app.get('validateAt')}
-                        onValidError={this.props.reportValidError}
-                        isSaving={app.get('saving')}
-                        hasSaveButton
-                      />
-                    ) : null
-                  }
+                  >Recharge</h3>
+                  <div>
+                    <FormContainer
+                      id="rechargeForm"
+                      className="o-form--compassed"
+                      options={$$curRechargeOptions}
+                      data={$$curWizardData}
+                      onChangeData={(data) => {
+                        this.props.updateScreenCustomProps(data);
+                      }}
+                      onSave={() => this.onSave('rechargeForm')}
+                      invalidMsg={app.get('invalid')}
+                      validateAt={app.get('validateAt')}
+                      onValidError={this.props.reportValidError}
+                      isSaving={app.get('saving')}
+                    />
+                    {
+                      this.state.isCreateCardCategory ? (
+                        <FormContainer
+                          id="createCardCategory"
+                          className="o-form--compassed"
+                          options={cardCategoryOptions}
+                          data={$$curWizardData}
+                          onChangeData={(data) => {
+                            this.props.updateScreenCustomProps(data);
+                          }}
+                          onSave={() => this.onSave('createCardCategory')}
+                          invalidMsg={app.get('invalid')}
+                          validateAt={app.get('validateAt')}
+                          onValidError={this.props.reportValidError}
+                          isSaving={app.get('saving')}
+                          hasSaveButton
+                        />
+                      ) : null
+                    }
+                  </div>
                 </div>
-              </div>
-
               </div>
             ) : null
           }
@@ -2605,16 +2604,16 @@ style={{
         required: true,
         type: 'select',
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addNewSNS"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isConfigNewSNS')}
-            />
-          ),
+          <Button
+            type="button"
+            text={__('New')}
+            key="addNewSNS"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isConfigNewSNS')}
+          />
+        ),
       },
     ]);
     const configNewSNSOptions = fromJS([
@@ -2848,15 +2847,15 @@ style={{
         required: true,
         type: 'select',
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addPortalAccount"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isCreateNewPortalAccount')}
-            />
+          <Button
+            type="button"
+            text={__('New')}
+            key="addPortalAccount"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isCreateNewPortalAccount')}
+          />
           ),
       },
     ]);
@@ -2924,15 +2923,15 @@ style={{
         required: true,
         type: 'select',
         appendRender: () => (
-            <Button
-              type="button"
-              text={__('New')}
-              key="addCardCategory"
-              icon="plus"
-              style={{ marginTop: '20px' }}
-              theme="primary"
-              onClick={() => this.toggleBox('isCreateCardCategory')}
-            />
+          <Button
+            type="button"
+            text={__('New')}
+            key="addCardCategory"
+            icon="plus"
+            style={{ marginTop: '20px' }}
+            theme="primary"
+            onClick={() => this.toggleBox('isCreateCardCategory')}
+          />
           ),
       },
     ]);

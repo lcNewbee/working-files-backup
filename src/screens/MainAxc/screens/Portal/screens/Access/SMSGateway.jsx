@@ -227,6 +227,35 @@ const listOptions = fromJS([
         label: __('Disable'),
       },
     ],
+  }, {
+    id: 'time',
+    text: __('Release Time'),
+    formProps: {
+      type: 'number',
+      min: '0',
+      max: '100',
+      defaultValue: '5',
+      help: __('Minutes'),
+      validator: validator({
+        rules: 'num:[0,100]',
+      }),
+    },
+    render(val) {
+      ret = `${val}m`;
+      return ret;
+    },
+  }, {
+    id: 'text',
+    text: __('Message Content'),
+    noTable: true,
+    formProps: {
+      type: 'textarea',
+      required: true,
+      maxLength: '257',
+      validator: validator({
+        rules: 'utf8Len:[1, 256]',
+      }),
+    },
   },
 ]);
 

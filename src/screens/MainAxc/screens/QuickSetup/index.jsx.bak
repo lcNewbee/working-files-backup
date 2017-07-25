@@ -12,7 +12,7 @@ import validate from 'shared/validator/validates/single';
 import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
-import WizardContainer from 'shared/components/Organism/WizardContainer';
+import StateWizardContainer from 'shared/components/Organism/StateWizardContainer';
 import './quicksetup.scss';
 
 const propTypes = {
@@ -26,9 +26,7 @@ const propTypes = {
   receiveScreenData: PropTypes.func,
 };
 
-const defaultProps = {
-
-};
+const defaultProps = {};
 
 const validOptions = ((n) => {
   let options = Map({
@@ -568,17 +566,41 @@ export default class AxcQuickSetup extends React.Component {
   }
 
   render() {
-    this.WizardContainerOptions = fromJS([
-      this.setWanSettingOption(),
-      this.setLanSettingOption(),
-      this.setConfirmOption(),
-    ]);
+    // this.WizardContainerOptions = fromJS([
+    //   this.setWanSettingOption(),
+    //   this.setLanSettingOption(),
+    //   this.setConfirmOption(),
+    // ]);
+
+    this.stateObj = fromJS({
+      initState: 'wanSettings',
+      wanSettings: {
+        prevState: null,
+        nextState: 'lanSettings',
+        stateTitle: __('WAN Settings'),
+        renderBody: this.renderWanSettingPage,
+        onNextButtonClick: () => '',
+      },
+      lanSettings: {
+        prevState: 'wanSettings',
+        nextState: 'confirm',
+        stateTitle: __('LAN Settings'),
+        renderBody: this.renderLanSettingPage,
+        onNextButtonClick: () => '',
+      },
+      confirm: {
+        prevState: 'lanSettings',
+        stateTitle: __('Confirm'),
+        nextState: null,
+        renderBody: this.renderConfirmPage,
+        onNextButtonClick: () => '',
+      },
+    });
 
     return (
-      <WizardContainer
-        options={this.WizardContainerOptions}
-        onBeforeStep={this.onBeforeStep}
-        onCompleted={this.onCompleted}
+      <StateWizardContainer
+        stateObj={this.stateObj}
+        title={__('Quicksetup')}
       />
     );
   }
