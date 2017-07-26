@@ -8,27 +8,25 @@ import utilsCore from 'shared/utils/lib/core';
 import { FormGroup, FormInput, Icon, Table } from 'shared/components';
 import validator from 'shared/validator';
 import validate from 'shared/validator/validates/single';
-
-import { actions as screenActions } from 'shared/containers/appScreen';
-import { actions as appActions } from 'shared/containers/app';
-
 import WizardContainer from 'shared/components/Organism/WizardContainer';
+
+import { actions as appActions } from 'shared/containers/app';
+import * as selfActions from './actions';
+import myReducer from './reducer';
 import './quicksetup.scss';
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   save: PropTypes.func,
-  fetchScreenData: PropTypes.func,
+  fetch: PropTypes.func,
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
   createModal: PropTypes.func,
-  receiveScreenData: PropTypes.func,
+  receiveQuickSetupFetchData: PropTypes.func,
 };
 
-const defaultProps = {
-
-};
+const defaultProps = {};
 
 const validOptions = ((n) => {
   let options = Map({
@@ -67,21 +65,20 @@ export default class AxcQuickSetup extends React.Component {
     };
   }
 
-  componentWillMount() {
-    this.props.fetchScreenData({ url: this.props.route.fetchUrl })
-        .then(() => {
-          const curScreenId = this.props.store.get('curScreenId');
-          const restoreState = this.props.store.getIn([curScreenId, 'data', 'restoreState']);
-          if (restoreState === '0') {
-            window.location.hash = this.props.route.mainPath;
+  componentDidMount() {
+    this.props.fetch(this.props.route.fetchUrl)
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.props.receiveQuickSetupFetchData(json.data);
           }
         });
   }
 
   componentWillReceiveProps(nextProps) {
-    const curScreenId = nextProps.store.get('curScreenId');
-    let nextInterfaceList = nextProps.store.getIn([curScreenId, 'data', 'interfaceList']);
-    const curInterfaceList = this.props.store.getIn([curScreenId, 'data', 'interfaceList']);
+    // const curScreenId = nextProps.store.get('curScreenId');
+    // console.log('curScreenId', curScreenId);
+    let nextInterfaceList = nextProps.store.get('interfaceList');
+    const curInterfaceList = this.props.store.get('interfaceList');
     // 只有当data变化时才更新state，否则数据验证无法进行
     // （修改的数据保存在state中，如果只要props更新就更新state，state总是会被置为data的值）
     if (nextInterfaceList && !(nextInterfaceList.equals(curInterfaceList))) {
@@ -96,8 +93,7 @@ export default class AxcQuickSetup extends React.Component {
   }
 
   componentWillUnmount() {
-    const curScreenId = this.props.store.get('curScreenId');
-    this.props.receiveScreenData(fromJS({ interfaceList: [] }), curScreenId);
+    this.props.receiveQuickSetupFetchData({ interfaceList: [] });
   }
 
   onBeforeStep(stepObj) {
@@ -590,14 +586,14 @@ AxcQuickSetup.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.screens,
+    store: state.quicksetup,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions,
+    selfActions,
   ), dispatch);
 }
 
@@ -606,3 +602,5 @@ export const Screen = connect(
   mapDispatchToProps,
   validator.mergeProps(validOptions),
 )(AxcQuickSetup);
+
+export const quicksetup = myReducer;

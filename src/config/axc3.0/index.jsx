@@ -891,8 +891,8 @@ const routes = [
       {
         id: 'login',
         path: '/login',
-        // mainPath: '/main/group/monitor/overview',
-        mainPath: '/quicksetup',
+        mainPath: '/main/group/monitor/overview',
+        // mainPath: '/quicksetup',
         component: sLogin.Screen,
       },
       {
@@ -912,6 +912,7 @@ const reducers = {
 
   // product comstom reducers
   product: sMainAxc.reducer,
+  quicksetup: sQuickSetup.quicksetup,
 
   toastr: toastrReducer,
 };
