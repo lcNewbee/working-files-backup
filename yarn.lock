@@ -1259,7 +1259,7 @@ babel-register@^6.24.1, babel-register@^6.9.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@6.x, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.22.0:
+babel-runtime@6.x, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.23.0:
   version "6.23.0"
   resolved "http://registry.npm.taobao.org/babel-runtime/download/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
   dependencies:
@@ -6967,10 +6967,6 @@ pngquant-bin@^3.0.0:
     bin-wrapper "^3.0.0"
     logalot "^2.0.0"
 
-popper.js@^1.0.2:
-  version "1.10.8"
-  resolved "http://registry.npm.taobao.org/popper.js/download/popper.js-1.10.8.tgz#0fd6343e68aa8c1cc8cfe35e02c673500a1bc609"
-
 portscanner@2.1.1:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/portscanner/download/portscanner-2.1.1.tgz#eabb409e4de24950f5a2a516d35ae769343fbb96"
@@ -7451,6 +7447,14 @@ rc-time-picker@^2.3.5:
     babel-runtime "6.x"
     classnames "2.x"
     moment "2.x"
+    prop-types "^15.5.8"
+    rc-trigger "1.x"
+
+rc-tooltip@^3.4.7:
+  version "3.4.7"
+  resolved "http://registry.npm.taobao.org/rc-tooltip/download/rc-tooltip-3.4.7.tgz#ec6cc39a962de96a9147de08a78fb38f93517ff3"
+  dependencies:
+    babel-runtime "^6.23.0"
     prop-types "^15.5.8"
     rc-trigger "1.x"
 
@@ -8991,12 +8995,6 @@ to-arraybuffer@^1.0.0:
 to-fast-properties@^1.0.0, to-fast-properties@^1.0.1:
   version "1.0.3"
   resolved "http://registry.npm.taobao.org/to-fast-properties/download/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
-
-tooltip.js@^1.1.2:
-  version "1.1.4"
-  resolved "http://registry.npm.taobao.org/tooltip.js/download/tooltip.js-1.1.4.tgz#17337f22065fc04d4a456429ce122dbf184bd861"
-  dependencies:
-    popper.js "^1.0.2"
 
 toposort@^1.0.0:
   version "1.0.3"

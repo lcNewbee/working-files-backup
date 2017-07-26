@@ -25,6 +25,7 @@ export { default as Search } from './Form/Search';
 export { default as Password } from './Form/Password';
 export { default as DatePicker } from './DatePicker';
 export { default as TimePicker } from './TimePicker';
+export { default as Popconfirm } from './Popconfirm';
 
 // Organism
 export { default as Modal } from './Modal';

@@ -543,6 +543,7 @@ export default class MainGroup extends React.Component {
               actionable ? (
                 <div>
                   <Tooltip
+                    placement="top"
                     title={__('Manage AP Groups')}
                   >
                     <Icon

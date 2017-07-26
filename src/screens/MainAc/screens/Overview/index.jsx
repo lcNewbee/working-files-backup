@@ -288,11 +288,11 @@ export class Status extends React.PureComponent {
   }
 
   onDeleteOfflineAp(mac) {
-    const comfirmText = __('Are you sure delete offline AP: %s?', mac);
+    const confirmText = __('Are you sure delete offline AP: %s?', mac);
     this.props.createModal({
       id: 'status',
       role: 'confirm',
-      text: comfirmText,
+      text: confirmText,
       apply: () => {
         this.props.deleteOfflineAp(mac);
       },

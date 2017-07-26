@@ -49,7 +49,7 @@ export default class SignUp extends React.Component {
     super(props);
     this.onOkButtonClick = this.onOkButtonClick.bind(this);
     this.onThinModeImgClick = this.onThinModeImgClick.bind(this);
-    this.comfirmModeChange = this.comfirmModeChange.bind(this);
+    this.confirmModeChange = this.confirmModeChange.bind(this);
     // this.onSkipButtonClick = this.onSkipButtonClick.bind(this);
 
     this.state = {
@@ -102,7 +102,7 @@ export default class SignUp extends React.Component {
           window.location.href = '#/main/status';
           return null;
         } else if (currModeData.enable !== nextModeData.enable && nextModeData.enable === '0') { // 模式改变，从瘦到胖
-          this.comfirmModeChange();
+          this.confirmModeChange();
           this.props.changeShowThinModeConfigModal(false);
         } else if (nextModeData.enable === '1') { // 瘦模式，配置改变（若配置不变，则不会执行到这里来，在前面已经返回了）
           // 验证各个参数是否合法，其中orgId没有验证
@@ -135,7 +135,7 @@ export default class SignUp extends React.Component {
             return null;
           }
           // 通过测试，保存配置
-          this.comfirmModeChange();
+          this.confirmModeChange();
           this.props.changeShowThinModeConfigModal(false);
           reportError('');
         }
@@ -155,7 +155,7 @@ export default class SignUp extends React.Component {
   //   });
   // }
 
-  comfirmModeChange() {
+  confirmModeChange() {
     const query = this.props.selfState.get('nextModeData').toJS();
     this.props.save('goform/set_thin', query);
 

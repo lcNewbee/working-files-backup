@@ -1,48 +1,43 @@
 import React, { Component } from 'react';
-import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
-import TooltipFun from 'tooltip.js';
+import RcTooltip from 'rc-tooltip';
 
 import './_index.scss';
 
 const propTypes = {
   children: PropTypes.node,
-  placement: PropTypes.string,
   title: PropTypes.string,
 };
 
 const defaultProps = {
-  placement: 'bottom',
+  prefixCls: 'rw-tooltip',
+  placement: 'top',
+  transitionName: 'rw-tooltip-zoom',
 };
 
 export class Tooltip extends Component {
   componentDidMount() {
-    const referenceElement = ReactDom.findDOMNode(this.elem);
-    this.tooltip = new TooltipFun(referenceElement, {
-      placement: this.props.placement,
-      title: this.props.title,
-    });
+    // const referenceElement = ReactDom.findDOMNode(this.elem);
+    // this.tooltip = new TooltipFun(referenceElement, {
+    //   placement: this.props.placement,
+    //   title: this.props.title,
+    // });
   }
   componentWillUnmount() {
     if (this.tooltip && typeof this.tooltip === 'function') {
-      this.tooltip.destroy();
+      // this.tooltip.destroy();
     }
   }
 
   render() {
-    const { children } = this.props;
-    const childrenElem = React.Children.only(children);
-
-    return childrenElem ? (
-      <childrenElem.type
-        {...childrenElem.props}
-        ref={(elem) => {
-          if (elem) {
-            this.elem = elem;
-          }
-        }}
-      />
-    ) : null;
+    return (
+      <RcTooltip
+        {...this.props}
+        overlay={<span>{this.props.title}</span>}
+      >
+        { this.props.children }
+      </RcTooltip>
+    );
   }
 }
 

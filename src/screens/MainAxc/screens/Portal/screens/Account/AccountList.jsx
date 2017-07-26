@@ -802,12 +802,7 @@ export default class View extends React.Component {
       });
     // this.getDefaultEditData();
   }
-  // onBeforeSave() {
-  //   const { store } = this.props;
-  //   const myScreenId = store.get('curScreenId');
-  //   const $$myScreenStore = store.get(myScreenId);
-  //   const $$curData = $$myScreenStore.get('curListItem');
-  // }
+
   onSave(formId) {
     if (this.props.validateAll) {
       this.props.validateAll(formId)
@@ -856,29 +851,6 @@ export default class View extends React.Component {
 
     return ret;
   }
-  // getDefaultEditData() {
-  //   const myDefaultEditData = {};
-  //   baseSetting.forEach(
-  //     ($$item, index) => {
-  //       const curId = $$item.get('id');
-  //       const defaultValue = $$item.get('defaultValue') || '';
-
-  //       myDefaultEditData[curId] = defaultValue;
-
-  //       return index;
-  //     },
-  //   );
-  //   advancedSetting.forEach(
-  //     ($$item, index) => {
-  //       const curId = $$item.get('id');
-  //       const defaultValue = $$item.get('defaultValue') || '';
-  //       myDefaultEditData[curId] = defaultValue;
-  //       return index;
-  //     },
-  //   );
-
-  //   this.defaultEditData = myDefaultEditData;
-  // }
   toggleBox(moduleName) {
     this.setState({
       [moduleName]: !this.state[moduleName],
@@ -901,9 +873,6 @@ export default class View extends React.Component {
       $$rechargeDetailData = $$curData.merge($$cardDataItem.delete('name'));
     }
 
-    if (actionType !== 'add' && actionType !== 'edit' && !isRecharge) {
-      return null;
-    }
     if (actionType === 'edit') {
       $$mybaseSetting = $$mybaseSetting.map(
         ($$item) => {

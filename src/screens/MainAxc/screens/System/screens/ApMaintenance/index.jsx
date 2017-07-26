@@ -18,7 +18,7 @@ const settingsFormOptions = fromJS([
     searchable: true,
   }, {
     id: 'discoverycnt',
-    label: __('AP Number of Re-joins'),
+    label: __('Number of Re-joins'),
     fieldset: 'retainDays',
     defaultValue: '7',
     type: 'number',
@@ -26,7 +26,7 @@ const settingsFormOptions = fromJS([
     max: '365',
   }, {
     id: 'echotime',
-    label: __('AP Heartbeat Time'),
+    label: __('Heartbeat Time-out'),
     fieldset: 'retainDays',
     defaultValue: '60',
     maxLength: '12',
@@ -35,7 +35,7 @@ const settingsFormOptions = fromJS([
     help: __('Seconds'),
   }, {
     id: 'statistime',
-    label: __('AP Data Reporting Time'),
+    label: __('Data Reporting Interval'),
     fieldset: 'retainDays',
     defaultValue: '120',
     maxLength: '12',
@@ -44,7 +44,7 @@ const settingsFormOptions = fromJS([
     help: __('Seconds'),
   }, {
     id: 'autoap',
-    label: __('Allow Automatic Add AP'),
+    label: __('Automatically Approve APs'),
     fieldset: 'retainDays',
     type: 'checkbox',
     value: '1',

@@ -151,24 +151,6 @@ const listOptions = fromJS([
     options: apStatus,
   },
 ]);
-const listActionBarButtons = [
-  {
-    actionName: 'upgrade',
-    text: __('Upgrade'),
-    icon: 'arrow-circle-o-up',
-    needConfirm: true,
-  }, {
-    actionName: 'reboot',
-    text: __('Reboot'),
-    icon: 'power-off',
-    needConfirm: true,
-  }, {
-    actionName: 'reset',
-    text: __('Reset'),
-    icon: 'undo',
-    needConfirm: true,
-  },
-];
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -242,7 +224,6 @@ export default class View extends React.Component {
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$selectedList = $$myScreenStore.getIn(['actionQuery', 'selectedList']);
-
     if ($$selectedList.size > 0) {
       this.props.changeScreenActionQuery({
         action: EDIT_LIST_ACTION,
@@ -250,12 +231,6 @@ export default class View extends React.Component {
       });
       this.props.fetchScreenData({
         url: 'goform/group/smartRf',
-      });
-    } else {
-      this.props.createModal({
-        id: EDIT_LIST_ACTION,
-        role: 'alert',
-        text: __('Please select %s rows', __('edit')),
       });
     }
   }
@@ -311,7 +286,6 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curSettings');
     const isEditList = $$myScreenStore.getIn(['actionQuery', 'action']) === EDIT_LIST_ACTION;
-
     if (!isEditList) {
       return null;
     }
@@ -411,19 +385,33 @@ export default class View extends React.Component {
 
       return ret;
     });
-    let listActionBarChildren = (
-      <Button
-        text={__('Edit')}
-        key="settingActionButton"
-        icon="cog"
-        onClick={() => this.onSettingSelected()}
-      />
-    );
-    let myActionButtons = listActionBarButtons;
+    let myActionButtons = [
+      {
+        actionName: 'upgrade',
+        text: __('Upgrade'),
+        icon: 'arrow-circle-o-up',
+        needConfirm: true,
+      }, {
+        actionName: 'reboot',
+        text: __('Reboot'),
+        icon: 'power-off',
+        needConfirm: true,
+      }, {
+        actionName: 'reset',
+        text: __('Reset'),
+        icon: 'undo',
+        needConfirm: true,
+      },
+      {
+        actionName: 'edit',
+        text: __('Edit'),
+        icon: 'cog',
+        onClick: () => this.onSettingSelected(),
+      },
+    ];
 
     // 如果是所有组不支持对AP的操作
     if (this.props.groupid === -100) {
-      listActionBarChildren = null;
       myActionButtons = [];
     }
 
@@ -432,7 +420,6 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={myListOptions}
         actionBarButtons={myActionButtons}
-        actionBarChildren={listActionBarChildren}
         modalChildren={this.renderCustomModal()}
         listKey="mac"
         addable={false}

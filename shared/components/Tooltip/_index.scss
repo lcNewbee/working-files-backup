@@ -1,5 +1,242 @@
-.tooltip {
-  padding: 6px;
-  background-color: #000;
-  color: #fff;
+/* Sass utils */
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
+.rw-tooltip {
+  position: absolute;
+  z-index: 2500;
+  display: block;
+  visibility: visible;
+  line-height: 1.5;
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 1px;
+}
+.rw-tooltip-hidden {
+  display: none;
+}
+.rw-tooltip-inner {
+  padding: $g-distance;
+  color: #333333;
+  text-align: left;
+  text-decoration: none;
+  background-color: #ffffff;
+  min-height: 34px;
+  border: 1px solid #fff;
+  background-clip: padding-box;
+  border-radius: 4px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+}
+.rw-tooltip-arrow,
+.rw-tooltip-arrow-inner {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.rw-tooltip-placement-top .rw-tooltip-arrow,
+.rw-tooltip-placement-topLeft .rw-tooltip-arrow,
+.rw-tooltip-placement-topRight .rw-tooltip-arrow {
+  bottom: -5px;
+  margin-left: -6px;
+  border-width: 6px 6px 0;
+  border-top-color: #fff;
+}
+.rw-tooltip-placement-top .rw-tooltip-arrow-inner,
+.rw-tooltip-placement-topLeft .rw-tooltip-arrow-inner,
+.rw-tooltip-placement-topRight .rw-tooltip-arrow-inner {
+  bottom: 1px;
+  margin-left: -6px;
+  border-width: 6px 6px 0;
+  border-top-color: #ffffff;
+}
+.rw-tooltip-placement-top .rw-tooltip-arrow {
+  left: 50%;
+}
+.rw-tooltip-placement-topLeft .rw-tooltip-arrow {
+  left: 15%;
+}
+.rw-tooltip-placement-topRight .rw-tooltip-arrow {
+  right: 15%;
+}
+.rw-tooltip-placement-right .rw-tooltip-arrow,
+.rw-tooltip-placement-rightTop .rw-tooltip-arrow,
+.rw-tooltip-placement-rightBottom .rw-tooltip-arrow {
+  left: -5px;
+  margin-top: -6px;
+  border-width: 6px 6px 6px 0;
+  border-right-color: #fff;
+}
+.rw-tooltip-placement-right .rw-tooltip-arrow-inner,
+.rw-tooltip-placement-rightTop .rw-tooltip-arrow-inner,
+.rw-tooltip-placement-rightBottom .rw-tooltip-arrow-inner {
+  left: 1px;
+  margin-top: -6px;
+  border-width: 6px 6px 6px 0;
+  border-right-color: #ffffff;
+}
+.rw-tooltip-placement-right .rw-tooltip-arrow {
+  top: 50%;
+}
+.rw-tooltip-placement-rightTop .rw-tooltip-arrow {
+  top: 15%;
+  margin-top: 0;
+}
+.rw-tooltip-placement-rightBottom .rw-tooltip-arrow {
+  bottom: 15%;
+}
+.rw-tooltip-placement-left .rw-tooltip-arrow,
+.rw-tooltip-placement-leftTop .rw-tooltip-arrow,
+.rw-tooltip-placement-leftBottom .rw-tooltip-arrow {
+  right: -5px;
+  margin-top: -6px;
+  border-width: 6px 0 6px 6px;
+  border-left-color: #fff;
+}
+.rw-tooltip-placement-left .rw-tooltip-arrow-inner,
+.rw-tooltip-placement-leftTop .rw-tooltip-arrow-inner,
+.rw-tooltip-placement-leftBottom .rw-tooltip-arrow-inner {
+  right: 1px;
+  margin-top: -6px;
+  border-width: 6px 0 6px 6px;
+  border-left-color: #ffffff;
+}
+.rw-tooltip-placement-left .rw-tooltip-arrow {
+  top: 50%;
+}
+.rw-tooltip-placement-leftTop .rw-tooltip-arrow {
+  top: 15%;
+  margin-top: 0;
+}
+.rw-tooltip-placement-leftBottom .rw-tooltip-arrow {
+  bottom: 15%;
+}
+.rw-tooltip-placement-bottom .rw-tooltip-arrow,
+.rw-tooltip-placement-bottomLeft .rw-tooltip-arrow,
+.rw-tooltip-placement-bottomRight .rw-tooltip-arrow {
+  top: -5px;
+  margin-left: -6px;
+  border-width: 0 6px 6px;
+  border-bottom-color: #fff;
+}
+.rw-tooltip-placement-bottom .rw-tooltip-arrow-inner,
+.rw-tooltip-placement-bottomLeft .rw-tooltip-arrow-inner,
+.rw-tooltip-placement-bottomRight .rw-tooltip-arrow-inner {
+  top: 1px;
+  margin-left: -6px;
+  border-width: 0 6px 6px;
+  border-bottom-color: #ffffff;
+}
+.rw-tooltip-placement-bottom .rw-tooltip-arrow {
+  left: 50%;
+}
+.rw-tooltip-placement-bottomLeft .rw-tooltip-arrow {
+  left: 15%;
+}
+.rw-tooltip-placement-bottomRight .rw-tooltip-arrow {
+  right: 15%;
+}
+.rw-tooltip.rw-tooltip-zoom-enter,
+.rw-tooltip.rw-tooltip-zoom-leave {
+  display: block;
+}
+.rw-tooltip-zoom-enter,
+.rw-tooltip-zoom-appear {
+  opacity: 0;
+  -webkit-animation-duration: 0.3s;
+          animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+          animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+.rw-tooltip-zoom-leave {
+  -webkit-animation-duration: 0.3s;
+          animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
+          animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+.rw-tooltip-zoom-enter.rw-tooltip-zoom-enter-active,
+.rw-tooltip-zoom-appear.rw-tooltip-zoom-appear-active {
+  -webkit-animation-name: rcToolTipZoomIn;
+          animation-name: rcToolTipZoomIn;
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+.rw-tooltip-zoom-leave.rw-tooltip-zoom-leave-active {
+  -webkit-animation-name: rcToolTipZoomOut;
+          animation-name: rcToolTipZoomOut;
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+@-webkit-keyframes rcToolTipZoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-transform: scale(0, 0);
+            transform: scale(0, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+}
+@keyframes rcToolTipZoomIn {
+  0% {
+    opacity: 0;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-transform: scale(0, 0);
+            transform: scale(0, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+}
+@-webkit-keyframes rcToolTipZoomOut {
+  0% {
+    opacity: 1;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-transform: scale(0, 0);
+            transform: scale(0, 0);
+  }
+}
+@keyframes rcToolTipZoomOut {
+  0% {
+    opacity: 1;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    -webkit-transform: scale(0, 0);
+            transform: scale(0, 0);
+  }
 }

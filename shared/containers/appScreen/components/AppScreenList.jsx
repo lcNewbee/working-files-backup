@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Map, List, fromJS } from 'immutable';
 import utils from 'shared/utils';
-import { FormInput, Search } from 'shared/components/Form';
-import Table from 'shared/components/Table';
-import Modal from 'shared/components/Modal';
-import { Button } from 'shared/components/Button';
-import FormContainer from 'shared/components/Organism/FormContainer';
+import { toastr } from 'react-redux-toastr';
+import {
+  Button, Popconfirm, FormContainer, Modal, Table, FormInput, Search,
+} from 'shared/components';
 
 const saveText = __('Apply');
 const savingText = __('Applying');
@@ -367,10 +366,6 @@ class AppScreenList extends React.PureComponent {
       if (actionName === 'setting') {
         actionName = 'edit';
       }
-      this.props.createModal({
-        role: 'alert',
-        text: __('Please select %s rows', __(actionName)),
-      });
     }
   }
   onItemAction($$actionQuery, option) {
@@ -615,28 +610,36 @@ class AppScreenList extends React.PureComponent {
                 }
                 {
                   deleteableResult ? (
-                    <Button
-                      icon="trash"
-                      text={__('Delete')}
-                      size="sm"
-                      onClick={() => {
-                        this.handleItemAction({
-                          actionName: 'delete',
-                          needConfirm: true,
-                          index,
-                        });
-                      }}
-                    />
-                    ) : null
-                  }
+                    <Popconfirm
+                      title={__('Are you sure to %s selected %s row?', __('delete'), (index + 1))}
+                      onOk={
+                        () => {
+                          this.handleItemAction({
+                            actionName: 'delete',
+                            index,
+                          });
+                        }
+                      }
+                    >
+                      <Button
+                        icon="trash"
+                        text={__('Delete')}
+                        size="sm"
+                      />
+                    </Popconfirm>
+                  ) : null
+                }
                 {
                   btnList ? btnList.map(($$btnItem) => {
+                    const actionName = $$btnItem.get('actionName') || $$btnItem.get('actionType');
+                    const needconfirm = $$btnItem.get('needConfirm');
                     let hiddenResult = $$btnItem.get('isHidden');
                     let onClickFunc = () => {
                       this.handleItemAction(
-                        $$btnItem.set('index', index).toJS(),
+                        $$btnItem.set('index', index).set('needconfirm', false).toJS(),
                       );
                     };
+                    let actionNode = null;
 
                     if (utils.isFunc(hiddenResult)) {
                       hiddenResult = hiddenResult($$item, index);
@@ -646,15 +649,33 @@ class AppScreenList extends React.PureComponent {
                       onClickFunc = $$btnItem.get('onClick');
                     }
 
-                    return hiddenResult ? null : (
-                      <Button
-                        key={`${$$btnItem.get('name')}Btn`}
-                        icon={$$btnItem.get('icon')}
-                        text={$$btnItem.get('text')}
-                        size="sm"
-                        onClick={onClickFunc}
-                      />
-                    );
+                    if (needconfirm) {
+                      actionNode = (
+                        <Popconfirm
+                          title={__('Are you sure to %s selected %s row?', __(actionName), (index + 1))}
+                          onOk={onClickFunc}
+                        >
+                          <Button
+                            key={`${$$btnItem.get('name')}Btn`}
+                            icon={$$btnItem.get('icon')}
+                            text={$$btnItem.get('text')}
+                            size="sm"
+                          />
+                        </Popconfirm>
+                      );
+                    } else {
+                      actionNode = (
+                        <Button
+                          key={`${$$btnItem.get('name')}Btn`}
+                          icon={$$btnItem.get('icon')}
+                          text={$$btnItem.get('text')}
+                          size="sm"
+                          onClick={onClickFunc}
+                        />
+                      );
+                    }
+
+                    return hiddenResult ? null : actionNode;
                   }) : null
                 }
                 {
@@ -773,8 +794,15 @@ class AppScreenList extends React.PureComponent {
     const query = store.getIn(['query']);
     const leftChildrenNode = [];
     const totalListItem = store.getIn(['data', 'page', 'total']) || $$curList.size;
-    let $$curActionBarButtons = actionBarButtons;
     const rightChildrenNode = null;
+    const $$selectedList = store.getIn(['actionQuery', 'selectedList']);
+    const selectNumber = $$selectedList ? $$selectedList.size : 0;
+    let deleteconfirmText = __('Please select %s rows', __('delete'));
+    let $$curActionBarButtons = actionBarButtons;
+
+    if (selectNumber > 0) {
+      deleteconfirmText = __('Are you sure to %s selected %s rows?', __('delete'), selectNumber);
+    }
 
     // 处理列表操作相关按钮
     if (actionable) {
@@ -805,17 +833,20 @@ class AppScreenList extends React.PureComponent {
         // 多行删除
         if (deleteable) {
           leftChildrenNode.push(
-            <Button
-              icon="trash-o"
-              key="delete"
-              text={__('Delete')}
-              onClick={() => {
+            <Popconfirm
+              title={deleteconfirmText}
+              onOk={() => {
                 this.onSelectedItemsAction({
                   actionName: 'delete',
-                  needConfirm: true,
                 });
               }}
-            />,
+            >
+              <Button
+                icon="trash-o"
+                key="delete"
+                text={__('Delete')}
+              />
+            </Popconfirm>,
           );
         }
 
@@ -828,17 +859,51 @@ class AppScreenList extends React.PureComponent {
           leftChildrenNode.push(
             $$curActionBarButtons.map(
               ($$subButton) => {
-                const butProps = $$subButton.toJS();
+                const butProps = $$subButton.remove('needConfirm').toJS();
                 const actionName = $$subButton.get('actionName');
-                return (
-                  <Button
-                    {...butProps}
-                    key={`${actionName}Btn`}
-                    onClick={() => {
-                      this.onSelectedItemsAction($$subButton.toJS());
-                    }}
-                  />
-                );
+                let onClickFuc = () => {
+                  this.onSelectedItemsAction(butProps);
+                };
+                let popType = 'confirm';
+                let confirmText = '';
+                let retNode = null;
+                if (selectNumber < 1) {
+                  confirmText = __('Please select %s rows', __(actionName));
+                  popType = 'message';
+                } else if ($$subButton.get('needConfirm')) {
+                  confirmText = __('Are you sure to %s selected %s rows?', __(actionName), selectNumber);
+                }
+
+                if (typeof $$subButton.get('onClick') === 'function') {
+                  onClickFuc = $$subButton.get('onClick');
+                }
+
+                if (confirmText) {
+                  retNode = (
+                    <Popconfirm
+                      title={confirmText}
+                      type={popType}
+                      key={`${actionName}Confirm`}
+                      onOk={onClickFuc}
+                    >
+                      <Button
+                        {...butProps}
+                        key={`${actionName}Btn`}
+                        onClick={utils.emptyFunc}
+                      />
+                    </Popconfirm>
+                  );
+                } else {
+                  retNode = (
+                    <Button
+                      {...butProps}
+                      key={`${actionName}Btn`}
+                      onClick={onClickFuc}
+                    />
+                  );
+                }
+
+                return retNode;
               },
             ).toJS(),
           );

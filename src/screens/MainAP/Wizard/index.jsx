@@ -49,7 +49,7 @@ export default class SignUp extends React.Component {
     super(props);
     this.onOkButtonClick = this.onOkButtonClick.bind(this);
     this.onThinModeImgClick = this.onThinModeImgClick.bind(this);
-    this.comfirmModeChange = this.comfirmModeChange.bind(this);
+    this.confirmModeChange = this.confirmModeChange.bind(this);
     // this.onSkipButtonClick = this.onSkipButtonClick.bind(this);
   }
 
@@ -97,11 +97,11 @@ export default class SignUp extends React.Component {
   //             (currModeData.enable === '1' && fromJS(currModeData).equals(fromJS(nextModeData)))) {
   //           window.location.href = '#/main/status';
   //         } else {
-  //           this.comfirmModeChange();
+  //           this.confirmModeChange();
   //           this.props.changeShowThinModeConfigModal(false);
   //         }
   //       } else {
-  //         this.comfirmModeChange();
+  //         this.confirmModeChange();
   //         this.props.changeShowThinModeConfigModal(false);
   //       }
   //     }
@@ -120,11 +120,11 @@ export default class SignUp extends React.Component {
               (currModeData.enable === '1' && fromJS(currModeData).equals(fromJS(nextModeData)))) {
             window.location.href = '#/main/status';
           } else {
-            this.comfirmModeChange();
+            this.confirmModeChange();
             this.props.changeShowThinModeConfigModal(false);
           }
         } else {
-          this.comfirmModeChange();
+          this.confirmModeChange();
           this.props.changeShowThinModeConfigModal(false);
         }
       }
@@ -143,7 +143,7 @@ export default class SignUp extends React.Component {
   //   });
   // }
 
-  comfirmModeChange() {
+  confirmModeChange() {
     const query = this.props.selfState.get('nextModeData').toJS();
     this.props.save('goform/set_thin', query);
 

@@ -43,6 +43,7 @@ const propTypes = {
   leaveScreen: PropTypes.func,
   changeScreenActionQuery: PropTypes.func.isRequired,
   changeScreenQuery: PropTypes.func.isRequired,
+  updateScreen: PropTypes.func,
 
   // List 相关属性list
   listOptions: PropTypes.oneOfType([

@@ -1,0 +1,24 @@
+/* Sass utils */
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
+.m-popconfirm {
+  background: #fff;
+  max-width: 300px;
+
+  &__content {
+    .icon {
+      color: $g-brand-warning;
+      margin-right: $g-distance-min;
+    }
+  }
+  &__footer {
+    margin-top: $g-distance;
+    @include clearfix;
+
+    .a-btn {
+      float: right;
+      margin-left: $g-distance-min;
+    }
+  }
+}

@@ -827,7 +827,7 @@ const routes = [
                     id: 'apMaintenanceBase',
                     path: '/main/system/ap/base',
                     formUrl: 'goform/system/maintenance',
-                    text: __('Configuration'),
+                    text: __('AP Policies'),
                     component: sApMaintenance.Screen,
                   }, {
                     id: 'apsVersion',
