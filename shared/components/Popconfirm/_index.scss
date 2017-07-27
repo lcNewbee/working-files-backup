@@ -5,6 +5,7 @@
 .m-popconfirm {
   background: #fff;
   max-width: 300px;
+  padding: $g-distance-min;
 
   &__content {
     .icon {

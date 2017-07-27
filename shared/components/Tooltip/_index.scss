@@ -16,7 +16,7 @@
   display: none;
 }
 .rw-tooltip-inner {
-  padding: $g-distance;
+  padding: $g-distance-min;
   color: #333333;
   text-align: left;
   text-decoration: none;
@@ -25,7 +25,7 @@
   border: 1px solid #fff;
   background-clip: padding-box;
   border-radius: 4px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .3);
 }
 .rw-tooltip-arrow,
 .rw-tooltip-arrow-inner {
@@ -53,12 +53,15 @@
 }
 .rw-tooltip-placement-top .rw-tooltip-arrow {
   left: 50%;
+  filter: drop-shadow(0px 3px 2px #bbb);
 }
 .rw-tooltip-placement-topLeft .rw-tooltip-arrow {
   left: 15%;
+  filter: drop-shadow(0px 3px 2px #bbb);
 }
 .rw-tooltip-placement-topRight .rw-tooltip-arrow {
   right: 15%;
+  filter: drop-shadow(0px 3px 2px #bbb);
 }
 .rw-tooltip-placement-right .rw-tooltip-arrow,
 .rw-tooltip-placement-rightTop .rw-tooltip-arrow,
@@ -78,13 +81,16 @@
 }
 .rw-tooltip-placement-right .rw-tooltip-arrow {
   top: 50%;
+  filter: drop-shadow(-3px 0px 2px #bbb);
 }
 .rw-tooltip-placement-rightTop .rw-tooltip-arrow {
   top: 15%;
   margin-top: 0;
+  filter: drop-shadow(-3px 0px 2px #bbb);
 }
 .rw-tooltip-placement-rightBottom .rw-tooltip-arrow {
   bottom: 15%;
+  filter: drop-shadow(-3px 0px 2px #bbb);
 }
 .rw-tooltip-placement-left .rw-tooltip-arrow,
 .rw-tooltip-placement-leftTop .rw-tooltip-arrow,
@@ -104,13 +110,16 @@
 }
 .rw-tooltip-placement-left .rw-tooltip-arrow {
   top: 50%;
+  filter: drop-shadow(3px 0px 2px #bbb);
 }
 .rw-tooltip-placement-leftTop .rw-tooltip-arrow {
   top: 15%;
   margin-top: 0;
+  filter: drop-shadow(3px 0px 2px #bbb);
 }
 .rw-tooltip-placement-leftBottom .rw-tooltip-arrow {
   bottom: 15%;
+  filter: drop-shadow(3px 0px 2px #bbb);
 }
 .rw-tooltip-placement-bottom .rw-tooltip-arrow,
 .rw-tooltip-placement-bottomLeft .rw-tooltip-arrow,
@@ -130,16 +139,21 @@
 }
 .rw-tooltip-placement-bottom .rw-tooltip-arrow {
   left: 50%;
+  filter: drop-shadow(0px -3px 2px #bbb);
 }
 .rw-tooltip-placement-bottomLeft .rw-tooltip-arrow {
   left: 15%;
+  filter: drop-shadow(0px -3px 2px #bbb);
 }
 .rw-tooltip-placement-bottomRight .rw-tooltip-arrow {
   right: 15%;
+  filter: drop-shadow(0px -3px 2px #bbb);
 }
 .rw-tooltip.rw-tooltip-zoom-enter,
 .rw-tooltip.rw-tooltip-zoom-leave {
   display: block;
+  transition: filter .3s ease-in;
+  filter: drop-shadow(0px 0px 0px #bbb);
 }
 .rw-tooltip-zoom-enter,
 .rw-tooltip-zoom-appear {

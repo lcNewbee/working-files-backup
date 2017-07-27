@@ -611,6 +611,7 @@ class AppScreenList extends React.PureComponent {
                   deleteableResult ? (
                     <Popconfirm
                       title={__('Are you sure to %s selected %s row?', __('delete'), (index + 1))}
+
                       onOk={
                         () => {
                           this.handleItemAction({
@@ -797,10 +798,12 @@ class AppScreenList extends React.PureComponent {
     const $$selectedList = store.getIn(['actionQuery', 'selectedList']);
     const selectNumber = $$selectedList ? $$selectedList.size : 0;
     let deleteconfirmText = __('Please select %s rows', __('delete'));
+    let confirmType = 'message';
     let $$curActionBarButtons = actionBarButtons;
 
     if (selectNumber > 0) {
       deleteconfirmText = __('Are you sure to %s selected %s rows?', __('delete'), selectNumber);
+      confirmType = 'confirm';
     }
 
     // 处理列表操作相关按钮
@@ -835,6 +838,7 @@ class AppScreenList extends React.PureComponent {
             <Popconfirm
               title={deleteconfirmText}
               key="delteAll"
+              type={confirmType}
               onOk={() => {
                 this.onSelectedItemsAction({
                   actionName: 'delete',
