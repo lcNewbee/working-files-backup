@@ -120,6 +120,7 @@ class Modal extends PureComponent {
     ]);
     this.state = {
       modalStyle: props.style,
+      isShow: props.isShow,
     };
   }
 
@@ -137,7 +138,8 @@ class Modal extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.style !== this.props.style) {
       this.setState({
-        modalStyle: this.props.style,
+        modalStyle: nextProps.style,
+        isShow: nextProps.isShow,
       });
     }
   }
@@ -225,7 +227,7 @@ class Modal extends PureComponent {
     return (
       <ReactCSSTransition
         key={keyVal}
-        in={isShow}
+        in={this.state.isShow}
         classNames="fade-down"
         enter={transitionEnter}
         exit={transitionLeave}

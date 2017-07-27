@@ -13,33 +13,6 @@ import { actions as screenActions, AppScreen } from 'shared/containers/appScreen
 import { actions as propertiesActions } from 'shared/containers/properties';
 import { Button } from 'shared/components/Button';
 
-function getCardCategoryName() {
-  return utils.fetch('goform/portal/card/cardcategory', {
-    size: 9999,
-    page: 1,
-  }).then(json => (
-    {
-      options: json.data.list.map(
-        item => ({
-          value: item.id,
-          label: item.name,
-        }),
-      ),
-    }),
-  );
-}
-function getCardInformation() {
-  return utils.fetch('goform/portal/card/cardcategory', {
-    size: 9999,
-    page: 1,
-  }).then((json) => {
-    if (json.state && json.state.code === 2000) {
-      return fromJS(json.data.list);
-    }
-    return fromJS([]);
-  });
-}
-
 const uptimeFilter = utils.filter('connectTime');
 const flowFilter = utils.filter('flowRate');
 const curDate = {
@@ -218,7 +191,8 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '0',
-  }, {
+  },
+  {
     id: 'speed',
     text: __('Speed Limit'),
     noForm: true,
@@ -230,21 +204,25 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '1',
-  }, {
+  },
+  {
     id: 'ex4',
     text: __('Last Unbind Month'),
     noForm: true,
     noTable: true,
-  }, {
+  },
+  {
     id: 'ex3',
     text: __('Unbind Times'),
     noForm: true,
     noTable: true,
-  }, {
+  },
+  {
     id: 'name',
     text: __('Name'),
     noTable: true,
-  }, {
+  },
+  {
     id: 'gender',
     text: __('Gender'),
     noTable: true,
@@ -258,11 +236,13 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '0',
-  }, {
+  },
+  {
     id: 'idnumber',
     text: __('ID No.'),
     noTable: true,
-  }, {
+  },
+  {
     id: 'phoneNumber',
     text: __('Phone'),
     noTable: true,
@@ -270,45 +250,18 @@ const listOptions = fromJS([
     id: 'address',
     text: __('Address'),
     noTable: true,
-  }, {
+  },
+  {
     id: 'email',
     text: __('Email'),
     noTable: true,
-  }, {
+  },
+  {
     id: 'description',
     text: __('Detail Information'),
     noTable: true,
-  }, {
-    id: 'ex5',
-    text: __('ex5'),
-    noTable: true,
-    noForm: true,
-  }, {
-    id: 'ex6',
-    text: __('ex6'),
-    noTable: true,
-    noForm: true,
-  }, {
-    id: 'ex7',
-    text: __('ex7'),
-    noTable: true,
-    noForm: true,
-  }, {
-    id: 'ex8',
-    text: __('ex8'),
-    noTable: true,
-    noForm: true,
-  }, {
-    id: 'ex9',
-    text: __('ex9'),
-    noTable: true,
-    noForm: true,
-  }, {
-    id: 'ex10',
-    text: __('ex10'),
-    noTable: true,
-    noForm: true,
-  }, {
+  },
+  {
     id: '__actions__',
     text: __('Actions'),
     render(val, $$item) {
@@ -325,7 +278,7 @@ const listOptions = fromJS([
     },
   },
 ]);
-export const baseSetting = fromJS([
+const baseSetting = fromJS([
   {
     id: 'loginName',
     label: __('Username'),
@@ -335,7 +288,8 @@ export const baseSetting = fromJS([
     validator: validator({
       rules: 'utf8Len:[1,128]',
     }),
-  }, {
+  },
+  {
     id: 'password',
     label: __('Password'),
     type: 'password',
@@ -345,7 +299,8 @@ export const baseSetting = fromJS([
     validator: validator({
       rules: 'utf8Len:[1,128]',
     }),
-  }, {
+  },
+  {
     id: 'state',
     label: __('Account Type'),
     options: [
@@ -463,7 +418,7 @@ export const baseSetting = fromJS([
   // },
 ]);
 
-export const advancedSetting = fromJS([
+const advancedSetting = fromJS([
   {
     id: 'name',
     label: __('Name'),
@@ -474,7 +429,8 @@ export const advancedSetting = fromJS([
     validator: validator({
       rules: 'utf8Len:[1,31]',
     }),
-  }, {
+  },
+  {
     id: 'gender',
     label: __('Gender'),
     noTable: true,
@@ -491,7 +447,8 @@ export const advancedSetting = fromJS([
     type: 'select',
     placeholder: __('Please Select ') + __('Gender'),
 
-  }, {
+  },
+  {
     id: 'idnumber',
     label: __('ID Document Number'),
     noTable: true,
@@ -500,7 +457,8 @@ export const advancedSetting = fromJS([
     validator: validator({
       rules: 'utf8Len:[1,18]',
     }),
-  }, {
+  },
+  {
     id: 'phoneNumber',
     label: __('Phone'),
     noTable: true,
@@ -514,7 +472,8 @@ export const advancedSetting = fromJS([
       const newNumber = phoneNumber.replace(/[^0-9-]/g, '');
       return Object.assign({}, data, { value: newNumber });
     },
-  }, {
+  },
+  {
     id: 'address',
     label: __('Address'),
     noTable: true,
@@ -523,7 +482,8 @@ export const advancedSetting = fromJS([
     validator: validator({
       rules: 'utf8Len:[1,32]',
     }),
-  }, {
+  },
+  {
     id: 'email',
     label: __('Email'),
     noTable: true,
@@ -532,7 +492,8 @@ export const advancedSetting = fromJS([
     validator: validator({
       rules: 'email',
     }),
-  }, {
+  },
+  {
     id: 'description',
     label: __('Details'),
     noTable: true,
@@ -643,7 +604,8 @@ const rechargeOptions = fromJS([
     visible(data) {
       return data.get('name') !== undefined;
     },
-  }, {
+  },
+  {
     id: 'maclimit',
     label: __('MAC Limit'),
     form: 'recharge',
@@ -662,7 +624,8 @@ const rechargeOptions = fromJS([
         label: __('Open'),
       },
     ],
-  }, {
+  },
+  {
     id: 'maclimitcount',
     label: __('MAC Quantity'),
     disabled: true,
@@ -676,7 +639,8 @@ const rechargeOptions = fromJS([
     validator: validator({
       rules: 'num:[0,9999]',
     }),
-  }, {
+  },
+  {
     id: 'autologin',
     label: __('Auto Re-login'),
     disabled: true,
@@ -694,7 +658,8 @@ const rechargeOptions = fromJS([
     ],
     type: 'select',
     required: true,
-  }, {
+  },
+  {
     id: 'speed',
     label: __('Speed Limit'),
     disabled: true,
@@ -710,7 +675,8 @@ const rechargeOptions = fromJS([
         label: __('1M'),
       },
     ],
-  }, {
+  },
+  {
     id: 'time',
     label: __('Count'),
     type: 'text',
@@ -723,7 +689,8 @@ const rechargeOptions = fromJS([
     validator: validator({
       rules: 'num:[0,9999]',
     }),
-  }, {
+  },
+  {
     id: 'money',
     label: __('Price'),
     form: 'recharge',
@@ -734,7 +701,8 @@ const rechargeOptions = fromJS([
     visible(data) {
       return data.get('name') !== undefined;
     },
-  }, {
+  },
+  {
     id: 'description',
     label: __('Description'),
     form: 'recharge',
@@ -748,6 +716,7 @@ const rechargeOptions = fromJS([
   },
 ]);
 
+// Component config
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -762,7 +731,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class AccountList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -788,19 +757,41 @@ export default class View extends React.Component {
 
   componentWillMount() {
     this.props.changeScreenQuery({ state: '-100' });
-    getCardCategoryName()
-      .then((data) => {
-        this.setState({
-          categoryTypeOptions: fromJS(data.options),
-        });
+
+    utils.fetch('goform/portal/card/cardcategory', {
+      size: 9999,
+      page: 1,
+    }).then((json) => {
+      let $$cardDataList = fromJS([]);
+      let categoryTypeOptions = fromJS([]);
+
+      if (json.state && json.state.code === 2000) {
+        $$cardDataList = fromJS(json.data.list);
+        categoryTypeOptions = $$cardDataList.map(
+          $$item => (fromJS({
+            value: $$item.get('id'),
+            label: $$item.get('name'),
+            type: $$item.get('state'),
+          })),
+        );
+      }
+
+      this.setState({
+        categoryTypeOptions,
+        $$cardDataList,
       });
-    getCardInformation()
-      .then(($$data) => {
-        this.setState({
-          $$cardDataList: $$data,
-        });
-      });
-    // this.getDefaultEditData();
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    const myScreenId = nextProps.store.get('curScreenId');
+    const thisActionType = this.props.store.getIn([myScreenId, 'actionQuery', 'action']);
+    const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
+
+    if (nextActionType === '' && thisActionType === 'recharge') {
+      this.isCloseRechage = true;
+    } else {
+      this.isCloseRechage = false;
+    }
   }
 
   onSave(formId) {
@@ -861,31 +852,54 @@ export default class View extends React.Component {
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curListItem');
+    const userState = $$myScreenStore.getIn(['curListItem', 'userState']);
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const isRecharge = store.getIn([route.id, 'actionQuery', 'action']) === 'recharge';
-    const $$curRechargeOptions = rechargeOptions.setIn([2, 'options'], this.state.categoryTypeOptions);
     const $$cardDataList = this.state.$$cardDataList;
     const $$cardDataItem = $$cardDataList.find($$item => $$item.get('id') === $$curData.get('name'));
     let $$rechargeDetailData = $$curData;
     let $$mybaseSetting = baseSetting;
+    let $$myCategoryTypeOptions = this.state.categoryTypeOptions;
+    let $$curRechargeOptions = null;
+
 
     if ($$cardDataItem) {
-      $$rechargeDetailData = $$curData.merge($$cardDataItem.delete('name'));
+      $$rechargeDetailData = $$curData.merge($$cardDataItem.remove('name'));
     }
 
-    if (actionType === 'edit') {
-      $$mybaseSetting = $$mybaseSetting.map(
-        ($$item) => {
-          let $$ret = $$item;
-          if ($$ret.get('notEditable')) {
-            $$ret = $$ret.set('disabled', true);
+    // 充值
+    if (isRecharge || this.isCloseRechage) {
+      // 记时用户
+      if (userState === '2') {
+        $$myCategoryTypeOptions = $$myCategoryTypeOptions.filter(
+          $$item => $$item && $$item.get('type') === '0',
+        );
+
+      // 买断用户
+      } else if (userState === '3') {
+        $$myCategoryTypeOptions = $$myCategoryTypeOptions.filter(
+          $$item => '1,2,3,'.indexOf($$item.get('type')) !== -1,
+        );
+
+      // 流量用户
+      } else if (userState === '4') {
+        $$myCategoryTypeOptions = $$myCategoryTypeOptions.filter(
+          $$item => $$item.get('type') === '4',
+        );
+      }
+      $$curRechargeOptions = rechargeOptions.map(($$option) => {
+        let $$ret = $$option;
+
+
+        if ($$option.get('id') === 'name') {
+          $$ret = $$ret.set('options', $$myCategoryTypeOptions);
+          if ($$myCategoryTypeOptions.size < 1) {
+            $$ret = $$ret.set('help', __('Please create the corresponding recharge voucher first'));
           }
-          return $$ret;
-        },
-      );
-    }
+        }
 
-    if (isRecharge) {
+        return $$ret;
+      });
       return (
         <FormContainer
           id="recharge"
@@ -901,6 +915,20 @@ export default class View extends React.Component {
         />
       );
     }
+
+
+    if (actionType === 'edit') {
+      $$mybaseSetting = $$mybaseSetting.map(
+        ($$item) => {
+          let $$ret = $$item;
+          if ($$ret.get('notEditable')) {
+            $$ret = $$ret.set('disabled', true);
+          }
+          return $$ret;
+        },
+      );
+    }
+
     return (
       <div className="o-box row">
         <div
@@ -975,31 +1003,36 @@ export default class View extends React.Component {
   }
   render() {
     const curListOptions = listOptions
-          .setIn([-1, 'render'], (val, $$data) => {
-            if (parseInt($$data.get('id'), 10) === 1) {
-              return null;
-            }
-            return (
-              <span>
-                <Button
-                  text={__('Recharge')}
-                  key="rechargeActionButton"
-                  icon="vcard"
-                  onClick={() => {
-                    this.props.changeScreenActionQuery({
-                      action: 'recharge',
-                      myTitle: __('Recharge'),
-                    });
-                    this.props.updateCurEditListItem({
-                      id: $$data.get('id'),
-                      loginName: $$data.get('loginName'),
-                      nickname: $$data.get('name'),
-                    });
-                  }}
-                />
-              </span>
-            );
-          });
+      .setIn([-1, 'render'], (val, $$data) => {
+        const userState = $$data.get('state');
+
+        // 0免费用户不能充值，1停用的用户也不能充值
+        if (parseInt(userState, 10) <= 1) {
+          return null;
+        }
+
+        return (
+          <span>
+            <Button
+              text={__('Recharge')}
+              key="rechargeActionButton"
+              icon="vcard"
+              onClick={() => {
+                this.props.changeScreenActionQuery({
+                  action: 'recharge',
+                  myTitle: __('Recharge'),
+                });
+                this.props.updateCurEditListItem({
+                  id: $$data.get('id'),
+                  loginName: $$data.get('loginName'),
+                  nickname: $$data.get('name'),
+                  userState: $$data.get('state'),
+                });
+              }}
+            />
+          </span>
+        );
+      });
     return (
       <AppScreen
         {...this.props}
@@ -1019,8 +1052,8 @@ export default class View extends React.Component {
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+AccountList.propTypes = propTypes;
+AccountList.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -1037,9 +1070,8 @@ function mapDispatchToProps(dispatch) {
   ), dispatch);
 }
 
-
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(View);
+)(AccountList);

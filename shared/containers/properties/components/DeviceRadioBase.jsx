@@ -18,12 +18,14 @@ function getChannelList(data) {
         options: [],
       };
 
-      ret.options = channel.map(
-        val => ({
-          value: val,
-          label: val,
-        }),
-      );
+      if (json && json.data && json.data.channel) {
+        ret.options = channel.map(
+          val => ({
+            value: val,
+            label: val,
+          }),
+        );
+      }
 
       return ret;
     },

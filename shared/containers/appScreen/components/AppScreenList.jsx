@@ -1000,6 +1000,7 @@ class AppScreenList extends React.PureComponent {
           isShow={isEditModelshow}
           title={actionQuery.get('myTitle')}
           onClose={this.onCloseEditModal}
+          onExited={(1)}
           size={modalSize}
           noFooter
           draggable

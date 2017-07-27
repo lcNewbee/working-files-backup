@@ -244,7 +244,6 @@ const listOptions = fromJS([
     options: [],
     formProps: {
       type: 'textarea',
-      required: true,
       maxLength: 256,
       validator: validator({
         rules: 'utf8Len:[1,255]',
