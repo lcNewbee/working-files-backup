@@ -52,7 +52,7 @@ class Loading extends React.Component {
   }
 
   render() {
-    const { size, style, key } = this.props;
+    const { size, style } = this.props;
     let myClassnames = 'a-heart';
 
     if (size !== 'default' && size) {
@@ -60,7 +60,7 @@ class Loading extends React.Component {
     }
 
     return (
-      <div key={key} className={myClassnames} style={style}>
+      <div className={myClassnames} style={style}>
         {
           this.state.showPiece ? [
             <div className="a-heart-piece-0" key="a-heart-piece-0" />,

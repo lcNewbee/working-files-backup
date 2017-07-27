@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Map, List, fromJS } from 'immutable';
 import utils from 'shared/utils';
-import { toastr } from 'react-redux-toastr';
 import {
   Button, Popconfirm, FormContainer, Modal, Table, FormInput, Search,
 } from 'shared/components';
@@ -835,6 +834,7 @@ class AppScreenList extends React.PureComponent {
           leftChildrenNode.push(
             <Popconfirm
               title={deleteconfirmText}
+              key="delteAll"
               onOk={() => {
                 this.onSelectedItemsAction({
                   actionName: 'delete',

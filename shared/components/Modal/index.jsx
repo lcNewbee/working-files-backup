@@ -136,12 +136,15 @@ class Modal extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    const newState = {
+      isShow: nextProps.isShow,
+    };
+
     if (nextProps.style !== this.props.style) {
-      this.setState({
-        modalStyle: nextProps.style,
-        isShow: nextProps.isShow,
-      });
+      newState.modalStyle = nextProps.style;
     }
+
+    this.setState(newState);
   }
 
   componentDidUpdate(prevProps) {

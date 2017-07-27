@@ -343,15 +343,18 @@ export default class AppScreen extends React.Component {
         }
         <div>
           {
-          this.props.children
-        }
+            this.props.children
+          }
         </div>
-
         {
-          this.state.loading ? [
-            <div key="appLoadingWarp" style={loadingWarpStyle} />,
-            <Loading size="sm" style={loadingStyle} />,
-          ] : null
+          this.state.loading ? (
+            <div key="appLoadingWarp" style={loadingWarpStyle} />
+          ) : null
+        }
+        {
+          this.state.loading ? (
+            <Loading size="sm" style={loadingStyle} />
+          ) : null
         }
       </div>
     );

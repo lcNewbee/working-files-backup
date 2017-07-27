@@ -9583,7 +9583,7 @@ webpack@^2.5.1:
     webpack-sources "^1.0.1"
     yargs "^6.0.0"
 
-webpack@^3.1.0:
+webpack@^3.4.1:
   version "3.4.1"
   resolved "http://registry.npm.taobao.org/webpack/download/webpack-3.4.1.tgz#4c3f4f3fb318155a4db0cb6a36ff05c5697418f4"
   dependencies:
