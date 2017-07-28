@@ -35,6 +35,7 @@ const listOptions = fromJS([
   // {
   //   id: 'interface_bind',
   //   label: __('Port'),
+  //   defaultValue: 'eth_all',
   //   formProps: {
   //     type: 'select',
   //     required: true,
@@ -105,6 +106,7 @@ export default class View extends React.Component {
         {...this.props}
         store={store}
         listOptions={curListOptions}
+
         onBeforeSave={this.onBeforeSave}
         // actionBarChildren={__('This function is available only when the "Rule Type" is "Port",whice configured in "User Access Policies".')}
         editable={false}

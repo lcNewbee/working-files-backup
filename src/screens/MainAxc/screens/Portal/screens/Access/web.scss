@@ -60,8 +60,9 @@
   border-radius: 6px;
   left: 660px;
   top: -48px;
+  bottom: 0;
   width: 450px;
-  height: 694px;
+  min-height: 694px;
 }
 
 .portal-preview-head {

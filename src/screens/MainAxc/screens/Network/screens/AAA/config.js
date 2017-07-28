@@ -205,7 +205,7 @@ export const $$radiusAccServer = fromJS([
       legend: __('Primary Accounting Server'),
       className: 'cols col-6',
     },
-    required: true,
+    // required: true,
     type: 'text',
     form: 'accServer',
     validator: validator({
@@ -222,7 +222,7 @@ export const $$radiusAccServer = fromJS([
     },
     label: __('Port'),
     fieldset: 'primary',
-    required: true,
+    // required: true,
     defaultValue: '1813',
     type: 'number',
     form: 'accServer',
@@ -236,7 +236,7 @@ export const $$radiusAccServer = fromJS([
       }
       return false;
     },
-    required: true,
+    // required: true,
     label: __('Shared Key'),
     fieldset: 'primary',
     form: 'accServer',
