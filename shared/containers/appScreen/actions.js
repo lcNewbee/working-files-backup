@@ -303,10 +303,11 @@ export function onListAction(option) {
 /**
  * SCREEN SETTINGS action
  */
-export function updateScreenSettings(payload) {
+export function updateScreenSettings(payload, meta) {
   return {
     type: ACTION_TYPES.UPDATE_SETTINGS,
     payload,
+    meta,
   };
 }
 export function saveScreenSettings(option) {

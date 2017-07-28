@@ -106,6 +106,17 @@ export default class View extends React.PureComponent {
       this.props.fetchScreenData();
     }
   }
+  componentWillUnmount() {
+    this.props.updateScreenSettings(
+      {
+        curMapId: '',
+      },
+      {
+        name: this.props.store.get('curScreenId'),
+      },
+    );
+  }
+
 
   onToggleUnplacedList(active) {
     let isUnplacedListShow = !this.state.isUnplacedListShow;
