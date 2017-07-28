@@ -62,8 +62,7 @@ const sMainAxc = require('../../screens/MainAxc');
  * 网络设置
  */
 const cNetwork = require('../../screens/MainAxc/containers/Network');
-const sVlanList = require('../../screens/MainAxc/screens/Network/screens/VlanList');
-const sIpInterface = require('../../screens/MainAxc/screens/Network/screens/IpInterface');
+const sVlanSettings = require('../../screens/MainAxc/screens/Network/screens/VLAN/VlanSettings');
 const sQinqSettings = require('../../screens/MainAxc/screens/Network/screens/VLAN/QinqSettings');
 const sV3Interfaces = require('../../screens/MainAxc/screens/Network/screens/V3Interfaces');
 const sHostNetwork = require('../../screens/MainAxc/screens/Network/screens/HostNetwork');
@@ -304,28 +303,103 @@ const routes = [
             text: __('Network '),
             routes: [
               {
-                id: 'vlanlist',
-                path: '/main/network/vlanlist',
-                formUrl: 'goform/network/vlanlist',
-                text: __('VLAN List'),
+                id: 'ethernetPort',
+                path: '/main/network/ethernetport',
+                isIndex: true,
+                icon: 'th-large',
+                text: __('Ethernet Port'),
+                routes: [
+                  {
+                    id: 'ethernetPortSettings',
+                    path: '/main/network/ethernetport/portsettings',
+                    formUrl: 'goform/network/portsettings',
+                    text: __('Settings'),
+                    icon: 'th',
+                    component: sPortSettings.Screen,
+                  },
+                  {
+                    id: 'ethernetPortMirring',
+                    path: '/main/network/ethernetport/portmirring',
+                    formUrl: 'goform/network/portmirring',
+                    text: __('Mirring'),
+                    icon: 'th',
+                    component: sPortMirring.Screen,
+                  },
+                  {
+                    id: 'ethernetPortAggregation',
+                    path: '/main/network/ethernetport/portaggregation',
+                    formUrl: 'goform/network/portaggregation',
+                    text: __('Aggregation'),
+                    icon: 'th',
+                    component: sPortAggregation.Screen,
+                  },
+                  {
+                    id: 'ethernetPortStatistics',
+                    path: '/main/network/ethernetport/portstatistics',
+                    formUrl: 'goform/network/portstatistics',
+                    text: __('Statistics'),
+                    icon: 'th',
+                    component: sPortStatics.Screen,
+                  },
+                ],
+              },
+              {
+                id: 'vlan',
                 icon: 'road',
-                component: sVlanList.Screen,
+                component: SharedComponents.TabContainer,
+                path: '/main/network/vlan',
+                text: __('VLAN'),
+                noTree: true,
+                routes: [
+                  {
+                    id: 'networkVlanSettings',
+                    path: '/main/network/vlan/vlansettings',
+                    formUrl: 'goform/network/vlan/vlansettings',
+                    text: __('VLAN Settings'),
+                    component: sVlanSettings.Screen,
+                  },
+                  {
+                    id: 'networkQinqSettings',
+                    path: '/main/network/vlan/qinqsettings',
+                    formUrl: 'goform/network/vlan/qinqsettings',
+                    text: __('QINQ Settings'),
+                    component: sQinqSettings.Screen,
+                  },
+                ],
               },
-              {
-                id: 'portSettings',
-                path: '/main/network/portsettings',
-                formUrl: 'goform/network/portsettings',
-                text: __('Port Settings'),
-                icon: 'th',
-                component: sPortSettings.Screen,
-              },
-              {
-                id: 'ipinterface',
-                icon: 'random',
-                path: '/main/network/ipinterface',
-                text: __('IP Interface'),
-                component: sIpInterface.Screen,
-              },
+              // {
+              //   id: 'networkHostnetwork',
+              //   path: '/main/network/hostnetwork',
+              //   formUrl: 'goform/network/hostnetwork',
+              //   text: __('Host Network'),
+              //   icon: 'th',
+              //   component: sHostNetwork.Screen,
+              // },
+
+              // { // V2.0版本接口设置
+              //   id: 'networkInterface',
+              //   icon: 'th',
+              //   path: '/main/network/interface',
+              //   formUrl: 'goform/network/interface',
+              //   text: __('Interfaces'),
+              //   component: sInterfaces.Screen,
+              // },
+              // { // V3.0版本接口设置
+              //   id: 'networkInterface',
+              //   icon: 'th',
+              //   path: '/main/network/v3interface',
+              //   formUrl: 'goform/network/v3interface',
+              //   text: __('Interfaces'),
+              //   component: sV3Interfaces.Screen,
+              // },
+              // {
+              //   id: 'networkPort',
+              //   path: '/main/network/port',
+              //   icon: 'th-large',
+              //   formUrl: '/goform/network/port',
+              //   text: __('Ports'),
+              //   component: sNetworkPort.Screen,
+              // },
               {
                 id: 'networkDhcp',
                 icon: 'random',
@@ -399,6 +473,14 @@ const routes = [
                   },
                 ],
               },
+              // {
+              //   id: 'networkNat',
+              //   icon: 'exchange',
+              //   path: '/main/network/nat',
+              //   text: __('NAT'),
+              //   formUrl: 'goform/network/nat',
+              //   component: sNetworkNat.Screen,
+              // },
               {
                 id: 'networkNatSettings',
                 icon: 'exchange',
@@ -616,6 +698,103 @@ const routes = [
                   },
                 ],
               },
+              // 先隐藏ACL
+              // {
+              //   id: 'networkAcl',
+              //   icon: 'ban',
+              //   path: '/main/network/acl',
+              //   text: __('Access Control'),
+              //   formUrl: 'goform/network/acl',
+              //   component: sNetworkAcl.Screen,
+              // },
+              // { // v2.5版本的路由设置
+              //   id: 'staticRoutes',
+              //   path: '/main/network/static_routes',
+              //   text: __('Routes'),
+              //   icon: 'map-signs',
+              //   formUrl: 'goform/network/route',
+              //   component: sNetworkRoutes.Screen,
+              // },
+
+              // { // v2.5版本端口设置
+              //   id: 'networkPort',
+              //   path: '/main/network/port',
+              //   icon: 'th-large',
+              //   formUrl: '/goform/network/port',
+              //   text: __('Ports'),
+              //   component: sNetworkPort.Screen,
+              // },
+              // {
+              //   id: 'networkURL',
+              //   icon: 'filter',
+              //   path: '/main/network/url',
+              //   formUrl: 'goform/network/url',
+              //   text: __('URL Filter'),
+              //   noTree: true,
+              //   component: SharedComponents.TabContainer,
+              //   routes: [
+              //     {
+              //       id: 'urlWlan',
+              //       path: '/main/network/url/wlan',
+              //       formUrl: 'goform/network/url/wlan',
+              //       text: __('WLAN'),
+              //       component: sNetworkUrlWlan.Screen,
+              //     },
+              //     {
+              //       id: 'urlRulesGroup',
+              //       path: '/main/network/url/rulesgroup',
+              //       formUrl: 'goform/network/url/rulesgroup',
+              //       text: __('Rules Group'),
+              //       component: sNetworkUrlRulesGroup.Screen,
+              //     },
+              //     {
+              //       id: 'urlFilterRules',
+              //       path: '/main/network/url/filterrules',
+              //       formUrl: 'goform/network/url/filterrules',
+              //       text: __('Filter Rules'),
+              //       component: sNetworkUrlFilterRules.Screen,
+              //     },
+              //     {
+              //       id: 'urlBindRules',
+              //       path: '/main/network/url/bindrules',
+              //       formUrl: 'goform/network/url/bindrules',
+              //       text: __('Bind Rules'),
+              //       component: sNetworkUrlBindRules.Screen,
+              //     },
+              //   ],
+              // },
+              // {
+              //   id: 'networkPPPOE',
+              //   icon: 'filter',
+              //   path: '/main/network/pppoe',
+              //   formUrl: 'goform/network/pppoe',
+              //   text: __('PPPOE'),
+              //   noTree: true,
+              //   component: SharedComponents.TabContainer,
+              //   routes: [
+              //     {
+              //       id: 'pppoeBase',
+              //       path: '/main/network/pppoe/baseConfig',
+              //       formUrl: 'goform/network/pppoe/baseConfig',
+              //       text: __('Base Config'),
+              //       component: sPPPOEBaseConfig.Screen,
+              //     },
+              //     {
+              //       id: 'pppoeUser',
+              //       path: '/main/network/pppoe/userList',
+              //       formUrl: 'goform/network/pppoe/userList',
+              //       text: __('User List'),
+              //       component: sPPPOEUserList.Screen,
+              //     },
+              //     {
+              //       id: 'pppoeVlan',
+              //       path: '/main/network/pppoe/vlan',
+              //       formUrl: 'goform/network/pppoe/vlan',
+              //       text: __('Bind Vlan'),
+              //       component: sPPPOEBindVlan.Screen,
+              //     },
+              //   ],
+              // },
               {
                 id: 'dpi',
                 icon: 'copy',

@@ -43,7 +43,6 @@ class NumberInput extends PureComponent {
           // 大于或等于最大值，则返回最大值
           } else if (numberVal >= parseFloat(max, 10)) {
             relaceValue = max;
-
           // 不能转换为数字时，替换为 defaultValue || max || min
           } else if (isNaN(numberVal)) {
             relaceValue = relaceDefValue;

@@ -15,6 +15,7 @@ import Switchs from '../Switchs';
 import TimePicker from '../TimePicker';
 import DatePicker from '../DatePicker';
 import DateTimePicker from './DateTimePicker';
+import NumberRange from './RangeInput';
 import utils from '../../utils';
 
 const propTypes = {
@@ -32,7 +33,7 @@ const propTypes = {
     'email', 'number', 'color', 'range', 'tel', 'url',
 
     // custom
-    'switch', 'plain-text', 'date-range', 'checkboxs',
+    'switch', 'plain-text', 'date-range', 'checkboxs', 'number-range',
   ]),
   dataType: PropTypes.oneOf(['string', 'number', 'ip', 'mac']),
   check: PropTypes.func,
@@ -54,6 +55,10 @@ const propTypes = {
 
   // DateTimePicker
   showTime: PropTypes.bool,
+
+  // NumberRange
+  onLowerInputChange: PropTypes.func,
+  onUpperInputChange: PropTypes.func,
 };
 
 const defaultProps = {
@@ -80,6 +85,8 @@ class FormInput extends PureComponent {
       'renderCustomInput',
       'onDateFocusChange',
       'onDateTimeChange',
+      'onLowerInputChange',
+      'onUpperInputChange',
     ]);
   }
 
@@ -196,6 +203,28 @@ class FormInput extends PureComponent {
     if (typeof this.props.checkClearValue === 'function' && this.props.disabled &&
         data.value === '') {
       this.props.checkClearValue(data.value);
+    }
+  }
+
+  onUpperInputChange(value) {
+    const data = {
+      label: __('Upper bound'),
+      value,
+    };
+
+    if (typeof this.props.onUpperInputChange === 'function') {
+      this.props.onUpperInputChange(data);
+    }
+  }
+
+  onLowerInputChange(value) {
+    const data = {
+      label: __('Lower bound'),
+      value,
+    };
+
+    if (typeof this.props.onUpperInputChange === 'function') {
+      this.props.onLowerInputChange(data);
     }
   }
 
@@ -342,6 +371,15 @@ class FormInput extends PureComponent {
           <DateTimePicker
             {...inputProps}
             onChange={this.onDateTimeChange}
+          />
+        );
+
+      case 'number-range':
+        return (
+          <NumberRange
+            {...inputProps}
+            onLowerInputChange={this.onLowerInputChange}
+            onUpperInputChange={this.onUpperInputChange}
           />
         );
 

@@ -22,6 +22,10 @@
   box-shadow: 10px 10px 10px;
 }
 
+.lan-card-row.row {
+  margin-left: 30px;
+}
+
 .quicksetup-confirm-card-container {
   text-align: center;
 }
@@ -34,7 +38,7 @@
   margin: 10px 10px;
   border-radius: 4px;
   min-width: 320px;
-  box-shadow: 10px 10px 10px;
+  box-shadow: 5px 5px 5px;
 }
 
 .quicksetup-confirm-card dl dt,

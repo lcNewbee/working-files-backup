@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "vlanId": "1",
+        "vlanName": "vlan1",
+        "status": "static",
+        "description": "111111111"
+      },
+      {
+        "vlanId": "2",
+        "status": "L2",
+        "vlanName": "vlan2",
+        "description": "22222222222"
+      },
+      {
+        "vlanId": "1",
+        "status": "L3",
+        "vlanName": "vlan3",
+        "description": "333333333333"
+      }
+    ]
+  }
+}

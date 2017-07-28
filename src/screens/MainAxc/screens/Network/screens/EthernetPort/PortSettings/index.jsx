@@ -142,85 +142,7 @@ export default class View extends React.Component {
         editable
         addable={false}
         actionBarButtons={customActionButton}
-      >
-        <div
-          className="clearfix"
-          style={{
-            position: 'absolute',
-            top: '0',
-            right: '0',
-          }}
-        >
-          <div className="fl">
-            <label
-              htmlFor="slotid"
-              style={{
-                marginTop: '7px',
-                marginRight: '10px',
-                fontWeight: 'bold',
-              }}
-            >
-              {__('Slot Id')}
-            </label>
-            <Select
-              id="slotid"
-              onChange={data => this.props.changeScreenQuery({ slotId: data.value })}
-              options={slotIdOptions}
-              value={store.getIn([curScreenId, 'query', 'slotId'])}
-              searchable={false}
-              clearable={false}
-            />
-          </div>
-          <div className="fl">
-            <label
-              htmlFor="porttype"
-              style={{
-                marginTop: '7px',
-                marginRight: '10px',
-                fontWeight: 'bold',
-              }}
-            >
-              {__('Port Type')}
-            </label>
-            <Select
-              id="porttype"
-              onChange={data => this.props.changeScreenQuery({ portType: data.value })}
-              value={store.getIn([curScreenId, 'query', 'portType'])}
-              options={portTypeOptions}
-              searchable={false}
-              clearable={false}
-            />
-          </div>
-          <div className="fl">
-            <label
-              htmlFor="portid"
-              style={{
-                marginTop: '7px',
-                marginRight: '10px',
-                fontWeight: 'bold',
-              }}
-            >
-              {__('Port Id')}
-            </label>
-            <FormInput
-              id="portid"
-              type="text"
-              value={store.getIn([curScreenId, 'query', 'portId'])}
-              onChange={data => this.props.changeScreenQuery({ portId: data.value })}
-            />
-          </div>
-          <div className="fl">
-            <Button
-              text={__('Search')}
-              onClick={() => this.props.fetchScreenData()}
-            />
-            <Button
-              text={__('Clear')}
-              onClick={this.onClearSearchCondition}
-            />
-          </div>
-        </div>
-      </AppScreen>
+      />
     );
   }
 }
@@ -243,3 +165,82 @@ export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(View);
+
+/* <div
+      className="clearfix"
+      style={{
+        position: 'absolute',
+        top: '0',
+        right: '0',
+      }}
+    >
+      <div className="fl">
+        <label
+          htmlFor="slotid"
+          style={{
+            marginTop: '7px',
+            marginRight: '10px',
+            fontWeight: 'bold',
+          }}
+        >
+          {__('Slot Id')}
+        </label>
+        <Select
+          id="slotid"
+          onChange={data => this.props.changeScreenQuery({ slotId: data.value })}
+          options={slotIdOptions}
+          value={store.getIn([curScreenId, 'query', 'slotId'])}
+          searchable={false}
+          clearable={false}
+        />
+      </div>
+      <div className="fl">
+        <label
+          htmlFor="porttype"
+          style={{
+            marginTop: '7px',
+            marginRight: '10px',
+            fontWeight: 'bold',
+          }}
+        >
+          {__('Port Type')}
+        </label>
+        <Select
+          id="porttype"
+          onChange={data => this.props.changeScreenQuery({ portType: data.value })}
+          value={store.getIn([curScreenId, 'query', 'portType'])}
+          options={portTypeOptions}
+          searchable={false}
+          clearable={false}
+        />
+      </div>
+      <div className="fl">
+        <label
+          htmlFor="portid"
+          style={{
+            marginTop: '7px',
+            marginRight: '10px',
+            fontWeight: 'bold',
+          }}
+        >
+          {__('Port Id')}
+        </label>
+        <FormInput
+          id="portid"
+          type="text"
+          value={store.getIn([curScreenId, 'query', 'portId'])}
+          onChange={data => this.props.changeScreenQuery({ portId: data.value })}
+        />
+      </div>
+      <div className="fl">
+        <Button
+          text={__('Search')}
+          onClick={() => this.props.fetchScreenData()}
+        />
+        <Button
+          text={__('Clear')}
+          onClick={this.onClearSearchCondition}
+        />
+      </div>
+    </div>
+    </AppScreen> */

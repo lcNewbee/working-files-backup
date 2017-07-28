@@ -16,6 +16,7 @@ const ERROR_MSG_MAP = {
   6111: __('Next hop IP must within interfaces segment'),
   6112: __('Same mac already exists'),
   6113: __('Same mac already exists'),
+  6114: __('DHCP Pool in use can not be deleted!'),
 
   // AXC： AP组管理 6200 - 6299
   6200: __(''),
