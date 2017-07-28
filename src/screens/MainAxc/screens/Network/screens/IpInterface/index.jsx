@@ -30,7 +30,7 @@ const $$listOptions = fromJS([
       ],
     },
   },
-  /* *************Static IP***************/
+  /* *************Static IP************** */
   {
     id: 'ip',
     text: __('IP Address'),
@@ -64,7 +64,7 @@ const $$listOptions = fromJS([
       type: 'text',
     },
   },
-  /* **Static IP over**PPPoE start******/
+  /* **Static IP over**PPPoE start***** */
   {
     id: 'pppoeServer',
     text: __('PPPoE Server'),
@@ -92,7 +92,7 @@ const $$listOptions = fromJS([
       type: 'password',
     },
   },
-  /* ***PPPoE over***DHCP Server Start***/
+  /* ***PPPoE over***DHCP Server Start** */
   {
     id: 'dhcpServerEnable',
     text: __('DHCP Server'),
@@ -140,7 +140,7 @@ const $$listOptions = fromJS([
       type: 'text',
     },
   },
-  /* ***DHCP Server Over********/
+  /* ***DHCP Server Over******* */
   {
     id: 'natEnable',
     text: __('NAT Enable'),

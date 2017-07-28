@@ -54,6 +54,7 @@ export default class AxcQuickSetup extends React.Component {
   constructor(props) {
     super(props);
     this.options = fromJS([]);
+    this.wanIndex = '0'; // 指示第几个接口是wan口
     utilsCore.binds(this, [
       'setWanSettingOption', 'setLanSettingOption', 'setConfirmOption',
       'renderWanSettingPage', 'renderLanSettingPage', 'renderConfirmPage',
@@ -82,11 +83,12 @@ export default class AxcQuickSetup extends React.Component {
     // 只有当data变化时才更新state，否则数据验证无法进行
     // （修改的数据保存在state中，如果只要props更新就更新state，state总是会被置为data的值）
     if (nextInterfaceList && !(nextInterfaceList.equals(curInterfaceList))) {
-      // 如果没有WAN口，则设置第一个为默认的WAN口,其余的都设为lan
+      // 如果没有WAN口，则设置第一个为默认的WAN口,其余的都设为lan, 并将WAN配置保存起来
       const hasWan = nextInterfaceList.findIndex(item => item.get('type') === 'wan');
       if (hasWan === -1) {
         nextInterfaceList = nextInterfaceList.map(item => item.set('type', 'lan'))
                             .setIn([0, 'type'], 'wan').setIn([0, 'enable'], '1');
+        this.wanIndex = '0';
       }
       this.setState({ interfaceList: nextInterfaceList });
     }
@@ -253,8 +255,21 @@ export default class AxcQuickSetup extends React.Component {
             options={wanOptions}
             value={wanPos !== -1 && list.getIn([wanPos, 'name'])}
             onChange={(data) => {
+              // 获取wan的设置
+              const { ip, mask, gateway } = this.state.interfaceList.get(this.wanIndex).toJS();
+              // 设置新的wan口设置
               const pos = this.state.interfaceList.findIndex(it => it.get('name') === data.value);
-              const newList = this.state.interfaceList.map(it => it.set('type', 'lan')).setIn([pos, 'type'], 'wan').setIn([pos, 'enable'], '1');
+              let newList = this.state.interfaceList.map(it => it.set('type', 'lan')).setIn([pos, 'type'], 'wan')
+                                  .setIn([pos, 'enable'], '1').setIn([pos, 'ip'], ip)
+                                  .setIn([pos, 'mask'], mask).setIn([pos, 'gateway'], gateway);
+              // 如果wan口发生了变化，将旧的wan口设置清空, 否则不做操作
+              if (this.wanIndex !== pos) {
+                const oldWan = newList.get(this.wanIndex).delete('ip').delete('mask').delete('gateway')
+                                      .delete('enable').set('type', 'lan');
+                newList = newList.set(this.wanIndex, oldWan);
+              }
+              // 更新wanIndex
+              this.wanIndex = pos;
               this.setState(() => ({ interfaceList: newList }));
             }}
             required
