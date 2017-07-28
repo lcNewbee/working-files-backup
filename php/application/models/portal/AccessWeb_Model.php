@@ -123,7 +123,8 @@ class AccessWeb_Model extends CI_Model {
             'copyRightUrl' => element('copyrightUrl', $data, ''),
             'description' => element('description', $data, ''),
             'url' => element('url', $data, 'http://'),
-            'sessiontime' => element('sessiontime', $data, 0)
+            'sessiontime' => element('sessiontime', $data, 0),
+            'pageStyle' => element('pageStyle', $data, '')
         );
         //send java
         if ($this->noticeSocket('add', array($socketarr))) {
@@ -159,7 +160,8 @@ class AccessWeb_Model extends CI_Model {
                     'copyRightUrl' => element('copyrightUrl', $drow, ''),
                     'description' => element('description', $drow, ''),
                     'url' => element('url', $drow, 'http://'),
-                    'sessiontime' => element('sessiontime', $drow, 0)
+                    'sessiontime' => element('sessiontime', $drow, 0),
+                    'pageStyle' => element('pageStyle', $data, '')
                 );
                 if ($this->noticeSocket('delete', array($socketarr))) {
                     //delete file
@@ -179,7 +181,7 @@ class AccessWeb_Model extends CI_Model {
            
         return json_encode(json_no(rtrim($failure_name,"/"))); 
     }
-    function Edit($data){
+    function Edit($data){   
         date_default_timezone_set("PRC");  
         $logo_name = date('YmdHis') . rand(10000000,99999999) . '.jpg';
         $bg_name = date('YmdHis') . rand(10000000,99999999) . '.jpg'; 
@@ -195,39 +197,48 @@ class AccessWeb_Model extends CI_Model {
             'copyRightUrl' => element('copyrightUrl', $data, ''),
             'description' => element('description', $data, ''),
             'url' => element('url', $data, 'http://'),
-            'sessiontime' => element('sessiontime', $data, 0)         
-        ); 
+            'sessiontime' => element('sessiontime', $data, 0),
+            'pageStyle' => element('pageStyle', $data, '')    
+        );         
         $query = $this->portalsql->query('select id,name,logo,bg_img from portal_web where id=' . $data['id'])->result_array();
         //1.上传图片
         //logo
-        $upload_data = $this->do_upload_img($logo_name, 'logo');        
-        if($upload_data['state']['code'] == 2000){            
-            //上传成功后删除原图片            
-            if(count($query) > 0 && $query[0]['logo'] != 'dist/css/img/logo.png'){
-                $dellogo = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['logo'];
-                if(is_file($dellogo)){
-                    unlink($dellogo);
-                }                               
-            }
+        if($data['logoText'] == null || $data['logoText'] == ''){
+            $socketarr['logo'] = '';
         }else{
-            //否则将需要修改的logo 路径置空
-            $socketarr['logo'] = '';//$query[0]['logo'];//否则将需要修改的logo名字 改回原数据库存储的值。
+            $upload_data = $this->do_upload_img($logo_name, 'logo');        
+            if($upload_data['state']['code'] == 2000){            
+                //上传成功后删除原图片            
+                if(count($query) > 0 && $query[0]['logo'] != 'dist/css/img/logo.png'){
+                    $dellogo = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['logo'];
+                    if(is_file($dellogo)){
+                        unlink($dellogo);
+                    }                               
+                }
+            }else{
+                //否则将需要修改的logo 路径置空
+                $socketarr['logo'] = $query[0]['logo'];//否则将需要修改的logo名字 改回原数据库存储的值。
+            }
         }
+        
         //bg
-        $upload_data2 = $this->do_upload_img($bg_name, 'backgroundImg');        
-        if($upload_data2['state']['code'] == 2000){
-            //上传成功后删除原图片            
-            if(count($query) > 0 && $query[0]['bg_img'] != 'dist/css/img/bg.jpg'){                
-                $delbg = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['bg_img'];   
-                if(is_file($delbg)){                    
-                    unlink($delbg);
-                }                              
-            }
+        if($data['backgroundImgText'] == null || $data['backgroundImgText'] == ''){
+            $socketarr['bgImg'] = '';
         }else{
-            if(count($query) > 0){
-                $socketarr['bgImg'] = '';//$query[0]['bg_img'];                
+            $upload_data2 = $this->do_upload_img($bg_name, 'backgroundImg');        
+            if($upload_data2['state']['code'] == 2000){
+                //上传成功后删除原图片            
+                if(count($query) > 0 && $query[0]['bg_img'] != 'dist/css/img/bg.jpg'){                
+                    $delbg = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/' . $query[0]['bg_img'];   
+                    if(is_file($delbg)){                    
+                        unlink($delbg);
+                    }                              
+                }
+            }else{
+                $socketarr['bgImg'] = $query[0]['bg_img'];                
             }
         }
+
         //2.操作数据库        
         //send java
         if ($this->noticeSocket('edit', array($socketarr))) {

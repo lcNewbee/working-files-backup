@@ -34,11 +34,11 @@ class NetworkPortalMac_Model extends CI_Model {
     }
     function add_portal_wite($data){
         $result = null;
-        $res = $this->is_add_sum($data['interface_bind'],$data['src_mac']);       
+        $res = $this->is_add_sum($data['src_mac']);       
         if( $res['totalsum'] < 513 && $res['ismac'] === 0){
             $arr = array(
-                'template_name'=>$this->get_portal_tmpname($data['interface_bind']),
-                'if_name'=>(string)$data['interface_bind'],
+                'template_name'=> 'ethx_all',//$this->get_portal_tmpname($data['interface_bind']),
+                'if_name'=>'ethx_all',//(string)$data['interface_bind'],
                 'src_mac'=>(string)$data['src_mac']
             );
             $result = portal_add_template_whitelist(json_encode($arr));
@@ -107,21 +107,17 @@ class NetworkPortalMac_Model extends CI_Model {
         }
         return $result;
     }
-    private function is_add_sum($facename,$mac){ 
+    private function is_add_sum($mac){ 
         $totalsum = 0;
         $ismac = 0;  
-        $query = $this->db->query("select blackwhite_id from blackwhite_params  where attr_value='".$facename."'");
-
-        foreach($query->result_array() as $row){            
-            $query2 = $this->db->query("select * from blackwhite_params where blackwhite_id=".$row['blackwhite_id']);
-            foreach($query2->result_array() as $row2){
-                if($row2['attr_id'] === 6){//6代表mac
-                    //计算mac 数量
-                    $totalsum = $totalsum + 1;
-                    if($row2['attr_value'] === $mac){
-                        //判断是否存在某个mac
-                        $ismac = 1;
-                    }
+        $query = $this->db->query("select * from blackwhite_params")->result_array();
+        foreach($query as $row){
+            if($row['attr_id'] === 6){//6代表mac
+                //计算mac 数量
+                $totalsum = $totalsum + 1;
+                if($row['attr_value'] === $mac){
+                    //判断是否存在某个mac
+                    $ismac = 1;
                 }
             }
         }
