@@ -176,6 +176,72 @@ const listOptions = fromJS([
     },
   },
   {
+    id: 'pageStyle',
+    noTable: true,
+    options: [
+      {
+        value: '#ffffff',
+        label: __('White'),
+      },
+      {
+        value: '#CFD7E7',
+        label: __('Gray'),
+      },
+      {
+        value: '#333333',
+        label: __('Dark'),
+      },
+      {
+        value: '#C23934',
+        label: __('Red'),
+      },
+      {
+        value: '#4BC076',
+        label: __('Green'),
+      },
+      {
+        value: '#0093DD',
+        label: __('Blue'),
+      },
+      {
+        value: '#F7B64B',
+        label: __('Yellow'),
+      },
+    ],
+    formProps: {
+      type: 'select',
+      label: __('Title Font Color'),
+      validator: validator({
+        rules: 'utf8Len:[0, 120]',
+      }),
+      help(val) {
+        return (
+          <Icon
+            name="circle"
+            style={{
+              color: val,
+              marginLeft: '6px',
+            }}
+          />
+        );
+      },
+      optionRenderer(option) {
+        return (
+          <span>
+            <Icon
+              name="circle"
+              style={{
+                color: option.value,
+                marginRight: '6px',
+              }}
+            />
+            {option.label}
+          </span>
+        );
+      },
+    },
+  },
+  {
     id: 'logo',
     noTable: true,
   },

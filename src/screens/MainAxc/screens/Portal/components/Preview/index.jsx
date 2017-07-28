@@ -244,9 +244,10 @@ export default class PortalPreview extends React.Component {
   render() {
     const { type } = this.props;
     const {
-      title, subTitle, auths, logo, backgroundImg, copyright, copyrightUrl,
+      title, subTitle, auths, logo, backgroundImg, copyright, copyrightUrl, pageStyle,
     } = this.props.data;
     const authArr = auths ? auths.split(',') : [];
+    const headerStyle = pageStyle ? { color: pageStyle } : {};
     let classNames = 'portal portal--mobile';
 
     if (type) {
@@ -262,7 +263,7 @@ export default class PortalPreview extends React.Component {
           }}
         />
         <div className="portal-content">
-          <div className="portal-content-header">
+          <div className="portal-content-header" style={headerStyle}>
             {
               logo ? (
                 <img src={logo} alt="logo" className="a-brand" />

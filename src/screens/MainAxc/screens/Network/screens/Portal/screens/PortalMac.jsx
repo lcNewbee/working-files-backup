@@ -32,15 +32,16 @@ const listOptions = fromJS([
       required: true,
     },
   },
+  // {
+  //   id: 'interface_bind',
+  //   label: __('Port'),
+  //   formProps: {
+  //     type: 'select',
+  //     required: true,
+  //     notEditable: true,
+  //   },
+  // },
   {
-    id: 'interface_bind',
-    label: __('Port'),
-    formProps: {
-      type: 'select',
-      required: true,
-      notEditable: true,
-    },
-  }, {
     id: 'src_mac',
     label: __('Mac Address'),
     formProps: {
@@ -71,34 +72,33 @@ export default class View extends React.Component {
     ]);
   }
   componentWillMount() {
-    getPortList()
-      .then((data) => {
-        this.setState({
-          portOptions: fromJS(data.options).filter($$item => $$item.get('value') !== 'lo'),
-        });
-      });
+    // getPortList()
+    //   .then((data) => {
+    //     this.setState({
+    //       portOptions: fromJS(data.options).filter($$item => $$item.get('value') !== 'lo'),
+    //     });
+    //   });
   }
 
-  onBeforeSave($$actionQuery, $$curListItem) {
-    const actionType = $$actionQuery.getIn(['action']);
-    const interfaceBind = $$curListItem.get('interface_bind');
-    let serverName = '';
+  // onBeforeSave($$actionQuery, $$curListItem) {
+  //   const actionType = $$actionQuery.getIn(['action']);
+  //   const interfaceBind = $$curListItem.get('interface_bind');
+  //   let serverName = '';
 
-    if (actionType === 'add' || actionType === 'delete') {
-      serverName = this.state.portOptions.find(
-        $$item => $$item.get('value') === interfaceBind,
-      ).get('serverName');
+  //   if (actionType === 'add' || actionType === 'delete') {
+  //     serverName = this.state.portOptions.find(
+  //       $$item => $$item.get('value') === interfaceBind,
+  //     ).get('serverName');
 
-      this.props.updateCurEditListItem({
-        template_name: serverName,
-      });
-    }
-  }
+  //     this.props.updateCurEditListItem({
+  //       template_name: serverName,
+  //     });
+  //   }
+  // }
 
   render() {
     const { store } = this.props;
-    const curListOptions = listOptions
-      .setIn([1, 'options'], this.state.portOptions);
+    const curListOptions = listOptions;
 
     return (
       <AppScreen
@@ -106,7 +106,7 @@ export default class View extends React.Component {
         store={store}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
-        actionBarChildren={__('This function is available only when the "Rule Type" is "Port",whice configured in "User Access Policies".')}
+        // actionBarChildren={__('This function is available only when the "Rule Type" is "Port",whice configured in "User Access Policies".')}
         editable={false}
         actionable
         selectable

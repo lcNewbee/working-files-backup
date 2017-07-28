@@ -19,7 +19,10 @@ function emptyFunc() {}
 const propTypes = {
   onValidError: PropTypes.func,
   errMsg: PropTypes.string,
-  help: PropTypes.string,
+  help: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+  ]),
   label: PropTypes.string,
   value: PropTypes.any,
   id: PropTypes.string,
