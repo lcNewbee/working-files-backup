@@ -330,7 +330,7 @@ export default class Basic extends React.Component {
               this.props.createModal({
                 id: 'settings',
                 role: 'alert',
-                text: `${message} (SSID Index: ${i + 1})`,
+                text: `SSID ${i + 1}: ${message}`,
               });
               break;
             }
@@ -699,7 +699,7 @@ export default class Basic extends React.Component {
       <FormInput
         type="checkbox"
         checked={val === '1'}
-        disabled={flag}
+        // disabled={flag}
         onChange={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
       />
     );
@@ -712,7 +712,7 @@ export default class Basic extends React.Component {
       <FormInput
         type="text"
         value={val}
-        disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+        // disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
         onChange={(data) => {
           const ssid = item.get('ssid');
           const str = ssid.replace(/(^\s*)|(\s*$)/g, '');
@@ -787,7 +787,7 @@ export default class Basic extends React.Component {
         text={__('Edit')}
         icon="pencil-square"
         size="sm"
-        disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+        // disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
         onClick={() => {
           const tableItemForSsid = fromJS({}).set('val', val)
                 .set('item', item).set('isShow', '1')
@@ -826,7 +826,7 @@ export default class Basic extends React.Component {
           text={__('Delete')}
           icon="times"
           size="sm"
-          disabled={pos === 0}
+          // disabled={pos === 0}
           onClick={() => this.onDeleteBtnClick(item)}
         />
       </div>
