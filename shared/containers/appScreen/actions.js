@@ -152,7 +152,7 @@ export function fetchScreenData(option) {
 }
 
 // SCREEN list actions
-export function updateCurEditListItem(data, sync) {
+export function updateCurListItem(data, sync) {
   return {
     type: ACTION_TYPES.UPDATE_CUR_EDIT_LIST_ITEM,
     payload: data,

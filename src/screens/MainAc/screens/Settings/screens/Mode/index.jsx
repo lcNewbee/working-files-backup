@@ -103,7 +103,7 @@ const propTypes = {
   route: PropTypes.object.isRequired,
   app: PropTypes.instanceOf(Map).isRequired,
   store: PropTypes.instanceOf(Map).isRequired,
-  updateCurEditListItem: PropTypes.func.isRequired,
+  updateCurListItem: PropTypes.func.isRequired,
   validateAll: PropTypes.func.isRequired,
   onListAction: PropTypes.func.isRequired,
   editListItemByIndex: PropTypes.func.isRequired,
@@ -155,7 +155,7 @@ export default class ModeSettings extends React.Component {
         'edit',
       );
     } else {
-      this.props.updateCurEditListItem(data);
+      this.props.updateCurListItem(data);
     }
   }
 
@@ -167,7 +167,7 @@ export default class ModeSettings extends React.Component {
       <AppScreen
         {...this.props}
         initOption={{
-          defaultEditData: {
+          defaultListItem: {
             thinenable: 1,
             thindiscovery: 'dhcp',
             thinacip: '',

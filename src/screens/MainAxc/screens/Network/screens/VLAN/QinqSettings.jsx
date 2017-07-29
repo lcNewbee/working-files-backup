@@ -13,7 +13,7 @@ const qinqOptions = [
 ];
 // const tableOptions = immutableUtils.getTableOptions(listOptions);
 // const editFormOptions = immutableUtils.getFormOptions(listOptions);
-// const defaultEditData = immutableUtils.getFormOptions(listOptions);
+// const defaultListItem = immutableUtils.getFormOptions(listOptions);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -22,7 +22,7 @@ const propTypes = {
   route: PropTypes.object,
   initScreen: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};

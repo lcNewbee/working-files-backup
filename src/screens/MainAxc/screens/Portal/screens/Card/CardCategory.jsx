@@ -255,7 +255,7 @@ const listOptions = fromJS([
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   changeScreenQuery: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -293,7 +293,7 @@ export default class View extends React.Component {
           value={$$curListItem.get('moneyUnit')}
           style={{ width: '110px' }}
           onChange={(data) => {
-            this.props.updateCurEditListItem(fromJS({ moneyUnit: data.value }));
+            this.props.updateCurListItem(fromJS({ moneyUnit: data.value }));
           }}
         />
       );

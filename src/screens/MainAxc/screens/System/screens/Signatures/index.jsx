@@ -72,7 +72,7 @@ export default class View extends React.PureComponent {
         {...this.props}
         settingsFormOptions={formOptions}
         initOption={{
-          defaultSettingsData: defaultFormData,
+          defaultSettings: defaultFormData,
         }}
       />
     );

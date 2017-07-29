@@ -100,7 +100,7 @@ const propTypes = {
   curStore: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   updateScreenSettings: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   updateScreenCustomProps: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
@@ -422,7 +422,7 @@ export default class LiveMap extends React.PureComponent {
           this.map.openInfoWindow(newInfoWindow, event1.point);
         });
 
-        this.props.updateCurEditListItem({
+        this.props.updateCurListItem({
           address: curAddress,
           lng: curPoint.lng,
           lat: curPoint.lat,
@@ -527,7 +527,7 @@ export default class LiveMap extends React.PureComponent {
           map.openInfoWindow(newInfoWindow, event.point);
         });
 
-        this.props.updateCurEditListItem({
+        this.props.updateCurListItem({
           address,
           lng: curPoint.lng,
           lat: curPoint.lat,
@@ -587,7 +587,7 @@ export default class LiveMap extends React.PureComponent {
             }
 
             this.map.centerAndZoom(pp);
-            this.props.updateCurEditListItem({
+            this.props.updateCurListItem({
               address,
               lng: pp.lng,
               lat: pp.lat,
@@ -737,7 +737,7 @@ export default class LiveMap extends React.PureComponent {
         (arr, status) => {
           if (status === 'OK') {
             if (arr && arr[0] && arr[0].formatted_address) {
-              this.props.updateCurEditListItem({
+              this.props.updateCurListItem({
                 address: arr[0].formatted_address,
                 lat: e.latLng.lat(),
                 lng: e.latLng.lng(),
@@ -791,7 +791,7 @@ export default class LiveMap extends React.PureComponent {
               (arr, status) => {
                 if (status === 'OK') {
                   if (arr && arr[0] && arr[0].formatted_address) {
-                    this.props.updateCurEditListItem({
+                    this.props.updateCurListItem({
                       address: arr[0].formatted_address,
                       lat: e.latLng.lat(),
                       lng: e.latLng.lng(),
@@ -831,7 +831,7 @@ export default class LiveMap extends React.PureComponent {
           ].join(' ');
         }
 
-        this.props.updateCurEditListItem({
+        this.props.updateCurListItem({
           address,
           lng: place.geometry.location.lng(),
           lat: place.geometry.location.lat(),
@@ -845,7 +845,7 @@ export default class LiveMap extends React.PureComponent {
     //       if (status === google.maps.GeocoderStatus.OK) {
     //         if (results[1]) {
     //           infowindow.setContent(results[1].formatted_address);
-    //           this.props.updateCurEditListItem(utils.extend({
+    //           this.props.updateCurListItem(utils.extend({
     //             address: results[1].formatted_address,
     //           }, latlng));
     //         } else {
@@ -1024,7 +1024,7 @@ export default class LiveMap extends React.PureComponent {
       <AppScreen
         {...this.props}
         initOption={{
-          defaultSettingsData: {
+          defaultSettings: {
             type: '0',
           },
         }}
@@ -1054,7 +1054,7 @@ export default class LiveMap extends React.PureComponent {
                         myFormOptions.deleteIn([-1]).deleteIn([-1])
                       }
                       onSave={this.onSave}
-                      onChangeData={this.props.updateCurEditListItem}
+                      onChangeData={this.props.updateCurListItem}
                       onValidError={this.props.reportValidError}
                       invalidMsg={app.get('invalid')}
                       validateAt={app.get('validateAt')}
@@ -1129,7 +1129,7 @@ export default class LiveMap extends React.PureComponent {
                 data={editData}
                 options={myFormOptions}
                 onSave={this.onSave}
-                onChangeData={this.props.updateCurEditListItem}
+                onChangeData={this.props.updateCurListItem}
                 onValidError={this.props.reportValidError}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}

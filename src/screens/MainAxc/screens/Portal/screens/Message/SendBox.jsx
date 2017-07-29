@@ -222,7 +222,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   save: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   onListAction: PropTypes.func,
   changeScreenQuery: PropTypes.func,
@@ -287,7 +287,7 @@ export default class SendBox extends React.Component {
           id="viewMessage"
           options={viewMessageOptions}
           data={store.getIn([route.id, 'curListItem'])}
-          onChangeData={this.props.updateCurEditListItem}
+          onChangeData={this.props.updateCurListItem}
           onSave={() => this.onSave('viewMessage')}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
@@ -300,7 +300,7 @@ export default class SendBox extends React.Component {
         id="sendMessage"
         options={getSendMessageOptions}
         data={store.getIn([route.id, 'curListItem'])}
-        onChangeData={this.props.updateCurEditListItem}
+        onChangeData={this.props.updateCurListItem}
         onSave={() => this.onSave('sendMessage')}
         invalidMsg={app.get('invalid')}
         validateAt={app.get('validateAt')}
@@ -325,7 +325,7 @@ export default class SendBox extends React.Component {
                 action: 'viewMessage',
                 myTitle: __('View Message'),
               });
-              this.props.updateCurEditListItem({
+              this.props.updateCurListItem({
                 date: $$data.get('date'),
                 ip: $$data.get('ip'),
                 title: $$data.get('title'),
@@ -343,7 +343,7 @@ export default class SendBox extends React.Component {
                 action: 'sendMessage',
                 myTitle: __('Transfer to Others'),
               });
-              this.props.updateCurEditListItem({
+              this.props.updateCurListItem({
                 title: $$data.get('title'),
                 description: $$data.get('description'),
               });

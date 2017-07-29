@@ -101,7 +101,7 @@ const listOptions = fromJS([
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   changeLoginStatus: PropTypes.func.isRequired,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -125,11 +125,11 @@ export default class View extends React.Component {
           $$curListItem.get('userPassword') !== $$curListItem.get('confirmPassword')) {
         ret = __('New password and confirm password must match');
       } else if (userType === 0) {
-        this.props.updateCurEditListItem({
+        this.props.updateCurListItem({
           purview: PURVIEW_ADMIN,
         });
       } else if (userType === 2) {
-        this.props.updateCurEditListItem({
+        this.props.updateCurListItem({
           purview: PURVIEW_GUEST,
         });
       }

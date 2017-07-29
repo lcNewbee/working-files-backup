@@ -165,7 +165,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
   editListItemByIndex: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   reportValidError: PropTypes.func,
   validateAll: PropTypes.func,
   onListAction: PropTypes.func,
@@ -211,14 +211,14 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         initOption={{
-          defaultEditData: defaultData,
+          defaultListItem: defaultData,
         }}
       >
         <FormContainer
           options={$$formOptions}
           data={$$formData}
           onChangeData={($$data) => {
-            this.props.updateCurEditListItem($$data);
+            this.props.updateCurListItem($$data);
           }}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}

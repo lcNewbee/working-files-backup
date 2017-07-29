@@ -23,12 +23,11 @@ const defaultItem = fromJS({
 
   // 页面全局配置
   curSettings: {},
+  defaultSettings: {},
 
   // 当前正在操作的列表项
   curListItem: {},
-
-  // 操作的列表项默认值
-  defaultEditData: {},
+  defaultListItem: {},
 
   // 操作相关查询对象
   actionQuery: {},
@@ -47,7 +46,7 @@ const defaultState = fromJS({
  */
 function initScreenState($$state, action) {
   const screenId = action.payload.id;
-  const defaultSettingsData = action.payload.defaultSettingsData;
+  const defaultSettings = action.payload.defaultSettings;
   let $$ret = $$state;
   let $$settingsData = $$ret.getIn([screenId, 'curSettings']) || fromJS({});
   let $$myScreenState = $$ret.get(screenId);
@@ -63,8 +62,8 @@ function initScreenState($$state, action) {
 
 
   // 只有当 $$settingsData 为空时才合并默认Settings
-  if (defaultSettingsData && $$settingsData.isEmpty()) {
-    $$settingsData = $$settingsData.merge(defaultSettingsData);
+  if (defaultSettings && $$settingsData.isEmpty()) {
+    $$settingsData = $$settingsData.merge(defaultSettings);
   }
 
   // 如何处理 screen的第一次初始化与其他初始
@@ -122,7 +121,7 @@ function selectedListItem(state, action, curScreenName) {
       .setIn([curScreenName, 'actionQuery', 'selectedList'], selectedList);
 }
 
-function updateCurEditListItem(curScreenName, state, action) {
+function updateCurListItem(curScreenName, state, action) {
   const curIndex = state.getIn([curScreenName, 'actionQuery', 'index']);
   let ret = state.mergeDeepIn([curScreenName, 'curListItem'], action.payload);
 
@@ -135,7 +134,7 @@ function updateCurEditListItem(curScreenName, state, action) {
 
 function activeListItem(state, curScreenName, action) {
   const curList = state.getIn([curScreenName, 'data', 'list']);
-  const defaultEditData = state.getIn([curScreenName, 'defaultEditData']) || fromJS({});
+  const defaultListItem = state.getIn([curScreenName, 'defaultListItem']) || fromJS({});
   let listItemIndex = 0;
   let myItem = fromJS({});
 
@@ -151,7 +150,7 @@ function activeListItem(state, curScreenName, action) {
 
   return state.setIn(
       [curScreenName, 'curListItem'],
-      defaultEditData.merge(myItem),
+      defaultListItem.merge(myItem),
     )
     .mergeIn([curScreenName, 'actionQuery'], {
       action: action.meta.action || 'edit',
@@ -202,7 +201,7 @@ function addScreen(state, action) {
 }
 export default function (state = defaultState, action) {
   const curScreenName = (action.meta && action.meta.name) || state.get('curScreenId');
-  const defaultEditData = state.getIn([curScreenName, 'defaultEditData']) || fromJS({});
+  const defaultListItem = state.getIn([curScreenName, 'defaultListItem']) || fromJS({});
 
   switch (action.type) {
 
@@ -248,7 +247,7 @@ export default function (state = defaultState, action) {
     case ACTION_TYPES.ADD_LIST_ITEM:
       return state.setIn(
         [curScreenName, 'curListItem'],
-        fromJS({}).merge(action.payload || defaultEditData),
+        fromJS({}).merge(action.payload || defaultListItem),
       )
       .mergeIn([curScreenName, 'actionQuery'], {
         action: 'add',
@@ -262,7 +261,7 @@ export default function (state = defaultState, action) {
       return selectedListItem(state, action, curScreenName);
 
     case ACTION_TYPES.UPDATE_CUR_EDIT_LIST_ITEM:
-      return updateCurEditListItem(curScreenName, state, action);
+      return updateCurListItem(curScreenName, state, action);
 
     case ACTION_TYPES.UPDATE_LIST_ITEM_BY_INDEX:
       return state.mergeDeepIn(

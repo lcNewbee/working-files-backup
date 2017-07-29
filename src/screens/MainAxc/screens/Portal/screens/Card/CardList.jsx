@@ -407,7 +407,7 @@ const propTypes = {
   route: PropTypes.object,
   store: PropTypes.instanceOf(Map),
   save: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   onListAction: PropTypes.func,
   changeScreenQuery: PropTypes.func,
@@ -477,7 +477,7 @@ export default class View extends React.Component {
         id="sendMessage"
         options={getSendMessageOptions}
         data={store.getIn([route.id, 'curListItem'])}
-        onChangeData={this.props.updateCurEditListItem}
+        onChangeData={this.props.updateCurListItem}
         onSave={() => this.onSave('sendMessage')}
         invalidMsg={app.get('invalid')}
         validateAt={app.get('validateAt')}
@@ -521,7 +521,7 @@ export default class View extends React.Component {
                   action: 'sendMessage',
                   myTitle: __('Send to Users'),
                 });
-                this.props.updateCurEditListItem({
+                this.props.updateCurListItem({
                   id: $$data.get('id'),
                   title: __('CD Key of Recharge Voucher'),
                   description: __('Coupon Name:') + $$data.get('name') + __('; ') + __('CD Key:') + $$data.get('cdKey') + __('; ') + __('Category Type:') + x,
@@ -558,7 +558,7 @@ export default class View extends React.Component {
           value={$$curListItem.get('moneyUnit')}
           style={{ width: '100px' }}
           onChange={(data) => {
-            this.props.updateCurEditListItem(fromJS({ moneyUnit: data.value }));
+            this.props.updateCurListItem(fromJS({ moneyUnit: data.value }));
           }}
         />
       );

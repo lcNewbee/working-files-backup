@@ -723,7 +723,7 @@ const propTypes = {
   route: PropTypes.object,
   validateAll: PropTypes.func,
   onListAction: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   reportValidError: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   changeScreenQuery: PropTypes.func,
@@ -745,7 +745,7 @@ export default class AccountList extends React.Component {
       'onAction',
       'onSave',
       'toggleBox',
-      'getDefaultEditData',
+      'getdefaultListItem',
       'onBeforeSave',
       'onBeforeSync',
     ]);
@@ -905,7 +905,7 @@ export default class AccountList extends React.Component {
           id="recharge"
           options={$$curRechargeOptions}
           data={$$rechargeDetailData}
-          onChangeData={this.props.updateCurEditListItem}
+          onChangeData={this.props.updateCurListItem}
           onSave={() => this.onSave('recharge')}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
@@ -953,7 +953,7 @@ export default class AccountList extends React.Component {
                 id="baseSetting"
                 options={$$mybaseSetting}
                 data={$$curData}
-                onChangeData={this.props.updateCurEditListItem}
+                onChangeData={this.props.updateCurListItem}
                 onSave={() => this.onSave('baseSetting')}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
@@ -987,7 +987,7 @@ export default class AccountList extends React.Component {
                 id="advancedSetting"
                 options={advancedSetting}
                 data={$$curData}
-                onChangeData={this.props.updateCurEditListItem}
+                onChangeData={this.props.updateCurListItem}
                 onSave={() => this.onSave('advancedSetting')}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
@@ -1022,7 +1022,7 @@ export default class AccountList extends React.Component {
                   action: 'recharge',
                   myTitle: __('Recharge'),
                 });
-                this.props.updateCurEditListItem({
+                this.props.updateCurListItem({
                   id: $$data.get('id'),
                   loginName: $$data.get('loginName'),
                   nickname: $$data.get('name'),

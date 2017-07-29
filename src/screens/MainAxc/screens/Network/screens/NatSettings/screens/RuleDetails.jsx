@@ -78,7 +78,7 @@ export default class View extends React.Component {
     this.setState({
       natType,
     });
-    this.props.updateCurEditListItem({ natType });
+    this.props.updateCurListItem({ natType });
   }
 
   render() {

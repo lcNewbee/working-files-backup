@@ -534,7 +534,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   validateAll: PropTypes.func,
   onListAction: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   reportValidError: PropTypes.func,
   createModal: PropTypes.func,
 };
@@ -556,14 +556,14 @@ export default class View extends React.Component {
       'onAction',
       'onSave',
       'toggleBox',
-      'getDefaultEditData',
+      'getdefaultListItem',
       'onBeforeSave',
       // 'onChange',
     ]);
   }
 
   componentWillMount() {
-    this.getDefaultEditData();
+    this.getdefaultListItem();
     getNasIP()
       .then((data) => {
         this.setState({
@@ -578,7 +578,7 @@ export default class View extends React.Component {
     const $$curData = $$myScreenStore.get('curListItem');
 
     if (!$$curData.get('acctpri_ipaddr') || !$$curData.get('acctpri_key')) {
-      this.props.updateCurEditListItem({
+      this.props.updateCurListItem({
         acctpri_ipaddr: $$curData.get('authpri_ipaddr'),
         acctpri_key: $$curData.get('authpri_key'),
       });
@@ -595,14 +595,14 @@ export default class View extends React.Component {
         });
     }
   }
-  getDefaultEditData() {
-    const myDefaultEditData = {};
+  getdefaultListItem() {
+    const mydefaultListItem = {};
     authServer.forEach(
       ($$item, index) => {
         const curId = $$item.get('id');
         const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+        mydefaultListItem[curId] = defaultValue;
 
         return index;
       },
@@ -612,7 +612,7 @@ export default class View extends React.Component {
         const curId = $$item.get('id');
         const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+        mydefaultListItem[curId] = defaultValue;
 
         return index;
       },
@@ -622,7 +622,7 @@ export default class View extends React.Component {
         const curId = $$item.get('id');
         const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+        mydefaultListItem[curId] = defaultValue;
 
         return index;
       },
@@ -632,13 +632,13 @@ export default class View extends React.Component {
         const curId = $$item.get('id');
         const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+        mydefaultListItem[curId] = defaultValue;
 
         return index;
       },
     );
 
-    this.defaultEditData = myDefaultEditData;
+    this.defaultListItem = mydefaultListItem;
   }
   toggleBox(moduleName) {
     this.setState({
@@ -687,7 +687,7 @@ export default class View extends React.Component {
                   ),
                 });
               } else {
-                this.props.updateCurEditListItem(data);
+                this.props.updateCurListItem(data);
               }
             }}
             onSave={() => this.onSave('serverChoices')}
@@ -720,7 +720,7 @@ export default class View extends React.Component {
                 className="o-form--compassed"
                 options={$$myAuthServer}
                 data={$$curData}
-                onChangeData={this.props.updateCurEditListItem}
+                onChangeData={this.props.updateCurListItem}
                 onSave={() => this.onSave('authServer')}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
@@ -756,7 +756,7 @@ export default class View extends React.Component {
                 options={accServer}
                 className="o-form--compassed"
                 data={$$curData}
-                onChangeData={this.props.updateCurEditListItem}
+                onChangeData={this.props.updateCurListItem}
                 onSave={() => this.onSave('accServer')}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
@@ -790,7 +790,7 @@ export default class View extends React.Component {
                 id="advancedSetting"
                 options={advancedSetting}
                 data={$$curData}
-                onChangeData={this.props.updateCurEditListItem}
+                onChangeData={this.props.updateCurListItem}
                 onSave={() => this.onSave('advancedSetting')}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
@@ -810,7 +810,7 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={listOptions}
         initOption={{
-          defaultEditData: this.defaultEditData,
+          defaultListItem: this.defaultListItem,
         }}
         modalChildren={this.renderCustomModal()}
         listKey="template_name"

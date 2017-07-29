@@ -805,7 +805,7 @@ const propTypes = {
   route: PropTypes.object,
   groupid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   changeScreenActionQuery: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   updateScreenCustomProps: PropTypes.func,
   fetch: PropTypes.func,
   receiveScreenData: PropTypes.func,
@@ -838,7 +838,7 @@ export default class View extends React.Component {
       'renderRadiusTemplate',
       'toggleBox',
       'renderNewRadiusTemplate',
-      'getDefaultEditData',
+      'getdefaultListItem',
       'createNewRemoteRadiusTemplate',
       'getWizardOptions',
       'onAddNewAAAModal',
@@ -1160,7 +1160,7 @@ export default class View extends React.Component {
     this.listOptions = listOptions;
   }
   componentWillMount() {
-    this.getDefaultEditData();
+    this.getdefaultListItem();
     getAccessConfig()
       .then((data) => {
         this.setState({
@@ -1242,7 +1242,7 @@ export default class View extends React.Component {
     return (item) => {
       const data = {};
       data[name] = item.value;
-      this.props.updateCurEditListItem(data);
+      this.props.updateCurListItem(data);
     };
   }
   onOpenCopySsidModal() {
@@ -1304,14 +1304,14 @@ export default class View extends React.Component {
     return this.props.store.getIn([this.props.route.id, 'curListItem', name]);
   }
 
-  getDefaultEditData() {
-    const myDefaultEditData = {};
+  getdefaultListItem() {
+    const mydefaultListItem = {};
     authServer.forEach(
       ($$item, index) => {
         const curId = $$item.get('id');
         const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+        mydefaultListItem[curId] = defaultValue;
 
         return index;
       },
@@ -1321,12 +1321,12 @@ export default class View extends React.Component {
         const curId = $$item.get('id');
         const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+        mydefaultListItem[curId] = defaultValue;
 
         return index;
       },
     );
-    this.defaultEditData = myDefaultEditData;
+    this.defaultListItem = mydefaultListItem;
   }
 
   fetchCopyGroupSsids(groupid) {
@@ -1459,7 +1459,7 @@ export default class View extends React.Component {
         className="o-form--compassed"
         options={$$myAuthServer}
         data={$$curData}
-        onChangeData={this.props.updateCurEditListItem}
+        onChangeData={this.props.updateCurListItem}
         onSave={() => this.onSave('authServer')}
         invalidMsg={app.get('invalid')}
         validateAt={app.get('validateAt')}
@@ -1807,7 +1807,7 @@ export default class View extends React.Component {
                         className="o-form--compassed"
                         options={$$myAuthServer}
                         data={$$curData}
-                        onChangeData={this.props.updateCurEditListItem}
+                        onChangeData={this.props.updateCurListItem}
                         onSave={() => this.onSave('authServer')}
                         invalidMsg={app.get('invalid')}
                         validateAt={app.get('validateAt')}

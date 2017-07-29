@@ -174,7 +174,7 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      defaultSettingsData: {
+      defaultSettings: {
         first5g: 1,
         switch11n: 1,
         txpower: 'auto',

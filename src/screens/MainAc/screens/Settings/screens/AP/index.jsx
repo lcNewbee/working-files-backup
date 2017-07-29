@@ -136,7 +136,7 @@ const propTypes = {
   fetchScreenData: PropTypes.func,
   createModal: PropTypes.func,
   saveFile: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   save: PropTypes.func.isRequired,
   fetch: PropTypes.func.isRequired,
   changeScreenActionQuery: PropTypes.func,
@@ -300,7 +300,7 @@ export default class ApMantance extends React.Component {
           method="POST"
           options={this.editCustomModalOptions}
           data={store.getIn([route.id, 'curListItem'])}
-          onChangeData={this.props.updateCurEditListItem}
+          onChangeData={this.props.updateCurListItem}
           onSave={() => this.onAddSave()}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
@@ -318,7 +318,7 @@ export default class ApMantance extends React.Component {
         method="POST"
         options={readOnlyEditModalOptions}
         data={store.getIn([route.id, 'curListItem'])}
-        onChangeData={this.props.updateCurEditListItem}
+        onChangeData={this.props.updateCurListItem}
         onSave={() => this.onEditSave()}
         invalidMsg={app.get('invalid')}
         validateAt={app.get('validateAt')}
@@ -347,7 +347,7 @@ export default class ApMantance extends React.Component {
                 action: 'edit',
                 myTitle: __('Edit Message'),
               });
-              this.props.updateCurEditListItem({
+              this.props.updateCurListItem({
                 model: $$data.get('model'),
                 subversion: $$data.get('subversion'),
                 fm_name: $$data.get('fm_name'),

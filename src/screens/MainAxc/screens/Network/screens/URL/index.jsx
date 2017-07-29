@@ -131,7 +131,7 @@ const propTypes = {
   route: PropTypes.object,
   store: PropTypes.instanceOf(Map),
   save: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   onListAction: PropTypes.func,
 };
@@ -181,7 +181,7 @@ export default class View extends React.Component {
           id="createGroup"
           options={groupOptions}
           data={store.getIn([route.id, 'curListItem'])}
-          onChangeData={this.props.updateCurEditListItem}
+          onChangeData={this.props.updateCurListItem}
           onSave={() => this.onSave('createGroup')}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
@@ -197,7 +197,7 @@ export default class View extends React.Component {
           id="makeFilterRules"
           options={rulesDetailsOptions}
           data={store.getIn([route.id, 'curListItem'])}
-          onChangeData={this.props.updateCurEditListItem}
+          onChangeData={this.props.updateCurListItem}
           onSave={() => this.onSave('makeFilterRules')}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
@@ -213,7 +213,7 @@ export default class View extends React.Component {
           id="bindRules"
           options={bindRulesOptions}
           data={store.getIn([route.id, 'curListItem'])}
-          onChangeData={this.props.updateCurEditListItem}
+          onChangeData={this.props.updateCurListItem}
           onSave={() => this.onSave('bindRules')}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
@@ -228,7 +228,7 @@ export default class View extends React.Component {
         id="openFilter"
         options={wlanOptions}
         data={store.getIn([route.id, 'curListItem'])}
-        onChangeData={this.props.updateCurEditListItem}
+        onChangeData={this.props.updateCurListItem}
         onSave={() => this.onSave('filter')}
         invalidMsg={app.get('invalid')}
         validateAt={app.get('validateAt')}
@@ -252,7 +252,7 @@ export default class View extends React.Component {
                 action: 'filter',
                 myTitle: __('Filter'),
               });
-              this.props.updateCurEditListItem({
+              this.props.updateCurListItem({
                 ssid: $$data.get('ssid'),
               });
             }}

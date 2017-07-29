@@ -350,7 +350,7 @@ const propTypes = {
   route: PropTypes.object,
   groupid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   changeScreenActionQuery: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   fetch: PropTypes.func,
   receiveScreenData: PropTypes.func,
   createModal: PropTypes.func,
@@ -421,7 +421,7 @@ export default class View extends React.Component {
       const data = {};
 
       data[name] = item.value;
-      this.props.updateCurEditListItem(data);
+      this.props.updateCurListItem(data);
     };
   }
   onOpenCopySsidModal() {

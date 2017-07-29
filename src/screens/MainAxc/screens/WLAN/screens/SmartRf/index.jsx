@@ -110,7 +110,7 @@ export default class SmartRf extends React.Component {
 
     super(props);
     this.state = {
-      defaultSettingsData: {
+      defaultSettings: {
         first5g: 1,
         switch11n: 1,
         txpower: 'auto',
@@ -165,7 +165,7 @@ export default class SmartRf extends React.Component {
   }
   render() {
     const { app, screenStore, updateScreenSettings } = this.props;
-    const { defaultSettingsData } = this.state;
+    const { defaultSettings } = this.state;
     const myScreenId = screenStore.get('curScreenId');
     const $$curData = screenStore.getIn([myScreenId, 'curSettings']);
 
@@ -174,7 +174,7 @@ export default class SmartRf extends React.Component {
         {...this.props}
         store={screenStore}
         initOption={{
-          defaultSettingsData,
+          defaultSettings,
         }}
         actionable={this.actionable}
       >

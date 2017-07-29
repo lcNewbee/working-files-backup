@@ -120,27 +120,27 @@ export default class AppScreen extends React.Component {
     // init Settings Form
     if (settingsFormOptions) {
       // 依据 settingsFormOptions 来获取默认值
-      this.defaultSettingsData = immutableUtils.getDefaultData(settingsFormOptions);
+      this.defaultSettings = immutableUtils.getDefaultData(settingsFormOptions);
       this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
     }
-    if (this.defaultSettingsData) {
-      initOption.defaultSettingsData = utils.extend(
+    if (this.defaultSettings) {
+      initOption.defaultSettings = utils.extend(
         {},
-        this.defaultSettingsData,
-        initOption.defaultSettingsData,
+        this.defaultSettings,
+        initOption.defaultSettings,
       );
     }
 
     // init list defaultData
     if (listOptions) {
-      this.defaultEditData = immutableUtils.getDefaultData(listOptions);
+      this.defaultListItem = immutableUtils.getDefaultData(listOptions);
     }
 
-    if (this.defaultEditData) {
-      initOption.defaultEditData = utils.extend(
+    if (this.defaultListItem) {
+      initOption.defaultListItem = utils.extend(
         {},
-        this.defaultEditData,
-        initOption.defaultEditData,
+        this.defaultListItem,
+        initOption.defaultListItem,
       );
     }
 
@@ -196,14 +196,14 @@ export default class AppScreen extends React.Component {
 
     // 更新 Settings 相关配置，需要根系 默认数据
     if (!immutable.is(nextSettingOptions, this.props.settingsFormOptions)) {
-      this.defaultSettingsData = utils.extend(
+      this.defaultSettings = utils.extend(
         {},
         immutableUtils.getDefaultData(nextSettingOptions),
-        nextProps.initOption ? nextProps.initOption.defaultSettingsData : {},
+        nextProps.initOption ? nextProps.initOption.defaultSettings : {},
       );
 
       this.props.updateScreen({
-        defaultSettingsData: this.defaultSettingsData,
+        defaultSettings: this.defaultSettings,
       });
     }
   }
@@ -285,7 +285,7 @@ export default class AppScreen extends React.Component {
 
   render() {
     const {
-      tableOptions, editFormOptions, defaultEditData,
+      tableOptions, editFormOptions, defaultListItem,
     } = this;
     const {
       store, title, noTitle, route, listOptions, customSettingForm, className,
@@ -332,7 +332,7 @@ export default class AppScreen extends React.Component {
               {...this.props}
               tableOptions={tableOptions}
               editFormOptions={editFormOptions}
-              defaultEditData={defaultEditData}
+              defaultListItem={defaultListItem}
               store={$$myScreenStore}
               fetchUrl={fetchUrl}
               saveUrl={saveUrl}

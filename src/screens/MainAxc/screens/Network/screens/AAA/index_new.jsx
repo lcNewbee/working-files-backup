@@ -281,7 +281,7 @@ const $$defaultData = fromJS(immutableUtils.getDefaultData(listOptions))
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   reportValidError: PropTypes.func,
   validateAll: PropTypes.func,
   onListAction: PropTypes.func,
@@ -560,7 +560,7 @@ export default class View extends React.Component {
                 options={this.$$radiusAuthServer}
                 data={$$curData.get('radius')}
                 onChangeData={(data) => {
-                  this.props.updateCurEditListItem({
+                  this.props.updateCurListItem({
                     radius: data,
                   });
                 }}
@@ -597,7 +597,7 @@ export default class View extends React.Component {
                 className="o-form--compassed"
                 data={$$curData.get('radius')}
                 onChangeData={(data) => {
-                  this.props.updateCurEditListItem({
+                  this.props.updateCurListItem({
                     radius: data,
                   });
                 }}
@@ -633,7 +633,7 @@ export default class View extends React.Component {
                 className="o-form--compassed"
                 data={$$curData.get('radius')}
                 onChangeData={(data) => {
-                  this.props.updateCurEditListItem({
+                  this.props.updateCurListItem({
                     radius: data,
                   });
                 }}
@@ -681,7 +681,7 @@ export default class View extends React.Component {
                 options={this.$$potalServerFormOptions}
                 data={$$curData.get('portalServer')}
                 onChangeData={(data) => {
-                  this.props.updateCurEditListItem({
+                  this.props.updateCurListItem({
                     portalServer: data,
                   });
                 }}
@@ -717,7 +717,7 @@ export default class View extends React.Component {
                 options={this.$$potalRuleFormOptions}
                 data={$$curData.get('portalRule')}
                 onChangeData={(data) => {
-                  this.props.updateCurEditListItem({
+                  this.props.updateCurListItem({
                     portalRule: data,
                   });
                 }}
@@ -782,7 +782,7 @@ export default class View extends React.Component {
                       },
                     ]}
                     onChange={(data) => {
-                      this.props.updateCurEditListItem({
+                      this.props.updateCurListItem({
                         portal_rule_type: data.value,
                       });
                     }}
@@ -800,7 +800,7 @@ export default class View extends React.Component {
                     options={$$localPortFormOptions}
                     data={$$curData.get('portalRule')}
                     onChangeData={(data) => {
-                      this.props.updateCurEditListItem({
+                      this.props.updateCurListItem({
                         portalRule: data,
                       });
                     }}
@@ -816,7 +816,7 @@ export default class View extends React.Component {
                     options={this.$$portalTemplateFormOptions}
                     data={$$curData.get('portalTemplate')}
                     onChangeData={(data) => {
-                      this.props.updateCurEditListItem({
+                      this.props.updateCurListItem({
                         portalTemplate: data,
                       });
                     }}
@@ -869,11 +869,11 @@ export default class View extends React.Component {
             className="o-form"
             options={this.$$baseFormOptions}
             initOption={{
-              defaultEditData: $$defaultData.toJS(),
+              defaultListItem: $$defaultData.toJS(),
             }}
             data={$$curData}
             onChangeData={(data) => {
-              this.props.updateCurEditListItem(data);
+              this.props.updateCurListItem(data);
             }}
             onSave={() => this.onSave('serverChoices')}
             invalidMsg={app.get('invalid')}
@@ -907,7 +907,7 @@ export default class View extends React.Component {
         modalChildren={this.renderCustomModal()}
         listOptions={this.listOptions}
         initOption={{
-          defaultEditData: $$defaultData.toJS(),
+          defaultListItem: $$defaultData.toJS(),
         }}
         deleteable={
           ($$item, index) => (index !== 0)

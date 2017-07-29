@@ -27,7 +27,7 @@ const propTypes = {
   }),
   updateScreenSettings: PropTypes.func,
   addPropertyPanel: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   onListAction: PropTypes.func,
@@ -112,7 +112,7 @@ export default class View extends React.PureComponent {
         curMapId: '',
       },
       {
-        name: this.props.store.get('curScreenId'),
+        name: this.curScreenId,
       },
     );
   }
@@ -149,7 +149,7 @@ export default class View extends React.PureComponent {
 
     ev.preventDefault();
 
-    this.props.updateCurEditListItem({
+    this.props.updateCurListItem({
       map: { ...gpsPoint },
       mapId: curMapId,
       ...gpsPoint,

@@ -58,7 +58,7 @@ const listOptions = fromJS([
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -91,7 +91,7 @@ export default class View extends React.Component {
   //       $$item => $$item.get('value') === interfaceBind,
   //     ).get('serverName');
 
-  //     this.props.updateCurEditListItem({
+  //     this.props.updateCurListItem({
   //       template_name: serverName,
   //     });
   //   }

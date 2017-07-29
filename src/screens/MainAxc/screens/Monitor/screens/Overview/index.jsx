@@ -402,7 +402,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   fetchScreenData: PropTypes.func,
   changeScreenQuery: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   createModal: PropTypes.func,
   onListAction: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
@@ -475,7 +475,7 @@ export default class GroupOverview extends React.Component {
     const isCounter = $$data.get('isCounter');
 
     if (isCounter === 0) {
-      this.props.updateCurEditListItem({
+      this.props.updateCurListItem({
         radioId: $$data.get('radioId'),
         ssidmac: $$data.get('mac'),
         ssidname: $$data.get('ssid'),
@@ -654,7 +654,7 @@ export default class GroupOverview extends React.Component {
             options={this.state.counterAps}
             onChange={
               (data) => {
-                this.props.updateCurEditListItem({
+                this.props.updateCurListItem({
                   apMac: data.value,
                 });
               }

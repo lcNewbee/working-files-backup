@@ -18,7 +18,7 @@ const propTypes = {
   route: PropTypes.object,
   changeScreenActionQuery: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};

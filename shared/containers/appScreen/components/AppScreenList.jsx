@@ -96,7 +96,7 @@ const propTypes = {
   addListItem: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   editFormOption: PropTypes.object,
   actionBarButtons: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
@@ -378,7 +378,7 @@ class AppScreenList extends React.PureComponent {
       }
 
       if (!$$curData.isEmpty()) {
-        this.props.updateCurEditListItem($$curData.toJS());
+        this.props.updateCurListItem($$curData.toJS());
         needMerge = true;
       }
       this.props.onListAction({ needMerge })
@@ -1021,7 +1021,7 @@ class AppScreenList extends React.PureComponent {
                 validateAt={app.get('validateAt')}
                 options={this.editFormOptions}
                 onSave={this.onSaveEditForm}
-                onChangeData={this.props.updateCurEditListItem}
+                onChangeData={this.props.updateCurListItem}
                 onValidError={this.props.reportValidError}
                 saveText={saveText}
                 savingText={savingText}

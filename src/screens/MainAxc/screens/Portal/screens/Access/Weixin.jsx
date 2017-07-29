@@ -132,7 +132,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
   editListItemByIndex: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
   reportValidError: PropTypes.func,
   validateAll: PropTypes.func,
   onListAction: PropTypes.func,
@@ -168,7 +168,7 @@ export default class View extends React.Component {
         {...this.props}
         noTitle
         initOption={{
-          defaultEditData: defaultData,
+          defaultListItem: defaultData,
         }}
         deleteable={
           ($$item, index) => (index !== 0)
@@ -188,7 +188,7 @@ export default class View extends React.Component {
           options={$$myFormOptions}
           data={$$formData}
           onChangeData={($$data) => {
-            this.props.updateCurEditListItem($$data);
+            this.props.updateCurListItem($$data);
           }}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}

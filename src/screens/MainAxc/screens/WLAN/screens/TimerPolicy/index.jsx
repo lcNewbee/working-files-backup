@@ -268,7 +268,7 @@ const propTypes = {
   groupname: PropTypes.oneOfType([
     PropTypes.number, PropTypes.string,
   ]),
-  updateCurEditListItem: PropTypes.func,
+  updateCurListItem: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -313,7 +313,7 @@ export default class View extends React.Component {
         subItem.objects_templateid = this.props.groupid;
       }
 
-      this.props.updateCurEditListItem(subItem);
+      this.props.updateCurListItem(subItem);
     }
   }
 
