@@ -85,7 +85,7 @@ class QuickSetup_Model extends CI_Model {
                 if(isset($row['type']) && $row['type'] === 'lan'){
                     $netarr = $this->getCgiParamsNet($row);
                     $netarr['natipaddr'] = $natipaddr;
-                    $netarr['ipaddr'] = $netarr['ipaddr'] . '/' . $this->getMaskLength($row['mask']);
+                    $netarr['ipaddr'] = substr($netarr['ipaddr'], 0, strripos($netarr['ipaddr'], '.')+1) . '0/' . $this->getMaskLength($row['mask']);
                     $netarr['ifname'] = $net_name;
                     $result = acnetmg_add_nat(json_encode($netarr));
                     $net_log = array(
@@ -122,7 +122,7 @@ class QuickSetup_Model extends CI_Model {
             'pool_route' => element('ip', $data, ''), //网关 要设置但不在这里设置
             'pool_domain' => '',//element('domain', $data, ''), 
             'pool_dns1' => element('mainDns', $data, '114.114.114.114'), //主DNS
-            'pool_dns2' => element('secondDns', $data, ''), //备用DNS
+            'pool_dns2' => '8.8.8.8',//element('secondDns', $data, '8.8.8.8'), //备用DNS
             'pool_opt43' => element('ip', $data, ''), //AC地址
             'pool_opt60' => element('opt60', $data, '')
         );

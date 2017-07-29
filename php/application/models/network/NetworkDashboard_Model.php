@@ -79,8 +79,10 @@ class NetworkDashboard_Model extends CI_Model {
         $dhcpary = $this->getAllDhcp();        
         foreach($arr as $row){            
             foreach($dhcpary['data'] as $nrow){
-                if($row['ip'] == $nrow['ippoolnet']){
-                    $row['users'] = $row['users'] + $nrow['ippooluse'];
+                if(isset($nrow['ippoolnet']) && isset($nrow['ippooluse'])){
+                    if($row['ip'] == $nrow['ippoolnet']){
+                        $row['users'] = $row['users'] + $nrow['ippooluse'];
+                    }
                 }
             }
             $result[] = $row;
@@ -169,8 +171,10 @@ class NetworkDashboard_Model extends CI_Model {
         if($ary['state']['code'] == 2000){
             $data = $ary['data']['list'];
             foreach ($ary['data']['list'] as $row) {
-                $dhcp_sum = $dhcp_sum + $row['ippoolall'];
-                $dhcp_use = $dhcp_use + $row['ippooluse'];
+                if(isset($row['ippoolall']) && isset($row['ippooluse'])){
+                    $dhcp_sum = $dhcp_sum + $row['ippoolall'];
+                    $dhcp_use = $dhcp_use + $row['ippooluse'];
+                }
             }            
         }
         return array('data' => $data, 'all' => $dhcp_sum, 'use' => $dhcp_use);
