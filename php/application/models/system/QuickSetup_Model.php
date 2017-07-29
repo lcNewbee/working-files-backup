@@ -30,7 +30,8 @@ class QuickSetup_Model extends CI_Model {
 	}
     function quick_setup($data){
         $result = null;
-        $gateway = '';
+        $natipaddr = '0.0.0.0';
+        $net_name = 'eth0';
         foreach($data as $row){
             if(isset($row['enable']) && $row['enable'] === '1'){
                 //1.设置接口
@@ -44,13 +45,14 @@ class QuickSetup_Model extends CI_Model {
                     'description' => json_encode($interface)
                 );
                 Log_Record($this->db, $interface_log);
-                //WAN 设置WAN口就是设置一个路由
+                //WAN 设置WAN口就是设置一个默认路由
                 if($row['type'] === 'wan') {
-                    $gateway = $row['gateway'];
+                    $net_name = $row['name'];
+                    $natipaddr = $row['ip'];
                     $route = array(
-                        'destnet' => element('ip', $row),
+                        'destnet' => '0.0.0.0',
                         'gateway' => element('gateway', $row),
-                        'mask'    => element('mask', $row), 
+                        'mask'    => '0.0.0.0', 
                     );
                     $result = acnetmg_add_route(json_encode($route));	
                     $route_log = array(
@@ -65,7 +67,7 @@ class QuickSetup_Model extends CI_Model {
                 //dhcp
                 if(isset($row['dhcpEnable'])  && $row['dhcpEnable'] === '1') {
                     $dhcp = $this->getCgiParamDhcp($row);
-                    $dhcp['pool_route'] = $gateway;
+                    //$dhcp['pool_route'] = $gateway;
                     $result = dhcpd_add_pool_name(json_encode($dhcp));
                     $dhcp_log = array(
                         'type' => 'Add', 
@@ -82,8 +84,9 @@ class QuickSetup_Model extends CI_Model {
                 }
                 if(isset($row['type']) && $row['type'] === 'lan'){
                     $netarr = $this->getCgiParamsNet($row);
-                    $netarr['natipaddr'] = $gateway;
-                    $netarr['ip'] = $netarr['ipaddr'] . '/' . $this->getMaskLength($row['mask']);
+                    $netarr['natipaddr'] = $natipaddr;
+                    $netarr['ipaddr'] = $netarr['ipaddr'] . '/' . $this->getMaskLength($row['mask']);
+                    $netarr['ifname'] = $net_name;
                     $result = acnetmg_add_nat(json_encode($netarr));
                     $net_log = array(
                         'type' => 'Add', 
@@ -116,7 +119,7 @@ class QuickSetup_Model extends CI_Model {
             'pool_ipaddr' => element('ip', $data, ''), //其实ip
             'pool_mask' => element('mask', $data, ''), //掩码
             'pool_lease' => element('releaseTime', $data, '7200'), //租约时间
-            'pool_route' => '', //网关 要设置但不在这里设置
+            'pool_route' => element('ip', $data, ''), //网关 要设置但不在这里设置
             'pool_domain' => '',//element('domain', $data, ''), 
             'pool_dns1' => element('mainDns', $data, '114.114.114.114'), //主DNS
             'pool_dns2' => element('secondDns', $data, ''), //备用DNS
