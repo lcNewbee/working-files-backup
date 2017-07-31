@@ -26,6 +26,9 @@
 #### 在浏览器中查看效果
     gulp
 
+#### 开发指导文档
+![](src/assets/images/logo.png)
+
 ## 原则
 在Comlanos前端平台设计与开发过程中我们尽量遵守以下原则
 
