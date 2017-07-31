@@ -1,3 +1,4 @@
+![](src/assets/images/logo.png)
 # 科蓝前端开发平台
 简单，跨平台，复用，持续优化的前端开发平台。
 
@@ -27,7 +28,7 @@
     gulp
 
 #### 开发指导文档
-![](src/assets/images/logo.png)
+
 
 ## 原则
 在Comlanos前端平台设计与开发过程中我们尽量遵守以下原则
