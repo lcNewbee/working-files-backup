@@ -16,19 +16,28 @@
 > 由于我们使用 gulp，接下来安装 gulp-cli
     npm install gulp-cli -g
 
+> 在开发目录文件夹下安装依赖
+    npm install
+
 #### Yarn
+> 安装 Yarn
+    npm install yarn -g
+
 > 在国内推荐使用 npm 淘宝镜像
-    yarn config set registry https://registry.npm.taobao.org 
-    yarn install 
+    yarn config set registry  https://registry.npm.taobao.org 
 
 > 由于我们使用 gulp，接下来安装 gulp-cli 
-    yarn install gulp-cli -g
+    yarn global add gulp-cli
+
+> 在开发目录文件夹下安装依赖
+    yarn
 
 #### 在浏览器中查看效果
+打开命令行，跳转到代码文件夹，运行gulp
     gulp
 
 #### 开发指导文档
-
+[页面开发指导](docs/react/getting-stared.md)
 
 ## 原则
 在Comlanos前端平台设计与开发过程中我们尽量遵守以下原则
