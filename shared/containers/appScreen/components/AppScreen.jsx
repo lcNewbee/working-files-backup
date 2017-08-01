@@ -50,6 +50,7 @@ const propTypes = {
     PropTypes.instanceOf(List),
     PropTypes.array,
   ]),
+  listId: PropTypes.string,
   groupid: PropTypes.any,
 
   // Settings 相关属性
@@ -289,7 +290,7 @@ export default class AppScreen extends React.Component {
     } = this;
     const {
       store, title, noTitle, route, listOptions, customSettingForm, className,
-      settingsFormOptions,
+      settingsFormOptions, listId,
       actionable,
     } = this.props;
     const myScreenId = store.get('curScreenId');
@@ -333,6 +334,7 @@ export default class AppScreen extends React.Component {
               tableOptions={tableOptions}
               editFormOptions={editFormOptions}
               defaultListItem={defaultListItem}
+              id={listId}
               store={$$myScreenStore}
               fetchUrl={fetchUrl}
               saveUrl={saveUrl}

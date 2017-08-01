@@ -1,4 +1,4 @@
-import { immutableUtils } from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import { actions as appActions } from '../app';
 import ACTION_TYPES from './actionTypes';
 
@@ -170,40 +170,34 @@ export function updateListItemByIndex(index, data) {
     },
   };
 }
-export function editListItemByIndex(index, action) {
+export function activeListItemByIndex(payload, meta) {
   return {
     type: ACTION_TYPES.ACTIVE_LIST_ITEM,
-    payload: {
-      keyName: 'index',
-      val: index,
-    },
-    meta: {
-      action,
-    },
+    payload: utils.extend({}, payload, {
+      keyName: '__index__',
+    }),
+    meta,
   };
 }
-export function activeListItem(keyName, val, action) {
+export function activeListItemByKeyValue(payload, meta) {
   return {
     type: ACTION_TYPES.ACTIVE_LIST_ITEM,
-    payload: {
-      keyName,
-      val,
-    },
-    meta: {
-      action,
-    },
+    payload,
+    meta,
   };
 }
-export function addListItem(defaultItem) {
+export function addListItem(defaultItem, listKeyMap) {
   return {
     type: ACTION_TYPES.ADD_LIST_ITEM,
     payload: defaultItem,
+    meta: listKeyMap,
   };
 }
-export function selectListItem(payload) {
+export function selectListItem(payload, meta) {
   return {
     type: ACTION_TYPES.SELECT_LIST_ITEM,
     payload,
+    meta,
   };
 }
 export function closeListItemModal() {
@@ -220,33 +214,21 @@ export function onListAction(option) {
     const ajaxMode = globalState.screens.getIn([name, 'ajaxMode']);
     const saveUrl = globalState.screens.getIn([name, 'saveUrl']) || formUrl;
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
-    const actionQuery = globalState.screens.getIn([name, 'actionQuery']);
-    const actionType = actionQuery.get('action');
+    let $$actionQuery = globalState.screens.getIn([name, 'actionQuery']);
+    const actionType = $$actionQuery.get('action');
     const needMerge = option && option.needMerge;
     const ajaxOption = {
       mode: ajaxMode,
     };
     let myUrl = saveUrl;
-    let subData = actionQuery.toJS();
-    let originalData = globalState.screens.getIn([name, 'data', 'list', actionQuery.get('index')]);
+    let subData = null;
+    let originalData = globalState.screens.getIn([name, 'data', 'list', $$actionQuery.get('index')]);
 
     if (originalData && originalData.get) {
       originalData = originalData.toJS();
     }
 
     window.clearTimeout(refreshTimeout);
-
-    // 需要把修改后数据合并到post参数里
-    if (actionType === 'add') {
-      subData = actionQuery.merge(editMap).toJS();
-      delete subData.selectedList;
-    } else if (actionType === 'edit') {
-      subData = actionQuery.merge(editMap).merge({
-        originalData,
-      }).toJS();
-    } else if (needMerge) {
-      subData = actionQuery.merge(editMap).toJS();
-    }
 
     // 处理自定义配置
     if (option) {
@@ -259,6 +241,25 @@ export function onListAction(option) {
       if (option.url) {
         myUrl = option.url;
       }
+
+      // 处理自定义数据
+      if (option.customData) {
+        $$actionQuery = $$actionQuery.merge(option.customData);
+      }
+    }
+
+    // 需要把修改后数据合并到post参数里
+    if (actionType === 'add') {
+      subData = $$actionQuery.merge(editMap).toJS();
+      delete subData.selectedList;
+    } else if (actionType === 'edit') {
+      subData = $$actionQuery.merge(editMap).merge({
+        originalData,
+      }).toJS();
+    } else if (needMerge) {
+      subData = $$actionQuery.merge(editMap).toJS();
+    } else {
+      subData = $$actionQuery.toJS();
     }
 
     // 删除不需要传到后台的属性属性

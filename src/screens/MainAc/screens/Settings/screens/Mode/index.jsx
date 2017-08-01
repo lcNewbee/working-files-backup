@@ -106,8 +106,8 @@ const propTypes = {
   updateCurListItem: PropTypes.func.isRequired,
   validateAll: PropTypes.func.isRequired,
   onListAction: PropTypes.func.isRequired,
-  editListItemByIndex: PropTypes.func.isRequired,
-  activeListItem: PropTypes.func.isRequired,
+  activeListItemByIndex: PropTypes.func.isRequired,
+  activeListItemByKeyValue: PropTypes.func.isRequired,
   reportValidError: PropTypes.func.isRequired,
 };
 
@@ -131,7 +131,10 @@ export default class ModeSettings extends React.Component {
       );
 
       if (!nextProps.store.getIn([this.screenId, 'curListItem', 'groupname'])) {
-        this.props.editListItemByIndex(0, 'edit');
+        this.props.activeListItemByIndex({
+          val: 0,
+          action: 'edit',
+        });
       }
     }
   }
@@ -149,10 +152,12 @@ export default class ModeSettings extends React.Component {
 
   onChangeCurItem(data) {
     if (data.groupname) {
-      this.props.activeListItem(
-        'groupname',
-        data.groupname,
-        'edit',
+      this.props.activeListItemByKeyValue(
+        {
+          keyName: 'groupname',
+          val: data.groupname,
+          action: 'edit',
+        },
       );
     } else {
       this.props.updateCurListItem(data);

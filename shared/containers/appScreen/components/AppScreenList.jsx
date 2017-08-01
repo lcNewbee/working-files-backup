@@ -23,12 +23,16 @@ function getDataListKeys(id) {
   let ret = {
     pageDataKey: 'page',
     listDataKey: 'list',
+    selectedListKey: 'selectedList',
+    id: '',
   };
 
   if (id) {
     ret = {
       pageDataKey: `${id}Page`,
       listDataKey: `${id}List`,
+      selectedListKey: `selected${utils.toCamel(id)}List`,
+      id,
     };
   }
 
@@ -114,7 +118,7 @@ const propTypes = {
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
   addListItem: PropTypes.func,
-  editListItemByIndex: PropTypes.func,
+  activeListItemByIndex: PropTypes.func,
   closeListItemModal: PropTypes.func,
   updateCurListItem: PropTypes.func,
   editFormOption: PropTypes.object,
@@ -173,7 +177,9 @@ class AppScreenList extends React.PureComponent {
       'onSelectedItemsAction',
       'initModalFormOptions',
     ]);
-    this.state = getDataListKeys(props.id);
+    this.state = {
+      listKeyMap: getDataListKeys(props.id),
+    };
   }
   componentWillMount() {
     this.initListTableOptions(this.props, this.props.editable);
@@ -189,7 +195,9 @@ class AppScreenList extends React.PureComponent {
       this.initModalFormOptions(nextProps);
     }
     if (this.props.id !== nextProps.id) {
-      this.setState(getDataListKeys(nextProps.id));
+      this.setState({
+        listKeyMap: getDataListKeys(nextProps.id),
+      });
     }
   }
 
@@ -245,11 +253,11 @@ class AppScreenList extends React.PureComponent {
 
     if (utils.isPromise(onBeforeSyncResult)) {
       onBeforeSyncResult.then(
-          (msg) => {
-            retOption.msg = msg;
-            callback(retOption);
-          },
-        );
+        (msg) => {
+          retOption.msg = msg;
+          callback(retOption);
+        },
+      );
     } else {
       if (onBeforeSyncResult) {
         retOption.msg = onBeforeSyncResult;
@@ -274,11 +282,11 @@ class AppScreenList extends React.PureComponent {
 
     if (utils.isPromise(onBeforeSaveResult)) {
       onBeforeSaveResult.then(
-          (msg) => {
-            saveOption.msg = msg;
-            this.doSaveEditForm(saveOption);
-          },
-        );
+        (msg) => {
+          saveOption.msg = msg;
+          this.doSaveEditForm(saveOption);
+        },
+      );
     } else {
       if (onBeforeSaveResult) {
         saveOption.msg = onBeforeSaveResult;
@@ -317,7 +325,11 @@ class AppScreenList extends React.PureComponent {
           action: 'delete',
           selectedList,
         });
-        this.props.onListAction()
+        this.props.onListAction({
+          customData: {
+            listId: this.props.id,
+          },
+        })
           .then(
             (json) => {
               this.props.onAfterSync(json);
@@ -342,19 +354,25 @@ class AppScreenList extends React.PureComponent {
   onSelectedItemsAction(option) {
     const needConfirm = option.needConfirm;
     const store = this.props.store;
+    const { selectedListKey } = this.state.listKeyMap;
     const $$list = store.getIn(['data', 'list']);
     const $$actionQuery = store.getIn(['actionQuery']);
     const listKey = option.actionKey || this.props.listKey;
     let actionName = option.actionName;
     let selectNumber = 0;
     let msgText = '';
-    let $$selectedList = $$actionQuery.get('selectedList');
+    let $$selectedList = $$actionQuery.get(selectedListKey);
+
     const doSelectedItemsAction = () => {
       this.props.changeScreenActionQuery({
         action: actionName,
-        selectedList: $$selectedList,
+        [selectedListKey]: $$selectedList,
       });
-      this.props.onListAction()
+      this.props.onListAction({
+        customData: {
+          listId: this.props.id,
+        },
+      })
         .then(
           (json) => {
             this.props.onAfterSync(json);
@@ -407,7 +425,12 @@ class AppScreenList extends React.PureComponent {
         this.props.updateCurListItem($$curData.toJS());
         needMerge = true;
       }
-      this.props.onListAction({ needMerge })
+      this.props.onListAction({
+        needMerge,
+        customData: {
+          listId: this.props.id,
+        },
+      })
         .then(
           (json) => {
             this.props.onAfterSync(json);
@@ -516,7 +539,11 @@ class AppScreenList extends React.PureComponent {
         });
     // 无文件提交
     } else {
-      this.props.onListAction()
+      this.props.onListAction({
+        customData: {
+          listId: this.props.id,
+        },
+      })
         .then(
           (json) => {
             this.props.onAfterSync(json);
@@ -628,7 +655,12 @@ class AppScreenList extends React.PureComponent {
                       text={__('Edit')}
                       size="sm"
                       onClick={() => {
-                        this.props.editListItemByIndex(index);
+                        this.props.activeListItemByIndex(
+                          {
+                            val: index,
+                          },
+                          this.state.listKeyMap,
+                        );
                       }}
                     />
                   ) : null
@@ -821,7 +853,7 @@ class AppScreenList extends React.PureComponent {
     const leftChildrenNode = [];
     const totalListItem = store.getIn(['data', 'page', 'total']) || $$curList.size;
     const rightChildrenNode = null;
-    const $$selectedList = store.getIn(['actionQuery', 'selectedList']);
+    const $$selectedList = store.getIn(['actionQuery', this.state.listKeyMap.selectedListKey]);
     const selectNumber = $$selectedList ? $$selectedList.size : 0;
     let deleteconfirmText = __('Please select %s rows', __('delete'));
     let confirmType = 'message';
@@ -844,7 +876,10 @@ class AppScreenList extends React.PureComponent {
               theme="primary"
               text={__('Add')}
               onClick={() => {
-                this.props.addListItem(this.props.defaultListItem);
+                this.props.addListItem(
+                  this.props.defaultListItem,
+                  this.state.listKeyMap,
+                );
               }}
             />
           ) : (
@@ -1074,7 +1109,7 @@ class AppScreenList extends React.PureComponent {
     const {
       store, listTitle, selectable, customTable, paginationType, id,
     } = this.props;
-    const { pageDataKey, listDataKey } = this.state;
+    const { pageDataKey, listDataKey } = this.state.listKeyMap;
     const query = store.getIn(['query']);
     const page = store.getIn(['data', pageDataKey]);
     const list = store.getIn(['data', listDataKey]);
@@ -1112,7 +1147,9 @@ class AppScreenList extends React.PureComponent {
               // 用于 相应 列表中单元素的操作事件,显示数据交互过程
               loading={this.props.loading === false && store.get('fetching')}
               selectable={selectable}
-              onRowSelect={this.props.selectListItem}
+              onRowSelect={(data) => {
+                this.props.selectListItem(data, this.state.listKeyMap);
+              }}
             />
           ) : null
         }

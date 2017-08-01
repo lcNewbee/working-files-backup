@@ -131,7 +131,7 @@ const defaultData = utils.immutableUtils.getDefaultData(listOptions);
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
-  editListItemByIndex: PropTypes.func,
+  activeListItemByIndex: PropTypes.func,
   updateCurListItem: PropTypes.func,
   reportValidError: PropTypes.func,
   validateAll: PropTypes.func,
@@ -150,7 +150,9 @@ export default class View extends React.Component {
     const prevData = prevProps.store.getIn([curScreenId, 'data']);
 
     if (thisData !== prevData) {
-      this.props.editListItemByIndex(0);
+      this.props.activeListItemByIndex({
+        val: 0,
+      });
     }
   }
   render() {

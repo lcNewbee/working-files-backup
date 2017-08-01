@@ -103,7 +103,7 @@ const propTypes = {
   updateCurListItem: PropTypes.func,
   updateScreenCustomProps: PropTypes.func,
   validateAll: PropTypes.func,
-  editListItemByIndex: PropTypes.func,
+  activeListItemByIndex: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
   onListAction: PropTypes.func,
   reportValidError: PropTypes.func,
@@ -167,7 +167,9 @@ export default class LiveMap extends React.PureComponent {
               text={__('Edit')}
               size="sm"
               onClick={() => {
-                this.props.editListItemByIndex($$option.get('__index__'));
+                this.props.activeListItemByIndex({
+                  val: $$option.get('__index__'),
+                });
               }}
             />
             <Button
@@ -490,7 +492,9 @@ export default class LiveMap extends React.PureComponent {
           this.resetCurMarker();
           this.markerIndex = index;
 
-          this.props.editListItemByIndex(index);
+          this.props.activeListItemByIndex({
+            val: index,
+          });
 
           // @@product(axcMonitor): AXC监控模式下不可修改 地址
           if (!isMoniterAc) {
@@ -719,7 +723,9 @@ export default class LiveMap extends React.PureComponent {
         editButtonElem.addEventListener('click', () => {
           this.resetCurMarker();
           this.markerIndex = index;
-          this.props.editListItemByIndex(index);
+          this.props.activeListItemByIndex({
+            val: index,
+          });
           marker.setDraggable(true);
         });
         viewButtonElem.addEventListener('click', () => {

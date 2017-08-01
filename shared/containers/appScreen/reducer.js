@@ -23,6 +23,13 @@ const defaultItem = fromJS({
   //
   curList: [],
 
+  curListKeys: {
+    pageDataKey: 'page',
+    listDataKey: 'list',
+    selectedListKey: 'selectedList',
+    id: '',
+  },
+
   // 页面全局配置
   curSettings: {},
   defaultSettings: {},
@@ -82,6 +89,33 @@ function initScreenState($$state, action) {
 }
 
 /**
+ * 向列表中添加项
+ *
+ * @param {any} $$state
+ * @param {any} action
+ */
+function addListItem($$state, curScreenName, action) {
+  const defaultListItem = $$state.getIn([curScreenName, 'defaultListItem']) || fromJS({});
+  const meta = action.meta;
+  let $$ret = $$state;
+
+  $$ret = $$ret.setIn(
+    [curScreenName, 'curListItem'],
+    fromJS({}).merge(action.payload || defaultListItem),
+  )
+    .mergeIn([curScreenName, 'actionQuery'], {
+      action: 'add',
+      myTitle: __('Add'),
+    });
+
+  if (meta) {
+    $$ret = $$ret.mergeIn([curScreenName, 'curListKeys'], meta);
+  }
+
+  return $$ret;
+}
+
+/**
  * Change the selected list data, save the selected
  *
  * @param {immutable} state
@@ -91,76 +125,121 @@ function initScreenState($$state, action) {
  */
 function selectedListItem(state, action, curScreenName) {
   const data = action.payload;
-  let list = state.getIn([curScreenName, 'data', 'list']);
-  let selectedList = state.getIn([curScreenName, 'actionQuery', 'selectedList']) || fromJS([]);
+  const meta = action.meta;
+  const listDataKey = meta.listDataKey || 'list';
+  const selectedListKey = meta.selectedListKey;
+  let list = state.getIn([curScreenName, 'data', listDataKey]);
+  let $$selectedList = state.getIn([curScreenName, 'actionQuery', selectedListKey]) || fromJS([]);
+  let $$ret = state;
 
   if (data.index !== -1) {
     list = list.setIn([data.index, '__selected__'], data.selected);
     if (data.selected) {
-      selectedList = selectedList.push(data.index);
+      $$selectedList = $$selectedList.push(data.index);
     } else {
-      selectedList = selectedList.delete(data.index);
+      $$selectedList = $$selectedList.delete(
+        $$selectedList.indexOf(data.index),
+      );
     }
   } else {
-    selectedList = fromJS([]);
+    $$selectedList = fromJS([]);
 
     if (data.selected) {
       list = list.map((item, index) => {
-        let $$ret = item;
+        let $$retItem = item;
 
         if (data.unselectableList.indexOf(index) === -1) {
-          selectedList = selectedList.push(index);
-          $$ret = $$ret.set('__selected__', true);
+          $$selectedList = $$selectedList.push(index);
+          $$retItem = $$retItem.set('__selected__', true);
         }
-        return $$ret;
+        return $$retItem;
       });
     } else {
       list = list.map(item => item.set('__selected__', false));
     }
   }
 
-  return state.setIn([curScreenName, 'data', 'list'], list)
-    .setIn([curScreenName, 'actionQuery', 'selectedList'], selectedList);
+  $$ret = $$ret.setIn([curScreenName, 'data', listDataKey], list)
+    .setIn([curScreenName, 'actionQuery', selectedListKey], $$selectedList);
+
+  if (meta) {
+    $$ret = $$ret.mergeIn([curScreenName, 'curListKeys'], meta);
+  }
+
+  return $$ret;
 }
 
 function updateCurListItem(curScreenName, state, action) {
   const curIndex = state.getIn([curScreenName, 'actionQuery', 'index']);
+  const curListDataKey = state.getIn([curScreenName, 'curListKeys', 'listDataKey']);
   let ret = state.mergeDeepIn([curScreenName, 'curListItem'], action.payload);
 
   if (action.meta.sync) {
-    ret = ret.mergeDeepIn([curScreenName, 'data', 'list', curIndex], action.payload);
+    ret = ret.mergeDeepIn([curScreenName, 'data', curListDataKey, curIndex], action.payload);
   }
 
   return ret;
 }
 
+/**
+ * 激活对列表某项额操作
+ *
+ * @param {any} state
+ * @param {any} curScreenName
+ * @param {any} action
+ * @returns
+ */
 function activeListItem(state, curScreenName, action) {
-  const curList = state.getIn([curScreenName, 'data', 'list']);
   const defaultListItem = state.getIn([curScreenName, 'defaultListItem']) || fromJS({});
+  const meta = action.meta;
+  let $$ret = state;
   let listItemIndex = 0;
   let myItem = fromJS({});
+  let $$curList = null;
 
-  if (action.payload.keyName === 'index') {
+  if (meta) {
+    $$ret = $$ret.mergeIn([curScreenName, 'curListKeys'], meta);
+  }
+
+  $$curList = $$ret.getIn(
+    [
+      curScreenName,
+      'data',
+      $$ret.getIn([curScreenName, 'curListKeys', 'listDataKey']),
+    ],
+  );
+
+  if (action.payload.keyName === '__index__') {
     listItemIndex = action.payload.val;
   } else {
-    listItemIndex = curList.findIndex(
+    listItemIndex = $$curList.findIndex(
       item => item.get(action.payload.keyName) === action.payload.val,
     );
   }
 
-  myItem = curList.get(listItemIndex);
+  myItem = $$curList.get(listItemIndex);
 
-  return state.setIn(
+  $$ret = $$ret.setIn(
     [curScreenName, 'curListItem'],
     defaultListItem.merge(myItem),
   )
     .mergeIn([curScreenName, 'actionQuery'], {
-      action: action.meta.action || 'edit',
+      action: action.payload.action || 'edit',
       myTitle: `${__('Edit')}: ${action.payload.val}`,
       index: listItemIndex,
     });
+
+  return $$ret;
 }
 
+/**
+ * 接收数据
+ *
+ * @param {any} $$state
+ * @param {any} curScreenName
+ * @param {any} action
+ * @returns
+ */
 function receiveScreenData($$state, curScreenName, action) {
   let $$ret = $$state;
   let $$selectedList = $$state.getIn([curScreenName, 'actionQuery', 'selectedList']);
@@ -180,6 +259,13 @@ function receiveScreenData($$state, curScreenName, action) {
     .setIn([curScreenName, 'actionQuery', 'selectedList'], $$selectedList);
 }
 
+/**
+ * 添加 app Screen
+ *
+ * @param {any} state
+ * @param {any} action
+ * @returns
+ */
 function addScreen(state, action) {
   let $$ret = state;
   const curScreenId = action.payload && action.payload.id;
@@ -202,9 +288,10 @@ function addScreen(state, action) {
   }
   return $$ret.set('curScreenId', curScreenId);
 }
+
+
 export default function (state = defaultState, action) {
   const curScreenName = (action.meta && action.meta.name) || state.get('curScreenId');
-  const defaultListItem = state.getIn([curScreenName, 'defaultListItem']) || fromJS({});
 
   switch (action.type) {
     // Screen 全局 action
@@ -220,8 +307,9 @@ export default function (state = defaultState, action) {
         search: '',
       })
         .setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'))
-        .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]))
-        .setIn([curScreenName, 'actionQuery', 'action'], '');
+        .setIn([curScreenName, 'actionQuery'], fromJS({
+          action: '',
+        }));
 
     case ACTION_TYPES.CHANGE_SAVE_STATUS:
       return state.setIn([curScreenName, 'saving'], action.payload);
@@ -235,41 +323,36 @@ export default function (state = defaultState, action) {
     case ACTION_TYPES.RECEIVE_DATA:
       return receiveScreenData(state, curScreenName, action);
 
-      // Screen Setting相关
-    case ACTION_TYPES.UPDATE_SETTINGS:
-      return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
-
-      // Screen 列表操作
+    // appScreen 操作
     case ACTION_TYPES.CHANGE_QUERY:
       return state.mergeIn([curScreenName, 'query'], action.payload);
 
     case ACTION_TYPES.CHANGE_ACTION_QUERY:
       return state.mergeIn([curScreenName, 'actionQuery'], action.payload);
 
+      // Screen Setting相关
+    case ACTION_TYPES.UPDATE_SETTINGS:
+      return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
+
+    // 对列表中某项的操作
     case ACTION_TYPES.ADD_LIST_ITEM:
-      return state.setIn(
-        [curScreenName, 'curListItem'],
-        fromJS({}).merge(action.payload || defaultListItem),
-      )
-        .mergeIn([curScreenName, 'actionQuery'], {
-          action: 'add',
-          myTitle: __('Add'),
-        });
+      return addListItem(state, curScreenName, action);
 
     case ACTION_TYPES.ACTIVE_LIST_ITEM:
       return activeListItem(state, curScreenName, action);
-
-    case ACTION_TYPES.SELECT_LIST_ITEM:
-      return selectedListItem(state, action, curScreenName);
-
-    case ACTION_TYPES.UPDATE_CUR_EDIT_LIST_ITEM:
-      return updateCurListItem(curScreenName, state, action);
 
     case ACTION_TYPES.UPDATE_LIST_ITEM_BY_INDEX:
       return state.mergeDeepIn(
         [curScreenName, 'data', 'list', action.meta.index],
         action.payload,
       );
+
+    case ACTION_TYPES.SELECT_LIST_ITEM:
+      return selectedListItem(state, action, curScreenName);
+
+    // 更新列表正在操作的项
+    case ACTION_TYPES.UPDATE_CUR_EDIT_LIST_ITEM:
+      return updateCurListItem(curScreenName, state, action);
 
     case ACTION_TYPES.CLOSE_LIST_ITEM_MODAL:
       return state.setIn([curScreenName, 'actionQuery', 'action'], '');

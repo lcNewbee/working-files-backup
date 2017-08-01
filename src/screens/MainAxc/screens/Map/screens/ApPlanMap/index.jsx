@@ -29,7 +29,7 @@ const propTypes = {
   addPropertyPanel: PropTypes.func,
   updateCurListItem: PropTypes.func,
   validateAll: PropTypes.func,
-  editListItemByIndex: PropTypes.func,
+  activeListItemByIndex: PropTypes.func,
   onListAction: PropTypes.func,
   updateListItemByIndex: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
@@ -208,7 +208,10 @@ export default class View extends React.PureComponent {
   }
   startDrag(ev, i) {
     ev.dataTransfer.setData('Text', ev.target.id);
-    this.props.editListItemByIndex(i, 'move');
+    this.props.activeListItemByIndex({
+      val: i,
+      action: 'move',
+    });
   }
   savePlaceDevice(type) {
     this.props.changeScreenActionQuery({
