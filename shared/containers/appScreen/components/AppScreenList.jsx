@@ -19,17 +19,37 @@ const sizeOptions = [
   { value: 100, label: '100' },
 ];
 
+function getDataListKeys(id) {
+  let ret = {
+    pageDataKey: 'page',
+    listDataKey: 'list',
+  };
+
+  if (id) {
+    ret = {
+      pageDataKey: `${id}Page`,
+      listDataKey: `${id}List`,
+    };
+  }
+
+  return ret;
+}
+
 const propTypes = {
   // 组件通用选项
   fetchUrl: PropTypes.string,
   saveUrl: PropTypes.string,
   listTitle: PropTypes.string,
 
+  // 用于配置，用于获取列表显示数据
+  id: PropTypes.string,
+
   // AppScreen 组件的加载状态
   loading: PropTypes.bool,
 
   // 用于配置 list表格主键，用于Ajax保存
   listKey: PropTypes.string,
+  defaultListItem: PropTypes.object,
   maxListSize: PropTypes.oneOfType([
     PropTypes.string, PropTypes.number,
   ]),
@@ -110,6 +130,7 @@ const propTypes = {
   actionBarChildren: PropTypes.node,
   modalChildren: PropTypes.node,
 };
+
 const defaultProps = {
   actionable: false,
   listKey: 'allKeys',
@@ -118,6 +139,7 @@ const defaultProps = {
   editable: true,
   deleteable: true,
   onAfterSync: utils.emptyFunc,
+  defaultListItem: {},
   createModal: (option) => {
     if (option && option.text) {
       /* eslint-disable no-alert */
@@ -151,6 +173,7 @@ class AppScreenList extends React.PureComponent {
       'onSelectedItemsAction',
       'initModalFormOptions',
     ]);
+    this.state = getDataListKeys(props.id);
   }
   componentWillMount() {
     this.initListTableOptions(this.props, this.props.editable);
@@ -164,6 +187,9 @@ class AppScreenList extends React.PureComponent {
         this.props.editFormOption !== nextProps.editFormOption ||
         this.props.store.getIn(['actionQuery', 'action']) !== nextProps.store.getIn(['actionQuery', 'action'])) {
       this.initModalFormOptions(nextProps);
+    }
+    if (this.props.id !== nextProps.id) {
+      this.setState(getDataListKeys(nextProps.id));
     }
   }
 
@@ -451,13 +477,13 @@ class AppScreenList extends React.PureComponent {
     // 异步处理，如果是 Promise 对象
     if (utils.isPromise(onBeforeActionResult)) {
       onBeforeActionResult.then(
-          msg => this.onItemAction($$actionQuery, {
-            cancelMsg: msg,
-            confirmText,
-            needConfirm,
-            $$curData,
-          }),
-        );
+        msg => this.onItemAction($$actionQuery, {
+          cancelMsg: msg,
+          confirmText,
+          needConfirm,
+          $$curData,
+        }),
+      );
 
     // 同步处理
     } else {
@@ -811,23 +837,30 @@ class AppScreenList extends React.PureComponent {
       // 初始化添加按钮
       if (addable) {
         leftChildrenNode.push(
-          <Button
-            icon="plus"
-            key="addBtn"
-            theme="primary"
-            text={__('Add')}
-            onClick={() => {
-              if (totalListItem < parseInt(maxListSize, 10)) {
-                this.props.addListItem();
-              } else {
-                this.props.createModal({
-                  id: 'addListItem',
-                  role: 'alert',
-                  text: __('Max list size is %s', maxListSize),
-                });
-              }
-            }}
-          />,
+          totalListItem < parseInt(maxListSize, 10) ? (
+            <Button
+              icon="plus"
+              key="addBtn"
+              theme="primary"
+              text={__('Add')}
+              onClick={() => {
+                this.props.addListItem(this.props.defaultListItem);
+              }}
+            />
+          ) : (
+            <Popconfirm
+              title={__('Max list size is %s', maxListSize)}
+              key="addItem"
+              type="message"
+            >
+              <Button
+                icon="plus"
+                key="addBtn"
+                theme="primary"
+                text={__('Add')}
+              />
+            </Popconfirm>
+          ),
         );
       }
       // 只有在列表是可选择情况下，添加多行操作按钮
@@ -1039,12 +1072,17 @@ class AppScreenList extends React.PureComponent {
 
   render() {
     const {
-      store, listTitle, selectable, customTable, paginationType,
+      store, listTitle, selectable, customTable, paginationType, id,
     } = this.props;
-    const page = store.getIn(['data', 'page']);
-    const list = store.getIn(['data', 'list']);
+    const { pageDataKey, listDataKey } = this.state;
     const query = store.getIn(['query']);
-    const currPagination = paginationType !== 'default' ? null : page;
+    const page = store.getIn(['data', pageDataKey]);
+    const list = store.getIn(['data', listDataKey]);
+    let currPagination = null;
+
+    if (paginationType === 'default') {
+      currPagination = page;
+    }
 
     return (
       <div className="t-list-info">

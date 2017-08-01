@@ -1,4 +1,6 @@
-import { fromJS } from 'immutable';
+import {
+  fromJS,
+} from 'immutable';
 import ACTION_TYPES from './actionTypes';
 
 const defaultItem = fromJS({
@@ -55,7 +57,7 @@ function initScreenState($$state, action) {
   if (!$$myScreenState) {
     $$myScreenState = defaultItem.mergeDeep(action.payload);
 
-  // 更新
+    // 更新
   } else {
     $$myScreenState = $$myScreenState.mergeDeep(action.payload);
   }
@@ -118,7 +120,7 @@ function selectedListItem(state, action, curScreenName) {
   }
 
   return state.setIn([curScreenName, 'data', 'list'], list)
-      .setIn([curScreenName, 'actionQuery', 'selectedList'], selectedList);
+    .setIn([curScreenName, 'actionQuery', 'selectedList'], selectedList);
 }
 
 function updateCurListItem(curScreenName, state, action) {
@@ -149,9 +151,9 @@ function activeListItem(state, curScreenName, action) {
   myItem = curList.get(listItemIndex);
 
   return state.setIn(
-      [curScreenName, 'curListItem'],
-      defaultListItem.merge(myItem),
-    )
+    [curScreenName, 'curListItem'],
+    defaultListItem.merge(myItem),
+  )
     .mergeIn([curScreenName, 'actionQuery'], {
       action: action.meta.action || 'edit',
       myTitle: `${__('Edit')}: ${action.payload.val}`,
@@ -177,6 +179,7 @@ function receiveScreenData($$state, curScreenName, action) {
     .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt)
     .setIn([curScreenName, 'actionQuery', 'selectedList'], $$selectedList);
 }
+
 function addScreen(state, action) {
   let $$ret = state;
   const curScreenId = action.payload && action.payload.id;
@@ -204,7 +207,6 @@ export default function (state = defaultState, action) {
   const defaultListItem = state.getIn([curScreenName, 'defaultListItem']) || fromJS({});
 
   switch (action.type) {
-
     // Screen 全局 action
     case ACTION_TYPES.ADD:
       return addScreen(state, action);
@@ -217,9 +219,9 @@ export default function (state = defaultState, action) {
       return state.mergeIn([curScreenName, 'query'], {
         search: '',
       })
-      .setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'))
-      .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]))
-      .setIn([curScreenName, 'actionQuery', 'action'], '');
+        .setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'))
+        .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]))
+        .setIn([curScreenName, 'actionQuery', 'action'], '');
 
     case ACTION_TYPES.CHANGE_SAVE_STATUS:
       return state.setIn([curScreenName, 'saving'], action.payload);
@@ -233,11 +235,11 @@ export default function (state = defaultState, action) {
     case ACTION_TYPES.RECEIVE_DATA:
       return receiveScreenData(state, curScreenName, action);
 
-    // Screen Setting相关
+      // Screen Setting相关
     case ACTION_TYPES.UPDATE_SETTINGS:
       return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
 
-    // Screen 列表操作
+      // Screen 列表操作
     case ACTION_TYPES.CHANGE_QUERY:
       return state.mergeIn([curScreenName, 'query'], action.payload);
 
@@ -249,10 +251,10 @@ export default function (state = defaultState, action) {
         [curScreenName, 'curListItem'],
         fromJS({}).merge(action.payload || defaultListItem),
       )
-      .mergeIn([curScreenName, 'actionQuery'], {
-        action: 'add',
-        myTitle: __('Add'),
-      });
+        .mergeIn([curScreenName, 'actionQuery'], {
+          action: 'add',
+          myTitle: __('Add'),
+        });
 
     case ACTION_TYPES.ACTIVE_LIST_ITEM:
       return activeListItem(state, curScreenName, action);
@@ -273,7 +275,6 @@ export default function (state = defaultState, action) {
       return state.setIn([curScreenName, 'actionQuery', 'action'], '');
 
     default:
-
   }
   return state;
 }

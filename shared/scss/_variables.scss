@@ -90,7 +90,6 @@ $g-icon-size-small:         ceil(($g-icon-size * 0.29)) !default;
 //  4. Body
 //
 // Settings for the `<body>` element.
-
 $g-body-bg:       #f2f2f2 !default;
 $g-body-color:      $g-gray-dark !default;
 $g-inverse-bg:      $g-gray-dark !default;
@@ -104,7 +103,6 @@ $g-text-btn:                #FFF !default;
 //  5. Links
 //
 // Settings anchor element.
-
 $g-link-color:              $g-brand-primary !default;
 $g-link-hover-color:        darken($g-link-color, 15%) !default;
 $g-link-hover-decoration:   underline !default;

@@ -37,7 +37,7 @@
     gulp
 
 #### 开发指导文档
-[页面开发指导](docs/react/getting-stared.md)
+![页面开发指导](docs/react/getting-started.md)
 
 ## 原则
 在Comlanos前端平台设计与开发过程中我们尽量遵守以下原则
