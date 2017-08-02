@@ -188,6 +188,10 @@ class FormContainer extends PureComponent {
     delete myProps.legend;
     delete myProps.fieldsetOption;
 
+    // if (typeof myProps.noForm === 'function') {
+    //   myProps.noForm = myProps.noForm(myProps.value, $$data);
+    // }
+
     if (myProps.noForm) {
       return null;
     }
@@ -346,7 +350,6 @@ class FormContainer extends PureComponent {
       $$optionsList = $$optionsList.map(
         ($$item) => {
           let retNode = $$item;
-
           if (!$$item.get('noForm')) {
             retNode = $$item.set(
               'render',

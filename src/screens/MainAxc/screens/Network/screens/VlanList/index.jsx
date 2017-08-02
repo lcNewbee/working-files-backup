@@ -3,6 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
+// import validator from 'shared/validator';
 import { FormGroup, FormInput } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
@@ -16,6 +17,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
+  editListItemByIndex: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   closeListItemModal: PropTypes.func,
   updateCurListItem: PropTypes.func,
@@ -30,6 +32,15 @@ export default class View extends React.Component {
 
   componentWillMount() {
     this.props.changeScreenActionQuery({ addMethod: 'single' });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const curScreenId = this.props.store.get('curScreenId');
+    const curAction = this.props.store.getIn([curScreenId, 'actionQuery', 'action']);
+    const nextAction = nextProps.store.getIn([curScreenId, 'actionQuery', 'action']);
+    if (curAction !== nextAction) {
+      this.props.changeScreenActionQuery({ addMethod: 'single' });
+    }
   }
 
   render() {
@@ -90,7 +101,7 @@ export default class View extends React.Component {
               max={100}
               required
               value={typeof this.props.store.getIn([curScreenId, 'actionQuery', 'vlanRange']) === 'undefined' ?
-                    [] : this.props.store.getIn([curScreenId, 'actionQuery', 'vlanRange']).toJS()}
+                [] : this.props.store.getIn([curScreenId, 'actionQuery', 'vlanRange']).toJS()}
               onLowerInputChange={(data) => {
                 // const curScreenId = this.props.store.get('curScreenId');
                 const actionQuery = this.props.store.getIn([curScreenId, 'actionQuery']);

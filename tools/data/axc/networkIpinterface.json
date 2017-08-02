@@ -1,0 +1,51 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "name": "portname1",
+        "ipType": "static",
+        "ip": "192.168.5.123",
+        "vlanId": "1",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.5.1",
+        "natEnable": "0",
+        "interVlanRouting": "0",
+        "authentication": "portal",
+        "dhcpServerEnable": "0"
+      },
+      {
+        "name": "portname2",
+        "ipType": "pppoe",
+        "ip": "192.168.5.123",
+        "vlanId": "2",
+        "mask": "255.255.255.0",
+        "pppoeServer": "192.168.2.1",
+        "pppoeUser": "pppoeusername",
+        "pppoePassword": "password",
+        "natEnable": "1",
+        "interVlanRouting": "0",
+        "authentication": "portal",
+        "dhcpServerEnable": "1"
+      },
+      {
+        "name": "portname3",
+        "ipType": "dhcp",
+        "dhcpServerEnable": "1",
+        "ip": "192.168.5.123",
+        "vlanId": "3",
+        "mask": "255.255.255.0",
+        "dhcpPoolStart": "192.168.0.1",
+        "dhcpPoolEnd": "192.168.0.222",
+        "dhcpPoolMask": "255.255.255.0",
+        "brandId": "86",
+        "natEnable": "1",
+        "interVlanRouting": "1",
+        "authentication": "portal"
+      }
+    ]
+  }
+}

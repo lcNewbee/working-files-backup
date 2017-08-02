@@ -8,10 +8,8 @@ import { actions as appActions } from 'shared/containers/app';
 import utils from 'shared/utils';
 
 const exchangeOptions = [
-  { label: 'access', value: 'access' },
-  { label: 'trunk', value: 'trunk' },
-  { label: 'QINQ(tunnel)', value: 'QINQ(tunnel)' },
-  { label: 'QINQ(uplink)', value: 'QINQ(uplink)' },
+  { label: 'Access', value: 'access' },
+  { label: 'Trunk', value: 'trunk' },
 ];
 
 const listOptions = fromJS([
@@ -22,58 +20,54 @@ const listOptions = fromJS([
     notEditable: true,
   },
   {
-    id: 'exchangeMode',
-    text: __('Exchange Mode'),
-    formProps: {
-      type: 'select',
-      options: exchangeOptions,
-    },
-  },
-  {
     id: 'status',
     text: __('Status'),
     formProps: {
+      type: 'checkbox',
       options: [
         { label: __('ON'), value: '1' },
         { label: __('OFF'), value: '0' },
       ],
+    },
+  },
+  {
+    id: 'exchangeMode',
+    text: __('Exchange Mode'),
+    type: 'select',
+    options: exchangeOptions,
+    formProps: {
       type: 'select',
     },
   },
   {
     id: 'rate',
     text: __('Rate'),
+    type: 'select',
+    options: [
+      { label: '1G', value: '1g' },
+      { label: '10G', value: '10g' },
+      { label: __('Auto'), value: 'auto' },
+    ],
     formProps: {
-      options: [
-        { label: '1G', value: '1g' },
-        { label: '10G', value: '10g' },
-        { label: __('Auto'), value: 'auto' },
-      ],
       type: 'select',
     },
   },
   {
     id: 'workMode',
     text: __('Working Mode'),
+    type: 'select',
+    options: [
+      { label: __('Simplex'), value: 'simplex' },
+      { label: __('Duplex'), value: 'duplex' },
+      { label: __('Auto'), value: 'auto' },
+    ],
     formProps: {
-      options: [
-        { label: __('Simplex'), value: 'simplex' },
-        { label: __('Duplex'), value: 'duplex' },
-        { label: __('Auto'), value: 'auto' },
-      ],
       type: 'select',
     },
   },
   {
-    id: 'maxPacket',
-    text: __('Max Transfer Packet'),
-    formProps: {
-      type: 'number',
-    },
-  },
-  {
     id: 'nativeVlan',
-    text: __('Native VLAN'),
+    text: __('(Native)VLAN'),
     formProps: {
       type: 'number',
     },
@@ -94,54 +88,20 @@ const listOptions = fromJS([
   },
 ]);
 
-const customActionButton = [
-  {
-    actionName: 'reset',
-    text: __('Reset'),
-    icon: 'reply-all',
-  },
-];
-
-const slotIdOptions = [
-  { label: __('ALL'), value: 'all' },
-];
-
-const portTypeOptions = [
-  { label: __('ALL'), value: 'all' },
-];
-
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.onClearSearchCondition = this.onClearSearchCondition.bind(this);
-  }
-
-  onClearSearchCondition() {
-    const search = fromJS({
-      slotId: 'all',
-      portId: '',
-      portType: 'all',
-    });
-    Promise.resolve().then(() => {
-      this.props.changeScreenQuery(search);
-    }).then(() => {
-      this.props.fetchScreenData();
-    });
   }
 
   render() {
-    const store = this.props.store;
-    const curScreenId = store.get('curScreenId');
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
         actionable
         deleteable={false}
-        selectable
         editable
         addable={false}
-        actionBarButtons={customActionButton}
       />
     );
   }
@@ -166,81 +126,3 @@ export const Screen = connect(
   mapDispatchToProps,
 )(View);
 
-/* <div
-      className="clearfix"
-      style={{
-        position: 'absolute',
-        top: '0',
-        right: '0',
-      }}
-    >
-      <div className="fl">
-        <label
-          htmlFor="slotid"
-          style={{
-            marginTop: '7px',
-            marginRight: '10px',
-            fontWeight: 'bold',
-          }}
-        >
-          {__('Slot Id')}
-        </label>
-        <Select
-          id="slotid"
-          onChange={data => this.props.changeScreenQuery({ slotId: data.value })}
-          options={slotIdOptions}
-          value={store.getIn([curScreenId, 'query', 'slotId'])}
-          searchable={false}
-          clearable={false}
-        />
-      </div>
-      <div className="fl">
-        <label
-          htmlFor="porttype"
-          style={{
-            marginTop: '7px',
-            marginRight: '10px',
-            fontWeight: 'bold',
-          }}
-        >
-          {__('Port Type')}
-        </label>
-        <Select
-          id="porttype"
-          onChange={data => this.props.changeScreenQuery({ portType: data.value })}
-          value={store.getIn([curScreenId, 'query', 'portType'])}
-          options={portTypeOptions}
-          searchable={false}
-          clearable={false}
-        />
-      </div>
-      <div className="fl">
-        <label
-          htmlFor="portid"
-          style={{
-            marginTop: '7px',
-            marginRight: '10px',
-            fontWeight: 'bold',
-          }}
-        >
-          {__('Port Id')}
-        </label>
-        <FormInput
-          id="portid"
-          type="text"
-          value={store.getIn([curScreenId, 'query', 'portId'])}
-          onChange={data => this.props.changeScreenQuery({ portId: data.value })}
-        />
-      </div>
-      <div className="fl">
-        <Button
-          text={__('Search')}
-          onClick={() => this.props.fetchScreenData()}
-        />
-        <Button
-          text={__('Clear')}
-          onClick={this.onClearSearchCondition}
-        />
-      </div>
-    </div>
-    </AppScreen> */

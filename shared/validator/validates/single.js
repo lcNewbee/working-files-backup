@@ -322,7 +322,32 @@ var vaildate = {
     if (str === undefined || str === '') {
       return __('%s is required');
     }
-  }
+  },
+  // 用于FormGroup，type为number-range的数据验证(对应于组件RangeInput)
+  numberRange: function (arr, min, max) {
+    var firstInput = arr[0],
+        secondInput = arr[1];
+
+    if (typeof firstInput === 'undefined' || !arr[0]) {
+      return __('Lower bound is required');
+    }
+
+    if (typeof secondInput === 'undefined' || !arr[1]) {
+      return __('Upper bound is required');
+    }
+
+    if (Math.parseFloat(firstInput) < min || Math.parseFloat(firstInput) > max) {
+      return __('Lower bound number out of range!');
+    }
+
+    if (Math.parseFloat(secondInput) < min || Math.parseFloat(secondInput) > max) {
+      return __('Upper bound number out of range!');
+    }
+
+    if (Math.parseFloat(firstInput) > Math.parseFloat(secondInput)) {
+      return __('Upper bound should not be less than lower bound!');
+    }
+  },
 };
 
 // exports

@@ -18,10 +18,28 @@ const $$listOptions = fromJS([
     },
   },
   {
+    id: 'vlanId',
+    text: __('VLAN ID'),
+    type: 'select',
+    options: [ // 选择已经配置好的vlan
+      { label: 'VLAN 1', value: '1' },
+      { label: 'VLAN 2', value: '2' },
+      { label: 'VLAN 3', value: '3' },
+      { label: 'VLAN 4', value: '4' },
+    ],
+    formProps: {
+      type: 'select',
+      searchable: true,
+      required: true,
+    },
+  },
+  {
     id: 'ipType',
     text: __('IP Type'),
     noTable: true,
+    defaultValue: 'static',
     formProps: {
+      minWidth: '66px',
       type: 'switch',
       options: [
         { label: 'Static', value: 'static' },
@@ -31,11 +49,11 @@ const $$listOptions = fromJS([
     },
   },
   /* *************Static IP************** */
-  {
+  { //  Qst:ip地址保存时，是否需要后台做检测，通过和已经存在的接口IP对比确定是否能够保存？
     id: 'ip',
     text: __('IP Address'),
-    noForm: (val, item) => item.get('ipType') !== 'static',
     formProps: {
+      visible: item => item.get('ipType') === 'static',
       type: 'text',
       required: true,
       validator: validator({
@@ -46,9 +64,9 @@ const $$listOptions = fromJS([
   {
     id: 'mask',
     text: __('Subnet Mask'),
-    noForm: (val, item) => item.get('ipType') !== 'static',
     formProps: {
       type: 'text',
+      visible: item => item.get('ipType') === 'static',
       required: true,
       validator: validator({
         rules: 'mask',
@@ -59,9 +77,9 @@ const $$listOptions = fromJS([
     id: 'gateway',
     text: __('Gateway'),
     noTable: true,
-    noForm: (val, item) => item.get('ipType') !== 'static',
     formProps: {
       type: 'text',
+      visible: item => item.get('ipType') === 'static',
     },
   },
   /* **Static IP over**PPPoE start***** */
@@ -69,26 +87,26 @@ const $$listOptions = fromJS([
     id: 'pppoeServer',
     text: __('PPPoE Server'),
     noTable: true,
-    noForm: (val, item) => item.get('ipType') !== 'pppoe',
     formProps: {
+      visible: item => item.get('ipType') === 'pppoe',
       type: 'text',
     },
   },
   {
     id: 'pppoeUser',
     noTable: true,
-    noForm: (val, item) => item.get('ipType') !== 'pppoe',
     text: __('PPPoE User Name'),
     formProps: {
+      visible: item => item.get('ipType') === 'pppoe',
       type: 'text',
     },
   },
   {
     id: 'pppoePassword',
     noTable: true,
-    noForm: (val, item) => item.get('ipType') !== 'pppoe',
     text: __('PPPoE Password'),
     formProps: {
+      visible: item => item.get('ipType') === 'pppoe',
       type: 'password',
     },
   },
@@ -96,6 +114,8 @@ const $$listOptions = fromJS([
   {
     id: 'dhcpServerEnable',
     text: __('DHCP Server'),
+    defaultValue: '0',
+    render(val) { return val === '1' ? __('Enabled') : __('Disabled'); },
     formProps: {
       type: 'checkbox',
       options: [
@@ -108,35 +128,35 @@ const $$listOptions = fromJS([
     id: 'dhcpPoolStart',
     text: __('DHCP Pool Start'),
     noTable: true,
-    noForm: (val, item) => item.get('ipType') !== 'static' && item.get('dhcpServerEnable') !== '1',
     formProps: {
       type: 'text',
+      visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
     },
   },
   {
     id: 'dhcpPoolEnd',
     text: __('DHCP Pool End'),
     noTable: true,
-    noForm: (val, item) => item.get('ipType') !== 'static' && item.get('dhcpServerEnable') !== '1',
     formProps: {
       type: 'text',
+      visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
     },
   },
   {
     id: 'dhcpPoolMask',
     text: __('Subnet Mask'),
     noTable: true,
-    noForm: (val, item) => item.get('ipType') !== 'static' && item.get('dhcpServerEnable') !== '1',
     formProps: {
+      visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
       type: 'text',
     },
   },
   {
-    id: 'dhcpOption',
-    text: __('Options'),
+    id: 'brandId',
+    text: __('Brand ID'),
     noTable: true,
-    noForm: (val, item) => item.get('dhcpServerEnable') !== '1',
     formProps: {
+      visible: item => item.get('dhcpServerEnable') === '1',
       type: 'text',
     },
   },
@@ -144,6 +164,8 @@ const $$listOptions = fromJS([
   {
     id: 'natEnable',
     text: __('NAT Enable'),
+    defaultValue: '1',
+    render(val) { return val === '1' ? __('Enabled') : __('Disabled'); },
     formProps: {
       type: 'checkbox',
     },
@@ -151,6 +173,8 @@ const $$listOptions = fromJS([
   {
     id: 'interVlanRouting',
     text: __('Inter-Vlan Routing'),
+    defaultValue: '0',
+    render(val) { return val === '1' ? __('Enabled') : __('Disabled'); },
     formProps: {
       type: 'checkbox',
     },

@@ -41,13 +41,7 @@ class RangeInput extends React.Component {
             this.props.onLowerInputChange(val);
           }}
         />
-        <div
-          className="fl"
-          style={{
-            textAlign: 'center',
-            margin: '6px 10px 0 10px',
-          }}
-        >
+        <div className="fl a-range-input--dash">
           {'-'}
         </div>
         <NumberInput
