@@ -175,8 +175,7 @@ function getPortalTemplateName() {
           }),
         ),
       }
-    ),
-  );
+    ));
 }
 
 function getWebTemplateName() {
@@ -193,8 +192,7 @@ function getWebTemplateName() {
           }),
         ),
       }
-    ),
-  );
+    ));
 }
 
 function getSSIDWebTemplate() {
@@ -651,17 +649,6 @@ export default class View extends React.Component {
 
     this.fetchMandatoryDomainList();
   }
-  componentWillUpdate(nextProps) {
-    const myScreenId = this.props.store.get('curScreenId');
-    const thisActionType = this.props.store.getIn([myScreenId, 'actionQuery', 'action']);
-    const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
-
-    if (thisActionType === 'copy' && (thisActionType !== nextActionType)) {
-      this.isCloseCopyList = true;
-    } else if (nextActionType && nextActionType !== 'copy') {
-      this.isCloseCopyList = false;
-    }
-  }
   onSave(type) {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
@@ -760,12 +747,12 @@ export default class View extends React.Component {
               ssid: $$curListItem.get('ssid'),
               web: $$curListItem.get('Authentication'),
             }).then(
-                () => {
-                  if (json && json.state && json.state.code === 2000) {
-                    this.props.receiveScreenData();
-                  }
-                },
-              );
+              () => {
+                if (json && json.state && json.state.code === 2000) {
+                  this.props.receiveScreenData();
+                }
+              },
+            );
           }
         });
     }
@@ -864,8 +851,7 @@ export default class View extends React.Component {
             return $$retItem;
           },
         );
-      },
-    );
+      });
   }
 
   renderActionBar() {
@@ -940,7 +926,7 @@ export default class View extends React.Component {
       },
     ];
 
-    if (actionQuery.get('action') !== 'copy' && !this.isCloseCopyList) {
+    if (actionQuery.get('action') !== 'copy') {
       return null;
     }
 
@@ -1008,7 +994,7 @@ export default class View extends React.Component {
   render() {
     const { store, route } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
-    const notEditListItem = actionQuery.get('action') === 'copy' || this.isCloseCopyList;
+    const notEditListItem = actionQuery.get('action') === 'copy';
     const curListOptions = this.listOptions.map(($$item) => {
       let $$retItem = $$item;
 

@@ -119,17 +119,6 @@ export default class Blacklist extends React.Component {
       data => this.onBeforeChangeType(data.value),
     );
   }
-  componentWillUpdate(nextProps) {
-    const myScreenId = this.props.store.get('curScreenId');
-    const thisActionType = this.props.store.getIn([myScreenId, 'actionQuery', 'action']);
-    const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
-
-    if (thisActionType === 'copy' && (thisActionType !== nextActionType)) {
-      this.isCloseCopyList = true;
-    } else if (nextActionType && nextActionType !== 'copy') {
-      this.isCloseCopyList = false;
-    }
-  }
   onBeforeChangeType(type) {
     let confirmText = __(
       'Are you sure to use %s?',
@@ -306,7 +295,7 @@ export default class Blacklist extends React.Component {
     const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
     const listType = store.getIn([route.id, 'data', 'settings', 'type']);
 
-    if (!isCopyShow && !this.isCloseCopyList) {
+    if (!isCopyShow) {
       return null;
     }
 
@@ -375,7 +364,7 @@ export default class Blacklist extends React.Component {
   render() {
     const { route, store } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
-    const isCopySsid = actionQuery.get('action') === 'copy' || this.isCloseCopyList;
+    const isCopySsid = actionQuery.get('action') === 'copy';
     const listType = store.getIn([route.id, 'data', 'settings', 'type']);
     const listTitle = listTypeMap[listType];
     let mylistOptions = listOptions;

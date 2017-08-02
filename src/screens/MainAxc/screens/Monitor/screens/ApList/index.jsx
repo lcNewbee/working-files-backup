@@ -224,7 +224,9 @@ export default class View extends React.Component {
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$selectedList = $$myScreenStore.getIn(['actionQuery', 'selectedList']);
-    if ($$selectedList.size > 0) {
+    const $$listData = $$myScreenStore.getIn(['data', 'list']);
+
+    if ($$selectedList.size > 1) {
       this.props.changeScreenActionQuery({
         action: EDIT_LIST_ACTION,
         myTitle: __('Edit Selected AP'),
@@ -232,6 +234,8 @@ export default class View extends React.Component {
       this.props.fetchScreenData({
         url: 'goform/group/smartRf',
       });
+    } else if ($$selectedList.size === 1) {
+      this.onAction('edit', $$listData.get($$selectedList.get(0)));
     }
   }
   onSave(formId) {
@@ -425,7 +429,7 @@ export default class View extends React.Component {
         addable={false}
         editable={false}
         deleteable={false}
-        selectable
+        selectable={$$data => $$data.get('status') !== 'new'}
         actionable
         searchable
         searchProps={{

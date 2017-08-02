@@ -148,10 +148,33 @@ export default class ProtoInfo extends React.Component {
     this.serverData = serverData;
     // this.flowOption = getFlowOption(serverData, store.getIn([curScreenId, 'query', 'timeType']));
   }
+  renderViewClientList() {
+    const store = this.props.store;
+    const curScreenId = store.get('curScreenId');
+    const viewClientList = store.getIn([curScreenId, 'actionQuery', 'action']) === 'viewClientList';
 
+    if (!viewClientList) {
+      return null;
+    }
+
+    return (
+      <Table
+        options={userModalOptions}
+        list={store.getIn([curScreenId, 'data', 'protoClientList'])}
+        className="table"
+        page={store.getIn([curScreenId, 'data', 'clientPage'])}
+        pageQuery={{
+          size: store.getIn([curScreenId, 'query', 'modalSize']),
+        }}
+        onPageChange={this.onChangeModalPage}
+        onPageSizeChange={this.onChangeModalView}
+      />
+    );
+  }
   render() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
+    const notEditListItem = store.getIn([curScreenId, 'actionQuery', 'action']) === 'viewClientList';
     const listOptions = fromJS([
       {
         id: 'attr_name',
@@ -164,13 +187,6 @@ export default class ProtoInfo extends React.Component {
             className="link-text"
             title={__('Click for details')}
             onClick={() => {
-              // 找到traffic在options中的位置，然后改变traffic的text属性
-              // const optionsIndex = this.state.userModalOptions.findIndex(name => name.get('id') === 'traffic');
-              // const options = this.state.userModalOptions.setIn([optionsIndex, 'text'], `${item.get('attr_name')} ${__('Traffic')}`);
-              this.setState({
-                showModal: true,
-                  // userModalOptions: options,
-              });
               Promise.resolve().then(() => {
                 this.props.changeScreenQuery({
                   modalPage: 1,
@@ -179,12 +195,16 @@ export default class ProtoInfo extends React.Component {
                 });
               }).then(() => {
                 this.props.fetchScreenData();
+                this.props.changeScreenActionQuery({
+                  action: 'viewClientList',
+                  myTitle: `${item.get('attr_name')} ${__('Clients List')}`,
+                });
               });
             }}
           >
             {val || '0'}
           </span>
-          ),
+        ),
       }, {
         id: 'curRate',
         text: __('Current Rate'),
@@ -199,87 +219,30 @@ export default class ProtoInfo extends React.Component {
 
 
     return (
-      <div>
-        <AppScreen
-          {...this.props}
-          // listOptions={listOptions}
-          initOption={{
-            isFetchInfinite: true,
-            fetchIntervalTime: 10000,
-            query: {
-              timeType: '0',
-              size: 50,
-              page: 1,
-            },
-          }}
-          // listTitle={__('Statistics Within 30 Seconds')}
-        >
-          <div className="t-overview">
-            <div className="element t-overview__section-header">
-              <h3>
-                <span
-                  style={{
-                    marginRight: '10px',
-                  }}
-                >
-                  {__('Time')}
-                </span>
-                <Select
-                  options={timeTypeSwitchs.toJS()}
-                  value={store.getIn([curScreenId, 'query', 'timeType'])}
-                  onChange={this.onChangeTimeType}
-                  clearable={false}
-                  style={{
-                    width: '180px',
-                  }}
-                />
-              </h3>
-            </div>
-            <div className="t-overview__section">
-              <Table
-                className="table"
-                options={listOptions}
-                list={store.getIn([curScreenId, 'data', 'list'])}
-                page={store.getIn([curScreenId, 'data', 'page'])}
-                pageQuery={{
-                  size: store.getIn([curScreenId, 'query', 'size']),
-                }}
-                onPageChange={this.onChangePage}
-                onPageSizeChange={this.onChangeView}
-              />
-            </div>
-          </div>
-          <Modal
-            isShow={this.state.showModal}
-            title={`${__('Clients List')}`}
-            cancelButton={false}
-            draggable
-            size="lg"
-            onOk={() => {
-              this.setState({
-                showModal: false,
-              });
-            }}
-            onClose={() => {
-              this.setState({
-                showModal: false,
-              });
-            }}
-          >
-            <Table
-              options={userModalOptions}
-              list={store.getIn([curScreenId, 'data', 'protoClientList'])}
-              className="table"
-              page={store.getIn([curScreenId, 'data', 'clientPage'])}
-              pageQuery={{
-                size: store.getIn([curScreenId, 'query', 'modalSize']),
-              }}
-              onPageChange={this.onChangeModalPage}
-              onPageSizeChange={this.onChangeModalView}
-            />
-          </Modal>
-        </AppScreen>
-      </div>
+      <AppScreen
+        {...this.props}
+        listOptions={listOptions}
+        initOption={{
+          isFetchInfinite: true,
+          fetchIntervalTime: 10000,
+          query: {
+            timeType: '0',
+            size: 50,
+            page: 1,
+          },
+        }}
+        queryFormOptions={fromJS([
+          {
+            id: 'timeType',
+            label: __('Time'),
+            type: 'select',
+            options: timeTypeSwitchs,
+            saveOnChange: true,
+          },
+        ])}
+        modalSize={notEditListItem ? 'lg' : 'md'}
+        modalChildren={this.renderViewClientList()}
+      />
     );
   }
 }

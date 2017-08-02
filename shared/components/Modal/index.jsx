@@ -9,7 +9,7 @@ import PureComponent from '../Base/PureComponent';
 let curModelShowNum = 0;
 let backdropTimeout = null;
 
-function renderBackdrop(isShow, transitionEnter, transitionLeave) {
+function renderBackdrop(isShow, enter, exit) {
   const modalBackdropElem = document.getElementById('modalBackdrop');
   let modalBackdropHtml = '<div id="modalBackdrop" class="o-modal__backdrop fade"></div>';
 
@@ -24,7 +24,7 @@ function renderBackdrop(isShow, transitionEnter, transitionLeave) {
   }
   // 如果是显示
   if (curModelShowNum > 0) {
-    if (transitionEnter) {
+    if (enter) {
       clearTimeout(backdropTimeout);
       backdropTimeout = setTimeout(
         () => {
@@ -47,7 +47,7 @@ function renderBackdrop(isShow, transitionEnter, transitionLeave) {
     }
 
     // 隐藏Backdrop, 并显示动画
-  } else if (transitionLeave) {
+  } else if (exit) {
     setTimeout(
       () => {
         if (document.getElementById('modalBackdrop')) {
@@ -86,8 +86,8 @@ const propTypes = {
   role: PropTypes.oneOf(['dialog', 'alert', 'confirm', 'message', 'loading']),
   okText: PropTypes.string,
   cancelText: PropTypes.string,
-  transitionLeave: PropTypes.bool,
-  transitionEnter: PropTypes.bool,
+  exit: PropTypes.bool,
+  enter: PropTypes.bool,
   okButton: PropTypes.bool,
   draggable: PropTypes.bool,
   cancelButton: PropTypes.bool,
@@ -100,8 +100,8 @@ const propTypes = {
 const defaultProps = {
   title: '',
   role: 'dialog',
-  transitionEnter: true,
-  transitionLeave: true,
+  enter: true,
+  exit: true,
   okButton: true,
   cancelButton: true,
   noFooter: false,
@@ -125,11 +125,11 @@ class Modal extends PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.isShow && !this.props.customBackdrop) {
+    if (this.state.isShow && !this.props.customBackdrop) {
       renderBackdrop(
-        this.props.isShow,
-        this.props.transitionEnter,
-        this.props.transitionLeave,
+        this.state.isShow,
+        this.props.enter,
+        this.props.exit,
       );
     }
     this.modalKey = `model${utils.uuid()}`;
@@ -147,12 +147,12 @@ class Modal extends PureComponent {
     this.setState(newState);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.isShow !== this.props.isShow && !this.props.customBackdrop) {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isShow !== this.state.isShow && !this.props.customBackdrop) {
       renderBackdrop(
-        this.props.isShow,
-        this.props.transitionEnter,
-        this.props.transitionLeave,
+        this.state.isShow,
+        this.props.enter,
+        this.props.exit,
       );
     }
   }
@@ -160,8 +160,8 @@ class Modal extends PureComponent {
     const isShowModel = false;
     renderBackdrop(
       isShowModel,
-      this.props.transitionEnter,
-      this.props.transitionLeave,
+      this.props.enter,
+      this.props.exit,
     );
   }
   onClose() {
@@ -186,7 +186,7 @@ class Modal extends PureComponent {
     );
   }
   render() {
-    const { size, role, id, transitionLeave, transitionEnter,
+    const { size, role, id, exit, enter,
       isShow, title, cancelText, okButton, okText, draggable,
       customBackdrop,
     } = this.props;
@@ -232,9 +232,11 @@ class Modal extends PureComponent {
         key={keyVal}
         in={this.state.isShow}
         classNames="fade-down"
-        enter={transitionEnter}
-        exit={transitionLeave}
+        enter={enter}
+        exit={exit}
         timeout={500}
+        onExited={this.onClose}
+        appear
         mountOnEnter
         unmountOnExit
       >
@@ -288,7 +290,11 @@ class Modal extends PureComponent {
                       hasCloseBtn ? (
                         <span
                           className="close fr"
-                          onClick={this.onClose}
+                          onClick={() => {
+                            this.setState({
+                              isShow: false,
+                            })
+                          }}
                         >
                           &times;
                         </span>

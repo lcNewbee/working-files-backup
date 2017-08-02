@@ -7,16 +7,16 @@ import PureComponent from '../Base/PureComponent';
 const propTypes = {
   isShow: PropTypes.bool,
   overlay: PropTypes.bool,
-  transitionLeave: PropTypes.bool,
-  transitionEnter: PropTypes.bool,
+  exit: PropTypes.bool,
+  enter: PropTypes.bool,
   transitionName: PropTypes.string,
   children: PropTypes.any,
   onClose: PropTypes.func,
 };
 
 const defaultProps = {
-  transitionEnter: true,
-  transitionLeave: true,
+  enter: true,
+  exit: true,
   transitionName: 'zoom-top-right',
   overlay: true,
 };
@@ -37,14 +37,14 @@ class PopOver extends PureComponent {
   }
 
   render() {
-    const { transitionLeave, transitionEnter, isShow, overlay, transitionName } = this.props;
+    const { exit, enter, isShow, overlay, transitionName } = this.props;
     const keyVal = 'onlyPopOver';
 
     return (
       <ReactCSSTransition
         classNames={transitionName}
-        enter={transitionEnter}
-        exit={transitionLeave}
+        enter={enter}
+        exit={exit}
         timeout={{
           enter: 500,
           exit: 300,

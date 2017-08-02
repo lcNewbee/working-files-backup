@@ -1000,26 +1000,6 @@ class AppScreenList extends React.PureComponent {
       );
     }
 
-    // 页面大小选择下拉框
-    /* if (page) {
-      rightChildrenNode = [
-        <label
-          key="pageLabel"
-          htmlFor="pageSelect"
-        >
-          {__('View')}
-        </label>,
-        <Select
-          key="pageSelect"
-          value={query.get('size')}
-          onChange={this.onChangeTableSize}
-          options={sizeOptions}
-          searchable={false}
-          clearable={false}
-        />,
-      ];
-    } */
-
     return (
       <FormContainer
         id={editFormId}

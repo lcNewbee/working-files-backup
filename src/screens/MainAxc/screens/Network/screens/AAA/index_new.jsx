@@ -541,13 +541,6 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(RADIUS_AUTH_SERVER_KEY)}
           >
-            {/* <Icon
-              name={this.state[RADIUS_AUTH_SERVER_KEY] ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-            /> */}
             {__('External Radius Authentication Server')}
           </h3>
         </div>
@@ -577,14 +570,6 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(RADIUS_ACC_SERVER_KEY)}
           >
-            {/* <Icon
-              name={this.state[RADIUS_ACC_SERVER_KEY] ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-              onClick={() => this.toggleBox(RADIUS_ACC_SERVER_KEY)}
-            />*/}
             {__('External Radius Accounting Server')}
           </h3>
         </div>
@@ -613,14 +598,6 @@ export default class View extends React.Component {
             style={{ cursor: 'pointer' }}
             onClick={() => this.toggleBox(RADIUS_ADVANCE_SETTING_KEY)}
           >
-            {/* <Icon
-              name={this.state[RADIUS_ADVANCE_SETTING_KEY] ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-              onClick={() => this.toggleBox(RADIUS_ADVANCE_SETTING_KEY)}
-            />*/}
             {__('External Radius Server Advanced Settings')}
           </h3>
         </div>
@@ -844,9 +821,11 @@ export default class View extends React.Component {
     const $$curData = $$myScreenStore.get('curListItem');
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
 
-    if (actionType !== 'add' && actionType !== 'edit') {
+    if ($$curData && actionType !== 'add' && actionType !== 'edit') {
       return null;
     }
+
+    console.log($$curData.toJS());
 
     // if (actionType === 'edit') {
     //   $$myBaseFormOptions = $$myBaseFormOptions.map(

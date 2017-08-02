@@ -108,6 +108,7 @@
             "sessiontime": "0"
           }
         ],
+        "wlan0enable":	0,
         "wlan0":	"423423234",
         "wlan1enable":	1,
         "wlan1":	"1231",

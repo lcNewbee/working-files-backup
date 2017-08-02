@@ -121,8 +121,8 @@ export default class App extends Component {
           isShow={modal.status === 'show'}
           title={modal.title}
           role={modelRole}
-          transitionEnter={false}
-          transitionLeave={false}
+          enter={false}
+          exit={false}
           onClose={this.onModalClose}
           onOk={this.onModalApply}
           noFooter={isLoadingModal}

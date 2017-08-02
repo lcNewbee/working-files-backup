@@ -346,17 +346,6 @@ export default class EthStatistic extends React.Component {
       this.initOptions(nextProps);
     }
   }
-  componentWillUpdate(nextProps) {
-    const myScreenId = this.props.store.get('curScreenId');
-    const thisActionType = this.props.store.getIn([myScreenId, 'actionQuery', 'action']);
-    const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
-
-    if (thisActionType === 'viewUsers' && (thisActionType !== nextActionType)) {
-      this.isCloseCustomModal = true;
-    } else if (nextActionType && nextActionType !== 'viewUsers') {
-      this.isCloseCustomModal = false;
-    }
-  }
 
   onChangePage(data) {
     this.props.changeScreenQuery({ page: data });
@@ -381,7 +370,7 @@ export default class EthStatistic extends React.Component {
     const curScreenId = store.get('curScreenId');
     const actionType = store.getIn([curScreenId, 'actionQuery', 'action']);
 
-    if (actionType !== 'viewUsers' && !this.isCloseCustomModal) {
+    if (actionType !== 'viewUsers') {
       return null;
     }
 
@@ -402,7 +391,7 @@ export default class EthStatistic extends React.Component {
   render() {
     const { store } = this.props;
     const curScreenId = store.get('curScreenId');
-    const notEditListItem = store.getIn([curScreenId, 'actionQuery', 'action']) === 'viewUsers' || this.isCloseCustomModal;
+    const notEditListItem = store.getIn([curScreenId, 'actionQuery', 'action']) === 'viewUsers';
 
     return (
       <AppScreen

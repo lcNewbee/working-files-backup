@@ -813,7 +813,9 @@ export const $$portalTemplateOptions = fromJS([
       type: 'select',
       defaultValue: '0',
       required: true,
-      visible: $$data => $$data.get('apmac') || $$data.get('ssid'),
+      visible: ($$data) => {
+        return $$data.get('apmac') || $$data.get('ssid')
+      },
     },
   },
   {
