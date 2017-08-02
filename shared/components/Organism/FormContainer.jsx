@@ -475,6 +475,7 @@ class FormContainer extends PureComponent {
         const fieldsetKey = `${$$item.getIn([0, 'fieldset'])}Fileset`;
         let fieldsetClassName = 'o-form__fieldset';
         let legendText = $$item.getIn([0, 'legend']);
+        let $$retNodes = this.renderFormGroupTree($$item, index);
 
         if ($$fieldsetOption) {
           legendText = legendText || $$fieldsetOption.get('legend');
@@ -484,8 +485,8 @@ class FormContainer extends PureComponent {
         }
 
         // 如果是带有标题 List，需添加legend
-        if (legendText) {
-          return (
+        if (legendText && $$retNodes.filterNot(node => node === null).size > 0) {
+          $$retNodes = (
             <fieldset
               key={fieldsetKey}
               className={fieldsetClassName}
@@ -499,7 +500,7 @@ class FormContainer extends PureComponent {
         }
 
         // 如果是无标题 List
-        return this.renderFormGroupTree($$item, index);
+        return $$retNodes;
       });
     }
 

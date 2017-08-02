@@ -8,9 +8,6 @@ import { FormContainer } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreenSettings, AppScreenList } from 'shared/containers/appScreen';
 
-const propTypes = {};
-const defaultProps = {};
-
 const settingsFormOptions = fromJS([
   {
     id: 'deviceName',
@@ -94,16 +91,16 @@ const ipv4ListOptions = fromJS([
   {
     id: 'name',
     type: 'text',
-    label: __('Name'),
+    text: __('Name'),
     formProps: {
-      label: __('Name'),
       type: 'text',
+      required: true,
     },
   },
   {
-    id: 'Subnet',
+    id: 'subnet',
     type: 'text',
-    label: __('Subnet'),
+    text: __('Subnet'),
     formProps: {
       type: 'text',
     },
@@ -111,7 +108,7 @@ const ipv4ListOptions = fromJS([
   {
     id: 'gateway',
     type: 'text',
-    label: __('Gateway'),
+    text: __('Gateway'),
     formProps: {
       type: 'text',
     },
@@ -145,6 +142,17 @@ const ipv6ListOptions = fromJS([
   },
 ]);
 
+const tableOptions = immutableUtils.getTableOptions(ipv4ListOptions);
+const editFormOptions = immutableUtils.getFormOptions(ipv4ListOptions);
+const ipv6TableOptions = immutableUtils.getTableOptions(ipv6ListOptions);
+const ipv6EditFormOptions = immutableUtils.getFormOptions(ipv6ListOptions);
+
+const propTypes = {
+  store: PropTypes.object,
+  fetchScreenData: PropTypes.func,
+};
+const defaultProps = {};
+
 export default class GeneralSettings extends React.Component {
   constructor(props) {
     super(props);
@@ -157,27 +165,25 @@ export default class GeneralSettings extends React.Component {
   render() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
-    this.tableOptions = immutableUtils.getTableOptions(ipv4ListOptions);
-    this.editFormOptions = immutableUtils.getFormOptions(ipv4ListOptions);
-    this.ipv6TableOptions = immutableUtils.getTableOptions(ipv6ListOptions);
-    this.ipv6EditFormOptions = immutableUtils.getTableOptions(ipv6ListOptions);
-    console.log(this.editFormOptions.toJS())
+    const curStore = store.get(curScreenId);
+
     return (
-      <div>
+      <div className="t-app">
         <div>
           <AppScreenSettings
             {...this.props}
-            store={store.get(curScreenId)}
+            store={curStore}
             settingsFormOptions={settingsFormOptions}
             hasSettingsSaveButton
           />
         </div>
-        <div>
+        <div style={{padding: '0 1em'}}>
           <AppScreenList
             {...this.props}
-            store={store.get(curScreenId)}
-            tableOptions={this.tableOptions}
-            editFormOptions={this.editFormOptions}
+            store={curStore}
+            tableOptions={tableOptions}
+            editFormOptions={editFormOptions}
+            editFormId="ipv4"
             listTitle={__('IPv4 Static Route')}
             actionable
             addable
@@ -186,13 +192,14 @@ export default class GeneralSettings extends React.Component {
             deletable
           />
         </div>
-        <div>
+        <div style={{padding: '0 1em'}}>
           <AppScreenList
             {...this.props}
-            store={store.get(curScreenId)}
-            tableOptions={this.ipv6TableOptions}
+            store={curStore}
+            tableOptions={ipv6TableOptions}
             id="ipv6"
-            editFormOptions={this.ipv6EditFormOptions}
+            editFormId="ipv6"
+            editFormOptions={ipv6EditFormOptions}
             listTitle={__('IPv6 Static Route')}
             actionable
             selectable

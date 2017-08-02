@@ -5,7 +5,9 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 // import validator from 'shared/validator';
 import { FormGroup, FormInput } from 'shared/components';
-import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
+import {
+  actions as screenActions, AppScreen, createContainer,
+} from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 // import RangeInput from 'shared/components/Form/RangeInput';
@@ -132,12 +134,10 @@ export default class View extends React.Component {
       //   },
       // },
     ]);
-    const editFormOptions = immutableUtils.getFormOptions(listOptions);
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        editFormOptions={editFormOptions}
         actionable
         selectable
       />
@@ -164,7 +164,4 @@ function mapDispatchToProps(dispatch) {
 
 
 // 添加 redux 属性的 react 页面
-export const Screen = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(View);
+export const Screen = createContainer(View);

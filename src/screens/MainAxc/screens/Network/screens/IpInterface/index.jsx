@@ -1,4 +1,5 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { fromJS, Map } from 'immutable';
 import validator from 'shared/validator';
@@ -190,18 +191,18 @@ const $$listOptions = fromJS([
 ]);
 
 
-const propTypes = {
-  store: PropTypes.instanceOf(Map),
-  route: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  }),
-};
+const propTypes = {};
 const defaultProps = {};
 
 export default class IpInterface extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  componentWillMount() {
+
+  }
+
 
   render() {
     return (
@@ -210,7 +211,6 @@ export default class IpInterface extends React.Component {
         listOptions={$$listOptions}
         listKey="allKeys"
         maxListSize="24"
-        paginationType="none"
         deleteable
         editable
         selectable

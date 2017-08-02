@@ -190,8 +190,8 @@ class AppScreenList extends React.PureComponent {
       this.initListTableOptions(nextProps, nextProps.editable);
     }
     if (this.props.editFormOptions !== nextProps.editFormOptions ||
-        this.props.editFormOption !== nextProps.editFormOption ||
-        this.props.store.getIn(['actionQuery', 'action']) !== nextProps.store.getIn(['actionQuery', 'action'])) {
+      this.props.editFormOption !== nextProps.editFormOption ||
+      this.props.store.getIn(['actionQuery', 'action']) !== nextProps.store.getIn(['actionQuery', 'action'])) {
       this.initModalFormOptions(nextProps);
     }
     if (this.props.id !== nextProps.id) {
@@ -405,11 +405,9 @@ class AppScreenList extends React.PureComponent {
       } else {
         doSelectedItemsAction();
       }
-    } else {
-      if (actionName === 'setting') {
+    } else if (actionName === 'setting') {
         actionName = 'edit';
       }
-    }
   }
   onItemAction($$actionQuery, option) {
     const { cancelMsg, needConfirm, confirmText, $$curData } = option;
@@ -446,7 +444,7 @@ class AppScreenList extends React.PureComponent {
         text: cancelMsg,
       });
 
-    // 需要询问用户
+      // 需要询问用户
     } else if (needConfirm) {
       this.props.createModal({
         id: modalId,
@@ -455,7 +453,7 @@ class AppScreenList extends React.PureComponent {
         apply: doItemAction,
       });
 
-    // 直接提交
+      // 直接提交
     } else {
       doItemAction();
     }
@@ -508,7 +506,7 @@ class AppScreenList extends React.PureComponent {
         }),
       );
 
-    // 同步处理
+      // 同步处理
     } else {
       if (onBeforeActionResult) {
         cancelMsg = onBeforeActionResult;
@@ -537,7 +535,7 @@ class AppScreenList extends React.PureComponent {
 
           this.props.onAfterSync(json);
         });
-    // 无文件提交
+      // 无文件提交
     } else {
       this.props.onListAction({
         customData: {
@@ -562,7 +560,7 @@ class AppScreenList extends React.PureComponent {
         text: option.msg,
       });
 
-    // 数据验证，与 syncData 前验证
+      // 数据验证，与 syncData 前验证
     } else if (this.props.validateAll) {
       this.props.validateAll(this.props.editFormId)
         .then((errMsg) => {
@@ -846,7 +844,7 @@ class AppScreenList extends React.PureComponent {
       store, app, fetchUrl,
       selectable, deleteable, searchable, searchProps, addable, actionable,
       editFormId, queryFormOptions, actionBarButtons,
-      actionBarChildren, maxListSize,
+      actionBarChildren, maxListSize, id,
     } = this.props;
     const $$curList = store.getIn(['data', 'list']) || List([]);
     const query = store.getIn(['query']);
@@ -1048,13 +1046,14 @@ class AppScreenList extends React.PureComponent {
   renderFooter() {
     const {
       store, app, modalSize, customModal, modalChildren,
-      editFormLayout, editFormOption, saveUrl,
+      editFormLayout, editFormOption, saveUrl, id,
     } = this.props;
     const editData = store.getIn(['curListItem']);
     const actionQuery = store.getIn(['actionQuery']);
     const actionType = actionQuery.get('action');
     let isEditModelshow = false;
     const syncCode = app.getIn(['state', 'code']);
+    const isCurList = !!store.getIn(['curListKeys', 'id']) === !!id;
 
     // 判断是否显示修改或添加 model
     if (actionType === 'edit' || actionType === 'add' || (!!modalChildren && actionType)) {
@@ -1064,12 +1063,11 @@ class AppScreenList extends React.PureComponent {
         savedText = __('Unapply');
       }
     }
-
     return (
       !customModal ? (
         <Modal
-          id="AppScreenListModal"
-          isShow={isEditModelshow}
+          id={`AppScreenListModal${id}`}
+          isShow={isCurList && isEditModelshow}
           title={actionQuery.get('myTitle')}
           onClose={this.onCloseEditModal}
           onExited={(1)}
