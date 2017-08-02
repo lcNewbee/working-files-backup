@@ -94,15 +94,43 @@ const ipv4ListOptions = fromJS([
   {
     id: 'name',
     type: 'text',
-    text: __('Name'),
+    label: __('Name'),
     formProps: {
+      label: __('Name'),
       type: 'text',
     },
   },
   {
     id: 'Subnet',
     type: 'text',
-    text: __('Subnet'),
+    label: __('Subnet'),
+    formProps: {
+      type: 'text',
+    },
+  },
+  {
+    id: 'gateway',
+    type: 'text',
+    label: __('Gateway'),
+    formProps: {
+      type: 'text',
+    },
+  },
+]);
+
+const ipv6ListOptions = fromJS([
+  {
+    id: 'name',
+    type: 'text',
+    text: __('Name'),
+    formProps: {
+      type: 'text',
+    },
+  },
+  {
+    id: 'prefix',
+    type: 'text',
+    text: __('Prefix'),
     formProps: {
       type: 'text',
     },
@@ -131,6 +159,9 @@ export default class GeneralSettings extends React.Component {
     const curScreenId = store.get('curScreenId');
     this.tableOptions = immutableUtils.getTableOptions(ipv4ListOptions);
     this.editFormOptions = immutableUtils.getFormOptions(ipv4ListOptions);
+    this.ipv6TableOptions = immutableUtils.getTableOptions(ipv6ListOptions);
+    this.ipv6EditFormOptions = immutableUtils.getTableOptions(ipv6ListOptions);
+    console.log(this.editFormOptions.toJS())
     return (
       <div>
         <div>
@@ -151,6 +182,19 @@ export default class GeneralSettings extends React.Component {
             actionable
             addable
             editable
+            selectable
+            deletable
+          />
+        </div>
+        <div>
+          <AppScreenList
+            {...this.props}
+            store={store.get(curScreenId)}
+            tableOptions={this.ipv6TableOptions}
+            id="ipv6"
+            editFormOptions={this.ipv6EditFormOptions}
+            listTitle={__('IPv6 Static Route')}
+            actionable
             selectable
             deletable
           />
