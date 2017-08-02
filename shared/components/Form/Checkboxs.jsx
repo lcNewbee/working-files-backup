@@ -31,7 +31,6 @@ class Checkboxs extends PureComponent {
 
   onChange(e, index, $$item) {
     const isChecked = e.target.checked;
-    console.log('isChecked', isChecked);
     const label = $$item.get('label');
     let curValue = '';
     const checkedNum = this.valueArrState.filter(state => state).length;
@@ -47,10 +46,11 @@ class Checkboxs extends PureComponent {
     ).join(this.props.splitStr);
 
     if (this.props.onChange) {
-      this.props.onChange({
+      this.props.onChange($$item.merge({
         value: curValue,
         label,
-      });
+        checked: isChecked,
+      }).toJS());
     }
   }
   render() {

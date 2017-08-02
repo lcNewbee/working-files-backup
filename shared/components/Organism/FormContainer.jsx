@@ -52,6 +52,7 @@ const defaultProps = {
   saveText: __('Apply'),
   savingText: __('Applying'),
   savedText: __('Applied'),
+  data: fromJS({}),
 };
 
 class FormContainer extends PureComponent {
