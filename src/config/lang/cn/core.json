@@ -530,5 +530,7 @@
   "Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF": "请输入正确的MAC地址，比如：AA:BB:CC:DD:EE:FF或AA-BB-CC-DD-EE-FF",
   "%s and %s can not has same segment": "%s与%s不能在同一网段",
   "Range: %s or %s - %s": "范围：%s 或 %s - %s",
+  "%s host bits Can not all zero": "%s的主机位不能全为0",
+  "%s must be string": "%s必须为字符串",
   "Can not has same segment": "不能拥有同样的网段"
 }

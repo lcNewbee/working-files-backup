@@ -189,6 +189,37 @@ var combineVaildate = {
     if (isBroadcastIpRet) {
       return __('Broadcast IP address is not allowed!');
     }
+  },
+
+  noHostBitsAllZero: function(ip, mask, msgOption) {
+    var ipArr = null;
+    var maskArr = null;
+    var i, curIpNum, curMaskNum;
+
+    if (typeof ip !== 'string') {
+      return __('%s must be string', (msgOption && msgOption.ipLabel) || __('IP Address'));
+    }
+
+    if(typeof mask !== 'string') {
+      return __('%s must be string', (msgOption && msgOption.maskLabel) || __('Subnet Mask'));
+    }
+
+    ipArr = ip.split('.');
+    maskArr = mask.split('.');
+
+    for (i = 3; i >= 0; i -= 1) {
+      curIpNum = parseInt(ipArr[i], 10);
+      curMaskNum = parseInt(maskArr[i], 10);
+
+      if ((curIpNum | curMaskNum) !== curMaskNum) {
+        return ;
+      }
+    }
+    if (msgOption && msgOption.ipLabel) {
+      return __('%s and %s can not has same segment', msgOption.ipLabel);
+    } else {
+      return __('%s host bits Can not all zero', __('IP Address'));
+    }
   }
 };
 
