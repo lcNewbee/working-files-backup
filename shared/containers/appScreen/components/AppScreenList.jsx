@@ -465,7 +465,7 @@ class AppScreenList extends React.PureComponent {
     const list = store.getIn(['data', 'list']);
     const listKey = option.actionKey || this.props.listKey;
     const $$actionItem = list.get(index);
-    const confirmText = __('Are you sure to %s selected %s row?', __(actionName), (index + 1));
+    const confirmText = __('Are you sure to %s the selected row %s?', __(actionName), (index + 1));
     let selectedList = [];
     let cancelMsg = '';
     let onBeforeActionResult;
@@ -666,7 +666,7 @@ class AppScreenList extends React.PureComponent {
                 {
                   deleteableResult ? (
                     <Popconfirm
-                      title={__('Are you sure to %s selected %s row?', __('delete'), (index + 1))}
+                      title={__('Are you sure to %s the selected row %s?', __('delete'), (index + 1))}
 
                       onOk={
                         () => {
@@ -708,7 +708,7 @@ class AppScreenList extends React.PureComponent {
                     if (needconfirm) {
                       actionNode = (
                         <Popconfirm
-                          title={__('Are you sure to %s selected %s row?', __(actionName), (index + 1))}
+                          title={__('Are you sure to %s the selected row %s?', __(actionName), (index + 1))}
                           onOk={onClickFunc}
                         >
                           <Button

@@ -5,7 +5,7 @@ class SystemLog extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
-		$this->load->helper('array');		
+		$this->load->helper('array');
 		$this->load->model('system/Log_Model');
 	}
 	function fetch() {
@@ -36,8 +36,13 @@ class SystemLog extends CI_Controller {
 	public function logdownload() {
 		//download
 		$this->load->helper('download');
-		$data = file_get_contents("/var/log/messages");
-		$name = 'messages';
-		force_download($name, $data);
+
+    if (is_file("/var/log/messages")) {
+      $data = file_get_contents("/var/netmanager/messages");
+      $name = 'messages';
+      force_download($name, $data);
+    } else {
+      echo 'File not exists';
     }
+  }
 }
