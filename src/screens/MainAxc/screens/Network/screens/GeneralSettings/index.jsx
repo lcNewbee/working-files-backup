@@ -16,19 +16,14 @@ const settingsFormOptions = fromJS([
     label: __('Device Name'),
   },
   {
-    id: 'ipSupport',
-    type: 'switch',
+    id: 'ipv6Enable',
+    type: 'checkbox',
     fieldset: 'generalsettings',
-    label: __('IP Support'),
-    options: [
-      { label: __('IPv4'), value: 'v4' },
-      { label: __('IPv6'), value: 'v6' },
-      { label: __('IPv4 & IPv6'), value: 'v46' },
-    ],
+    label: __('IPv6 Enable'),
   },
   /** *****IPv4 settings********** */
   {
-    id: 'ipv4Type',
+    id: 'ipv4Ip',
     type: 'text',
     fieldset: 'ipv4settings',
     fieldsetOption: {
@@ -36,9 +31,6 @@ const settingsFormOptions = fromJS([
     },
     label: __('IP'),
     legend: __('IPv4 Management Interface'),
-    visible(item) {
-      return item.get('ipSupport') === 'v4' || item.get('ipSupport') === 'v46';
-    },
   },
   {
     id: 'ipv4Mask',
@@ -46,18 +38,12 @@ const settingsFormOptions = fromJS([
     fieldset: 'ipv4settings',
     label: __('Subnet Mask'),
     disabled: item => item.get('ipv4Type') === 'dhcp',
-    visible(item) {
-      return item.get('ipSupport') === 'v4' || item.get('ipSupport') === 'v46';
-    },
   },
   {
     id: 'ipv4Vlan',
     type: 'number',
     fieldset: 'ipv4settings',
     label: __('Access VLAN'),
-    visible(item) {
-      return item.get('ipSupport') === 'v4' || item.get('ipSupport') === 'v46';
-    },
   },
   /** ***IPv6 settings********* */
   {
@@ -71,7 +57,7 @@ const settingsFormOptions = fromJS([
     disabled: item => item.get('ipv6Type') === 'auto',
     legend: __('IPv6 Management Interface'),
     visible(item) {
-      return item.get('ipSupport') === 'v6' || item.get('ipSupport') === 'v46';
+      return item.get('ipv6Enable') === '1';
     },
   },
   {
@@ -81,7 +67,7 @@ const settingsFormOptions = fromJS([
     label: __('Prefix Length'),
     disabled: item => item.get('ipv6Type') === 'auto',
     visible(item) {
-      return item.get('ipSupport') === 'v6' || item.get('ipSupport') === 'v46';
+      return item.get('ipv6Enable') === '1';
     },
   },
 ]).groupBy(item => item.get('fieldset'))
@@ -167,6 +153,11 @@ export default class GeneralSettings extends React.Component {
     const curScreenId = store.get('curScreenId');
     const curStore = store.get(curScreenId);
 
+    const ipv6Enable = store.getIn([curScreenId, 'curSettings', 'ipv6Enable']);
+    this.tableOptions = immutableUtils.getTableOptions(ipv4ListOptions);
+    this.editFormOptions = immutableUtils.getFormOptions(ipv4ListOptions);
+    this.ipv6TableOptions = immutableUtils.getTableOptions(ipv6ListOptions);
+    this.ipv6EditFormOptions = immutableUtils.getTableOptions(ipv6ListOptions);
     return (
       <div className="t-app">
         <div>
@@ -177,7 +168,7 @@ export default class GeneralSettings extends React.Component {
             hasSettingsSaveButton
           />
         </div>
-        <div style={{padding: '0 1em'}}>
+        <div style={{ padding: '0 1em' }}>
           <AppScreenList
             {...this.props}
             store={curStore}
@@ -192,20 +183,23 @@ export default class GeneralSettings extends React.Component {
             deletable
           />
         </div>
-        <div style={{padding: '0 1em'}}>
-          <AppScreenList
-            {...this.props}
-            store={curStore}
-            tableOptions={ipv6TableOptions}
-            id="ipv6"
-            editFormId="ipv6"
-            editFormOptions={ipv6EditFormOptions}
-            listTitle={__('IPv6 Static Route')}
-            actionable
-            selectable
-            deletable
-          />
-        </div>
+        {
+          ipv6Enable === '1' && (
+            <div style={{ padding: '0 1em' }}>
+              <AppScreenList
+                {...this.props}
+                store={curStore}
+                tableOptions={ipv6TableOptions}
+                id="ipv6"
+                editFormOptions={ipv6EditFormOptions}
+                listTitle={__('IPv6 Static Route')}
+                actionable
+                selectable
+                deletable
+              />
+            </div>
+          )
+        }
       </div>
     );
   }

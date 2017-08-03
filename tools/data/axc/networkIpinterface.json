@@ -4,23 +4,28 @@
     "msg": "ok"
   },
   "data": {
+    "ipv6Enable": "1",
     "list": [
       {
         "name": "portname1",
         "ipType": "static",
-        "ip": "192.168.5.123",
+        "ipv4Ip": "192.168.5.123",
         "vlanId": "1",
         "mask": "255.255.255.0",
-        "gateway": "192.168.5.1",
+        "ipv4Gateway": "192.168.5.1",
         "natEnable": "0",
         "interVlanRouting": "0",
         "authentication": "portal",
-        "dhcpServerEnable": "0"
+        "dhcpServerEnable": "0",
+
+        "ipv6Ip": "fe80::250:56ff:fe83:6457",
+        "prefix": "1234556",
+        "ipv6Gateway": "fe80::250:56ff:fe83:6457"
       },
       {
         "name": "portname2",
         "ipType": "pppoe",
-        "ip": "192.168.5.123",
+        "ipv4Ip": "192.168.5.123",
         "vlanId": "2",
         "mask": "255.255.255.0",
         "pppoeServer": "192.168.2.1",
@@ -29,7 +34,11 @@
         "natEnable": "1",
         "interVlanRouting": "0",
         "authentication": "portal",
-        "dhcpServerEnable": "1"
+        "dhcpServerEnable": "1",
+
+        "ipv6Ip": "fe80::250:56ff:fe83:6457",
+        "prefix": "1234556",
+        "ipv6Gateway": "fe80::250:56ff:fe83:6457"
       },
       {
         "name": "portname3",

@@ -77,7 +77,9 @@ export default class View extends React.Component {
         text: __('VLAN ID'),
         noForm: this.props.store.getIn([curScreenId, 'actionQuery', 'addMethod']) !== 'single',
         formProps: {
+          required: true,
           type: 'number',
+          disabled: this.props.store.getIn([curScreenId, 'actionQuery', 'action']) === 'edit',
         },
       },
       {
@@ -89,6 +91,18 @@ export default class View extends React.Component {
         id: 'status',
         noForm: true,
         text: __('Status'),
+      },
+      {
+        id: 'description',
+        noForm: this.props.store.getIn([curScreenId, 'actionQuery', 'addMethod']) !== 'single',
+        text: __('Description'),
+        render: (val) => {
+          if (!val) return '--';
+          return val;
+        },
+        formProps: {
+          type: 'textarea',
+        },
       },
       // VLAN group
       {

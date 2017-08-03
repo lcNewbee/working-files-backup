@@ -1,0 +1,41 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "deviceName": "AXC4.0",
+      "ipv6Enable": "1",
+      "ipv4Ip": "192.168.0.222",
+      "ipv4Mask": "255.255.255.0",
+      "ipv4Vlan": "1",
+      "ipv6Ip": "fe80::250:56ff:fe83:6457",
+      "ipv6Prefix": "123"
+    },
+    "list": [
+      {
+        "name": "static1",
+        "subnet": "192.168.0.0/24",
+        "gateway": "192.168.0.1"
+      },
+      {
+        "name": "static2",
+        "subnet": "192.168.1.0/24",
+        "gateway": "192.168.1.1"
+      }
+    ],
+    "ipv6List": [
+      {
+        "name": "static1",
+        "prefix": "000",
+        "gateway": "192.168.0.1"
+      },
+      {
+        "name": "static1",
+        "prefix": "000",
+        "gateway": "192.168.0.1"
+      }
+    ]
+  }
+}
