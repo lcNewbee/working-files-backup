@@ -24,7 +24,6 @@ const defaultProps = {
   Component: 'button',
   theme: 'default',
   role: 'button',
-  type: 'button',
 };
 
 class Button extends PureComponent {
