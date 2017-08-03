@@ -5,7 +5,7 @@ import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 
 import FormGroup from 'shared/components/Form/FormGroup';
-import SaveButton from 'shared/components/Button/SaveButton';
+import Button from 'shared/components/Button/Button';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
@@ -36,6 +36,8 @@ export default class View extends React.Component {
 
   onDownloadSystemLog() {
     window.location.href = '/goform/system/logdownload';
+    // this.props.fetch('/goform/system/logdownload');
+    // window.open('/goform/system/logdownload', 'dowmloadLog');
   }
 
   render() {
@@ -49,13 +51,12 @@ export default class View extends React.Component {
           <fieldset className="o-form__fieldset">
             <legend className="o-form__legend">{__('System Log')}</legend>
             <FormGroup label={__('Download System Log')}>
-              <SaveButton
-                type="button"
+              <Button
+                Component="a"
+                theme="primary"
                 icon="download"
                 text={__('Download')}
-                onClick={
-                  () => this.onDownloadSystemLog()
-                }
+                href="/goform/system/logdownload"
               />
             </FormGroup>
           </fieldset>

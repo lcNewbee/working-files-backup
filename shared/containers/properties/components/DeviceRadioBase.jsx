@@ -12,24 +12,40 @@ import {
 
 function getChannelList(data) {
   return utils.fetch('goform/country/channel', data)
-    .then((json) => {
-      const channel = json.data.channel;
-      const ret = {
-        options: [],
-      };
+    .then(
+      (json) => {
+        const channel = json.data.channel;
+        const ret = {
+          options: [],
+        };
 
-      if (json && json.data && json.data.channel) {
-        ret.options = channel.map(
-          val => ({
-            value: val,
-            label: val,
-          }),
-        );
-      }
+        if (json && json.data && json.data.channel) {
+          ret.options = channel.map(
+            val => ({
+              value: val,
+              label: val,
+            }),
+          );
+        }
 
-      return ret;
-    },
-  );
+        return ret;
+      },
+    );
+}
+function getSSIDStr($$data) {
+  const ret = [];
+  const len = 16;
+  let curSsid = '';
+  let curEnable = 0;
+
+  for (let i = 0; i < len; i += 1) {
+    curSsid = $$data.get(`wlan${i}`);
+    curEnable = $$data.get(`wlan${i}enable`);
+    if (curSsid && curEnable === 1) {
+      ret.push(curSsid);
+    }
+  }
+  return ret.join(',');
 }
 
 const propTypes = {
@@ -94,6 +110,7 @@ class DeviceSystem extends PureComponent {
         myData.channelwidth = 50;
       }
     }
+    console.log(data);
 
     if (this.props.onChangeData) {
       this.props.onChangeData(myData);
@@ -143,18 +160,56 @@ class DeviceSystem extends PureComponent {
   render() {
     const { app, store, actionable, ...restProps } = this.props;
     const formData = store.getIn(['data']);
-    const formOptions = radioBase.setIn([
-      radioBase.findIndex(
-        $$item => $$item.get('id') === 'channel',
-      ),
-      'options',
-    ], this.state.$$channelOptions)
-    .setIn([
-      radioBase.findIndex(
-        $$item => $$item.get('id') === 'phymode',
-      ),
-      'options',
-    ], this.state.$$phymodeOptopns);
+    const formOptions = radioBase.map(
+      ($$item) => {
+        let $$retItem = $$item;
+
+        if ($$item.get('id') === 'channel') {
+          $$retItem = $$retItem.set('options', this.state.$$channelOptions);
+        } else if ($$item.get('id') === 'phymode') {
+          $$retItem = $$retItem.set('options', this.state.$$phymodeOptopns);
+        }
+
+        return $$retItem;
+      },
+    )
+      .push(fromJS({
+        id: 'ssids',
+        label: __('SSID Control'),
+        type: 'checkboxs',
+        value: getSSIDStr(formData),
+        visible($$data) {
+          return parseInt($$data.get('radioenable'), 10) === 1;
+        },
+        options: ($$data) => {
+          const $$ret = [];
+          const len = 16;
+          let curSsid = '';
+
+          for (let i = 0; i < len; i += 1) {
+            curSsid = $$data.get(`wlan${i}`);
+            if (curSsid) {
+              $$ret.push({
+                value: curSsid,
+                label: curSsid,
+                key: `wlan${i}enable`,
+              });
+            }
+          }
+          return $$ret;
+        },
+
+        onChange(data) {
+          const retData = utils.extend({}, data);
+
+          retData.mergeData = {
+            [data.key]: data.checked ? 1 : 0,
+          };
+
+          return retData;
+        },
+      }));
+
 
     return (
       <FormContainer

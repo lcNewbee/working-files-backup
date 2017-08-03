@@ -37,8 +37,10 @@ class SystemLog extends CI_Controller {
 		//download
 		$this->load->helper('download');
 
-    if (is_file("/var/log/messages")) {
-      $data = file_get_contents("/var/netmanager/messages");
+    $filePath = "/var/netmanager/messages";
+
+    if (is_file($filePath)) {
+      $data = file_get_contents($filePath);
       $name = 'messages';
       force_download($name, $data);
     } else {

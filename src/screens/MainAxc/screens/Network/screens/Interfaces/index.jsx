@@ -100,10 +100,22 @@ export default class NetworkInterface extends React.Component {
     const ip = $$curListItem.get('ip');
     const mask = $$curListItem.get('mask');
     let $$curList = store.getIn([route.id, 'data', 'list']);
-    let ret = '';
+    let ret;
 
     if (actionType === 'add' || actionType === 'edit') {
+      // 验证 是否为广播地址
       ret = validator.combine.noBroadcastIp(ip, mask);
+
+      if (ret) {
+        return ret;
+      }
+
+      // 验证 是否主机位全位0
+      ret = validator.combine.noHostBitsAllZero(ip, mask);
+
+      if (ret) {
+        return ret;
+      }
 
       // 过滤正在编辑的项
       if (actionType === 'edit') {

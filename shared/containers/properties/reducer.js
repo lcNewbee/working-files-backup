@@ -38,6 +38,22 @@ const defaultItem = fromJS({
         txpower: '100%',
         first5g: 1,
         switch11n: 1,
+        wlan0enable: 1,
+        wlan1enable: 1,
+        wlan2enable: 1,
+        wlan3enable: 1,
+        wlan4enable: 1,
+        wlan5enable: 1,
+        wlan6enable: 1,
+        wlan7enable: 1,
+        wlan8enable: 1,
+        wlan9enable: 1,
+        wlan10enable: 1,
+        wlan11enable: 1,
+        wlan12enable: 1,
+        wlan13enable: 1,
+        wlan14enable: 1,
+        wlan15enable: 1,
       },
     }, {
       panelKey: 'radioAdvance',
@@ -132,8 +148,8 @@ function initAddPropertyPanel(state, action) {
   }
 
   return ret.set('isShowPanel', true)
-      .set('list', $$retList)
-      .set('activeIndex', activeIndex);
+    .set('list', $$retList)
+    .set('activeIndex', activeIndex);
 }
 
 function receivePropertyPanelData(state, action) {
@@ -229,10 +245,10 @@ function changePropertyPanelRadioIndex(state, index) {
   let $$curRadioData = $$curListItem.getIn(['curData', 'radio']);
 
   $$curRadioData = $$curRadioData.merge(
-      $$curListItem.getIn(
-        ['data', 'radios', radioIndex],
-      ),
-    ).set('activeIndex', radioIndex);
+    $$curListItem.getIn(
+      ['data', 'radios', radioIndex],
+    ),
+  ).set('activeIndex', radioIndex);
 
   $$curListItem = $$curListItem
     .set('configurationRadioIndex', radioIndex)
