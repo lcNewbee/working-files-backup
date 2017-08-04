@@ -241,8 +241,9 @@ function activeListItem(state, curScreenName, action) {
  * @returns
  */
 function receiveScreenData($$state, curScreenName, action) {
+  const selectedListKey = $$state.getIn([curScreenName, 'curListKeys', 'selectedListKey']);
   let $$ret = $$state;
-  let $$selectedList = $$state.getIn([curScreenName, 'actionQuery', 'selectedList']);
+  let $$selectedList = $$state.getIn([curScreenName, 'actionQuery', selectedListKey]);
 
   if (action.payload && action.payload.settings) {
     $$ret = $$ret.mergeDeepIn([curScreenName, 'curSettings'], action.payload.settings);
@@ -256,7 +257,7 @@ function receiveScreenData($$state, curScreenName, action) {
   return $$ret.setIn([curScreenName, 'fetching'], false)
     .mergeIn([curScreenName, 'data'], action.payload)
     .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt)
-    .setIn([curScreenName, 'actionQuery', 'selectedList'], $$selectedList);
+    .setIn([curScreenName, 'actionQuery', selectedListKey], $$selectedList);
 }
 
 /**

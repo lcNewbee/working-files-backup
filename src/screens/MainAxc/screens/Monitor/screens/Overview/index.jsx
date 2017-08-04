@@ -14,6 +14,8 @@ const flowRateFilter = utils.filter('flowRate');
 
 const msg = {
   days: __('Days'),
+  goSetting: __('Go to Setting'),
+  helpText: __('To enable Rogue AP and Interfering AP detection, please go to AP Group > WIPS/WIDS , enable the AP Monitor function and to collect information about neighbor APs.'),
 };
 const timeTypeSwitchs = fromJS([
   {
@@ -613,9 +615,16 @@ export default class GroupOverview extends React.Component {
               />
             </div>
           </div>
-          <h3 className="element t-overview__header">
-            {__('Rogue AP List')}
-          </h3>
+
+          <div className="element">
+            <h3 className="t-overview__header">
+              {__('Rogue AP List')}
+            </h3>
+            <p>
+              <span className="help">{ msg.helpText }</span>
+              <a href="#/main/group/safe/wips" className="link-more">{msg.goSetting}>></a>
+            </p>
+          </div>
           <div className="element t-overview__section">
             <Table
               className="table table--light"
@@ -624,9 +633,15 @@ export default class GroupOverview extends React.Component {
               page={serverData.getIn(['neighborsAps', 'page'])}
             />
           </div>
-          <h3 className="element t-overview__header">
-            {__('Interfering AP List')}
-          </h3>
+          <div className="element">
+            <h3 className="t-overview__header">
+              {__('Interfering AP List')}
+            </h3>
+            <p className="help">
+              <span className="help">{ msg.helpText }</span>
+              <a href="#/main/group/safe/wips" className="link-more">{msg.goSetting}>></a>
+            </p>
+          </div>
           <div className="element t-overview__section">
             <Table
               className="table table--light"

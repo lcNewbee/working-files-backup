@@ -354,14 +354,15 @@ class AppScreenList extends React.PureComponent {
   onSelectedItemsAction(option) {
     const needConfirm = option.needConfirm;
     const store = this.props.store;
-    const { selectedListKey } = this.state.listKeyMap;
-    const $$list = store.getIn(['data', 'list']);
+    const { selectedListKey, listDataKey } = this.state.listKeyMap;
+    const $$list = store.getIn(['data', listDataKey]);
     const $$actionQuery = store.getIn(['actionQuery']);
     const listKey = option.actionKey || this.props.listKey;
     let actionName = option.actionName;
     let selectNumber = 0;
     let msgText = '';
     let $$selectedList = $$actionQuery.get(selectedListKey);
+
 
     const doSelectedItemsAction = () => {
       this.props.changeScreenActionQuery({
@@ -391,7 +392,7 @@ class AppScreenList extends React.PureComponent {
         }
 
         return ret;
-      });
+      }).filterNot($$item => !$$item);
       selectNumber = $$actionQuery.get('selectedList').size;
       msgText = __('Are you sure to %s selected %s rows?', __(actionName), selectNumber);
 
@@ -406,8 +407,8 @@ class AppScreenList extends React.PureComponent {
         doSelectedItemsAction();
       }
     } else if (actionName === 'setting') {
-        actionName = 'edit';
-      }
+      actionName = 'edit';
+    }
   }
   onItemAction($$actionQuery, option) {
     const { cancelMsg, needConfirm, confirmText, $$curData } = option;
