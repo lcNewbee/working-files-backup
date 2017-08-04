@@ -30,7 +30,7 @@ describe('validator.combine', () => {
 
     it('When params ip or mask not type string return err msg', () => {
       expect(noHostBitsAllZero('', {})).toBe('Subnet Mask must be string');
-      expect(noHostBitsAllZero({}, '')).toBe('IP address must be string');
+      expect(noHostBitsAllZero({}, '')).toBe('IP Address must be string');
     });
 
     it('When ip host bits not all zero should return undefinded', () => {
@@ -41,10 +41,10 @@ describe('validator.combine', () => {
     });
 
     it('should return msg', () => {
-      expect(noHostBitsAllZero('192.168.1.128', '255.255.255.192')).toBe('IP address host bits Can not all zero');
-      expect(noHostBitsAllZero('192.168.128.0', '255.255.192.0')).toBe('IP address host bits Can not all zero');
-      expect(noHostBitsAllZero('192.252.0.0', '255.254.0.0')).toBe('IP address host bits Can not all zero');
-      expect(noHostBitsAllZero('128.0.0.0', '192.0.0.0')).toBe('IP address host bits Can not all zero');
+      expect(noHostBitsAllZero('192.168.1.128', '255.255.255.192')).toBe('IP Address host bits Can not all zero');
+      expect(noHostBitsAllZero('192.168.128.0', '255.255.192.0')).toBe('IP Address host bits Can not all zero');
+      expect(noHostBitsAllZero('192.252.0.0', '255.254.0.0')).toBe('IP Address host bits Can not all zero');
+      expect(noHostBitsAllZero('128.0.0.0', '192.0.0.0')).toBe('IP Address host bits Can not all zero');
     });
   });
 });

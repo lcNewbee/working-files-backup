@@ -59,6 +59,7 @@
     overflow: hidden;
     background-color: #fff;
     transition: width .3s ease-in-out;
+    animation: asideRight .3s 1;
   }
 
   &.active {
@@ -80,5 +81,16 @@
     overflow-y: auto;
 
     @include scrollbar();
+  }
+}
+
+@keyframes asideRight {
+  0%,
+  50% {
+    width: 0;
+  }
+  100% {
+    opacity: 1;
+    width: 380px;
   }
 }

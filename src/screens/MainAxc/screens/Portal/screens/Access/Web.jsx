@@ -178,6 +178,7 @@ const listOptions = fromJS([
   {
     id: 'pageStyle',
     noTable: true,
+    defaultValue: '#ffffff',
     options: [
       {
         value: '#ffffff',

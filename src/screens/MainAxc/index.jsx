@@ -85,6 +85,12 @@ export default class Main extends React.PureComponent {
     }
     this.onRefreshProductInfo(this.props);
     this.actionable = getActionable(this.props);
+
+    setTimeout(() => {
+      this.setState({
+        animationInited: true,
+      });
+    }, 1800);
   }
   componentWillUpdate(nextProps) {
     if (this.props.app.get('companyname') !== nextProps.app.get('companyname')) {
@@ -218,6 +224,7 @@ export default class Main extends React.PureComponent {
       'main--open-left': isMainLeftShow,
       'is-main-right-open': isMainRightShow,
       'is-main-nav-hidden': !isMainNavShow,
+      'animation-inited': this.state.animationInited,
     });
     return (
       <div className={mainClassName}>

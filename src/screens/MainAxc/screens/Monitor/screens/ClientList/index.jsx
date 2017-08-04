@@ -47,8 +47,15 @@ const listOptions = fromJS([
   }, {
     id: 'connectap',
     text: __('Associated AP'),
-    render(val, item) {
-      return item.get('connectap') || item.get('apmac');
+    render(val, $$item) {
+      const frequency = $$item.get('frequency');
+      let ret = $$item.get('connectap') || $$item.get('apmac');
+
+
+      if (frequency) {
+        ret = `${ret} (${frequency})`;
+      }
+      return ret;
     },
   }, {
     id: 'bandwidth',

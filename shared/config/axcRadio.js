@@ -311,8 +311,8 @@ export const radioAdvance = fromJS([
     label: __('RTS Threshold'),
     type: 'number',
     min: 0,
-    max: 2346,
-    defaultValue: 2346,
+    max: 2347,
+    defaultValue: 2347,
   },
   // {
   //   id: 'shortretrythreshold',

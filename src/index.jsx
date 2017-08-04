@@ -60,7 +60,9 @@ function renderApp(renderRoutes) {
     mountNode,
   );
 }
-renderApp(prodConfig.routes);
+window.onload = () => {
+  renderApp(prodConfig.routes);
+};
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {

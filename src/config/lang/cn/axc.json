@@ -589,6 +589,7 @@
   "Number of Re-joins": "重新加入次数",
   "Same AP model and firmware version item already exists": "已存在相同AP型号与软件版本号的项",
   "Restoring..., Do not shutdown device": "恢复中，请不要关闭设备",
+  "This interface is already used by the DHCP address pool. To modify please delete the corresponding DHCP address pool": "此接口已被DHCP地址池使用，如需修改请先删除相应DHCP地址池",
 
   "Read Password": "读口令",
   "Write Password": "写口令",

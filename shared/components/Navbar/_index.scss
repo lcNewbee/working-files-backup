@@ -7,7 +7,7 @@
   top: 0;
   z-index: 1501;
   width: 100%;
-  min-height: $g-navbar-height;
+  height: $g-navbar-height;
   background: $g-main-color;
   background-color: #fff;
   box-shadow: 0 1px 4px 0 rgba(222, 222, 222, 1);
@@ -124,3 +124,5 @@
     }
   }
 }
+
+

@@ -255,7 +255,7 @@ const routes = [
                     id: 'dhcpList',
                     path: '/main/network/dhcp/service/list',
                     formUrl: 'goform/network/dhcp/service/list',
-                    text: __('DHCP List'),
+                    text: __('DHCP Server'),
                     component: sDhcpList.Screen,
                   }, {
                     id: 'dhcpRelay',
