@@ -417,5 +417,10 @@
   "Free account don't need recharge!": "免费账户无需充值!",
   "Only 'Hourly Voucher' type is available to Time-based account!": "计时账户只能使用‘包时卡’充值！",
   "'Hourly Voucher' and 'Traffic Voucher' type are NOT available to 'Buy Out' account!": "买断账户不能使用‘包时卡’和‘流量卡’充值！",
-  "Only 'Traffic Voucher' type is available to 'Traffic' account!": "流量账户只能使用‘流量卡’充值！"
+  "Only 'Traffic Voucher' type is available to 'Traffic' account!": "流量账户只能使用‘流量卡’充值！",
+
+  "Cooperative ID": "合作身份ID",
+  "Security Code": "安全检验码",
+  "Alipay Payment Settings": "阿里支付设置",
+  "Wechat Payment Settings": "微信支付设置"
 }

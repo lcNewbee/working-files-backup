@@ -664,7 +664,7 @@ export default class Basic extends React.Component {
       macList = apMacList.insert(it - 1, macVal).delete(it + 1);
     }
     const radioList = this.props.store.get('curData').get('radioList')
-                        .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
+      .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
     this.props.updateItemSettings({ radioList });
   }
 
@@ -672,7 +672,7 @@ export default class Basic extends React.Component {
     const selectedCode = this.props.selfState.get('selectedCountry');
     const { radioId } = this.props.selfState.get('currRadioConfig').toJS();
     const radioList = this.props.store.getIn(['curData', 'radioList'])
-                                .setIn([radioId, 'countryCode'], selectedCode);
+      .setIn([radioId, 'countryCode'], selectedCode);
     Promise.resolve().then(() => {
       this.props.updateItemSettings({ radioList });
     }).then(() => {
@@ -790,8 +790,8 @@ export default class Basic extends React.Component {
         // disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
         onClick={() => {
           const tableItemForSsid = fromJS({}).set('val', val)
-                .set('item', item).set('isShow', '1')
-                .set('pos', pos);
+            .set('item', item).set('isShow', '1')
+            .set('pos', pos);
           this.props.changeTableItemForSsid(tableItemForSsid);
         }}
       />
@@ -808,8 +808,8 @@ export default class Basic extends React.Component {
         size="sm"
         onClick={() => {
           const tableItemForSsid = fromJS({}).set('val', val)
-                .set('item', item).set('isShow', '0')
-                .set('pos', pos);
+            .set('item', item).set('isShow', '0')
+            .set('pos', pos);
           this.props.changeShowSpeedLimitModal(true);
           this.props.changeTableItemForSsid(tableItemForSsid);
         }}
@@ -905,7 +905,7 @@ export default class Basic extends React.Component {
     const apMacList = curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacList']) || fromJS([]);
     // const keysFromRoute = funConfig.ssidTableKeys;
     const radioModeOptionsFor5g = funConfig.radioModeOptionsFor5g ? funConfig.radioModeOptionsFor5g
-                                                                  : defaultRadioModeOptionsFor5g;
+      : defaultRadioModeOptionsFor5g;
     if (this.props.store.get('curSettingId') === 'base') {
       return null;
     }
@@ -953,7 +953,7 @@ export default class Basic extends React.Component {
 
         <div className="row">
           <div className={this.radioSettingsHeadClassName()}>
-            {  // 标题
+            { // 标题
               this.props.selfState.get('showRadioSetting') ? (
                 <icon
                   className="fa fa-minus-square-o"
@@ -1036,9 +1036,9 @@ export default class Basic extends React.Component {
                   <FormInput
                     type="text"
                     value={getCountryNameFromCode(
-                        this.props.selfState.get('selectedCountry'),
-                        countryMap,
-                      )}
+                      this.props.selfState.get('selectedCountry'),
+                      countryMap,
+                    )}
                     disabled
                     style={{
                       width: '127px',
@@ -1172,7 +1172,7 @@ export default class Basic extends React.Component {
                   value={curData.getIn(['radioList', radioId, 'frequency'])}
                   onChange={(data) => {
                     const radioList = curData.get('radioList')
-                                      .setIn([radioId, 'frequency'], data.value);
+                      .setIn([radioId, 'frequency'], data.value);
                     this.props.updateItemSettings({ radioList });
                   }}
                 />
@@ -1187,7 +1187,7 @@ export default class Basic extends React.Component {
                       value={curData.getIn(['radioList', radioId, 'maxRadioClients'])}
                       onChange={(data) => {
                         const radioList = curData.get('radioList')
-                                          .setIn([radioId, 'maxRadioClients'], data.value);
+                          .setIn([radioId, 'maxRadioClients'], data.value);
                         this.props.updateItemSettings({ radioList });
                       }}
                       help={`${__('Range: ')}1 ~ 200`}
@@ -1196,7 +1196,7 @@ export default class Basic extends React.Component {
                     />
                   ) : null
                 }
-                <FormGroup
+                {/* <FormGroup // 正常功率版本
                   label={__('Tx Power')}
                   type="number"
                   min={this.props.selfState.get('minTxpower')}
@@ -1205,10 +1205,26 @@ export default class Basic extends React.Component {
                   value={curData.getIn(['radioList', radioId, 'txPower'])}
                   onChange={(data) => {
                     const radioList = curData.get('radioList')
-                                      .setIn([radioId, 'txPower'], data.value);
+                      .setIn([radioId, 'txPower'], data.value);
                     this.props.updateItemSettings({ radioList });
                   }}
                   help={`${__('Range: ')} ${this.props.selfState.get('minTxpower') || '3'}~${this.props.selfState.get('maxTxpower') || '23'} dBm`}
+                  required
+                  {...validTxpower}
+                /> */}
+                <FormGroup // 低功率版本
+                  label={__('Tx Power')}
+                  type="number"
+                  min={this.props.selfState.get('minTxpower')}
+                  form="radioSettings"
+                  max={20}
+                  value={curData.getIn(['radioList', radioId, 'txPower'])}
+                  onChange={(data) => {
+                    const radioList = curData.get('radioList')
+                      .setIn([radioId, 'txPower'], data.value);
+                    this.props.updateItemSettings({ radioList });
+                  }}
+                  help={`${__('Range: ')} ${this.props.selfState.get('minTxpower') || '3'}~20 dBm`}
                   required
                   {...validTxpower}
                 />

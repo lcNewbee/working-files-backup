@@ -376,7 +376,7 @@ export default class SystemMaintenance extends Component {
                 />
               </div>
             </div>
-            )
+          )
         }
 
         {
