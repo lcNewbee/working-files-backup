@@ -17,6 +17,9 @@ const ERROR_MSG_MAP = {
   6112: __('Same mac already exists'),
   6113: __('Same mac already exists'),
   6114: __('This interface is already used by the DHCP address pool. To modify please delete the corresponding DHCP address pool'),
+  6115: __('Native vlan id does not exit in vlan list!'),
+  6116: __('Vlan id list allowed by trunk contains nonexistent id!'),
+  6117: __('DHCP Pool in use can not be deleted!'),
 
   // AXC： AP组管理 6200 - 6299
   6200: __(''),

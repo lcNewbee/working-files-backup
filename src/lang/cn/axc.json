@@ -791,5 +791,8 @@
   "WAN Select": "WAN口选择",
   "LAN Select": "LAN口选择",
   "DHCP Enable": "DHCP开关",
-  "Next Hoop": "下一跳"
+  "Next Hoop": "下一跳",
+
+  "IP address is required when the interface is enabled": "已开启端口的IP地址为必填项。",
+  "Subnet mask is required when the interface is enabled": "已开启端口的子网掩码为必填项。"
 }

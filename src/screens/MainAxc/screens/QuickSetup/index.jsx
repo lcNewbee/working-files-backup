@@ -382,7 +382,7 @@ export default class AxcQuickSetup extends React.Component {
       },
       {
         id: 'dhcpEnable',
-        text: __('DHCP Enable'),
+        text: __('DHCP Server Enable'),
         render: (val, item) => (
           <FormInput
             type="checkbox"
@@ -458,7 +458,7 @@ export default class AxcQuickSetup extends React.Component {
                 {
                   item.get('type') === 'lan' && (
                     <dl className="clearfix">
-                      <dt>{__('DHCP Enable')}</dt>
+                      <dt>{__('DHCP Server Enable')}</dt>
                       <dd>{item.get('dhcpEnable') === '1' ? __('Enabled') : __('Disabled')}</dd>
                     </dl>
                   )

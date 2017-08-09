@@ -29,12 +29,12 @@
       {
         "name": "static1",
         "prefix": "000",
-        "gateway": "192.168.0.1"
+        "gateway": "1111::250:56ff:fe83:6457"
       },
       {
-        "name": "static1",
-        "prefix": "000",
-        "gateway": "192.168.0.1"
+        "name": "static2",
+        "prefix": "111",
+        "gateway": "2222::250:56ff:fe83:6457"
       }
     ]
   }

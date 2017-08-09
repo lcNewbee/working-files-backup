@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import utils from 'shared/utils';
+import validator from 'shared/validator';
 
 const exchangeOptions = [
   { label: 'Access', value: 'access' },
@@ -45,12 +46,13 @@ const listOptions = fromJS([
     text: __('Rate'),
     type: 'select',
     options: [
-      { label: '1G', value: '1g' },
-      { label: '10G', value: '10g' },
+      { label: '100M', value: '100m' },
+      { label: '1000M', value: '1000m' },
       { label: __('Auto'), value: 'auto' },
     ],
     formProps: {
       type: 'select',
+      defaultValue: 'auto',
     },
   },
   {
@@ -68,10 +70,38 @@ const listOptions = fromJS([
   },
   {
     id: 'nativeVlan',
-    text: __('(Native)VLAN'),
+    text: __('Native VLAN'),
+    render: (val, item) => {
+      if (item.get('exchangeMode') === 'access') return '--';
+      return val;
+    },
     formProps: {
       type: 'number',
       required: true,
+      visible(item) {
+        return item.get('exchangeMode') === 'trunk';
+      },
+      validator: validator({
+        rules: 'num:[1, 4094]',
+      }),
+    },
+  },
+  {
+    id: 'vlanId',
+    text: __('VLAN Id'),
+    render: (val, item) => {
+      if (item.get('exchangeMode') === 'trunk') return '--';
+      return val;
+    },
+    formProps: {
+      type: 'number',
+      required: true,
+      visible(item) {
+        return item.get('exchangeMode') === 'access';
+      },
+      validator: validator({
+        rules: 'num:[1, 4094]',
+      }),
     },
   },
   {
@@ -83,6 +113,7 @@ const listOptions = fromJS([
     },
     formProps: {
       type: 'text',
+      help: `${__('Example')}: 2,5-10,15`,
       visible(item) {
         return item.get('exchangeMode') === 'trunk';
       },

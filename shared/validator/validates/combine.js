@@ -220,6 +220,25 @@ var combineVaildate = {
     } else {
       return __('%s host bits Can not all zero', __('IP Address'));
     }
+  },
+
+  // 验证IP是否在subnet子网中，subnet形式为：'192.168.0.0/24'
+  isWithinSubnet: function (ip, subnet) {
+    var ipAddress = subnet.split('/')[0];
+    var maskSize = subnet.split('/')[1];
+    var ipNumber = function(ip) {
+      var ipArr = ip.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+      if (ipArr) return (+ipArr[1]<<24) + (+ipArr[2]<<16) + (+ipArr[3]<<8) + (+ipArr[4]);
+      return null;
+    }
+
+    var ipMask = function(size) {
+      return -1 << (32 - size);
+    }
+
+    if ((ipNumber(ipAddress) & ipMask(maskSize)) !== (ipNumber(ip) & ipMask(maskSize))) {
+      return __('The IP address is out of the range of subnet!');
+    }
   }
 };
 

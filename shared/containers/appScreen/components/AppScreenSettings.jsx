@@ -78,9 +78,11 @@ class AppSettings extends React.PureComponent {
       onlyChanged: this.props.settingOnlyChanged,
     }).then(
       (json) => {
-        this.props.onAfterSync(json, {
-          action: 'setting',
-        });
+        if (typeof this.props.onAfterSync === 'function') {
+          this.props.onAfterSync(json, {
+            action: 'setting',
+          });
+        }
       },
     );
   }

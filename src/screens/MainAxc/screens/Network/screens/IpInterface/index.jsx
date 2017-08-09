@@ -9,236 +9,324 @@ import {
   AppScreen,
 } from 'shared/containers/appScreen';
 
+// 设计模式：职责链模式 用于数据保存前的组合验证
+const Chain = function (fn) {
+  this.fn = fn;
+  this.successor = null;
+};
+
+Chain.prototype.setNextSuccessor = function (successor) {
+  this.successor = successor;
+};
+
+Chain.prototype.passRequest = function () {
+  const ret = this.fn.apply(this, arguments);
+  if (ret === 'nextSuccessor') {
+    return this.successor && this.successor.passRequest.apply(this.successor, arguments);
+  }
+  return ret;
+};
+
+// ipv4 IP地址和网关是否在同一网段
+function isIpAndGatewayInTheSameNet(actionQury, currList) {
+  const { ipv4Gateway, ipv4Ip, mask } = currList.toJS();
+  if (ipv4Gateway) {
+    const msgOption = { ipLabel: __('IP Address'), ip2Label: __('Gateway') };
+    const msg = validator.combine.needSameNet(ipv4Ip, mask, ipv4Gateway, msgOption);
+    if (msg) return msg;
+  }
+  return 'nextSuccessor';
+}
+
+// dhcp地址池起始和终止地址是否在同一个网段
+function isDhcpPoolInTheSameNet(actionQury, currList) {
+  const { dhcpPoolStart, dhcpPoolEnd, dhcpPoolMask, dhcpServerEnable, ipType } = currList.toJS();
+  if (ipType === 'static' && dhcpServerEnable === '1') {
+    const msgOption = { ipLabel: __('DHCP Start IP'), ip2Label: __('DHCP End IP') };
+    const msg = validator.combine.needSameNet(dhcpPoolStart, dhcpPoolMask, dhcpPoolEnd, msgOption);
+    if (msg) return msg;
+  }
+  return 'nextSuccessor';
+}
+
+// 终止IP地址是否小于起始IP地址
+function isDhcpEndIpBiggerThanStart(actionQury, currList) {
+  const { dhcpPoolStart, dhcpPoolEnd, dhcpPoolMask, dhcpServerEnable, ipType } = currList.toJS();
+  if (ipType === 'static' && dhcpServerEnable === '1') {
+    let maskBinaryStr = '';
+    dhcpPoolMask.split('.').forEach((element) => {
+      maskBinaryStr += Number(element).toString(2);
+    });
+    const netNum = maskBinaryStr.match(/^[1]+/)[0].length;
+    const hostMask = (((2 ** 32) - 1) >>> netNum);
+    const startIpArr = dhcpPoolStart.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+    const endIpArr = dhcpPoolEnd.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+
+    const startIpNum = (+startIpArr[1] << 24) + (+startIpArr[2] << 16) + (+startIpArr[3] << 8) + (+startIpArr[4]);
+    const endIpNum = (+endIpArr[1] << 24) + (+endIpArr[2] << 16) + (+endIpArr[3] << 8) + (+endIpArr[4]);
+    console.log((startIpNum & hostMask), (endIpNum & hostMask));
+    if ((startIpNum & hostMask) > (endIpNum & hostMask)) return __('DHCP end IP address must be greater than start IP!');
+    return '';
+  }
+  return 'nextSuccessor';
+}
+
+// 还有待判断的错误：
+// 1. ipv6的IP地址和网关不能相同。注意一个地址可能写法上并不相同
+// 2. ipv6的IP地址和网关应该在同一网段。
+
+const chainIpAndGatewayInTheSameNet = new Chain(isIpAndGatewayInTheSameNet);
+const chainDhcpPoolInTheSameNet = new Chain(isDhcpPoolInTheSameNet);
+const chainDhcpEndIpBiggerThanStart = new Chain(isDhcpEndIpBiggerThanStart);
+
+// 指定职责链
+chainIpAndGatewayInTheSameNet.setNextSuccessor(chainDhcpPoolInTheSameNet);
+chainDhcpPoolInTheSameNet.setNextSuccessor(chainDhcpEndIpBiggerThanStart);
+
+function onBeforeSync(actionQury, currList) {
+  return chainIpAndGatewayInTheSameNet.passRequest(actionQury, currList);
+}
+
 const sizeOptions = [
   { value: 10, label: '10' },
   { value: 20, label: '20' },
   { value: 30, label: '30' },
 ];
 
-const $$listOptions = fromJS([
-  {
-    id: 'name',
-    text: __('Port Name'),
-    formProps: {
-      type: 'text',
-      notEditable: true,
-      required: true,
+function generateListOptions() {
+  const $$listOptions = fromJS([
+    {
+      id: 'name',
+      text: __('Port Name'),
+      formProps: {
+        type: 'text',
+        notEditable: true,
+        required: true,
+      },
     },
-  },
-  {
-    id: 'vlanId',
-    text: __('VLAN ID'),
-    type: 'select',
-    options: [ // 选择已经配置好的vlan
-      { label: 'VLAN 1', value: '1' },
-      { label: 'VLAN 2', value: '2' },
-      { label: 'VLAN 3', value: '3' },
-      { label: 'VLAN 4', value: '4' },
-    ],
-    formProps: {
+    {
+      id: 'vlanId',
+      text: __('VLAN ID'),
       type: 'select',
-      searchable: true,
-      required: true,
+      options: this.vlanList,
+      formProps: {
+        type: 'select',
+        searchable: true,
+        required: true,
+      },
     },
-  },
-  {
-    id: 'ipType',
-    text: __('IP Type'),
-    noTable: true,
-    defaultValue: 'static',
-    formProps: {
-      minWidth: '66px',
-      type: 'switch',
-      options: [
-        { label: 'Static', value: 'static' },
-        { label: 'DHCP', value: 'dhcp' },
-        { label: 'PPPoE', value: 'pppoe' },
-      ],
+    {
+      id: 'ipType',
+      text: __('IP Type'),
+      noTable: true,
+      defaultValue: 'static',
+      formProps: {
+        minWidth: '66px',
+        type: 'switch',
+        options: [
+          { label: 'Static', value: 'static' },
+          { label: 'DHCP', value: 'dhcp' },
+          { label: 'PPPoE', value: 'pppoe' },
+        ],
+      },
     },
-  },
-  /* *************Static IP************** */
-  { //  Qst:ip地址保存时，是否需要后台做检测，通过和已经存在的接口IP对比确定是否能够保存？
-    id: 'ipv4Ip',
-    text: __('IPv4 IP'),
-    formProps: {
-      visible: item => item.get('ipType') === 'static',
-      type: 'text',
-      required: true,
-      validator: validator({
-        rules: 'ip',
-      }),
+    /* *************Static IP************** */
+    { //  Qst:ip地址保存时，是否需要后台做检测，通过和已经存在的接口IP对比确定是否能够保存？
+      id: 'ipv4Ip',
+      text: __('IPv4 IP'),
+      formProps: {
+        visible: item => item.get('ipType') === 'static',
+        type: 'text',
+        required: true,
+        validator: validator({
+          rules: 'ip',
+        }),
+      },
     },
-  },
-  {
-    id: 'mask',
-    text: __('Subnet Mask'),
-    noTable: true,
-    formProps: {
-      type: 'text',
-      visible: item => item.get('ipType') === 'static',
-      required: true,
-      validator: validator({
-        rules: 'mask',
-      }),
+    {
+      id: 'mask',
+      text: __('Subnet Mask'),
+      noTable: true,
+      formProps: {
+        type: 'text',
+        visible: item => item.get('ipType') === 'static',
+        required: true,
+        validator: validator({
+          rules: 'mask',
+        }),
+      },
     },
-  },
-  {
-    id: 'ipv4Gateway',
-    text: __('IPv4 Gateway'),
-    noTable: true,
-    formProps: {
-      type: 'text',
-      visible: item => item.get('ipType') === 'static',
+    {
+      id: 'ipv4Gateway',
+      text: __('IPv4 Gateway'),
+      noTable: true,
+      formProps: {
+        type: 'text',
+        visible: item => item.get('ipType') === 'static',
+      },
     },
-  },
-  /* **Static IP over**PPPoE start***** */
-  {
-    id: 'pppoeServer',
-    text: __('PPPoE Server'),
-    noTable: true,
-    formProps: {
-      visible: item => item.get('ipType') === 'pppoe',
-      type: 'text',
-      required: true,
+    /* **Static IP over**PPPoE start***** */
+    {
+      id: 'pppoeUser',
+      noTable: true,
+      text: __('PPPoE User Name'),
+      formProps: {
+        visible: item => item.get('ipType') === 'pppoe',
+        required: true,
+        type: 'text',
+      },
     },
-  },
-  {
-    id: 'pppoeUser',
-    noTable: true,
-    text: __('PPPoE User Name'),
-    formProps: {
-      visible: item => item.get('ipType') === 'pppoe',
-      required: true,
-      type: 'text',
+    {
+      id: 'pppoePassword',
+      noTable: true,
+      text: __('PPPoE Password'),
+      formProps: {
+        visible: item => item.get('ipType') === 'pppoe',
+        required: true,
+        type: 'password',
+      },
     },
-  },
-  {
-    id: 'pppoePassword',
-    noTable: true,
-    text: __('PPPoE Password'),
-    formProps: {
-      visible: item => item.get('ipType') === 'pppoe',
-      required: true,
-      type: 'password',
+    /* ***PPPoE over***DHCP Server Start** */
+    {
+      id: 'dhcpServerEnable',
+      text: __('DHCP Server'),
+      defaultValue: '0',
+      render(val) {
+        return val === '1' ? __('Enabled') : __('Disabled');
+      },
+      formProps: {
+        type: 'checkbox',
+        options: [
+          { label: __('ON'), value: '1' },
+          { label: __('OFF'), value: '0' },
+        ],
+      },
     },
-  },
-  /* ***PPPoE over***DHCP Server Start** */
-  {
-    id: 'dhcpServerEnable',
-    text: __('DHCP Server'),
-    defaultValue: '0',
-    render(val) {
-      return val === '1' ? __('Enabled') : __('Disabled');
+    {
+      id: 'dhcpPoolStart',
+      text: __('DHCP Pool Start'),
+      noTable: true,
+      formProps: {
+        required: true,
+        type: 'text',
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+      },
     },
-    formProps: {
-      type: 'checkbox',
-      options: [
-        { label: __('ON'), value: '1' },
-        { label: __('OFF'), value: '0' },
-      ],
+    {
+      id: 'dhcpPoolEnd',
+      text: __('DHCP Pool End'),
+      noTable: true,
+      formProps: {
+        required: true,
+        type: 'text',
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+      },
     },
-  },
-  {
-    id: 'dhcpPoolStart',
-    text: __('DHCP Pool Start'),
-    noTable: true,
-    formProps: {
-      required: true,
-      type: 'text',
-      visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+    {
+      id: 'dhcpPoolMask',
+      text: __('Subnet Mask'),
+      noTable: true,
+      formProps: {
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+        required: true,
+        type: 'text',
+      },
     },
-  },
-  {
-    id: 'dhcpPoolEnd',
-    text: __('DHCP Pool End'),
-    noTable: true,
-    formProps: {
-      required: true,
-      type: 'text',
-      visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+    {
+      id: 'dns',
+      text: __('DNS'),
+      noTable: true,
+      formProps: {
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+        type: 'text',
+      },
     },
-  },
-  {
-    id: 'dhcpPoolMask',
-    text: __('Subnet Mask'),
-    noTable: true,
-    formProps: {
-      visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
-      required: true,
-      type: 'text',
+    {
+      id: 'brandId',
+      text: __('Brand ID'),
+      noTable: true,
+      formProps: {
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+        type: 'text',
+      },
     },
-  },
-  {
-    id: 'brandId',
-    text: __('Brand ID'),
-    noTable: true,
-    formProps: {
-      visible: item => item.get('dhcpServerEnable') === '1',
-      required: true,
-      type: 'text',
+    /* ***DHCP Server Over******* */
+    {
+      id: 'natEnable',
+      text: __('NAT Enable'),
+      defaultValue: '1',
+      render(val) { return val === '1' ? __('Enabled') : __('Disabled'); },
+      formProps: {
+        type: 'checkbox',
+      },
     },
-  },
-  /* ***DHCP Server Over******* */
-  {
-    id: 'natEnable',
-    text: __('NAT Enable'),
-    defaultValue: '1',
-    render(val) { return val === '1' ? __('Enabled') : __('Disabled'); },
-    formProps: {
-      type: 'checkbox',
+    {
+      id: 'interVlanRouting',
+      text: __('Inter-Vlan Routing'),
+      defaultValue: '0',
+      render(val) { return val === '1' ? __('Enabled') : __('Disabled'); },
+      formProps: {
+        type: 'checkbox',
+      },
     },
-  },
-  {
-    id: 'interVlanRouting',
-    text: __('Inter-Vlan Routing'),
-    defaultValue: '0',
-    render(val) { return val === '1' ? __('Enabled') : __('Disabled'); },
-    formProps: {
-      type: 'checkbox',
+    {
+      id: 'authentication',
+      text: __('Authentication'),
+      formProps: {
+        type: 'select',
+        options: this.aaaPolicy,
+      },
     },
-  },
-  {
-    id: 'authentication',
-    text: __('Authentication'),
-    formProps: {
-      type: 'select',
-      options: [],
+    {
+      id: 'ipv6Ip',
+      text: __('IPv6 IP'),
+      fieldset: 'ipv6settings',
+      render: val => (!val ? '--' : val),
+      formProps: {
+        type: 'text',
+        validator: validator({
+          rules: 'ipv6Ip',
+        }),
+      },
     },
-  },
-  {
-    id: 'ipv6Ip',
-    text: __('IPv6 IP'),
-    fieldset: 'ipv6settings',
-    render: val => (!val ? '--' : val),
-    formProps: {
-      type: 'text',
+    {
+      id: 'prefix',
+      text: __('Prefix'),
+      noTable: true,
+      fieldset: 'ipv6settings',
+      formProps: {
+        type: 'text',
+        validator: validator({
+          rules: 'num:[1,128]',
+        }),
+      },
     },
-  },
-  {
-    id: 'prefix',
-    text: __('Prefix'),
-    noTable: true,
-    fieldset: 'ipv6settings',
-    formProps: {
-      type: 'text',
+    {
+      id: 'ipv6Gateway',
+      text: __('IPv6 Gateway'),
+      fieldset: 'ipv6settings',
+      render: val => (!val ? '--' : val),
+      formProps: {
+        type: 'text',
+        validator: validator({
+          rules: 'ipv6Ip',
+        }),
+      },
     },
-  },
-  {
-    id: 'ipv6Gateway',
-    text: __('IPv6 Gateway'),
-    fieldset: 'ipv6settings',
-    render: val => (!val ? '--' : val),
-    formProps: {
-      type: 'text',
+    {
+      id: '__action__',
+      width: '50px',
+      noForm: true,
+      render: (val, item) => item.get('dhcpServerEnable') === '1' && (
+        <Button
+          text={__('DHCP Clients')}
+          onClick={() => { this.onShowClientBtnClick(item); }}
+        />
+      ),
     },
-  },
-  {
-    id: '__action__',
-    width: '50px',
-    noForm: true,
-  },
-]);
-
+  ]);
+  return $$listOptions;
+}
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -273,6 +361,20 @@ export default class IpInterface extends React.Component {
     this.onModalOkClick = this.onModalOkClick.bind(this);
     this.onPageChange = this.onPageChange.bind(this);
     this.onPageSizeChange = this.onPageSizeChange.bind(this);
+    this.generateListOptions = generateListOptions.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.fetch('goform/portal/aaa').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.aaaPolicy = json.data.list.map(item => ({ label: item.name, value: item.name }));
+      }
+    });
+    this.props.fetch('goform/network/vlanlist?size=1000&page=1').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.vlanList = json.data.list.map(item => ({ label: item.vlanId, value: item.vlanId }));
+      }
+    });
   }
 
   onShowClientBtnClick(item) {
@@ -312,7 +414,7 @@ export default class IpInterface extends React.Component {
     const ipv6Enable = store.getIn([curScreenId, 'data', 'ipv6Enable']);
     const ipv6FormStatus = ipv6Enable !== '1';
     // 确定是否要显示ipv6的内容
-    let listOptions = $$listOptions.map((item) => {
+    const listOptions = this.generateListOptions().map((item) => {
       let itemcp = item;
       if (item.get('fieldset') === 'ipv6settings') {
         if (!item.has('noForm')) {
@@ -325,12 +427,6 @@ export default class IpInterface extends React.Component {
       }
       return item;
     });
-    listOptions = listOptions.setIn([-1, 'render'], (val, item) => item.get('dhcpServerEnable') === '1' && (
-      <Button
-        text={__('DHCP Clients')}
-        onClick={() => { this.onShowClientBtnClick(item); }}
-      />
-    ));
     return listOptions;
   }
 
@@ -381,6 +477,7 @@ export default class IpInterface extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={this.initListOptions()}
+        onBeforeSync={onBeforeSync}
         listKey="allKeys"
         maxListSize="24"
         deleteable
