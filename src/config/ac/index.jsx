@@ -7,9 +7,9 @@ import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import guiConfig from './config.json';
 
 // 多语言工具
-const langCnCore = require('../lang/cn/core.json');
-const langCnAc = require('../lang/cn/ac.json');
-const langEn = require('../lang/en/core.json');
+const langCnCore = require('../../lang/cn/core.json');
+const langCnAc = require('../../lang/cn/ac.json');
+const langEn = require('../../lang/en/core.json');
 
 const bodyElem = document.getElementsByTagName('body')[0];
 

@@ -11,10 +11,10 @@ import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import guiConfig from './config.json';
 
 // 多语言处理
-const cnCore = require('../lang/cn/core.json');
-const cnAxc = require('../lang/cn/axc.json');
-const cnPortal = require('../lang/cn/portal.json');
-const langEn = require('../lang/en/core.json');
+const cnCore = require('../../lang/cn/core.json');
+const cnAxc = require('../../lang/cn/axc.json');
+const cnPortal = require('../../lang/cn/portal.json');
+const langEn = require('../../lang/en/core.json');
 
 const bodyElem = document.getElementsByTagName('body')[0];
 

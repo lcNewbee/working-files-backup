@@ -1,3 +1,5 @@
+@import 'variables';
+
 .ntw-dsb-section-block {
   margin-top: 30px;
 }
@@ -18,7 +20,7 @@
   width: 95%;
   min-width: 262px;
   height: 150px;
-  background-color: #0093dd;
+  background-color: $g-brand-color;
   margin: 0 auto;
   border-radius: 7px;
   padding: 10px;

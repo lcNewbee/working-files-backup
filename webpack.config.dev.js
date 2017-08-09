@@ -106,7 +106,10 @@ let config = {
             loader: "postcss-loader",
           },
           {
-            loader: "sass-loader"
+            loader: "sass-loader",
+            options: {
+              includePaths: ['shared/scss']
+            }
           }
         ]
       },

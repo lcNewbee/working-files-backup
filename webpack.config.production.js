@@ -135,9 +135,18 @@ module.exports = {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
           use: [
-            "css-loader",
-            "postcss-loader",
-            "sass-loader"
+            {
+              loader: "css-loader"
+            },
+            {
+              loader: "postcss-loader",
+            },
+            {
+              loader: "sass-loader",
+              options: {
+                includePaths: ['shared/scss']
+              }
+            }
           ],
         })
       },

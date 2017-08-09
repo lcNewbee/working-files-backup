@@ -13,7 +13,7 @@ $tab-nav-height: 28px;
     left: 0;
     z-index: 2;
     padding-left: $g-distance-sm;
-    border-bottom: $c-border-radius solid $g-main-color-light;
+    border-bottom: $c-border-radius solid $g-brand-color;
 
     @include clearfix;
 
@@ -30,7 +30,7 @@ $tab-nav-height: 28px;
         padding-top: 1px;
         font-size: 13px;
         line-height: $tab-nav-height;
-        color: $g-main-color-light;
+        color: $g-main-color;
         text-align: center;
         cursor: pointer;
         background-color: #fff;
@@ -66,7 +66,7 @@ $tab-nav-height: 28px;
 
         &:hover {
           z-index: 1;
-          color: $g-main-color-light;
+          color: $g-main-color;
           background: #e5e5e5;
 
           &::before {
@@ -81,16 +81,16 @@ $tab-nav-height: 28px;
         &.active {
           z-index: 2;
           color: #fff;
-          background: $g-main-color-light;
+          background: $g-brand-color;
 
           &::before {
             filter: none;
-            border-color: transparent $g-main-color-light $g-main-color-light transparent;
+            border-color: transparent $g-brand-color $g-brand-color transparent;
           }
 
           &::after {
             filter: none;
-            border-color: transparent transparent $g-main-color-light $g-main-color-light;
+            border-color: transparent transparent $g-brand-color $g-brand-color;
           }
         }
       }
@@ -116,7 +116,7 @@ $tab-nav-height: 28px;
     .o-tab__nav {
       position: static;
       padding-left: 0;
-      border-bottom: 1px solid $g-main-color-lighter;
+      border-bottom: 1px solid $g-brand-color;
 
       li {
         margin: 0 ($g-distance-sm * 2.2) 0 0;
@@ -129,7 +129,7 @@ $tab-nav-height: 28px;
           padding: .28571em 0;
           font-size: 13px;
           line-height: 1em;
-          color: $g-main-color-light;
+          color: $g-brand-color;
           text-align: center;
           background-color: transparent;
 

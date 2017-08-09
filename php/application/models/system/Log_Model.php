@@ -12,20 +12,22 @@ class Log_Model extends CI_Model {
 		$tablenames = 'web_log';
 		$pageindex = (int)element('page', $data, 1);
 		$pagesize = (int)element('size', $data, 20);
-		$datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);
+		$datalist = help_data_page_order($this->db, $columns,$tablenames,$pageindex,$pagesize, array(
+      array('time', 'DESC')
+    ));
 
 		$arr['state'] = array('code' => 2000, 'msg' => 'OK');
 		$arr['data'] = array(
-            'settings' => array(), 
+            'settings' => array(),
             'page' => array(
-				'start' => 1, 
-				'size' => $pagesize, 
-				'currPage' => $pageindex, 
-				'totalPage' => $datalist['total_page'], 
-				'total' => $datalist['total_row'], 
-				'nextPage' => ($pageindex + 1) === $datalist['total_page'] ? ($pageindex + 1) : -1, 
+				'start' => 1,
+				'size' => $pagesize,
+				'currPage' => $pageindex,
+				'totalPage' => $datalist['total_page'],
+				'total' => $datalist['total_row'],
+				'nextPage' => ($pageindex + 1) === $datalist['total_page'] ? ($pageindex + 1) : -1,
 				'lastPage' => $datalist['total_page']
-			), 
+			),
             'list' => $datalist['data']
 		);
 		return json_encode($arr);

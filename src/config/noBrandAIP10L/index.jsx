@@ -6,8 +6,8 @@ import { reducer as toastrReducer } from 'react-redux-toastr';
 import 'shared/scss/styles.scss';
 import guiConfig from './config.json';
 // 多语言工具
-const langCn = require('../lang/cn/core.json');
-const apCn = require('../lang/cn/ap.json');
+const langCn = require('../../lang/cn/core.json');
+const apCn = require('../../lang/cn/ap.json');
 
 b28n.addDict(langCn, 'cn');
 b28n.addDict(apCn, 'cn');

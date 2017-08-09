@@ -4,6 +4,9 @@
   "description": "comlanos 前端开发平台",
   "main": "src/index.jsx",
   "repository": "none",
+  "engines": {
+    "node": ">=0.12.0"
+  },
   "keywords": [
     "webpack",
     "fetch",

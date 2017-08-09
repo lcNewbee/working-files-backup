@@ -1,45 +1,95 @@
-![](src/assets/images/logo.png)
+![Logo](src/assets/images/logo.png)
+
 # 科蓝前端开发平台
-简单，跨平台，复用，持续优化的前端开发平台。
+> Webpack，ES6, React, Redux, Immutable.js
 
-## 简介
-本平台支持es6语法
+简单，跨平台，复用，持续优化的产品前端开发平台。
 
-## 快速上手
-首先确保安装node.js环境.
+## Installing / Getting started
+使用git下载平台代码
 
-### 依赖包安装
+## Developing
+
+### Built With
+Webpack(V3+), Babel, Sass
+
+### Prerequisites
+确保已经安装 node.js.
+
+### Setting up Dev
+
 #### npm
-> 接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像
-    npm config set registry https://registry.npm.taobao.org
-    npm install
+> 在国内推荐安装 npm 淘宝镜像
+```shell
+npm config set registry https://registry.npm.taobao.org
+npm install
+```
 > 由于我们使用 gulp，接下来安装 gulp-cli
-    npm install gulp-cli -g
+```shell
+npm install gulp-cli -g
+```
 
 > 在开发目录文件夹下安装依赖
-    npm install
+```shell
+npm install
+```
 
 #### Yarn
 > 安装 Yarn
-    npm install yarn -g
+```shell
+npm install yarn -g
 
 > 在国内推荐使用 npm 淘宝镜像
-    yarn config set registry  https://registry.npm.taobao.org 
+```shell
+yarn config set registry  https://registry.npm.taobao.org
+``` 
 
 > 由于我们使用 gulp，接下来安装 gulp-cli 
-    yarn global add gulp-cli
+```shell
+yarn global add gulp-cli
+```
 
 > 在开发目录文件夹下安装依赖
-    yarn
+```shell
+yarn
+```
 
-#### 在浏览器中查看效果
+### Building
 打开命令行，跳转到代码文件夹，运行gulp
-    gulp
+```shell
+cd yourProject
+gulp
+```
+将会自动打开浏览器运行代码
 
-#### 开发指导文档
-![页面开发指导](docs/react/getting-started.md)
+### Deploying / Publishing
+发布产品
+```shell
+gulp pub productName  // productName产品名称如：ac, axc3.0
+```
 
-## 原则
+## Versioning
+查看![版本修改记录](CHANGELOG.md)，下载![发布版本](/releases)
+
+## Configuration
+
+## Tests
+使用Jest进行单元测试
+```shell
+gulp test
+```
+
+## Style guide
+
+### JavaScript Style Guide
+使用eslint做静态代码检查，配置使用 eslint-config-airbnb
+
+[Airbnb javascript style Guide][https://github.com/airbnb/javascript]
+
+### CSS Style Guide 
+待确认
+
+### 开发原则
 在Comlanos前端平台设计与开发过程中我们尽量遵守以下原则
 
 * 与其重新发明轮子，不如改进现在的轮子。
@@ -56,5 +106,12 @@
 
 参考文档：[Docker libcontainer 原则][https://github.com/docker/libcontainer/blob/master/PRINCIPLES.md]
 
-## 修改记录
-查看 CHANGLOG.md 文件
+## Api Reference
+### 代码开发
+![页面开发指导](docs/react/getting-started.md)
+
+## Database
+
+## Licensing
+none
+
