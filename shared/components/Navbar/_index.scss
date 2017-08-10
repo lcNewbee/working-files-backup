@@ -1,6 +1,7 @@
 /* Sass utils */
-@import "../../scss/variables";
-@import "../../scss/mixins";
+@import "functions";
+@import "variables";
+@import "mixins";
 
 .navbar {
   position: fixed;
@@ -8,7 +9,7 @@
   z-index: 1501;
   width: 100%;
   height: $g-navbar-height;
-  background: $g-main-color;
+  background: neutral-color('darker');
   background-color: #fff;
   box-shadow: 0 1px 4px 0 rgba(222, 222, 222, 1);
 
@@ -57,7 +58,7 @@
     font-size: $g-navbar-height / 2;
     color: #999;
     vertical-align: middle;
-    background-color: $g-main-color-light;
+    background-color: neutral-color('dark');
     transition: background .3s ease;
   }
 
@@ -94,7 +95,7 @@
     }
 
     &:hover {
-      //background-color: $g-main-color-light;
+      //background-color: neutral-color('dark');
       color: #0093dd;
 
       .icon {
@@ -110,13 +111,14 @@
     display: inline-block;
     padding: ($g-navbar-height / 8) ($g-navbar-height / 4);
 
-    //border-left: 1px solid $g-main-color-light;
+    //border-left: 1px solid neutral-color('dark');
     color: #333;
     vertical-align: middle;
+
     transition: background .3s ease,color .3s ease;
 
     &:hover {
-      //background-color: $g-main-color-light;
+      //background-color: neutral-color('dark');
 
       .icon-down {
         transform: rotate(360deg);

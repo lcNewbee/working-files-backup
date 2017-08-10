@@ -13,7 +13,7 @@ $tab-nav-height: 28px;
     left: 0;
     z-index: 2;
     padding-left: $g-distance-sm;
-    border-bottom: $c-border-radius solid $g-brand-color;
+    border-bottom: $c-border-radius solid neutral-color('dark');
 
     @include clearfix;
 
@@ -30,7 +30,7 @@ $tab-nav-height: 28px;
         padding-top: 1px;
         font-size: 13px;
         line-height: $tab-nav-height;
-        color: $g-main-color;
+        color: neutral-color('darker');
         text-align: center;
         cursor: pointer;
         background-color: #fff;
@@ -66,7 +66,7 @@ $tab-nav-height: 28px;
 
         &:hover {
           z-index: 1;
-          color: $g-main-color;
+          color: neutral-color('darker');
           background: #e5e5e5;
 
           &::before {
@@ -81,16 +81,16 @@ $tab-nav-height: 28px;
         &.active {
           z-index: 2;
           color: #fff;
-          background: $g-brand-color;
+          background: neutral-color('dark');
 
           &::before {
             filter: none;
-            border-color: transparent $g-brand-color $g-brand-color transparent;
+            border-color: transparent neutral-color('dark') neutral-color('dark') transparent;
           }
 
           &::after {
             filter: none;
-            border-color: transparent transparent $g-brand-color $g-brand-color;
+            border-color: transparent transparent neutral-color('dark') neutral-color('dark');
           }
         }
       }
@@ -116,7 +116,7 @@ $tab-nav-height: 28px;
     .o-tab__nav {
       position: static;
       padding-left: 0;
-      border-bottom: 1px solid $g-brand-color;
+      border-bottom: 1px solid neutral-color('dark');
 
       li {
         margin: 0 ($g-distance-sm * 2.2) 0 0;
@@ -129,7 +129,7 @@ $tab-nav-height: 28px;
           padding: .28571em 0;
           font-size: 13px;
           line-height: 1em;
-          color: $g-brand-color;
+          color: neutral-color('dark');
           text-align: center;
           background-color: transparent;
 

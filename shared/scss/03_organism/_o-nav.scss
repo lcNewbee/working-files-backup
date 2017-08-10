@@ -58,10 +58,12 @@ $main-blue: #0093dd;
       border-radius: 2px;
       background-color: transparent;
     }
-
+    &:hover {
+      color: #fff;
+    }
     &.active {
       color: #fff;
-      background-color: $g-brand-primary;
+      background-color: $g-brand-color;
 
       .icon {
         color: #fff;
@@ -94,6 +96,21 @@ $main-blue: #0093dd;
       &.has-tabs {
         &::after {
           left: $g-distance * 1.70;
+        }
+      }
+    }
+  }
+}
+
+// 针对不同厂商不同配置
+@each $color, $value in $brand-colors {
+  @if $color {
+    .app-#{$color} {
+      .o-nav {
+        .o-nav__link {
+          &.active {
+            background-color: brand-color($color);
+          }
         }
       }
     }

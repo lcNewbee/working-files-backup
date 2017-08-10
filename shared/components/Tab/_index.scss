@@ -1,7 +1,7 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
 $tab-nav-height:    28px;
-//$g-main-color-light : #0093dd;
+//neutral-color('dark') : #0093dd;
 
 
 .tab-nav {
@@ -11,7 +11,7 @@ $tab-nav-height:    28px;
   z-index: 2;
 
   ul {
-    border-bottom: 4px solid $g-main-color-light;
+    border-bottom: 4px solid neutral-color('dark');
     padding-left: $g-distance;
 
     @include clearfix;
@@ -26,7 +26,7 @@ $tab-nav-height:    28px;
       padding: 0 $g-distance;
       padding-top: 1px;
       background-color: #fff;
-      color: $g-main-color-light;
+      color: neutral-color('dark');
       position: relative;
       height: $tab-nav-height;
       line-height: $tab-nav-height;
@@ -77,17 +77,17 @@ $tab-nav-height:    28px;
       }
 
       &.active {
-        background: $g-main-color-light;
+        background: neutral-color('dark');
         color: #fff;
         z-index: 2;
 
         &::before {
-          border-color:transparent $g-main-color-light $g-main-color-light transparent;
+          border-color:transparent neutral-color('dark') neutral-color('dark') transparent;
           filter: none;
         }
 
         &::after {
-          border-color: transparent transparent $g-main-color-light $g-main-color-light;
+          border-color: transparent transparent neutral-color('dark') neutral-color('dark');
           filter: none;
         }
       }

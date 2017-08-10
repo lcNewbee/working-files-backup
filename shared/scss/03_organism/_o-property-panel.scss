@@ -19,7 +19,7 @@ $panel-width: 380px;
     color: #fff;
     text-align: center;
     cursor: pointer;
-    background-color: $g-main-color-light;
+    background-color: neutral-color('dark');
     border-radius: 16px 0 16px 16px;
     box-shadow: -2px 2px 0 0 rgba(0,0,0,.2);
     transition: top .4s ease-in-out, opacity .4s ease-in-out;
@@ -41,7 +41,7 @@ $panel-width: 380px;
     line-height: 20px;
     color: #fff;
     user-select: none;
-    background-color: $g-main-color-light;
+    background-color: neutral-color('dark');
 
     .icon {
       margin-left: 12px;

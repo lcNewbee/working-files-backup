@@ -56,6 +56,7 @@ gulp.task('pub:copy', () => {
 
   // 如果是 AXC 系列, 需要拷贝 PHP
   if (gulp.appName && gulp.appName.indexOf('axc') === 0) {
+    srcPaths.push(`${paths.src}/config/axc/assets/**/*`);
     srcPaths.push(`${paths.php}/**/*`);
   }
 

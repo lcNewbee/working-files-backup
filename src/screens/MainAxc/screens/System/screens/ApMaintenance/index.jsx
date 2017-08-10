@@ -1,5 +1,7 @@
-import React from 'react'; import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import utils from 'shared/utils';
+import validator from 'shared/validator';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -22,6 +24,7 @@ const settingsFormOptions = fromJS([
     fieldset: 'retainDays',
     defaultValue: '7',
     type: 'number',
+    dataType: 'number',
     min: '1',
     max: '365',
   }, {
@@ -31,6 +34,7 @@ const settingsFormOptions = fromJS([
     defaultValue: '60',
     maxLength: '12',
     type: 'number',
+    dataType: 'number',
     min: '30',
     help: __('Seconds'),
   }, {
@@ -40,14 +44,20 @@ const settingsFormOptions = fromJS([
     defaultValue: '120',
     maxLength: '12',
     type: 'number',
-    min: '30',
+    min: '0',
+    validator: validator({
+      rules: 'num[30,120]',
+      exclude: '0',
+    }),
+    dataType: 'number',
     help: __('Seconds'),
   }, {
     id: 'autoap',
     label: __('Automatically Approve APs'),
     fieldset: 'retainDays',
     type: 'checkbox',
-    value: '1',
+    dataType: 'number',
+    value: 1,
   },
 ]);
 

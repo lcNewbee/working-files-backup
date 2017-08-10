@@ -94,15 +94,9 @@ gulp.task('pub:path', () => {
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('open:src', shell.task([
-  'babel-node ./tools/srcServer.js --colors',
-], {
-  env: { FORCE_COLOR: true },
-}));
-
 gulp.task('open:build', ['build'], shell.task(['babel-node tools/buildServer.js']));
 
-gulp.task('default', ['open:src']);
+gulp.task('default', ['serve:dev']);
 
 // 处理浏览器标题
 function changeTitle(name) {

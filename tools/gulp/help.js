@@ -16,7 +16,7 @@ gulp.task('help', () => {
       const mainName = taskArr[0];
 
       if (!myTasksObj[mainName]) {
-        myTasksObj[mainName] = [];
+        myTasksObj[mainName] = [name];
       } else {
         myTasksObj[mainName].push(name);
       }

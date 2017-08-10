@@ -9,7 +9,7 @@
 //  2. Options
 //  3. Distance
 //  4. Body
-//  5. LinksD
+//  5. Links
 //  6. Typography
 
 //  7. Components
@@ -42,10 +42,71 @@ $g-brand-info:              #62B7ED !default;
 $g-brand-warning:           #F7B64B !default;
 $g-brand-danger:            #C23934 !default;
 
-$g-main-color:               #141a23 !default;
-$g-main-color-light:         #1d2531 !default;
-$g-main-color-lighter:       #666 !default;
-$g-brand-color:              $g-brand-primary !default;
+$g-brand-color:              #0093DD !default;
+
+// 中性颜色
+$white:  #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #868e96 !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black:  #000 !default;
+
+$neutral:              #4F6A92 !default;
+$neutral-light:        #A7B8D1 !default;
+$neutral-lighter:      #CFD7E7 !default;
+$neutral-lightest:     #EEF1F6 !default;
+$neutral-dark:         #1d2531 !default;
+$neutral-darker:       #141a23 !default;
+$neutral-darkest:        $black !default;
+
+$neutral-colors: (
+  default: $neutral,
+  light: $neutral-light,
+  lighter: $neutral-lighter,
+  lightest: $neutral-lightest,
+  dark: $neutral-dark,
+  darker: $neutral-darker,
+  darkest: $neutral-darkest
+) !default;
+
+// scene Colors: 情景颜色，依据用户情景来表达
+$blue:    #007bff !default;
+$indigo:  #6610f2 !default;
+$purple:  #6f42c1 !default;
+$pink:    #e83e8c !default;
+$red:     #dc3545 !default;
+$orange:  #fd7e14 !default;
+$yellow:  #ffc107 !default;
+$green:   #28a745 !default;
+$teal:    #20c997 !default;
+$cyan:    #17a2b8 !default;
+
+$scene-colors: (
+  primary: $blue,
+  secondary: $gray-600,
+  success: $green,
+  info: $cyan,
+  warning: $yellow,
+  danger: $red,
+  light: $gray-100,
+  dark: $gray-800
+) !default;
+
+// brand color: 商标颜色
+$brand-color-axilspot: #0093DD !default;
+$brand-color-omx: #e50077 !default;
+
+$brand-colors: (
+  axilspot: $brand-color-axilspot,
+  omx: $brand-color-omx
+) !default;
+
 
 // 2. Options
 //
@@ -63,6 +124,15 @@ $g-enable-print-styles:       true !default;
 //  3. Distance
 //
 //  元素间距
+$g-distance: 1rem !default;
+$g-distances: (
+  0: 0,
+  1: ($g-distance * .25),
+  2: ($g-distance * .5),
+  3: $g-distance,
+  4: ($g-distance * 1.5),
+  5: ($g-distance * 3)
+) !default;
 
 $g-distance: 			          1rem !default;
 $g-distance-x: 			        $g-distance !default;
@@ -153,6 +223,8 @@ $mw-xl:                       1382px !default;
 //== navbar
 // 值需为 4 的整数倍
 $g-navbar-height:             $g-distance * 3.25 !default;
+
+
 
 
 // 10. Components

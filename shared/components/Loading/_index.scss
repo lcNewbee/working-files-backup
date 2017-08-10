@@ -7,7 +7,7 @@ $g-brand-info:              #62B7ED !default;
 $g-brand-warning:           #F7B64B !default;
 $g-brand-danger:            #C23934 !default;
 
-$g-main-color:               #141a23 !default;
+$neutral-darker:               #141a23 !default;
 
 .flex-container {
   width: 100%;
@@ -65,13 +65,13 @@ $g-main-color:               #141a23 !default;
   left: 0px;
   -webkit-animation-delay: 0s;
           animation-delay: 0s;
-  background-color: $g-main-color;
+  background-color: neutral-color('darker');
 }
 .heart-piece-1 {
   left: 16px;
   -webkit-animation-delay: 0.15s;
           animation-delay: 0.15s;
-  background-color: $g-main-color;
+  background-color: neutral-color('darker');
 }
 .heart-piece-2 {
   left: 32px;
@@ -107,13 +107,13 @@ $g-main-color:               #141a23 !default;
   left: 112px;
   -webkit-animation-delay: 1.05s;
           animation-delay: 1.05s;
-  background-color: $g-main-color;
+  background-color: neutral-color('darker');
 }
 .heart-piece-8 {
   left: 128px;
   -webkit-animation-delay: 1.2s;
           animation-delay: 1.2s;
-  background-color: $g-main-color;
+  background-color: neutral-color('darker');
 }
 @-webkit-keyframes piece-4 {
   0%, 10%, 90%, 100% {

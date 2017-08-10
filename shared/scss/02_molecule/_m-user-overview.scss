@@ -4,7 +4,7 @@
   right: 3px;
   z-index: 1070;
   min-width: 340px;
-  background: $g-main-color;
+  background: neutral-color('darker');
   color: #f5f5f5;
 
   a {
@@ -14,7 +14,7 @@
     cursor: pointer;
 
     &:hover {
-      background: $g-brand-primary;
+      // background: brand-color();
       color: #f5f5f5;
     }
   }
@@ -29,7 +29,7 @@
   }
 
   .m-user-overview__controls {
-    background-color: $g-main-color-light;
+    background-color: neutral-color('dark');
     @include clearfix;
 
     .change-pas {
@@ -40,6 +40,21 @@
     }
     .fa {
       margin-right: 4px;
+    }
+  }
+}
+
+// 针对不同厂商不同配置
+@each $color, $value in $brand-colors {
+  @if $color {
+    .app-#{$color} {
+      .m-user-overview {
+        a {
+          &:hover {
+            background-color: brand-color($color);
+          }
+        }
+      }
     }
   }
 }

@@ -46,13 +46,13 @@
   left: 0px;
   -webkit-animation-delay: 0s;
           animation-delay: 0s;
-  background-color: $g-main-color;
+  background-color: neutral-color('darker');
 }
 .a-heart-piece-1 {
   left: 16px;
   -webkit-animation-delay: 0.1s;
           animation-delay: 0.1s;
-  background-color: $g-main-color;
+  background-color: neutral-color('darker');
 }
 .a-heart-piece-2 {
   left: 32px;
@@ -88,13 +88,13 @@
   left: 112px;
   -webkit-animation-delay: .7s;
           animation-delay: .7s;
-  background-color: $g-main-color;
+  background-color: neutral-color('darker');
 }
 .a-heart-piece-8 {
   left: 128px;
   -webkit-animation-delay: .8s;
           animation-delay: .8s;
-  background-color: $g-main-color;
+  background-color: neutral-color('darker');
 }
 @-webkit-keyframes piece-4 {
   0%, 10%, 90%, 100% {

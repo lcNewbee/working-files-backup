@@ -15,7 +15,7 @@ $nav-line-size: 4px;
     padding: .5em 0;
     font-size: 2.4em;
     font-weight: 300;
-    color: $g-main-color;
+    color: neutral-color('darker');
     text-align: center;
   }
 
@@ -85,15 +85,15 @@ $nav-line-size: 4px;
       }
 
       &.completed {
-        color: $g-main-color;
-        border-top-color: $g-main-color;
+        color: neutral-color('darker');
+        border-top-color: neutral-color('darker');
 
         @include opacity(1);
 
         .icon {
           &::before {
             content: "\F00C";
-            border: $nav-line-size solid $g-main-color;
+            border: $nav-line-size solid neutral-color('darker');
           }
         }
       }
@@ -185,7 +185,7 @@ $nav-line-size: 4px;
           &.completed {
             .icon {
               &::before {
-                border: $nav-line-size solid $g-main-color;
+                border: $nav-line-size solid neutral-color('darker');
               }
             }
           }
@@ -273,7 +273,7 @@ $nav-line-size: 4px;
           &.active {
             .icon {
               &::before {
-                border: $nav-line-size solid $g-main-color;
+                border: $nav-line-size solid neutral-color('darker');
               }
             }
           }

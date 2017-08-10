@@ -4,19 +4,9 @@
     "msg": "ok"
   },
   "data": {
-    "version": "AXC3000"
-  },
-  "vendors": [
-    {
-      "version": "AXC1000",
-      "title": "Axilspot",
-      "companyname": "axilspot",
-      "email": "sales@axilspot.com"
-    }, {
-      "version": "LN1000",
-      "title": "Lenovonet",
-      "companyname": "lenovonet",
-      "email": "support@lenovonet.com"
-    }
-  ]
+    "version": "AXC1000 V1.3.7",
+    "title": "Axilspot",
+    "companyname": "axilspot",
+    "email": "sales@axilspot.com"
+  }
 }

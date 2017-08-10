@@ -183,6 +183,7 @@ class AppSettings extends React.PureComponent {
     } = this.props;
     const $$curSettings = store.get('curSettings');
     const syncCode = app.getIn(['state', 'code']);
+    const curActionType = store.getIn(['actionQuery', 'action'])
     let curSavedText = this.props.savedText;
 
     if (syncCode >= 6000) {
@@ -199,7 +200,7 @@ class AppSettings extends React.PureComponent {
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
           onValidError={this.props.reportValidError}
-          isSaving={store.get('saving')}
+          isSaving={curActionType === 'settings' && store.get('saving')}
           actionable={actionable}
           hasSaveButton={hasSettingsSaveButton}
           saveText={this.props.saveText}

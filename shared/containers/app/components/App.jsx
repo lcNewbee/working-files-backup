@@ -26,6 +26,14 @@ const propTypes = {
   }),
 };
 
+function renderBrandClassname(brand) {
+  const bodyElem = document.getElementsByTagName('body')[0];
+
+  if (brand) {
+    bodyElem.className += ` app-${brand.toLowerCase()}`;
+  }
+}
+
 const defaultProps = {
   closeModal: () => true,
 };
@@ -47,7 +55,12 @@ export default class App extends Component {
   componentWillMount() {
     const { history, route, location } = this.props;
     if (this.props.fetchProductInfo && typeof (this.props.route.formUrl) !== 'undefined') {
-      this.props.fetchProductInfo(this.props.route.formUrl);
+      this.props.fetchProductInfo(this.props.route.formUrl)
+        .then((json) => {
+          if (json && json.data && json.data.companyname) {
+            renderBrandClassname(json.data.companyname)
+          }
+        });
     }
     this.unsubscribeFromHistory = history.listen(this.handleLocationChange);
 

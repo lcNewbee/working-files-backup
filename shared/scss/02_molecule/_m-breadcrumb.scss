@@ -52,7 +52,7 @@
       padding: 0 5px;
       padding-left: 30px;
       font-size: $g-distance * 1;
-      color: $g-main-color;
+      color: neutral-color('darker');
       background-color: transparent;
 
       &::after {
@@ -82,6 +82,23 @@
             display: none;
           }
         }
+      }
+    }
+  }
+}
+
+// 针对不同厂商不同配置
+@each $color, $value in $brand-colors {
+  @if $color {
+    .app-#{$color} {
+      .m-breadcrumb.m-breadcrumb--simple {
+         li {
+            &:first-child {
+              .m-breadcrumb__link {
+                color: $value;
+              }
+            }
+         }
       }
     }
   }

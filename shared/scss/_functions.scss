@@ -1,0 +1,12 @@
+// Color contrast
+@function scene-color($key: "primary") {
+  @return map-get($scene-colors, $key);
+}
+
+@function brand-color($key: "axilspot") {
+  @return map-get($brand-colors, $key);
+}
+
+@function neutral-color($key: "default") {
+  @return map-get($neutral-colors, $key);
+}

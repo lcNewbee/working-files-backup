@@ -1,4 +1,5 @@
 /* Sass utils */
+@import "./functions";
 @import "./variables";
 @import "./mixins";
 
@@ -60,10 +61,6 @@
 @import './04_template/t-overview';
 @import './04_template/t-app-screen';
 @import './04_template/t-list-info';
-
-/* Theme css */
-@import "./05_theme/colors";
-
 
 
 

@@ -21,12 +21,12 @@
   padding: .5em 1em;
   font-size: $g-font-size;
   line-height: 1;
-  color: #666;
+  color: #fff;
   white-space: nowrap;
   user-select: none;
   text-decoration: none;
   cursor: pointer;
-  background-color: #e8e8e8;
+  background-color: scene-color('secondary');
   border: 1px solid transparent;
   border-radius: 3px;
   vertical-align: middle;
@@ -81,10 +81,6 @@ a.a-btn {
   }
 }
 
-.a-btn--block {
-  display: block;
-}
-
 // Button size type
 .a-btn--sm {
   font-size: 12px;
@@ -108,61 +104,56 @@ a.a-btn {
   padding: 9px 18px;
 }
 
-// Button Role
-.a-btn--default {
-  background-color: #e8e8e8;
-  border-color:#ccc;
-
-  &:hover {
-    background-color: #e8e8e8 - #101010;
-    border-color: #adadad;
+//
+// Alternate scene buttons
+//
+@each $color, $value in $scene-colors {
+  .a-btn--#{$color} {
+    @include button-variant($value, $value);
   }
 }
-.a-btn--primary {
-  color: #fff;
-  background-color: $g-brand-primary;
 
-  &:hover {
-    background-color: lighten($g-brand-primary, 5%);
+.a-btn--block {
+  display: block;
+  width: 100%;
+}
+
+// Vertically space out multiple block buttons
+.a-btn--block + .a-btn--block {
+  margin-top: $g-distance / 2;
+}
+
+// Specificity overrides
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  &.a-btn--block {
+    width: 100%;
   }
+}
+
+
+//
+// Link buttons
+//
+
+// Make a button look and behave like a link
+.a-btn-link {
+  font-weight: normal;
+  color: $blue;
+  border-radius: 0;
+
+  &,
+  &:active,
+  &.active,
+  &:disabled {
+    background-color: transparent;
+    @include box-shadow(none);
+  }
+  &,
+  &:focus,
   &:active {
-    background-color: darken($g-brand-primary, 10%);
+    border-color: transparent;
+    box-shadow: none;
   }
-}
-.a-btn--success {
-  color: #fff;
-  background-color: $g-brand-success;
-
-  &:hover {
-    background-color: $g-brand-success - #101010;
-  }
-}
-.a-btn--info {
-  color: #fff;
-  background-color: $g-brand-info;
-
-  &:hover {
-    background-color: $g-brand-info - #101010;
-  }
-}
-.a-btn--warning {
-  color: #fff;
-  background-color: $g-brand-warning;
-
-  &:hover {
-    background-color: $g-brand-warning - #101010;
-  }
-}
-.a-btn--danger {
-  color: #fff;
-  background-color: $g-brand-danger;
-
-  &:hover {
-    background-color: $g-brand-danger - #101010;
-  }
-}
-
-button[disabled] {
-  cursor: not-allowed;
-  opacity: .8;
 }

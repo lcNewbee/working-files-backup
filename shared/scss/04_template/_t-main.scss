@@ -39,7 +39,7 @@ body {
     left: 0;
     z-index: 1502;
     width: $sidebar-width;
-    background: $g-main-color;
+    background: neutral-color('darker');
     transition: left .3s ease-in;
 
     &.o-nav--tree {
@@ -80,7 +80,7 @@ body {
       left: $t-main-top-menu-size;
       width: $t-main-nav-size;
       // max-width: $t-main-nav-size;
-      background-color: $g-main-color;
+      background-color: neutral-color('darker');
       color: #fff;
       z-index: 1501;
       overflow: hidden;
@@ -92,7 +92,7 @@ body {
       > h4 {
         font-size: .875rem;
         list-style: 1;
-        color: $g-brand-color;
+        color: brand-color();
         text-shadow: 1px 1px 1px #000;
         padding: 4px 10px;
         margin-bottom: 8px;
@@ -102,11 +102,11 @@ body {
         }
       }
       .m-menu__link {
-        background-color: $g-main-color;
+        background-color: neutral-color('darker');
         transition: background-color .2s ease-in-out;
 
         &:hover {
-          background-color: lighten($g-main-color, 8%)
+          background-color: lighten(neutral-color('darker'), 8%)
         }
       }
 
@@ -126,8 +126,8 @@ body {
       }
       .a-leaf-link {
         &.active {
-          background-color: $g-brand-color;
-          text-shadow: 1px 1px 1px $g-main-color;
+          background-color: brand-color();
+          text-shadow: 1px 1px 1px neutral-color('darker');
         }
       }
       .o-nav__sub-menus {
@@ -144,7 +144,7 @@ body {
       padding-left: 2px;
       color: #ababab;
       font-size: 14px;
-      background-color: $g-main-color;
+      background-color: neutral-color('darker');
       border-bottom-right-radius: 20px;
       border-top-right-radius: 20px;
       cursor: pointer;
@@ -167,15 +167,15 @@ body {
       max-height: 0;
       overflow-x: hidden;
       transition: max-height .4s ease-in-out;
-      background-color: $g-main-color;
-      border-bottom: 1px solid lighten($g-main-color, 10%);
+      background-color: neutral-color('darker');
+      border-bottom: 1px solid lighten(neutral-color('darker'), 10%);
       @include scrollbar();
 
       .m-menu__link {
-        background-color: $g-main-color;
+        background-color: neutral-color('darker');
 
         &.active {
-          color: $g-brand-color;
+          color: brand-color();
         }
       }
 
@@ -185,7 +185,7 @@ body {
         left: $t-main-top-menu-size;
         width: $t-main-nav-size;
         z-index: 1502;
-        background-color: $g-main-color;
+        background-color: neutral-color('darker');
         padding: 8px 10px;
         transition: width .2 ease-in-out;
         overflow: hidden;
@@ -207,12 +207,12 @@ body {
         cursor: pointer;
         width: 1.25rem;
         height: 1.25rem;
-        border: 1px solid $g-brand-color;
+        border: 1px solid brand-color();
         border-radius: 10px;
         text-shadow: 1px 1px 1px #000;
 
         .icon {
-          color: $g-brand-color;
+          color: brand-color();
           font-size: .75rem;
           line-height: .75rem;
           transition: transform .4s ease-in-out;
@@ -242,7 +242,7 @@ body {
       bottom: 0;
       z-index: 1502;
       width: $t-main-top-menu-size;
-      background-color: $g-main-color-light;
+      background-color: neutral-color('dark');
       animation: topMenuLeft $animation-duration $animation-num;
 
       a {
@@ -265,14 +265,14 @@ body {
           top: 50%;
           margin-top: -12px;
           right: 0;
-          border-color: transparent $g-main-color transparent transparent;
+          border-color: transparent neutral-color('darker') transparent transparent;
           border-style: solid;
           border-width: 6px 12px;
           opacity: 0;
           transition: opacity .3s ease-in-out;
         }
         &.active {
-          color: $g-brand-color;
+          color: brand-color();
           text-shadow: 1px 1px 1px #000;
 
           &::after {
@@ -378,7 +378,7 @@ body {
   .icon {
     line-height: ($g-distance * 1.25);
     width: $g-distance;
-    color: $g-brand-color;
+    color: brand-color();
     font-size: 1rem;
     cursor: pointer;
   }
@@ -409,7 +409,7 @@ body {
     cursor: pointer;
     width: 24px;
     height: 24px;
-    color: $g-brand-color;
+    color: brand-color();
     line-height: 24px;
     text-align: center;
     transition: transform .3s ease-in-out;
@@ -477,7 +477,6 @@ body {
   }
 }
 
-
 @keyframes contenDown {
   0%,
   50% {
@@ -493,5 +492,53 @@ body {
   100% {
     opacity: 1;
     margin-top: 0;
+  }
+}
+
+// 针对不同厂商不同配置
+@each $color, $value in $brand-colors {
+  @if $color {
+    .app-#{$color} {
+      .t-main {
+        &.t-main--axc {
+          .t-main__nav {
+            > h4 {
+              color: $value
+            }
+            .a-leaf-link {
+              &.active {
+                background-color: $value;
+              }
+            }
+          }
+          .t-main__asider-top {
+            .m-menu__link {
+              &.active {
+                color: $value;
+              }
+            }
+            .toggle-bar {
+              border-color: $value;
+
+              .icon {
+                color: $value;
+              }
+            }
+          }
+          .o-top-menu-bar {
+            a {
+              &.active {
+                color: $value;
+              }
+            }
+          }
+        }
+        .t-main__asider-footer {
+          .icon {
+            color: $value;
+          }
+        }
+      }
+    }
   }
 }

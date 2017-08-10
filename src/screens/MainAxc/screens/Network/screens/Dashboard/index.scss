@@ -1,3 +1,4 @@
+@import 'functions';
 @import 'variables';
 
 .ntw-dsb-section-block {
@@ -20,7 +21,7 @@
   width: 95%;
   min-width: 262px;
   height: 150px;
-  background-color: $g-brand-color;
+  background-color: brand-color();
   margin: 0 auto;
   border-radius: 7px;
   padding: 10px;
@@ -148,5 +149,16 @@
 .ntw-dsb-throughput-echart {
   width: 100%;
   height: 400px;
+}
+
+// 针对不同厂商不同配置
+@each $color, $value in $brand-colors {
+  @if $color {
+    .app-#{$color} {
+      .ntw-dsb-card {
+        background-color: brand-color($color);
+      }
+    }
+  }
 }
 
