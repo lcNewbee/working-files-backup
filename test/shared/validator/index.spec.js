@@ -20,7 +20,7 @@ describe('utils validator', () => {
           myValidator.check(null);
         }).toThrowError('');
         expect(() => {
-          myValidator.check(undefined);
+          myValidator.check(/ds/);
         }).toThrowError('');
         expect(() => {
           myValidator.check({});
@@ -104,7 +104,7 @@ describe('utils validator', () => {
           myValidator.checkClear(null);
         }).toThrowError('');
         expect(() => {
-          myValidator.checkClear(undefined);
+          myValidator.checkClear(/ds/);
         }).toThrowError('');
         expect(() => {
           myValidator.checkClear({});

@@ -59,6 +59,10 @@ class NumberInput extends PureComponent {
   }
   onBlur(e) {
     this.onNumberChange(e, true);
+
+    if (this.props.onBlur) {
+      this.props.onBlur(e);
+    }
   }
   render() {
     let myClassName = 'a-input-number';

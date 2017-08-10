@@ -186,7 +186,7 @@ utils.extend({
     rulesArr = rules.split('|');
 
     for (var i = 0; i < rulesArr.length; i++) {
-      ruleObj = this.getRuleObj(rulesArr[i], rulesContainer);
+      ruleObj = utils.getRuleObj(rulesArr[i], rulesContainer);
 
       if (ruleObj.fun) {
         ret.push(ruleObj);

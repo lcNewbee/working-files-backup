@@ -46,11 +46,11 @@ const settingsFormOptions = fromJS([
     type: 'number',
     min: '0',
     validator: validator({
-      rules: 'num[30,120]',
-      exclude: '0',
+      rules: 'num:[30, 999999999999]',
+      exclude: 0,
     }),
     dataType: 'number',
-    help: __('Seconds'),
+    help: __('Seconds') + ` (${__('0 means disabled')})`,
   }, {
     id: 'autoap',
     label: __('Automatically Approve APs'),

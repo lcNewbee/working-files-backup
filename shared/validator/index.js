@@ -55,7 +55,6 @@ function checkClear(str, rules) {
 function check(str, rules) {
   var len = rules.length;
   var ret, args, i, ruleObj;
-
   if(str === undefined) {
     return ;
   }
@@ -94,8 +93,7 @@ function isExclueString(obj, str) {
   var ret = false;
   var exclude = obj.exclude;
   var i, len, curExclude, curType;
-
-  if (typeof exclude === 'string' && exclude === str) {
+  if (exclude === str) {
     ret = true;
   } else if (utilsCore.isArray(exclude)) {
     for(i = 0, len = exclude.length; i < len; i += 1) {
@@ -103,7 +101,7 @@ function isExclueString(obj, str) {
       curType = typeof curExclude;
 
       // 单纯过滤字符串
-      if (curType === 'string' && curExclude === str) {
+      if (curExclude === str) {
         ret = true;
 
       // 如果是过滤函数
@@ -134,7 +132,7 @@ function init(options) {
     this.rules = [];
   }
 
-  if(options.exclude) {
+  if(options.exclude !== undefined) {
     this.exclude = options.exclude;
   }
 

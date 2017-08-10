@@ -35,7 +35,6 @@ var vaildate = {
 
   num: function (str, min, max, expand) {
     var retStr;
-    console.log(str, min, max)
     if (!utilsString.isInteger(str)) {
       return __("Must be integer");
     }
