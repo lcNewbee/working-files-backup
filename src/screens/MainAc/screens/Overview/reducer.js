@@ -1,4 +1,5 @@
 import { Map, List, fromJS } from 'immutable';
+import immutableUtils from 'shared/utils/lib/immutable';
 
 function setFetching(state) {
   return state.update('fetching', val => true);
@@ -25,6 +26,9 @@ const defaultState = fromJS({
       size: 50,
     },
     list: [],
+    actionQuery: {
+      selectedList: [],
+    },
   },
 });
 
@@ -47,12 +51,21 @@ function receiveOffilineApData(state, data) {
   return state;
 }
 
-
+function selectRow(state, action) {
+  const selectObject = immutableUtils.selectList(
+    state.getIn(['offlineAp', 'list']),
+    action.payload,
+    state.getIn(['offlineAp', 'actionQuery', 'selectedList']),
+  );
+  return state.setIn(['offlineAp', 'list'], selectObject.$$list)
+    .setIn(['offlineAp', 'actionQuery', 'selectedList'], selectObject.selectedList);
+}
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'REQEUST_STATS':
       return setFetching(state);
-
+    case 'SELECT_OfflineAP_ROW':
+      return selectRow(state, action);
     case 'REVEVICE_STATS':
       return state.mergeIn(['data'], action.data);
 

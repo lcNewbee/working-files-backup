@@ -87,6 +87,12 @@ export function changeOfflineApQuery(data) {
   };
 }
 
+export function selectRow(index) {
+  return {
+    type: 'SELECT_OfflineAP_ROW',
+    payload: index,
+  };
+}
 export function fetchOfflineAp() {
   return (dispatch, getState) => {
     const query = getState().status.getIn(['offlineAp', 'query']).toJS();

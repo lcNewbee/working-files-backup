@@ -43,6 +43,14 @@ export function selectDevice(mac, unselect) {
   };
 }
 
+export function selectRow(index) {
+  return {
+    type: 'SELECT_ROW',
+    payload: index,
+  };
+}
+
+
 // 获取组列表
 export function reqeustFetchDeviceGroups() {
   return {

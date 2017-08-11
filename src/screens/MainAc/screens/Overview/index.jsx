@@ -241,6 +241,8 @@ export class Status extends React.PureComponent {
       'getApNumberChartOption',
       'getClientStatisticsChartOption',
       'onDeleteOfflineDev',
+      'onRowSelect',
+      'onDeleteMultiOfflineAp',
     ]);
   }
   componentWillMount() {
@@ -259,7 +261,10 @@ export class Status extends React.PureComponent {
     this.props.showOfflineAp();
     this.props.fetchOfflineAp();
   }
-
+  onRowSelect(index) {
+    //  index {index: 0, selected: true, unselectableList: Array(0)};
+    this.props.selectRow(index);
+  }
   onChangeTime(data) {
     if (data.value) {
       this.props.changeStatsQuery({
@@ -297,7 +302,33 @@ export class Status extends React.PureComponent {
         this.props.deleteOfflineAp(mac);
       },
     });
-    // this.props.deleteOfflineAp(mac);
+  }
+
+  onDeleteMultiOfflineAp() {
+    const warningMsgText = __('Please choose offline AP to delete!');
+    const $$selectedListIndex = this.props.offlineAp.getIn(['actionQuery', 'selectedList']);
+    const selectedListSize = $$selectedListIndex.size;
+    const confirmMsgText = __('Are you sure to delete the chosen %s offline AP you?', selectedListSize);
+    const macs = [];
+    $$selectedListIndex.forEach((index) => {
+        macs.push(this.props.offlineAp.getIn(['list', index, 'mac']));
+    });
+    if (selectedListSize === 0) {
+      this.props.createModal({
+        id: 'settings',
+        role: 'confirm',
+        text: warningMsgText,
+      });
+    } else {
+      this.props.createModal({
+        id: 'settings',
+        role: 'confirm',
+        text: confirmMsgText,
+        apply: () => {
+          this.props.deleteOfflineAp(macs);
+        },
+      });
+    }
   }
   createTimeTypeClass(type) {
     let ret = 'btn';
@@ -634,12 +665,22 @@ export class Status extends React.PureComponent {
           onOk={this.hideOfflineApp}
           draggable
         >
+          <div style={{ padding: '8px 0', overflow: 'auto' }}>
+            <Button
+              icon="trash"
+              text={__('Delete')}
+              onClick={this.onDeleteMultiOfflineAp}
+              size="sm"
+            />
+          </div>
           <Table
             className="table"
             options={offlineApOption}
             list={this.props.offlineAp.get('list')}
             page={this.props.offlineAp.get('page')}
             onPageChange={this.onOfflineApPageChange}
+            onRowSelect={this.onRowSelect}
+            selectable
           />
 
         </Modal>

@@ -472,7 +472,7 @@ export class Wireless extends PureComponent {
           onChange={this.onUpdateSettings('channelsBandwidth')}
           required
         />
-        <h3>{__('Bandwidth Control')}</h3>
+        <h3>{__('Bandwidth Limit')}</h3>
         <FormGroup
           label={msg.upSpeed}
           help="KB/s"

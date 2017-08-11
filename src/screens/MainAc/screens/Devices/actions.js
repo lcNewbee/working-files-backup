@@ -47,7 +47,7 @@ export function locateDevice(mac) {
 }
 export function selectRow(index) {
   return {
-    type: 'SELECT_ROW',
+    type: 'SELECT_Device_ROW',
     payload: index,
   };
 }

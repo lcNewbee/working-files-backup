@@ -21,13 +21,13 @@ function getEditObjByMac(state, mac) {
     return item.get('mac') == mac;
   }).set('devices', devices)
 }
+
 function selectRow(state, action) {
   const selectObject = immutableUtils.selectList(
     state.getIn(['data', 'list']),
     action.payload,
     state.getIn(['actionQuery', 'selectedList']),
   );
-
   return state.setIn(['data', 'list'], selectObject.$$list)
     .setIn(['actionQuery', 'selectedList'], selectObject.selectedList);
 }
@@ -61,7 +61,7 @@ export default function (state = defaultState, action) {
     case 'REQEUST_FETCH_DEVICE':
       return state.set('fetching', true);
 
-    case 'SELECT_ROW':
+    case 'SELECT_Device_ROW':
       return selectRow(state, action);
 
     case 'RECIVE_FETCH_DEVICES':

@@ -41,7 +41,7 @@ export class GroupSettings extends PureComponent {
     utils.binds(this, [
       'getEditVal',
       'onSelectDevice',
-
+      'onRowSelect',
       'onAddGroup',
       'onEditGroup',
       'onDeleteGroup',
@@ -116,6 +116,10 @@ export class GroupSettings extends PureComponent {
     });
   }
 
+  onRowSelect(index) {
+    //  index {index: 0, selected: true, unselectableList: Array(0)};
+    this.props.selectRow(index);
+  }
   onChangeGroupSettings(name) {
     return function (data) {
       let editObj = {};
@@ -258,26 +262,28 @@ export class GroupSettings extends PureComponent {
           }
           return val;
         },
-      }, {
-        id: 'op',
-        text: __('Select'),
-        width: 50,
-        render: (val, $$item) => {
-          const selectedDevices = this.props.edit.get('devices');
-          const deviceMac = $$item.get('mac');
+      },
+      // {
+      //   id: 'op',
+      //   text: __('Select'),
+      //   width: 50,
+      //   render: (val, $$item) => {
+      //     const selectedDevices = this.props.edit.get('devices');
+      //     const deviceMac = $$item.get('mac');
 
-          return (
-            <div className="action-btns">
-              <input
-                type="checkbox"
-                value={deviceMac}
-                onChange={this.onSelectDevice}
-                checked={selectedDevices.indexOf(deviceMac) !== -1}
-              />
-            </div>
-          );
-        },
-      }]);
+      //     return (
+      //       <div className="action-btns">
+      //         <input
+      //           type="checkbox"
+      //           value={deviceMac}
+      //           onChange={this.onSelectDevice}
+      //           checked={selectedDevices.indexOf(deviceMac) !== -1}
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // }
+    ]);
     const noControl = this.props.app.get('noControl');
 
     if (noControl) {
@@ -323,6 +329,8 @@ export class GroupSettings extends PureComponent {
                 options={fromJS(devicesTableOptions)}
                 list={this.props.devices.get('list')}
                 page={this.props.page}
+                onRowSelect={this.onRowSelect}
+                selectable
               />
             </div>
           )

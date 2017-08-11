@@ -179,14 +179,15 @@ export default class ModeSettings extends React.Component {
           },
         }}
       >
-        <h3
+        <h5
           style={{
             color: 'red',
             marginLeft: '25px',
           }}
         >
-          {__('Note: If Access Manager control is needed, please  set the mode of the current group as Fat AP')}
-        </h3>
+          {__('Note: If Access Manager control is needed, please  set the mode of the current group as Fat AP!')}
+          {__('If you change Thin AP mode to Fat AP, all these APs will go away from Hardware controller!')}
+        </h5>
         <FormContainer
           options={this.formOptions}
           data={$$curData}
