@@ -77,7 +77,6 @@ function generateFormOptions() {
 }
 
 export default class PaymentSettings extends React.Component {
-
   render() {
     return (
       <AppScreen

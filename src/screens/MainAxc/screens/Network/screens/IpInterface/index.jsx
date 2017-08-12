@@ -389,6 +389,13 @@ export default class IpInterface extends React.Component {
     this.setState({ pageQuery }, () => {
       this.fetchClientListByName(this.name);
     });
+    // 为什么这里使用了函数的形式更新state，更新后立即取用state，state仍然是更新前的数据呢？
+    // this.setState((state) => {
+    //   console.log('state', state);
+    //   return { pageQuery: state.pageQuery.set('page', page) };
+    // });
+    // console.log('out setState', this.state.pageQuery.toJS());
+    // this.fetchClientListByName(this.name);
   }
 
   onPageSizeChange(size) {

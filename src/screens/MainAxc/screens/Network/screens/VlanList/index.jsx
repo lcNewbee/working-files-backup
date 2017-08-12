@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-// import validator from 'shared/validator';
+import validator from 'shared/validator';
 import { FormGroup, FormInput } from 'shared/components';
 import {
   actions as screenActions, AppScreen, createContainer,
@@ -14,6 +14,12 @@ import { actions as appActions } from 'shared/containers/app';
 
 import './index.scss';
 
+const validOptions = Map({
+  validNumRange: validator({
+    rules: 'numberRange:[1,4094]',
+  }),
+});
+
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -23,6 +29,7 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func,
   closeListItemModal: PropTypes.func,
   updateCurListItem: PropTypes.func,
+  validateOption: PropTypes.object,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -113,24 +120,30 @@ export default class View extends React.Component {
             <FormGroup
               type="number-range"
               label={__('VLAN Range')}
+              style={{ width: '470px' }}
               min={1}
-              max={100}
+              max={4094}
               required
               value={typeof this.props.store.getIn([curScreenId, 'actionQuery', 'vlanRange']) === 'undefined' ?
-                [] : this.props.store.getIn([curScreenId, 'actionQuery', 'vlanRange']).toJS()}
+                '-' : this.props.store.getIn([curScreenId, 'actionQuery', 'vlanRange'])}
               onLowerInputChange={(data) => {
                 const actionQuery = this.props.store.getIn([curScreenId, 'actionQuery']);
-                let vlanRange = actionQuery.get('vlanRange') || fromJS([]);
-                vlanRange = vlanRange.set('0', data.value);
+                let vlanRange = actionQuery.get('vlanRange') || '-';
+                const vlanRangeArr = vlanRange.split('-');
+                vlanRangeArr[0] = data.value;
+                vlanRange = vlanRangeArr.join('-');
                 this.props.changeScreenActionQuery({ vlanRange });
               }}
               onUpperInputChange={(data) => {
                 const actionQuery = this.props.store.getIn([curScreenId, 'actionQuery']);
-                let vlanRange = actionQuery.get('vlanRange') || fromJS([]);
-                vlanRange = vlanRange.set('1', data.value);
+                let vlanRange = actionQuery.get('vlanRange') || '-';
+                const vlanRangeArr = vlanRange.split('-');
+                vlanRangeArr[1] = data.value;
+                vlanRange = vlanRangeArr.join('-');
                 this.props.changeScreenActionQuery({ vlanRange });
               }}
-              help={`${__('Range: ')}2 - 4094`}
+              help={`${__('Range: ')}1 - 4094`}
+              {...this.props.validateOption.validNumRange}
             />
           ),
         },
@@ -169,5 +182,6 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
+  validator.mergeProps(validOptions),
 )(View);
 

@@ -421,6 +421,7 @@
 
   "Cooperative ID": "合作身份ID",
   "Security Code": "安全检验码",
-  "Alipay Payment Settings": "阿里支付设置",
-  "Wechat Payment Settings": "微信支付设置"
+  "Alipay Payment Settings": "支付宝支付设置",
+  "Wechat Payment Settings": "微信支付设置",
+  "Payment Settings": "支付设置"
 }
