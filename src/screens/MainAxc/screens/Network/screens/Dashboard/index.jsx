@@ -98,11 +98,6 @@ export default class NetWorkDashBoard extends React.Component {
         formatter: `{b} <br/> {a}: {c} ${unit.str}/s`,
       },
       toolbox: {
-        feature: {
-          dataZoom: {
-            yAxisIndex: 'none',
-          },
-        },
       },
       grid: {
         right: '4%',
@@ -213,7 +208,7 @@ export default class NetWorkDashBoard extends React.Component {
                   alt="portsused"
                   className="ntw-dsb-card-img"
                 />
-                <p className="ntw-dsb-card-num">{this.props.store.getIn([curScreenId, 'data', 'dhcpPool'])}</p>
+                <a href="/#/main/network/dhcp/service/list"><p className="ntw-dsb-card-num">{this.props.store.getIn([curScreenId, 'data', 'dhcpPool'])}</p></a>
               </div>
             </div>
 
@@ -255,7 +250,7 @@ export default class NetWorkDashBoard extends React.Component {
                   alt="natstrategy"
                   className="ntw-dsb-card-img"
                 />
-                <p className="ntw-dsb-card-num">{this.props.store.getIn([curScreenId, 'data', 'natNum'])}</p>
+                <a href="/#/main/network/nat"><p className="ntw-dsb-card-num">{this.props.store.getIn([curScreenId, 'data', 'natNum'])}</p></a>
               </div>
             </div>
 
