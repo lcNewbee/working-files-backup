@@ -720,9 +720,7 @@ export default class Basic extends React.Component {
             this.onSsidItemChange(val, item, 'ssid', data.value);
           }
         }}
-        style={{
-          height: '29px',
-        }}
+        style={{ height: '29px' }}
       />
     );
   }
@@ -978,9 +976,7 @@ export default class Basic extends React.Component {
                 <icon
                   className="fa fa-plus-square"
                   size="lg"
-                  style={{
-                    marginRight: '4px',
-                  }}
+                  style={{ marginRight: '4px' }}
                   onClick={() => this.props.changeTitleShowIcon({
                     name: 'showRadioSetting',
                     value: true,
@@ -1039,9 +1035,7 @@ export default class Basic extends React.Component {
                       countryMap,
                     )}
                     disabled
-                    style={{
-                      width: '127px',
-                    }}
+                    style={{ width: '127px' }}
                   />
                   <Button
                     text={__('Change')}
@@ -1232,9 +1226,7 @@ export default class Basic extends React.Component {
                 wirelessMode !== 'ap' &&
                   typeof (wirelessMode) !== 'undefined' ? ( // 处理第一次进入该页面，汽包内容闪现的问题。
                     <div
-                      style={{
-                        overflow: 'visible',
-                      }}
+                      style={{ overflow: 'visible' }}
                       className="cols cols-6 bubble"
                     >
                       <div className="bubble-arrow-before" />
@@ -1242,15 +1234,11 @@ export default class Basic extends React.Component {
                         curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? (
                           <div className="clearfix">
                             <div
-                              style={{
-                                width: '500px',
-                              }}
+                              style={{ width: '500px' }}
                             >
                               <div
                                 className="fl"
-                                style={{
-                                  width: '370px',
-                                }}
+                                style={{ width: '370px' }}
                               >
                                 <FormGroup
                                   label={__('Remote SSID')}
@@ -1272,9 +1260,7 @@ export default class Basic extends React.Component {
                               </div>
                             </div>
                             <div
-                              style={{
-                                paddingTop: '2px',
-                              }}
+                              style={{ paddingTop: '2px' }}
                               className="fl"
                             >
                               {

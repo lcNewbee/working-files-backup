@@ -9,6 +9,8 @@ import {
   AppScreen,
 } from 'shared/containers/appScreen';
 
+import startValidFun from 'shared/utils/lib/chain';
+/*
 // 设计模式：职责链模式 用于数据保存前的组合验证
 const Chain = function (fn) {
   this.fn = fn;
@@ -82,9 +84,55 @@ const chainDhcpEndIpBiggerThanStart = new Chain(isDhcpEndIpBiggerThanStart);
 // 指定职责链
 chainIpAndGatewayInTheSameNet.setNextSuccessor(chainDhcpPoolInTheSameNet);
 chainDhcpPoolInTheSameNet.setNextSuccessor(chainDhcpEndIpBiggerThanStart);
-
 function onBeforeSync(actionQury, currList) {
   return chainIpAndGatewayInTheSameNet.passRequest(actionQury, currList);
+}
+*/
+
+function isIpAndGatewayInTheSameNet(actionQury, currList) {
+  const { ipv4Gateway, ipv4Ip, mask } = currList.toJS();
+  if (ipv4Gateway) {
+    const msgOption = { ipLabel: __('IP Address'), ip2Label: __('Gateway') };
+    const msg = validator.combine.needSameNet(ipv4Ip, mask, ipv4Gateway, msgOption);
+    if (msg) return msg;
+  }
+  return '';
+}
+
+function isDhcpPoolInTheSameNet(actionQury, currList) {
+  const { dhcpPoolStart, dhcpPoolEnd, dhcpPoolMask, dhcpServerEnable, ipType } = currList.toJS();
+  if (ipType === 'static' && dhcpServerEnable === '1') {
+    const msgOption = { ipLabel: __('DHCP Start IP'), ip2Label: __('DHCP End IP') };
+    const msg = validator.combine.needSameNet(dhcpPoolStart, dhcpPoolMask, dhcpPoolEnd, msgOption);
+    if (msg) return msg;
+  }
+  return '';
+}
+
+function isDhcpEndIpBiggerThanStart(actionQury, currList) {
+  const { dhcpPoolStart, dhcpPoolEnd, dhcpPoolMask, dhcpServerEnable, ipType } = currList.toJS();
+  if (ipType === 'static' && dhcpServerEnable === '1') {
+    let maskBinaryStr = '';
+    dhcpPoolMask.split('.').forEach((element) => {
+      maskBinaryStr += Number(element).toString(2);
+    });
+    const netNum = maskBinaryStr.match(/^[1]+/)[0].length;
+    const hostMask = (((2 ** 32) - 1) >>> netNum);
+    const startIpArr = dhcpPoolStart.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+    const endIpArr = dhcpPoolEnd.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+
+    const startIpNum = (+startIpArr[1] << 24) + (+startIpArr[2] << 16) + (+startIpArr[3] << 8) + (+startIpArr[4]);
+    const endIpNum = (+endIpArr[1] << 24) + (+endIpArr[2] << 16) + (+endIpArr[3] << 8) + (+endIpArr[4]);
+    if ((startIpNum & hostMask) > (endIpNum & hostMask)) return __('DHCP end IP address must be greater than start IP!');
+    return '';
+  }
+  return '';
+}
+
+const funArr = [isIpAndGatewayInTheSameNet, isDhcpPoolInTheSameNet, isDhcpEndIpBiggerThanStart];
+function onBeforeSync(actionQury, currList) {
+  const validateFun = startValidFun(funArr);
+  return validateFun(actionQury, currList);
 }
 
 const sizeOptions = [

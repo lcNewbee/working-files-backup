@@ -197,14 +197,14 @@ export default class NetworkSettings extends React.Component {
       },
       defaultData: {
         proto: 'dhcp', // static or dhcp
-      //   fallbackIp: '192.168.1.11', // fallback ip
-      //   fallbackMask: '255.255.255.0',
-      //   ip: '192.168.1.10',
-      //   mask: '255.255.255.0',
-      //   gateway: '192.168.1.1',
-      //   dns1: '192.168.1.1', // 主dns
-      //   dns2: '8.8.8.8', // 次dns
-      //   mtu: '1500',
+        //   fallbackIp: '192.168.1.11', // fallback ip
+        //   fallbackMask: '255.255.255.0',
+        //   ip: '192.168.1.10',
+        //   mask: '255.255.255.0',
+        //   gateway: '192.168.1.1',
+        //   dns1: '192.168.1.1', // 主dns
+        //   dns2: '8.8.8.8', // 次dns
+        //   mtu: '1500',
         vlanEnable: '1',  // 管理vlan开关,默认关
         vlanId: '1', // 2-4094 // vlan id
       },
@@ -233,26 +233,26 @@ export default class NetworkSettings extends React.Component {
   renderTypeSelector(val, item) {
     const enable = this.props.store.getIn(['curData', 'vlanEnable']);
     return (
-      <div className="form-group">
-        <div className="form-group--inline">
-          <FormInput
-            type="select"
-            value={val}
-            options={[
-              { label: 'Trunk', value: 'trunk' },
-              { label: 'Access', value: 'access' },
-            ]}
-            size="sm"
-            disabled={enable === '0'}
-            onChange={(data) => {
-              let portList = this.props.store.getIn(['curData', 'portList']);
-              const index = portList.indexOf(item);
-              portList = portList.setIn([index, 'type'], data.value);
-              this.props.updateItemSettings({ portList });
-            }}
-          />
-        </div>
-      </div>
+      // <div className="form-group">
+      //   <div className="form-group--inline">
+      <FormInput
+        type="select"
+        value={val}
+        options={[
+          { label: 'Trunk', value: 'trunk' },
+          { label: 'Access', value: 'access' },
+        ]}
+        size="sm"
+        disabled={enable === '0'}
+        onChange={(data) => {
+          let portList = this.props.store.getIn(['curData', 'portList']);
+          const index = portList.indexOf(item);
+          portList = portList.setIn([index, 'type'], data.value);
+          this.props.updateItemSettings({ portList });
+        }}
+      />
+      //   </div>
+      // </div>
     );
   }
 
@@ -365,8 +365,8 @@ export default class NetworkSettings extends React.Component {
         id: 'type',
         text: __('Type'),
         render: (val, item) => that.renderTypeSelector(val, item),
-        // width: '150px',
-        paddingLeft: '30px',
+        width: '300px',
+        paddingLeft: '85px',
       },
       {
         id: 'vlanId',
@@ -375,13 +375,6 @@ export default class NetworkSettings extends React.Component {
         // wdith: '150px',
         paddingLeft: '30px',
       },
-      // {
-      //   id: 'members',
-      //   text: __('Members'),
-      //   render: (val, item) => that.renderMembersInput(val, item),
-      //   wdith: '150',
-      //   paddingLeft: '40px',
-      // },
       {
         id: 'manageVlanId',
         text: __('Manage VLAN ID'),
