@@ -734,10 +734,13 @@ const defaultProps = {};
 export default class AccountList extends React.Component {
   constructor(props) {
     super(props);
+    this.firstCharge = true;
     this.state = {
       isBaseShow: true,
       isAdvancedShow: false,
       date: curDate.date,
+      categoryTypeOptions: fromJS([]),
+      $$cardDataList: fromJS([]),
     };
 
     utils.binds(this, [
@@ -749,38 +752,34 @@ export default class AccountList extends React.Component {
       'onBeforeSave',
       'onBeforeSync',
     ]);
-    this.state = {
-      isBaseShow: true,
-      $$cardDataList: fromJS([]),
-    };
   }
 
   componentWillMount() {
     this.props.changeScreenQuery({ state: '-100' });
 
-    utils.fetch('goform/portal/card/cardcategory', {
-      size: 9999,
-      page: 1,
-    }).then((json) => {
-      let $$cardDataList = fromJS([]);
-      let categoryTypeOptions = fromJS([]);
+    // utils.fetch('goform/portal/card/cardcategory', {
+    //   size: 9999,
+    //   page: 1,
+    // }).then((json) => {
+    //   let $$cardDataList = fromJS([]);
+    //   let categoryTypeOptions = fromJS([]);
 
-      if (json.state && json.state.code === 2000) {
-        $$cardDataList = fromJS(json.data.list);
-        categoryTypeOptions = $$cardDataList.map(
-          $$item => (fromJS({
-            value: $$item.get('id'),
-            label: $$item.get('name'),
-            type: $$item.get('state'),
-          })),
-        );
-      }
+    //   if (json.state && json.state.code === 2000) {
+    //     $$cardDataList = fromJS(json.data.list);
+    //     categoryTypeOptions = $$cardDataList.map(
+    //       $$item => (fromJS({
+    //         value: $$item.get('id'),
+    //         label: $$item.get('name'),
+    //         type: $$item.get('state'),
+    //       })),
+    //     );
+    //   }
 
-      this.setState({
-        categoryTypeOptions,
-        $$cardDataList,
-      });
-    });
+    //   this.setState({
+    //     categoryTypeOptions,
+    //     $$cardDataList,
+    //   });
+    // });
   }
   componentWillReceiveProps(nextProps) {
     const myScreenId = nextProps.store.get('curScreenId');
@@ -791,6 +790,35 @@ export default class AccountList extends React.Component {
       this.isCloseRechage = true;
     } else {
       this.isCloseRechage = false;
+    }
+    // 只在第一次点击充值时请求，this.firstCharge标识是否是第一次请求。
+    // (该请求原本在componentWillMount中，但同时两个请求会导致后台出错，故移至该处。也算合理，不充值不请求)
+    if (nextActionType === 'recharge' && thisActionType !== 'recharge' && this.firstCharge) {
+      utils.fetch('goform/portal/card/cardcategory', {
+        size: 9999,
+        page: 1,
+      }).then((json) => {
+        let $$cardDataList = fromJS([]);
+        let categoryTypeOptions = fromJS([]);
+
+        if (json.state && json.state.code === 2000) {
+          $$cardDataList = fromJS(json.data.list);
+          categoryTypeOptions = $$cardDataList.map(
+            $$item => (fromJS({
+              value: $$item.get('id'),
+              label: $$item.get('name'),
+              type: $$item.get('state'),
+            })),
+          );
+        }
+
+        this.setState({
+          categoryTypeOptions,
+          $$cardDataList,
+        });
+        // 第一次请求后，将标识置为false，下一次点击充值不再请求
+        this.firstCharge = false;
+      });
     }
   }
 
