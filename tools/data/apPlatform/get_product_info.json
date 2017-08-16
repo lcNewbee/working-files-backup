@@ -22,6 +22,12 @@
       }
     ],
     "title": "CHANGED TITLE",
-    "companyname": "axilspot"
-}
+    "companyname": "axilspot",
+    "companyTel": "4001234567",
+    "companyWebsite": "www.axilspot.com",
+    "productName": "WQA2503",
+    "productMode": "AIP10L",
+    "slogan": "Make world better!",
+    "email": "xxx.@axilspot.com"
+  }
 }

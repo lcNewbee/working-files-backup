@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import utils from 'shared/utils';
 import classNamesUtils from 'classnames';
-import { getActionable } from 'shared/axc'
+import { getActionable } from 'shared/axc';
 import { SaveButton, Icon, PopOver, Navbar } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import {

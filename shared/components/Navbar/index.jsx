@@ -5,6 +5,7 @@ import './_index.scss';
 const propTypes = {
   title: PropTypes.string,
   version: PropTypes.string,
+  slogan: PropTypes.string,
   children: PropTypes.any,
   theme: PropTypes.oneOf(['metro']),
 };
@@ -14,7 +15,7 @@ const defaultProps = {
 };
 
 function Navbar(props) {
-  const { title, version, theme } = props;
+  const { title, version, theme, slogan } = props;
   let navbarClassName = 'navbar';
 
   if (theme) {
@@ -29,7 +30,13 @@ function Navbar(props) {
           <span className="version">{version}</span>
         ) : null
       }
-
+      {
+        slogan ? (
+          <div className="slogan-wrap">
+            <span className="slogan">{slogan}</span>
+          </div>
+        ) : null
+      }
       {props.children}
     </header>
   );

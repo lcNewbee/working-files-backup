@@ -166,7 +166,7 @@ export default class Login extends React.PureComponent {
   }
 
   render() {
-    const { version, guiName } = this.props.app.toJS();
+    const { version, guiName, slogan } = this.props.app.toJS();
     const { username, password } = this.props.validateOption;
 
     return (
@@ -174,6 +174,7 @@ export default class Login extends React.PureComponent {
         <Navbar
           title={guiName}
           version={version}
+          slogan={__(slogan)}
         />
 
         <div className="sign">

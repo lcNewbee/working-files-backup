@@ -103,7 +103,7 @@ function mergeIn(target, path, mergeObj) {
     return result;
   }
   if (Object.prototype.toString.call(mergeObj) != "[object Object]") {
-    throw new Error("config --> mergeIn: mergeIn can not be used to merge array or variable but only object.");
+    throw new Error("config --> mergeIn: mergeIn can not be used to merge array or variable but only object.", mergeObj);
   }
 
   var pathStackStr = JSON.stringify(path);

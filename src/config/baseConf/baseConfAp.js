@@ -58,19 +58,19 @@ baseComponents.sChannelUtilization = require('../../screens/MainAP/screens/Tools
 const funConfig = {
   // 覆盖型产品快速设置
   quicksetup: {
-    router: true,              // 是否有router模式
+    router: true, // 是否有router模式
   },
   networksettings: {
-    router: true,              // 是否有router模式
-    hasVlan: true,              // 是否有VLAN功能
-    hasMngVlanId: true,         // 是否有管理VLAN ID的填写框
-    hasUntagVlanId: true,       // 是否有untag VLAN ID填写框
-    hasPortListTable: true,    // 是否有接口VLAN配置的列表显示
+    router: true, // 是否有router模式
+    hasVlan: true, // 是否有VLAN功能
+    hasMngVlanId: true, // 是否有管理VLAN ID的填写框
+    hasUntagVlanId: true, // 是否有untag VLAN ID填写框
+    hasPortListTable: true, // 是否有接口VLAN配置的列表显示
     hasVlanInputByTable: true, // 通过后台传递过来的列表显示VLAN输入框，目前是ASW3特有的。
   },
   // 无线设置页面
   basic: {
-    radioMaxClientsLimit: true,  // 射频客户端限制
+    radioMaxClientsLimit: true, // 射频客户端限制
     hasIptvFun: false, // 是否有IPTV的配置项
     devicemodeOptions: [
       { value: 'ap', label: __('AP') },
@@ -78,26 +78,26 @@ const funConfig = {
       { value: 'repeater', label: __('Repeater') },
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
-    ssidTableKeys: [    // 多SSID配置表格项
-      'enable',         // 该SSID是否启用
-      'ssid',           // SSID名称
-      'maxClients',     // SSID最大客户端限制
-      'airTimeEnable',  // 时间公平性
-      'speedLimit',     // SSID限速
-      'vlanId',         // VLAN ID
-      'hideSsid',       // 该SSID是否隐藏
-      'isolation',      // 是否启用客户端隔离
-      'security',       // 加密配置
-      'delete',         // 删除按钮
-      'portalEnable',         // portal功能开关
+    ssidTableKeys: [ // 多SSID配置表格项
+      'enable', // 该SSID是否启用
+      'ssid', // SSID名称
+      'maxClients', // SSID最大客户端限制
+      'airTimeEnable', // 时间公平性
+      'speedLimit', // SSID限速
+      'vlanId', // VLAN ID
+      'hideSsid', // 该SSID是否隐藏
+      'isolation', // 是否启用客户端隔离
+      'security', // 加密配置
+      'delete', // 删除按钮
+      'portalEnable', // portal功能开关
     ],
-    portalFun: true,        // 是否有portal功能
+    portalFun: true, // 是否有portal功能
   },
   advance: {
     ledThreshFun: true, // 信号强度控制LED灯功能
     beaconIntervalFun: true, // Beacon帧间间隔
     dtimIntervalFun: true, // DTIM间隔
-    distanceFun: true,          // 距离调整
+    distanceFun: true, // 距离调整
     segmentThreshFun: true, // 分片阈值
     ampduFun: true, // ampdu值
     rateSetFun: true, // 速率集
@@ -113,7 +113,7 @@ const funConfig = {
 const routes = [{
   path: '/',
   component: app.Screen,
-  // formUrl: 'goform/get_product_info',
+  formUrl: 'goform/get_product_info',
   indexPath: '/login',
   routes: [{
     path: '/main',

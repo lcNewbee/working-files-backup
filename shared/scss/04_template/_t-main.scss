@@ -67,6 +67,25 @@ body {
       font-size: 1.214em;
     }
   }
+  .t-main__nav-footer {
+    width: 100%;
+    position: fixed;
+    bottom: 12px;
+    left: 20px;
+    z-index: 1509;
+
+    .icon {
+      font-size: 40px;
+      color: #ababab;
+      margin-left: 15px;
+      margin-bottom: 5px;
+    }
+
+    .contact {
+      color: #ababab;
+      font-size: 14px;
+    }
+  }
   &.t-main--axc {
     overflow: hidden;
 

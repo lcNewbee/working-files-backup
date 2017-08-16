@@ -100,7 +100,7 @@ export default class MainAP extends React.PureComponent {
   }
 
   render() {
-    const { guiName, saving } = this.props.app.toJS();
+    const { guiName, saving, slogan, companyname, email } = this.props.app.toJS();
     const { isShow } = this.state;
     // 解决在管理页面刷新获取radioType为undefined，导致请求国家信道错误的问题
     if (this.props.selfState.getIn(['deviceRadioList']).size === 0) return null;
@@ -110,6 +110,7 @@ export default class MainAP extends React.PureComponent {
       <div>
         <Navbar
           title={guiName}
+          slogan={slogan}
         >
           <div className="aside">
             <a href="" className="as-control" onClick={this.onRefresh}>
@@ -138,6 +139,21 @@ export default class MainAP extends React.PureComponent {
               routes={this.props.route.routes}
             />
           </div>
+
+          <ul
+            className="t-main__nav-footer"
+          >
+            <li>
+              <a
+                className=""
+                title={__('Email to %s', companyname)}
+                href={`mailto:${email}`}
+              >
+                <Icon name="envelope" />
+                <div className="contact">{__('Contact Us')}</div>
+              </a>
+            </li>
+          </ul>
         </div>
         {
           isShow ? (
@@ -186,8 +202,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-  appActions,
-  actions,
+    appActions,
+    actions,
   ), dispatch);
 }
 
