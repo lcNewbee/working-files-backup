@@ -70,20 +70,46 @@ body {
   .t-main__nav-footer {
     width: 80px;
     position: fixed;
-    bottom: 12px;
+    bottom: 34px;
     left: 20px;
-    z-index: 1509;
+    z-index: 1505;
+    text-align: center;
 
     .icon {
       font-size: 40px;
       color: #ababab;
-      margin-left: 15px;
       margin-bottom: 5px;
     }
 
     .contact {
       color: #ababab;
       font-size: 14px;
+    }
+  }
+  .t-main__footer-bar {
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    height: 24px;
+    z-index: 1509;
+    line-height: 24px;
+    text-align: center;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(85, 171, 214, 1) 0%,
+      rgba(0, 147, 221, 1) 100%
+    );
+
+    .content-wraper {
+      display: inline-block;
+
+      div {
+        margin-left: 25px;
+
+        a {
+          direction: none;
+        }
+      }
     }
   }
   &.t-main--axc {

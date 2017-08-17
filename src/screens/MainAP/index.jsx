@@ -100,7 +100,9 @@ export default class MainAP extends React.PureComponent {
   }
 
   render() {
-    const { guiName, saving, slogan, companyname, email } = this.props.app.toJS();
+    const {
+      guiName, saving, slogan, companyname, email, companyTel, copyrightInfo, supportLink,
+    } = this.props.app.toJS();
     const { isShow } = this.state;
     // 解决在管理页面刷新获取radioType为undefined，导致请求国家信道错误的问题
     if (this.props.selfState.getIn(['deviceRadioList']).size === 0) return null;
@@ -139,7 +141,6 @@ export default class MainAP extends React.PureComponent {
               routes={this.props.route.routes}
             />
           </div>
-
           {
             email && companyname ? (
               <ul
@@ -157,6 +158,32 @@ export default class MainAP extends React.PureComponent {
                 </li>
               </ul>
             ) : null
+          }
+
+          { // 只在有版权信息时才显示底边栏
+            copyrightInfo && (<div className="t-main__footer-bar">
+              <div className="content-wraper clearfix">
+                <div className="copyright fl">
+                  {__(copyrightInfo)}
+                </div>
+
+                {
+                  companyTel && (
+                    <div className="telNumber fl">
+                      {__('Service Tel')}：{companyTel}
+                    </div>
+                  )
+                }
+
+                {
+                  supportLink && (
+                    <div className="support fl">
+                      <a href={`//${supportLink}`}>{__('Tech Support')}</a>
+                    </div>
+                  )
+                }
+              </div>
+            </div>)
           }
         </div>
         {
@@ -185,6 +212,7 @@ export default class MainAP extends React.PureComponent {
             </div>
           ) : null
         }
+
         {
           saving ? <div className="body-backdrop" /> : null
         }

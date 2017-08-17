@@ -410,5 +410,8 @@
   "Service Enable": "启用云服务",
   "Organize ID": "组织ID",
   "Cloud Service Settings": "云服务设置",
-  "IP address begin with %s is invalid!": "以%s开始的IP地址无效!"
+  "IP address begin with %s is invalid!": "以%s开始的IP地址无效!",
+
+  "Tech Support": "技术支持",
+  "Service Tel": "客服电话"
 }
