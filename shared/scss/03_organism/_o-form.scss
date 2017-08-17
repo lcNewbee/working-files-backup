@@ -93,6 +93,10 @@ $o-form-content-margin: 1em 0 0;
       margin: 0 12px 8px;
 
       > label {
+        width: auto;
+
+        // chrome 浏览器低版本不支持 auto
+        min-width: 50px;
         min-width: auto;
         margin-right: 12px;
         text-align: left;

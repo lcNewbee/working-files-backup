@@ -72,11 +72,11 @@ function initScreenState($$state, action) {
 
   // 只有当 $$settingsData 为空时才合并默认Settings
   if (defaultSettings && $$settingsData.isEmpty()) {
-    $$settingsData = $$settingsData.merge(defaultSettings);
+    $$settingsData = $$settingsData.mergeDeep(defaultSettings);
   }
 
   // 如何处理 screen的第一次初始化与其他初始
-  $$ret = $$ret.mergeIn(
+  $$ret = $$ret.mergeDeepIn(
     [screenId],
     $$myScreenState.set('curSettings', $$settingsData),
   );
@@ -101,7 +101,7 @@ function addListItem($$state, curScreenName, action) {
 
   $$ret = $$ret.setIn(
     [curScreenName, 'curListItem'],
-    fromJS({}).merge(action.payload || defaultListItem),
+    defaultListItem.mergeDeep(action.payload),
   )
     .mergeIn([curScreenName, 'actionQuery'], {
       action: 'add',
@@ -301,6 +301,7 @@ export default function (state = defaultState, action) {
     case ACTION_TYPES.INIT:
       return initScreenState(state, action, curScreenName);
     case ACTION_TYPES.UPDATE:
+      console.log(action.payload)
       return state.merge(action.payload);
 
     case ACTION_TYPES.LEAVE:

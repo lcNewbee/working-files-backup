@@ -58,7 +58,7 @@ export default class App extends Component {
       this.props.fetchProductInfo(this.props.route.formUrl)
         .then((json) => {
           if (json && json.data && json.data.companyname) {
-            renderBrandClassname(json.data.companyname)
+            renderBrandClassname(json.data.companyname);
           }
         });
     }

@@ -258,7 +258,7 @@ export function fetchProductInfo(url) {
     const fetchUrl = url || APP_CONFIG.fetchInfo;
     return dispatch(fetch(fetchUrl))
       .then((json) => {
-        if (json.state && json.state.code === 2000) {
+        if (json && json.state && json.state.code === 2000) {
           dispatch(receiveFetchProductInfo(json.data));
         }
 

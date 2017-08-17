@@ -440,7 +440,42 @@ body {
     margin-top: 0;
   }
 }
+@-webkit-keyframes navbarDown {
+  0% {
+    opacity: 0;
+    margin-top: -$g-navbar-height;
+  }
+  24.99% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+    margin-top: 0;
+  }
+  50%,
+  75%,
+  100% {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
 @keyframes topMenuLeft {
+  0%,
+  25% {
+    margin-left: -$t-main-top-menu-size;
+    opacity: 0;
+  }
+  50.01% {
+    opacity: 1;
+    margin-left: 0;
+  }
+  75%,
+  100% {
+    opacity: 1;
+    margin-left: 0;
+  }
+}
+@-webkit-keyframes topMenuLeft {
   0%,
   25% {
     margin-left: -$t-main-top-menu-size;
@@ -476,8 +511,44 @@ body {
     margin-left: 0;
   }
 }
+@-webkit-keyframes navLeft {
+  0%,
+  50% {
+    margin-left: -$t-main-nav-size;
+    opacity: 0;
+  }
+  50.01% {
+    opacity: .8;
+    margin-left: -$t-main-nav-size;
+  }
+  65% {
+    opacity: 1;
+    margin-left: 0;
+  }
+  100% {
+    opacity: 1;
+    margin-left: 0;
+  }
+}
 
 @keyframes contenDown {
+  0%,
+  50% {
+    opacity: 0;
+  }
+  50.01% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0;
+    margin-top: -10px;
+  }
+  100% {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
+@-webkit-keyframes contenDown {
   0%,
   50% {
     opacity: 0;

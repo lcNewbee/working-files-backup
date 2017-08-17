@@ -31,7 +31,8 @@ $boder-color:         #ccc;
     display: inline-block;
     margin-left: 24px;
     > label {
-      min-width: auto;
+      width: auto;
+      min-width: 60px;
       margin-right: 12px;
     }
     .form-control {

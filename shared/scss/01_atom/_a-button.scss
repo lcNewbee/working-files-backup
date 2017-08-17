@@ -21,16 +21,14 @@
   padding: .5em 1em;
   font-size: $g-font-size;
   line-height: 1;
-  color: #fff;
   white-space: nowrap;
   user-select: none;
   text-decoration: none;
-  cursor: pointer;
-  background-color: scene-color('secondary');
   border: 1px solid transparent;
   border-radius: 3px;
   vertical-align: middle;
   transition: background-color .3s ease-in-out;
+  cursor: pointer;
 
   &:active {
     @include opacity(.8);
@@ -138,10 +136,11 @@ input[type="button"] {
 //
 
 // Make a button look and behave like a link
-.a-btn-link {
+.a-btn--link {
   font-weight: normal;
   color: $blue;
   border-radius: 0;
+  background-color: transparent;
 
   &,
   &:active,

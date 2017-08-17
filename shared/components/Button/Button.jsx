@@ -10,7 +10,7 @@ import '../../scss/01_atom/_a-button.scss';
 const propTypes = {
   icon: PropTypes.string,
   className: PropTypes.string,
-  theme: PropTypes.oneOf(['primary', 'secondary', 'success', 'info', 'warning', 'danger']),
+  theme: PropTypes.oneOf(['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']),
   size: PropTypes.oneOf(['sm', 'lg', 'min']),
   type: PropTypes.oneOf(['button', 'reset', 'submit']),
   inverse: PropTypes.bool,
@@ -22,7 +22,7 @@ const propTypes = {
 
 const defaultProps = {
   Component: 'button',
-  theme: 'secondary',
+  theme: 'light',
   role: 'button',
 };
 

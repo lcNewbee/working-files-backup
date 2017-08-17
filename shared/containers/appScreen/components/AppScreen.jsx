@@ -27,6 +27,26 @@ const loadingWarpStyle = {
   opacity: 0.2,
 };
 
+function getLoadingStatus(props) {
+  const { loading } = props;
+  const $$store = props.store;
+  const myScreenId = $$store.get('curScreenId');
+  const $$myScreenStore = $$store.get(myScreenId);
+  const $$myScreenDataList = $$myScreenStore.get('list');
+  const $$myScreenDataSettings = $$myScreenStore.get('settings');
+  let ret = loading;
+
+  if (typeof loading === 'undefined') {
+    ret = true;
+    if (($$myScreenDataList && !$$myScreenDataList.isEmpty()) && ($$myScreenDataSettings &&
+        !$$myScreenDataSettings.isEmpty())) {
+      ret = false;
+    }
+  }
+
+  return ret;
+}
+
 const propTypes = {
   app: PropTypes.instanceOf(Map).isRequired,
   store: PropTypes.instanceOf(Map).isRequired,
@@ -44,6 +64,7 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func.isRequired,
   changeScreenQuery: PropTypes.func.isRequired,
   updateScreen: PropTypes.func,
+  loading: PropTypes.bool,
 
   // List 相关属性list
   listOptions: PropTypes.oneOfType([
@@ -76,25 +97,7 @@ const defaultProps = {
 
   settingsFormOptions: List([]),
 };
-function getLoadingStatus(props) {
-  const { loading } = props;
-  const $$store = props.store;
-  const myScreenId = $$store.get('curScreenId');
-  const $$myScreenStore = $$store.get(myScreenId);
-  const $$myScreenDataList = $$myScreenStore.get('list');
-  const $$myScreenDataSettings = $$myScreenStore.get('settings');
-  let ret = loading;
 
-  if (typeof loading === 'undefined') {
-    ret = true;
-    if (($$myScreenDataList && !$$myScreenDataList.isEmpty()) && ($$myScreenDataSettings &&
-        !$$myScreenDataSettings.isEmpty())) {
-      ret = false;
-    }
-  }
-
-  return ret;
-}
 export default class AppScreen extends React.Component {
   constructor(props) {
     const {
@@ -126,7 +129,6 @@ export default class AppScreen extends React.Component {
     }
     if (this.defaultSettings) {
       initOption.defaultSettings = utils.extend(
-        {},
         this.defaultSettings,
         initOption.defaultSettings,
       );
@@ -139,7 +141,6 @@ export default class AppScreen extends React.Component {
 
     if (this.defaultListItem) {
       initOption.defaultListItem = utils.extend(
-        {},
         this.defaultListItem,
         initOption.defaultListItem,
       );
@@ -158,26 +159,39 @@ export default class AppScreen extends React.Component {
     this.initOption = initOption;
     this.selectedList = [];
     this.state = {};
+    if (typeof props.loading !== 'undefined') {
+      this.state.loading = props.loading;
+    }
   }
   componentWillMount() {
     this.props.initScreen(this.initOption);
     this.actionable = getActionable(this.props);
   }
   componentDidMount() {
-    this.fetchAppScreenData();
+    if (!this.props.initNoFetch) {
+      this.fetchAppScreenData();
+    }
   }
   componentWillReceiveProps(nextProps) {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$curScreenLoading = store.getIn([myScreenId, 'loading']);
-    const $$nextScreenLoading = store.get([myScreenId, 'loading']);
+    const $$nextScreenLoading = store.getIn([myScreenId, 'loading']);
+    const nextLoading = nextProps.loading;
 
-    // 更新加载状态
-    if ($$curScreenLoading !== $$nextScreenLoading) {
+    if (nextLoading !== this.state.loading) {
       this.setState({
-        loading: getLoadingStatus(nextProps),
+        loading: nextLoading,
       });
+    } else if ($$curScreenLoading !== $$nextScreenLoading) {
+      // 更新加载状态
+      if ($$curScreenLoading !== $$nextScreenLoading) {
+        this.setState({
+          loading: getLoadingStatus(nextProps),
+        });
+      }
     }
+
     if (nextProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.fetchAppScreenData(true);
     }
