@@ -140,20 +140,24 @@ export default class MainAP extends React.PureComponent {
             />
           </div>
 
-          <ul
-            className="t-main__nav-footer"
-          >
-            <li>
-              <a
-                className=""
-                title={__('Email to %s', companyname)}
-                href={`mailto:${email}`}
+          {
+            email && companyname ? (
+              <ul
+                className="t-main__nav-footer"
               >
-                <Icon name="envelope" />
-                <div className="contact">{__('Contact Us')}</div>
-              </a>
-            </li>
-          </ul>
+                <li>
+                  <a
+                    className=""
+                    title={__('Email to %s', companyname)}
+                    href={`mailto:${email}`}
+                  >
+                    <Icon name="envelope" />
+                    <div className="contact">{__('Contact Us')}</div>
+                  </a>
+                </li>
+              </ul>
+            ) : null
+          }
         </div>
         {
           isShow ? (
