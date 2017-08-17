@@ -72,7 +72,7 @@ export default class Main extends React.PureComponent {
 
     // 判断是否恢复出厂状态，再决定跳转页面
     this.props.fetch('goform/quicksetup').then((json) => {
-      if (json.state && json.state.code === 2000) {
+      if (json && json.state && json.state.code === 2000) {
         if (json.data.restoreState === '1') {
           window.location.hash = '/quicksetup';
         }

@@ -1,0 +1,35 @@
+.h-action-icon {
+  position: absolute;
+  right: 0;
+  float: right;
+  font-size: 20px;
+  text-align: center;
+  margin-right: 12px;
+  cursor: pointer;
+  transition: transform .2s ease-in-out;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.h-action-bar.o-form.o-form--flow {
+  position: relative;
+
+  button,
+  .form-group {
+    display: none;
+  }
+
+  &.active {
+    .h-action-icon {
+      transform: rotate(180deg);
+    }
+
+    button,
+    .form-group {
+      display: inline-block;
+    }
+  }
+}
+

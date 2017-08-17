@@ -5,15 +5,17 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import h337 from 'heatmap.js';
 import moment from 'moment';
+import classnames from 'classnames';
 
 import {
-  FormInput, Icon, FormGroup,
+  FormInput, Icon, FormGroup, Button,
 } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 
 import '../../shared/_map.scss';
+import './_index.scss';
 
 function calcValueWithinCircle(dataList, centerPoint, radius) {
   let totalValue = 0;
@@ -50,6 +52,8 @@ export default class View extends React.PureComponent {
       zoom: 100,
       observeRadius: 5,
       observeValue: 0,
+      loading: true,
+      actionBarShow: true,
     };
     this.datas = fromJS([]);
     this.totalValue = 0;
@@ -57,6 +61,7 @@ export default class View extends React.PureComponent {
       [
         'onSave',
         'onDrop',
+        'viewLiveData',
         'renderUndeployDevice',
         'onMapMouseUp',
         'onMapMouseDown',
@@ -83,15 +88,12 @@ export default class View extends React.PureComponent {
   componentWillMount() {
     // console.log('this.props.store', this.props.store.get('curScreenId'));
     const groupid = this.props.groupid;
+
     this.props.fetch('goform/group/map/building', { groupid }).then((json) => {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
       }
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
-    }).then((list) => {
-      if (typeof (list) !== 'undefined') {
-        this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
-      }
     });
   }
 
@@ -123,14 +125,17 @@ export default class View extends React.PureComponent {
     this.props.changeScreenQuery({ buildId: id });
     this.setState({ buildId: id });
     this.props.fetch('goform/group/map/list', { buildId: id })
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.mapOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mapName'), value: item.get('id') }));
-            this.mapList = fromJS(json.data.list);
-          }
-        }).then(() => {
-          this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          this.mapOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mapName'), value: item.get('id') }));
+          this.mapList = fromJS(json.data.list);
+        }
+        this.setState({
+          loading: false,
         });
+      }).then(() => {
+        this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+      });
   }
 
   onChangeMapId(id) {
@@ -138,7 +143,14 @@ export default class View extends React.PureComponent {
       this.props.changeScreenQuery({ curMapId: id });
       this.setState({ curMapId: id });
     }).then(() => {
-      this.props.fetchScreenData();
+      this.setState({
+        loading: true,
+      });
+      this.props.fetchScreenData().then(() => {
+        this.setState({
+          loading: false,
+        });
+      });
     });
   }
   onMapMouseUp() {
@@ -165,6 +177,17 @@ export default class View extends React.PureComponent {
     image.src = url;
     this.naturalWidth = image.width;
     this.naturalHeight = image.height;
+  }
+  viewLiveData(option) {
+    const num = option.value;
+    const curType = option.type || 'm';
+    const startTime = moment().subtract(num, curType).format('HH:mm:ss');
+    const endTime = moment().add(1, 'm').format('HH:mm:ss');
+    this.props.changeScreenQuery({
+      startTime,
+      endTime,
+    });
+    this.props.fetchScreenData();
   }
   removeShowerDiv() {
     const showers = document.querySelectorAll('.observeShower');
@@ -242,7 +265,7 @@ export default class View extends React.PureComponent {
     const len = heatCanvas.length;
     let i = 0;
 
-    for (i = 0; i < len; i++) {
+    for (i = 0; i < len; i += 1) {
       this.mapContent.removeChild(heatCanvas[i]);
     }
   }
@@ -251,6 +274,7 @@ export default class View extends React.PureComponent {
     const curItem = list.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
     this.getNaturalWidthAndHeight(imgUrl);
+
     return (
       <div
         className="o-map-container"
@@ -278,38 +302,53 @@ export default class View extends React.PureComponent {
     );
   }
   renderHeatMap() {
+    const curScreenId = this.props.store.get('curScreenId');
+    const { startDate, startTime } = this.props.store.getIn([curScreenId, 'query']).toJS();
+    const timeRangeM = moment().diff(moment(`${startDate} ${startTime}`), 'm') || 1;
+
     if (this.mapMouseDown) return null; // 移动图片时不重新计算绘图位置，因为坐标位置并没有改变
     let max = 0;
     const curMapInfo = this.mapList.find(item => item.get('id') === this.state.curMapId);
     if (!curMapInfo) return null;
-    const curScreenId = this.props.store.get('curScreenId');
     const points = this.props.store.getIn([curScreenId, 'data', 'list']);
     // 热力图数据生成代码
     this.datas = points.toJS().map((point) => {
-      // console.log('renderHeatMap');
       const ret = gps.getOffsetFromGpsPoint(point, curMapInfo.toJS());
       const x = Math.floor((ret.x * this.mapWidth) / 100);
       const y = Math.floor((ret.y * this.mapHeight) / 100);
       max = max > point.value ? max : point.value;
       return { x, y, value: point.value };
     });
+
+    max = 4 * timeRangeM;
+
     const data = {
       max,
       data: this.datas,
     };
-    if (this.mapContent) {
-      this.removeHeatMap();
-      const heatmapInstance = h337.create({
-        container: this.mapContent,
-        radius: Math.floor((25 * this.state.zoom) / 100),
-        maxOpacity: 0.3,
-        minOpacity: 0,
-        blur: 0.7,
-      });
-      heatmapInstance.setData(data);
+    if (this.mapContent && this.mapContent.offsetWidth > 0) {
+      // this.removeHeatMap();
+
+      if (!this.heatmapInstance) {
+        this.heatmapInstance = h337.create({
+          container: this.mapContent,
+          radius: Math.floor((26 * this.state.zoom) / 100),
+          maxOpacity: 0.2,
+          minOpacity: 0.02,
+          blur: 0.9,
+          gradient: {
+            '.1': 'blue',
+            '.4': 'green',
+            '.5': 'yellow',
+            '.7': 'orange',
+          },
+        });
+      }
+
+      this.heatmapInstance.setData(data);
     }
     // 一个画布，用来绘制可擦除的圆形观察范围，因为热力图不能擦除，故不能在热力图上绘制
-    this.renderBlankCanvas(this.mapContent);
+    return this.renderBlankCanvas(this.mapContent);
   }
 
   renderBlankCanvas(parentNode) {
@@ -335,6 +374,10 @@ export default class View extends React.PureComponent {
     const myZoom = this.state.zoom;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
+    const barClassname = classnames('o-form o-form--flow h-action-bar', {
+      active: this.state.actionBarShow,
+    });
+
     return (
       <AppScreen
         {...this.props}
@@ -342,15 +385,25 @@ export default class View extends React.PureComponent {
           query: {
             startDate: moment().format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
-            startTime: '00:00:00',
-            endTime: '23:59:59',
+            startTime: moment().subtract(30, 'm').format('HH:mm:ss'),
+            endTime: moment().add(2, 'm').format('HH:mm:ss'),
             mapType: 'number',
           },
         }}
+        loading={this.state.loading || this.props.store.getIn([curScreenId, 'fetching'])}
+        initNoFetch
       >
-        <div className="o-form o-form--flow">
+        <div className={barClassname}>
+          <Icon
+            className="h-action-icon"
+            name="caret-down"
+            onClick={() => this.setState({
+              actionBarShow: !this.state.actionBarShow,
+            })}
+          />
           <FormGroup
             type="select"
+            className="fl"
             label={__('Building')}
             value={this.state.buildId}
             options={this.buildOptions ? this.buildOptions.toJS() : []}
@@ -358,6 +411,7 @@ export default class View extends React.PureComponent {
           />
           <FormGroup
             type="select"
+            className="fl"
             label={__('Map Name')}
             value={this.state.curMapId}
             options={this.mapOptions ? this.mapOptions.toJS() : []}
@@ -365,6 +419,7 @@ export default class View extends React.PureComponent {
           />
           <FormGroup
             type="select"
+            className="fl"
             label={__('Observe Radius')}
             value={this.state.observeRadius}
             options={[
@@ -375,6 +430,7 @@ export default class View extends React.PureComponent {
           />
           <FormGroup
             label={__('Start Date')}
+            className="fl"
           >
             <FormInput
               type="date"
@@ -411,6 +467,7 @@ export default class View extends React.PureComponent {
           </FormGroup>
           <FormGroup
             label={__('End Date')}
+            className="fl"
           >
             <FormInput
               type="date"
@@ -441,13 +498,14 @@ export default class View extends React.PureComponent {
               }}
               style={{
                 marginLeft: '5px',
+                marginRight: '12px',
                 verticalAlign: 'middle',
               }}
             />
           </FormGroup>
-
           <FormGroup
             type="switch"
+            className="fl"
             value={store.getIn([curScreenId, 'query', 'mapType'])}
             label={__('Map Type')}
             options={[
@@ -457,6 +515,33 @@ export default class View extends React.PureComponent {
             onChange={(data) => {
               this.props.changeScreenQuery({ mapType: data.value });
               this.props.fetchScreenData();
+            }}
+          />
+          <Button
+            theme="primary"
+            icon="eye"
+            className="fl"
+            text={__('Live Data')}
+            style={{
+              marginRight: '8px',
+            }}
+            onClick={() => {
+              this.viewLiveData({
+                value: 1,
+                type: 'm',
+              });
+            }}
+          />
+          <Button
+            theme="primary"
+            icon="eye"
+            className="fl"
+            text={__('Last Half an Hour Data')}
+            onClick={() => {
+              this.viewLiveData({
+                value: 30,
+                type: 'm',
+              });
             }}
           />
         </div>

@@ -102,6 +102,31 @@ function stationaryPoint(ctx, pathList) {
   }
 }
 
+function drawLineFormPoints(ctx, points, colors) {
+  const len = points.length;
+  const colorsLen = colors.length;
+  let curIndex = 0;
+  let curPoint = null;
+  let prevPiont = points[0];
+
+  ctx.beginPath();
+  ctx.strokeStyle = colors[Math.floor(colorsLen * Math.random())];
+  ctx.lineWidth = 1.5;
+
+  // 画线的轨迹
+  for (curIndex; curIndex < len; curIndex += 1) {
+    curPoint = points[curIndex];
+
+    ctx.moveTo(prevPiont[0], prevPiont[1]);
+    ctx.lineTo(curPoint[0], curPoint[1]);
+    prevPiont = curPoint;
+  }
+  // 注意：性能考虑，每一帧只执行一次划线
+  ctx.stroke();
+
+  return ctx;
+}
+
 /**
  * 获取点的偏移量
  *
@@ -165,9 +190,10 @@ function formatTime(milesecond) {
   const hour = time.getHours();
   const minutes = time.getMinutes();
   const seconds = time.getSeconds();
-  return `${year}/${month}/${day} ${hour}:${minutes}:${seconds}`;
-}
 
+  return moment.unix(milesecond).format('YYYY-MM-DD HH:mm');
+  // return `${year}/${month}/${day} ${hour}:${minutes}:${seconds}`;
+}
 
 const propTypes = {
   store: PropTypes.object,
@@ -183,8 +209,8 @@ const propTypes = {
 const defaultProps = {};
 const defaultQuery = {
   date: moment().format('YYYY-MM-DD'),
-  fromTime: '00:00:00',
-  toTime: '23:59:59',
+  fromTime: moment().subtract(60, 'm').format('HH:mm:ss'),
+  toTime: moment().add(2, 'm').format('HH:mm:ss'),
 };
 
 export default class View extends React.Component {
@@ -206,6 +232,7 @@ export default class View extends React.Component {
       mapHeight: 1,
       noticeFlag: -1,
       pathList: fromJS([]),
+      loading: true,
     };
     utils.binds(this,
       [
@@ -222,6 +249,7 @@ export default class View extends React.Component {
 
         'drawLinePath',
         'drawCurveAnimPath',
+        'drawManWalking',
         'updateCanvas',
       ],
     );
@@ -296,6 +324,9 @@ export default class View extends React.Component {
           this.mapOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mapName'), value: item.get('id') }));
           this.mapList = fromJS(json.data.list);
         }
+        this.setState({
+          loading: false,
+        });
       }).then(() => {
         if (locationQuery && typeof locationQuery.curMapId !== 'undefined') {
           this.onChangeMapId(locationQuery.curMapId, locationQuery);
@@ -314,6 +345,10 @@ export default class View extends React.Component {
         curMapId: id,
       });
     }).then(() => {
+      this.setState({
+        loading: true,
+      });
+
       this.props.fetchScreenData().then(() => {
         const mac = this.props.store.getIn([curScreenId, 'query', 'mac']) || curMac;
 
@@ -328,6 +363,9 @@ export default class View extends React.Component {
             mac: firstMac,
           }));
         }
+        this.setState({
+          loading: false,
+        });
       });
     });
   }
@@ -386,6 +424,9 @@ export default class View extends React.Component {
     const locationQuery = utils.getQuery(this.props.location.search);
 
     if (props.groupid) {
+      this.setState({
+        loading: true,
+      });
       this.props.fetch('goform/group/map/building', { groupid: props.groupid })
         .then((json) => {
           if (json.state && json.state.code === 2000) {
@@ -487,49 +528,110 @@ export default class View extends React.Component {
     }
   }
   drawMap($$pathList) {
-    /** *********************hack over*************************************/
-    if (typeof (this.canvasElem) === 'undefined') return;
+    let ret = null;
+
+    if (typeof (this.canvasElem) === 'undefined') return ret;
 
     // const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
     const mapList = this.mapList;
 
     // this.mapMouseDown用来检测是否是拖动引起的页面重绘，如果是，则坐标点位置没有变化无需重新计算
     if (typeof mapList !== 'undefined') {
-      // console.log('did update curScreenId & pathlist', curScreenId, $$pathList);
-
-      // 只有单列表点改变时，才画canvas
-      // if (!this.mapMouseDown) {
-        // 画所有经过的静态点
-        // 绘图只应该发生在数据改变时
-      this.updateCanvas($$pathList, mapList);
-      // }
+      // 画所有经过的静态点
+      // 绘图只应该发生在数据改变时
+      ret = this.updateCanvas($$pathList, mapList);
     }
+
+    return ret;
+  }
+  drawManWalking(walkPoints) {
+    const fontsize = Math.round((24 * this.state.zoom) / 100);
+    const curElem = document.getElementById('walkingMan');
+    let startIndex = 0;
+    let len = 0;
+    let curPoint = null;
+    let nextPoint = null;
+    let loopStep = null;
+
+    if (!walkPoints || !curElem) {
+      return null;
+    }
+
+    len = walkPoints.length;
+
+    if (len < 1) {
+      return null;
+    }
+
+    cancelAnimationFrame(this.walkAnimationFrame);
+
+    loopStep = () => {
+      let nextIndex = startIndex + 1;
+      let loopIndex = nextIndex;
+
+      curPoint = walkPoints[startIndex];
+
+      if (nextIndex === len) {
+        nextIndex = 0;
+
+      // 需要清除相同的点，防止在同一个点很长时间禁止不动
+      } else {
+        for (loopIndex; loopIndex < len; loopIndex += 1) {
+          nextPoint = walkPoints[loopIndex];
+          // 如果下一个点是相同的点，继续画下一个点
+          if (nextPoint && nextPoint[1] === curPoint[1] && nextPoint[0] === curPoint[0]) {
+            curPoint = nextPoint;
+            nextIndex = loopIndex;
+          } else {
+            break;
+          }
+        }
+      }
+
+      curElem.style.top = `${curPoint[1] - fontsize}px`;
+      curElem.style.left = `${curPoint[0] - (Math.round((14.3 * this.state.zoom) / 100) / 2)}px`;
+
+      startIndex = nextIndex;
+
+      this.walkAnimationFrame = requestAnimationFrame(() => {
+        loopStep();
+      });
+    };
+
+    this.walkAnimationFrame = requestAnimationFrame(() => {
+      loopStep();
+    });
+
+    return this.walkAnimationFrame;
   }
   updateCanvas($$pathList, mapList) {
     const { store } = this.props;
     const curScreenId = store.get('curScreenId');
     const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
-    let arguLen = arguments.length;
+    let $$curItem = null;
+    let ctx = this.canvasElem;
+    let curItem = null;
+    let pathListPixelLen = 0;
 
-
-    while (arguLen--) {
-      if (typeof arguments[arguLen] === 'undefined') return null;
+    if (!$$pathList || !mapList || !ctx) {
+      return null;
     }
 
-    let ctx = this.canvasElem;
+    $$curItem = mapList.find(item => item.get('id') === curMapId);
 
-    if (!ctx) return null;
+    if (typeof $$curItem === 'undefined') {
+      return null;
+    }
+
+    curItem = $$curItem.toJS();
 
     ctx = this.canvasElem.getContext('2d');
-
     ctx.clearRect(0, 0, this.state.mapWidth, this.state.mapHeight);
-    const curItem = mapList.find(item => item.get('id') === curMapId);
-    if (typeof curItem === 'undefined') return null;
 
     // 经纬度转换为画布上的像素, 并清除超出画布的点
     const pathListPixel = $$pathList
       .map(($$point) => {
-        const pointOffset = gps.getOffsetFromGpsPoint($$point.toJS(), curItem.toJS());
+        const pointOffset = gps.getOffsetFromGpsPoint($$point.toJS(), curItem);
         let ret = null;
         if (pointOffset.x <= 100 && pointOffset.y <= 100) {
           ret = {
@@ -550,21 +652,39 @@ export default class View extends React.Component {
       pathList: fromJS(pathListPixel), // 存储起来，避免在没有请求数据的情况下做多余的计算。
     });
 
-    const len = pathListPixel.length;
+    pathListPixelLen = pathListPixel.length;
     this.curvePath = [];
 
     pathListPixel.forEach((item, index, arr) => {
-      if (index === len - 1) return;
+      if (index === pathListPixelLen - 1) return;
       const crvPoints = getPointList(item, arr[index + 1]);
       this.curvePath = this.curvePath.concat(crvPoints);
     });
     // 依据点显示动画
-    this.drawCurveAnimPath(ctx, this.curvePath);
+    // this.drawCurveAnimPath(ctx, this.curvePath);
+
+    drawLineFormPoints(ctx, this.curvePath, this.colors);
+
+    if (this.curvePath) {
+      this.setState({
+        manWalking: true,
+      });
+
+      if (!this.drawManWalking(this.curvePath)) {
+        this.setState({
+          manWalking: false,
+        });
+      }
+    }
+
+    return ctx;
   }
 
   renderCurMap(mapList, curMapId, myZoom) {
     const curItem = mapList.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
+    const fontsize = Math.round((24 * this.state.zoom) / 100);
+
     // 获取图片的原始大小
     // 如果使用百分比设置canvas的宽高，当浏览器放大缩小时，画布不会重绘，导致画布图案超出图片
     this.getNaturalWidthAndHeight(imgUrl);
@@ -615,7 +735,6 @@ export default class View extends React.Component {
         />
         {
           this.state.pathList.map((point) => {
-            const fontsize = Math.round((24 * this.state.zoom) / 100);
             // console.log('point', point.toJS());
             return (
               <div
@@ -641,6 +760,25 @@ export default class View extends React.Component {
             );
           })
         }
+        <Icon
+          id="walkingMan"
+          name="map-pin"
+          className="client"
+          ref={
+            (elem) => {
+              if (elem) {
+                this.manElem = elem;
+              }
+            }
+          }
+          style={{
+            position: 'absolute',
+            display: this.state.manWalking ? 'inline-block' : 'none',
+            color: 'red',
+            cursor: 'pointer',
+            fontSize: `${fontsize}px`,
+          }}
+        />
       </div>
     );
   }
@@ -655,8 +793,14 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         initOption={{
-          query: defaultQuery,
+          query: {
+            date: moment().format('YYYY-MM-DD'),
+            fromTime: moment().subtract(60, 'm').format('HH:mm:ss'),
+            toTime: moment().add(2, 'm').format('HH:mm:ss'),
+          },
         }}
+        loading={this.state.loading || this.props.store.getIn([curScreenId, 'fetching'])}
+        initNoFetch
       >
         <div
           className="o-form o-form--flow"
@@ -667,6 +811,7 @@ export default class View extends React.Component {
           <FormGroup
             type="select"
             className="fl"
+
             label={__('Building')}
             options={this.buildOptions ? this.buildOptions.toJS() : []}
             value={$$screenQuery.get('buildId')}
@@ -713,6 +858,7 @@ export default class View extends React.Component {
           />
           <FormGroup
             type="text"
+            display="inline"
             className="fl"
             label={__('Client')}
             value={store.getIn([curScreenId, 'query', 'mac'])}
@@ -720,6 +866,7 @@ export default class View extends React.Component {
             appendRender={() => (
               <Button
                 text={'GO'}
+                theme="dark"
                 onClick={() => { this.onSearch(); }}
                 style={{
                   marginLeft: '-8px',

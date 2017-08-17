@@ -825,8 +825,6 @@ export default class View extends React.Component {
       return null;
     }
 
-    console.log($$curData.toJS());
-
     // if (actionType === 'edit') {
     //   $$myBaseFormOptions = $$myBaseFormOptions.map(
     //     ($$item) => {

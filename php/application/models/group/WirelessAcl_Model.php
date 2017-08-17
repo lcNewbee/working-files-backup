@@ -9,10 +9,10 @@ class WirelessAcl_Model extends CI_Model {
     public function get_list($data) {
         $page = (int)element('page', $data, 1);
         $size = (int)element('size', $data, 20);
-        $result = null;        
+        $result = null;
         //所有组
         if ($data['groupid'] == -100) {
-            $result = $this->getAclAll($data['filterGroupid'], $data['aclType']);            
+            $result = $this->getAclAll($data['filterGroupid'], $data['aclType']);
         } else {
             $acltype = 'black';
             $querydata = $this->db->select('ap_group.id,wids_template.acltype')
@@ -25,7 +25,7 @@ class WirelessAcl_Model extends CI_Model {
               $acltype = $querydata[0]['acltype'];
             }
             $cgijson = array(
-                'groupid' => (int)element('groupid', $data, -1),                
+                'groupid' => (int)element('groupid', $data, -1),
                 'page' => (int)element('page', $data, 1),
                 'size' => (int)element('size', $data, 20),
                 'search' => element('search', $data, 20)
@@ -42,15 +42,15 @@ class WirelessAcl_Model extends CI_Model {
                 )
               );
             }
-            $result = $cgidata;            
-        }           
-        /*对数组分页*/    
+            $result = $cgidata;
+        }
+        /*对数组分页*/
         $where = array();
         if(isset($data['search']) && $data['search'] != ''){
             $where = array('mac',$data['search']);
-        }     
+        }
         $pagedata = $result['data']['list'];
-        $data = array_page($pagedata,$page,$size,$where);        
+        $data = array_page($pagedata,$page,$size,$where);
         //添加序号index
         $datalist = array();
         $k = 0;
@@ -68,7 +68,7 @@ class WirelessAcl_Model extends CI_Model {
         if (!empty($data['groupid'])) {
             $cgiary['groupid'] = (int)$data['groupid'];
             $cgiary['mac'] = (string)$data['mac'];
-            $cgiary['reason'] = (string)$data['reason'];
+            $cgiary['reason'] = (string)element('reason', $data, '');
             $result = axc_set_wireless_acl(json_encode($cgiary));
             //log
             $cgiObj = json_decode($result);
@@ -149,7 +149,7 @@ class WirelessAcl_Model extends CI_Model {
      * @filterid 过滤groupid
      * @type     获取类型 默认白
     */
-    private function getAclAll($filterid=0, $type='black') {        
+    private function getAclAll($filterid=0, $type='black') {
         $tableName = 'sta_black_list';
         if( $type === 'white') {
             $tableName = 'sta_white_list';
@@ -164,7 +164,7 @@ class WirelessAcl_Model extends CI_Model {
                                 ->from($tableName)
                                 ->where('wids_id !=',$filterid)
                                 ->get()->result_array();
-        
+
         if(count($querydata) > 0){
             $macary = array();
             foreach ($querydata as $row) {

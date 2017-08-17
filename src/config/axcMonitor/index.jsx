@@ -106,8 +106,8 @@ const sApPlanMap =
     require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
 const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sAlarmMap = require('../../screens/MainAxc/screens/Map/screens/AlarmMap');
+const sAlarmMapGathering = require('../../screens/MainAxc/screens/Map/screens/AlarmMap/gathering');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
-const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 const sMapPiont = require('../../screens/MainAxc/screens/Map/screens/Piont');
 
@@ -300,29 +300,21 @@ const routes = [
                 icon: 'map',
                 text: __('Map'),
                 routes: [
+                  // {
+                  //   id: 'gatheringAlarmmap',
+                  //   path: '/main/group/map/alarmmap_gathering',
+                  //   formUrl: '/goform/group/map/alarmmap/gathering',
+                  //   fetchUrl: '/goform/group/map/alarmmap/gathering',
+                  //   text: __('Gathering Alarm Map'),
+                  //   component: sAlarmMapGathering.Screen,
+                  // },
                   {
-                    id: 'liveMap',
-                    path: '/main/group/map/live/list',
-                    text: __('Live Map'),
-                    formUrl: 'goform/group/map/building',
-                    isIndex: true,
-                    component: sLiveMap.Screen,
-                  }, {
-
-                    id: 'buildMap',
-                    path: '/main/group/map/building/:id',
-                    text: __('AP Plan Map'),
-                    formUrl: 'goform/group/map/apPlan',
-                    component: sApPlanMap.Screen,
-                    noNav: true,
-                  },
-                  {
-                    id: 'heatMap',
-                    path: '/main/group/map/heat_map',
-                    formUrl: 'goform/group/map/heatmap',
-                    fetchUrl: 'goform/group/map/heatmap',
-                    text: __('Heat Map'),
-                    component: sHeatMap.Screen,
+                    id: 'alarmmap',
+                    path: '/main/group/map/alarmmap',
+                    formUrl: '/goform/group/map/alarmmap',
+                    fetchUrl: '/goform/group/map/alarmmap',
+                    text: __('Alarm Map'),
+                    component: sAlarmMap.Screen,
                   },
                   {
                     id: 'orbitTrace',
@@ -333,11 +325,28 @@ const routes = [
                     component: sOrbitTrace.Screen,
                   },
                   {
-                    id: 'point',
-                    path: '/main/group/map/point',
+                    id: 'heatMap',
+                    path: '/main/group/map/heat_map',
+                    formUrl: 'goform/group/map/heatmap',
+                    fetchUrl: 'goform/group/map/heatmap',
+                    text: __('Heat Map'),
+                    component: sHeatMap.Screen,
+                  },
+                  {
+                    id: 'liveMap',
+                    path: '/main/group/map/live/list',
+                    text: __('Map Settings'),
+                    formUrl: 'goform/group/map/building',
+                    isIndex: true,
+                    component: sLiveMap.Screen,
+                  },
+                  {
+                    id: 'buildMap',
+                    path: '/main/group/map/building/:id',
+                    text: __('AP Plan Map'),
+                    formUrl: 'goform/group/map/apPlan',
+                    component: sApPlanMap.Screen,
                     noNav: true,
-                    formUrl: '/goform/group/map/alarmmap',
-                    component: sMapPiont.Screen,
                   },
                   {
                     id: 'dubiousClient',
@@ -347,35 +356,18 @@ const routes = [
                     component: sDubiousClient.Screen,
                   },
                   {
-                    id: 'alarmmap',
-                    path: '/main/group/map/alarmmap',
-                    formUrl: '/goform/group/map/alarmmap',
-                    fetchUrl: '/goform/group/map/alarmmap',
-                    text: __('Alarm Map'),
-                    component: sAlarmMap.Screen,
+                    id: 'clientsTrace',
+                    path: '/main/group/map/clients_trace/list',
+                    formUrl: '/goform/group/map/clients_trace',
+                    text: __('Clients Statistics Reporter'),
+                    component: sClientsTraceList.Screen,
                   },
                   {
-                    id: 'cientsTrace',
-                    path: '/main/group/map/clients_trace',
-                    text: __('Clients Statistics'),
-                    // icon: 'bar-chart',
-                    noTree: true,
-                    component: SharedComponents.TabContainer,
-                    routes: [
-                      {
-                        id: 'clientsTrace',
-                        path: '/main/group/map/clients_trace/list',
-                        formUrl: '/goform/group/map/clients_trace',
-                        text: __('Clients Statistics'),
-                        component: sClientsTraceList.Screen,
-                      }, {
-                        id: 'clientsTrace',
-                        path: '/main/group/map/clients_trace/settings',
-                        formUrl: 'goform/group/map/clients_trace',
-                        text: __('Settings'),
-                        component: sClientsTraceSettings.Screen,
-                      },
-                    ],
+                    id: 'point',
+                    path: '/main/group/map/point',
+                    noNav: true,
+                    formUrl: '/goform/group/map/alarmmap',
+                    component: sMapPiont.Screen,
                   },
                 ],
               },

@@ -363,6 +363,8 @@
   "Map": "地图",
   "Map Type": "地图类型",
   "Map Name": "地图名称",
+  "Map Settings": "地图设置",
+  "Clients Statistics Reporter": "人流统计报表",
   "Map Backgroud Image": "地图背景图",
   "Backgroud Image": "背景图",
   "Live Map": "实时地图",
@@ -386,7 +388,11 @@
   "Add Building": "添加建筑",
 
   "RF Plan": "RF规划",
-  "Heat Map": "热力图",
+  "Heat Map": "热力地图",
+  "Live Data": "实时数据",
+  "Last Half an Hour Data": "最近半小时数据",
+  "Gathering Alarm Map": "人员聚集告警地图",
+  "Gather Threshold": "聚集阀值",
   "Cients Trace": "终端轨迹",
 
   "ACL": "访问控制",

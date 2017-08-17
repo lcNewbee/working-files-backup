@@ -8,19 +8,23 @@
       {
         "id": 1,
         "mapName": "Floor One",
-        "width": 120,
-        "length": 120,
-        "lat": 43.23123231,
-        "lng": 123.2312323,
-        "backgroundImg": "images/map_bg.jpg"
+        "width": 22,
+        "length": 22,
+        "backgroundImg": "images/map_bg.jpg",
+        "lat": 39.913235,
+        "lng": 116.463524,
+        "column": 10,
+        "rows": 10
       }, {
         "id": 2,
         "mapName": "Floor Two",
-        "width": 100,
-        "length": 200,
-        "lat": 43.23123231,
-        "lng": 123.2312323,
-        "backgroundImg": "images/map_bg.jpg"
+        "width": 22,
+        "length": 22,
+        "backgroundImg": "images/map_bg.jpg",
+        "lat": 39.913235,
+        "lng": 116.463524,
+        "column": 10,
+        "rows": 10
       }
     ]
   }

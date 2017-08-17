@@ -702,7 +702,7 @@ export default class LiveMap extends React.PureComponent {
           `<button class="a-btn a-btn--primary" id="editBulid${markerId}">
             ${__('Edit')}
           </button>`
-        ) : ''}
+          ) : ''}
         <button class="a-btn a-btn--info" id="viewBulid${markerId}">
           ${__('View')}
         </button>

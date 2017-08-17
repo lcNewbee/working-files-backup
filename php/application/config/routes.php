@@ -77,6 +77,7 @@ $route['goform/network/dpi/dpisettings'] = 'network/dpiSettings';
 $route['goform/network/firewall/attackdefense'] = 'network/networkFirewallAttackDefense';
 $route['goform/network/firewall/balcklist'] = 'network/networkFirewallBlackList';
 $route['goform/network/dashboard'] = 'network/netwirkDashboard';
+
 // AP组管理
 $route['goform/group'] = 'group/group';
 $route['goform/group/overview'] = 'group/groupOverview';
@@ -108,6 +109,8 @@ $route['goform/group/map/point'] = 'group/mapPoint';
 $route['goform/alarm_map_chunk_pos'] = 'group/mapAreaInfo';
 $route['goform/change_priority_settings'] = 'group/mapAreaInfo/settings';
 $route['goform/group/map/alarmmap'] = 'group/mapArea';
+$route['goform/group/map/alarmmap/gathering'] = 'group/mapAreaGather';
+
 // 系统设置
 $route['goform/system/version/upload'] = 'system/systemVersion/upload';
 $route['goform/system/version/upgrade'] = 'system/systemVersion/upgrade';
