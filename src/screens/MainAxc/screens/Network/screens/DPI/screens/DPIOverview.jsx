@@ -95,7 +95,7 @@ function renderNotEnable(statusInt) {
           color: '#CCC',
         }}
       >
-        {__('Application Analsys Disabled')}
+        {__('Application Analysis Disabled')}
       </div>
     ) : null
   );

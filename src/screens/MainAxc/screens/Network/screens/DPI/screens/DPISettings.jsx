@@ -71,7 +71,7 @@ export default class DPISettings extends React.Component {
     this.$$formOptions = fromJS([
       {
         id: 'ndpiEnable',
-        label: __('Application Analsys'),
+        label: __('Application Analysis'),
         type: 'checkbox',
         value: '1',
         saveOnChange: true,
