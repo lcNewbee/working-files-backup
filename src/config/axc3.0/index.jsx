@@ -180,7 +180,7 @@ const sPortalSMSGateWay =
     require('../../screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
 const sPortalSMSLog =
     require('../../screens/MainAxc/screens/Portal/screens/Access/SMSLog');
-const sPaymentSettings = require('../../screens/MainAxc/screens/Portal/screens/Access/PaymentSettings');
+// const sPaymentSettings = require('../../screens/MainAxc/screens/Portal/screens/Access/PaymentSettings');
 
 const sPortalAccountList =
     require('../../screens/MainAxc/screens/Portal/screens/Account/AccountList');
@@ -614,13 +614,13 @@ const routes = [
                         text: __('SMS Gateway'),
                         component: sPortalSMSGateWay.Screen,
                       },
-                      {
-                        id: 'paymentSettings',
-                        path: '/main/portal/local/portal/paymentsetings',
-                        formUrl: 'goform/portal/access/paymentsettings',
-                        text: __('Payment Settings'),
-                        component: sPaymentSettings.Screen,
-                      },
+                      // {
+                      //   id: 'paymentSettings',
+                      //   path: '/main/portal/local/portal/paymentsetings',
+                      //   formUrl: 'goform/portal/access/paymentsettings',
+                      //   text: __('Payment Settings'),
+                      //   component: sPaymentSettings.Screen,
+                      // },
                       // {
                       //   id: 'portalAccessWeb',
                       //   path: '/main/portal/local/portal/web',
