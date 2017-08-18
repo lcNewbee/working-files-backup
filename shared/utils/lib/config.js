@@ -1,20 +1,6 @@
 
+var warning = require('./warning');
 var config;
-
-function warning(msg) {
-  /* eslint-disable no-console */
-  if (console && typeof console.error === 'function') {
-    console.error('Warning: ', msg);
-  }
-
-  try {
-    // This error was thrown as a convenience so that if you enable
-    // "break on all exceptions" in your console,
-    // it would pause the execution at this line.
-    throw new Error(msg)
-  /* eslint-disable no-empty */
-  } catch (e) { }
-}
 
 // 多数方法都会修改传入的target数组，因为数组包含的对象中，含有来自其他地方的引用，必须保持这个引用
 
@@ -88,7 +74,7 @@ function setIn(target, path, value) {
     throw new Error("config.js -> setIn: The second argument must be an array");
   }
   if (path.length == 0) {
-    warning('config.js -> setIn: Can not find the object refered by path, return target without change');
+    warning(false, 'config.js -> setIn: Can not find the object refered by path, return target without change');
     return result;
   }
   var obj = result;
@@ -96,7 +82,7 @@ function setIn(target, path, value) {
     var step = pathStack.shift();
     obj = obj[step];
     if (typeof obj == 'undefined') {
-      warning('config.js -> setIn: Can not find the object refered by path, return target without change');
+      warning(false, 'config.js -> setIn: Can not find the object refered by path, return target without change');
       return result;
     }
   }
@@ -113,7 +99,7 @@ function mergeIn(target, path, mergeObj) {
   if (Object.prototype.toString.call(path) != "[object Array]") {
     throw new Error("config --> mergeIn: Argument path must be array");
   } else if (path.length == 0) {
-    warning("config --> mergeIn: Can not find the object refered by path, return target without change");
+    warning(false, "config --> mergeIn: Can not find the object refered by path, return target without change");
     return result;
   }
   if (Object.prototype.toString.call(mergeObj) != "[object Object]") {
@@ -127,7 +113,7 @@ function mergeIn(target, path, mergeObj) {
     var step = pathStack.shift();
     obj = obj[step];
     if (typeof obj == 'undefined') {
-      warning('config.js -> mergeIn: Can not find the object refered by path, return target without change');
+      warning(false, 'config.js -> mergeIn: Can not find the object refered by path, return target without change');
       return result;
     }
   }
@@ -148,7 +134,7 @@ function deleteIn(target, path) {
   if (Object.prototype.toString.call(path) != "[object Array]") {
     throw new Error("config.js -> deleteIn: The second argument must be array");
   } else if (path.length == 0) {
-    warning('config.js -> deleteIn: Can not find the object refered by path, return target without change');
+    warning(false, 'config.js -> deleteIn: Can not find the object refered by path, return target without change');
     return result;
   }
   var parentPath = path.slice(0, -1);
@@ -177,7 +163,7 @@ function append(target, path, routeObj) {
   if (Object.prototype.toString.call(path) != "[object Array]") {
     throw new Error("config.js -> append: The second argument must be array");
   } else if (path.length == 0) {
-    warning('config.js -> append: Can not find the object refered by path, return target without change');
+    warning(false, 'config.js -> append: Can not find the object refered by path, return target without change');
     return result;
   }
 
@@ -186,12 +172,12 @@ function append(target, path, routeObj) {
     var step = pathStack.shift();
     obj = obj[step];
     if (typeof obj == 'undefined') {
-      warning('config.js -> mergeIn: Can not find the object refered by path, return target without change');
+      warning(false, 'config.js -> mergeIn: Can not find the object refered by path, return target without change');
       return result;
     }
   }
   if (Object.prototype.toString.call(obj) != "[object Array]") {
-    warning('config.js -> append: item refered by path has to be an array, return target without change');
+    warning(false, 'config.js -> append: item refered by path has to be an array, return target without change');
     return target;
   }
   // 只有数组才能添加，所以obj最后必然是引用，无需保留最后一步
@@ -205,7 +191,7 @@ function addBefore(target, posId, routeObj) {
   var result = [].concat(target);
   var idRoute = findPath(result, posId);
   if (idRoute.length == 0) {
-    warning('config.js -> addBefore: Can not find the object refered by path, return target without change');
+    warning(false, 'config.js -> addBefore: Can not find the object refered by path, return target without change');
     return target;
   }
 
@@ -237,7 +223,7 @@ function merge(target, objArr) {
   objArr.forEach(function(item) {
     var id = item.id;
     if (typeof id == 'undefined') {
-      warning('config.js -> merge: Object to be merged must contain an attribute named id. Object without id was ingnored!')
+      warning(false, 'config.js -> merge: Object to be merged must contain an attribute named id. Object without id was ingnored!')
     } else {
       var path = findPath(result, id);
       result = mergeIn(result, path, item);

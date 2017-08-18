@@ -1,19 +1,5 @@
 // 对 immutable 数据的操作
-
-function warning(msg) {
-  /* eslint-disable no-console */
-  if (console && typeof console.error === 'function') {
-    console.error('Warning: ', msg);
-  }
-
-  try {
-    // This error was thrown as a convenience so that if you enable
-    // "break on all exceptions" in your console,
-    // it would pause the execution at this line.
-    throw new Error(msg)
-  /* eslint-disable no-empty */
-  } catch (e) { }
-}
+var warning = require('./warning');
 
 function isImmutableList($$list) {
   return $$list && $$list.constructor && typeof $$list.constructor.isList === 'function';
@@ -82,7 +68,7 @@ var immutableUtils = {
     var ret = {};
 
     if (!isImmutableList($$options)) {
-      warning('immutableUtils.getDefaultData param need immutable.js List data, but type is ' + typeof $$options);
+      warning(false, 'immutableUtils.getDefaultData param need immutable.js List data, but type is ' + typeof $$options);
       return null;
     }
 
@@ -193,7 +179,7 @@ var immutableUtils = {
 
   selectList: function($$list, data, $$selectedList) {
     if(!isImmutableList($$list) || !data) {
-      warning('immutableUtils.selectList need params $$list and data');
+      warning(false, 'immutableUtils.selectList need params $$list and data');
       return null;
     }
     var $$retList = $$list;

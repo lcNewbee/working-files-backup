@@ -1,28 +1,14 @@
 'use strict';
+var warning = require('./warning');
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var utils = {};
 
-
-function warning(msg) {
-  /* eslint-disable no-console */
-  if (console && typeof console.error === 'function') {
-    console.error('Warning: ', msg);
-  }
-
-  try {
-    // This error was thrown as a convenience so that if you enable
-    // "break on all exceptions" in your console,
-    // it would pause the execution at this line.
-    throw new Error(msg)
-  /* eslint-disable no-empty */
-  } catch (e) { }
-}
 
 function toObject(val, callerMsg) {
   var showCallerMsg = callerMsg || (this && this.caller) || '';
 
   if (val === null || val === undefined) {
-    warning(showCallerMsg + ' should not be null or undefined');
+    warning(false, showCallerMsg + ' should not be null or undefined');
   }
 
   return Object(val);
@@ -240,10 +226,11 @@ utils.extend({
     var valType = typeof val;
     var ret = parseInt(val || '0', 10);
 
-    if (isNaN(ret)) {
-      warning(funcName + ' expected be called with number or number string,'+
-          ' actual is ' + valType + 'and value = ' + val);
-    }
+    warning(
+      !isNaN(ret),
+      '%s expected be called with number or number string, actual is %s and value = %s',
+      funcName, valType, val
+    );
 
     return ret;
   },
@@ -251,9 +238,11 @@ utils.extend({
   toString: function(val, funcName) {
     var valType = typeof val;
 
-    if(valType !== 'string') {
-      warning(funcName + ' expected be called with string, actual is ' + valType + ' and value = ' + val);
-    }
+    warning(
+      typeof valType === 'string',
+      '%s expected be called with string, actual is %s and value = %s',
+      funcName, valType, val
+    );
 
     return val;
   },
@@ -264,7 +253,7 @@ utils.extend({
     var func;
 
     if (typeof target !== 'object' || !utils.isArray(keys)) {
-      warning('utils.binds should call with object target and array keys');
+      warning(false, 'utils.binds should call with object target and array keys');
       return ;
     }
 

@@ -2,8 +2,22 @@ import config from 'shared/utils/lib/config';
 
 // findPath
 describe('utils config', () => {
+  let sandbox;
+  beforeEach(() => {
+    // create a sandbox
+    sandbox = sinon.sandbox.create();
+
+    // stub some console methods
+    sandbox.stub(console, 'error');
+  });
+
+  afterEach(() => {
+    // restore the environment as it was before
+    sandbox.restore();
+  });
+
   describe('#findPath()', () => {
-    const objectAssign = config.findPath;
+    const findPath = config.findPath;
 
     it('should return empty array when id not found', () => {
       const target = [
@@ -12,7 +26,7 @@ describe('utils config', () => {
           value: 'before',
         },
       ];
-      expect(objectAssign(target, 'level')).toEqual([]);
+      expect(findPath(target, 'level')).toEqual([]);
     });
 
     it('should return array with only one element', () => {
@@ -23,7 +37,7 @@ describe('utils config', () => {
         },
       ];
 
-      expect(objectAssign(target, 'level0')).toEqual([0]);
+      expect(findPath(target, 'level0')).toEqual([0]);
     });
 
     it('should return path in deep depth in array of object', () => {
@@ -49,15 +63,13 @@ describe('utils config', () => {
           ],
         },
       ];
-      expect(objectAssign(target, 'level2')).toEqual([1, 'routes', 1, 'routes', 0]);
+      expect(findPath(target, 'level2')).toEqual([1, 'routes', 1, 'routes', 0]);
     });
   });
-});
 
-// getIn
-describe('utils config', () => {
+  // getIn
   describe('#getIn()', () => {
-    const objectAssign = config.getIn;
+    const getIn = config.getIn;
 
     it('should return object in shadow depth', () => {
       const target = [
@@ -67,7 +79,7 @@ describe('utils config', () => {
         },
       ];
 
-      expect(objectAssign(target, [0])).toEqual(
+      expect(getIn(target, [0])).toEqual(
         {
           id: 'level0',
           value: 'before',
@@ -81,7 +93,7 @@ describe('utils config', () => {
           value: 'before',
         },
       ];
-      expect(objectAssign(target, [])).toEqual(undefined);
+      expect(getIn(target, [])).toEqual(undefined);
     });
 
     it('should return undefined if no object was found by the path', () => {
@@ -107,7 +119,7 @@ describe('utils config', () => {
           ],
         },
       ];
-      expect(objectAssign(target, [1, 'routes', 0, 'routes', 0])).toEqual(undefined);
+      expect(getIn(target, [1, 'routes', 0, 'routes', 0])).toEqual(undefined);
     });
 
     it('should return object in deep depth', () => {
@@ -133,19 +145,17 @@ describe('utils config', () => {
           ],
         },
       ];
-      expect(objectAssign(target, [1, 'routes', 1, 'routes', 0])).toEqual(
+      expect(getIn(target, [1, 'routes', 1, 'routes', 0])).toEqual(
         {
           id: 'level2',
           value: 'level2',
         });
     });
   });
-});
 
-// setIn
-describe('utils config', () => {
+  // setIn
   describe('#setIn()', () => {
-    const objectAssign = config.setIn;
+    const setIn = config.setIn;
 
     it('should return object with shadow object changed', () => {
       const target = [
@@ -161,7 +171,7 @@ describe('utils config', () => {
         added: 'addValue',
       };
 
-      expect(objectAssign(target, [0], value)).toEqual(
+      expect(setIn(target, [0], value)).toEqual(
         [{
           id: 'level0',
           value: 'after',
@@ -181,7 +191,8 @@ describe('utils config', () => {
         value: 'after',
         added: 'addValue',
       };
-      expect(objectAssign(target, [], value)).toEqual(target);
+      expect(setIn(target, [], value)).toEqual(target);
+      sinon.assert.calledOnce(console.error);
     });
 
     it('should return target without change if object can not be found by the path', () => {
@@ -213,7 +224,8 @@ describe('utils config', () => {
         value: 'after',
         added: 'addValue',
       };
-      expect(objectAssign(target, [1, 'routes', undefined, 'routes', 0], value)).toEqual(target);
+      expect(setIn(target, [1, 'routes', undefined, 'routes', 0], value)).toEqual(target);
+      sinon.assert.calledOnce(console.error);
     });
 
     it('should return the target array with the object refered by the path changed', () => {
@@ -245,7 +257,7 @@ describe('utils config', () => {
         value: 'after',
         added: 'addValue',
       };
-      expect(objectAssign(target, [1, 'routes', 1, 'routes', 0], value)).toEqual(
+      expect(setIn(target, [1, 'routes', 1, 'routes', 0], value)).toEqual(
         [
           {
             id: 'level0',
@@ -271,10 +283,8 @@ describe('utils config', () => {
         ]);
     });
   });
-});
 
-// merge
-describe('utils config', () => {
+  // merge
   describe('#merge()', () => {
     const objectAssign = config.merge;
 
@@ -375,16 +385,13 @@ describe('utils config', () => {
         ]);
     });
   });
-});
 
-// mergeIn
-describe('utils config', () => {
+  // mergeIn
   describe('#mergeIn()', () => {
-    const objectAssign = config.mergeIn;
+    const mergeIn = config.mergeIn;
     // it('should throw error if item to be merged in is not an object')
 
     // it('should throw error if item refered by path is not an object')
-
     it('should return object with shadow object merged in', () => {
       const target = [
         {
@@ -399,7 +406,7 @@ describe('utils config', () => {
         added: 'addValue',
       };
 
-      expect(objectAssign(target, [0], value)).toEqual(
+      expect(mergeIn(target, [0], value)).toEqual(
         [{
           id: 'level0',
           value: 'after',
@@ -438,7 +445,7 @@ describe('utils config', () => {
         value: 'after',
         added: 'addValue',
       };
-      expect(objectAssign(target, [1, 'routes', 1, 'routes', 0], value)).toEqual(
+      expect(mergeIn(target, [1, 'routes', 1, 'routes', 0], value)).toEqual(
         [
           {
             id: 'level0',
@@ -465,10 +472,8 @@ describe('utils config', () => {
         ]);
     });
   });
-});
 
-// deleteIn
-describe('utils config', () => {
+  // deleteIn
   describe('#deleteIn()', () => {
     const objectAssign = config.deleteIn;
 
@@ -597,10 +602,8 @@ describe('utils config', () => {
       expect(objectAssign(target, [1, 'routes', 1, 'routes', 1])).toEqual(target);
     });
   });
-});
 
-// delete
-describe('utils config', () => {
+  // delete
   describe('#delete()', () => {
     const objectAssign = config.delete;
 
@@ -675,10 +678,8 @@ describe('utils config', () => {
       expect(objectAssign(target, ['a', 'b'])).toEqual(target);
     });
   });
-});
 
-// append
-describe('utils config', () => {
+  // append
   describe('#append()', () => {
     const objectAssign = config.append;
 
@@ -772,10 +773,8 @@ describe('utils config', () => {
       expect(objectAssign(target, ['a', 'b'], { id: 'level' })).toEqual(target);
     });
   });
-});
 
-// addBefore
-describe('utils config', () => {
+  // addBefore
   describe('#addBefore()', () => {
     const objectAssign = config.addBefore;
 

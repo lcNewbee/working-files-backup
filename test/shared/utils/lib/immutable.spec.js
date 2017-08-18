@@ -2,6 +2,20 @@ import { getNumberKeys, getFormOptions, getDefaultData, selectList } from 'share
 import { fromJS } from 'immutable';
 
 describe('immutableUtils', () => {
+  let sandbox;
+  beforeEach(() => {
+    // create a sandbox
+    sandbox = sinon.sandbox.create();
+
+    // stub some console methods
+    sandbox.stub(console, 'error');
+  });
+
+  afterEach(() => {
+    // restore the environment as it was before
+    sandbox.restore();
+  });
+
   describe('#getNumberKeys()', () => {
     it('should return number list when param is list', () => {
       const formList = fromJS([
@@ -121,6 +135,7 @@ describe('immutableUtils', () => {
     it('should return null when param is not immutable List', () => {
       expect(getDefaultData(123)).toBe(null);
       expect(getDefaultData()).toBe(null);
+      sinon.assert.calledTwice(console.error);
     });
     it('should Form Options when param is immutable List options', () => {
       const listOptions = fromJS([
@@ -189,6 +204,7 @@ describe('immutableUtils', () => {
     it('should return null when not first argument or second argument', () => {
       expect(selectList()).toEqual(null);
       expect(selectList(fromJS([]))).toEqual(null);
+      sinon.assert.calledTwice(console.error);
     });
     it('should return correct $$list and selectedList when second argument is to select one', () => {
       const data = {

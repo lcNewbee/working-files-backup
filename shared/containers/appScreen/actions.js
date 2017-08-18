@@ -252,10 +252,11 @@ export function onListAction(option) {
     if (actionType === 'add') {
       subData = $$actionQuery.merge(editMap).toJS();
       delete subData.selectedList;
-    } else if (actionType === 'edit') {
+    } else if (actionType === 'edit' || actionType === '__edit__') {
       subData = $$actionQuery.merge(editMap).merge({
         originalData,
       }).toJS();
+      subData.action = 'edit';
     } else if (needMerge) {
       subData = $$actionQuery.merge(editMap).toJS();
     } else {

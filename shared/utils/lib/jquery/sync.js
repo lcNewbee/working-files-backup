@@ -1,6 +1,6 @@
 'use strict';
 
-var warning = require('../core').warning;
+var warning = require('./warning');
 
 var sync = {
 
@@ -15,7 +15,7 @@ var sync = {
       data: $.extend({}, utils.getQueryObj(), data),
       contentType: 'application/json',
       error: function(xhttp, status, err) {
-        warning('Ajax Error = ' + err);
+        warning(false, 'Ajax post Error = ' + err);
       }
     };
     _options.data.client = _options.data.client || {};
@@ -36,7 +36,7 @@ var sync = {
       dataType: 'json',
       data: $.extend({}, utils.getQueryObj(), data),
       error: function(xhttp, status, err) {
-        warning('Ajax Error = ' + err);
+        warning(false, 'Ajax fetch Error = ' + err);
       }
     };
 

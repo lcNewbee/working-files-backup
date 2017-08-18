@@ -1,10 +1,10 @@
 var query = require('./query');
-var core = require('./core');
+var warning = require('./warning');
 var loadedScripts = [];
 
 function checkStatus(response) {
   if (!response.ok) {
-    core.warning('Response Status not ok: ', response.statusText);
+    warning(false, 'Response Status not ok: %s', response.statusText);
   }
   return response;
 }
@@ -15,7 +15,7 @@ function parseJSON(response) {
   try {
     ret = response.json();
   } catch(err) {
-    core.warning('JSON parse error: ', err);
+    warning(false, 'JSON parse error: %s', err);
     ret = err;
   }
 
