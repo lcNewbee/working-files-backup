@@ -325,14 +325,29 @@ export class Device extends PureComponent {
           id: 'model',
           text: __('Model'),
         }, {
+          id: 'groupname',
+          text: __('Current Group'),
+        }, {
           id: 'softversion',
           text: __('Version'),
         }, {
           id: 'channel2.4G',
           text: __('Channel2.4G'),
+          render(val) {
+            if (val === '0') {
+              return __('Auto');
+            }
+            return val;
+          },
         }, {
           id: 'channel5.8G',
           text: __('Channel5.8G'),
+          render(val) {
+            if (val === '0') {
+              return __('Auto');
+            }
+            return val;
+          },
         }, {
           id: 'operationhours',
           text: __('Uptime'),
@@ -443,9 +458,21 @@ export class Device extends PureComponent {
         }, {
           id: 'channel2.4G',
           text: __('Channel2.4G'),
+          render(val) {
+            if (val === '0') {
+              return __('Auto');
+            }
+            return val;
+          },
         }, {
           id: 'channel5.8G',
           text: __('Channel5.8G'),
+          render(val) {
+            if (val === '0') {
+              return __('Auto');
+            }
+            return val;
+          },
         }, {
           id: 'status',
           text: __('Status'),
@@ -453,6 +480,9 @@ export class Device extends PureComponent {
         }, {
           id: 'model',
           text: __('Model'),
+        }, {
+          id: 'groupname',
+          text: __('Current Group'),
         }, {
           id: 'softversion',
           text: __('Version'),

@@ -69,8 +69,8 @@
                 "model": "V2.2",
                 "softversion": "V1.1",
                 "channel": "1",
-                "channel2.4G":"3",
-                "channel5.8G":"----",
+                "channel2.4G":"0",
+                "channel5.8G":"0",
                 "operationhours": 6600,
                 "hasNewSoft": "1",
                 "operate": "Reboot"

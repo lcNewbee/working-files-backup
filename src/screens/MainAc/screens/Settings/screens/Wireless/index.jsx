@@ -89,10 +89,10 @@ const channelsList = List(channels);
 
 function getCountryOptions() {
   return channelsList.map(item =>
-     ({
+    ({
        value: item.country,
        label: b28n.getLang() === 'cn' ? __(item.cn) : __(item.en),
-     }),
+    }),
   ).toJS();
 }
 

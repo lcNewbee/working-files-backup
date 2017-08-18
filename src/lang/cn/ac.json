@@ -21,6 +21,7 @@
   "Channel2.4G":"2.4G信道",
   "Channel5.8G":"5.8G信道",
   "Frequency":"频段",
+  "Auto":"自动",
   "Bandwidth Limit":"流量限制",
   "Note: If Access Manager control is needed, please  set the mode of the current group as Fat AP!":"注意：若需要开启AC控制功能，请设置当前组的模式为胖AP模式！",
   "If you change Thin AP mode to Fat AP, all these APs will go away from Hardware controller!":"如果你将瘦AP模式切换到胖AP， 所有的AP设备都将脱离硬件控制器的管控！",

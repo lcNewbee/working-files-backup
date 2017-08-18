@@ -322,6 +322,7 @@ export default class ApMantance extends React.Component {
         onSave={() => this.onEditSave()}
         invalidMsg={app.get('invalid')}
         validateAt={app.get('validateAt')}
+        onValidError={this.props.reportValidError}
         isSaving={app.get('saving')}
         savedText="success"
         hasSaveButton
