@@ -161,6 +161,22 @@ export default class View extends React.PureComponent {
                     <dt>{__('Frimware Version')}</dt>
                     <dd>{serverData.get('version') || ''}</dd>
                   </dl>
+                  {
+                    serverData.get('system_mac') ? (
+                      <dl className="o-description-list-row">
+                        <dt>{__('MAC Address')}</dt>
+                        <dd>{serverData.get('system_mac')}</dd>
+                      </dl>
+                    ) : null
+                  }
+                  {
+                    serverData.get('system_sn') ? (
+                      <dl className="o-description-list-row">
+                        <dt>{__('System SN')}</dt>
+                        <dd>{serverData.get('system_sn')}</dd>
+                      </dl>
+                    ) : null
+                  }
                   <dl className="o-description-list-row">
                     <dt>{__('System Time')}</dt>
                     <dd>{serverData.get('system_time')}</dd>

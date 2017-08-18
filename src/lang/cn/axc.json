@@ -301,6 +301,7 @@
   "To enable Rogue AP and Interfering AP detection, please go to AP Group > WIPS/WIDS , enable the AP Monitor function and to collect information about neighbor APs.": "开启非法AP和干扰AP监测功能，需要先在AP组管理的WIPS/WIDS 菜单下启用AP监控开关。",
   "AP with the same name already exists": "已经存在相同名字的AP",
   "AP with the same MAC already exists": "已经存在相同MAC的AP",
+  "System SN": "系统序列号",
 
   "Traffic": "流量",
   "Data-based": "流量",
