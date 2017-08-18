@@ -96,7 +96,7 @@ export class Popconfirm extends Component {
           type === 'confirm' ? (
             <div className="m-popconfirm__footer">
               <Button onClick={this.onOk} theme="primary" text={__('OK')} />
-              <Button onClick={this.onCancel} text={__('NO')} />
+              <Button onClick={this.onCancel} theme="secondary" text={__('NO')} />
             </div>
           ) : null
         }

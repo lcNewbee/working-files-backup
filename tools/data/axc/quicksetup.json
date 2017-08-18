@@ -4,7 +4,7 @@
     "msg": "ok"
   },
   "data": {
-    "restoreState": "0"
+    "restoreState": "0",
     "interfaceList": [
         {
             "name": "eth0"

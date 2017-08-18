@@ -7,10 +7,8 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
 import { colors, $$commonPieOption } from 'shared/config/axc';
 import {
-  Modal, Table, Select, EchartReact, Button, FormGroup,
+  Modal, Table, Select, EchartReact, Button, FormGroup, Icon, Tooltip,
 } from 'shared/components';
-
-const flowRateFilter = utils.filter('flowRate');
 
 const msg = {
   days: __('Days'),
@@ -619,11 +617,14 @@ export default class GroupOverview extends React.Component {
           <div className="element">
             <h3 className="t-overview__header">
               {__('Rogue AP List')}
-            </h3>
-            <p>
-              <span className="help">{ msg.helpText }</span>
+              <Tooltip
+                title={msg.helpText}
+                placement="right"
+              >
+                <Icon name="warning" style={{ color: '#ffc107', marginLeft: '12px' }} />
+              </Tooltip>
               <a href="#/main/group/safe/wips" className="link-more">{msg.goSetting}>></a>
-            </p>
+            </h3>
           </div>
           <div className="element t-overview__section">
             <Table
@@ -636,11 +637,14 @@ export default class GroupOverview extends React.Component {
           <div className="element">
             <h3 className="t-overview__header">
               {__('Interfering AP List')}
-            </h3>
-            <p className="help">
-              <span className="help">{ msg.helpText }</span>
+              <Tooltip
+                title={msg.helpText}
+                placement="right"
+              >
+                <Icon name="warning" style={{ color: '#ffc107', marginLeft: '12px' }} />
+              </Tooltip>
               <a href="#/main/group/safe/wips" className="link-more">{msg.goSetting}>></a>
-            </p>
+            </h3>
           </div>
           <div className="element t-overview__section">
             <Table

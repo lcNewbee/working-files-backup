@@ -317,7 +317,7 @@ class Modal extends PureComponent {
                       cancelButton ? (
                         <button
                           type="button"
-                          className="a-btn a-btn-default"
+                          className="a-btn a-btn--secondary"
                           onClick={this.onClose}
                         >
                           {cancelText || b28n.format('Cancel')}

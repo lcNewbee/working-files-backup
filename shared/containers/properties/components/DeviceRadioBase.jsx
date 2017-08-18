@@ -110,7 +110,6 @@ class DeviceSystem extends PureComponent {
         myData.channelwidth = 50;
       }
     }
-    console.log(data);
 
     if (this.props.onChangeData) {
       this.props.onChangeData(myData);
@@ -175,7 +174,7 @@ class DeviceSystem extends PureComponent {
     )
       .push(fromJS({
         id: 'ssids',
-        label: __('SSID Control'),
+        label: __('Enable SSID'),
         type: 'checkboxs',
         value: getSSIDStr(formData),
         visible($$data) {

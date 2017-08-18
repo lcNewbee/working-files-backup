@@ -432,7 +432,7 @@ const listOptions = fromJS([
   },
   {
     id: 'mandatorydomain',
-    text: __('AAA Policy'),
+    text: __('User Access Policies'),
     defaultValue: aaaDefaultValue,
     noTable: true,
     noForm: noAAAFormgroup,
