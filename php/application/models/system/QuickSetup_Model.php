@@ -32,6 +32,14 @@ class QuickSetup_Model extends CI_Model {
         $result = null;
         $natipaddr = '0.0.0.0';
         $net_name = 'eth0';
+        //提前得到wan口的ip
+        foreach($data as $row){
+            if($row['type'] === 'wan'){
+                $net_name = $row['name'];
+                $natipaddr = $row['ip'];
+                break;
+            }
+        }
         foreach($data as $row){
             if(isset($row['enable']) && $row['enable'] === '1'){
                 //1.设置接口
@@ -47,8 +55,6 @@ class QuickSetup_Model extends CI_Model {
                 Log_Record($this->db, $interface_log);
                 //WAN 设置WAN口就是设置一个默认路由
                 if($row['type'] === 'wan') {
-                    $net_name = $row['name'];
-                    $natipaddr = $row['ip'];
                     $route = array(
                         'destnet' => '0.0.0.0',
                         'gateway' => element('gateway', $row),
