@@ -275,6 +275,7 @@
   "Multi-Terminal Log":"多终端登录",
   "Overdue Duration":"过期时长",
   "Message Content":"短信内容",
+  "Message Template":"短信模板",
   "SMS Gateway":"短信网关设置",
   "Enable":"启用",
   "Disable":"停用",

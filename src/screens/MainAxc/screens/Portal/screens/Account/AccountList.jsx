@@ -109,7 +109,7 @@ const listOptions = fromJS([
       const accountType = $$data.get('state');
       let ret = flowFilter.transform(val);
 
-       // 禁用
+      // 禁用
       if (accountType === '0') {
         ret = '-';
 

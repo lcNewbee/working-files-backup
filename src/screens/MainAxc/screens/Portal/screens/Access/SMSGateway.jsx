@@ -183,7 +183,7 @@ const listOptions = fromJS([
   },
   {
     id: 'text',
-    text: __('Message Content'),
+    text: __('Message Template'),
     noTable: true,
     formProps: {
       type: 'textarea',
@@ -193,23 +193,6 @@ const listOptions = fromJS([
         rules: 'utf8Len:[1, 256]',
       }),
     },
-  },
-  {
-    id: 'state',
-    text: __('State'),
-    formProps: {
-      type: 'checkbox',
-      defaultValue: '1',
-    },
-    options: [
-      {
-        value: '1',
-        label: __('Enable'),
-      }, {
-        value: '0',
-        label: __('Disable'),
-      },
-    ],
   },
   {
     id: 'more',
@@ -229,16 +212,15 @@ const listOptions = fromJS([
     ],
   },
   {
-    id: 'text',
-    text: __('Message Content'),
-    noTable: true,
+    id: 'state',
+    text: __('State'),
+    noForm: true,
+    type: 'switch',
+    actionName: '__edit__',
+    actionKey: 'allKeys',
     formProps: {
-      type: 'textarea',
-      required: true,
-      maxLength: '257',
-      validator: validator({
-        rules: 'utf8Len:[1, 256]',
-      }),
+      type: 'checkbox',
+      defaultValue: '1',
     },
   },
 ]);
