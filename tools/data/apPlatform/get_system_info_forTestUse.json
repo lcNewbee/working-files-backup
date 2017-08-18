@@ -53,7 +53,7 @@
       "enable": "1",
 			"wirelessMode":"ap",
 			"radioMode":"802.11an",
-			"ssid":"axilspot",
+			"ssid":"axilspot axilspot axilspot axilspot",
 			"security":"none",
 			"channel":"11",
 			"frequency":"2.412",
@@ -66,7 +66,7 @@
 			"staList":[
         {
           "vapId":"0",
-          "ssid":"axilspot",
+          "ssid":"axilspot axilspot axilspot axilspot",
           "mac":"14:FF:00:00:11:14",
           "deviceName":"1234567890123456sssssssssssssssdddddddsssdddddsddddddddddsaaaa",
           "txSignal":"60",
@@ -83,7 +83,7 @@
           "ipAddr":"192.168.1.100"
         }, {
           "vapId":"0",
-          "ssid":"axilspot",
+          "ssid":"axilspot axilspot axilspot axilspot",
           "mac":"14:FF:00:00:11:12",
           "deviceName":"0123456789123456789",
           "txSignal":"60",
@@ -264,7 +264,7 @@
 				}, {
 					"name":"vap0",
 					"mac":"12:00:00:00:00:02",
-					"ssid":"axilspot22",
+					"ssid":"axilspot22 axilspot axilspot",
 					"txBytes":"1399",
 					"rxBytes":"2000",
 					"txPackets":"50",

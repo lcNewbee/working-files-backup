@@ -49,29 +49,51 @@ const listOptions = fromJS([
   {
     id: 'speed',
     text: __('Port Speed'),
-    options($$data) {
-      const ret = [
-        {
-          value: '10',
-          label: '10',
-        }, {
-          value: '100',
-          label: '100',
-        }, {
-          value: '1000',
-          label: __('1000'),
-        },
-      ];
-
-      if ($$data.get('workModel') === 'half') {
-        ret.splice(-1, 1);
-      }
-      return ret;
-    },
+    options: [
+      {
+        value: '10',
+        label: '10',
+      }, {
+        value: '100',
+        label: '100',
+      }, {
+        value: '1000',
+        label: __('1000'),
+      }, {
+        value: 'auto',
+        label: __('Auto'),
+      },
+    ],
     formProps: {
       type: 'switch',
       visible(data) {
         return data.get('workModel') !== 'auto';
+      },
+      required: true,
+      options($$data) {
+        const ret = [
+          {
+            value: '10',
+            label: '10',
+          }, {
+            value: '100',
+            label: '100',
+          }, {
+            value: '1000',
+            label: __('1000'),
+          }, {
+            value: 'auto',
+            label: __('Auto'),
+          },
+        ];
+
+        if ($$data.get('workModel') === 'half') {
+          ret.splice(-2, 2);
+        }
+        if ($$data.get('workModel') === 'full') {
+          ret.splice(-1, 1);
+        }
+        return ret;
       },
     },
   }, {

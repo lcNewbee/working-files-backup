@@ -160,8 +160,8 @@ export default class MainAP extends React.PureComponent {
             ) : null
           }
 
-          { // 只在有版权信息时才显示底边栏
-            copyrightInfo && (<div className="t-main__footer-bar">
+          { // 只有网旗有底边栏 netflag
+            companyname && companyname.toLowerCase() === 'netflag' && (<div className="t-main__footer-bar">
               <div className="content-wraper clearfix">
                 <div className="copyright fl">
                   {__(copyrightInfo)}

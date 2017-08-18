@@ -94,11 +94,13 @@ body {
     z-index: 1509;
     line-height: 24px;
     text-align: center;
-    background-image: linear-gradient(
-      to bottom,
-      rgba(85, 171, 214, 1) 0%,
-      rgba(0, 147, 221, 1) 100%
-    );
+    color: white;
+    background-color: #141a23;
+    // background-image: linear-gradient(
+    //   to bottom,
+    //   rgba(85, 171, 214, 1) 0%,
+    //   rgba(0, 147, 221, 1) 100%
+    // );
 
     .content-wraper {
       display: inline-block;
@@ -108,6 +110,7 @@ body {
 
         a {
           direction: none;
+          color: white;
         }
       }
     }

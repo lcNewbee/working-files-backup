@@ -36,11 +36,15 @@ const vapInterfaceOptions = fromJS([
     id: 'name',
     text: __('Name'),
     render(val, item) {
-      const ssid = item.get('ssid');
+      let ssid = item.get('ssid');
+      if (ssid.length > 12) ssid = `${ssid.slice(0, 6)}...${ssid.slice(-3)}`;
       if (val === '') {
         return `--(${ssid})`;
       }
       return `${val}(${ssid})`;
+    },
+    getTitle(val, item) {
+      return item.get('ssid');
     },
     width: '152px',
   }, {

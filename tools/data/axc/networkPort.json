@@ -68,7 +68,7 @@
         "name": "eth4",
         "exchangeModel": "QINQ_tunnel",
         "status": 1,
-        "speed": "100",
+        "speed": "auto",
         "workModel": "auto",
         "mtu": "1480",
         "nativeVLAN": "2",

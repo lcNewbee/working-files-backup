@@ -26,7 +26,7 @@ const paths = {
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: './webpack.config.dev.js',
   pubWebpack: './webpack.config.production.js',
-  pubAIP3: '../svn/AIP3web',
+  pubAIP3: '../svn/AIP3_web',
   pubAIP5: '../svn/AIP5_web',
   pubAIP10: '../svn/AIP10_web',
   pubAIP10L: '../svn/AIP10L_web',

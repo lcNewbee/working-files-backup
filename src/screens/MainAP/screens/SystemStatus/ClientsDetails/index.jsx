@@ -153,8 +153,13 @@ export default class ClientsDetails extends React.Component {
         render(val) {
           if (val === '' || val === undefined) {
             return '--';
+          } else if (val.length > 12) {
+            return `${val.slice(0, 6)}...${val.slice(-3)}`;
           }
           return val;
+        },
+        getTitle(val, item) {
+          return item.get('ssid');
         },
       },
       {
