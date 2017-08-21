@@ -64,6 +64,7 @@ class SystemMaintenance extends CI_Controller {
             echo $result;
         }
     }
+    //备份配置（提供下载）
     public function backup() {
         $logary = array(
             'type'=>'Backup',
@@ -87,8 +88,12 @@ class SystemMaintenance extends CI_Controller {
 		//检测是有备份文件，否则再次备份一次
 		if(!is_file('/var/conf/config.db')){
 			exec('cp /var/run/config.db /var/conf/config.db');
+        }
+        if(!is_file('/var/conf/openportalserver_bak.sql')){
+			exec('mysqldump openportalserver>/var/conf/openportalserver_bak.sql');
 		}
-		copy('/var/conf/config.db', '/var/conf/config/config.db');
+        copy('/var/conf/config.db', '/var/conf/config/config.db');
+        copy('/var/conf/openportalserver_bak.sql', '/var/conf/config/openportalserver_bak.sql');
 		system('cp -r /var/conf/images/* /var/conf/config');
 		//3.打包
 		$path = '/var/conf/config';//需压缩的目录（文件夹）        
@@ -104,6 +109,7 @@ class SystemMaintenance extends CI_Controller {
 		$name = 'backup.zip';
 		force_download($name, $data);
     }
+    //保存配置（不会下载）
     public function saveConfig() {
         $logary = array(
             'type'=>'saveConfig',
@@ -113,8 +119,10 @@ class SystemMaintenance extends CI_Controller {
             'description'=>""
         );
         Log_Record($this->db,$logary);
-        //系统备份
+        //备份sqlite
         exec('cp /var/run/config.db /var/conf/config.db');
+        //备份mysql openportal
+        exec('mysqldump openportalserver>/var/conf/openportalserver_bak.sql');
         exec('sync');
         $result = array('state' => array('code' => 2000, 'msg' => 'OK'));
 
@@ -153,11 +161,16 @@ class SystemMaintenance extends CI_Controller {
                        if(file_exists('/var/conf/restore_config/config.db')){
                            //移动config.db 到/var/conf下
                            system('mv /var/conf/restore_config/config.db /var/conf/config.db');
+                           //还原openportal
+                           if(is_file('/var/conf/restore_config/openportalserver_bak.sql')){
+                               system('mv /var/conf/restore_config/openportalserver_bak.sql /var/conf/openportalserver_bak.sql');
+                               exec('mysql openportalserver</var/conf/openportalserver_bak.sql');
+                            }
                            //移动所有 到/var/conf/images下
                            if(!is_dir('/var/conf/images')) {
                                mkdir('/var/conf/images',0777,true);
                            }
-                           system('mv /var/conf/restore_config/* /var/conf/images/');
+                           system('mv /var/conf/restore_config/* /var/conf/images/');                           
                        }
                     } 
                     system('rm -rf /var/conf/restore_config');
@@ -201,5 +214,5 @@ class SystemMaintenance extends CI_Controller {
             $result = array('state' => array('code' => 2000, 'msg' => 'OK'), 'data' => $data);
         }
         return $result;
-    }    
+    }
 }
