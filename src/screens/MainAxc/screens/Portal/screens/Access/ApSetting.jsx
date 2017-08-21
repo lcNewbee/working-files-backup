@@ -4,7 +4,6 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/validator';
 
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
@@ -20,8 +19,7 @@ function getWebTemplate() {
           }),
         ),
       }
-    ),
-  );
+    ));
 }
 
 const listOptions = fromJS([
