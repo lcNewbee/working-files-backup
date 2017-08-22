@@ -16,172 +16,88 @@ import { actions as propertiesActions } from 'shared/containers/properties';
 const EDIT_LIST_ACTION = 'editList';
 const flowRateFilter = utils.filter('flowRate');
 
-// const settingsFormOptions = radioBase
-//   // 添加自动功率
-//   .map(
-//     ($$item) => {
-//       const curId = $$item.get('id');
+const settingsFormOptions = radioBase
+  // 添加自动功率
+  .map(
+    ($$item) => {
+      const curId = $$item.get('id');
 
-//       switch (curId) {
-//         // 功率添加自动选项
-//         case 'phymode':
-//           return $$item.updateIn(
-//             ['options'],
-//             $$options => $$options.unshift(Map({
-//               value: 'auto',
-//               label: __('Automatic'),
-//             })),
-//           ).set('disabled', true);
+      switch (curId) {
+        // 功率添加自动选项
+        case 'phymode':
+          return $$item.updateIn(
+            ['options'],
+            $$options => $$options.unshift(Map({
+              value: 'auto',
+              label: __('Automatic'),
+            })),
+          ).set('disabled', true);
 
-//         // 功率添加自动选项
-//         case 'txpower':
-//           return $$item.updateIn(
-//             ['options'],
-//             $$options => $$options.unshift(Map({
-//               value: 'auto',
-//               label: __('Automatic'),
-//             })),
-//           ).set('disabled', true);
+        // 功率添加自动选项
+        case 'txpower':
+          return $$item.updateIn(
+            ['options'],
+            $$options => $$options.unshift(Map({
+              value: 'auto',
+              label: __('Automatic'),
+            })),
+          ).set('disabled', true);
 
-//         // 信道只支持自动
-//         case 'channel':
-//           return $$item.set(
-//             'options',
-//             fromJS([
-//               {
-//                 value: 0,
-//                 label: __('Automatic'),
-//               },
-//             ]),
-//           ).set('disabled', true);
+        // 信道只支持自动
+        case 'channel':
+          return $$item.set(
+            'options',
+            fromJS([
+              {
+                value: 0,
+                label: __('Automatic'),
+              },
+            ]),
+          ).set('disabled', true);
 
-//         // 5G优先,  11n优先
-//         case 'first5g':
-//         case 'switch11n':
-//           return $$item.set(
-//               'label',
-//               $$item.get('text'),
-//             ).delete('text');
+        // 5G优先,  11n优先
+        case 'first5g':
+        case 'switch11n':
+          return $$item.set(
+              'label',
+              $$item.get('text'),
+            ).delete('text');
 
-//         default:
-//       }
+        default:
+      }
 
-//       return $$item;
-//     },
-//   )
-//   .rest()
-//   .butLast()
-//   .groupBy(
-//     item => item.get('fieldset'),
-//   )
-//   .toList();
-
-function createSettingsFormOptions() {
-  const settingsFormOptions = fromJS([
-    {
-      id: 'radioEnable_2g',
-      form: 'modalsetting',
-      fieldset: 'radiosettingof2g',
-      legend: __('2.4G Settings'),
-      label: __('Radio'),
-      type: 'checkbox',
-      defaultValue: '1',
+      return $$item;
     },
-    {
-      id: 'radioPower_2g',
-      fieldset: 'radiosettingof2g',
-      form: 'modalsetting',
-      label: __('Tx Power'),
-      type: 'select',
-      options: [
-        {
-          value: '3%',
-          label: '3%',
-        }, {
-          value: '6%',
-          label: '6%',
-        }, {
-          value: '12%',
-          label: '12%',
-        }, {
-          value: '25%',
-          label: '25%',
-        }, {
-          value: '50%',
-          label: '50%',
-        }, {
-          value: '100%',
-          label: '100%',
-        },
-      ],
-    },
-    {
-      id: 'ssid_2g',
-      label: __('SSID'),
-      form: 'modalsetting',
-      fieldset: 'radiosettingof2g',
-      type: 'checkboxs',
-      defaultValue: '',
-      options: this.state.ssidOptions,
-    },
-    {
-      id: 'radioEnable_5g',
-      form: 'modalsetting',
-      fieldset: 'radiosettingof5g',
-      legend: __('5G Settings'),
-      label: __('Radio'),
-      type: 'checkbox',
-      defaultValue: '1',
-    },
-    {
-      id: 'radioPower_5g',
-      form: 'modalsetting',
-      fieldset: 'radiosettingof5g',
-      label: __('Tx Power'),
-      type: 'select',
-      options: [
-        {
-          value: '3%',
-          label: '3%',
-        }, {
-          value: '6%',
-          label: '6%',
-        }, {
-          value: '12%',
-          label: '12%',
-        }, {
-          value: '25%',
-          label: '25%',
-        }, {
-          value: '50%',
-          label: '50%',
-        }, {
-          value: '100%',
-          label: '100%',
-        },
-      ],
-    },
-    {
-      id: 'ssid_5g',
-      form: 'modalsetting',
-      fieldset: 'radiosettingof5g',
-      label: __('SSID'),
-      type: 'checkboxs',
-      required: true,
-      options: this.state.ssidOptions,
-    },
-  ]);
-  return settingsFormOptions;
-}
+  )
+  .rest()
+  .butLast()
+  .groupBy(
+    item => item.get('fieldset'),
+  )
+  .toList();
+
+let $$radioAdvanceFormOptions = radioAdvance.filterNot(
+  ($$item) => {
+    let ret = false;
+    const curId = $$item.get('id');
+
+    if (curId === 'rateset' || curId === 'txchain' ||
+        curId === 'rxchain') {
+      ret = true;
+    }
+
+    return ret;
+  },
+);
 
 // 处理大于 2.5的版本
-// if (window.guiConfig.versionCode >= 20500) {
-//   $$radioAdvanceFormOptions = $$radioAdvanceFormOptions.concat(radioQos);
-// }
+if (window.guiConfig.versionCode >= 20500) {
+  $$radioAdvanceFormOptions = $$radioAdvanceFormOptions.concat(radioQos);
+}
 const listOptions = fromJS([
   {
     id: 'devicename',
-    width: 160,
+    width: 180,
     text: __('Name'),
     maxLength: '31',
     validator: validator({
@@ -190,22 +106,20 @@ const listOptions = fromJS([
   },
   {
     id: 'ip',
-    width: 140,
+    width: 160,
     text: __('IP Address'),
   },
   {
     id: 'mac',
-    width: 140,
+    width: 160,
     text: __('MAC Address'),
   },
   {
     id: 'model',
-    width: 100,
     text: __('AP Model'),
   },
   {
     id: 'softversion',
-    width: 120,
     text: __('Firmware Version'),
   },
   {
@@ -215,7 +129,7 @@ const listOptions = fromJS([
   },
   {
     id: 'bandwidth',
-    width: 160,
+    width: 80,
     text: __('Data'),
     render(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
@@ -232,7 +146,6 @@ const listOptions = fromJS([
   },
   {
     id: 'status',
-    width: 120,
     text: __('Status'),
     defaultValue: 'unkown',
     options: apStatus,
@@ -243,7 +156,6 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
-  fetch: PropTypes.func,
 
   closeModal: PropTypes.func.isRequired,
   validateAll: PropTypes.func,
@@ -271,10 +183,11 @@ export default class View extends React.Component {
         channelwidth: 40,
         groupid: props.groupid,
       },
-      ssidOptions: [],
+
+      isBaseShow: true,
+      isAdvancedShow: false,
     };
 
-    this.createSettingsFormOptions = createSettingsFormOptions.bind(this);
     utils.binds(this, [
       'renderCustomModal',
       'onAction',
@@ -285,24 +198,9 @@ export default class View extends React.Component {
   }
 
   componentDidMount() {
-    const query = {
-      groupid: this.props.groupid,
-      size: 99,
-    };
-    this.props.fetch('goform/group/ssidSetting', query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          const list = fromJS(json.data.list);
-          const ssidOptions = list.map((item) => {
-            const ssid = item.get('ssid');
-            return fromJS({
-              value: ssid,
-              label: ssid,
-            });
-          });
-          this.setState({ ssidOptions: ssidOptions.toJS() });
-        }
-      });
+    this.props.fetchScreenData({
+      url: 'goform/group/smartRf',
+    });
   }
 
   onAction(type, item) {
@@ -333,15 +231,9 @@ export default class View extends React.Component {
         action: EDIT_LIST_ACTION,
         myTitle: __('Edit Selected AP'),
       });
-      const screenSettings = fromJS({
-        radioEnable_2g: '1',
-        radioPower_2g: '100%',
-        ssid_2g: '',
-        radioEnable_5g: '1',
-        radioPower_5g: '100%',
-        ssid_5g: '',
+      this.props.fetchScreenData({
+        url: 'goform/group/smartRf',
       });
-      this.props.updateScreenSettings(screenSettings);
     } else if ($$selectedList.size === 1) {
       this.onAction('edit', $$listData.get($$selectedList.get(0)));
     }
@@ -364,24 +256,17 @@ export default class View extends React.Component {
       this.props.validateAll(formId)
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
-            const curScreenId = this.props.store.get('curScreenId');
-            const radioSettings = this.props.store.getIn([curScreenId, 'curSettings']).toJS();
-            if (!radioSettings.ssid_2g || !radioSettings.ssid_5g) {
-              this.props.createModal({
-                role: 'alert',
-                text: __('Please at least select one ssid per radio!'),
-              });
-              return;
-            }
             this.props.saveScreenSettings({
-              url: 'goform/group/ap/radiogroupcfg',
+              url: 'goform/group/ap/radio',
               onlyChanged: true,
               numberKeys: fromJS(numberKeys),
               data: {
                 action: EDIT_LIST_ACTION,
                 selectedList: selectedMacList,
-                ...radioSettings,
               },
+              alwaySaveKeys: [
+                'beaconinterval', 'fragthreshold', 'rtsthreshold', 'dtim',
+              ],
             }).then(
               () => {
                 this.props.closeModal();
@@ -412,21 +297,76 @@ export default class View extends React.Component {
     return (
       <div className="o-box row">
         <div className="o-box__cell">
-          <FormContainer
-            id="radioBase"
-            options={this.createSettingsFormOptions()}
-            data={$$curData}
-            onChangeData={this.props.updateScreenSettings}
-            onSave={() => this.onSave('modalsetting')}
-            invalidMsg={app.get('invalid')}
-            validateAt={app.get('validateAt')}
-            isSaving={app.get('saving')}
-            saveText={__('Apply')}
-            savingText={__('Applying')}
-            savedText={__('Applied')}
-            hasSaveButton
-          />
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox('isBaseShow')}
+          >
+            <Icon
+              name={this.state.isBaseShow ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+            />
+            {__('Base Settings')}
+          </h3>
         </div>
+        {
+          this.state.isBaseShow ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id="radioBase"
+                options={settingsFormOptions}
+                data={$$curData}
+                onChangeData={this.props.updateScreenSettings}
+                onSave={() => this.onSave('radioBase')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                isSaving={app.get('saving')}
+                saveText={__('Apply')}
+                savingText={__('Applying')}
+                savedText={__('Applied')}
+              />
+            </div>
+          ) : null
+        }
+
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox('isAdvancedShow')}
+          >
+            <Icon
+              name={this.state.isAdvancedShow ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+              onClick={() => this.toggleBox('isAdvancedShow')}
+            />
+            {__('Advanced Settings')}
+          </h3>
+        </div>
+        {
+          this.state.isAdvancedShow ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id="radioAdvance"
+                options={$$radioAdvanceFormOptions}
+                data={$$curData}
+                onChangeData={this.props.updateScreenSettings}
+                onSave={() => this.onSave('radioAdvance')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                isSaving={app.get('saving')}
+                saveText={__('Apply')}
+                savingText={__('Applying')}
+                savedText={__('Applied')}
+                hasSaveButton
+              />
+            </div>
+          ) : null
+        }
       </div>
     );
   }
