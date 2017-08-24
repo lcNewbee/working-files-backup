@@ -116,9 +116,7 @@ class Modal extends PureComponent {
       'onClose',
       'onOk',
       'onShow',
-      'onExit',
       'onExited',
-      'onEntered',
     ]);
     this.state = {
       modalStyle: props.style,
@@ -274,7 +272,6 @@ class Modal extends PureComponent {
         exit={exit}
         timeout={500}
         onExited={this.onExited}
-        onEn
         appear
         mountOnEnter
         unmountOnExit
