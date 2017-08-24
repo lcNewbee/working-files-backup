@@ -1,9 +1,9 @@
 {
-  "name": "comlanos",
+  "name": "axilspot",
   "version": "2.1.0.rc",
-  "description": "comlanos 前端开发平台",
+  "description": "Axilspot 前端开发平台",
   "main": "src/index.jsx",
-  "repository": "none",
+  "repository": "http://192.168.100.240:5002/web_group/frontend.git",
   "engines": {
     "node": ">=0.12.0"
   },

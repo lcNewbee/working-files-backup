@@ -66,10 +66,12 @@ class FileUpload extends React.Component {
     }
   }
   onChangeImage(e) {
-    const data = {};
     const { acceptExt, onChange } = this.props;
     const thisElem = e.target;
     const filePath = thisElem.value;
+    const data = {
+      value: thisElem.value,
+    };
     const extension = utils.getExtension(filePath);
 
     this.ext = extension;
@@ -81,13 +83,8 @@ class FileUpload extends React.Component {
       }, e);
     }
 
-    if (!filePath) {
-      this.onAlert(MSG.shouldSelectFile);
-      return;
-    }
-
     // 验证可接受的文件类型
-    if (acceptExt && acceptExt.indexOf(extension) === -1) {
+    if (filePath && acceptExt && acceptExt.indexOf(extension) === -1) {
       this.onAlert(__(MSG.extensionRange, acceptExt));
       thisElem.value = '';
       this.restImageStatus();
@@ -136,8 +133,7 @@ class FileUpload extends React.Component {
       fetch(url, {
         method: 'POST',
         body: data,
-      })
-      .then(() => {
+      }).then(() => {
         this.restImageStatus();
 
         // 完成时的回调函数
@@ -155,6 +151,8 @@ class FileUpload extends React.Component {
         onUploaded();
       }
     }
+
+    return input;
   }
 
   restImageStatus() {
@@ -181,13 +179,8 @@ class FileUpload extends React.Component {
 
   render() {
     const { url, target, buttonText, name, buttonIcon, disabled, placeholder } = this.props;
-    const { imageStatus } = this.state;
+    const { imageStatus, value } = this.state;
     const curButtonText = buttonText || __('Upload Image');
-    let displayStyle = 'none';
-
-    if (imageStatus === 'default') {
-      displayStyle = 'inline-block';
-    }
 
     return (
       <form
@@ -208,9 +201,9 @@ class FileUpload extends React.Component {
           name={name}
           onChange={this.onChangeImage}
           disabled={disabled}
+          value={value}
           style={{
             marginRight: '8px',
-            display: displayStyle,
           }}
           onRef={(fileElem) => {
             if (fileElem) {
@@ -223,7 +216,7 @@ class FileUpload extends React.Component {
           text={curButtonText}
           icon={buttonIcon}
           loading={imageStatus === 'loading'}
-          theme={imageStatus === 'selected' ? 'primary' : undefined}
+          theme={value ? 'primary' : undefined}
           onClick={this.onUploadImage}
           disabled={disabled}
           placeholder={placeholder}
