@@ -160,8 +160,8 @@ export default class MainAP extends React.PureComponent {
             ) : null
           }
 
-          { // 只有网旗有底边栏 netflag
-            companyname && companyname.toLowerCase() === 'netflag' && (<div className="t-main__footer-bar">
+          { // 只有网旗有底边栏 wangqi
+            companyname && companyname.toLowerCase() === 'wangqi' && (<div className="t-main__footer-bar">
               <div className="content-wraper clearfix">
                 <div className="copyright fl">
                   {__(copyrightInfo)}
@@ -178,7 +178,7 @@ export default class MainAP extends React.PureComponent {
                 {
                   supportLink && (
                     <div className="support fl">
-                      <a href={`//${supportLink}`}>{__('Tech Support')}</a>
+                      <a href={`${supportLink}`}>{__('Technical Support')}</a>
                     </div>
                   )
                 }
