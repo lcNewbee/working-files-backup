@@ -179,9 +179,6 @@ class Modal extends PureComponent {
       this.props.exit,
     );
   }
-  onEntered() {
-    this.callBackName = '';
-  }
   onExited() {
     const newState = {};
     let needSetState = false;
@@ -201,22 +198,16 @@ class Modal extends PureComponent {
     }
 
     this.cacheBodyContent = null;
-  }
-
-  // 再执行即将关闭 Modal 动画前
-  onExit() {
-    this.exiting = true;
+    this.cacheSize = '';
   }
 
   onClose() {
-    this.callBackName = 'onClose';
     if (typeof this.props.onClose === 'function') {
       this.props.onClose();
     }
   }
 
   onOk() {
-    this.callBackName = 'onOk';
     if (typeof this.props.onOk === 'function') {
       this.props.onOk();
     }
@@ -282,9 +273,7 @@ class Modal extends PureComponent {
         enter={enter}
         exit={exit}
         timeout={500}
-        onExit={this.onExit}
         onExited={this.onExited}
-        onEntered={this.onEntered}
         onEn
         appear
         mountOnEnter
