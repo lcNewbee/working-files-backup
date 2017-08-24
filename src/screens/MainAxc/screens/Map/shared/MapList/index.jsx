@@ -1,10 +1,9 @@
 import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
-import { List, Map } from 'immutable';
-import SaveButton from 'shared/components/Button/SaveButton';
-import Icon from 'shared/components/Icon';
+import { List, Map, fromJS } from 'immutable';
+import classnames from 'classnames';
 import {
-  Modal, FormGroup,
+  Modal, FormGroup, SaveButton, Icon, Button,
 } from 'shared/components';
 
 // @@product(axcMonitor):
@@ -52,15 +51,24 @@ export default class MapList extends React.PureComponent {
       'checkMapData',
       'editMapList',
       'closeModal',
+      'toggleVisible',
     ]);
 
     this.state = {
       backgroundImgUrl: '',
       isModalShow: false,
+      visible: props.visible || true,
     };
   }
   componentDidMount() {
     this.fetchMapList();
+  }
+  componentWillReceiveProps(nextProps) {
+    if (typeof nextProps.visible !== 'undefined') {
+      this.setState({
+        visible: nextProps.visible,
+      });
+    }
   }
 
   onSaveMap() {
@@ -85,6 +93,11 @@ export default class MapList extends React.PureComponent {
     this.setState({
       isModalShow: true,
       action: 'add',
+    });
+  }
+  toggleVisible() {
+    this.setState({
+      visible: !this.state.visible,
     });
   }
   closeModal() {
@@ -125,9 +138,12 @@ export default class MapList extends React.PureComponent {
     }).then(
       (json) => {
         if (json && json.state && json.state.code === 2000) {
-          this.props.receiveScreenData({
-            maps: json.data,
-          });
+          if (json && json.data) {
+            this.props.receiveScreenData({
+              maps: json.data,
+            });
+            this.props.onSelectMap(fromJS(json.data.list[0]))
+          }
         }
       },
     );
@@ -156,104 +172,129 @@ export default class MapList extends React.PureComponent {
     }).toJS());
   }
   render() {
-    const { actionable, $$mapList, onSelectMap, app, visible } = this.props;
-    let mapRatio = '1024 * 760';
+    const { actionable, $$mapList, onSelectMap, app, activeId } = this.props;
+    const { visible } = this.state;
     const invalidMsg = app.get('invalid');
     const validateProps = {
       validateAt: app.get('validateAt'),
       onValidError: this.props.reportValidError,
     };
+    const containerClassname = classnames({
+      'o-list o-map-list': true,
+      'o-map-list--minimized': !visible,
+    });
+    const iconPromptClassname = classnames({
+      'o-map-list__prompt': true,
+      open: visible,
+    });
+    let mapRatio = '1024 * 760';
 
     if (this.state.width && this.state.length) {
       mapRatio = `1024 * ${parseInt((this.state.width * 1024) / this.state.length, 10)}`;
     }
-    // 如果不可见
-    if (!visible) {
-      return null;
-    }
 
     return (
-      <div className="o-map-list">
-        {
-          $$mapList.map(($$map) => {
-            const mapId = $$map.getIn(['id']);
-            const mapName = $$map.getIn(['mapName']);
-            const imgUrl = $$map.getIn(['backgroundImg']);
+      <div className={containerClassname}>
+        <div
+          className="o-list__header"
+          onClick={() => {
+            this.toggleVisible();
+          }}
+        >
+          <Icon
+            name="list"
+            className="fl o-map-list__toggle"
+          />
+          {__('Floor Plans')}
+          <Icon
+            name={visible ? 'angle-double-down' : 'angle-double-up'}
+            className={iconPromptClassname}
+          />
+        </div>
+        <div className="o-map-list__content">
+          {
+            $$mapList.map(($$map) => {
+              const mapId = $$map.getIn(['id']);
+              const mapName = $$map.getIn(['mapName']);
+              const imgUrl = $$map.getIn(['backgroundImg']);
+              const mapItemClass = classnames('m-thumbnail', {
+                active: mapId === activeId,
+              });
 
-            if (mapId === -100) {
-              return null;
-            }
+              if (mapId === -100) {
+                return null;
+              }
 
-            return (
-              <div className="cols col-3" key={mapId}>
-                <div
-                  className="m-thumbnail"
-                >
-                  {
-                    actionable ? (
-                      <Icon
-                        name="times"
-                        className="close"
-                        onClick={
-                          () => {
-                            this.deleteMapList(mapId);
-                          }
-                        }
-                      />
-                    ) : null
-                  }
-                  {
-                    actionable ? (
-                      <Icon
-                        name="edit"
-                        className="edit"
-                        onClick={
-                          () => {
-                            this.editMapList($$map);
-                          }
-                        }
-                      />
-                    ) : null
-                  }
-
+              return (
+                <div key={mapId}>
                   <div
-                    className="m-thumbnail__content"
-                    onClick={() => {
-                      onSelectMap($$map);
-                    }}
+                    className={mapItemClass}
                   >
-                    <img
-                      src={imgUrl}
-                      draggable="false"
-                      alt={mapName}
-                    />
-                  </div>
-                  <div
-                    className="m-thumbnail__caption"
-                    onClick={() => onSelectMap($$map)}
-                  >
-                    <h3>{mapName}</h3>
+                    {
+                      actionable ? (
+                        <Icon
+                          name="times"
+                          className="close"
+                          onClick={
+                            () => {
+                              this.deleteMapList(mapId);
+                            }
+                          }
+                        />
+                      ) : null
+                    }
+                    {
+                      actionable ? (
+                        <Icon
+                          name="edit"
+                          className="edit"
+                          onClick={
+                            () => {
+                              this.editMapList($$map);
+                            }
+                          }
+                        />
+                      ) : null
+                    }
+
+                    <div
+                      className="m-thumbnail__content"
+                      onClick={() => {
+                        onSelectMap($$map);
+                      }}
+                    >
+                      <img
+                        src={imgUrl}
+                        draggable="false"
+                        alt={mapName}
+                      />
+                    </div>
+                    <div
+                      className="m-thumbnail__caption"
+                      onClick={() => onSelectMap($$map)}
+                    >
+                      {mapName}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })
-        }
-        {
-          actionable ? (
-            <div
-              className="cols col-3"
-              onClick={this.onAddMap}
-            >
-              <div className="o-map-list__add">
-                <Icon
-                  name="plus"
-                  size="3x"
+              );
+            })
+          }
+          {
+            actionable ? (
+              <div className="m-thumbnail m-thumbnail--add">
+                <Button
+                  icon="plus"
+                  theme="primary"
+                  className="a-btn--block"
+                  text={__('Add Map')}
+                  onClick={this.onAddMap}
                 />
               </div>
-            </div>
-          ) : null
-        }
+            ) : null
+          }
+        </div>
+
         <Modal
           title={__('Add')}
           isShow={this.state.isModalShow}

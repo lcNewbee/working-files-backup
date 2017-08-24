@@ -80,6 +80,7 @@ export default class View extends React.PureComponent {
         'savePlaceDevice',
         'onUppaceDrop',
         'fetchMapList',
+        'renderDevicesList',
       ],
     );
     this.curBuildId = parseInt(props.match.params.id, 10);
@@ -416,6 +417,90 @@ export default class View extends React.PureComponent {
 
     return ret;
   }
+  renderDevicesList() {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const curMapId = store.getIn([myScreenId, 'curSettings', 'curMapId']);
+    const list = store.getIn([myScreenId, 'data', 'list']);
+    const deviceListClassname = classnames('o-list o-devices-list', {
+      active: !!curMapId && this.state.isUnplacedListShow,
+    });
+    const isEmpty = !list || list.isEmpty();
+
+    return (
+      <div
+        className={deviceListClassname}
+        onDrop={e => this.onUppaceDrop(e)}
+        onDragOver={e => e.preventDefault()}
+      >
+        {
+          curMapId ? (
+            <div
+              className="toggle-button"
+              onClick={() => this.onToggleUnplacedList()}
+            >
+              <Icon
+                title={__('Unplaced AP List')}
+                name="align-justify"
+                size="2x"
+              />
+              {
+                isEmpty ? (
+                  <i className="not-null" />
+                ) : null
+              }
+            </div>
+          ) : null
+        }
+
+        <div className="o-list__header" onClick={() => this.onToggleUnplacedList()}>
+          {__('Unplaced AP List')}
+          <Icon
+            className="fr"
+            style={{
+              fontSize: '16px',
+              cursor: 'pointer',
+            }}
+            name="angle-double-down"
+          />
+        </div>
+        <div className="o-list__body">
+          {
+            list ?
+              list.map(this.renderUndeployDevice) :
+              null
+          }
+        </div>
+        <div className="o-list__footer o-devices-list__footer">
+          {
+            this.actionable ? (
+              <Button
+                icon="plus"
+                theme="primary"
+                text={__('Add AP to Group')}
+                onClick={
+                  () => {
+                    this.props.selectManageGroupAp({
+                      id: this.props.groupid,
+                    });
+                    this.props.fetchModelList();
+                    this.props.resetGroupAddDevice();
+                    this.props.fetchGroupAps(-1);
+                    this.props.showMainModal({
+                      title: __('Add AP to Group'),
+                      size: 'md',
+                      isShow: true,
+                      name: 'groupApAdd',
+                    });
+                  }
+                }
+              />
+            ) : null
+          }
+        </div>
+      </div>
+    );
+  }
   renderCurMap($$list, curMapId, myZoom) {
     const backgroundImgUrl = this.curMapItem && this.curMapItem.backgroundImg;
     const mapName = this.curMapItem && this.curMapItem.mapName;
@@ -469,30 +554,9 @@ export default class View extends React.PureComponent {
     // const isLocked = store.getIn([myScreenId, 'curSettings', 'isLocked']);
     const myZoom = this.state.zoom;
     const curMapId = store.getIn([myScreenId, 'curSettings', 'curMapId']);
-    const actionBarChildren = [
-      <Button
-        icon="arrow-left"
-        theme="primary"
-        text={__('Back')}
-        key="back"
-        onClick={() => {
-          if (curMapId) {
-            this.props.updateScreenSettings({
-              curMapId: '',
-            });
-            this.onToggleUnplacedList(true);
-          } else {
-            this.props.history.push('/main/group/map/live/list');
-          }
-        }}
-      />,
-    ];
     const $$thisMapList = this.$$mapList;
-    const deviceListClassname = classnames('o-list o-devices-list', {
-      active: !!curMapId && this.state.isUnplacedListShow,
-    });
     const mapWarpClassname = classnames('o-map-warp', {
-      dsada: false,
+      'o-map-warp--ap-plan': true,
     });
 
     return (
@@ -506,11 +570,6 @@ export default class View extends React.PureComponent {
         }}
         noTitle
       >
-        <div className="m-action-bar">
-          {
-            actionBarChildren
-          }
-        </div>
         <div className={mapWarpClassname}>
           <MapList
             {...this.props}
@@ -528,12 +587,26 @@ export default class View extends React.PureComponent {
                 curList: $$mapAps,
               });
             }}
+            activeId={curMapId}
             validateAll={this.props.validateAll}
             save={this.props.save}
             fetch={this.props.fetch}
             saveFile={this.props.saveFile}
             receiveScreenData={this.props.receiveScreenData}
-            visible={!curMapId}
+          />
+          <Button
+            icon="arrow-left"
+            theme="primary"
+            className="o-map-warp__back"
+            title={__('Back')}
+            key="back"
+            onClick={() => {
+              this.props.updateScreenSettings({
+                curMapId: '',
+              });
+              this.onToggleUnplacedList(true);
+              this.props.history.push('/main/group/map/live/list');
+            }}
           />
           {
             curMapId ? this.renderCurMap(list, curMapId, myZoom) : null
@@ -563,73 +636,9 @@ export default class View extends React.PureComponent {
               </div>
             ) : null
           }
-          <div
-            className={deviceListClassname}
-            onDrop={e => this.onUppaceDrop(e)}
-            onDragOver={e => e.preventDefault()}
-          >
-            {
-              curMapId ? (
-                <div
-                  className="toggle-button"
-                  onClick={() => this.onToggleUnplacedList()}
-                >
-                  <Icon
-                    title={__('Unplaced AP List')}
-                    name="align-justify"
-                    size="2x"
-                  />
-                </div>
-              ) : null
-            }
-
-            <div className="o-list__header">
-              {__('Unplaced AP List')}
-              <Icon
-                className="fr"
-                style={{
-                  fontSize: '16px',
-                  cursor: 'pointer',
-                }}
-                name="angle-double-right"
-                onClick={() => this.onToggleUnplacedList()}
-              />
-            </div>
-            <div className="o-list__body">
-              {
-                list ?
-                  list.map(this.renderUndeployDevice) :
-                  null
-              }
-            </div>
-            <div className="o-list__footer o-devices-list__footer">
-              {
-                this.actionable ? (
-                  <Button
-                    icon="plus"
-                    theme="primary"
-                    text={__('Add AP to Group')}
-                    onClick={
-                      () => {
-                        this.props.selectManageGroupAp({
-                          id: this.props.groupid,
-                        });
-                        this.props.fetchModelList();
-                        this.props.resetGroupAddDevice();
-                        this.props.fetchGroupAps(-1);
-                        this.props.showMainModal({
-                          title: __('Add AP to Group'),
-                          size: 'md',
-                          isShow: true,
-                          name: 'groupApAdd',
-                        });
-                      }
-                    }
-                  />
-                ) : null
-              }
-            </div>
-          </div>
+          {
+            this.renderDevicesList()
+          }
         </div>
       </AppScreen>
     );

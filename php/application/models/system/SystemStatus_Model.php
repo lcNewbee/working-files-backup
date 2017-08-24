@@ -21,11 +21,13 @@ class SystemStatus_Model extends CI_Model {
 
         $obj = json_decode($stateid);
         if(is_object($obj)){
-            $retda['system_cpuid'] = $obj->data->system_cpuid;
-            $retda['system_memid'] = $obj->data->system_memid;
-            $retda['system_sdaid'] = $obj->data->system_sdaid;
-            $retda['system_sn'] = $obj->data->system_sn;
-            $retda['system_mac'] = $obj->data->system_mac;
+          $objData = $obj->data;
+
+          if(is_object($obj)) {
+            foreach($objData as $key => $value) {
+              $retda[$key] = $value;
+            }
+          }
         }
         //
         $version = file_get_contents('/etc/version');

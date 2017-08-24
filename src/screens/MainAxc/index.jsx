@@ -116,7 +116,7 @@ export default class Main extends React.PureComponent {
     // 'sales@axilspot.com'
     this.emailUrl = props.app.get('email') || '';
 
-    document.title = `${this.companyTitle} Access Manager`;
+    document.title = `${this.companyTitle} Access Controller`;
   }
 
   onRefresh(e) {

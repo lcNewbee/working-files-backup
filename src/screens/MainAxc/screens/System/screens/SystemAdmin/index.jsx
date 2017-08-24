@@ -67,8 +67,9 @@ const listOptions = fromJS([
     defaultValue: '',
     formProps: {
       required: true,
+      maxLength: '31',
       validator: validator({
-        rules: 'len:[1,32]',
+        rules: 'len:[1,31]',
       }),
     },
   }, {
@@ -79,8 +80,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'password',
       required: true,
+      maxLength: '31',
       validator: validator({
-        rules: 'len:[8,32]',
+        rules: 'len:[8,31]',
       }),
     },
   }, {
@@ -91,8 +93,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'password',
       required: true,
+      maxLength: '31',
       validator: validator({
-        rules: 'len:[8,32]',
+        rules: 'len:[8,31]',
       }),
     },
   },

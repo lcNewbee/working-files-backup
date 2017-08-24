@@ -1,7 +1,12 @@
+@import 'functions';
+@import "variables";
+@import "mixins";
+
 $border-radius: 2px;
 $map-distance: 1rem;
 $map-distance-x: $map-distance * .75;
 $map-distance-y: $map-distance * .75;
+$map-warp-spacer: $map-distance * .5;
 
 .m-device {
   display: inline-block;
@@ -111,29 +116,108 @@ $map-distance-y: $map-distance * .75;
     }
   }
 
-  .o-map-list__add {
-    height: 208px;
-    margin: 10px 5px;
-    line-height: 208px;
-    color: #0083cd;
+  .o-map-warp__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 6px;
+    margin-right: 6px;
+    border-radius: 20px;
+    z-index: 3;
+    line-height: 20px;
+    width: 20px;
+    padding: 0;
+    background-color: red;
+    color: #fff;
     text-align: center;
     cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: $border-radius;
+    display: block;
+    transition: transform .24s ease-in-out;
+  }
+  &__back {
+    position: absolute;
+    top: $map-warp-spacer;
+    left: $map-warp-spacer;
+    z-index: 4;
+    padding: 6px 5px;
+    text-align: center;
+    box-shadow: 1px 2px 1px rgba(0,0,0,.15);
+
     .icon {
-      transform: none;
-      transition: transform .3s ease-in-out;
+      width: 1rem;
+    }
+  }
+  &--ap-plan {
+    top: 0;
+
+    .o-map-zoom-bar {
+      left: $map-warp-spacer + 2.25rem;
+    }
+  }
+  &.o-map-warp--list {
+    overflow: auto;
+  }
+}
+
+.o-map-list {
+  position: absolute;
+  width: 188px;
+  left: $map-warp-spacer;
+  top: $map-warp-spacer + 2.125rem;
+  bottom: $map-warp-spacer;
+  background-color: #fff;
+  border: 1px solid #333;
+  padding: 0;
+  z-index: 2506;
+  border-radius: $border-radius;
+  padding-bottom: 42px;
+  box-shadow: 1px 2px 1px rgba(0,0,0,.15);
+
+  .o-map-list__toggle {
+    margin-right: $map-warp-spacer;
+    transition: transform .3s ease-in-out;
+  }
+  .o-map-list__prompt {
+    margin-left: $map-warp-spacer;
+    float: right;
+    transition: transform .3s ease-in-out;
+  }
+  .o-list__header {
+    cursor: pointer;
+
+    > .icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+      text-align: center;
     }
 
     &:hover {
-      .icon {
-        transform: rotate(90deg);
+      .o-map-list__prompt {
+        transform: rotate(180deg);
       }
-
     }
   }
+  .o-map-list__add {
+    font-size: 1rem;
+    color: #0083cd;
+    text-align: center;
+    float: right;
+    cursor: pointer;
+    transform: none;
+    transition: transform .3s ease-in-out;
+
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+  .o-map-list__content{
+    overflow-y: auto;
+    height: 100%;
+    width: 186px;
+  }
   .m-thumbnail {
-    margin: 10px 5px;
+    margin: 8px;
     position: relative;
     cursor: pointer;
 
@@ -161,9 +245,14 @@ $map-distance-y: $map-distance * .75;
       right: 28px;
       background-color: #333;
     }
+    .m-thumbnail__caption {
+      padding: 4px;
+      @include ellipsis();
+      font-weight: 500;
+    }
     .m-thumbnail__content {
       position: relative;
-      height: 160px;
+      height: 80px;
       overflow: hidden;
       text-align: center;
 
@@ -180,10 +269,24 @@ $map-distance-y: $map-distance * .75;
       }
     }
 
+    &.active {
+      background-color: brand-color('axilspot');
+
+      .m-thumbnail__caption {
+        color: #fff;
+      }
+    }
+
+    &--add {
+      @include clearfix();
+      text-align: center;
+      border: none;
+    }
+
     &:hover {
       .m-thumbnail__content {
         img {
-          //width: 102%;
+          // width: 102%;
         }
       }
       .edit,
@@ -193,8 +296,31 @@ $map-distance-y: $map-distance * .75;
     }
   }
 
-  &.o-map-warp--list {
-    overflow: auto;
+  &--minimized {
+    bottom: auto;
+    padding: 0;
+    width: auto;
+    cursor: pointer;
+    height: 34px;
+    overflow: hidden;
+    color: #dddddd;
+
+    .o-list__header {
+      display: inline-block;
+      color: #dddddd;
+      transition: color .3s ease-in-out;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+    .o-map-list__content {
+      width: 80px;
+    }
+
+    &:hover {
+      color: #fff;
+    }
   }
 }
 
@@ -291,45 +417,48 @@ $map-distance-y: $map-distance * .75;
 }
 .o-map-zoom-bar {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: $map-warp-spacer;
+  left: $map-warp-spacer;
   z-index: 3;
   text-align: center;
   background-color: #fff;
-  border: 1px solid #ccc;
+  box-shadow: 1px 2px 1px rgba(0,0,0,.15);
   border-radius: $border-radius;
 
   .o-map-zoom-bar__thmp {
     display: inline-block;
     width: 40px;
-    height: 27px;
-    line-height: 27px;
+    height: 26px;
+    line-height: 26px;
     vertical-align: middle;
     user-select: none;
-    border-right: 1px solid #ccc;
-    border-left: 1px solid #ccc;
+    border-right: 1px solid #ddd;
+    border-left: 1px solid #ddd;
   }
   .icon {
-    width: 28px;
+    width: 26px;
     font-size: 14px;
+    height: 26px;
     line-height: 26px;
-    color: #444;
+    color: #666;
     vertical-align: middle;
     cursor: pointer;
   }
 }
 .o-devices-list {
   position: absolute;
-  top: 10px;
+  top: $map-warp-spacer;
   right: 0;
-  bottom: 10px;
+  bottom: $map-warp-spacer;
   width: 188px;
-  max-width: 0;
+  max-width: 188px;
   padding: 0;
   padding-bottom: 36px;
   background-color: #fff;
   border-radius: $border-radius;
-  transition: .3s max-width ease-in-out, .3s right ease-in-out;
+  transition: .3s right ease-in-out;
+  border: 1px solid #333;
+  right: -188px;
   //overflow: hidden;
 
   .m-device {
@@ -339,31 +468,63 @@ $map-distance-y: $map-distance * .75;
       cursor: move;
     }
   }
+  .o-list__header {
+    cursor: pointer;
 
-  .toggle-button {
+    .icon {
+      transition: transform .3s ease-in-out;
+      width: 16px;
+      line-height: 16px;
+      text-align: center;
+    }
+
+    &:hover {
+      .icon {
+        transform: rotate(-90deg);
+      }
+    }
+  }
+
+  .not-null {
     position: absolute;
     top: 0;
     right: 0;
-    width: 24px;
-    height: 24px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-top: -3px;
+    margin-right: -3px;
+    border-radius: 10px;
+    background-color: $red;
+  }
+
+  .toggle-button {
+    position: absolute;
+    left: -34px;
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
     max-height: 200px;
     margin-right: 4px;
-    overflow: hidden;
     color: #fff;
     text-align: center;
-    cursor: pointer;
     background-color: #222;
-    border-radius: 16px 0 16px 16px;
+    // border-radius: 16px 0 16px 16px;
+    border-radius: $border-radius;
     box-shadow: -2px 2px 0 0 rgba(0,0,0,.2);
     opacity: 1;
+    cursor: pointer;
     transition: top .4s ease-in-out, opacity .4s ease-in-out;
 
     .icon {
       font-size: 12px;
-      line-height: 24px;
+      line-height: 26px;
       color: #ababab;
+    }
 
-      &:hover {
+    &:hover {
+      .icon {
         color: #fff;
       }
     }
@@ -372,11 +533,11 @@ $map-distance-y: $map-distance * .75;
   &.active {
     right: 10px;
     max-width: 188px;
-    border: 1px solid #333;
 
     .toggle-button {
       top: -60px;
       opacity: 0;
+      left: auto;
     }
   }
   .o-list__body {
