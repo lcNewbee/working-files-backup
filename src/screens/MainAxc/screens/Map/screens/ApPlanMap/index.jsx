@@ -445,9 +445,9 @@ export default class View extends React.PureComponent {
                 size="2x"
               />
               {
-                isEmpty ? (
+                isEmpty ? null : (
                   <i className="not-null" />
-                ) : null
+                )
               }
             </div>
           ) : null

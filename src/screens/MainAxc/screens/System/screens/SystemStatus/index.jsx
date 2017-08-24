@@ -25,7 +25,7 @@ function getCpuOption(serverData) {
     },
     title: {
       text: `${__('Used')}`,
-      subtext: `${usedValue}%`,
+      subtext: `${usedValue || ''}%`,
     },
     series: [
       {
@@ -50,7 +50,7 @@ function getMemoryOption(serverData) {
     color: [colors[1], colors[7]],
     title: {
       text: `${__('Used')}`,
-      subtext: `${usedValue}%`,
+      subtext: `${usedValue || ''}%`,
     },
     legend: {
       data: [usedName, freeName],
@@ -127,10 +127,6 @@ const propTypes = {
 const defaultProps = {};
 
 export default class View extends React.PureComponent {
-  constructor(props, context) {
-    super(props, context);
-  }
-
   render() {
     const { store } = this.props;
     const curScreenId = store.get('curScreenId');
