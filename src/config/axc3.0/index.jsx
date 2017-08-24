@@ -167,7 +167,7 @@ const sQuickSetup = require('../../screens/MainAxc/screens/QuickSetup');
  * AAA 接入，认证，计费
  */
 const cAAA = require('../../screens/MainAxc/containers/AAA');
-const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA/index_new');
+const sPortalUserAccessPolicies = require('../../screens/MainAxc/screens/Portal/screens/UserAccessPolicies');
 const sPortalOverview =
     require('../../screens/MainAxc/screens/Portal/screens/Overview');
 const sPortalWeb =
@@ -757,12 +757,12 @@ const routes = [
                 component: sPortalMac.Screen,
               },
               {
-                id: 'networkAaa',
+                id: 'userAccessPolicies',
                 icon: 'link',
                 path: '/main/portal/aaa/list',
                 formUrl: 'goform/portal/Aaa',
                 text: __('User Access Policies'),
-                component: sNetworkAaa.Screen,
+                component: sPortalUserAccessPolicies.Screen,
               },
             ],
           },

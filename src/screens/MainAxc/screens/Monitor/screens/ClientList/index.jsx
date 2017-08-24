@@ -44,20 +44,25 @@ const listOptions = fromJS([
     id: 'authtype',
     // noTable: true,
     text: __('Authentication Type'),
-  }, {
+  },
+  {
     id: 'connectap',
     text: __('Associated AP'),
     render(val, $$item) {
       const frequency = $$item.get('frequency');
-      let ret = $$item.get('connectap') || $$item.get('apmac');
-
+      let ret = val;
 
       if (frequency) {
         ret = `${ret} (${frequency})`;
       }
       return ret;
     },
-  }, {
+  },
+  {
+    id: 'apname',
+    text: __('Associated AP Name'),
+  },
+  {
     id: 'bandwidth',
     text: __('Data'),
     render(val, item) {

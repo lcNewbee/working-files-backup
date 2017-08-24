@@ -333,7 +333,8 @@
   "WIRED": "有线",
   "GUEST": "来宾",
 
-  "Associated AP": "关联 AP",
+  "Associated AP": "关联AP",
+  "Associated AP Name": "关联AP名称",
   "Up Speed": "上传流量",
   "Down Speed": "下载流量",
   "Up/Down Speed": "上/下行流量",

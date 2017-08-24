@@ -104,7 +104,7 @@ const sNetworkNatUlog = require('../../screens/MainAxc/screens/Network/screens/N
 // const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
 // const sRaduisTemplate =
 //     require('../../screens/MainAxc/screens/Network/screens/RadiusTemplate');
-const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA');
+const sPortalUserAccessPolicies = require('../../screens/MainAxc/screens/Portal/screens/UserAccessPolicies');
 // const sPortalServer =
 //     require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
 // const sPortalRules =
@@ -1098,7 +1098,7 @@ const routes = [
                 path: '/main/portal/aaa/list',
                 formUrl: 'goform/portal/Aaa',
                 text: __('User Access Policies'),
-                component: sNetworkAaa.Screen,
+                component: sPortalUserAccessPolicies.Screen,
               },
             ],
           },

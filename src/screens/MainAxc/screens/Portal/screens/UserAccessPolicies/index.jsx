@@ -11,6 +11,7 @@ import validator from 'shared/validator';
 import {
   getPortList, getWebTemplate, getAllGroupSSID, getApMac,
 } from './getServerData';
+
 import {
   $$radiusAuthServer, $$radiusAccServer, $$radiusAdvancedSetting, radiusDefaultData,
   $$potalServerFormOptions, potalServerDefaultSettingData,
@@ -18,19 +19,12 @@ import {
   $$portalTemplateFormOptions, portalTemplateDefaultSettingData,
 } from './config';
 
-// const $$defaultNoneItem = fromJS({
-//   value: '',
-//   label: __('None'),
-// });
-
 const RADIUS_AUTH_SERVER_KEY = 'authServer';
 const RADIUS_ACC_SERVER_KEY = 'accServer';
 const RADIUS_ADVANCE_SETTING_KEY = 'radiusAdvanceSetting';
 const PORTAL_SERVER_KEY = 'portalServer';
 const PORTAL_RULE_KEY = 'portalRule';
 const PORTAL_LOCAL_RULE_KEY = 'portalLocalRule';
-
-const DEFAULT_STR = __('ALL');
 
 const accessTypeSeletOptions = [
   {
@@ -271,12 +265,12 @@ const listOptions = fromJS([
 
 const $$baseFormOptions = utils.immutableUtils.getFormOptions(listOptions);
 const $$defaultData = fromJS(immutableUtils.getDefaultData(listOptions))
-    .mergeDeep({
-      radius: radiusDefaultData,
-      portalServer: potalServerDefaultSettingData,
-      portalRule: potalRuleDefaultSettingData,
-      portalTemplate: portalTemplateDefaultSettingData,
-    });
+  .mergeDeep({
+    radius: radiusDefaultData,
+    portalServer: potalServerDefaultSettingData,
+    portalRule: potalRuleDefaultSettingData,
+    portalTemplate: portalTemplateDefaultSettingData,
+  });
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -522,12 +516,6 @@ export default class View extends React.Component {
     );
   }
 
-  toggleBox(moduleName) {
-
-    // this.setState({
-    //   [moduleName]: !this.state[moduleName],
-    // });
-  }
   renderRemoteRadiusServer($$curData) {
     const { app } = this.props;
 

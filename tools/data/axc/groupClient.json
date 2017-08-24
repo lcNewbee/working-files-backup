@@ -22,6 +22,7 @@
         "mac": "12:22:33:44:55:66",
         "ssid": "ssid1",
         "connectap": "ap1",
+        "apmac": "12:22:33:44:55:65",
         "frequency": "",
         "downstream": "256",
         "upstream": "1232323",
@@ -41,6 +42,7 @@
         "mac": "12:22:33:44:55:65",
         "ssid": "ssid2",
         "connectap": "ap2",
+        "apmac": "12:22:33:44:55:65",
         "frequency": "2.4G",
         "downstream": "128",
         "upstream": "64",
@@ -51,6 +53,7 @@
         "islock": "unlock",
         "vendor": "huawei",
         "lasttime": "2016-06-22 17:25:51"
+
       },
       {
         "id": "3",
@@ -80,6 +83,7 @@
         "mac": "12:22:33:44:55:65",
         "ssid": "ssid2",
         "connectap": "ap2",
+        "apmac": "12:22:33:44:55:65",
         "frequency": "5G",
         "downstream": "128",
         "upstream": "64",
