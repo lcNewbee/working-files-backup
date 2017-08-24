@@ -12,10 +12,10 @@ import { actions } from 'shared/containers/settings';
 import * as selfActions from './actions';
 import reducer from './reducer';
 import countryMap from './country';
+import './index.scss';
 
 const remarkTxt = require('shared/validator/validates/single').remarkTxt;
 
-import './index.scss';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -440,12 +440,13 @@ export default class Basic extends React.Component {
       });
   }
   onCloseCountrySelectModal() {
-    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    this.props.fetch('goform/get_wl_all').then((json) => {
-      if (json.state && json.state.code === 2000) {
-        this.props.closeCountrySelectModal(json.data.radioList[radioId].countryCode);
-      }
-    });
+    // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    // this.props.fetch('goform/get_wl_all').then((json) => {
+    //   if (json.state && json.state.code === 2000) {
+    //     this.props.closeCountrySelectModal(json.data.radioList[radioId].countryCode);
+    //   }
+    // });
+    this.props.closeCountrySelectModal(this.oldCountry);
   }
 
   onSecurityModeChange(data) {
@@ -1044,7 +1045,10 @@ export default class Basic extends React.Component {
                       marginLeft: '-1px',
                       width: '70px',
                     }}
-                    onClick={() => { this.props.changeCtyModal(true); }}
+                    onClick={() => {
+                      this.props.changeCtyModal(true);
+                      this.oldCountry = this.props.selfState.get('selectedCountry');
+                    }}
                   />
                 </FormGroup>
                 { /* 国家代码弹出选择框 */

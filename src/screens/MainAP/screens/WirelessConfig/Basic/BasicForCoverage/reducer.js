@@ -64,11 +64,11 @@ export default function (state = defaultState, action) {
       return state.set('selectedCountry', action.data);
     case 'CLOSE_COUNTRY_SELECT_MODAL':
       return state.set('showCtyModal', false).set('agreeProtocol', false)
-                  .set('selectedCountry', action.data);
+        .set('selectedCountry', action.data);
     case 'RECEIVE_COUNTRY_INFO':
       return state.set('channels', fromJS(action.data.channels))
-                  .set('maxTxpower', action.data.maxTxpower)
-                  .set('minTxpower', action.data.minTxpower);
+        .set('maxTxpower', action.data.maxTxpower)
+        .set('minTxpower', action.data.minTxpower);
     case 'LEAVE_SCREEN':
       return defaultState;
     case 'RESTORE_SELF_STATE':
