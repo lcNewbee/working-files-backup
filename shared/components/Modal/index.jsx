@@ -116,11 +116,15 @@ class Modal extends PureComponent {
       'onClose',
       'onOk',
       'onShow',
-      'onHide',
+      'onExit',
+      'onExited',
+      'onEntered',
     ]);
     this.state = {
       modalStyle: props.style,
+      modalSize: props.size,
       isShow: props.isShow,
+      bodyContent: props.children,
     };
   }
 
@@ -144,6 +148,17 @@ class Modal extends PureComponent {
       newState.modalStyle = nextProps.style;
     }
 
+    // 如果是关闭 Modal, 暂存现在的显示状态
+    if (this.props.isShow && !nextProps.isShow) {
+      this.cacheBodyContent = nextProps.children;
+      this.cacheSize = nextProps.size;
+    } else {
+      this.setState({
+        bodyContent: nextProps.children,
+        modalSize: nextProps.size,
+      });
+    }
+
     this.setState(newState);
   }
 
@@ -164,13 +179,44 @@ class Modal extends PureComponent {
       this.props.exit,
     );
   }
+  onEntered() {
+    this.callBackName = '';
+  }
+  onExited() {
+    const newState = {};
+    let needSetState = false;
+
+    if (this.cacheBodyContent) {
+      newState.bodyContent = this.cacheBodyContent;
+      needSetState = true;
+    }
+
+    if (this.cacheSize) {
+      needSetState = true;
+      newState.modalSize = this.cacheSize;
+    }
+
+    if (needSetState) {
+      this.setState(newState);
+    }
+
+    this.cacheBodyContent = null;
+  }
+
+  // 再执行即将关闭 Modal 动画前
+  onExit() {
+    this.exiting = true;
+  }
+
   onClose() {
+    this.callBackName = 'onClose';
     if (typeof this.props.onClose === 'function') {
       this.props.onClose();
     }
   }
 
   onOk() {
+    this.callBackName = 'onOk';
     if (typeof this.props.onOk === 'function') {
       this.props.onOk();
     }
@@ -186,10 +232,11 @@ class Modal extends PureComponent {
     );
   }
   render() {
-    const { size, role, id, exit, enter,
+    const { role, id, exit, enter,
       isShow, title, cancelText, okButton, okText, draggable,
       customBackdrop,
     } = this.props;
+    const size = this.state.modalSize;
     let noFooter = this.props.noFooter;
     let contentClassNames;
     let keyVal = this.modalKey;
@@ -235,7 +282,10 @@ class Modal extends PureComponent {
         enter={enter}
         exit={exit}
         timeout={500}
-        onExited={this.onClose}
+        onExit={this.onExit}
+        onExited={this.onExited}
+        onEntered={this.onEntered}
+        onEn
         appear
         mountOnEnter
         unmountOnExit
@@ -290,11 +340,7 @@ class Modal extends PureComponent {
                       hasCloseBtn ? (
                         <span
                           className="close fr"
-                          onClick={() => {
-                            this.setState({
-                              isShow: false,
-                            })
-                          }}
+                          onClick={this.onClose}
                         >
                           &times;
                         </span>
@@ -308,7 +354,7 @@ class Modal extends PureComponent {
               }
 
               <div className="o-modal__body">
-                {this.props.children}
+                {this.state.bodyContent}
               </div>
               {
                 !noFooter ? (
