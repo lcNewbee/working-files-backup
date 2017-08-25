@@ -397,7 +397,7 @@ export default class NetWorkDashBoard extends React.Component {
                           </div>
                           <div className="ntw-dsb-interface-status">
                             {
-                              item.get('enable') === '1' ? item.get('negoSpeed') : __('DOWN')
+                              item.get('enable') === '1' ? `${item.get('negoSpeed')} Mbps` : __('DOWN')
                             }
                           </div>
                         </div>
