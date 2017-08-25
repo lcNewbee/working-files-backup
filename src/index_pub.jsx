@@ -9,7 +9,8 @@ const appActions = require('shared/containers/app/actions');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const RouteSwitches = require('shared/components/Organism/RouterConfig').RouteSwitches;
-const prodConfig = require('./config/axc').default;
+const prodConfig = require('./config/axc3.0').default;
+
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;
 const createStore = redux.createStore;
