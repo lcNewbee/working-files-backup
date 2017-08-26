@@ -14,6 +14,7 @@ import { actions as screenActions, AppScreen } from 'shared/containers/appScreen
 import { actions as propertiesActions } from 'shared/containers/properties';
 
 const EDIT_LIST_ACTION = 'editList';
+const AP_MONITOR_ACTION = 'monitor';
 const flowRateFilter = utils.filter('flowRate');
 
 // const settingsFormOptions = radioBase
@@ -75,6 +76,146 @@ const flowRateFilter = utils.filter('flowRate');
 //     item => item.get('fieldset'),
 //   )
 //   .toList();
+
+const apMonitorSettingsOptions = fromJS([
+  {
+    id: 'enable',
+    width: 60,
+    form: 'modalmonitor',
+    label: __('Enable'),
+    type: 'checkbox',
+    dataType: 'number',
+    value: '1',
+  }, {
+    id: 'apopermode',
+    width: 120,
+    form: 'modalmonitor',
+    label: __('AP Work Mode'),
+    options: [
+      {
+        value: 1,
+        label: __('Normal'),
+      }, {
+        value: 2,
+        label: __('Monitor'),
+      },
+    ],
+    defaultValue: 1,
+    type: 'switch',
+    dataType: 'number',
+    value: 1,
+  }, {
+    id: 'scantype',
+    form: 'modalmonitor',
+    label: __('Scan Type'),
+    options: [
+      {
+        value: 2,
+        label: __('Passive'),
+      }, {
+        value: 1,
+        label: __('Initiative'),
+      },
+    ],
+    type: 'switch',
+    dataType: 'number',
+    defaultValue: 1,
+  },
+  {
+    id: 'scanSpectrum',
+    label: __('Scanning Band'),
+    type: 'checkboxs',
+    form: 'modalmonitor',
+    required: true,
+    options: [{ label: '5G', value: '5' }, { label: '2.4G', value: '2' }],
+    defaultValue: '2,5',
+    value: '2,5',
+    boxStyle: { marginRight: '20px' },
+  },
+  {
+    id: 'cycles',
+    label: __('Scan Cycles Times'),
+    form: 'modalmonitor',
+    min: 0,
+    max: 255,
+    type: 'number',
+    help: '0~255',
+    dataType: 'number',
+    defaultValue: 1,
+  },
+  {
+    id: 'rpttime',
+    label: __('Channel Quality Report Cycle'),
+    form: 'modalmonitor',
+    type: 'number',
+    min: 1,
+    max: 65535,
+    dataType: 'number',
+    defaultValue: 30,
+    required: true,
+    help: __('Seconds'),
+  },
+  {
+    id: 'enable2g4chl',
+    form: 'modalmonitor',
+    label: __('Auto Channel'),
+    type: 'checkbox',
+    linkId: 'enable5gchl',
+    dataType: 'number',
+    defaultValue: 0,
+    value: 1,
+  }, {
+    id: 'enable2g4pwr',
+    form: 'modalmonitor',
+    label: __('Auto Power'),
+    type: 'checkbox',
+    linkId: 'enable5gpwr',
+    dataType: 'number',
+    defaultValue: 0,
+    value: 1,
+  },
+  {
+    id: 'maxtxpwr',
+    form: 'modalmonitor',
+    label: __('Max Power'),
+    type: 'select',
+    defaultValue: '100%',
+    options: [
+      {
+        value: '3%',
+        label: '3%',
+      }, {
+        value: '6%',
+        label: '6%',
+      }, {
+        value: '12%',
+        label: '12%',
+      }, {
+        value: '25%',
+        label: '25%',
+      }, {
+        value: '50%',
+        label: '50%',
+      }, {
+        value: '100%',
+        label: '100%',
+      },
+    ],
+    visible($$data) {
+      return $$data.get('enable2g4pwr') === 1;
+    },
+  },
+  // {
+  //   id: 'adjafactor2g4',
+  //   label: __('Neighbor Coefficient'),
+  //   linkId: 'adjafactor5g',
+  //   min: 1,
+  //   max: 255,
+  //   type: 'number',
+  //   dataType: 'number',
+  //   defaultValue: '1',
+  // },
+]);
 
 function createSettingsFormOptions() {
   const settingsFormOptions = fromJS([
@@ -280,6 +421,7 @@ export default class View extends React.Component {
       'onAction',
       'onSave',
       'toggleBox',
+      'onMonitorBtnClick',
     ]);
     this.screenId = props.route.id;
   }
@@ -346,6 +488,32 @@ export default class View extends React.Component {
       this.onAction('edit', $$listData.get($$selectedList.get(0)));
     }
   }
+
+  onMonitorBtnClick() {
+    // const { store } = this.props;
+    // const myScreenId = store.get('curScreenId');
+    // const $$myScreenStore = store.get(myScreenId);
+    // const $$selectedList = $$myScreenStore.getIn(['actionQuery', 'selectedList']);
+    // const $$listData = $$myScreenStore.getIn(['data', 'list']);
+
+    this.props.changeScreenActionQuery({
+      action: AP_MONITOR_ACTION,
+      myTitle: __('AP Monitor Settings'),
+    });
+    const screenSettings = fromJS({
+      enable: '1',
+      apopermode: 1,
+      scantype: 2,
+      scanSpectrum: '2,5',
+      cycles: 1,
+      rpttime: 30,
+      enable2g4chl: 0,
+      enable2g4pwr: 0,
+      maxtxpwr: '100%',
+    });
+    this.props.updateScreenSettings(screenSettings);
+  }
+
   onSave(formId) {
     const $$apList = this.props.store.getIn([
       this.screenId,
@@ -405,27 +573,49 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curSettings');
     const isEditList = $$myScreenStore.getIn(['actionQuery', 'action']) === EDIT_LIST_ACTION;
-    if (!isEditList) {
+    const isApMonitor = $$myScreenStore.getIn(['actionQuery', 'action']) === AP_MONITOR_ACTION;
+    if (!isEditList && !isApMonitor) {
       return null;
     }
 
     return (
       <div className="o-box row">
         <div className="o-box__cell">
-          <FormContainer
-            id="radioBase"
-            options={this.createSettingsFormOptions()}
-            data={$$curData}
-            onChangeData={this.props.updateScreenSettings}
-            onSave={() => this.onSave('modalsetting')}
-            invalidMsg={app.get('invalid')}
-            validateAt={app.get('validateAt')}
-            isSaving={app.get('saving')}
-            saveText={__('Apply')}
-            savingText={__('Applying')}
-            savedText={__('Applied')}
-            hasSaveButton
-          />
+          {
+            isEditList && (
+              <FormContainer
+                id="radioBase"
+                options={this.createSettingsFormOptions()}
+                data={$$curData}
+                onChangeData={this.props.updateScreenSettings}
+                onSave={() => this.onSave('modalsetting')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                isSaving={app.get('saving')}
+                saveText={__('Apply')}
+                savingText={__('Applying')}
+                savedText={__('Applied')}
+                hasSaveButton
+              />
+            )
+          }
+          {
+            isApMonitor && (
+              <FormContainer
+                options={apMonitorSettingsOptions}
+                data={$$curData}
+                onChangeData={this.props.updateScreenSettings}
+                onSave={() => this.onSave('modalmonitor')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                isSaving={app.get('saving')}
+                saveText={__('Apply')}
+                savingText={__('Applying')}
+                savedText={__('Applied')}
+                hasSaveButton
+              />
+            )
+          }
         </div>
       </div>
     );
@@ -471,6 +661,12 @@ export default class View extends React.Component {
         text: __('Edit'),
         icon: 'cog',
         onClick: () => this.onSettingSelected(),
+      },
+      {
+        actionName: 'monitor',
+        text: __('Monitor'),
+        icon: 'cog',
+        onClick: () => this.onMonitorBtnClick(),
       },
     ];
 
