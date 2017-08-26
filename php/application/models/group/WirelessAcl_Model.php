@@ -7,6 +7,7 @@ class WirelessAcl_Model extends CI_Model {
         $this->load->helper(array('array', 'my_customfun_helper','array_page'));
     }
     public function get_list($data) {
+        $groupid = element('groupid', $data, null);
         $page = (int)element('page', $data, 1);
         $size = (int)element('size', $data, 20);
         $result = null;
@@ -61,6 +62,7 @@ class WirelessAcl_Model extends CI_Model {
         }
         $result['data']['page'] = $data['page'];
         $result['data']['list'] = $datalist;
+        $result['data']['settings'] = $this->getProtectionConfig($groupid);
         return json_encode($result);
     }
     public function add_acl($data) {
@@ -142,6 +144,9 @@ class WirelessAcl_Model extends CI_Model {
             $cgi_dyblk['type'] = (string)$data['type'];
             $result = axc_change_wireless_acltype(json_encode($cgi_dyblk));
         }
+        if($data['type'] === 'black'){
+            $this->set_terminalprotect_info($data);
+        }
         return $result;
     }
     /**
@@ -184,5 +189,45 @@ class WirelessAcl_Model extends CI_Model {
         }
         return $result;
     }
+    private function getProtectionConfig($groupid){
+        $arr = array();
+        $data = $this->db->select('acltype,attack_enable,attack_time,attack_cnt,age_time')
+                ->from('wids_template')
+                ->where('id',$groupid)
+                ->get()->result_array();
 
+        if(count($data) > 0){
+            $arr = array(
+                'type' => element('acltype', $data[0], ''), // 类型，黑名单/白名单/禁用
+                // 以下设置项只有黑名单有
+                'widsenable' => (string)element('attack_enable', $data[0], ''), // 自动黑名单是否开启
+                'attacttime' => (string)element('attack_time', $data[0], ''),// 攻击时间, 字符串类型
+                'attactcnt' => (string)element('attack_cnt', $data[0], ''),// 攻击次数，字符串类型
+                'dyaging' => (string)element('age_time', $data[0], '')// 老化时间，字符串类型
+            );
+        }
+        return $arr;
+    }
+    private function set_terminalprotect_info($data) {
+        $result = null;
+        $arr['groupid'] = (int)element('groupid',$data,-1);
+        $arr['widsenable'] = (int)element('widsenable',$data,-1);
+        $arr['attacttime'] = (int)element('attacttime',$data,-1);
+        $arr['attactcnt'] = (int)element('attactcnt',$data,-1);
+        $arr['dyaging'] = (int)element('dyaging',$data,-1);
+        $result = axc_set_wireless_dyblk(json_encode($arr));
+        //log
+        $cgiObj = json_decode($result);
+        if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+            $logary = array(
+                'type'=>'Setting',
+                'operator'=>element('username',$_SESSION,''),
+                'operationCommand'=>"Setting Terminal protection",
+                'operationResult'=>'ok',
+                'description'=>json_encode($arr)
+            );
+            Log_Record($this->db,$logary);
+        }
+        return $result;
+    }
 }
