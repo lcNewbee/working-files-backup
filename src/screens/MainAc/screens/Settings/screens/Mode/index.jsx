@@ -106,6 +106,7 @@ const propTypes = {
   updateCurListItem: PropTypes.func.isRequired,
   validateAll: PropTypes.func.isRequired,
   onListAction: PropTypes.func.isRequired,
+  changeScreenActionQuery: PropTypes.func.isRequired,
   activeListItemByIndex: PropTypes.func.isRequired,
   activeListItemByKeyValue: PropTypes.func.isRequired,
   reportValidError: PropTypes.func.isRequired,
@@ -138,14 +139,16 @@ export default class ModeSettings extends React.Component {
       }
     }
   }
-  componentWillUnmount() {
-
-  }
 
   onSave() {
     this.props.validateAll().then(($$msg) => {
       if ($$msg.isEmpty()) {
-        this.props.onListAction();
+        this.props.onListAction()
+          .then(() => {
+            this.props.changeScreenActionQuery({
+              action: 'edit',
+            });
+          });
       }
     });
   }

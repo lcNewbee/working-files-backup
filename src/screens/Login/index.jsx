@@ -186,7 +186,7 @@ export default class Login extends React.PureComponent {
                 <FormGroup
                   display="block"
                   name="username"
-                  maxLength="31"
+                  maxLength="32"
                   data-label={__('Username')}
                   placeholder={__('Username')}
                   value={this.state.username}

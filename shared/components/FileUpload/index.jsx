@@ -204,6 +204,7 @@ class FileUpload extends React.Component {
           value={value}
           style={{
             marginRight: '8px',
+            // display: displayStyle,
           }}
           onRef={(fileElem) => {
             if (fileElem) {
