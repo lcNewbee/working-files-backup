@@ -11,7 +11,7 @@
 ## Developing
 
 ### Built With
-Webpack(V3+), Babel, Sass
+Gulp, Webpack(V3+), Babel, Sass
 
 ### Prerequisites
 确保已经安装 node.js.
@@ -69,7 +69,9 @@ gulp pub productName  // productName产品名称如：ac, axc3.0
 ```
 
 ## Versioning
-查看![版本修改记录](CHANGELOG.md)，下载![发布版本](/releases)
+查看![版本修改记录](CHANGELOG.md)
+
+下载![发布版本](/releases)
 
 ## Configuration
 

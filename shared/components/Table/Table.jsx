@@ -29,10 +29,12 @@ function getPageObject($$list, pageQuery) {
     if (endIndex > $$list.size) {
       endIndex = $$list.size;
     }
-    $$newList = $$list.slice(
-      starIndex,
-      endIndex,
-    );
+    $$newList = $$list
+      .map(($$item, index) => $$item.set('__index__', index))
+      .slice(
+        starIndex,
+        endIndex,
+      );
 
     page.currPage = pageQuery.page < 1 ? 1 : pageQuery.page;
     page.totalPage = parseInt($$list.size / pageQuery.size, 10);
@@ -56,7 +58,7 @@ const propTypes = {
     // 无分页
     'none',
 
-    // 不对分页对象做处理
+    // 采用传入的分页对象，不对分页对象做处理
     'default',
 
     // 自动计算分页对象
@@ -203,8 +205,9 @@ class Table extends PureComponent {
     this.selectedList = [];
     this.unselectableList = [];
     if (myList && myList.size > 0) {
-      ret = myList.map((item, i) => {
-        const isSelected = item && !!item.get('__selected__');
+      ret = myList.map(($$item, i) => {
+        const isSelected = $$item && !!$$item.get('__selected__');
+        const curIndex = ($$item && $$item.get('__index__')) || i;
         let curSelectable = selectable;
 
         if (isSelected) {
@@ -212,7 +215,7 @@ class Table extends PureComponent {
         }
 
         if (utils.isFunc(selectable)) {
-          curSelectable = selectable(item, i);
+          curSelectable = selectable($$item, i);
         }
 
         // 不可选择的项
@@ -222,15 +225,15 @@ class Table extends PureComponent {
 
         return (
           <Row
-            key={`tableRow${i}`}
+            key={`tableRow${curIndex}`}
             options={this.$$options}
-            item={item}
-            index={i}
+            item={$$item}
+            index={curIndex}
             selectable={selectable}
             curSelectable={curSelectable}
             selected={curSelectable && isSelected}
             onSelect={this.onRowSelect}
-            onClick={e => this.onRowClick(e, i)}
+            onClick={e => this.onRowClick(e, curIndex)}
           />
         );
       });

@@ -49,9 +49,8 @@ class Checkbox extends PureComponent {
     }
 
     if (className) {
-      classNames = `${classNames} a-checkbox--${className}`;
+      classNames = `${classNames} ${className}`;
     }
-
 
     return (
       <label htmlFor={id} className={classNames} style={style}>
