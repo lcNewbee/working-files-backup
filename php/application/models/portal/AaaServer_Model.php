@@ -70,7 +70,7 @@ class AaaServer_Model extends CI_Model {
         $domain = element('name', $data, NULL);//domain域 名称 **（统一name 不再加别的前后缀）
         $radius_server_type = element('radius_server_type', $data, NULL);//radius 服务类型 local | remote
         $portal_server_type = element('portal_server_type', $data, NULL);//portal 服务类型 local | remote
-        
+        $ac_ip = $this->getInterface();
         //802.1x 认证
         if($auth_accesstype === '8021x-access'){            
             //802.1x 认证 -> 远程Radius服务器
@@ -123,7 +123,7 @@ class AaaServer_Model extends CI_Model {
                             $web_ins = array(
                                 'name' => $domain,
                                 'address' => '',//地址
-                                'basip' => $this->getInterface(),
+                                'basip' => $ac_ip,
                                 'web' => $web,
                                 'des' => $des,
                                 'ssid' => $ssid,
@@ -143,7 +143,7 @@ class AaaServer_Model extends CI_Model {
                                 $web_ins = array(
                                     'name' => $domain,
                                     'address' => '',//地址
-                                    'basip' => $this->getInterface(),
+                                    'basip' => $ac_ip,
                                     'web' => $web,
                                     'des' => $des,
                                     'ssid' => $ssid,
@@ -155,7 +155,7 @@ class AaaServer_Model extends CI_Model {
                                 $web_ary = array(
                                     'name' => $domain,
                                     'address' => '',//地址
-                                    'basip' => $this->getInterface(),
+                                    'basip' => $ac_ip,
                                     'web' => $web,
                                     'des' => $des,
                                     'ssid' => $ssid,
@@ -197,13 +197,12 @@ class AaaServer_Model extends CI_Model {
                         return json_encode(json_no('add aaa error!',6405));
                     }
                     //3.创建 portal 模版
-                    $server_ip = $this->getInterface();
                     $portal_tp = array(
-                        'ac_ip' => $server_ip,
-                        'server_ipaddr' => $server_ip,
+                        'ac_ip' => $ac_ip,
+                        'server_ipaddr' => $ac_ip,
                         'server_key' => '123456',
                         'server_port' => '50100',
-                        'server_url' => $server_ip . ':8080',
+                        'server_url' => $ac_ip . ':8080',
                         'template_name' => $domain,
                         'auth_domain' => $domain
                     );
@@ -243,7 +242,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3.创建 Portal 模板
                 $portal_tp = array(
-                    'ac_ip' => element('ac_ip', $data['portalServer']),
+                    'ac_ip' => $ac_ip,
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
                     'server_key' => element('server_key', $data['portalServer']),
                     'server_port' => element('server_port', $data['portalServer']),
@@ -289,13 +288,12 @@ class AaaServer_Model extends CI_Model {
                     return json_encode(json_no('add aaa error!',6405));
                 }
                 //3.创建 portal 模版
-                $server_ip = $this->getInterface();
                 $portal_tp = array(
-                    'ac_ip' => $server_ip,
-                    'server_ipaddr' => $server_ip,
+                    'ac_ip' => $ac_ip,
+                    'server_ipaddr' => $ac_ip,
                     'server_key' => '123456',
                     'server_port' => '50100',
-                    'server_url' => $server_ip . ':8080',
+                    'server_url' => $ac_ip . ':8080',
                     'template_name' => $domain,
                     'auth_domain' => $domain
                 );                
@@ -339,7 +337,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3.创建 Portal 模板
                 $portal_tp = array(
-                    'ac_ip' => element('ac_ip', $data['portalServer']),
+                    'ac_ip' => $ac_ip,
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
                     'server_key' => element('server_key', $data['portalServer']),
                     'server_port' => element('server_port', $data['portalServer']),
@@ -381,6 +379,7 @@ class AaaServer_Model extends CI_Model {
         $domain = element('name', $data, NULL);//domain域
         $radius_server_type = element('radius_server_type', $data, NULL);//radius 服务类型 local | remote
         $portal_server_type = element('portal_server_type', $data, NULL);//portal 服务类型 local | remote
+        $ac_ip = $this->getInterface();
         // 已存在相同 SSID 与 apmac 规则
         // 直接返回错误码 6405
         if ($this->isSameSsidApmacTemplate($data['portalTemplate'])) {
@@ -539,13 +538,12 @@ class AaaServer_Model extends CI_Model {
                         }
                     }                    
                     //3 portal模版 需要修改                    
-                    $server_ip = $this->getInterface();
                     $portal_tp = array(
-                        'ac_ip' => $server_ip,
-                        'server_ipaddr' => $server_ip,
+                        'ac_ip' => $ac_ip,
+                        'server_ipaddr' => $ac_ip,
                         'server_key' => '123456',
                         'server_port' => '50100',
-                        'server_url' => $server_ip . ':8080',
+                        'server_url' => $ac_ip . ':8080',
                         'template_name' => $domain,
                         'auth_domain' => $domain
                     );                   
@@ -613,7 +611,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3 portal模版 需要修改                    
                 $portal_tp = array(
-                    'ac_ip' => element('ac_ip', $data['portalServer']),
+                    'ac_ip' => $ac_ip,
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
                     'server_key' => element('server_key', $data['portalServer']),
                     'server_port' => element('server_port', $data['portalServer']),
@@ -687,13 +685,12 @@ class AaaServer_Model extends CI_Model {
                     }
                 }
                 //3 portal模版 需要修改                    
-                $server_ip = $this->getInterface();
                 $portal_tp = array(
-                    'ac_ip' => $server_ip,
-                    'server_ipaddr' => $server_ip,
+                    'ac_ip' => $ac_ip,
+                    'server_ipaddr' => $ac_ip,
                     'server_key' => '123456',
                     'server_port' => '50100',
-                    'server_url' => $server_ip . ':8080',
+                    'server_url' => $ac_ip . ':8080',
                     'template_name' => $domain,
                     'auth_domain' => $domain
                 );                   
@@ -764,7 +761,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3 portal模版 需要修改                    
                 $portal_tp = array(
-                    'ac_ip' => element('ac_ip', $data['portalServer']),
+                    'ac_ip' => $ac_ip,
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
                     'server_key' => element('server_key', $data['portalServer']),
                     'server_port' => element('server_port', $data['portalServer']),
@@ -1029,7 +1026,7 @@ class AaaServer_Model extends CI_Model {
                 case 'server_key' : $arr['server_key'] = $row['attr_value']; break;
                 case 'redirect_url' : $arr['server_url'] = $row['attr_value']; break;
                 case 'server_ifname' : $arr['interface_bind'] = $row['attr_value']; break;
-                case 'ac_ip' : $arr['ac_ip'] = $row['attr_value']; break;
+                //case 'ac_ip' : $arr['ac_ip'] = $row['attr_value']; break;
             }
         }
         return $arr;
@@ -1062,10 +1059,6 @@ class AaaServer_Model extends CI_Model {
             }
         }
         return $arr;
-    }
-
-    private function getPortalWeb(){
-
     }
 
     private function getInterface() {
