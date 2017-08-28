@@ -83,7 +83,7 @@ class SystemMaintenance extends CI_Controller {
 		}
 		if(!is_dir('/var/conf/config')){
             mkdir('/var/conf/config', 0777, true);
-            mkdir('/var/conf/config/ap_version', 0777, true);
+            //mkdir('/var/conf/config/ap_version', 0777, true);
         }        
 		//2.将需要备份的文件放到config 文件夹中
 		//检测是有备份文件，否则再次备份一次
@@ -93,17 +93,21 @@ class SystemMaintenance extends CI_Controller {
         if(!is_file('/var/conf/openportalserver_bak.sql')){
 			exec('mysqldump openportalserver>/var/conf/openportalserver_bak.sql');
         }
+        /*
         if(!is_dir('/var/conf/ap_version')){
             mkdir('/var/conf/ap_version', 0777, true);
             system('cp -r /etc/Ap_ver/* /var/conf/ap_version');
-        }       
+        } 
+        */      
         //拷贝数据库文件到/var/conf/config/中
         copy('/var/conf/config.db', '/var/conf/config/config.db');
         //拷贝openportal备份文件到/var/conf/config/中
         copy('/var/conf/openportalserver_bak.sql', '/var/conf/config/openportalserver_bak.sql');
+        /*
         //拷贝AP版本文件到/var/conf/config 中        
         system('cp -r /var/conf/ap_version/* /var/conf/config/ap_version');
         //拷贝页面图片文件到/var/conf/config/中
+        */
 		system('cp -r /var/conf/images/* /var/conf/config');
 		//3.打包
 		$path = '/var/conf/config';//需压缩的目录（文件夹）        
@@ -133,12 +137,13 @@ class SystemMaintenance extends CI_Controller {
         exec('cp /var/run/config.db /var/conf/config.db');
         //保存mysql openportal
         exec('mysqldump openportalserver>/var/conf/openportalserver_bak.sql');
+        /*
         //保存ap版本
         if(!is_dir('/var/conf/ap_version')){
             mkdir('/var/conf/ap_version',0777,true);                   
         }
         exec('cp /etc/Ap_ver/* /var/conf/ap_version');
-
+        */
         exec('sync');
         $result = array('state' => array('code' => 2000, 'msg' => 'OK'));
 
@@ -181,6 +186,7 @@ class SystemMaintenance extends CI_Controller {
                                 system('mv /var/conf/restore_config/openportalserver_bak.sql /var/conf/openportalserver_bak.sql');
                                 exec('mysql openportalserver</var/conf/openportalserver_bak.sql');
                             }
+                            /*
                             //还原ap版本文件
                             if (!is_dir('/var/conf/ap_version')) {
                                 mkdir('/var/conf/ap_version', 0777, true);
@@ -189,6 +195,7 @@ class SystemMaintenance extends CI_Controller {
                                 system('cp /var/conf/restore_config/ap_version/* /var/conf/ap_version');
                                 system('cp /var/conf/restore_config/ap_version/* /etc/Ap_ver');                                
                             }
+                            */
                             //移动所有 到/var/conf/images下
                             if (!is_dir('/var/conf/images')) {
                                 mkdir('/var/conf/images', 0777, true);
