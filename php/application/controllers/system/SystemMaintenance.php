@@ -199,7 +199,7 @@ class SystemMaintenance extends CI_Controller {
                     system('rm /var/conf/restore_config.zip');
                     system('rm -rf /var/conf/restore_config');
                 }
-                //exec('/sbin/reboot');
+                exec('/sbin/reboot');
             } else {
                 $result = json_encode($result);
             }
