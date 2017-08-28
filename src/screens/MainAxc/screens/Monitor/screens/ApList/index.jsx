@@ -78,33 +78,35 @@ const flowRateFilter = utils.filter('flowRate');
 //   .toList();
 
 const apMonitorSettingsOptions = fromJS([
+  // {
+  //   id: 'enable',
+  //   width: 60,
+  //   form: 'modalmonitor',
+  //   label: __('Enable'),
+  //   type: 'checkbox',
+  //   dataType: 'number',
+  //   value: '1',
+  // },
+  // {
+  //   id: 'apopermode',
+  //   width: 120,
+  //   form: 'modalmonitor',
+  //   label: __('AP Work Mode'),
+  //   options: [
+  //     {
+  //       value: 1,
+  //       label: __('Normal'),
+  //     }, {
+  //       value: 2,
+  //       label: __('Monitor'),
+  //     },
+  //   ],
+  //   defaultValue: 1,
+  //   type: 'switch',
+  //   dataType: 'number',
+  //   value: 1,
+  // },
   {
-    id: 'enable',
-    width: 60,
-    form: 'modalmonitor',
-    label: __('Enable'),
-    type: 'checkbox',
-    dataType: 'number',
-    value: '1',
-  }, {
-    id: 'apopermode',
-    width: 120,
-    form: 'modalmonitor',
-    label: __('AP Work Mode'),
-    options: [
-      {
-        value: 1,
-        label: __('Normal'),
-      }, {
-        value: 2,
-        label: __('Monitor'),
-      },
-    ],
-    defaultValue: 1,
-    type: 'switch',
-    dataType: 'number',
-    value: 1,
-  }, {
     id: 'scantype',
     form: 'modalmonitor',
     label: __('Scan Type'),
@@ -263,6 +265,7 @@ function createSettingsFormOptions() {
       fieldset: 'radiosettingof2g',
       type: 'checkboxs',
       defaultValue: '',
+      required: true,
       options: this.state.ssidOptions,
     },
     {
@@ -490,12 +493,6 @@ export default class View extends React.Component {
   }
 
   onMonitorBtnClick() {
-    // const { store } = this.props;
-    // const myScreenId = store.get('curScreenId');
-    // const $$myScreenStore = store.get(myScreenId);
-    // const $$selectedList = $$myScreenStore.getIn(['actionQuery', 'selectedList']);
-    // const $$listData = $$myScreenStore.getIn(['data', 'list']);
-
     this.props.changeScreenActionQuery({
       action: AP_MONITOR_ACTION,
       myTitle: __('AP Monitor Settings'),
@@ -534,30 +531,58 @@ export default class View extends React.Component {
           if (errMsg.isEmpty()) {
             const curScreenId = this.props.store.get('curScreenId');
             const radioSettings = this.props.store.getIn([curScreenId, 'curSettings']).toJS();
-            if (!radioSettings.ssid_2g || !radioSettings.ssid_5g) {
-              this.props.createModal({
-                role: 'alert',
-                text: __('Please at least select one ssid per radio!'),
-              });
-              return;
-            }
-            this.props.saveScreenSettings({
-              url: 'goform/group/ap/radiogroupcfg',
-              onlyChanged: true,
-              numberKeys: fromJS(numberKeys),
-              data: {
-                action: EDIT_LIST_ACTION,
-                selectedList: selectedMacList,
-                ...radioSettings,
-              },
-            }).then(
-              () => {
-                this.props.closeModal();
-                this.props.changeScreenActionQuery({
-                  action: '',
+            const action = this.props.store.getIn([curScreenId, 'actionQuery', 'action']);
+            if (action === EDIT_LIST_ACTION) {
+              if (!radioSettings.ssid_2g || !radioSettings.ssid_5g) {
+                this.props.createModal({
+                  role: 'alert',
+                  text: __('Please at least select one ssid per radio!'),
                 });
-              },
-            );
+                return;
+              }
+              this.props.saveScreenSettings({
+                url: 'goform/group/ap/radiogroupcfg',
+                onlyChanged: true,
+                numberKeys: fromJS(numberKeys),
+                data: {
+                  action: EDIT_LIST_ACTION,
+                  selectedList: selectedMacList,
+                  ...radioSettings,
+                },
+              }).then(
+                () => {
+                  this.props.closeModal();
+                  this.props.changeScreenActionQuery({
+                    action: '',
+                  });
+                },
+              );
+            } else if (action === AP_MONITOR_ACTION) {
+              if (!radioSettings.scanSpectrum) {
+                this.props.createModal({
+                  role: 'alert',
+                  text: __('Please at least select one scanning radio!'),
+                });
+                return;
+              }
+              this.props.saveScreenSettings({
+                url: 'goform/group/wips',
+                onlyChanged: true,
+                numberKeys: fromJS(numberKeys),
+                data: {
+                  action: AP_MONITOR_ACTION,
+                  selectedList: selectedMacList,
+                  ...radioSettings,
+                },
+              }).then(
+                () => {
+                  this.props.closeModal();
+                  this.props.changeScreenActionQuery({
+                    action: '',
+                  });
+                },
+              );
+            }
           }
         });
     }
