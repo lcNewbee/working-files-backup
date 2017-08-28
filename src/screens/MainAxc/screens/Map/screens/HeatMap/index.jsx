@@ -401,6 +401,7 @@ export default class View extends React.PureComponent {
               actionBarShow: !this.state.actionBarShow,
             })}
           />
+
           <FormGroup
             type="select"
             className="fl"

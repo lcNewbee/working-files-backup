@@ -205,7 +205,7 @@ export const $$radiusAccServer = fromJS([
       legend: __('Primary Accounting Server'),
       className: 'cols col-6',
     },
-    // required: true,
+    required: true,
     type: 'text',
     form: 'accServer',
     validator: validator({
@@ -222,7 +222,7 @@ export const $$radiusAccServer = fromJS([
     },
     label: __('Port'),
     fieldset: 'primary',
-    // required: true,
+    required: true,
     defaultValue: '1813',
     type: 'number',
     form: 'accServer',
@@ -236,7 +236,7 @@ export const $$radiusAccServer = fromJS([
       }
       return false;
     },
-    // required: true,
+    required: true,
     label: __('Shared Key'),
     fieldset: 'primary',
     form: 'accServer',
@@ -596,20 +596,8 @@ export const $$potalServerOptions = fromJS([
       max: '65535',
       required: true,
     },
-  }, {
-    id: 'server_key',
-    label: __('Shared Key'),
-    fieldset: 'Authentication',
-    noTable: true,
-    formProps: {
-      type: 'password',
-      maxLength: '31',
-      required: true,
-      validator: validator({
-        rules: 'pwd',
-      }),
-    },
-  }, {
+  },
+  {
     id: 'server_url',
     label: __('Redirect URL'),
     fieldset: 'other',
@@ -621,18 +609,33 @@ export const $$potalServerOptions = fromJS([
       type: 'text',
       required: true,
     },
-  }, {
-    id: 'ac_ip',
-    label: __('AC IP'),
+  },
+  {
+    id: 'server_key',
+    label: __('Shared Key'),
     fieldset: 'other',
+    noTable: true,
     formProps: {
-      type: 'text',
+      type: 'password',
+      maxLength: '31',
       required: true,
       validator: validator({
-        rules: 'ip',
+        rules: 'pwd',
       }),
     },
   },
+  // {
+  //   id: 'ac_ip',
+  //   label: __('AC IP'),
+  //   fieldset: 'other',
+  //   formProps: {
+  //     type: 'text',
+  //     required: true,
+  //     validator: validator({
+  //       rules: 'ip',
+  //     }),
+  //   },
+  // },
 ]);
 
 export const $$potalServerFormOptions = immutableUtils.getFormOptions($$potalServerOptions);

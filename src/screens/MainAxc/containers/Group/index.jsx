@@ -477,26 +477,6 @@ export default class MainGroup extends React.Component {
             />
           </div>
         </header>
-        {/* <h4 className="t-main__asider-header row">
-          {__('Group List')}
-          {
-            actionable ? (
-              <Icon
-                name="cog"
-                className="fr"
-                onClick={() => {
-                  this.props.fetchGroupAps(manageGroupId);
-                  this.props.showMainModal({
-                    title: __('Manage AP Groups'),
-                    isShow: true,
-                    size: 'lg',
-                    name: 'groupManage',
-                  });
-                }}
-              />
-            ) : null
-          }
-        </h4>*/}
         <ul
           className="m-menu m-menu--open"
         >

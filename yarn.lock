@@ -1403,13 +1403,8 @@ bin-wrapper@^3.0.0:
     os-filter-obj "^1.0.0"
 
 binary-extensions@^1.0.0:
-<<<<<<< c6eaf3bdfa9aa96ae9f4bba21e11085c5b9aeb1c
   version "1.10.0"
   resolved "http://registry.npm.taobao.org/binary-extensions/download/binary-extensions-1.10.0.tgz#9aeb9a6c5e88638aad171e167f5900abe24835d0"
-=======
-  version "1.9.0"
-  resolved "http://registry.npm.taobao.org/binary-extensions/download/binary-extensions-1.9.0.tgz#66506c16ce6f4d6928a5b3cd6a33ca41e941e37b"
->>>>>>> ac: bug解决
 
 "binaryextensions@1 || 2":
   version "2.0.0"

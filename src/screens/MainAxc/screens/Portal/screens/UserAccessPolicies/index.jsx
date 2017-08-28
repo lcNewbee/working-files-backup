@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { FormContainer, SaveButton, FormGroup } from 'shared/components';
+import { FormContainer, SaveButton, FormGroup, FormInput } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import validator from 'shared/validator';
@@ -25,6 +25,26 @@ const RADIUS_ADVANCE_SETTING_KEY = 'radiusAdvanceSetting';
 const PORTAL_SERVER_KEY = 'portalServer';
 const PORTAL_RULE_KEY = 'portalRule';
 const PORTAL_LOCAL_RULE_KEY = 'portalLocalRule';
+
+function isAccSameWithAuth($$listItem) {
+  return $$listItem.getIn(['radius', 'authpri_ipaddr']) === $$listItem.getIn(['radius', 'acctpri_ipaddr']) ||
+    $$listItem.getIn(['radius', 'authpri_key']) === $$listItem.getIn(['radius', 'acctpri_key']);
+}
+
+function getAcctPort($$listItem) {
+  const authPort = $$listItem.getIn(['radius', 'authpri_port']);
+  let ret = $$listItem.getIn(['radius', 'acctpri_port']);
+
+  if (!ret) {
+    ret = parseInt(authPort, 10) + 1;
+  }
+
+  if (ret > 65535) {
+    ret = '1813';
+  }
+
+  return `${ret}`;
+}
 
 const accessTypeSeletOptions = [
   {
@@ -291,7 +311,6 @@ export default class View extends React.Component {
       'renderRemoteRadiusServer',
       'renderRemotePortalServer',
       'renderLocalPortalRule',
-      'toggleBox',
       'initFormOptions',
       'onSave',
       'onFetchData',
@@ -305,7 +324,7 @@ export default class View extends React.Component {
       webTemplateOptions: fromJS([]),
       [RADIUS_AUTH_SERVER_KEY]: true,
       [RADIUS_ADVANCE_SETTING_KEY]: true,
-      [RADIUS_ACC_SERVER_KEY]: true,
+      [RADIUS_ACC_SERVER_KEY]: false,
       [PORTAL_SERVER_KEY]: true,
       [PORTAL_RULE_KEY]: true,
       [PORTAL_LOCAL_RULE_KEY]: true,
@@ -324,6 +343,27 @@ export default class View extends React.Component {
   componentWillMount() {
     this.onFetchData();
   }
+  componentWillReceiveProps(nextProps) {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const curActionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
+    const $$nextListItem = nextProps.store.getIn([myScreenId, 'curListItem']);
+
+    if (curActionType !== nextActionType && nextActionType) {
+      if ($$nextListItem && isAccSameWithAuth($$nextListItem)) {
+        this.setState({
+          [RADIUS_ACC_SERVER_KEY]: false,
+        });
+      } else {
+        this.setState({
+          [RADIUS_ACC_SERVER_KEY]: true,
+        });
+      }
+    }
+  }
+
   componentWillUpdate(nextProps, nextState) {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
@@ -333,7 +373,7 @@ export default class View extends React.Component {
     const curActionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const nextActionType = nextProps.store.getIn([myScreenId, 'actionQuery', 'action']);
     const curListItemName = $$myScreenStore.getIn(['curListItem', 'name']);
-    const nextListItemName = $$myScreenStore.getIn(['curListItem', 'name']);
+    const nextListItemName = nextProps.store.getIn([myScreenId, 'curListItem', 'name']);
 
     if (nextState.portOptions.size > 0) {
       if (this.state.portOptions !== nextState.portOptions) {
@@ -344,11 +384,21 @@ export default class View extends React.Component {
       }
     }
   }
-  onSave() {
+  onSave($$curData) {
     this.props.validateAll()
       .then(
         ($$msg) => {
           if ($$msg.isEmpty()) {
+            // 远程 Radius 计费服务器关闭时则设置值与认证服务器一样
+            if (!this.state[RADIUS_ACC_SERVER_KEY] && $$curData.get('radius_server_type') === 'remote') {
+              this.props.updateCurListItem({
+                radius: {
+                  acctpri_ipaddr: $$curData.getIn(['radius', 'authpri_ipaddr']),
+                  acctpri_port: getAcctPort($$curData),
+                  acctpri_key: $$curData.getIn(['radius', 'authpri_key']),
+                },
+              });
+            }
             this.props.onListAction();
           }
         },
@@ -527,7 +577,6 @@ export default class View extends React.Component {
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox(RADIUS_AUTH_SERVER_KEY)}
           >
             {__('External Radius Authentication Server')}
           </h3>
@@ -556,9 +605,22 @@ export default class View extends React.Component {
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox(RADIUS_ACC_SERVER_KEY)}
           >
             {__('External Radius Accounting Server')}
+            <FormInput
+              type="checkbox"
+              value="1"
+              style={{
+                float: 'right',
+                marginTop: '2px',
+              }}
+              checked={this.state[RADIUS_ACC_SERVER_KEY]}
+              onChange={(data) => {
+                this.setState({
+                  [RADIUS_ACC_SERVER_KEY]: data.value === '1',
+                });
+              }}
+            />
           </h3>
         </div>
         {
@@ -584,7 +646,6 @@ export default class View extends React.Component {
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox(RADIUS_ADVANCE_SETTING_KEY)}
           >
             {__('External Radius Server Advanced Settings')}
           </h3>
@@ -624,16 +685,7 @@ export default class View extends React.Component {
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox(PORTAL_SERVER_KEY)}
           >
-            {/* <Icon
-              name={this.state[PORTAL_SERVER_KEY] ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-              onClick={() => this.toggleBox(PORTAL_SERVER_KEY)}
-            />*/}
             {__('External Portal Server')}
           </h3>
         </div>
@@ -661,16 +713,7 @@ export default class View extends React.Component {
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox(PORTAL_RULE_KEY)}
           >
-            {/* <Icon
-              name={this.state[PORTAL_RULE_KEY] ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-              onClick={() => this.toggleBox(PORTAL_RULE_KEY)}
-            />*/}
             {__('Portal Rules')}
           </h3>
         </div>
@@ -710,16 +753,7 @@ export default class View extends React.Component {
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}
-            onClick={() => this.toggleBox(PORTAL_LOCAL_RULE_KEY)}
           >
-            {/* <Icon
-              name={this.state[PORTAL_LOCAL_RULE_KEY] ? 'minus-square' : 'plus-square'}
-              size="lg"
-              style={{
-                marginRight: '5px',
-              }}
-              onClick={() => this.toggleBox(PORTAL_LOCAL_RULE_KEY)}
-            />*/}
             {__('Local Portal Rule')}
           </h3>
         </div>
@@ -813,19 +847,6 @@ export default class View extends React.Component {
       return null;
     }
 
-    // if (actionType === 'edit') {
-    //   $$myBaseFormOptions = $$myBaseFormOptions.map(
-    //     ($$item) => {
-    //       let $$ret = $$item;
-    //       if ($$item.get('notEditable')) {
-    //         $$ret = $$ret.set('readOnly', true);
-    //       }
-
-    //       return $$ret;
-    //     },
-    //   );
-    // }
-
     return (
       <div className="o-box row">
         <div className="o-box__cell">
@@ -857,7 +878,9 @@ export default class View extends React.Component {
               marginLeft: '180px',
             }}
             loading={app.get('saving')}
-            onClick={this.onSave}
+            onClick={() => {
+              this.onSave($$curData);
+            }}
           />
         </div>
 
