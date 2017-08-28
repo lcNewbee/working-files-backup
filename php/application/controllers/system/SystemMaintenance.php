@@ -82,8 +82,9 @@ class SystemMaintenance extends CI_Controller {
 			mkdir('/var/conf/images', 0777, true);
 		}
 		if(!is_dir('/var/conf/config')){
-			mkdir('/var/conf/config', 0777, true);
-		}
+            mkdir('/var/conf/config', 0777, true);
+            mkdir('/var/conf/config/ap_version', 0777, true);
+        }        
 		//2.将需要备份的文件放到config 文件夹中
 		//检测是有备份文件，否则再次备份一次
 		if(!is_file('/var/conf/config.db')){
@@ -91,9 +92,18 @@ class SystemMaintenance extends CI_Controller {
         }
         if(!is_file('/var/conf/openportalserver_bak.sql')){
 			exec('mysqldump openportalserver>/var/conf/openportalserver_bak.sql');
-		}
+        }
+        if(!is_dir('/var/conf/ap_version')){
+            mkdir('/var/conf/ap_version', 0777, true);
+            system('cp -r /etc/Ap_ver/* /var/conf/ap_version');
+        }       
+        //拷贝数据库文件到/var/conf/config/中
         copy('/var/conf/config.db', '/var/conf/config/config.db');
+        //拷贝openportal备份文件到/var/conf/config/中
         copy('/var/conf/openportalserver_bak.sql', '/var/conf/config/openportalserver_bak.sql');
+        //拷贝AP版本文件到/var/conf/config 中        
+        system('cp -r /var/conf/ap_version/* /var/conf/config/ap_version');
+        //拷贝页面图片文件到/var/conf/config/中
 		system('cp -r /var/conf/images/* /var/conf/config');
 		//3.打包
 		$path = '/var/conf/config';//需压缩的目录（文件夹）        
@@ -119,10 +129,16 @@ class SystemMaintenance extends CI_Controller {
             'description'=>""
         );
         Log_Record($this->db,$logary);
-        //备份sqlite
+        //保存sqlite
         exec('cp /var/run/config.db /var/conf/config.db');
-        //备份mysql openportal
+        //保存mysql openportal
         exec('mysqldump openportalserver>/var/conf/openportalserver_bak.sql');
+        //保存ap版本
+        if(!is_dir('/var/conf/ap_version')){
+            mkdir('/var/conf/ap_version',0777,true);                   
+        }
+        exec('cp /etc/Ap_ver/* /var/conf/ap_version');
+
         exec('sync');
         $result = array('state' => array('code' => 2000, 'msg' => 'OK'));
 
@@ -144,39 +160,47 @@ class SystemMaintenance extends CI_Controller {
     }
     public function restore() {
         $result = array('state' => array('code' => 2000, 'msg' => 'OK'));
-
-        if(isset($_POST['suffix'])) {
+        if (isset($_POST['suffix'])) {
             //从文件恢复
             //1.上传
             $result = $this->do_upload();
-            if ($result['state']['code'] === 2000){                
+            if ($result['state']['code'] === 2000) {
                 //2.解压
-                if(file_exists('/var/conf/restore_config.zip')){                                        
-                    mkdir('/var/conf/restore_config',0777,true);             
+                if (file_exists('/var/conf/restore_config.zip')) {
+                    mkdir('/var/conf/restore_config', 0777, true);
                     $zip = new PHPZip();
                     $pathfile = "/var/conf/restore_config.zip"; //需解压的文件
-                    $targetpath = "/var/conf/restore_config";//解压地址                                                                   
-                    if($zip->Zip_Decompression($pathfile,$targetpath)){
-                       //解压完成
-                       if(file_exists('/var/conf/restore_config/config.db')){
-                           //移动config.db 到/var/conf下
-                           system('mv /var/conf/restore_config/config.db /var/conf/config.db');
-                           //还原openportal
-                           if(is_file('/var/conf/restore_config/openportalserver_bak.sql')){
-                               system('mv /var/conf/restore_config/openportalserver_bak.sql /var/conf/openportalserver_bak.sql');
-                               exec('mysql openportalserver</var/conf/openportalserver_bak.sql');
+                    $targetpath = "/var/conf/restore_config"; //解压地址
+                    if ($zip->Zip_Decompression($pathfile, $targetpath)) {
+                        //解压完成
+                        if (file_exists('/var/conf/restore_config/config.db')) {
+                            //移动config.db 到/var/conf下
+                            system('mv /var/conf/restore_config/config.db /var/conf/config.db');
+                            //还原openportal
+                            if (is_file('/var/conf/restore_config/openportalserver_bak.sql')) {
+                                system('mv /var/conf/restore_config/openportalserver_bak.sql /var/conf/openportalserver_bak.sql');
+                                exec('mysql openportalserver</var/conf/openportalserver_bak.sql');
                             }
-                           //移动所有 到/var/conf/images下
-                           if(!is_dir('/var/conf/images')) {
-                               mkdir('/var/conf/images',0777,true);
-                           }
-                           system('mv /var/conf/restore_config/* /var/conf/images/');                           
-                       }
-                    } 
+                            //还原ap版本文件
+                            if (!is_dir('/var/conf/ap_version')) {
+                                mkdir('/var/conf/ap_version', 0777, true);
+                            }
+                            if (is_dir('/var/conf/restore_config')) {
+                                system('cp /var/conf/restore_config/ap_version/* /var/conf/ap_version');
+                                system('cp /var/conf/restore_config/ap_version/* /etc/Ap_ver');                                
+                            }
+                            //移动所有 到/var/conf/images下
+                            if (!is_dir('/var/conf/images')) {
+                                mkdir('/var/conf/images', 0777, true);
+                            }
+                            system('cp /var/conf/restore_config/* /var/conf/images/');                            
+                        }
+                    }
+                    system('rm /var/conf/restore_config.zip');
                     system('rm -rf /var/conf/restore_config');
                 }
-                exec('/sbin/reboot');
-            } else{
+                //exec('/sbin/reboot');
+            } else {
                 $result = json_encode($result);
             }
         } else {
@@ -193,7 +217,6 @@ class SystemMaintenance extends CI_Controller {
             */
             axc_set_sysreset();
         }
-
         return $result;
     }
     //上传
