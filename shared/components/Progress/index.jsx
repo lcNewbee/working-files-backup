@@ -40,6 +40,7 @@ export default class Progress extends PureComponent {
       'a-progress-bar--striped': striped,
     });
     const percentValue = parseInt(((value / max) * 100), 10);
+    const textValue = parseInt(value, 10);
     const hasTextProgress = (
       <div className={`${className} a-progress-wrap`} >
         <progress
@@ -67,7 +68,7 @@ export default class Progress extends PureComponent {
           }
 
         </progress>
-        <span className="a-progress-text">{`${value}${unit}`}</span>
+        <span className="a-progress-text">{`${textValue}${unit}`}</span>
       </div>
     );
 

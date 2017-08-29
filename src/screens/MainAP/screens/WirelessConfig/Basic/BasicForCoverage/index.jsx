@@ -484,7 +484,7 @@ export default class Basic extends React.Component {
       security: {
         mode: 'none',
         cipher: 'aes&tkip',
-        auth: 'open',
+        auth: 'shared',
         keyLength: '64',
         keyType: 'Hex',
         keyIndex: '1',

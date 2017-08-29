@@ -101,12 +101,18 @@ export default class MainAP extends React.PureComponent {
 
   render() {
     const {
-      guiName, saving, slogan, companyname, email, companyTel, copyrightInfo, supportLink,
+      guiName, saving, companyname, email, companyTel, copyrightInfo, supportLink,
     } = this.props.app.toJS();
+    let slogan = this.props.app.get('slogan');
     const { isShow } = this.state;
     // 解决在管理页面刷新获取radioType为undefined，导致请求国家信道错误的问题
     if (this.props.selfState.getIn(['deviceRadioList']).size === 0) return null;
     // console.log('menus', this.props.selfState.get('menus'));
+
+    // 后台不支持中文字符串，网旗没有对应英文，故这里做特殊处理，写死
+    if (companyname && companyname.toLowerCase() === 'wangqi') {
+      slogan = '网络旗舰 物联云科';
+    }
 
     return (
       <div>
