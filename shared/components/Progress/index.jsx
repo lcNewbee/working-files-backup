@@ -59,7 +59,7 @@ export default class Progress extends PureComponent {
             <span
               className={progressBarClassNames}
               style={{
-                width: `${percentValue}%`,
+                width: `${value}%`,
               }}
             />
           </div>
