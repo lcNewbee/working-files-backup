@@ -112,7 +112,7 @@ export default class MainAP extends React.PureComponent {
       <div>
         <Navbar
           title={guiName}
-          slogan={slogan}
+          slogan={__(slogan)}
         >
           <div className="aside">
             <a href="" className="as-control" onClick={this.onRefresh}>
