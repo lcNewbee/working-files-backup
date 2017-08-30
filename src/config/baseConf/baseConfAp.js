@@ -275,8 +275,8 @@ const routes = [{
       component: SharedComponents.TabContainer,
       routes: [
         {
-          id: 'modesettings',
-          path: '/main/modesettings/modesettings',
+          id: 'modechange',
+          path: '/main/modesettings/modechange',
           text: __('Mode Settings'),
           component: baseComponents.sModeSettings.Screen,
         },

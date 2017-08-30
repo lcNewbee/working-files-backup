@@ -4,7 +4,8 @@ import baseConf from '../baseConf/baseConfAp';
 import guiConfig from './config.json';
 
 window.guiConfig = guiConfig;
-
+// 新的页面，需要替换基本配置中的'modechange'页面
+const sModeSettings = require('../../screens/MainAP/screens/ModeSettings/CloudService');
 
 // 页面功能项配置
 const funConfig = {
@@ -62,9 +63,24 @@ const funConfig = {
   },
 };
 
+
 const reducers = baseConf.reducers;
+const newObjToMerge = {
+  id: 'modesettings',
+  icon: 'cloud',
+  routes: [
+    {
+      id: 'cloudservice',
+      path: '/main/modesettings/cloudservice',
+      text: __('Cloud Service'),
+      component: sModeSettings.Screen,
+    },
+  ],
+};
+// 首先以旧路由为标识插入新路由，然后删除旧路由
+let routes = utils.config.merge(baseConf.routes, [newObjToMerge]);
 // 将funConfig合入到routes中
-const routes = utils.config.merge_funConfig_to_routes(baseConf.routes, funConfig);
+routes = utils.config.merge_funConfig_to_routes(baseConf.routes, funConfig);
 const appConfig = Object.assign({}, baseConf.appConfig, guiConfig);
 
 export default {

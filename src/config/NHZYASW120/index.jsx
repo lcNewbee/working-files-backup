@@ -113,8 +113,6 @@ const funConfig = {
   },
 };
 
-
-
 const routes = [{
   path: '/',
   component: app.Screen,
