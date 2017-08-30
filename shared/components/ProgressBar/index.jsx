@@ -18,9 +18,7 @@ const propTypes = {
   showText: PropTypes.bool, // 是否显示进度条文字，默认true
   unit: PropTypes.string, // 进度条单位，默认%
   color: PropTypes.string, // 进度条颜色
-
-  // 进度条总时长,单位为 秒（s）
-  time: PropTypes.number,
+  time: PropTypes.number, // 进度条总时长,单位为 秒（s）
 };
 
 const defaultProps = {
@@ -35,10 +33,6 @@ export default class ProgressBar extends React.Component {
   constructor(props) {
     super(props);
     this.oneStepMove = this.oneStepMove.bind(this);
-    this.state = {
-      width: 0,
-      progress: 0,
-    };
   }
 
   componentDidMount() {
@@ -63,7 +57,8 @@ export default class ProgressBar extends React.Component {
     const runtime = timeStamp - this.startTime;
     let progress = runtime / (this.props.time * 1000);
     progress = Math.min(progress, 1);
-    this.setState({ progress });
+    this.pgsElem.style.width = `${progress * 100}%`;
+    this.txtElem.textContent = `${parseInt(progress * 100, 10)}${this.props.unit}`;
     if (runtime < this.props.time * 1000) {
       this.requestId = requestAnimationFrame(this.oneStepMove);
     } else {
@@ -74,8 +69,6 @@ export default class ProgressBar extends React.Component {
 
   render() {
     const { title, showText, unit, color } = this.props;
-    const percentageValue = parseFloat(this.state.progress * 100);
-    const percentageText = parseInt(percentageValue, 10);
 
     return (
       <div className="m-progress-bar">
@@ -97,14 +90,28 @@ export default class ProgressBar extends React.Component {
         >
           <div
             style={{
-              width: `${percentageValue}%`,
+              width: 0,
               backgroundColor: color,
               height: '16px',
+            }}
+            ref={(pgsElem) => {
+              if (pgsElem) {
+                this.pgsElem = pgsElem;
+              }
             }}
           />
           {
             showText && (
-              <span className="a-progress-text">{`${percentageText}${unit}`}</span>
+              <span
+                className="a-progress-text"
+                ref={(txtElem) => {
+                  if (txtElem) {
+                    this.txtElem = txtElem;
+                  }
+                }}
+              >
+                {`0${unit}`}
+              </span>
             )
           }
         </div>

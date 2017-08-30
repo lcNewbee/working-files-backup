@@ -90,7 +90,7 @@ export default class MainAP extends React.PureComponent {
     e.preventDefault();
     this.props.changeLoginStatus('0');
     this.props.save('goform/set_logout_stat');
-    window.location.hash = '#';
+    window.location.hash = '#/login';
   }
 
   showUserPopOver() {
@@ -206,7 +206,7 @@ export default class MainAP extends React.PureComponent {
                     />
                     {__('CHANGE PASSWORD')}
                   </a>
-                  <a className="sign-out" href="#/" onClick={this.onLogout}>
+                  <a className="sign-out" href="#/login" onClick={this.onLogout}>
                     <Icon
                       name="sign-out"
                     />
