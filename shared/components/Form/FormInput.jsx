@@ -16,6 +16,7 @@ import TimePicker from '../TimePicker';
 import DatePicker from '../DatePicker';
 import DateTimePicker from './DateTimePicker';
 import NumberRange from './RangeInput';
+import DateRangePicker from '../DateRangePicker';
 import utils from '../../utils';
 
 const propTypes = {
@@ -87,6 +88,7 @@ class FormInput extends PureComponent {
       'onDateTimeChange',
       'onLowerInputChange',
       'onUpperInputChange',
+      'onDateRangePickerChange',
     ]);
   }
 
@@ -203,6 +205,18 @@ class FormInput extends PureComponent {
     if (typeof this.props.checkClearValue === 'function' && this.props.disabled &&
         data.value === '') {
       this.props.checkClearValue(data.value);
+    }
+  }
+
+  onDateRangePickerChange(momentArr) {
+    const formater = 'YYYY-MM-DD HH:mm:ss';
+    const timeArr = momentArr.map(val => val.format(formater));
+    const data = {
+      label: this.props.label,
+      value: timeArr,
+    };
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange(data);
     }
   }
 
@@ -342,23 +356,16 @@ class FormInput extends PureComponent {
         );
 
       case 'date-range':
-        if (!moment.isMoment(timeValue)) {
-          timeValue = moment(timeValue);
-        }
 
         if (!inputProps.id) {
           inputProps.id = `date${Math.random()}`;
         }
-
+        // value属性是一个字符串数组，代表起始时间
         return (
-          <DatePicker.DateRangePicker
+          <DateRangePicker
             {...inputProps}
-            displayFormat={displayFormat}
-            monthFormat={monthFormat}
-            onFocusChange={this.onDateFocusChange}
-            onDatesChange={this.onDatesChange}
-            focusedInput={this.state.focusedInput}
-            showDefaultInputIcon
+            value={value.map(val => moment(val))}
+            onChange={this.onDateRangePickerChange}
           />
         );
 

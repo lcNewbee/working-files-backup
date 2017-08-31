@@ -49,3 +49,4 @@ gulp.task('config:ASW120', () => configProduct('ASW120'));
 gulp.task('config:NHZYASW120', () => configProduct('NHZYASW120'));
 gulp.task('config:NHZYAEC120', () => configProduct('NHZYAEC120'));
 gulp.task('config:noBrandAIP10L', () => configProduct('noBrandAIP10L'));
+gulp.task('config:NewFeatureTest', () => configProduct('NewFeatureTest'));
