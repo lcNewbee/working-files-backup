@@ -12,11 +12,9 @@ export default class NotFound extends Component {
   onClick() {
 
   }
-
   render() {
     return (
       <div style={{ textAlign: 'center' }} >
-        <h1>Axilspot</h1>
         <p>404 NotFound</p>
       </div>
     );

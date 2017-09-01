@@ -1,0 +1,31 @@
+@import "functions";
+@import "variables";
+@import "mixins";
+
+.rw-process-container{
+  position: relative;
+  clear: both;
+
+  > .rw-process-container__backdrop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
+    background: #000;
+
+    @include opacity(0);
+  }
+
+  > .rw-process-container__loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -57px;
+    margin-top: -25px;
+    z-index: 2;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 6px;
+  }
+}

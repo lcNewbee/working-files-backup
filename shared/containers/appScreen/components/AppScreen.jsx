@@ -3,29 +3,11 @@ import PropTypes from 'prop-types';
 import immutable, { List, Map } from 'immutable';
 import utils, { immutableUtils } from 'shared/utils';
 import { getActionable } from 'shared/axc';
-import { Loading } from 'shared/components';
+import { Loading, ProcessContainer } from 'shared/components';
 import AppScreenList from './AppScreenList';
 import AppScreenSettings from './AppScreenSettings';
 
 function emptyFunc() { }
-
-const loadingStyle = {
-  position: 'absolute',
-  top: '40%',
-  marginTop: '-12px',
-  marginLeft: '-55px',
-  left: '50%',
-  fontSize: '24px',
-  color: '#0093DD',
-};
-const loadingWarpStyle = {
-  position: 'absolute',
-  top: '0',
-  bottom: 0,
-  width: '100%',
-  backgroundColor: '#fff',
-  opacity: 0.2,
-};
 
 function getLoadingStatus(props) {
   const { loading } = props;
@@ -94,8 +76,6 @@ const defaultProps = {
   hasSettingsSaveButton: false,
   customSettingForm: false,
   settingOnlyChanged: false,
-
-  settingsFormOptions: List([]),
 };
 
 export default class AppScreen extends React.Component {
@@ -324,7 +304,13 @@ export default class AppScreen extends React.Component {
       screenClassName = `${screenClassName} ${className}`;
     }
     return (
-      <div className={screenClassName}>
+      <ProcessContainer
+        className={screenClassName}
+        loading={this.state.loading}
+        style={{
+          height: '100%',
+        }}
+      >
         {
           noTitle ? null : (
             <h2 className="t-app-screen__title">{myTitle}</h2>
@@ -357,22 +343,10 @@ export default class AppScreen extends React.Component {
             />
           ) : null
         }
-        <div>
-          {
-            this.props.children
-          }
-        </div>
         {
-          this.state.loading ? (
-            <div key="appLoadingWarp" style={loadingWarpStyle} />
-          ) : null
+          this.props.children
         }
-        {
-          this.state.loading ? (
-            <Loading size="sm" style={loadingStyle} />
-          ) : null
-        }
-      </div>
+      </ProcessContainer>
     );
   }
 }

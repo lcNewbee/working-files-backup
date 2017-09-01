@@ -1099,7 +1099,9 @@ class AppScreenList extends React.PureComponent {
     }
 
     return (
-      <div className="t-list-info">
+      <div
+        className="t-list-info"
+      >
         {
           listTitle ? (
             <h2 className="t-list-info__title">{listTitle}</h2>

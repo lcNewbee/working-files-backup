@@ -304,6 +304,7 @@
   "System SN": "系统序列号",
 
   "Traffic": "流量",
+  "Data Control": "流量控制",
   "Data-based": "流量",
   "UP/Down Traffic": "上/下行流量",
   "SSID Status": "SSID状态",
