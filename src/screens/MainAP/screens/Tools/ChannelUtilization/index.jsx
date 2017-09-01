@@ -140,7 +140,6 @@ export default class ChannelUtilization extends React.Component {
           this.props.selfState.get('showScanTable') ? (
             <div className="stats-group-cell">
               <Table
-                className="table"
                 title={__('Channel Utilization:')}
                 options={this.props.selfState.get('channelUtiOptions')}
                 list={this.props.selfState.get('channelUtiList')}

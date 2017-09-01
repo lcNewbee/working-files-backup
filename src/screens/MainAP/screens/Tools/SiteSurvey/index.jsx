@@ -156,7 +156,6 @@ export default class SiteSurvey extends React.Component {
             <div className="stats-group">
               <div className="stats-group-cell">
                 <Table
-                  className="table"
                   options={siteScanResultOptions}
                   list={siteList}
                 />

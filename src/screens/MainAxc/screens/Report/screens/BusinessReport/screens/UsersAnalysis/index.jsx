@@ -86,7 +86,6 @@ export default class View extends PureComponent {
           </div>
           <div className="stats-group-cell">
             <Table
-              className="table"
               options={tableOptions}
               list={list || []}
             />

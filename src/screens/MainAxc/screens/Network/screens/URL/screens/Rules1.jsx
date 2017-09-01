@@ -118,7 +118,7 @@ export default class Rules extends React.Component {
               <div className="o-box__cell">
                 <div className="element t-overview__section">
                   <Table
-                    className="table table--light"
+                    theme="light"
                     options={rulesGroupOptions}
                   />
                 </div>
@@ -147,7 +147,7 @@ export default class Rules extends React.Component {
               <div className="o-box__cell">
                 <div className="element t-overview__section">
                   <Table
-                    className="table table--light"
+                    theme="light"
                     options={filterRulesOptions}
                   />
                 </div>
@@ -175,7 +175,7 @@ export default class Rules extends React.Component {
               <div className="o-box__cell">
                 <div className="element t-overview__section">
                   <Table
-                    className="table table--light"
+                    theme="light"
                     options={bindRulesOptions}
                   />
                 </div>

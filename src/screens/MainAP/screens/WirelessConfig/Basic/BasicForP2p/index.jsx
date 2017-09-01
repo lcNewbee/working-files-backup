@@ -969,7 +969,6 @@ export default class Basic extends React.Component {
           cancelButton
         >
           <Table
-            className="table"
             options={modalOptions}
             list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
           />
@@ -1998,7 +1997,6 @@ export default class Basic extends React.Component {
             <div className="stats-group-cell">
               <span>{__('Notice: The first SSID can\'t be modefied here !')}</span>
               <Table
-                className="table"
                 options={this.props.selfState.get('ssidTableOptions')}
                 list={(() => {
                   const list = fromJS([]);

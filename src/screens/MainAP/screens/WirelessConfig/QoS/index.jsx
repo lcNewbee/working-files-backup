@@ -126,7 +126,6 @@ export default class QoS extends React.Component {
             label={__('WAP EDCA Parameters')}
           >
             <Table
-              className="table"
               options={wapEdcaOptions}
               list={wapEdcaList}
             />
@@ -141,7 +140,6 @@ export default class QoS extends React.Component {
             label={__('Station EDCA Parameters')}
           >
             <Table
-              className="table"
               options={wapEdcaOptions}
               list={wapEdcaList}
             />

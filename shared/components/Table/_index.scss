@@ -1,4 +1,11 @@
-.table {
+@import "functions";
+@import "variables";
+@import "mixins";
+
+.rw-table-container {
+  position: relative;
+}
+.rw-table {
   min-width: 100%;
   border-spacing: 1;
   border-collapse: collapse;
@@ -28,6 +35,12 @@
     color: #fff;
     background: #1d2531;
   }
+  td {
+    background-color: #fff;
+    .a-checkbox--square {
+      margin: 3px 0;
+    }
+  }
 
   tr:hover {
     background-color: #fff;
@@ -37,14 +50,19 @@
     padding: 16px 6px;
     color: $g-gray-light;
   }
+  .action-btns {
+    .a-btn {
+      margin-right: 8px;
+    }
+  }
 
-  &.table--pionter {
+  &--pionter {
     tr {
       cursor: pointer;
     }
   }
 
-  &.table--light {
+  &--light {
     background-color: #fff;
     th {
       border-top: none;
@@ -58,45 +76,30 @@
     }
   }
 }
-.table-wrap {
-  position: relative;
-  clear: both;
+.rw-table-scroll {
+  overflow: auto;
+}
+.rw-table-fixed-left,
+.rw-table-fixed-right {
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+}
+.rw-table-fixed-right {
+  right: 0;
+  box-shadow: -4px 0 4px rgba(100, 100, 100, 0.1);
+}
 
-  .table-loading {
-    position: absolute;
-    top: 26px;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
+.rw-table-config {
+  .a-checkbox--square {
+    display: block;
+    padding: 5px;
+    cursor: pointer;
+    margin-right: 0;
 
-    .backdrop {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      z-index: 1;
-      width: 100%;
-      background: #000;
-
-      @include opacity(0);
-    }
-    .table-loading-content {
-      position: relative;
-      z-index: 2;
-      width: 68px;
-      padding: 10px;
-      margin: 6px auto;
-      background-color: #f4f4f4;
-      border-radius: 6px;
-
-      .fa {
-        font-size: 20px;
-        color: $g-brand-primary;
-      }
+    &:hover {
+      background-color: #ddd;
     }
   }
 }
-.action-btns {
-  .a-btn {
-    margin-right: 5px;
-  }
-}
+

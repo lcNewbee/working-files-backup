@@ -358,7 +358,6 @@ export default class ClientsDetails extends React.Component {
         </div>
         <div className="o-box__cell">
           <Table
-            className="table"
             options={clientOptions}
             list={staList}
           />

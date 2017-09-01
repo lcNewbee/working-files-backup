@@ -654,7 +654,6 @@ export class Device extends PureComponent {
           }
         </div>
         <Table
-          className="table"
           loading={this.props.store.get('fetching')}
           options={devicesTableOptions}
           list={this.props.store.getIn(['data', 'list'])}

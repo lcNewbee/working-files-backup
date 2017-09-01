@@ -288,6 +288,7 @@ const listOptions = fromJS([
   }, {
     id: '__actions__',
     text: __('Actions'),
+    fixed: 'right',
     actions: [
       {
         icon: 'arrow-down',

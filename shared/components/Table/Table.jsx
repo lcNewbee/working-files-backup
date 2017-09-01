@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fromJS, List } from 'immutable';
+import immutable, { fromJS, List } from 'immutable';
+import classnams from 'classnames';
 import PureComponent from '../Base/PureComponent';
 import utils from '../../utils';
 import Pagination from '../Pagination';
-import Row from './Row';
-import Loading from '../Loading';
+import TableRow from './TableRow';
+import TableHeader from './TableHeader';
+import ProcessContainer from '../ProcessContainer';
+import ColumnGroup from './ColumnGroup';
+import Checkbox from '../Form/Checkbox';
 
 const THEAD_INDEX = -1;
 
@@ -51,9 +55,18 @@ function getPageObject($$list, pageQuery) {
 }
 
 const propTypes = {
+  prefixClass: PropTypes.string,
+  theme: PropTypes.oneOf([
+    'light', '',
+  ]),
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+  hiddenColumns: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   list: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   page: PropTypes.object,
+  scroll: PropTypes.shape({
+    x: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    y: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }),
   paginationType: PropTypes.oneOf([
     // 无分页
     'none',
@@ -78,14 +91,18 @@ const propTypes = {
   ]),
   onRowSelect: PropTypes.func,
   onRowClick: PropTypes.func,
+  onColumnSort: PropTypes.func,
 };
 
 const defaultProps = {
-  isTh: false,
+  prefixClass: 'rw-table',
+  theme: '',
+  scroll: {},
   paginationType: 'default',
   sizeOptions: defaultSizeOptions,
   pageQuery: {},
   list: fromJS([]),
+  hiddenColumns: fromJS([]),
 };
 
 class Table extends PureComponent {
@@ -95,27 +112,37 @@ class Table extends PureComponent {
     utils.binds(this, [
       'onRowSelect',
       'onRowClick',
-      'initList',
+      'refreshListData',
       'onTheadRowClick',
-      'transformOptions',
+      'refreshColumns',
       'sortRowsById',
+      'onColumnSort',
+      'onColumnsConfig',
+      'getTable',
+      'getBodyRows',
     ]);
     this.state = {
       myList: fromJS([]),
+      hiddenColumns: fromJS([]),
     };
     this.sortCalc = 1;
   }
 
   componentWillMount() {
-    this.transformOptions(this.props.options);
-    this.initList(this.props);
+    this.refreshColumns(this.props, this.state);
+    this.refreshListData(this.props);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.list !== this.props.list) {
-      this.initList(nextProps);
+      this.refreshListData(nextProps);
     }
     if (nextProps.options !== this.props.options) {
-      this.transformOptions(nextProps.options);
+      this.refreshColumns(nextProps, this.state);
+    }
+  }
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.hiddenColumns !== nextState.hiddenColumns) {
+      this.refreshColumns(nextProps, nextState);
     }
   }
 
@@ -131,15 +158,208 @@ class Table extends PureComponent {
       this.props.onRowClick(e, i);
     }
   }
-  onTheadRowClick(e) {
-    const option = this.$$options.find(
-      item => `${item.get('id')}SortIcon` === e.target.id,
-    );
-    if (option && option.get('sortable')) {
-      this.sortRowsById(option.get('id'));
+  onColumnSort(dataIndex) {
+    // 优先调用传入的 排序函数
+    if (this.props.onColumnSort) {
+      this.props.onColumnSort(dataIndex);
+    } else {
+      this.sortRowsById(dataIndex);
     }
   }
-  initList(props) {
+
+  onColumnsConfig(dataIndex, visible) {
+    let $$newHidenColumns = this.state.hiddenColumns;
+    const oldListIndex = $$newHidenColumns.findIndex(itemIndex => itemIndex === dataIndex);
+
+    // k
+    if (visible) {
+      $$newHidenColumns = $$newHidenColumns.delete(oldListIndex);
+    } else if (oldListIndex === -1) {
+      $$newHidenColumns = $$newHidenColumns.push(dataIndex);
+    }
+
+    this.setState({
+      hiddenColumns: $$newHidenColumns,
+    });
+  }
+  getBodyRows(myList, $$columns) {
+    const { selectable } = this.props;
+    let ret = null;
+
+    this.selectedList = [];
+    this.unselectableList = [];
+    if (myList && myList.size > 0) {
+      ret = myList.map(($$item, i) => {
+        const isSelected = $$item && !!$$item.get('__selected__');
+        const curIndex = ($$item && $$item.get('__index__')) || i;
+        let curSelectable = selectable;
+
+        if (isSelected) {
+          this.selectedList.push(i);
+        }
+
+        if (utils.isFunc(selectable)) {
+          curSelectable = selectable($$item, i);
+        }
+
+        // 不可选择的项
+        if (!curSelectable) {
+          this.unselectableList.push(i);
+        }
+
+        return (
+          <TableRow
+            key={`tableRow${curIndex}`}
+            columns={$$columns}
+            item={$$item}
+            index={curIndex}
+            selectable={selectable}
+            curSelectable={curSelectable}
+            selected={curSelectable && isSelected}
+            onSelect={this.onRowSelect}
+            onClick={e => this.onRowClick(e, curIndex)}
+          />
+        );
+      });
+    } else {
+      ret = (
+        <tr>
+          <td
+            colSpan={this.$$options.size + (selectable ? 1 : 0)}
+            className="empty"
+          >
+            {__('No Data')}
+          </td>
+        </tr>
+      );
+    }
+
+    return ret;
+  }
+
+  getTable($$myList, fixed) {
+    const {
+      className, selectable, onRowClick, scroll, prefixClass, theme,
+    } = this.props;
+    const isFixedHeader = (scroll && scroll.y);
+    let $$columns = this.$$options;
+    let headTable = null;
+    let bodyTable = null;
+    let myBodyChildren = null;
+    let unselectableLen = 0;
+    let myTableClassName = prefixClass;
+    let isSelectAll = false;
+    let tableBodyStyle = null;
+
+    if (fixed) {
+      $$columns = this.$$columnsGroup.get(fixed);
+    }
+
+    if (onRowClick) {
+      myTableClassName = `${myTableClassName} ${prefixClass}--pionter`;
+    }
+
+    if (theme) {
+      myTableClassName = `${myTableClassName} ${prefixClass}--${theme}`;
+    }
+
+    if (className) {
+      myTableClassName = `${myTableClassName} ${className}`;
+    }
+
+    myBodyChildren = this.getBodyRows($$myList, $$columns);
+    unselectableLen = this.unselectableList.length;
+
+    if ($$myList && $$myList.size > 0 && this.selectedList.length > 0 &&
+        ((this.selectedList.length + unselectableLen) === $$myList.size)) {
+      isSelectAll = true;
+    }
+
+    $$columns = $$columns.map(($$column) => {
+      let ret = $$column;
+
+      if ($$column.get('id') === '__selected__') {
+        ret = $$column.set('text', (
+          <Checkbox
+            theme="square"
+            checked={isSelectAll}
+            onChange={(e) => {
+              this.onRowSelect({
+                index: THEAD_INDEX,
+                selected: e.target.checked,
+              });
+            }}
+          />
+        ));
+      }
+      return ret;
+    });
+
+
+    if (isFixedHeader) {
+      headTable = (
+        <div className={`${prefixClass}-header`} key="tableHeader">
+          <table className={myTableClassName} >
+            <ColumnGroup
+              columns={$$columns}
+              selectable={selectable}
+            />
+            <TableHeader
+              allColumns={this.props.options}
+              columns={$$columns}
+              selectable={selectable}
+              selected={isSelectAll}
+              index={THEAD_INDEX}
+              onColumnSort={this.onColumnSort}
+              onColumnsConfig={this.onColumnsConfig}
+              curSelectable
+            />
+          </table>
+        </div>
+      );
+
+      tableBodyStyle = {
+        maxHeight: scroll.y,
+        overflowY: 'scroll',
+      };
+    }
+
+    bodyTable = (
+      <div
+        className={`${prefixClass}-body`}
+        style={tableBodyStyle}
+        key="tableBody"
+      >
+        <table className={myTableClassName}>
+          <ColumnGroup
+            columns={$$columns}
+            selectable={selectable}
+          />
+          {
+            isFixedHeader ? null : (
+              <TableHeader
+                allColumns={this.props.options}
+                columns={$$columns}
+                selectable={selectable}
+                selected={isSelectAll}
+                index={THEAD_INDEX}
+                onColumnSort={this.onColumnSort}
+                onColumnsConfig={this.onColumnsConfig}
+                curSelectable
+              />
+            )
+          }
+          <tbody>
+            { myBodyChildren }
+          </tbody>
+        </table>
+      </div>
+    );
+
+    return [headTable, bodyTable];
+  }
+
+  refreshListData(props) {
     let $$tmpList = List.isList(props.list) ? props.list : fromJS(props.list);
 
     if ($$tmpList) {
@@ -154,7 +374,11 @@ class Table extends PureComponent {
       myList: $$tmpList,
     });
   }
-  transformOptions($$options) {
+
+  refreshColumns(props, state) {
+    const { selectable } = props;
+    const $$options = props.options;
+    const $$hiddenColumns = state.hiddenColumns;
     let $$retOptions = $$options;
 
     if (!List.isList($$retOptions)) {
@@ -169,6 +393,43 @@ class Table extends PureComponent {
         ret = item.set('filterObj', utils.filter(filterStr));
       }
       return ret;
+    });
+
+    if (!$$hiddenColumns.isEmpty()) {
+      this.$$options = this.$$options.filterNot(($$item) => {
+        const colId = $$item.get('id');
+
+        return $$hiddenColumns.find(dataIndex => dataIndex === colId);
+      });
+    }
+
+    if (selectable) {
+      this.$$options = this.$$options.unshift(fromJS({
+        id: '__selected__',
+        fixed: 'left',
+        render: (val, $$item, $$colnmn) => {
+          const disabled = !$$colnmn.get('curSelectable');
+          const curIndex = $$colnmn.get('__index__');
+
+          return (
+            <Checkbox
+              theme="square"
+              checked={val || false}
+              disabled={disabled}
+              onChange={(e) => {
+                this.onRowSelect({
+                  index: curIndex,
+                  selected: e.target.checked,
+                });
+              }}
+            />
+          );
+        },
+      }));
+    }
+
+    this.$$columnsGroup = this.$$options.groupBy(($$item) => {
+      return $$item.get('fixed') || 'scroll';
     });
   }
 
@@ -198,84 +459,25 @@ class Table extends PureComponent {
     });
   }
 
-  renderBodyRow(myList) {
-    const { selectable } = this.props;
-    let ret = null;
-
-    this.selectedList = [];
-    this.unselectableList = [];
-    if (myList && myList.size > 0) {
-      ret = myList.map(($$item, i) => {
-        const isSelected = $$item && !!$$item.get('__selected__');
-        const curIndex = ($$item && $$item.get('__index__')) || i;
-        let curSelectable = selectable;
-
-        if (isSelected) {
-          this.selectedList.push(i);
-        }
-
-        if (utils.isFunc(selectable)) {
-          curSelectable = selectable($$item, i);
-        }
-
-        // 不可选择的项
-        if (!curSelectable) {
-          this.unselectableList.push(i);
-        }
-
-        return (
-          <Row
-            key={`tableRow${curIndex}`}
-            options={this.$$options}
-            item={$$item}
-            index={curIndex}
-            selectable={selectable}
-            curSelectable={curSelectable}
-            selected={curSelectable && isSelected}
-            onSelect={this.onRowSelect}
-            onClick={e => this.onRowClick(e, curIndex)}
-          />
-        );
-      });
-    } else {
-      ret = (
-        <tr>
-          <td
-            colSpan={this.$$options.size + (selectable ? 1 : 0)}
-            className="empty"
-          >
-            {__('No Data')}
-          </td>
-        </tr>
-      );
-    }
-
-    return ret;
-  }
-
   render() {
     const {
-      className, page, loading, selectable, onRowClick, paginationType,
-      pageQuery, sizeOptions,
+      page, loading, paginationType, pageQuery, sizeOptions, scroll,
+      prefixClass,
     } = this.props;
+    const tableContainerClassNames = classnams({
+      [`${prefixClass}-container`]: true,
+      [`${prefixClass}-fixed-header`]: (scroll && scroll.y),
+    });
+    const isTableScroll = this.$$columnsGroup.size > 1 || scroll.x || scroll.y;
+    const isAnyFixedLeftColumns = this.$$columnsGroup.get('left');
+    const isAnyFixedRightColumns = this.$$columnsGroup.get('right');
     let mySizeOptions = sizeOptions;
-    let unselectableLen = 0;
     let newPageObject = {
       page,
     };
     let $$myList = this.state.myList;
-    let myBodyChildren = null;
     let myPagination = page;
-    let myTableClassName = 'table';
-    let isSelectAll = false;
-
-    if (onRowClick) {
-      myTableClassName = `${myTableClassName} table--pionter`;
-    }
-
-    if (className) {
-      myTableClassName = `${myTableClassName} ${className}`;
-    }
+    let scrollTable = null;
 
     // 需要自己计算计算，分页相关
     if (paginationType === 'auto') {
@@ -291,33 +493,32 @@ class Table extends PureComponent {
       mySizeOptions = null;
     }
 
-    myBodyChildren = this.renderBodyRow($$myList);
-    unselectableLen = this.unselectableList.length;
+    scrollTable = this.getTable($$myList);
 
-    if ($$myList && $$myList.size > 0 && this.selectedList.length > 0 &&
-        ((this.selectedList.length + unselectableLen) === $$myList.size)) {
-      isSelectAll = true;
+    if (isTableScroll) {
+      scrollTable = <div className={`${prefixClass}-scroll`}>{scrollTable}</div>;
     }
 
     return (
-      <div className="table-wrap">
-        <table className={myTableClassName}>
-          <thead>
-            <Row
-              options={this.$$options}
-              selectable={selectable}
-              selected={isSelectAll}
-              index={THEAD_INDEX}
-              onSelect={this.onRowSelect}
-              onClick={this.onTheadRowClick}
-              curSelectable
-              isTh
-            />
-          </thead>
-          <tbody>
-            { myBodyChildren }
-          </tbody>
-        </table>
+      <ProcessContainer loading={loading}>
+        <div className={tableContainerClassNames}>
+          { scrollTable }
+          {
+            isAnyFixedLeftColumns ? (
+              <div className={`${prefixClass}-fixed-left`}>
+                { this.getTable($$myList, 'left') }
+              </div>
+            ) : null
+          }
+          {
+            isAnyFixedRightColumns ? (
+              <div className={`${prefixClass}-fixed-right`}>
+                { this.getTable($$myList, 'right') }
+              </div>
+            ) : null
+          }
+        </div>
+
         {
           myPagination ? (
             <Pagination
@@ -329,22 +530,7 @@ class Table extends PureComponent {
             />
           ) : null
         }
-        {
-          loading ? (
-            <div className="table-loading">
-              <div className="backdrop" />
-              <div className="table-loading-content">
-                <Loading
-                  size="sm"
-                  style={{
-                    marginLeft: '-44px',
-                  }}
-                />
-              </div>
-            </div>
-          ) : null
-        }
-      </div>
+      </ProcessContainer>
     );
   }
 }

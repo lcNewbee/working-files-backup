@@ -450,7 +450,6 @@ export default class RadioDetails extends React.Component {
         </div>
         <div className="o-box__cell">
           <Table
-            className="table"
             options={vapInterfaceOptions}
             list={vapInterfacesList}
           />
@@ -463,7 +462,6 @@ export default class RadioDetails extends React.Component {
         </div>
         <div className="o-box__cell">
           <Table
-            className="table"
             options={clientOptions}
             list={staList}
           />

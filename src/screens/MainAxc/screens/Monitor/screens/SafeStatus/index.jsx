@@ -149,7 +149,7 @@ export default class SafeStatus extends React.Component {
           </div>
           <div className="element t-overview__section">
             <Table
-              className="table table--light"
+              theme="light"
               options={tableOptions}
               list={serverList}
             />

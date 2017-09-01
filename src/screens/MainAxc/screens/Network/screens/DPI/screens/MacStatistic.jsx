@@ -507,7 +507,6 @@ export default class MacStatistic extends React.Component {
           <div className="t-overview__section">
             <Table
               // selectable
-              className="table"
               options={listOptions}
               // list={this.newList}
               list={store.getIn([curScreenId, 'data', 'list'])}
