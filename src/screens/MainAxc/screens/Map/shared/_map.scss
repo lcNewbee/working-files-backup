@@ -100,9 +100,9 @@ $map-warp-spacer: $map-distance * .5;
 .o-map-warp {
   position: absolute;
   top: $map-distance * 2.5;
-  right: $map-distance;
+  right: 0;
   bottom: $map-distance;
-  left: $map-distance;
+  left: 0;
   min-height: 400px;
   padding: 0 5px;
   overflow: hidden;
@@ -328,9 +328,9 @@ $map-warp-spacer: $map-distance * .5;
 .o-map {
   position: absolute;
   top: $map-distance * 2.5;
-  right: $map-distance-x;
   bottom: $map-distance-y;
-  left: $map-distance-x;
+  left: 0;
+  right: 0;
   border: 1px solid #d2d2d2;
 
   .o-map__header {

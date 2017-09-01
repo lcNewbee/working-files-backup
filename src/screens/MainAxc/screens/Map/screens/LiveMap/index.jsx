@@ -1025,7 +1025,6 @@ export default class LiveMap extends React.PureComponent {
       );
     }
     this.isChangeMapBuilding = isOpenHeader && settings.get('type') === LIVE_GOOGLE_MAP;
-
     return (
       <AppScreen
         {...this.props}
@@ -1106,7 +1105,6 @@ export default class LiveMap extends React.PureComponent {
             </div>
           ) : (
             <Table
-              className="table"
               options={this.listTableOptions}
               list={list}
               page={page}

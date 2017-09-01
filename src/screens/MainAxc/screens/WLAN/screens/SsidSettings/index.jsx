@@ -277,12 +277,12 @@ const listOptions = fromJS([
   },
   {
     id: 'upstream/downstream',
-    text: __('UP/Down Traffic'),
+    text: __('Data'),
     render(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 
-      return `${upRate} / ${downRate}`;
+      return `${upRate}↑ / ${downRate}↓`;
     },
     noForm: true,
   },
@@ -454,15 +454,15 @@ const listOptions = fromJS([
       max: 128,
     },
   },
-  {
-    id: 'loadBalanceType',
-    text: __('Traffic Control'),
-    defaultValue: '0',
-    options: loadBalanceTypeArr,
-    formProps: {
-      type: 'switch',
-    },
-  },
+  // {
+  //   id: 'loadBalanceType',
+  //   text: __('Data Control'),
+  //   defaultValue: '0',
+  //   options: loadBalanceTypeArr,
+  //   formProps: {
+  //     type: 'switch',
+  //   },
+  // },
   {
     id: 'upstream',
     defaultValue: '64',
