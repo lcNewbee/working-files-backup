@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DateRangePicker from 'shared/components/DateRangePicker';
 import { FormGroup } from 'shared/components/Form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

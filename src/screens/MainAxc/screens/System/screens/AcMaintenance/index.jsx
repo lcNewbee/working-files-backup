@@ -15,7 +15,7 @@ import { getActionable } from 'shared/axc';
 import AcVersion from './AcVersion';
 
 
-const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
+const languageOptions = List(b28n.getOptions().supportLang).map(item => (
   {
     value: item,
     label: b28n.langMap[item] || 'English',
@@ -58,6 +58,7 @@ export default class View extends React.PureComponent {
       'checkSaveResult',
       'renderUpgrade',
       'initState',
+      'onBackupApCfg',
     ]);
 
     this.state = {
@@ -89,6 +90,14 @@ export default class View extends React.PureComponent {
     if (this.actionable) {
       window.location.href = '/goform/system/backup';
     }
+  }
+
+  onBackupApCfg() {
+    this.props.fetch('goform/system/apbackup').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        window.location.href = json.data.url;
+      }
+    });
   }
 
   onSaveConfiguration() {
@@ -204,9 +213,7 @@ export default class View extends React.PureComponent {
       >
         <div
           className="o-form"
-          style={{
-            paddingBottom: '60px',
-          }}
+          style={{ paddingBottom: '60px' }}
         >
           <AcVersion
             {...this.props}
@@ -221,9 +228,7 @@ export default class View extends React.PureComponent {
                 icon="power-off"
                 text={__('Reboot Now')}
                 disabled={!this.actionable}
-                onClick={
-                  () => this.onConfirm('reboot')
-                }
+                onClick={() => this.onConfirm('reboot')}
               />
             </FormGroup>
           </fieldset>
@@ -236,12 +241,10 @@ export default class View extends React.PureComponent {
                 loading={this.state.isSaveConfig}
                 text={__('Save Configuration')}
                 disabled={!this.actionable}
-                onClick={
-                  () => this.onSaveConfiguration()
-                }
+                onClick={() => this.onSaveConfiguration()}
               />
             </FormGroup>
-            <FormGroup label={__('Backup Configuration')}>
+            <FormGroup label={__('AC Configuration Backup')}>
               <SaveButton
                 type="button"
                 icon="download"
@@ -255,15 +258,25 @@ export default class View extends React.PureComponent {
                 }
               </span>
             </FormGroup>
+            <FormGroup label={__('AP Configuration Backup')}>
+              <SaveButton
+                type="button"
+                icon="download"
+                text={__('')}
+                onClick={this.onBackupApCfg}
+                disabled={!this.actionable}
+              />
+              <span className="help">
+                {'Download the current AP configuration in readable form'}
+              </span>
+            </FormGroup>
             <FormGroup label={__('Restore To Factory')}>
               <SaveButton
                 type="button"
                 icon="undo"
                 text=""
                 disabled={!this.actionable}
-                onClick={
-                  () => this.onConfirm('restoreToFactory')
-                }
+                onClick={() => this.onConfirm('restoreToFactory')}
               />
             </FormGroup>
             <FormGroup
