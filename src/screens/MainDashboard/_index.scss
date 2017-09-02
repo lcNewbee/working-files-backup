@@ -1,0 +1,64 @@
+
+@import "functions";
+@import "variables";
+@import "mixins";
+
+$backgroundColor: #1b2033;
+$cardBackgroundColor: #010a29;
+$spacer: .75rem;
+
+.app-warp {
+  &--dashboard {
+    padding-top: 3.25rem;
+
+    background-color: $backgroundColor;
+
+    .navbar {
+      box-shadow: none;
+    }
+  }
+}
+
+.t-main {
+  &--dashboard {
+    padding: 0;
+  }
+}
+
+.rw-dashboard {
+  padding: $spacer;
+
+  .cols {
+    padding-right: 1rem;
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+}
+
+.rw-dashboard-card {
+  background-color: $cardBackgroundColor;
+  color: #fff;
+
+  margin-bottom: $spacer;
+}
+
+.rw-description-list {
+  @include clearfix();
+  line-height: 1rem;
+
+  dt,
+  dd {
+    float: left;
+    padding: $spacer * 0.5;
+  }
+
+  dt {
+    min-width: 80px;
+  }
+
+  dd {
+    font-size: 1rem;
+  }
+}

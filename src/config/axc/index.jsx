@@ -74,14 +74,14 @@ const sMainAxc = require('../../screens/MainAxc');
  */
 const cNetwork = require('../../screens/MainAxc/containers/Network');
 const sInterfaces = require('../../screens/MainAxc/screens/Network/screens/Interfaces');
+const sNetworkDashbaord = require('../../screens/MainAxc/screens/Network/screens/Dashboard');
 const sDhcpList = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
 const sDhcpRelay = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
 const sNetworkRoutes = require('../../screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
-const sPortalMac =
-    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
+const sPortalMac = require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 
 
 /**
@@ -111,7 +111,7 @@ const sApPlanMap =
 const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
-const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
+// const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 
 
 // ndpi
@@ -122,10 +122,10 @@ const sProtoInfo = require('../../screens/MainAxc/screens/Network/screens/DPI/sc
 const sDPISettings = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPISettings');
 
 // 防火墙
-const sAttackDefense =
-    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
-const sFirewallBlackList =
-    require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
+// const sAttackDefense =
+//     require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/attackDefenseSetting');
+// const sFirewallBlackList =
+//     require('../../screens/MainAxc/screens/Network/screens/Firewall/screens/blackList');
 
 /**
  * 系统管理
@@ -160,6 +160,8 @@ const sAcMaintenance =
 const sNetworkTimeProtocol =
     require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
+// quicksetup
+const sQuickSetup = require('../../screens/MainAxc/screens/QuickSetup');
 
 /**
  * AAA 接入，认证，计费
@@ -178,14 +180,14 @@ const sPortalSMSGateWay =
     require('../../screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
 const sPortalSMSLog =
     require('../../screens/MainAxc/screens/Portal/screens/Access/SMSLog');
-
+// const sPaymentSettings = require('../../screens/MainAxc/screens/Portal/screens/Access/PaymentSettings');
 
 const sPortalAccountList =
     require('../../screens/MainAxc/screens/Portal/screens/Account/AccountList');
 const sPortalConnectRecord =
     require('../../screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
-const sPortalSendMessage =
-    require('../../screens/MainAxc/screens/Portal/screens/Message/SendMessage');
+// const sPortalSendMessage =
+//     require('../../screens/MainAxc/screens/Portal/screens/Message/SendMessage');
 const sPortalSendBox =
     require('../../screens/MainAxc/screens/Portal/screens/Message/SendBox');
 const sPortalReceiveBox =
@@ -202,6 +204,11 @@ const sPortalOnlineRecordList =
     require('../../screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
 const sPortalOnlineList =
     require('../../screens/MainAxc/screens/Portal/screens/Log/OnlineList');
+
+// dashboard
+const sMainDashboard = require('../../screens/MainDashboard/');
+const sMainDashboardOverview = require('../../screens/MainDashboard/screens/Overview');
+
 
 const routes = [
   {
@@ -222,8 +229,17 @@ const routes = [
             icon: 'sphere',
             text: __('Network '),
             component: cNetwork.Screen,
-            indexPath: '/main/network/interface',
+            indexPath: '/main/network/dashboard',
             routes: [
+              {
+                id: 'networkdashboard',
+                icon: 'tachometer',
+                // noNav: true, // 暂时隐藏未完成的功能
+                path: '/main/network/dashboard',
+                fetchUrl: 'goform/network/dashboard',
+                text: __('Overview'),
+                component: sNetworkDashbaord.Screen,
+              },
               {
                 id: 'networkInterface',
                 icon: 'th',
@@ -244,7 +260,7 @@ const routes = [
                     id: 'dhcpList',
                     path: '/main/network/dhcp/service/list',
                     formUrl: 'goform/network/dhcp/service/list',
-                    text: __('DHCP List'),
+                    text: __('DHCP Server'),
                     component: sDhcpList.Screen,
                   }, {
                     id: 'dhcpRelay',
@@ -320,33 +336,33 @@ const routes = [
                   },
                 ],
               },
-              {
-                id: 'firewall',
-                isIndex: true,
-                path: '/main/network/firewall',
-                icon: 'dot-circle-o ',
-                text: __('Firewall'),
-                noTree: true,
-                component: SharedComponents.TabContainer,
-                indexPath: '/main/network/firewall/attackdefense',
-                routes: [
-                  {
-                    id: 'attackDefense',
-                    isIndex: true,
-                    formUrl: 'goform/network/firewall/attackdefense',
-                    path: '/main/network/firewall/attackdefense',
-                    text: __('Attack Defense'),
-                    component: sAttackDefense.Screen,
-                  }, {
-                    id: 'firewallBlackList',
-                    isIndex: true,
-                    formUrl: 'goform/network/firewall/balcklist',
-                    path: '/main/network/firewall/balcklist',
-                    text: __('Black List'),
-                    component: sFirewallBlackList.Screen,
-                  },
-                ],
-              },
+              // {
+              //   id: 'firewall',
+              //   isIndex: true,
+              //   path: '/main/network/firewall',
+              //   icon: 'dot-circle-o ',
+              //   text: __('Firewall'),
+              //   noTree: true,
+              //   component: SharedComponents.TabContainer,
+              //   indexPath: '/main/network/firewall/attackdefense',
+              //   routes: [
+              //     {
+              //       id: 'attackDefense',
+              //       isIndex: true,
+              //       formUrl: 'goform/network/firewall/attackdefense',
+              //       path: '/main/network/firewall/attackdefense',
+              //       text: __('Attack Defense'),
+              //       component: sAttackDefense.Screen,
+              //     }, {
+              //       id: 'firewallBlackList',
+              //       isIndex: true,
+              //       formUrl: 'goform/network/firewall/balcklist',
+              //       path: '/main/network/firewall/balcklist',
+              //       text: __('Black List'),
+              //       component: sFirewallBlackList.Screen,
+              //     },
+              //   ],
+              // },
             ],
           },
           {
@@ -365,7 +381,7 @@ const routes = [
                 text: __('Monitor'),
                 routes: [
                   {
-                    id: 'overview',
+                    id: 'groupOverview',
                     path: '/main/group/monitor/overview',
                     formUrl: 'goform/group/overview',
                     text: __('Overview'),
@@ -408,8 +424,6 @@ const routes = [
                 icon: 'wifi',
                 noTree: true,
                 component: SharedComponents.TabContainer,
-
-                // 不要删除空格
                 text: __('WLANs'),
                 routes: [
                   {
@@ -459,27 +473,31 @@ const routes = [
                     component: sHeatMap.Screen,
                   },
                   {
-                    id: 'cientsTrace',
-                    path: '/main/group/map/clients_trace',
+                    id: 'clientsTrace',
+                    path: '/main/group/map/clients_trace/list',
+                    formUrl: '/goform/group/map/clients_trace',
                     text: __('Clients Statistics'),
-                    icon: 'bar-chart',
-                    noTree: true,
-                    component: SharedComponents.TabContainer,
-                    routes: [
-                      {
-                        id: 'clientsTrace',
-                        path: '/main/group/map/clients_trace/list',
-                        formUrl: '/goform/group/map/clients_trace',
-                        text: __('Clients Statistics'),
-                        component: sClientsTraceList.Screen,
-                      }, {
-                        id: 'clientsTrace',
-                        path: '/main/group/map/clients_trace/settings',
-                        formUrl: 'goform/group/map/clients_trace',
-                        text: __('Settings'),
-                        component: sClientsTraceSettings.Screen,
-                      },
-                    ],
+                    component: sClientsTraceList.Screen,
+                    // path: '/main/group/map/clients_trace',
+                    // text: __('Clients Statistics'),
+                    // noTree: true,
+                    // component: SharedComponents.TabContainer,
+                    // routes: [
+                    //   {
+                    //     id: 'clientsTraceList',
+                    //     path: '/main/group/map/clients_trace/list',
+                    //     formUrl: '/goform/group/map/clients_trace',
+                    //     text: __('Clients Statistics'),
+                    //     component: sClientsTraceList.Screen,
+                    //   },
+                    //   // {
+                    //   //   id: 'clientsTrace',
+                    //   //   path: '/main/group/map/clients_trace/settings',
+                    //   //   formUrl: 'goform/group/map/clients_trace',
+                    //   //   text: __('Settings'),
+                    //   //   component: sClientsTraceSettings.Screen,
+                    //   // },
+                    // ],
                   },
                   {
                     id: 'orbitTrace',
@@ -503,7 +521,7 @@ const routes = [
                 id: 'wirelessSafePolicy',
                 icon: 'certificate',
                 path: '/main/group/safe',
-                text: __('Safe Policy'),
+                text: __('WIPS/WIDS'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 routes: [
@@ -543,7 +561,7 @@ const routes = [
             routes: [
               {
                 id: 'portalOverview',
-                icon: 'home',
+                icon: 'tachometer',
                 path: '/main/portal/overview',
                 formUrl: 'goform/portal/overview',
                 mode: 'cors',
@@ -577,21 +595,21 @@ const routes = [
                         id: 'portalAccessWeb',
                         path: '/main/portal/local/portal/web',
                         formUrl: 'goform/portal/access/web',
-                        text: __('Page Settings'),
+                        text: __('Portal Template'),
                         component: sPortalWeb.Screen,
                       },
                       {
                         id: 'portalWechat',
                         path: '/main/portal/local/portal/weixin',
                         formUrl: 'goform/portal/access/weixin',
-                        text: __('Wechat Authentication'),
+                        text: __('Wechat Login'),
                         component: sPortalWeixin.Screen,
                       },
                       {
                         id: 'portalFacebook',
                         path: '/main/portal/local/portal/facebook',
                         formUrl: 'goform/portal/access/facebook',
-                        text: __('Facebook Authentication'),
+                        text: __('Facebook Login'),
                         component: sPortalFacebook.Screen,
                       },
                       {
@@ -601,6 +619,13 @@ const routes = [
                         text: __('SMS Gateway'),
                         component: sPortalSMSGateWay.Screen,
                       },
+                      // {
+                      //   id: 'paymentSettings',
+                      //   path: '/main/portal/local/portal/paymentsetings',
+                      //   formUrl: 'goform/portal/access/paymentsettings',
+                      //   text: __('Payment Settings'),
+                      //   component: sPaymentSettings.Screen,
+                      // },
                       // {
                       //   id: 'portalAccessWeb',
                       //   path: '/main/portal/local/portal/web',
@@ -636,33 +661,41 @@ const routes = [
                     ],
                   },
                   {
-                    id: 'portalCard',
-                    isIndex: true,
-                    path: '/main/portal/local/card',
-                    noTree: true,
-                    component: SharedComponents.TabContainer,
+                    id: 'sPortalCardCategory',
+                    path: '/main/portal/local/card/cardcategory',
+                    formUrl: 'goform/portal/card/cardcategory',
                     text: __('Recharge Vouchers'),
-                    routes: [
-                      {
-                        id: 'sPortalCardCategory',
-                        path: '/main/portal/local/card/cardcategory',
-                        formUrl: 'goform/portal/card/cardcategory',
-                        text: __('Vouchers'),
-                        component: sPortalCardCategory.Screen,
-                      }, {
-                        id: 'portalCardCardList',
-                        path: '/main/portal/local/card/cardlist',
-                        formUrl: 'goform/portal/card/cardlist',
-                        text: __('Recharge Coupons'),
-                        component: sPortalCardList.Screen,
-                      },
-                    ],
+                    component: sPortalCardCategory.Screen,
                   },
+                  // {
+                  //   id: 'portalCard',
+                  //   isIndex: true,
+                  //   path: '/main/portal/local/card',
+                  //   noTree: true,
+                  //   component: SharedComponents.TabContainer,
+                  //   text: __('Recharge Vouchers'),
+                  //   routes: [
+                  //     {
+                  //       id: 'sPortalCardCategory',
+                  //       path: '/main/portal/local/card/cardcategory',
+                  //       formUrl: 'goform/portal/card/cardcategory',
+                  //       text: __('Vouchers Type'),
+                  //       component: sPortalCardCategory.Screen,
+                  //     },
+                  //     {
+                  //       id: 'portalCardCardList',
+                  //       path: '/main/portal/local/card/cardlist',
+                  //       formUrl: 'goform/portal/card/cardlist',
+                  //       text: __('Vouchers List'),
+                  //       component: sPortalCardList.Screen,
+                  //     },
+                  //   ],
+                  // },
                   {
                     id: 'portalMessage',
                     isIndex: true,
                     path: '/main/portal/local/message',
-                    text: __('SMS Options'),
+                    text: __('Message'),
                     noTree: true,
                     component: SharedComponents.TabContainer,
                     routes: [
@@ -678,13 +711,14 @@ const routes = [
                         formUrl: 'goform/portal/message/send',
                         text: __('Outbox'),
                         component: sPortalSendBox.Screen,
-                      }, {
-                        id: 'portalSendMessage',
-                        path: '/main/portal/local/message/sendmessage',
-                        formUrl: 'goform/portal/message/sendmessage',
-                        text: __('Send Message'),
-                        component: sPortalSendMessage.Screen,
                       },
+                      // {
+                      //   id: 'portalSendMessage',
+                      //   path: '/main/portal/local/message/sendmessage',
+                      //   formUrl: 'goform/portal/message/sendmessage',
+                      //   text: __('Send Message'),
+                      //   component: sPortalSendMessage.Screen,
+                      // },
                     ],
                   },
                   {
@@ -728,7 +762,7 @@ const routes = [
                 component: sPortalMac.Screen,
               },
               {
-                id: 'networkAaa',
+                id: 'userAccessPolicies',
                 icon: 'link',
                 path: '/main/portal/aaa/list',
                 formUrl: 'goform/portal/Aaa',
@@ -747,10 +781,10 @@ const routes = [
             routes: [
               {
                 id: 'systemStatus',
-                icon: 'area-chart',
+                icon: 'tachometer',
                 path: '/main/system/status',
                 formUrl: '/goform/system/status',
-                text: __('System Status'),
+                text: __('Overview'),
                 component: sSystemStatus.Screen,
               }, {
                 id: 'alarmEvents',
@@ -805,7 +839,7 @@ const routes = [
                     id: 'apMaintenanceBase',
                     path: '/main/system/ap/base',
                     formUrl: 'goform/system/maintenance',
-                    text: __('Configuration'),
+                    text: __('AP Policies'),
                     component: sApMaintenance.Screen,
                   }, {
                     id: 'apsVersion',
@@ -860,9 +894,33 @@ const routes = [
         component: sWizard.Screen,
       },
       {
+        id: 'quicksetup',
+        path: '/quicksetup',
+        fetchUrl: 'goform/quicksetup',
+        mainPath: '/main/group/monitor/overview',
+        component: sQuickSetup.Screen,
+      },
+      {
+        id: 'mainDashboard',
+        path: '/dashboard',
+        fetchUrl: 'goform/quicksetup',
+        mainPath: '/main/group/monitor/overview',
+        component: sMainDashboard.Screen,
+        routes: [
+          {
+            id: 'dashboardOverview',
+            path: '/dashboard/overview',
+            formUrl: 'goform/dashboard/overview',
+            text: __('Dashboard Overview'),
+            component: sMainDashboardOverview.Screen,
+          },
+        ],
+      },
+      {
         id: 'login',
         path: '/login',
-        mainPath: '/main/group/monitor/overview',
+        mainPath: '/dashboard',
+        // mainPath: '/quicksetup',
         component: sLogin.Screen,
       },
       {
@@ -882,6 +940,7 @@ const reducers = {
 
   // product comstom reducers
   product: sMainAxc.reducer,
+  quicksetup: sQuickSetup.quicksetup,
 
   toastr: toastrReducer,
 };

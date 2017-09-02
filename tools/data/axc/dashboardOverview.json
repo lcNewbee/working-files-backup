@@ -1,0 +1,112 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "build": "景区",
+    "floor": "龙潭",
+    "environment": {
+      "temperature": "17.2 °C",
+      "humidity": "49.2 %rh",
+      "ph": "7.01",
+      "water": "二类"
+    },
+    "parking": {
+      "total": "532",
+      "used": "200",
+      "booked": "12"
+    },
+    "clients": {
+      "total": 893,
+      "online": 693,
+      "offline": 200,
+      "today": [
+        12, 123, 123, 23, 323, 233, 32, 35, 35, 36, 34, 45,
+        12, 123, 123, 23, 323, 233, 32, 35, 35, 36, 34, 45
+      ],
+      "retentionTime": {
+        "5": 12,
+        "10": 12,
+        "15": 12,
+        "20": 12,
+        "25": 12,
+        "30": 12,
+        "35": 12,
+        "40": 12,
+        "45": 12,
+        "50": 12,
+        "55": 12,
+        ">60": 12
+      }
+    },
+    "clientsAnalysis": [
+      {
+        "location": "xx",
+        "live": "12",
+        "total": "12",
+        "new": "12",
+        "newRate": "12",
+        "retentionTime": "12"
+      }, {
+        "location": "xx",
+        "live": "12",
+        "total": "12",
+        "new": "12",
+        "newRate": "12",
+        "retentionTime": "12"
+      }, {
+        "location": "xx",
+        "live": "12",
+        "total": "12",
+        "new": "12",
+        "newRate": "12",
+        "retentionTime": "12"
+      }, {
+        "location": "xx",
+        "live": "12",
+        "total": "12",
+        "new": "12",
+        "newRate": "12",
+        "retentionTime": "12"
+      }, {
+        "location": "xx",
+        "live": "12",
+        "total": "12",
+        "new": "12",
+        "newRate": "12",
+        "retentionTime": "12"
+      }, {
+        "location": "xx",
+        "live": "12",
+        "total": "12",
+        "new": "12",
+        "newRate": "12",
+        "retentionTime": "12"
+      }
+    ],
+    "heatMap": [
+      {
+        "x": "27%",
+        "y": "30%",
+        "value": 1
+      }, {
+        "x": "21%",
+        "y": "30%",
+        "value": 2
+      }, {
+        "x": "24%",
+        "y": "30%",
+        "value": 5
+      }, {
+        "x": "20%",
+        "y": "30%",
+        "value": 3
+      }, {
+        "x": "22%",
+        "y": "33%",
+        "value": 5
+      }
+    ]
+  }
+}
