@@ -185,24 +185,6 @@ class TableHeader extends PureComponent {
 
     rowChilren = this.renderThList();
 
-    // // 添加选择列
-    // if (selectable && rowChilren) {
-    //   rowChilren = rowChilren.unshift((
-    //     <th
-    //       key="tableRow_select"
-    //     >
-    //       <Checkbox
-    //         theme="square"
-    //         checked={curSelectable && selected}
-    //         disabled={!curSelectable}
-    //         onChange={(e) => {
-    //           this.onSelect(index, e);
-    //         }}
-    //       />
-    //     </th>
-    //   ));
-    // }
-
     return rowChilren ? (
       <thead>
         <tr>

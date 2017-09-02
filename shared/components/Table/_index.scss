@@ -4,11 +4,22 @@
 
 .rw-table-container {
   position: relative;
+  &--scroll-position-left {
+    .rw-table-fixed-left {
+      box-shadow: none;
+    }
+  }
+  &--scroll-position-right {
+    .rw-table-fixed-right {
+      box-shadow: none;
+    }
+  }
 }
 .rw-table {
   min-width: 100%;
   border-spacing: 1;
   border-collapse: collapse;
+  background-color: #fff;
 
   caption {
     text-align: left;
@@ -34,16 +45,18 @@
     font-weight: 400;
     color: #fff;
     background: #1d2531;
+    .a-checkbox--square {
+      margin: 0 1px;
+    }
   }
   td {
-    background-color: #fff;
     .a-checkbox--square {
-      margin: 3px 0;
+      margin: 3px 1px;
     }
   }
 
   tr:hover {
-    background-color: #fff;
+    background-color: #ccc;
   }
 
   .empty {
@@ -51,6 +64,8 @@
     color: $g-gray-light;
   }
   .action-btns {
+    min-height: 22px;
+    //height: 22px;
     .a-btn {
       margin-right: 8px;
     }
@@ -76,6 +91,7 @@
     }
   }
 }
+
 .rw-table-scroll {
   overflow: auto;
 }
@@ -84,10 +100,15 @@
   position: absolute;
   top: 0;
   overflow: hidden;
+  transition: box-shadow .3s ease-in-out;
 }
 .rw-table-fixed-right {
   right: 0;
   box-shadow: -4px 0 4px rgba(100, 100, 100, 0.1);
+}
+.rw-table-fixed-left {
+  left: 0;
+  box-shadow: 4px 0 4px rgba(100, 100, 100, 0.1);
 }
 
 .rw-table-config {

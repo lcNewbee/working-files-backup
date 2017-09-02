@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import immutable, { fromJS, List } from 'immutable';
+import { fromJS, List } from 'immutable';
 import classnams from 'classnames';
 import PureComponent from '../Base/PureComponent';
 import utils from '../../utils';
@@ -120,6 +120,7 @@ class Table extends PureComponent {
       'onColumnsConfig',
       'getTable',
       'getBodyRows',
+      'handleBodyScroll',
     ]);
     this.state = {
       myList: fromJS([]),
@@ -145,6 +146,13 @@ class Table extends PureComponent {
       this.refreshColumns(nextProps, nextState);
     }
   }
+
+  componentDidUpdate() {
+    if (this.scrollTableElem) {
+      this.setScrollPositionClassName(this.scrollTableElem);
+    }
+  }
+
 
   onRowSelect(data) {
     const actionData = data;
@@ -275,30 +283,35 @@ class Table extends PureComponent {
       isSelectAll = true;
     }
 
-    $$columns = $$columns.map(($$column) => {
-      let ret = $$column;
+    // 需要处理 选择 列
+    if (fixed !== 'right') {
+      $$columns = $$columns.map(($$column) => {
+        let ret = $$column;
 
-      if ($$column.get('id') === '__selected__') {
-        ret = $$column.set('text', (
-          <Checkbox
-            theme="square"
-            checked={isSelectAll}
-            onChange={(e) => {
-              this.onRowSelect({
-                index: THEAD_INDEX,
-                selected: e.target.checked,
-              });
-            }}
-          />
-        ));
-      }
-      return ret;
-    });
-
+        if ($$column.get('id') === '__selected__') {
+          ret = $$column.set('text', (
+            <Checkbox
+              theme="square"
+              checked={isSelectAll}
+              onChange={(e) => {
+                this.onRowSelect({
+                  index: THEAD_INDEX,
+                  selected: e.target.checked,
+                });
+              }}
+            />
+          ));
+        }
+        return ret;
+      });
+    }
 
     if (isFixedHeader) {
       headTable = (
-        <div className={`${prefixClass}-header`} key="tableHeader">
+        <div
+          className={`${prefixClass}-header`}
+          key="tableHeader"
+        >
           <table className={myTableClassName} >
             <ColumnGroup
               columns={$$columns}
@@ -329,6 +342,12 @@ class Table extends PureComponent {
         className={`${prefixClass}-body`}
         style={tableBodyStyle}
         key="tableBody"
+        onScroll={this.handleBodyScroll}
+        ref={(elem) => {
+          if (!fixed && elem) {
+            this.scrollBodyTableElem = elem;
+          }
+        }}
       >
         <table className={myTableClassName}>
           <ColumnGroup
@@ -357,6 +376,47 @@ class Table extends PureComponent {
     );
 
     return [headTable, bodyTable];
+  }
+  setScrollPosition(position) {
+    const { prefixClass } = this.props;
+
+    this.scrollPosition = position;
+    if (this.tableContainerNode) {
+      utils.dom.removeClass(this.tableContainerNode, `${prefixClass}-container--scroll-position-left`);
+      utils.dom.removeClass(this.tableContainerNode, `${prefixClass}-container--scroll-position-right`);
+      utils.dom.removeClass(this.tableContainerNode, `${prefixClass}-container--scroll-position-middle`);
+      if (position === 'both') {
+        utils.dom.addClass(this.tableContainerNode, `${prefixClass}-container--scroll-position-left ${prefixClass}-container--scroll-position-right`);
+      } else {
+        utils.dom.addClass(this.tableContainerNode, `${prefixClass}-container--scroll-position-${position}`);
+      }
+    }
+  }
+
+  setScrollPositionClassName(target) {
+    const node = target;
+    const scrollToLeft = node.scrollLeft === 0;
+    const scrollToRight = node.scrollLeft + 1 >=
+      node.children[0].children[0].getBoundingClientRect().width -
+      node.getBoundingClientRect().width;
+
+    if (scrollToLeft && scrollToRight) {
+      this.setScrollPosition('both');
+    } else if (scrollToLeft) {
+      this.setScrollPosition('left');
+    } else if (scrollToRight) {
+      this.setScrollPosition('right');
+    } else if (this.scrollPosition !== 'middle') {
+      this.setScrollPosition('middle');
+    }
+  }
+  handleBodyScroll(e) {
+    const target = e.target;
+
+    if (target.scrollLeft !== this.lastScrollLeft) {
+      this.setScrollPositionClassName(target);
+    }
+    this.lastScrollLeft = target.scrollLeft;
   }
 
   refreshListData(props) {
@@ -496,12 +556,31 @@ class Table extends PureComponent {
     scrollTable = this.getTable($$myList);
 
     if (isTableScroll) {
-      scrollTable = <div className={`${prefixClass}-scroll`}>{scrollTable}</div>;
+      scrollTable = (
+        <div
+          className={`${prefixClass}-scroll`}
+          onScroll={this.handleBodyScroll}
+          ref={(elem) => {
+            if (elem) {
+              this.scrollTableElem = elem;
+            }
+          }}
+        >
+          {scrollTable}
+        </div>
+      );
     }
 
     return (
       <ProcessContainer loading={loading}>
-        <div className={tableContainerClassNames}>
+        <div
+          className={tableContainerClassNames}
+          ref={(elem) => {
+            if (elem) {
+              this.tableContainerNode = elem;
+            }
+          }}
+        >
           { scrollTable }
           {
             isAnyFixedLeftColumns ? (

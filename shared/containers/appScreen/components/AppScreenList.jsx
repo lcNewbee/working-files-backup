@@ -624,6 +624,7 @@ class AppScreenList extends React.PureComponent {
         if (!actionsOption) {
           this.listTableOptions = tableOptions.push(Map({
             id: '__actions__',
+            fixed: 'right',
             text: __('Actions'),
           }));
         }

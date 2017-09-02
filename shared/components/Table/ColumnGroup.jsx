@@ -2,14 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import utilsCore from 'shared/utils/lib/core';
 import PureComponent from '../Base/PureComponent';
+import { getSizeStyleUnit } from './utils';
 
 import './_index.scss';
 
 const propTypes = {
   columns: PropTypes.object.isRequired,
-  selectable: PropTypes.oneOfType([
-    PropTypes.bool, PropTypes.func,
-  ]),
 };
 
 const defaultProps = {};
@@ -23,7 +21,7 @@ class ColumnGroup extends PureComponent {
   }
 
   render() {
-    const { columns, selectable } = this.props;
+    const { columns } = this.props;
     let myCols = [];
 
     if (!columns) {
@@ -32,11 +30,7 @@ class ColumnGroup extends PureComponent {
 
     myCols = columns.map(($$column, i) => {
       const myOption = typeof $$column.toJS === 'function' ? $$column.toJS() : $$column;
-      let widthString = myOption.width;
-
-      if (typeof widthString === 'number') {
-        widthString = `${widthString}px`;
-      }
+      const widthString = getSizeStyleUnit(myOption.width);
 
       return (
         <col
@@ -47,19 +41,7 @@ class ColumnGroup extends PureComponent {
           }}
         />
       );
-    })
-    if (selectable) {
-      myCols = myCols.unshift((
-        <col
-          key="selectCol"
-          style={{
-            width: '15px',
-            maxWidth: '15px',
-          }}
-        />
-      ));
-    }
-
+    });
 
     return (
       <colgroup>
