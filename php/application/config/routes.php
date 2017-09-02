@@ -129,6 +129,7 @@ $route['goform/system/saveConfig'] = 'system/systemMaintenance/saveConfig';
 $route['goform/system/reboot'] = 'system/systemMaintenance/reboot';
 $route['goform/system/license'] = 'system/systemLicense';
 $route['goform/system/networktimeprotocol'] = 'system/systemNtp';
+$route['goform/system/apbackup'] = 'system/apbackup';
 //Portal
 $route['goform/portal/overview'] = 'portal/overview';
 $route['goform/portal/radius/nas'] = 'portal/RadiusNas';

@@ -31,6 +31,20 @@ class DbSqlite {
 		$request->finalize();
 		return $data;
 	}
+	/******************************************************
+	 **	sqlite3 查询
+	 ** $sql 语句
+	 ** 返回 索引数组
+	 ******************************************************/
+	 public function query_index($sql) {
+		$data = array();
+		$request = $this->db->query($sql);
+		while ($res = $request->fetchArray(SQLITE3_NUM)) {
+			$data[] = $res;
+		}
+		$request->finalize();
+		return $data;
+	}
 	/*
 	       public function  prepare($sql){          
 	           $stmt = $this->db->prepare($sql);        
