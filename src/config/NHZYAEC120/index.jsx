@@ -6,6 +6,7 @@ import guiConfig from './config.json';
 window.guiConfig = guiConfig;
 // 新的页面，需要替换基本配置中的'modechange'页面
 const sModeSettings = require('../../screens/MainAP/screens/ModeSettings/CloudService');
+const sWizard = require('../../screens/MainAP/Wizard/indexForNHZY');
 
 // 页面功能项配置
 const funConfig = {
@@ -29,7 +30,7 @@ const funConfig = {
       // { value: 'sta', label: __('Station') },
       // { value: 'repeater', label: __('Repeater') },
     ],
-    radioMaxClientsLimit: false,    // 射频最大客户端限制
+    radioMaxClientsLimit: false, // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [
       'enable',
@@ -50,7 +51,7 @@ const funConfig = {
     ledThreshFun: false, // 信号强度控制LED灯功能
     beaconIntervalFun: true, // Beacon帧间间隔
     dtimIntervalFun: true, // DTIM间隔
-    distanceFun: false,          // 距离调整
+    distanceFun: false, // 距离调整
     segmentThreshFun: true, // 分片阈值
     ampduFun: true, // ampdu值
     rateSetFun: true, // 速率集
@@ -68,6 +69,7 @@ const reducers = baseConf.reducers;
 const newObjToMerge = {
   id: 'modesettings',
   icon: 'cloud',
+  text: __('Cloud Service'),
   routes: [
     {
       id: 'cloudservice',
@@ -77,8 +79,12 @@ const newObjToMerge = {
     },
   ],
 };
+const newWazirdObj = {
+  id: 'wizard',
+  component: sWizard.Screen,
+};
 // 首先以旧路由为标识插入新路由，然后删除旧路由
-let routes = utils.config.merge(baseConf.routes, [newObjToMerge]);
+let routes = utils.config.merge(baseConf.routes, [newObjToMerge, newWazirdObj]);
 // 将funConfig合入到routes中
 routes = utils.config.merge_funConfig_to_routes(baseConf.routes, funConfig);
 const appConfig = Object.assign({}, baseConf.appConfig, guiConfig);

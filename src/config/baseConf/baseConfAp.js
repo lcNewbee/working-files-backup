@@ -284,9 +284,11 @@ const routes = [{
     },
     ],
   }, {
+    id: 'wizard',
     path: '/wizard',
     component: baseComponents.sWizard.Screen,
   }, {
+    id: 'login',
     path: '/login',
     mainPath: '/main/status',
     component: baseComponents.pLogin.Screen,

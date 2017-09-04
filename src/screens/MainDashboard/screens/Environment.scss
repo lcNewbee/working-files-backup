@@ -1,0 +1,29 @@
+.env-top {
+
+  .env-top-cards {
+    width: 20%;
+
+    .env-infobox-left {
+      width: 40%;
+      padding-left: 15%;
+      padding-top: 10px;
+    }
+
+    .env-infobox-right {
+      padding-left: 15%;
+      padding-top: 15px;
+      padding-bottom: 20px;
+
+      .infobox-right-value {
+        font-size: 30px;
+      }
+    }
+  }
+}
+
+.env-middle {
+
+  .element {
+    height: 300px;
+  }
+}

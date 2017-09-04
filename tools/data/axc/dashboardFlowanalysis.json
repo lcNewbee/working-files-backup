@@ -1,0 +1,99 @@
+{
+	"state": {
+		"code": 2000,
+		"msg": "success"
+	},
+	"data": {
+		"curFlow": "663",
+		"curFlowDiff": "33",
+		"totalFlow": "4138",
+		"totalFlowDiff": "180",
+		"flowPeak": "1104",
+		"flowPeakDiff": "-120",
+		"newFlow": "3139",
+		"newFlowDiff": "139",
+		"averageStayTime": "60",
+		"averageStayTimeDiff": "5",
+		"flowRank": [
+			{
+				"zoneName": "zone1",
+				"flowPercent": "90.1%",
+				"flowDiff": "4.2%"
+			},
+			{
+				"zoneName": "zone2",
+				"flowPercent": "5.2%",
+				"flowDiff": "-4.2%"
+			},
+			{
+				"zoneName": "zone3",
+				"flowPercent": "1.4%",
+				"flowDiff": "-1.2%"
+			},
+			{
+				"zoneName": "zone4",
+				"flowPercent": "1.4%",
+				"flowDiff": "2.2%"
+			}
+		],
+		"flowChange": [
+			{
+				"time": "7:00",
+				"tdFlow": "400",
+				"ystdFlow": "350"
+			},
+			{
+				"time": "9:00",
+				"tdFlow": "321",
+				"ystdFlow": "125"
+			},
+			{
+				"time": "11:00",
+				"tdFlow": "522",
+				"ystdFlow": "653"
+			},
+			{
+				"time": "13:00",
+				"tdFlow": "524",
+				"ystdFlow": "392"
+			},
+			{
+				"time": "15:00",
+				"tdFlow": "451",
+				"ystdFlow": "698"
+			},
+			{
+				"time": "17:00",
+				"tdFlow": "542",
+				"ystdFlow": "394"
+			},
+			{
+				"time": "19:00",
+				"tdFlow": "147",
+				"ystdFlow": "258"
+			},
+			{
+				"time": "21:00",
+				"tdFlow": "369",
+				"ystdFlow": "789"
+			},
+			{
+				"time": "23:00",
+				"tdFlow": "456",
+				"ystdFlow": "123"
+			}
+		],
+		"stayTime": {
+			"averageTime": "93",
+			"beyound4": "20%",
+			"between1and4": "50%",
+			"bellow1": "30%"
+		},
+		"visitTimes": {
+			"averageTimes": "1.2",
+			"beyound10": "1.5%",
+			"between3and10": "13.5%",
+			"bellow3": "84%"
+		}
+	}
+}

@@ -1,0 +1,62 @@
+{
+	"state": {
+		"code": 2000,
+		"msg": "success"
+	},
+	"data": {
+        "temperature": "30",
+        "humidity": "80%",
+        "noise": "30",
+        "pm25": "0",
+        "waterQuality": "0",
+        "leatestWeekData": [
+            {
+                "date": "2017-9-2",
+                "temperature": [-2, 10],
+                "pm25": "0",
+                "waterQuality": "0"
+            },
+            {
+                "date": "2017-9-3",
+                "temperature": [0, 15],
+                "pm25": "0",
+                "waterQuality": "0"
+            },
+            {
+                "date": "2017-9-4",
+                "temperature": [-3, 9],
+                "pm25": "0",
+                "waterQuality": "0"
+            },
+            {
+                "date": "2017-9-5",
+                "temperature": [-1, 20],
+                "pm25": "0",
+                "waterQuality": "0"
+            },
+            {
+                "date": "2017-9-6",
+                "temperature": [1, 25],
+                "pm25": "80",
+                "waterQuality": "0"
+            },
+            {
+                "date": "2017-9-7",
+                "temperature": [0, 23],
+                "pm25": "0",
+                "waterQuality": "0"
+            },
+            {
+                "date": "2017-9-8",
+                "temperature": [4, 30],
+                "pm25": "0",
+                "waterQuality": "0"
+            }
+        ],
+        "noiseMonitor":{
+          "monitor1": [40, 40, 40, 30, 65, 65, 30, 30, 30, 50, 50, 30],
+          "monitor2": [30, 50, 30, 30, 30, 40, 40, 40, 30, 30, 30, 30],
+          "monitor3": [30, 40, 40, 30, 65, 30, 30, 30, 30, 30, 50, 30]
+        }
+	}
+}

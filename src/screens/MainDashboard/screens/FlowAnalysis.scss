@@ -1,0 +1,36 @@
+.info-box {
+  width: 20%;
+
+  .info-card {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-left: 10%;
+  }
+
+  .info-box-left {
+    width: 60%;
+    padding-left: 4px;
+    padding-bottom: 0;
+    font-size: 16px;
+    border-left: 2px solid white;
+
+    .box-left-title {
+      margin-bottom: 8px;
+    }
+
+    .box-left-flow {
+      font-size: 25px;
+
+      span {
+        font-size: 16px;
+        margin-left: 12px;
+      }
+    }
+  }
+
+  .info-box-right {
+    width: 40%;
+    margin-top: 38px;
+    font-size: 16px;
+  }
+}
