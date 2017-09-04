@@ -402,7 +402,7 @@ export default class NetworkSettings extends React.Component {
               if (this.curProto === nextProto && this.curProto === 'dhcp') {
                 window.location = '#';
               } else {
-                window.location = nextProto === 'dhcp' ? 'http://192.168.188.1' : `http://${nextIpAddr}`;
+                window.location = nextProto === 'dhcp' ? `http://${fallbackIp}` : `http://${nextIpAddr}`;
               }
             }}
           />

@@ -86,7 +86,7 @@ function makeAverageStayFlowInfo(data) {
   const diff = data.get('averageStayTimeDiff') || 0;
   const title = __('平均游览时间');
   const key = 'averageStayTime';
-  const unit = '分';
+  const unit = '分钟';
   return { flow, title, diff, key, unit };
 }
 
@@ -97,8 +97,14 @@ function getFlowRankOption(data) {
   const flowRankData = flowRank.map(item => ({ value: parseFloat(item.get('flowPercent')), name: item.get('zoneName') })).toJS();
   const title = {
     text: '本日客流排行榜',
+    left: '10px',
+    top: 'top',
+    show: true,
     textStyle: {
       color: '#fff',
+      fontSize: 18,
+      fontWeight: 'normal',
+      fontFamily: 'Microsoft YaHei',
     },
   };
   const ret = $$commonPieOption.mergeDeep({
@@ -110,6 +116,8 @@ function getFlowRankOption(data) {
       itemWidth: 20,
       itemHeight: 12,
       itemGap: 10,
+      left: '60%',
+      top: '40%',
       data: legendData.toJS(),
       textStyle: {
         color: '#fff',
@@ -164,9 +172,14 @@ function getFlowChangeOption(data) {
     },
     title: {
       text: '七日游客量变化',
+      left: '10px',
+      top: 'top',
+      show: true,
       textStyle: {
         color: '#fff',
         fontSize: 18,
+        fontWeight: 'normal',
+        fontFamily: 'Microsoft YaHei',
       },
     },
     tooltip: {
@@ -195,11 +208,23 @@ function getFlowChangeOption(data) {
       type: 'category',
       boundaryGap: false,
       data: timeData.toJS(),
+      axisLine: {
+        lineStyle: { color: '#fff' },
+      },
     },
     yAxis: {
       type: 'value',
       axisLabel: {
         formatter: '{value} 人',
+      },
+      axisLine: {
+        lineStyle: { color: '#fff' },
+      },
+      splitLine: {
+        // show: false,
+        lineStyle: {
+          color: '#444',
+        },
       },
     },
     series: [
@@ -235,6 +260,17 @@ const bottomChartCommonOption = $$commonPieOption.mergeDeep({
       fontSize: 14,
     },
   },
+  title: {
+    left: '35px',
+    top: 'top',
+    show: true,
+    textStyle: {
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: 'normal',
+      fontFamily: 'Microsoft YaHei',
+    },
+  },
   series: [
     {
       radius: ['50%', '70%'],
@@ -257,30 +293,40 @@ function getNewCustomerOption(data) {
     { value: oldFlow, name: '老游客' },
   ];
   const title = {
-    show: true,
     text: '新老游客',
-    textStyle: { color: '#fff' },
   };
 
-  const option = bottomChartCommonOption.toJS();
-  option.series[0].data = flowdata;
-  option.series[0].name = title.text;
-  option.series[0].label.normal = {
-    show: true,
-    position: 'center',
-    color: '#fff',
-    formatter: () => `今日客流总量\n\n${totalFlow}人`,
-  };
-  option.legend.data = legendData;
-  option.legend.formatter = (seriesName) => {
-    if (seriesName === legendData[0]) {
-      return `${seriesName}: ${flowdata[0].value}人`;
-    } else if (seriesName === legendData[1]) {
-      return `${seriesName}: ${flowdata[1].value}人`;
-    }
-    return `${seriesName}`;
-  };
-  option.title = title;
+  const option = bottomChartCommonOption.mergeDeep({
+    series: [
+      {
+        data: flowdata,
+        name: title.text,
+        label: {
+          normal: {
+            show: true,
+            position: 'center',
+            color: '#fff',
+            formatter: () => `今日客流总量\n\n${totalFlow}人`,
+          },
+        },
+      },
+    ],
+    legend: {
+      left: '60%',
+      top: '50%',
+      data: legendData,
+      formatter: (seriesName) => {
+        if (seriesName === legendData[0]) {
+          return `${seriesName}: ${flowdata[0].value}人`;
+        } else if (seriesName === legendData[1]) {
+          return `${seriesName}: ${flowdata[1].value}人`;
+        }
+        return `${seriesName}`;
+      },
+    },
+    title,
+  }).toJS();
+
   return option;
 }
 
@@ -297,27 +343,36 @@ function getStayTimeOption(data) {
     { value: parseFloat(bellow1), name: legendData[2] },
   ];
   const title = {
-    show: true,
     text: '停留时间',
-    textStyle: { color: '#fff' },
   };
 
-  const option = bottomChartCommonOption.toJS();
-  option.series[0].data = stayData;
-  option.series[0].name = title.text;
-  option.series[0].label.normal = {
-    show: true,
-    position: 'center',
-    color: '#fff',
-    formatter: () => `平均停留时间\n\n${averageTime}分`,
-  };
-  option.legend.data = legendData;
-  option.legend.formatter = (seriesName) => {
-    const index = fromJS(stayData).findIndex(item => item.get('name') === seriesName);
-    if (index !== -1) return `${seriesName} : ${stayData[index].value}%`;
-    return `${seriesName}`;
-  };
-  option.title = title;
+  const option = bottomChartCommonOption.mergeDeep({
+    series: [
+      {
+        data: stayData,
+        name: title.text,
+        label: {
+          normal: {
+            show: true,
+            position: 'center',
+            color: '#fff',
+            formatter: () => `平均停留时间\n\n${averageTime}分钟`,
+          },
+        },
+      },
+    ],
+    legend: {
+      left: '60%',
+      top: '45%',
+      data: legendData,
+      formatter: (seriesName) => {
+        const index = fromJS(stayData).findIndex(item => item.get('name') === seriesName);
+        if (index !== -1) return `${seriesName} : ${stayData[index].value}%`;
+        return `${seriesName}`;
+      },
+    },
+    title,
+  }).toJS();
 
   return option;
 }
@@ -340,22 +395,33 @@ function getVisitTimesOptions(data) {
     textStyle: { color: '#fff' },
   };
 
-  const option = bottomChartCommonOption.toJS();
-  option.series[0].data = stayData;
-  option.series[0].name = title.text;
-  option.series[0].label.normal = {
-    show: true,
-    position: 'center',
-    color: '#fff',
-    formatter: () => `平均来访次数\n\n${averageVisitTimes}次`,
-  };
-  option.legend.data = legendData;
-  option.legend.formatter = (seriesName) => {
-    const index = fromJS(stayData).findIndex(item => item.get('name') === seriesName);
-    if (index !== -1) return `${seriesName} : ${stayData[index].value}%`;
-    return `${seriesName}`;
-  };
-  option.title = title;
+  const option = bottomChartCommonOption.mergeDeep({
+    series: [
+      {
+        data: stayData,
+        name: title.text,
+        label: {
+          normal: {
+            show: true,
+            position: 'center',
+            color: '#fff',
+            formatter: () => `平均来访次数\n\n${averageVisitTimes}次`,
+          },
+        },
+      },
+    ],
+    legend: {
+      left: '60%',
+      top: '45%',
+      data: legendData,
+      formatter: (seriesName) => {
+        const index = fromJS(stayData).findIndex(item => item.get('name') === seriesName);
+        if (index !== -1) return `${seriesName} : ${stayData[index].value}%`;
+        return `${seriesName}`;
+      },
+    },
+    title,
+  }).toJS();
 
   return option;
 }

@@ -12,20 +12,21 @@ import { actions, AppScreen } from 'shared/containers/appScreen';
 import './Environment.scss';
 /**
  *
- * @param {value, title, icon, key} info
+ * @param {value, title, icon, key, unit} info
  */
 function renderTopInfoBox(info) {
+  const { value = 0, title = '', icon = '', unit = '' } = info;
   return (
     <div className="env-top-infobox rw-dashboard-card clearfix">
       <div className="env-infobox-left fl">
         <Icon
-          name={info.icon}
+          name={icon}
           style={{ fontSize: 50 }}
         />
       </div>
       <div className="env-infobox-right fl">
-        <div className="infobox-right-value">{info.value}</div>
-        <div className="infobox-right-title">{info.title}</div>
+        <div className="infobox-right-value">{value}<span>{unit}</span></div>
+        <div className="infobox-right-title">{title}</div>
       </div>
     </div>
   );
@@ -50,9 +51,9 @@ export default class Environment extends Component {
       temperature = '0', humidity = '0', noise = '0', pm25 = '0', waterQuality = '0',
     } = data.toJS();
     const topCardsData = [
-      { value: temperature, title: '当前温度', icon: 'thermometer-half', key: 'temperature' },
+      { value: temperature, title: '当前温度', icon: 'thermometer-half', key: 'temperature', unit: '℃' },
       { value: humidity, title: '当前湿度', icon: 'tint', key: 'humidity' },
-      { value: noise, title: '噪音强度', icon: 'bullhorn', key: 'noise' },
+      { value: noise, title: '噪音强度', icon: 'bullhorn', key: 'noise', unit: 'dB' },
       { value: pm25, title: '空气质量', icon: 'leaf', key: 'pm25' },
       { value: waterQuality, title: '水质指数', icon: 'flask', key: 'waterQuality' },
     ];
@@ -114,11 +115,16 @@ export default class Environment extends Component {
       },
       yAxis: {
         type: 'value',
+        name: '温度 °C',
         axisLabel: {
-          formatter: '{value} °C',
+          formatter: '{value}',
         },
         axisLine: {
           lineStyle: { color: '#fff' },
+        },
+        splitLine: {
+          show: false,
+          lineStyle: { color: '#444' },
         },
       },
       series: [
@@ -187,8 +193,13 @@ export default class Environment extends Component {
       yAxis: [
         {
           type: 'value',
+          name: '空气质量',
           axisLine: {
             lineStyle: { color: '#fff' },
+          },
+          splitLine: {
+            show: false,
+            lineStyle: { color: '#444' },
           },
         },
       ],
@@ -250,13 +261,19 @@ export default class Environment extends Component {
           axisLine: {
             lineStyle: { color: '#fff' },
           },
+
         },
       ],
       yAxis: [
         {
           type: 'value',
+          name: '水质',
           axisLine: {
             lineStyle: { color: '#fff' },
+          },
+          splitLine: {
+            show: false,
+            lineStyle: { color: '#444' },
           },
         },
       ],
@@ -323,11 +340,16 @@ export default class Environment extends Component {
       },
       yAxis: {
         type: 'value',
+        name: '噪音(dB)',
         axisLabel: {
-          formatter: '{value} dB',
+          formatter: '{value}',
         },
         axisLine: {
           lineStyle: { color: '#fff' },
+        },
+        splitLine: {
+          show: false,
+          lineStyle: { color: '#444' },
         },
       },
       series: [
