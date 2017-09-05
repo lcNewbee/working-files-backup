@@ -3,6 +3,10 @@
   .env-top-cards {
     width: 20%;
 
+    .env-top-infobox {
+      padding: 15px 0;
+    }
+
     .env-infobox-left {
       width: 40%;
       padding-left: 15%;
@@ -15,12 +19,16 @@
       padding-bottom: 20px;
 
       .infobox-right-value {
-        font-size: 30px;
+        font-size: 35px;
 
         span {
-          font-size: 14px;
+          font-size: 15px;
           margin-left: 10px;
         }
+      }
+
+      .infobox-right-title {
+        font-size: 15px;
       }
     }
   }

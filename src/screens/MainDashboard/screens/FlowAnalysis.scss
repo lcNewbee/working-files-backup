@@ -2,8 +2,8 @@
   width: 20%;
 
   .info-card {
-    padding-top: 25px;
-    padding-bottom: 25px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     padding-left: 10%;
   }
 
@@ -33,4 +33,11 @@
     margin-top: 38px;
     font-size: 16px;
   }
+}
+
+.dashboard-middle {
+
+    .rw-dashboard-card {
+      padding-top: 10px;
+    }
 }

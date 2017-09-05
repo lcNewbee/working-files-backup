@@ -21,7 +21,7 @@ function renderTopInfoBox(info) {
       <div className="env-infobox-left fl">
         <Icon
           name={icon}
-          style={{ fontSize: 50 }}
+          style={{ fontSize: 60 }}
         />
       </div>
       <div className="env-infobox-right fl">
@@ -84,6 +84,11 @@ export default class Environment extends Component {
           color: '#fff',
         },
       },
+      grid: {
+        bottom: '18%',
+        left: '8%',
+        right: '7%',
+      },
       textStyle: {
         color: '#fff',
       },
@@ -144,7 +149,7 @@ export default class Environment extends Component {
       <div className="rw-dashboard-card element">
         <EchartReact
           option={option}
-          style={{ wdith: '100%', height: '250px' }}
+          style={{ wdith: '100%', height: '300px' }}
         />
       </div>
     );
@@ -173,9 +178,9 @@ export default class Environment extends Component {
         },
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+        left: '5%',
+        right: '6%',
+        bottom: '10%',
         containLabel: true,
       },
       xAxis: [
@@ -216,7 +221,7 @@ export default class Environment extends Component {
       <div className="rw-dashboard-card element">
         <EchartReact
           option={option}
-          style={{ wdith: '100%', height: '250px' }}
+          style={{ wdith: '100%', height: '300px' }}
         />
       </div>
     );
@@ -246,9 +251,9 @@ export default class Environment extends Component {
         },
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
+        left: '5%',
+        right: '6%',
+        bottom: '10%',
         containLabel: true,
       },
       xAxis: [
@@ -290,7 +295,7 @@ export default class Environment extends Component {
       <div className="rw-dashboard-card element">
         <EchartReact
           option={option}
-          style={{ wdith: '100%', height: '250px' }}
+          style={{ wdith: '100%', height: '300px' }}
         />
       </div>
     );
@@ -308,6 +313,11 @@ export default class Environment extends Component {
         textStyle: {
           color: '#fff',
         },
+      },
+      grid: {
+        bottom: '18%',
+        left: '8%',
+        right: '7%',
       },
       textStyle: {
         color: '#fff',
@@ -374,7 +384,7 @@ export default class Environment extends Component {
       <div className="rw-dashboard-card element">
         <EchartReact
           option={option}
-          style={{ wdith: '100%', height: '250px' }}
+          style={{ wdith: '100%', height: '300px' }}
         />
       </div>
     );
