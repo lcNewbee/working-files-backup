@@ -93,11 +93,9 @@ export default class View extends React.PureComponent {
   }
 
   onBackupApCfg() {
-    this.props.fetch('goform/system/apbackup').then((json) => {
-      if (json.state && json.state.code === 2000) {
-        window.location.href = json.data.url;
-      }
-    });
+    if (this.actionable) {
+      window.loaction.href = 'goform/system/apbackup';
+    }
   }
 
   onSaveConfiguration() {
