@@ -613,29 +613,28 @@ export const $$potalServerOptions = fromJS([
   {
     id: 'server_key',
     label: __('Shared Key'),
-    fieldset: 'other',
+    fieldset: 'Authentication',
     noTable: true,
     formProps: {
       type: 'password',
       maxLength: '31',
-      required: true,
       validator: validator({
         rules: 'pwd',
       }),
     },
   },
-  // {
-  //   id: 'ac_ip',
-  //   label: __('AC IP'),
-  //   fieldset: 'other',
-  //   formProps: {
-  //     type: 'text',
-  //     required: true,
-  //     validator: validator({
-  //       rules: 'ip',
-  //     }),
-  //   },
-  // },
+  {
+    id: 'ac_ip',
+    label: __('Nas IP'),
+    fieldset: 'other',
+    formProps: {
+      type: 'text',
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  },
 ]);
 
 export const $$potalServerFormOptions = immutableUtils.getFormOptions($$potalServerOptions);

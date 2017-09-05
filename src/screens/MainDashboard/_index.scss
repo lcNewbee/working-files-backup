@@ -7,6 +7,7 @@ $backgroundColor: #1b2033;
 $cardBackgroundColor: #010a29;
 $spacer: .75rem;
 $radiusSize: 6px;
+$warningSize: 10px;
 
 .app-warp {
   &--dashboard {
@@ -45,6 +46,16 @@ $radiusSize: 6px;
   border-radius: $radiusSize;
   padding: 0 4px;
 
+  .link-more {
+    color: #ddd;
+    line-height: 18px;
+    transition: transform .3s ease-in-out;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
   .table {
     tr {
       &:hover {
@@ -66,7 +77,7 @@ $radiusSize: 6px;
   }
 
   .rw-map {
-    height: 302px;
+    height: 304px;
     background-color: #eee;
   }
 
@@ -84,10 +95,10 @@ $radiusSize: 6px;
 
   &.rw-dashboard-card--max {
     position: fixed;
-    top: 10px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 1600;
 
     .rw-map {
@@ -146,7 +157,7 @@ $radiusSize: 6px;
 }
 
 .chart-container {
-  min-height: 184px;
+  min-height: 190px;
   border-radius: 4px;
 }
 
@@ -165,13 +176,13 @@ $radiusSize: 6px;
 
 .rw-dashboard-environment {
   text-align: center;
-  padding-top: 6px;
+  padding-bottom: 9px;
 
   li,
   dt,
   dd {
     text-align: center;
-    padding: 4px 0;
+    padding: 5px 0;
   }
   dd {
     font-size: 16px;
@@ -193,6 +204,82 @@ $radiusSize: 6px;
     li {
       padding: $spacer * 2 / 3;
     }
+  }
+}
+
+.rw-map-warning-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #ff2573;
+  text-align: center;
+  top: 20%;
+  left: 40%;
+  border-radius: 40px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -3px;
+    margin-left: -3px;
+    display: inline-block;
+    background-color: #fff;
+    width: 6px;
+    height: 6px;
+    border-radius: 4px;
+    line-height: 16px;
+    vertical-align: middle;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    bottom: -1px;
+    right: -1px;
+    border-radius: inherit;
+    border: 0 solid #ff2573;
+    opacity: .6;
+    animation: warningEffect 1.2s infinite;
+    display: block;
+  }
+  .rw-map-warning-icon__warning {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    bottom: -1px;
+    right: -1px;
+    border-radius: inherit;
+    border: 0 solid #ff2573;
+    opacity: .6;
+    animation: warningEffect 1s infinite;
+    animation-delay: .2s;
+  }
+}
+
+//
+// Button
+// --------------------------------------------------
+@keyframes warningEffect {
+  to {
+    opacity: 0;
+    top: -$warningSize;
+    left: -$warningSize;
+    bottom: -$warningSize;
+    right: -$warningSize;
+    border-width: $warningSize;
+  }
+}
+@-webkit-keyframes warningEffect {
+  to {
+    opacity: 0;
+    top: -$warningSize;
+    left: -$warningSize;
+    bottom: -$warningSize;
+    right: -$warningSize;
+    border-width: $warningSize;
   }
 }
 

@@ -16,6 +16,35 @@ import MapContainer from './MapContainer';
 
 const REFRESH_INTERVAR = 10000;
 
+function createHeatMapPoints(num, width, height) {
+  // now generate some random data
+  const points = [];
+  const curHeight = height || 100;
+  const curWidth = width || 100;
+  let len = num || 400;
+  let max = 0;
+  let point;
+
+  while (len--) {
+    const val = Math.floor(Math.random() * 100);
+    // now also with custom radius
+    const radius = Math.floor(Math.random() * 70);
+
+    max = Math.max(max, val);
+    point = {
+      x: Math.floor(Math.random() * curWidth),
+      y: Math.floor(Math.random() * curHeight),
+      value: val,
+
+      // radius configuration on point basis
+      radius,
+    };
+    points.push(point);
+  }
+
+  return points;
+}
+
 function getClientFlowEchartOption($$serverData) {
   const unit = {
     str: '人',
@@ -59,7 +88,7 @@ function getClientFlowEchartOption($$serverData) {
       left: 40,
       right: 10,
       top: 30,
-      bottom: 20,
+      bottom: 36,
     },
     xAxis: {
       type: 'category',
@@ -143,7 +172,7 @@ function getClientTetentionTimeOption($$serverData) {
     max = $$serverData.max((a, b) => a - b);
     $$serverData.forEach((val, key) => {
       xAxisData.unshift(`${key}`);
-      data.unshift(val);
+      data.unshift(parseInt(val, 10));
       backgroundData.unshift(max);
     });
   }
@@ -165,7 +194,7 @@ function getClientTetentionTimeOption($$serverData) {
       left: 40,
       right: 0,
       top: 30,
-      bottom: 20,
+      bottom: 40,
     },
     xAxis: {
       type: 'category',
@@ -240,14 +269,26 @@ function getClientTetentionTimeOption($$serverData) {
   return option;
 }
 function getClientsTimeOption($$serverData, total) {
-  const myData = [];
+  const myData = [
+    {
+      value: 0,
+      name: '短时间',
+    },
+    {
+      value: 0,
+      name: '长时间',
+    },
+  ];
   const ret = $$commonPieOption.mergeDeep({
-    color: [colors[1], colors[7]],
+    color: ['#ffba03', '#249ad7'],
+    tooltip: {
+      show: false,
+    },
     title: {
       text: `${__('总记')}`,
       subtext: `${total || ''} 人`,
       x: '48.2%',
-      y: '37%',
+      y: '25%',
       textStyle: {
         fontSize: '14',
         color: '#fff',
@@ -258,25 +299,39 @@ function getClientsTimeOption($$serverData, total) {
         color: '#fff',
       },
     },
+    legend: {
+      orient: 'horizontal',
+      x: 'center',
+      y: '72%',
+      textStyle: {
+        color: '#fff',
+      },
+    },
     series: [
       {
         name: __('滞留时间人数'),
         type: 'pie',
-        center: ['50%', '50%'],
+        center: ['50%', '38%'],
+        radius: ['38%', '62%'],
       },
     ],
   }).toJS();
 
   if ($$serverData) {
     $$serverData.forEach((val, key) => {
-      myData.unshift({
-        value: val,
-        name: `${key}分钟`,
-      });
+      if (key < 45) {
+        myData[0].value += parseInt(val, 10);
+      } else {
+        myData[1].value += parseInt(val, 10);
+      }
     });
   }
 
+  myData[0].name = `短时间滞留人数：${myData[0].value}`;
+  myData[1].name = `长时间滞留人数：${myData[1].value}`;
+
   ret.series[0].data = myData;
+  ret.legend.data = [myData[0].name, myData[1].name];
 
   return ret;
 }
@@ -325,10 +380,12 @@ export default class DashboardOverview extends React.PureComponent {
       'renderHeatMap',
       'fetchHeatMapData',
       'renderClientsPathsMap',
+      'renderEnvironment',
     ]);
     this.state = {
       heatmapData: [],
       clientsPaths: [],
+      heatMapImgIndex: 1,
     };
   }
 
@@ -354,10 +411,16 @@ export default class DashboardOverview extends React.PureComponent {
 
     this.props.fetch('goform/dashboard/heatmap')
       .then((json) => {
+        let newIndex = this.state.heatMapImgIndex + 1;
+
+        if (newIndex > 4) {
+          newIndex = 1;
+        }
         if (json && json.data && json.data.heatMap) {
           this.setState({
             heatmapData: json.data.heatMap,
             needUpdateHeatMap: Date.now(),
+            heatMapImgIndex: newIndex,
           });
         }
         this.fetchHeatMapTimeout = setTimeout(() => {
@@ -385,6 +448,9 @@ export default class DashboardOverview extends React.PureComponent {
 
   renderHeatMap() {
     const newData = [];
+    const data = createHeatMapPoints(400);
+
+    // const data = this.state.heatmapData;
 
     if (this.heatMapContent && this.heatMapContent.offsetWidth > 0) {
       // this.removeHeatMap();
@@ -395,9 +461,10 @@ export default class DashboardOverview extends React.PureComponent {
         this.heatmapInstance = h337.create({
           container: this.heatMapContent,
           radius: 24,
+          blur: 0.9,
         });
       } else {
-        this.state.heatmapData.forEach((item) => {
+        data.forEach((item) => {
           newData.push({
             x: (item.x * this.heatmapInstance._renderer._width) / 100,
             y: (item.y * this.heatmapInstance._renderer._height) / 100,
@@ -451,12 +518,170 @@ export default class DashboardOverview extends React.PureComponent {
     }
   }
 
-  render() {
+  renderEnvironment() {
     const { store } = this.props;
-    const { heatMapDataUrl, clientsMapwidth, clientsMapHeight  } = this.state;
+    const curScreenId = store.get('curScreenId');
+    const $$serverData = store.getIn([curScreenId, 'data']);
+    const headerNode = (
+      <h3 className="element" key="dashboardHead">
+        环境监测
+        <a href="#/dashboard/environment" className="link-more"><Icon name="angle-double-right" /></a>
+      </h3>
+    );
+    const contentNode = (
+      <div className="rw-dashboard-environment" key="environment">
+        <div className="element">
+          <ul className="rw-description-list">
+            <li className="fl col-5">
+              <Icon name="thermometer-half" size="5x" />
+            </li>
+            <li className="fl col-7">
+              <div style={{ fontSize: '24px', marginBottom: '12px' }}>
+                {$$serverData.getIn(['environment', 'temperature'])} °
+                <Icon name="cloud" style={{ marginLeft: '12px' }} />
+              </div>
+              <div style={{ fontSize: '20px', marginTop: '12px', lineHeight: '1' }}>深圳</div>
+            </li>
+          </ul>
+        </div>
+        <div className="row element">
+          <div className="fl col-3">
+            <dl>
+              <dt>湿度</dt>
+              <dt><Icon name="tint" size="2x" /></dt>
+              <dd>{$$serverData.getIn(['environment', 'humidity']) || 0}</dd>
+            </dl>
+          </div>
+          <div className="fl col-3">
+            <dl>
+              <dt>PM2.5</dt>
+              <dt><Icon name="leaf" size="2x" /></dt>
+              <dd>{$$serverData.getIn(['environment', 'ph']) || 0}</dd>
+            </dl>
+          </div>
+          <div className="fl col-3">
+            <dl>
+              <dt>噪声</dt>
+              <dt><Icon name="bullhorn" size="2x" /></dt>
+              <dd>{$$serverData.getIn(['environment', 'noise']) || 0}</dd>
+            </dl>
+          </div>
+          <div className="fl col-3">
+            <dl>
+              <dt>水质</dt>
+              <dt><Icon name="flask" size="2x" /></dt>
+              <dd>{$$serverData.getIn(['environment', 'water']) || 0}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    );
+
+    return [headerNode, contentNode];
+  }
+  renderFloodWarning() {
+    const { store } = this.props;
     const curScreenId = store.get('curScreenId');
     const $$serverData = store.getIn([curScreenId, 'data']);
     const warningLevel = Math.ceil($$serverData.getIn(['environment', 'rainfall']) / 45);
+    const headerNode = (
+      <h3 className="element">洪涝预警</h3>
+    );
+    const contentNode = (
+      <div className="element row">
+        <div className="cols col-5" >
+          <Rain warningLevel="4" text="暴雨" active={warningLevel === 4} />
+          <Rain warningLevel="3" text="暴雨" active={warningLevel === 3} />
+          <Rain warningLevel="2" text="暴雨" active={warningLevel === 2} />
+          <Rain warningLevel="1" text="暴雨" active={warningLevel === 1} />
+        </div>
+        <div className="fl col-7">
+          <Bar
+            min="0"
+            max="210"
+            value={$$serverData.getIn(['environment', 'rainfall'])}
+            scale={6}
+            style={{
+              height: '182px',
+            }}
+          />
+        </div>
+        <div className="cols col-12 ">
+          <div className="rain-description">
+            降水量：<span>{$$serverData.getIn(['environment', 'rainfall'])}</span> mm
+          </div>
+        </div>
+      </div>
+    );
+
+    return [headerNode, contentNode];
+  }
+  renderPark() {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const $$serverData = store.getIn([curScreenId, 'data']);
+    const headerNode = (
+      <h3 className="element">车位信息</h3>
+    );
+    const contentNode = (
+      <div className="element">
+        <dl className="rw-description-list">
+          <dt><Icon name="square" style={{ color: '#007bff' }} />闲置车位</dt>
+          <dd>{$$serverData.getIn(['parking', 'total']) - $$serverData.getIn(['parking', 'used'])}</dd>
+        </dl>
+        <dl className="rw-description-list">
+          <dt><Icon name="square" style={{ color: '#ffc107' }} />预定车位</dt>
+          <dd>{$$serverData.getIn(['parking', 'booked'])}</dd>
+        </dl>
+        <dl className="rw-description-list">
+          <dt>
+            <Icon name="square" style={{ color: '#fd7e14' }} />已停车位
+          </dt>
+          <dd>{$$serverData.getIn(['parking', 'used'])}</dd>
+        </dl>
+      </div>
+    );
+
+    return [headerNode, contentNode];
+  }
+  renderClientsTetentionTime(type) {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const $$serverData = store.getIn([curScreenId, 'data']);
+    const headerNode = (
+      <h3 className="element">
+        平均滞留时间
+        <a href="#/dashboard/flowanalysis" className="link-more"><Icon name="angle-double-right" /></a>
+      </h3>
+    );
+    let option = getClientsTimeOption(
+      $$serverData.getIn(['clients', 'retentionTime']),
+      $$serverData.getIn(['clients', 'total']),
+    );
+    let contentNode = null;
+
+    if (type === 'bar') {
+      option = getClientTetentionTimeOption($$serverData.getIn(['clients', 'retentionTime']));
+    }
+
+    contentNode = (
+      <EchartReact
+        className="chart-container"
+        option={option}
+        style={{
+          height: '216px',
+        }}
+      />
+    );
+
+    return [headerNode, contentNode];
+  }
+
+  render() {
+    const { store } = this.props;
+    const { heatMapDataUrl, clientsMapwidth, clientsMapHeight } = this.state;
+    const curScreenId = store.get('curScreenId');
+    const $$serverData = store.getIn([curScreenId, 'data']);
 
     return (
       <AppScreen
@@ -466,146 +691,48 @@ export default class DashboardOverview extends React.PureComponent {
       >
         <div className="rw-dashboard row">
           <div className="cols col-2">
-            <div className="rw-dashboard-card">
-              <h3 className="element rw-dashboard-location__header">
-                {$$serverData.get('build')}
-                {$$serverData.get('floor') || ' '}
-                &nbsp;
-                <Icon name="chevron-circle-down" style={{ marginTop: '4px' }} className="fr" />
-              </h3>
+            <div className="rw-dashboard-card rw-dashboard-card--lg">
+              { this.renderEnvironment() }
+            </div>
+            <div
+              className="rw-dashboard-card rw-dashboard-card--lg"
+            >
+              { this.renderClientsTetentionTime() }
             </div>
             <div className="rw-dashboard-card rw-dashboard-card--lg">
-              <h3 className="element">环境监测</h3>
-              <div className="element rw-dashboard-environment">
-                <ul className="rw-description-list">
-                  <li className="fl col-5">
-                    <Icon name="thermometer-half" size="5x" />
-                  </li>
-                  <li className="fl col-7">
-                    <div style={{ fontSize: '24px', marginBottom: '12px' }}>
-                      {$$serverData.getIn(['environment', 'temperature'])} °
-                      <Icon name="cloud" style={{ marginLeft: '12px' }} />
-                    </div>
-                    <div style={{ fontSize: '20px', marginTop: '12px', lineHeight: '1' }}>深圳</div>
-                  </li>
-                </ul>
-              </div>
-              <div className="row element rw-dashboard-environment">
-                <div className="fl col-3">
-                  <dl>
-                    <dt>湿度</dt>
-                    <dt><Icon name="tint" size="2x" /></dt>
-                    <dd>{$$serverData.getIn(['environment', 'humidity']) || 0}</dd>
-                  </dl>
-                </div>
-                <div className="fl col-3">
-                  <dl>
-                    <dt>PM2.5</dt>
-                    <dt><Icon name="leaf" size="2x" /></dt>
-                    <dd>{$$serverData.getIn(['environment', 'ph']) || 0}</dd>
-                  </dl>
-                </div>
-                <div className="fl col-3">
-                  <dl>
-                    <dt>噪声</dt>
-                    <dt><Icon name="bullhorn" size="2x" /></dt>
-                    <dd>{$$serverData.getIn(['environment', 'noise']) || 0}</dd>
-                  </dl>
-                </div>
-                <div className="fl col-3">
-                  <dl>
-                    <dt>水质</dt>
-                    <dt><Icon name="flask" size="2x" /></dt>
-                    <dd>{$$serverData.getIn(['environment', 'water']) || 0}</dd>
-                  </dl>
-                </div>
-              </div>
+              { this.renderFloodWarning() }
             </div>
-            <div className="rw-dashboard-card rw-dashboard-card--lg">
-              <h3 className="element">滞留时间分布</h3>
-              <div className="element row">
-                <EchartReact
-                  className="chart-container"
-                  option={
-                    getClientsTimeOption(
-                      $$serverData.getIn(['clients', 'retentionTime']),
-                      $$serverData.getIn(['clients', 'total']),
-                    )
-                  }
-                />
-              </div>
-            </div>
-            <div className="rw-dashboard-card rw-dashboard-card--lg">
-              <h3 className="element">洪涝预警</h3>
-              <div className="element row">
-                <div className="cols col-5" >
-                  <Rain warningLevel="4" text="暴雨" active={warningLevel === 4} />
-                  <Rain warningLevel="3" text="暴雨" active={warningLevel === 3} />
-                  <Rain warningLevel="2" text="暴雨" active={warningLevel === 2} />
-                  <Rain warningLevel="1" text="暴雨" active={warningLevel === 1} />
-                </div>
-                <div className="fl col-7">
-                  <Bar
-                    min="0"
-                    max="210"
-                    value={$$serverData.getIn(['environment', 'rainfall'])}
-                    scale={6}
-                    style={{
-                      height: '182px',
-                    }}
-                  />
-                </div>
-                <div className="cols col-12 ">
-                  <div className="rain-description">
-                    降水量：<span>{$$serverData.getIn(['environment', 'rainfall'])}</span> mm
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="rw-dashboard-card rw-dashboard-card--lg">
-              <h3 className="element">车位信息</h3>
-              <div className="element">
-                <dl className="rw-description-list">
-                  <dt><Icon name="square" style={{ color: '#007bff' }} />闲置车位</dt>
-                  <dd>{$$serverData.getIn(['parking', 'total']) - $$serverData.getIn(['parking', 'used'])}</dd>
-                </dl>
-                <dl className="rw-description-list">
-                  <dt><Icon name="square" style={{ color: '#ffc107' }} />预定车位</dt>
-                  <dd>{$$serverData.getIn(['parking', 'booked'])}</dd>
-                </dl>
-                <dl className="rw-description-list">
-                  <dt>
-                    <Icon name="square" style={{ color: '#fd7e14' }} />已停车位
-                  </dt>
-                  <dd>{$$serverData.getIn(['parking', 'used'])}</dd>
-                </dl>
-              </div>
+            <div
+              className="rw-dashboard-card rw-dashboard-card--lg"
+              style={{
+                height: '306px',
+              }}
+            >
+              { this.renderPark() }
             </div>
           </div>
           <div className="cols col-5">
             <div className="rw-dashboard-card">
-              <h3 className="element">本日客流量</h3>
+              <h3 className="element">本日客流量
+                <a href="#/dashboard/flowanalysis" className="link-more"><Icon name="angle-double-right" /></a>
+              </h3>
               <div className="element">
                 <EchartReact
                   className="chart-container"
                   style={{
-                    height: '225px',
+                    height: '180px',
                   }}
                   option={getClientFlowEchartOption($$serverData.getIn(['clients', 'today']))}
                 />
               </div>
             </div>
             <div className="rw-dashboard-card">
-              <h3 className="element">平均滞留时间</h3>
-              <div className="element">
-                <EchartReact
-                  className="chart-container"
-                  option={getClientTetentionTimeOption($$serverData.getIn(['clients', 'retentionTime']))}
-                />
-              </div>
+              {
+                this.renderClientsTetentionTime('bar')
+              }
             </div>
             <div className="rw-dashboard-card">
-              <h3 className="element">关键区域客流分析</h3>
+              <h3 className="element">关键区域客流分析<a href="#/dashboard/flowanalysis" className="link-more"><Icon name="angle-double-right" /></a></h3>
               <div className="element" style={{ height: '270px' }}>
                 <Table
                   options={[
@@ -627,12 +754,74 @@ export default class DashboardOverview extends React.PureComponent {
                     }, {
                       id: 'retentionTime',
                       text: '平均逗留时间',
+                      render: val => parseInt(val, 10),
                     },
                   ]}
                   scroll={{
                     y: '180px',
                   }}
                   list={$$serverData.getIn(['clientsAnalysis'])}
+                  paginationType="none"
+                />
+              </div>
+            </div>
+            <div className="rw-dashboard-card">
+              <h3 className="element">车位信息</h3>
+              <div className="element" style={{ height: '270px' }}>
+                <Table
+                  options={[
+                    {
+                      id: 'location',
+                      text: '停车场',
+                    }, {
+                      id: 'live',
+                      text: '空闲车位',
+                    }, {
+                      id: 'total',
+                      text: '已停车位',
+                    }, {
+                      id: 'new',
+                      text: '预定车位',
+                    }, {
+                      id: 'newRate',
+                      text: '空闲车位占比',
+                      render: val => `${val} %`,
+                    },
+                  ]}
+                  scroll={{
+                    y: '180px',
+                  }}
+                  list={[
+                    {
+                      location: '西门停车场',
+                      live: '12',
+                      total: '345',
+                      new: '12',
+                      newRate: '20',
+                      retentionTime: '12',
+                    }, {
+                      location: '东门停车场',
+                      live: '34',
+                      total: '456',
+                      new: '12',
+                      newRate: '12',
+                      retentionTime: '12',
+                    }, {
+                      location: '南门停车场',
+                      live: '34',
+                      total: '245',
+                      new: '12',
+                      newRate: '12',
+                      retentionTime: '12',
+                    }, {
+                      location: '北门停车场',
+                      live: '56',
+                      total: '245',
+                      new: '12',
+                      newRate: '12',
+                      retentionTime: '12',
+                    },
+                  ]}
                   paginationType="none"
                 />
               </div>
@@ -672,59 +861,33 @@ export default class DashboardOverview extends React.PureComponent {
 
               </h3>
               <MapContainer
-                onReady={(data) => {
-                  this.heatMapContent = data.contentElem;
-                  this.heatMapZoom = data.zoom;
-
-                  this.setState({
-                    needUpdateHeatMap: Date.now(),
-                  });
-                }}
                 style={{
-                  height: '525px',
+                  height: '507px',
                 }}
                 className="rw-dashboard-card__content"
-              >
-                {
-                  heatMapDataUrl ? (
-                    <img src={heatMapDataUrl} draggable="false" className="overlay-img" alt="heatMap" />
-                  ) : null
-                }
-              </MapContainer>
+                backgroundImgUrl={`images/${this.state.heatMapImgIndex}.jpg`}
+              />
             </div>
             <div className="rw-dashboard-card rw-dashboard-card--fixed-header">
               <h3 className="element rw-dashboard-card__header">
-                客流轨迹图
-                <Icon name="expand" className="fr" />
+                实时视频
               </h3>
               <MapContainer
-                onReady={(data) => {
-                  this.clientsPathsMapContent = data.contentElem;
-                  this.clientPathsMapZoom = data.zoom;
-                  this.fetchClientsPathsMapData();
-                  this.setState({
-                    clientsMapwidth: data.width,
-                    clientsMapHeight: data.height,
-                  });
-                }}
-                onZoomChange={(data) => {
-                  this.clientPathsMapZoom = data.zoom;
-                  this.setState({
-                    clientsMapwidth: data.width,
-                    clientsMapHeight: data.height,
-                    needUpdateClientsPathsMap: Date.now(),
-                  });
-                }}
+                backgroundImgUrl="images/vide.jpg"
+                className="rw-dashboard-card__content"
+                noResize
+              />
+            </div>
+            <div className="rw-dashboard-card rw-dashboard-card--fixed-header">
+              <h3 className="element rw-dashboard-card__header">
+                烟感报警
+              </h3>
+              <MapContainer
                 className="rw-dashboard-card__content"
               >
-                <canvas
-                  className="rw-map-canvas"
-                  ref={(elem) => { this.clientsPathsCanvas = elem; }}
-                  style={{
-                    width: `${clientsMapwidth}px`,
-                    height: `${clientsMapHeight}px`,
-                  }}
-                />
+                <div className="rw-map-warning-icon" >
+                  <div className="rw-map-warning-icon__warning" />
+                </div>
               </MapContainer>
             </div>
           </div>
