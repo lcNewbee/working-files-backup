@@ -116,8 +116,6 @@ function getFlowRankOption(data) {
       itemWidth: 20,
       itemHeight: 12,
       itemGap: 10,
-      left: '60%',
-      top: '40%',
       data: legendData.toJS(),
       textStyle: {
         color: '#fff',
@@ -171,7 +169,7 @@ function getFlowChangeOption(data) {
       color: '#fff',
     },
     title: {
-      text: '七日游客量变化',
+      text: '游客量变化',
       left: '10px',
       top: 'top',
       show: true,
@@ -206,6 +204,7 @@ function getFlowChangeOption(data) {
     },
     xAxis: {
       type: 'category',
+      name: '时',
       boundaryGap: false,
       data: timeData.toJS(),
       axisLine: {
@@ -214,8 +213,9 @@ function getFlowChangeOption(data) {
     },
     yAxis: {
       type: 'value',
+      name: '人',
       axisLabel: {
-        formatter: '{value} 人',
+        formatter: '{value}',
       },
       axisLine: {
         lineStyle: { color: '#fff' },

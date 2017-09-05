@@ -54,8 +54,8 @@ export default class Environment extends Component {
       { value: temperature, title: '当前温度', icon: 'thermometer-half', key: 'temperature', unit: '℃' },
       { value: humidity, title: '当前湿度', icon: 'tint', key: 'humidity' },
       { value: noise, title: '噪音强度', icon: 'bullhorn', key: 'noise', unit: 'dB' },
-      { value: pm25, title: '空气质量', icon: 'leaf', key: 'pm25' },
-      { value: waterQuality, title: '水质指数', icon: 'flask', key: 'waterQuality' },
+      { value: pm25, title: 'PM2.5浓度', icon: 'leaf', key: 'pm25', unit: 'μg/m³' },
+      { value: waterQuality, title: '水质指数', icon: 'flask', key: 'waterQuality', unit: '' },
     ];
 
     const topNodes = topCardsData.map(item => (
@@ -112,6 +112,7 @@ export default class Environment extends Component {
       },
       xAxis: {
         type: 'category',
+        name: '日期',
         boundaryGap: false,
         data: timeData,
         axisLine: {
@@ -121,6 +122,7 @@ export default class Environment extends Component {
       yAxis: {
         type: 'value',
         name: '温度 °C',
+        scale: true,
         axisLabel: {
           formatter: '{value}',
         },
@@ -166,7 +168,7 @@ export default class Environment extends Component {
         color: '#fff',
       },
       title: {
-        text: '七日空气质量统计',
+        text: '七日PM2.5浓度统计',
         textStyle: {
           color: '#fff',
         },
@@ -176,6 +178,7 @@ export default class Environment extends Component {
         axisPointer: { // 坐标轴指示器，坐标轴触发有效
           type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
         },
+        formatter: '{a}<br/>{b}: {c}μg/m³',
       },
       grid: {
         left: '5%',
@@ -186,6 +189,7 @@ export default class Environment extends Component {
       xAxis: [
         {
           type: 'category',
+          name: '日期',
           data: timeData,
           axisTick: {
             alignWithLabel: true,
@@ -198,7 +202,7 @@ export default class Environment extends Component {
       yAxis: [
         {
           type: 'value',
-          name: '空气质量',
+          name: 'PM2.5浓度 μg/m³',
           axisLine: {
             lineStyle: { color: '#fff' },
           },
@@ -210,10 +214,31 @@ export default class Environment extends Component {
       ],
       series: [
         {
-          name: '空气质量',
+          name: 'PM2.5浓度',
           type: 'bar',
           barWidth: '60%',
           data: qualityData,
+          label: {
+            normal: {
+              position: 'top',
+              show: true,
+              formatter: (params) => {
+                const value = +params.value;
+                if (value <= 50) {
+                  return '优';
+                } else if (value <= 100) {
+                  return '良';
+                } else if (value <= 150) {
+                  return '轻度污染';
+                } else if (value <= 200) {
+                  return '中度污染';
+                } else if (value <= 300) {
+                  return '重度污染';
+                }
+                return '严重污染';
+              },
+            },
+          },
         },
       ],
     };
@@ -232,7 +257,7 @@ export default class Environment extends Component {
     const curScreenId = store.get('curScreenId');
     const leatestWeekData = store.getIn([curScreenId, 'data', 'leatestWeekData']) || fromJS([]);
     const timeData = leatestWeekData.map(item => item.get('date')).toJS();
-    const qualityData = leatestWeekData.map(item => item.get('waterQuality')).toJS();
+    const qualityData = leatestWeekData.map(item => 6 - +item.get('waterQuality')).toJS();
     const option = {
       color: ['#3398DB'],
       textStyle: {
@@ -249,6 +274,7 @@ export default class Environment extends Component {
         axisPointer: { // 坐标轴指示器，坐标轴触发有效
           type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
         },
+        formatter: params => `${params[0].seriesName}<br/ >${params[0].name}: ${6 - params[0].value}类`,
       },
       grid: {
         left: '5%',
@@ -259,6 +285,7 @@ export default class Environment extends Component {
       xAxis: [
         {
           type: 'category',
+          name: '日期',
           data: timeData,
           axisTick: {
             alignWithLabel: true,
@@ -273,6 +300,11 @@ export default class Environment extends Component {
         {
           type: 'value',
           name: '水质',
+          minInterval: 1,
+          interval: 1,
+          splitNumber: 5,
+          max: 5,
+          // data: ['Ⅴ', 'Ⅳ', 'Ⅲ', 'Ⅱ', 'Ⅰ'],
           axisLine: {
             lineStyle: { color: '#fff' },
           },
@@ -280,11 +312,18 @@ export default class Environment extends Component {
             show: false,
             lineStyle: { color: '#444' },
           },
+          axisLabel: {
+            show: true,
+            formatter: (value) => {
+              if (value === 0) return '';
+              return `${6 - value}类`;
+            },
+          },
         },
       ],
       series: [
         {
-          name: '空气质量',
+          name: '水质',
           type: 'bar',
           barWidth: '60%',
           data: qualityData,
@@ -343,6 +382,7 @@ export default class Environment extends Component {
       xAxis: {
         type: 'category',
         boundaryGap: false,
+        name: '时间',
         data: timeData,
         axisLine: {
           lineStyle: { color: '#fff' },
@@ -351,6 +391,7 @@ export default class Environment extends Component {
       yAxis: {
         type: 'value',
         name: '噪音(dB)',
+        scale: true,
         axisLabel: {
           formatter: '{value}',
         },

@@ -13,44 +13,44 @@
             {
                 "date": "2017-9-2",
                 "temperature": [-2, 10],
-                "pm25": "0",
-                "waterQuality": "0"
+                "pm25": "25",
+                "waterQuality": "1"
             },
             {
                 "date": "2017-9-3",
                 "temperature": [0, 15],
-                "pm25": "0",
-                "waterQuality": "0"
+                "pm25": "60",
+                "waterQuality": "3"
             },
             {
                 "date": "2017-9-4",
                 "temperature": [-3, 9],
-                "pm25": "0",
-                "waterQuality": "0"
+                "pm25": "30",
+                "waterQuality": "5"
             },
             {
                 "date": "2017-9-5",
                 "temperature": [-1, 20],
-                "pm25": "0",
-                "waterQuality": "0"
+                "pm25": "100",
+                "waterQuality": "4"
             },
             {
                 "date": "2017-9-6",
                 "temperature": [1, 25],
-                "pm25": "80",
-                "waterQuality": "0"
+                "pm25": "500",
+                "waterQuality": "3"
             },
             {
                 "date": "2017-9-7",
                 "temperature": [0, 23],
-                "pm25": "0",
-                "waterQuality": "0"
+                "pm25": "159",
+                "waterQuality": "4"
             },
             {
                 "date": "2017-9-8",
                 "temperature": [4, 30],
-                "pm25": "0",
-                "waterQuality": "0"
+                "pm25": "300",
+                "waterQuality": "4"
             }
         ],
         "noiseMonitor":{
