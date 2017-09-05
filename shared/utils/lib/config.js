@@ -97,13 +97,13 @@ function mergeIn(target, path, mergeObj) {
   // 合并一个有path指示的对象到target
   var result = [].concat(target);
   if (Object.prototype.toString.call(path) != "[object Array]") {
-    throw new Error("config --> mergeIn: Argument path must be array");
+    throw new Error("config -> mergeIn: Argument path must be array");
   } else if (path.length == 0) {
-    warning(false, "config --> mergeIn: Can not find the object refered by path, return target without change");
+    warning(false, "config -> mergeIn: Can not find the object refered by path, return target without change.");
     return result;
   }
   if (Object.prototype.toString.call(mergeObj) != "[object Object]") {
-    throw new Error("config --> mergeIn: mergeIn can not be used to merge array or variable but only object.", mergeObj);
+    throw new Error("config -> mergeIn: mergeIn can not be used to merge array or variable but only object.");
   }
 
   var pathStackStr = JSON.stringify(path);
@@ -172,7 +172,7 @@ function append(target, path, routeObj) {
     var step = pathStack.shift();
     obj = obj[step];
     if (typeof obj == 'undefined') {
-      warning(false, 'config.js -> mergeIn: Can not find the object refered by path, return target without change');
+      warning(false, 'config.js -> append: Can not find the object refered by path, return target without change');
       return result;
     }
   }
