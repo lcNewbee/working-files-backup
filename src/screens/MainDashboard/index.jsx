@@ -234,7 +234,7 @@ export default class Main extends React.PureComponent {
 
     return (
       <div className={mainClassName}>
-        <Navbar version={version}>
+        {/* <Navbar version={version}>
           <div className="aside">
             <button className="as-control" onClick={this.onRefresh} >
               <Icon name="refresh" className="icon" />
@@ -248,7 +248,7 @@ export default class Main extends React.PureComponent {
               />
             </div>
           </div>
-        </Navbar>
+        </Navbar> */}
         <RouteSwitches
           routes={this.props.route.routes}
         />

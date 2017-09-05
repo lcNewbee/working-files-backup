@@ -6,10 +6,11 @@
 $backgroundColor: #1b2033;
 $cardBackgroundColor: #010a29;
 $spacer: .75rem;
+$radiusSize: 6px;
 
 .app-warp {
   &--dashboard {
-    padding-top: 3.25rem;
+    padding-top: 0;
 
     background-color: $backgroundColor;
 
@@ -40,25 +41,159 @@ $spacer: .75rem;
 .rw-dashboard-card {
   background-color: $cardBackgroundColor;
   color: #fff;
-
   margin-bottom: $spacer;
+  border-radius: $radiusSize;
+  padding: 0 4px;
+
+  .table {
+    tr {
+      &:hover {
+        background-color: transparent;
+        opacity: .8;
+      }
+    }
+
+    th,
+    td {
+      background-color: transparent;
+      color: #efefef;
+      border: none;
+      padding: 8px;
+    }
+    th {
+      border-bottom: 1px solid #ccc;
+    }
+  }
+
+  .rw-map {
+    height: 302px;
+    background-color: #eee;
+  }
+
+  &__header {
+    border-top-right-radius: $radiusSize;
+    border-top-left-radius: $radiusSize;
+  }
+  &__content {
+    border-bottom-right-radius: $radiusSize;
+    border-bottom-left-radius: $radiusSize;
+  }
+  &.rw-dashboard-card--lg {
+    padding: 0 12px;
+  }
+
+  &.rw-dashboard-card--max {
+    position: fixed;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 1600;
+
+    .rw-map {
+      position: absolute;
+      width: 100%;
+      top: 36px;
+      bottom: 0;
+    }
+  }
+  &--fixed-header {
+    position: relative;
+    padding: 0;
+
+    .rw-dashboard-card__header {
+      position: absolute;
+      background-color: $cardBackgroundColor;
+      opacity: .8;
+      width: 100%;
+      z-index: 2;
+    }
+
+    .rw-dashboard-card__content {
+      border-top-right-radius: $radiusSize;
+      border-top-left-radius: $radiusSize;
+    }
+
+    .rw-map-zoom-bar {
+      top: 42px;
+    }
+  }
+
 }
 
 .rw-description-list {
   @include clearfix();
-  line-height: 1rem;
+  line-height: 1.2rem;
 
   dt,
   dd {
     float: left;
-    padding: $spacer * 0.5;
+    width: 50%;
+    padding: $spacer * 0.75;
   }
 
   dt {
-    min-width: 80px;
+    .icon {
+      margin-right: $spacer * 0.5;
+      width: 12px;
+      text-align: center;
+    }
   }
 
   dd {
-    font-size: 1rem;
+    font-size: 2rem;
   }
 }
+
+.chart-container {
+  min-height: 184px;
+  border-radius: 4px;
+}
+
+.rain-description {
+  line-height: 24px;
+  text-align: center;
+  padding: $spacer;
+  border-top: 1px solid #555c6f;
+  font-size: 14px;
+  margin-bottom: $spacer;
+
+  > span {
+    font-size: 18px;
+  }
+}
+
+.rw-dashboard-environment {
+  text-align: center;
+  padding-top: 6px;
+
+  li,
+  dt,
+  dd {
+    text-align: center;
+    padding: 4px 0;
+  }
+  dd {
+    font-size: 16px;
+  }
+}
+
+.rw-dashboard-location {
+  padding-bottom: $spacer;
+
+  &__header {
+    font-size: 20px;
+    font-weight: normal;
+  }
+  &__content {
+    color: #d5d5d5;
+    height: 180px;
+    overflow: auto;
+
+    li {
+      padding: $spacer * 2 / 3;
+    }
+  }
+}
+
+

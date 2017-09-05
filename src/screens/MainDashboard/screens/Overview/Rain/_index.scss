@@ -1,0 +1,69 @@
+@import "functions";
+@import "variables";
+@import "mixins";
+
+$spacer: .75rem;
+$levelColors: #2ea9e5, $yellow, $orange, $red;
+
+.rw-rain {
+  text-align: center;
+  width: 80px;
+  margin-bottom: 1rem;
+  @include clearfix();
+  line-height: 1;
+  opacity: .3;
+  transition: opacity .3s ease-in-out;
+
+  &__icon,
+  &__text {
+    float: left;
+  }
+
+  &__icon {
+    padding-bottom: 2px;
+    > .icon {
+      font-size: 32px;
+      transform: scaleY(0.6);
+      height: 24px;
+      margin-top: -2px
+    }
+  }
+
+  &__text {
+    margin-left: $spacer;
+    width: 16px;
+    text-align: center;
+
+    > span {
+      display: inline-block;
+      padding: 4px 3px;
+      background-color: scene-color('info');
+    }
+  }
+
+  &__level {
+    font-size: 8px;
+    margin-top: -5px;
+
+    .icon {
+      width: 8px;
+    }
+  }
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+@for $i from 1 through length($levelColors) {
+  .rw-rain--level-#{$i} {
+    .rw-rain__icon {
+      color: nth($levelColors, $i);
+    }
+    .rw-rain__text {
+      span {
+        background-color: nth($levelColors, $i);
+      }
+    }
+  }
+}

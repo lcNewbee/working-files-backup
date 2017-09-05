@@ -4,17 +4,45 @@
     "msg": "ok"
   },
   "data": {
-    "build": "景区",
-    "floor": "龙潭",
+    "build": "",
+    "floor": "",
+    "regionlist": [
+      {
+          "id": "1",
+          "name": "休闲广场"
+      },
+      {
+          "id": "2",
+          "name": "社区购物中心"
+      },
+      {
+          "id": "3",
+          "name": "文化中心"
+      },
+      {
+          "id": "4",
+          "name": "体育馆"
+      },
+      {
+          "id": "5",
+          "name": "美食街"
+      },
+      {
+          "id": "6",
+          "name": "西大门"
+      }
+    ],
     "environment": {
-      "temperature": "17.2 °C",
-      "humidity": "49.2 %rh",
+      "temperature": "17.2",
+      "humidity": "49.2",
       "ph": "7.01",
-      "water": "二类"
+      "water": "二类",
+      "rainfall": "120",
+      "noise": "233"
     },
     "parking": {
       "total": "532",
-      "used": "200",
+      "used": "248",
       "booked": "12"
     },
     "clients": {
@@ -22,62 +50,62 @@
       "online": 693,
       "offline": 200,
       "today": [
-        12, 123, 123, 23, 323, 233, 32, 35, 35, 36, 34, 45,
-        12, 123, 123, 23, 323, 233, 32, 35, 35, 36, 34, 45
+        12, 14, 15, 23, 30, 45, 57, 35, 35, 80, 89, 90,
+        120, 123, 123, 200, 390, 500, 420, 321, 200, 30, 34, 10
       ],
       "retentionTime": {
-        "5": 12,
-        "10": 12,
-        "15": 12,
-        "20": 12,
-        "25": 12,
-        "30": 12,
-        "35": 12,
-        "40": 12,
-        "45": 12,
-        "50": 12,
+        "5": 22,
+        "10": 23,
+        "15": 34,
+        "20": 56,
+        "25": 124,
+        "30": 62,
+        "35": 76,
+        "40": 86,
+        "45": 67,
+        "50": 88,
         "55": 12,
-        ">60": 12
+        ">60": 22
       }
     },
     "clientsAnalysis": [
       {
-        "location": "xx",
+        "location": "休闲广场",
         "live": "12",
-        "total": "12",
+        "total": "345",
         "new": "12",
         "newRate": "12",
         "retentionTime": "12"
       }, {
-        "location": "xx",
+        "location": "社区购物中心",
         "live": "12",
-        "total": "12",
+        "total": "456",
         "new": "12",
         "newRate": "12",
         "retentionTime": "12"
       }, {
-        "location": "xx",
+        "location": "文化中心",
         "live": "12",
-        "total": "12",
+        "total": "245",
         "new": "12",
         "newRate": "12",
         "retentionTime": "12"
       }, {
-        "location": "xx",
+        "location": "体育馆",
         "live": "12",
-        "total": "12",
+        "total": "222",
         "new": "12",
         "newRate": "12",
         "retentionTime": "12"
       }, {
-        "location": "xx",
+        "location": "美食街",
         "live": "12",
-        "total": "12",
+        "total": "233",
         "new": "12",
         "newRate": "12",
         "retentionTime": "12"
       }, {
-        "location": "xx",
+        "location": "东大门",
         "live": "12",
         "total": "12",
         "new": "12",

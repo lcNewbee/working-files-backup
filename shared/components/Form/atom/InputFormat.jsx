@@ -11,8 +11,8 @@ const propTypes = {
 const defaultProps = {
   type: 'text',
   isFocus: false,
-  onKeyDown: utils.emptyFunc,
-  onChange: utils.emptyFunc,
+  onKeyDown: utils.noop,
+  onChange: utils.noop,
 };
 
 class Input extends React.Component {

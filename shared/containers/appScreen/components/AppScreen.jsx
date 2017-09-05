@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import immutable, { List, Map } from 'immutable';
 import utils, { immutableUtils } from 'shared/utils';
 import { getActionable } from 'shared/axc';
-import { Loading, ProcessContainer } from 'shared/components';
+import { ProcessContainer } from 'shared/components';
 import AppScreenList from './AppScreenList';
 import AppScreenSettings from './AppScreenSettings';
-
-function emptyFunc() { }
 
 function getLoadingStatus(props) {
   const { loading } = props;
@@ -35,7 +33,10 @@ const propTypes = {
   noTitle: PropTypes.bool,
   children: PropTypes.node,
   title: PropTypes.string,
-  refreshInterval: PropTypes.string,
+  refreshInterval: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   className: PropTypes.string,
   actionable: PropTypes.bool,
   route: PropTypes.object,
@@ -47,6 +48,7 @@ const propTypes = {
   changeScreenQuery: PropTypes.func.isRequired,
   updateScreen: PropTypes.func,
   loading: PropTypes.bool,
+  noLoading: PropTypes.bool,
 
   // List 相关属性list
   listOptions: PropTypes.oneOfType([
@@ -64,15 +66,15 @@ const propTypes = {
   customSettingForm: PropTypes.bool,
 };
 const defaultProps = {
-  onAfterSync: emptyFunc,
+  onAfterSync: utils.noop,
   noTitle: true,
   groupid: 'not',
 
   // AppScreenList Option
 
   // Settings Form
-  updateScreenSettings: emptyFunc,
-  saveScreenSettings: emptyFunc,
+  updateScreenSettings: utils.noop,
+  saveScreenSettings: utils.noop,
   hasSettingsSaveButton: false,
   customSettingForm: false,
   settingOnlyChanged: false,
@@ -285,7 +287,7 @@ export default class AppScreen extends React.Component {
     const {
       store, title, noTitle, route, listOptions, customSettingForm, className,
       settingsFormOptions, listId,
-      actionable,
+      actionable, noLoading,
     } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
@@ -306,7 +308,8 @@ export default class AppScreen extends React.Component {
     return (
       <ProcessContainer
         className={screenClassName}
-        loading={this.state.loading}
+        loading={!noLoading && this.state.loading}
+        delay={1000}
         style={{
           height: '100%',
         }}

@@ -120,7 +120,7 @@ class File extends PureComponent {
 
       // React waring: value 需要与 onChange 联合使用
       value: this.state.showText,
-      onChange: utils.emptyFunc,
+      onChange: utils.noop,
     };
     let inputClassName = 'a-input-file__input';
 

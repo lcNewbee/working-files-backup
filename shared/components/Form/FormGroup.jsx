@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
+import utils from 'shared/utils';
 import PureComponent from '../Base/PureComponent';
 import FormInput from './FormInput';
 
@@ -14,7 +15,6 @@ function isValidateMyForm(validateAt, myForm) {
     validateForm === '__all__' || myForm === validateForm
   );
 }
-function emptyFunc() {}
 
 const propTypes = {
   onValidError: PropTypes.func,
@@ -52,8 +52,8 @@ const propTypes = {
 const defaultProps = {
   showLabel: true,
   validator: {
-    check: emptyFunc,
-    checkClear: emptyFunc,
+    check: utils.noop,
+    checkClear: utils.noop,
   },
 
   // 默认所有值为空， 防止在 controlled 与 uncontrolled 间切换

@@ -36,7 +36,7 @@ const defaultProps = {
   options: List([]),
   nextDisabled: false,
   animation: false,
-  onBeforeStep: utils.emptyFunc,
+  onBeforeStep: utils.noop,
 };
 
 class WizardContainer extends PureComponent {

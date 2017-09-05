@@ -15,7 +15,7 @@ const propTypes = {
 const defaultProps = {
   Component: 'span',
   searchOnChange: true,
-  onSearch: utils.emptyFunc,
+  onSearch: utils.noop,
 };
 
 class Search extends PureComponent {

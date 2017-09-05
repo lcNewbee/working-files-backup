@@ -281,7 +281,7 @@ utils.extend({
     return uuid;
   },
 
-  emptyFunc: function(){},
+  noop: function(){},
   warning: warning
 });
 

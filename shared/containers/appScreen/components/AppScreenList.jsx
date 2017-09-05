@@ -142,7 +142,7 @@ const defaultProps = {
   addable: true,
   editable: true,
   deleteable: true,
-  onAfterSync: utils.emptyFunc,
+  onAfterSync: utils.noop,
   defaultListItem: {},
   createModal: (option) => {
     if (option && option.text) {
@@ -960,7 +960,7 @@ class AppScreenList extends React.PureComponent {
                       <Button
                         {...butProps}
                         key={`${actionName}Btn`}
-                        onClick={utils.emptyFunc}
+                        onClick={utils.noop}
                       />
                     </Popconfirm>
                   );

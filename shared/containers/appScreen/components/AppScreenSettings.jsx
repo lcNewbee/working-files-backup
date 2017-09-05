@@ -43,8 +43,8 @@ const propTypes = {
 
 const defaultProps = {
   hasSaveButton: true,
-  updateScreenSettings: utils.emptyFunc,
-  resetVaildateMsg: utils.emptyFunc,
+  updateScreenSettings: utils.noop,
+  resetVaildateMsg: utils.noop,
   createModal: (option) => {
     if (option && option.text) {
       /* eslint-disable no-alert */
