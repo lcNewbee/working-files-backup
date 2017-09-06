@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import echarts from 'echarts';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -162,6 +163,12 @@ export default class Environment extends Component {
     const leatestWeekData = store.getIn([curScreenId, 'data', 'leatestWeekData']) || fromJS([]);
     const timeData = leatestWeekData.map(item => item.get('date')).toJS();
     const qualityData = leatestWeekData.map(item => item.get('pm25')).toJS();
+    const qualityDataCompensate = qualityData.map(value => 500 - value);
+    const dataShadow = [];
+    const yMax = 500;
+    for (let i = 0; i < qualityData.length; i += 1) {
+      dataShadow.push(yMax);
+    }
     const option = {
       color: ['#3398DB'],
       textStyle: {
@@ -206,6 +213,10 @@ export default class Environment extends Component {
           axisLine: {
             lineStyle: { color: '#fff' },
           },
+          // minInterval: 50,
+          interval: 100,
+          splitNumber: 100,
+          max: 500,
           splitLine: {
             show: false,
             lineStyle: { color: '#444' },
@@ -216,14 +227,37 @@ export default class Environment extends Component {
         {
           name: 'PM2.5浓度',
           type: 'bar',
-          barWidth: '60%',
+          z: 3,
+          barGap: '-100%',
+          stack: '总量',
           data: qualityData,
+          animation: false,
+          itemStyle: {
+            normal: {
+              opacity: 0,
+            },
+          },
           label: {
             normal: {
               position: 'top',
               show: true,
+            },
+          },
+        },
+        {
+          name: 'PM2.5浓度',
+          type: 'bar',
+          z: 3,
+          barGap: '-100%',
+          stack: '总量',
+          data: qualityDataCompensate,
+          animation: false,
+          label: {
+            normal: {
+              position: 'insideBottom',
+              show: true,
               formatter: (params) => {
-                const value = +params.value;
+                const value = 500 - +params.value;
                 if (value <= 50) {
                   return '优';
                 } else if (value <= 100) {
@@ -239,6 +273,38 @@ export default class Environment extends Component {
               },
             },
           },
+          itemStyle: {
+            normal: {
+              color: '#010a29',
+              shadowColor: '#010a29',
+              // borderWidth: 10,
+              // shadowBlur: 10,
+              // shadowOffsetX: ,
+            },
+          },
+        },
+        {
+          type: 'bar',
+          z: 2,
+          itemStyle: {
+            normal: {
+              color: new echarts.graphic.LinearGradient(
+                0, 0, 0, 1,
+                [
+                  { offset: 0.1, color: '#62001e' },
+                  // { offset: 0.5, color: '#970454' },
+                  // { offset: 0.7, color: '#fe0000' },
+                  { offset: 0.8, color: '#fe8800' },
+                  // { offset: 0.9, color: '#fbd029' },
+                  { offset: 1, color: '#6acd06' },
+                ],
+              ),
+              borderColor: '#010a29',
+              borderWidth: 2,
+            },
+          },
+          barGap: '-100%',
+          data: dataShadow,
         },
       ],
     };
