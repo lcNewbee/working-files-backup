@@ -1026,7 +1026,7 @@ class AaaServer_Model extends CI_Model {
                 case 'server_key' : $arr['server_key'] = $row['attr_value']; break;
                 case 'redirect_url' : $arr['server_url'] = $row['attr_value']; break;
                 case 'server_ifname' : $arr['interface_bind'] = $row['attr_value']; break;
-                //case 'ac_ip' : $arr['ac_ip'] = $row['attr_value']; break;
+                case 'ac_ip' : $arr['ac_ip'] = $row['attr_value']; break;
             }
         }
         return $arr;
