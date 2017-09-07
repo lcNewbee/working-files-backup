@@ -130,6 +130,14 @@ $route['goform/system/reboot'] = 'system/systemMaintenance/reboot';
 $route['goform/system/license'] = 'system/systemLicense';
 $route['goform/system/networktimeprotocol'] = 'system/systemNtp';
 $route['goform/system/apbackup'] = 'system/apbackup';
+
+//dashboard
+$route['goform/dashboard/overview'] = 'dashboard/overview';//环境监测概览
+//$route['goform/dashboard/heatmap'] = 'dashboard/heatmap';//热力图
+//$route['goform/dashboard/clientsPaths'] = 'dashboard/clientsPaths';//轨迹图
+$route['goform/dashboard/flowanalysis'] = 'dashboard/flowanalysis';//客流详情
+$route['goform/dashboard/environment'] = 'dashboard/environment';//环境详情
+
 //Portal
 $route['goform/portal/overview'] = 'portal/overview';
 $route['goform/portal/radius/nas'] = 'portal/RadiusNas';

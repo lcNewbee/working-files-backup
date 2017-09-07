@@ -242,7 +242,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3.创建 Portal 模板
                 $portal_tp = array(
-                    'ac_ip' => $ac_ip,
+                    'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
                     'server_key' => element('server_key', $data['portalServer']),
                     'server_port' => element('server_port', $data['portalServer']),
@@ -337,7 +337,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3.创建 Portal 模板
                 $portal_tp = array(
-                    'ac_ip' => $ac_ip,
+                    'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
                     'server_key' => element('server_key', $data['portalServer']),
                     'server_port' => element('server_port', $data['portalServer']),
@@ -611,7 +611,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3 portal模版 需要修改                    
                 $portal_tp = array(
-                    'ac_ip' => $ac_ip,
+                    'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
                     'server_key' => element('server_key', $data['portalServer']),
                     'server_port' => element('server_port', $data['portalServer']),
@@ -761,7 +761,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //3 portal模版 需要修改                    
                 $portal_tp = array(
-                    'ac_ip' => $ac_ip,
+                    'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
                     'server_key' => element('server_key', $data['portalServer']),
                     'server_port' => element('server_port', $data['portalServer']),
