@@ -190,18 +190,18 @@ function getFlowChangeOption(data) {
         fontSize: 14,
       },
     },
-    toolbox: {
-      show: true,
-      feature: {
-        dataZoom: {
-          yAxisIndex: 'none',
-        },
-        dataView: { readOnly: false },
-        magicType: { type: ['line', 'bar'] },
-        restore: {},
-        saveAsImage: {},
-      },
-    },
+    // toolbox: {
+    //   show: true,
+    //   feature: {
+    //     dataZoom: {
+    //       yAxisIndex: 'none',
+    //     },
+    //     dataView: { readOnly: false },
+    //     magicType: { type: ['line', 'bar'] },
+    //     restore: {},
+    //     saveAsImage: {},
+    //   },
+    // },
     xAxis: {
       type: 'category',
       name: '时',

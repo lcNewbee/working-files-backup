@@ -102,15 +102,15 @@ export default class Environment extends Component {
           color: '#fff',
         },
       },
-      toolbox: {
-        show: true,
-        feature: {
-          dataView: { readOnly: false },
-          magicType: { type: ['line', 'bar'] },
-          restore: {},
-          saveAsImage: {},
-        },
-      },
+      // toolbox: {
+      //   show: true,
+      //   feature: {
+      //     dataView: { readOnly: false },
+      //     magicType: { type: ['line', 'bar'] },
+      //     restore: {},
+      //     saveAsImage: {},
+      //   },
+      // },
       xAxis: {
         type: 'category',
         name: '日期',
@@ -325,7 +325,7 @@ export default class Environment extends Component {
     const timeData = leatestWeekData.map(item => item.get('date')).toJS();
     const qualityData = leatestWeekData.map(item => 6 - +item.get('waterQuality')).toJS();
     const option = {
-      color: ['#3398DB'],
+      color: ['#6acd06'],
       textStyle: {
         color: '#fff',
       },
@@ -436,15 +436,15 @@ export default class Environment extends Component {
           color: '#fff',
         },
       },
-      toolbox: {
-        show: true,
-        feature: {
-          dataView: { readOnly: false },
-          magicType: { type: ['line', 'bar'] },
-          restore: {},
-          saveAsImage: {},
-        },
-      },
+      // toolbox: {
+      //   show: true,
+      //   feature: {
+      //     dataView: { readOnly: false },
+      //     magicType: { type: ['line', 'bar'] },
+      //     restore: {},
+      //     saveAsImage: {},
+      //   },
+      // },
       xAxis: {
         type: 'category',
         boundaryGap: false,
