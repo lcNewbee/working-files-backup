@@ -701,8 +701,6 @@ export default class View extends React.Component {
       return null;
     }
 
-    console.log(this.$$potalServerFormOptions.toJS())
-
     return (
       <div>
         <div className="o-box__cell">
