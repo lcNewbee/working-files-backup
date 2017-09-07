@@ -73,7 +73,12 @@ export default class Login extends React.PureComponent {
       // 如果登录时间不一致
       // 后续可以做记住密码的功能
       if (this.props.loginedAt !== nextProps.loginedAt) {
-        this.props.history.push(mainPath);
+        // dashboard 用于演示的特殊用户
+        if (this.state.username === 'dashboard' || this.props.app.getIn(['login', 'username']) === 'dashboard') {
+          this.props.history.push('/dashboard/overview');
+        } else {
+          this.props.history.push(mainPath);
+        }
       }
     }
   }

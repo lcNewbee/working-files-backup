@@ -47,7 +47,7 @@ $warningSize: 10px;
   padding: 0 4px;
 
   .link-more {
-    color: #ddd;
+    color: #aaa;
     line-height: 18px;
     transition: transform .3s ease-in-out;
 
@@ -81,9 +81,28 @@ $warningSize: 10px;
     background-color: #eee;
   }
 
+  .link-header {
+    cursor: pointer;
+
+    &:hover {
+      .link-more {
+        color: #fff;
+      }
+    }
+  }
+
   &__header {
     border-top-right-radius: $radiusSize;
     border-top-left-radius: $radiusSize;
+
+    .icon {
+      cursor: pointer;
+      color: #aaa;
+
+      &:hover {
+        color: #fff;
+      }
+    }
   }
   &__content {
     border-bottom-right-radius: $radiusSize;
@@ -100,11 +119,12 @@ $warningSize: 10px;
     left: 0;
     right: 0;
     z-index: 1600;
+    margin-bottom: 0;
 
     .rw-map {
       position: absolute;
       width: 100%;
-      top: 36px;
+      top: 0;
       bottom: 0;
     }
   }
@@ -134,7 +154,7 @@ $warningSize: 10px;
 
 .rw-description-list {
   @include clearfix();
-  line-height: 1.2rem;
+  line-height: 3.5rem;
 
   dt,
   dd {
@@ -152,7 +172,7 @@ $warningSize: 10px;
   }
 
   dd {
-    font-size: 2rem;
+    font-size: 2.25rem;
   }
 }
 
@@ -168,6 +188,7 @@ $warningSize: 10px;
   border-top: 1px solid #555c6f;
   font-size: 14px;
   margin-bottom: $spacer;
+  margin-top: 10px;
 
   > span {
     font-size: 18px;
@@ -176,13 +197,13 @@ $warningSize: 10px;
 
 .rw-dashboard-environment {
   text-align: center;
-  padding-bottom: 9px;
+  padding-bottom: 11px;
 
   li,
   dt,
   dd {
     text-align: center;
-    padding: 5px 0;
+    padding: 6px 0;
   }
   dd {
     font-size: 16px;
@@ -204,6 +225,30 @@ $warningSize: 10px;
     li {
       padding: $spacer * 2 / 3;
     }
+  }
+}
+.rw-map-normal-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #2ea9e5;
+  text-align: center;
+  border-radius: 40px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -3px;
+    margin-left: -3px;
+    display: inline-block;
+    background-color: #fff;
+    width: 6px;
+    height: 6px;
+    border-radius: 4px;
+    line-height: 16px;
+    vertical-align: middle;
   }
 }
 

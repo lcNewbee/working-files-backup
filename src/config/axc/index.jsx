@@ -935,7 +935,7 @@ const routes = [
       {
         id: 'login',
         path: '/login',
-        mainPath: '/dashboard',
+        mainPath: '/main/group/monitor/overview',
         // mainPath: '/quicksetup',
         component: sLogin.Screen,
       },

@@ -6,6 +6,7 @@ import './_index.scss';
 
 const propTypes = {
   noResize: PropTypes.bool,
+  reinitialize: PropTypes.bool,
   onReady: PropTypes.func,
   onZoomChange: PropTypes.func,
   backgroundImgUrl: PropTypes.string,
@@ -30,6 +31,7 @@ export default class View extends React.PureComponent {
       'renderHeatMap',
       'getImgNaturalSize',
       'handleZoomChange',
+      'initialize',
     ]);
 
     this.state = {
@@ -47,6 +49,9 @@ export default class View extends React.PureComponent {
       this.setState({
         backgroundImgUrl: nextProps.backgroundImgUrl,
       });
+    }
+    if (nextProps.reinitialize) {
+      this.initialize();
     }
   }
   componentDidUpdate(prevProps, prevState) {
@@ -78,17 +83,12 @@ export default class View extends React.PureComponent {
     const image = new Image();
 
     image.onload = () => {
-      if (image.width && this.mapContent) {
+      if (image.width && this.mapElem) {
         // 高度与宽度对比
         const naturalRatio = image.height / image.width;
-        const width = this.mapContent.offsetWidth;
+        const width = this.mapElem.offsetWidth;
         const height = width * naturalRatio;
-
-        this.setState({
-          naturalWidth: width,
-          naturalHeight: height,
-          naturalRatio,
-        });
+        this.initialize(naturalRatio);
 
         this.props.onReady({
           width,
@@ -100,6 +100,28 @@ export default class View extends React.PureComponent {
     };
     image.onerror = () => {};
     image.src = url;
+  }
+
+  /**
+   * 初始化 zoom 等于 100 时图片的长宽
+   *
+   * @param {any} naturalRatio
+   * @memberof View
+   */
+  initialize(newNaturalRatio) {
+    const { naturalRatio, naturalWidth, naturalHeight } = this.state;
+    const newRatio = newNaturalRatio || naturalRatio;
+    const newWidth = this.mapElem.offsetWidth;
+    const newHeight = newWidth * newRatio;
+
+    // 只有在需要改变时，才修改 state值
+    if (naturalRatio !== newRatio || newWidth !== naturalWidth || newHeight !== naturalHeight) {
+      this.setState({
+        naturalWidth: newWidth,
+        naturalHeight: newWidth * newRatio,
+        naturalRatio: newRatio,
+      });
+    }
   }
 
   handleZoomChange(zoom) {

@@ -43,7 +43,34 @@
     "parking": {
       "total": "532",
       "used": "248",
-      "booked": "12"
+      "booked": "12",
+      "list": [
+        {
+          "name": "西门停车场",
+          "total": "400",
+          "free": "12",
+          "used": "345",
+          "booked": "12"
+        }, {
+          "name": "东门停车场",
+          "total": "423",
+          "free": "12",
+          "used": "345",
+          "booked": "12"
+        }, {
+          "name": "南门停车场",
+          "total": "360",
+          "free": "12",
+          "used": "345",
+          "booked": "12"
+        }, {
+          "name": "北门停车场",
+          "total": "380",
+          "free": "12",
+          "used": "345",
+          "booked": "12"
+        }
+      ]
     },
     "clients": {
       "total": 893,
