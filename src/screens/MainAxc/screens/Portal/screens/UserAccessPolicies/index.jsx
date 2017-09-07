@@ -9,7 +9,7 @@ import { actions as appActions } from 'shared/containers/app';
 import validator from 'shared/validator';
 
 import {
-  getPortList, getWebTemplate, getAllGroupSSID, getApMac,
+  getPortList, getInterfacesList, getWebTemplate, getAllGroupSSID, getApMac,
 } from './getServerData';
 
 import {
@@ -410,17 +410,20 @@ export default class View extends React.Component {
       getAllGroupSSID(),
       getApMac(),
       getWebTemplate(),
+      getInterfacesList(),
     ]).then(
       (values) => {
         const portOptions = fromJS(values[0].options);
         const ssidOptions = fromJS(values[1].options);
         const apsMacOptions = fromJS(values[2].options);
         const webTemplateOptions = fromJS(values[3].options);
+        const interfacesIpList = fromJS(values[4].options);
         this.setState({
           portOptions,
           ssidOptions,
           apsMacOptions,
           webTemplateOptions,
+          interfacesIpList,
         });
       },
     );
@@ -539,6 +542,24 @@ export default class View extends React.Component {
         return $$ret;
       },
     );
+    this.$$potalServerFormOptions = this.$$potalServerFormOptions
+      .setIn([1, 1, 'options'], nextState.interfacesIpList);
+    // .map(
+    //   ($$item) => {
+    //     const curId = $$item.get('id');
+    //     let $$ret = $$item;
+
+
+    //     switch (curId) {
+    //       case 'ac_ip':
+    //         $$ret = $$ret.set('options', nextState.interfacesIpList);
+    //         break;
+
+    //       default:
+    //     }
+    //     return $$ret;
+    //   },
+    // );
     this.$$portalTemplateFormOptions = this.$$portalTemplateFormOptions.map(
       ($$item) => {
         const curId = $$item.get('id');
@@ -679,6 +700,8 @@ export default class View extends React.Component {
     if ($$curData.get('auth_accesstype') === '8021x-access' || $$curData.get('portal_server_type') !== 'remote') {
       return null;
     }
+
+    console.log(this.$$potalServerFormOptions.toJS())
 
     return (
       <div>

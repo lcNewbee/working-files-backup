@@ -625,10 +625,10 @@ export const $$potalServerOptions = fromJS([
   },
   {
     id: 'ac_ip',
-    label: __('Nas IP'),
+    label: __('AC IP'),
     fieldset: 'other',
     formProps: {
-      type: 'text',
+      type: 'select',
       required: true,
       validator: validator({
         rules: 'ip',
