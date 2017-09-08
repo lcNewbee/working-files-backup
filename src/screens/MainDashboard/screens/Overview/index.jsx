@@ -397,8 +397,27 @@ export default class DashboardOverview extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.fetchHeatMapData();
+    // this.fetchHeatMapData();
   }
+  componentWillReceiveProps(nextProps) {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const $$serverData = store.getIn([curScreenId, 'data']);
+    const $$nextServerData = nextProps.store.getIn([curScreenId, 'data']);
+
+    if ($$serverData !== $$nextServerData) {
+      let newIndex = this.state.heatMapImgIndex + 1;
+
+      if (newIndex > 4) {
+        newIndex = 1;
+      }
+
+      this.setState({
+        heatMapImgIndex: newIndex,
+      });
+    }
+  }
+
   componentWillUpdate(nextProps, nextState) {
     if (typeof this.state.heatmapMax !== 'undefined' && this.state.heatmapMax !== nextState.heatmapMax) {
       this.reinitializeHeatMap = true;
