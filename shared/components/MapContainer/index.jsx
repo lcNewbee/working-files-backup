@@ -17,7 +17,7 @@ const propTypes = {
 const defaultProps = {
   onReady: utils.noop,
   onZoomChange: utils.noop,
-  backgroundImgUrl: 'images/backgroundImg.png',
+  backgroundImgUrl: '',
 };
 
 export default class View extends React.PureComponent {
@@ -43,6 +43,12 @@ export default class View extends React.PureComponent {
   }
   componentDidMount() {
     this.getImgNaturalSize(this.state.backgroundImgUrl);
+
+    // 全局添加 mouseup 事件
+    // 防止鼠标在 map元素外起来，内容还在拖动问题
+    document.addEventListener('mouseup', () => {
+      this.mapMouseDown = false;
+    });
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.backgroundImgUrl !== this.state.backgroundImgUrl) {
@@ -60,9 +66,6 @@ export default class View extends React.PureComponent {
     }
   }
 
-  onMapMouseUp() {
-    this.mapMouseDown = false;
-  }
   onMapMouseDown(e) {
     this.mapMouseDown = true;
     this.mapClientX = e.clientX;
@@ -88,6 +91,7 @@ export default class View extends React.PureComponent {
         const naturalRatio = image.height / image.width;
         const width = this.mapElem.offsetWidth;
         const height = width * naturalRatio;
+
         this.initialize(naturalRatio);
 
         this.props.onReady({
@@ -98,7 +102,15 @@ export default class View extends React.PureComponent {
         });
       }
     };
-    image.onerror = () => {};
+
+    // 图片加载失败
+    image.onerror = () => {
+      if (this.mapElem) {
+        const naturalRatio = this.mapElem.offsetHeight / this.mapElem.offsetWidth;
+
+        this.initialize(naturalRatio);
+      }
+    };
     image.src = url;
   }
 
@@ -191,7 +203,6 @@ export default class View extends React.PureComponent {
             }
           }}
           onMouseDown={this.onMapMouseDown}
-          onMouseUp={this.onMapMouseUp}
           onMouseMove={this.onMapMouseMove}
         >
           { this.props.children }
