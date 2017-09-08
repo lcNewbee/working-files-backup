@@ -3,16 +3,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { Map } from 'immutable';
-import { Icon, EchartReact, Table } from 'shared/components';
+import { Icon, EchartReact, Table, MapContainer } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import { actions, AppScreen } from 'shared/containers/appScreen';
 import echarts from 'echarts/lib/echarts';
 import h337 from 'heatmap.js';
-import { colors, $$commonPieOption } from 'shared/config/axc';
+import { $$commonPieOption } from 'shared/config/axc';
 
 import Rain from './Rain';
 import Bar from './Bar';
-import MapContainer from './MapContainer';
 
 const REFRESH_INTERVAR = 10000;
 
@@ -561,6 +560,7 @@ export default class DashboardOverview extends React.PureComponent {
     const $$serverData = store.getIn([curScreenId, 'data']);
     const headerNode = (
       <h3
+        key="header"
         className="element link-header"
         onClick={() => this.props.history.push('/dashboard/environment')}
       >
@@ -625,10 +625,10 @@ export default class DashboardOverview extends React.PureComponent {
     const $$serverData = store.getIn([curScreenId, 'data']);
     const warningLevel = Math.ceil(($$serverData.getIn(['environment', 'rainfall']) - 40) / 45);
     const headerNode = (
-      <h3 className="element">洪涝预警</h3>
+      <h3 className="element" key="header">洪涝预警</h3>
     );
     const contentNode = (
-      <div className="element row">
+      <div className="element row" key="content">
         <div className="cols col-5" >
           <Rain warningLevel="4" text="暴雨" active={warningLevel === 4} />
           <Rain warningLevel="3" text="暴雨" active={warningLevel === 3} />
@@ -661,10 +661,10 @@ export default class DashboardOverview extends React.PureComponent {
     const curScreenId = store.get('curScreenId');
     const $$serverData = store.getIn([curScreenId, 'data']);
     const headerNode = (
-      <h3 className="element">车位信息</h3>
+      <h3 className="element" key="header">车位信息</h3>
     );
     const contentNode = (
-      <div className="element">
+      <div className="element" key="content">
         <dl className="rw-description-list">
           <dt><Icon name="square" style={{ color: '#007bff' }} />闲置车位</dt>
           <dd>{$$serverData.getIn(['parking', 'total']) - $$serverData.getIn(['parking', 'used'])}</dd>
@@ -690,6 +690,7 @@ export default class DashboardOverview extends React.PureComponent {
     const $$serverData = store.getIn([curScreenId, 'data']);
     const headerNode = (
       <h3
+        key="header"
         className="element link-header"
         onClick={() => this.props.history.push('/dashboard/flowanalysis')}
       >
@@ -709,6 +710,7 @@ export default class DashboardOverview extends React.PureComponent {
 
     contentNode = (
       <EchartReact
+        key="content"
         className="chart-container"
         option={option}
         style={{
@@ -726,6 +728,7 @@ export default class DashboardOverview extends React.PureComponent {
     const $$serverData = store.getIn([curScreenId, 'data']);
     const headerNode = (
       <h3
+        key="header"
         className="element link-header"
         onClick={() => this.props.history.push('/dashboard/flowanalysis')}
       >
@@ -737,7 +740,7 @@ export default class DashboardOverview extends React.PureComponent {
     let contentNode = null;
 
     contentNode = (
-      <div className="element">
+      <div className="element" key="content">
         <EchartReact
           className="chart-container"
           style={{
@@ -756,6 +759,7 @@ export default class DashboardOverview extends React.PureComponent {
     const $$serverData = store.getIn([curScreenId, 'data']);
     const headerNode = (
       <h3
+        key="header"
         className="element link-header"
         onClick={() => this.props.history.push('/dashboard/flowanalysis')}
       >
@@ -764,7 +768,7 @@ export default class DashboardOverview extends React.PureComponent {
       </h3>
     );
     const contentNode = (
-      <div className="element" style={{ height: '270px' }}>
+      <div className="element" style={{ height: '270px' }} key="content">
         <Table
           options={[
             {
@@ -942,6 +946,7 @@ export default class DashboardOverview extends React.PureComponent {
               </h3>
               <MapContainer
                 className="rw-dashboard-card__content"
+                backgroundImgUrl="images/backgroundImg.jpg"
               >
                 <div className="rw-map-warning-icon" >
                   <div className="rw-map-warning-icon__warning" />
