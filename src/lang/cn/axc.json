@@ -586,6 +586,7 @@
   "AC Maintenance": "AC维护",
   "Save Configuration": "保存配置",
   "Backup Configuration": "备份配置",
+  "AC Configuration Backup": "AC配置备份",
   "Restore Configuration": "恢复配置",
   "Backup Your Current Configuration": "备份当前配置",
   "Reboot Device": "重启设备",
