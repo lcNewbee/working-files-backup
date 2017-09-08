@@ -261,8 +261,8 @@ const bottomChartCommonOption = $$commonPieOption.mergeDeep({
     },
   },
   title: {
-    left: '35px',
-    top: 'top',
+    top: 12,
+    left: '8%',
     show: true,
     textStyle: {
       color: '#fff',

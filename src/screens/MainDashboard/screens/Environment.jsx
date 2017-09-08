@@ -80,13 +80,16 @@ export default class Environment extends Component {
     const highTempData = leatestWeekData.map(item => item.getIn(['temperature', 1])).toJS();
     const option = {
       title: {
+        top: 12,
+        left: 12,
         text: '七日气温变化',
         textStyle: {
           color: '#fff',
         },
       },
       grid: {
-        bottom: '18%',
+        top: 80,
+        bottom: '14%',
         left: '8%',
         right: '7%',
       },
@@ -97,6 +100,7 @@ export default class Environment extends Component {
         trigger: 'axis',
       },
       legend: {
+        top: 12,
         data: ['最低气温', '最高气温'],
         textStyle: {
           color: '#fff',
@@ -175,6 +179,8 @@ export default class Environment extends Component {
         color: '#fff',
       },
       title: {
+        top: 12,
+        left: 12,
         text: '七日PM2.5浓度统计',
         textStyle: {
           color: '#fff',
@@ -188,9 +194,10 @@ export default class Environment extends Component {
         formatter: '{a}<br/>{b}: {c}μg/m³',
       },
       grid: {
+        top: 80,
         left: '5%',
         right: '6%',
-        bottom: '10%',
+        bottom: '8%',
         containLabel: true,
       },
       xAxis: [
@@ -331,6 +338,8 @@ export default class Environment extends Component {
       },
       title: {
         text: '七日水质统计',
+        top: 12,
+        left: 12,
         textStyle: {
           color: '#fff',
         },
@@ -343,9 +352,10 @@ export default class Environment extends Component {
         formatter: params => `${params[0].seriesName}<br/ >${params[0].name}: ${6 - params[0].value}类`,
       },
       grid: {
+        top: 80,
         left: '5%',
         right: '6%',
-        bottom: '10%',
+        bottom: '6%',
         containLabel: true,
       },
       xAxis: [
@@ -415,12 +425,15 @@ export default class Environment extends Component {
     const option = {
       title: {
         text: '噪音监控',
+        top: 12,
+        left: 12,
         textStyle: {
           color: '#fff',
         },
       },
       grid: {
-        bottom: '18%',
+        top: 80,
+        bottom: '13%',
         left: '8%',
         right: '7%',
       },
@@ -432,6 +445,7 @@ export default class Environment extends Component {
       },
       legend: {
         data: ['监控点1', '监控点2', '监控点3'],
+        top: 12,
         textStyle: {
           color: '#fff',
         },
