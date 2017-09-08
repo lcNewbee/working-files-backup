@@ -151,11 +151,20 @@ class Overview_Model extends CI_Model {
 
     //获取景区配置
     private function getCcenicList(){
+        $arr = array(
+            array('id'=>'1','name'=>'龙岗岗贝社区'),
+            array('id'=>'2','name'=>'葵涌较场尾社区'),
+            array('id'=>'3','name'=>'观澜版画基地'),
+            array('id'=>'4','name'=>'东部华侨城'),
+            array('id'=>'5','name'=>'世界之窗'),
+        );
+        /*
         $arr = array();
         $query = $this->mysql->query("select id,name from region where parent_id=0")->result_array();
         if(count($query) > 0){
             $arr = $query;
         }
+        */
         return $arr;
     }
 
