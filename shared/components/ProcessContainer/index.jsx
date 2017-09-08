@@ -24,17 +24,58 @@ const defaultProps = {
 
 class ProcessContainer extends React.Component {
   constructor(props) {
+    const { delay, loading } = props;
     super(props);
 
     utils.binds(this, [
       'renderHeart',
+      'showLoading',
     ]);
+
+    if (loading) {
+      this.showLoading(delay);
+    } else {
+      this.state = {
+        loading: false,
+      };
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.loading && nextProps.loading !== this.state.loading) {
+      this.showLoading(nextProps.delay);
+    }
+  }
+
+
+  showLoading(delay) {
+    if (delay > 0) {
+      this.state = {
+        loading: false,
+      };
+      this.delayTimeout = setTimeout(() => {
+        this.setState({
+          loading: true,
+        });
+      }, delay);
+    } else {
+      this.state = {
+        loading: true,
+      };
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.delayTimeout);
   }
 
   render() {
     const { size, loading, delay, className, ...rest } = this.props;
     let myClassnames = classnames(className, {
       'rw-process-container': true,
+    });
+    const loadingContentClassnames = classnames('rw-process-container__loading', {
+      'active': this.state.loading,
     });
 
     if (size !== 'default' && size) {
@@ -49,7 +90,9 @@ class ProcessContainer extends React.Component {
         }
         {
           loading ? (
-            <div className="rw-process-container__loading">
+            <div
+              className={loadingContentClassnames}
+            >
               <Loading
                 size={size}
                 delay={delay}
