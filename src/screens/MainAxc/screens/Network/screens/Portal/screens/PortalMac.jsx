@@ -69,7 +69,7 @@ export default class View extends React.Component {
       portOptions: fromJS([]),
     };
     utils.binds(this, [
-      'onBeforeSave',
+      'onBeforeSync',
     ]);
   }
   componentWillMount() {
@@ -81,21 +81,18 @@ export default class View extends React.Component {
     //   });
   }
 
-  // onBeforeSave($$actionQuery, $$curListItem) {
-  //   const actionType = $$actionQuery.getIn(['action']);
-  //   const interfaceBind = $$curListItem.get('interface_bind');
-  //   let serverName = '';
+  onBeforeSync($$actionQuery, $$curListItem) {
+    const actionType = $$actionQuery.getIn(['action']);
+    let srcMac = $$curListItem.get('src_mac');
 
-  //   if (actionType === 'add' || actionType === 'delete') {
-  //     serverName = this.state.portOptions.find(
-  //       $$item => $$item.get('value') === interfaceBind,
-  //     ).get('serverName');
+    if (actionType === 'add') {
+      srcMac = srcMac.replace(/-/g, ':');
 
-  //     this.props.updateCurListItem({
-  //       template_name: serverName,
-  //     });
-  //   }
-  // }
+      this.props.updateCurListItem({
+        src_mac: srcMac,
+      });
+    }
+  }
 
   render() {
     const { store } = this.props;
@@ -106,9 +103,7 @@ export default class View extends React.Component {
         {...this.props}
         store={store}
         listOptions={curListOptions}
-
-        onBeforeSave={this.onBeforeSave}
-        // actionBarChildren={__('This function is available only when the "Rule Type" is "Port",whice configured in "User Access Policies".')}
+        onBeforeSync={this.onBeforeSync}
         editable={false}
         actionable
         selectable

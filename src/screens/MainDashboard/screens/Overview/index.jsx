@@ -128,7 +128,7 @@ function getClientFlowEchartOption($$serverData) {
     },
     series: [
       {
-        name: __('Clients'),
+        name: __('客流'),
         type: 'line',
         sampling: 'average',
         itemStyle: {
@@ -319,6 +319,7 @@ function getClientsTimeOption($$serverData, total) {
       },
     ],
   }).toJS();
+  let totalNum = total;
 
   if ($$serverData) {
     $$serverData.forEach((val, key) => {
@@ -329,10 +330,12 @@ function getClientsTimeOption($$serverData, total) {
       }
     });
   }
+  totalNum = myData[0].value + myData[1].value;
 
   myData[0].name = `${myData[0].name}人数：${myData[0].value}`;
   myData[1].name = `${myData[1].name}人数：${myData[1].value}`;
 
+  ret.title.subtext = `${totalNum || ''} 人`;
   ret.series[0].data = myData;
   ret.legend.data = [myData[0].name, myData[1].name];
 
