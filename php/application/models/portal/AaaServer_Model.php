@@ -244,7 +244,7 @@ class AaaServer_Model extends CI_Model {
                 $portal_tp = array(
                     'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
-                    'server_key' => element('server_key', $data['portalServer']),
+                    'server_key' => element('server_key', $data['portalServer'],''),
                     'server_port' => element('server_port', $data['portalServer']),
                     'server_url' => element('server_url', $data['portalServer']),
                     'template_name' => $domain,
@@ -339,7 +339,7 @@ class AaaServer_Model extends CI_Model {
                 $portal_tp = array(
                     'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
-                    'server_key' => element('server_key', $data['portalServer']),
+                    'server_key' => element('server_key', $data['portalServer'],''),
                     'server_port' => element('server_port', $data['portalServer']),
                     'server_url' => element('server_url', $data['portalServer']),
                     'template_name' => $domain,
@@ -613,7 +613,7 @@ class AaaServer_Model extends CI_Model {
                 $portal_tp = array(
                     'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
-                    'server_key' => element('server_key', $data['portalServer']),
+                    'server_key' => element('server_key', $data['portalServer'],''),
                     'server_port' => element('server_port', $data['portalServer']),
                     'server_url' => element('server_url', $data['portalServer']),
                     'template_name' => $domain,
@@ -763,7 +763,7 @@ class AaaServer_Model extends CI_Model {
                 $portal_tp = array(
                     'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
-                    'server_key' => element('server_key', $data['portalServer']),
+                    'server_key' => element('server_key', $data['portalServer'],''),
                     'server_port' => element('server_port', $data['portalServer']),
                     'server_url' => element('server_url', $data['portalServer']),
                     'template_name' => $domain,
