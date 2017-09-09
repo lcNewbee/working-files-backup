@@ -160,10 +160,11 @@ $warningSize: 10px;
   dd {
     float: left;
     width: 50%;
-    padding: $spacer * 0.75;
+    padding: $spacer * 0.75 0;
   }
 
   dt {
+    @include ellipsis();
     .icon {
       margin-right: $spacer * 0.5;
       width: 12px;

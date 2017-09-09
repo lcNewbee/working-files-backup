@@ -7,12 +7,17 @@ import './_index.scss';
 const propTypes = {
   children: PropTypes.node,
   title: PropTypes.string,
+  theme: PropTypes.oneOf([
+    'dark',
+    'light',
+  ]),
 };
 
 const defaultProps = {
   prefixCls: 'rw-tooltip',
   placement: 'top',
   transitionName: 'rw-tooltip-zoom',
+  theme: 'dark',
 };
 
 export class Tooltip extends Component {
@@ -30,9 +35,13 @@ export class Tooltip extends Component {
   }
 
   render() {
+    const { theme } = this.props;
+    const classNames = `rw-tooltip--${theme}`;
+
     return (
       <RcTooltip
         {...this.props}
+        overlayClassName={classNames}
         overlay={<span>{this.props.title}</span>}
       >
         { this.props.children }

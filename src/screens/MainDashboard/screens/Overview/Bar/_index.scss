@@ -2,7 +2,8 @@
 @import "variables";
 @import "mixins";
 
-$scaleWidth: 12px;
+$scaleWidth: 33%;
+$scaleValueWidth: 12px;
 $valueBarWidth: 35px;
 
 .rw-bar {
@@ -30,12 +31,13 @@ $valueBarWidth: 35px;
   }
 
   &__scale {
-    width: 33.33%;
+    position: absolute;
+    right: 0;
+    width: $scaleWidth;
     height: 100%;
     float: left;
     margin-left: 25%;
     border-left: 2px solid #fff;
-    position: relative;
 
     > span {
       position: absolute;
@@ -48,8 +50,8 @@ $valueBarWidth: 35px;
 
     &__value {
       border-bottom: 1px solid #fff;
-      margin-left: -($scaleWidth / 2) - 1px;
-      width: $scaleWidth;
+      margin-left: -($scaleValueWidth / 2) - 1px;
+      width: $scaleValueWidth;
       position: relative;
 
       span {
@@ -90,9 +92,9 @@ $valueBarWidth: 35px;
   }
   &__line {
     position: absolute;
-    width: 24%;
     border-bottom: 1px #2ea9e5 dashed;
     left: $valueBarWidth;
+    right: $scaleWidth;
     transition: bottom .3s ease-in-out;
 
     &::after {

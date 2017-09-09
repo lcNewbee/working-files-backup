@@ -9,7 +9,7 @@ const redux = require('redux');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
-const prodConfig = require('./config/noBrandAIP10L').default;
+const prodConfig = require('./config/AIP5').default;
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;
@@ -66,9 +66,9 @@ window.onload = () => {
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/noBrandAIP10L', () => {
+  module.hot.accept('./config/AIP5', () => {
     /* eslint-disable global-require */
-    const nextConfig = require('./config/noBrandAIP10L').default;
+    const nextConfig = require('./config/AIP5').default;
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,
