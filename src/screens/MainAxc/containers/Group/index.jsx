@@ -524,6 +524,7 @@ export default class MainGroup extends React.Component {
                 <div>
                   <Tooltip
                     placement="top"
+                    theme="light"
                     title={__('Manage AP Groups')}
                   >
                     <Icon

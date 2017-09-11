@@ -140,18 +140,18 @@ let authenticationTypeOptions = fromJS([
     value: 'none+none',
     label: __('NONE'),
   },
-  {
-    value: 'none+portal',
-    label: __(' Portal'),
-  },
+  // {
+  //   value: 'none+portal',
+  //   label: __(' Portal'),
+  // },
   {
     value: 'psk-mixed+none',
     label: __('WPA2-PSK'),
   },
-  {
-    value: 'psk-mixed+portal',
-    label: __('WPA2-PSK + Portal'),
-  },
+  // {
+  //   value: 'psk-mixed+portal',
+  //   label: __('WPA2-PSK + Portal'),
+  // },
   {
     value: '802.1x',
     label: '802.1x',
@@ -454,15 +454,17 @@ const listOptions = fromJS([
       max: 128,
     },
   },
-  // {
-  //   id: 'loadBalanceType',
-  //   text: __('Data Control'),
-  //   defaultValue: '0',
-  //   options: loadBalanceTypeArr,
-  //   formProps: {
-  //     type: 'switch',
-  //   },
-  // },
+  {
+    id: 'loadBalanceType',
+    text: __('Data Control'),
+    noTable: true,
+    defaultValue: '0',
+    options: loadBalanceTypeArr,
+    formProps: {
+      type: 'switch',
+      noForm: true,
+    },
+  },
   {
     id: 'upstream',
     defaultValue: '64',

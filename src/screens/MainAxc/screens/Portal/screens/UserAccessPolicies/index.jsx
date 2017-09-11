@@ -220,7 +220,7 @@ const listOptions = fromJS([
   },
   {
     id: 'portal_rule_type',
-    defaultValue: 'ssid',
+    defaultValue: 'port',
     noTable: true,
     noForm: true,
   },
@@ -781,7 +781,7 @@ export default class View extends React.Component {
         {
           this.state[PORTAL_LOCAL_RULE_KEY] ? (
             <div className="o-box__cell row">
-              {
+              {/* {
                 $$curData.get('radius_server_type') === 'local' ? (
                   <FormGroup
                     style={{
@@ -808,7 +808,7 @@ export default class View extends React.Component {
                     }}
                   />
                 ) : null
-              }
+              } */}
 
               {
                 portalRuleType === 'port' ? (

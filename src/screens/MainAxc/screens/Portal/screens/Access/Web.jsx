@@ -734,9 +734,9 @@ export default class View extends React.Component {
         searchProps={{
           placeholder: `${__('Name')}`,
         }}
-        deleteable={(item, index) => !(index === '0' || index === 0)}
+        deleteable={false}
         selectable={(item, index) => !(index === '0' || index === 0)}
-        addable
+        addable={false}
         noTitle
         actionable
       />
