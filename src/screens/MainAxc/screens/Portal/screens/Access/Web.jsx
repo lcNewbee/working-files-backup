@@ -27,7 +27,7 @@ function generateClassName(id) {
 }
 
 function onBeforeSync($$actionQuery, $$curListItem) {
-  const selectedLoginType = $$curListItem.get('auths');
+  const selectedLoginType = $$curListItem.get('auths').replace(/\s/g, '');
   if (!selectedLoginType) return __('Please select at least one Login Type!');
 
   const supportedType = fromJS(['jpg', 'png', 'gif', 'jpeg']);
@@ -406,12 +406,9 @@ const listOptions = fromJS([
     formProps: {
       // notEditable: true,
       linkId: 'auths',
+      // required: true,
       initValue($$data) {
-        let ret = $$data.get('authentication');
-
-        if (!ret) {
-          ret = ' ';
-        }
+        const ret = $$data.get('authentication') || '';
         return ret;
       },
       render: (propsObj, listData) => {

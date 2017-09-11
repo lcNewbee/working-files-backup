@@ -256,7 +256,7 @@ export default class View extends React.PureComponent {
                 }
               </span>
             </FormGroup>
-            {/* <FormGroup label={__('AP Configuration Backup')}>
+            <FormGroup label={__('AP Configuration Backup')}>
               <SaveButton
                 type="button"
                 icon="download"
@@ -267,7 +267,7 @@ export default class View extends React.PureComponent {
               <span className="help">
                 {'Download the current AP configuration in readable form'}
               </span>
-            </FormGroup> */}
+            </FormGroup>
             <FormGroup label={__('Restore To Factory')}>
               <SaveButton
                 type="button"
