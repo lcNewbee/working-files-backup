@@ -9,6 +9,12 @@ function checkStatus(response) {
   return response;
 }
 
+/**
+ *
+ *
+ * @param {any} response
+ * @returns
+ */
 function parseJSON(response) {
   var ret = {};
 
@@ -16,8 +22,15 @@ function parseJSON(response) {
     ret = response.json();
   } catch(err) {
     warning(false, 'JSON parse error: %s', err);
-    ret = err;
+    ret = {
+      state: {
+        code: 2001,
+        msg: err
+      }
+    };
   }
+
+  ret.__response__ = response;
 
   return ret;
 }
