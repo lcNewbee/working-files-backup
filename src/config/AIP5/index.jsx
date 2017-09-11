@@ -27,11 +27,11 @@ const funConfig = {
   // 无线设置页面
   basic: {
     devicemodeOptions: [
-      { value: 'ap', label: __('AP') },              // AP模式
-      { value: 'sta', label: __('Station') },        // Station模式
-      { value: 'repeater', label: __('Repeater') },  // Repeater模式
+      { value: 'ap', label: __('AP') }, // AP模式
+      { value: 'sta', label: __('Station') }, // Station模式
+      { value: 'repeater', label: __('Repeater') }, // Repeater模式
     ],
-    radioMaxClientsLimit: false,    // 射频最大客户端限制
+    radioMaxClientsLimit: false, // 射频最大客户端限制
     hasIptvFun: false, // 是否有IPTV的配置项
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     // 决定哪些功能在ssid配置表格上出现
@@ -43,27 +43,27 @@ const funConfig = {
       'isolation',
       'security',
       'delete',
-      'maxClients',     // SSID最大客户端限制
+      'maxClients', // SSID最大客户端限制
       // 'speedLimit',
       // 'portalEnable',         // portal功能开关
     ],
   },
   // 无线高级设置页面
   advance: {
-    ledThreshFun: true,        // 信号强度控制LED灯功能
-    beaconIntervalFun: true,    // Beacon帧间间隔
-    distanceFun: true,          // 距离调整
-    dtimIntervalFun: true,      // DTIM间隔
-    segmentThreshFun: true,     // 分片阈值
-    ampduFun: true,             // ampdu值
-    rateSetFun: true,           // 速率集
-    rssiLimitFun: true,         // rssi限制
-    airTimeFairnessFun: true,   // 时间公平性
+    ledThreshFun: true, // 信号强度控制LED灯功能
+    beaconIntervalFun: true, // Beacon帧间间隔
+    distanceFun: true, // 距离调整
+    dtimIntervalFun: true, // DTIM间隔
+    segmentThreshFun: true, // 分片阈值
+    ampduFun: true, // ampdu值
+    rateSetFun: true, // 速率集
+    rssiLimitFun: true, // rssi限制
+    airTimeFairnessFun: true, // 时间公平性
   },
   // 系统维护页面
   systemmaintenance: {
-    poeOutFun: true,            // POE输出功能
-    voipFun: false,             // VOIP功能
+    poeOutFun: true, // POE输出功能
+    voipFun: false, // VOIP功能
   },
 };
 
@@ -76,7 +76,7 @@ const appReducers = Object.assign({}, baseConf.reducers, reducers);
 const appConfig = Object.assign({}, baseConf.appConfig, guiConfig);
 const appRoutes = utils.config.merge(
   utils.config.merge_funConfig_to_routes(baseConf.routes, funConfig), // 将funConfig合入到routes中
-  [{  // 用客制化的快速设置替换基本配置中的快速设置页面
+  [{ // 用客制化的快速设置替换基本配置中的快速设置页面
     id: 'quicksetup',
     component: customComponents.pQuickSetup.Screen,
   }],

@@ -24,14 +24,14 @@ const funConfig = {
   basic: {
     devicemodeOptions: [
       { value: 'ap', label: __('AP') },
-      // { value: 'sta', label: __('Station') },
-      // { value: 'repeater', label: __('Repeater') },
+      { value: 'sta', label: __('Station') },
+      { value: 'repeater', label: __('Repeater') },
     ],
     radioModeOptionsFor5g: [
       { value: '11na', label: '802.11an' },
       { value: '11a', label: '802.11a' },
     ],
-    radioMaxClientsLimit: false,    // 射频最大客户端限制
+    radioMaxClientsLimit: false, // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [
       'enable',
@@ -50,7 +50,7 @@ const funConfig = {
   advance: {
     ledThreshFun: false, // 信号强度控制LED灯功能
     beaconIntervalFun: true, // Beacon帧间间隔
-    distanceFun: false,          // 距离调整拖动条
+    distanceFun: false, // 距离调整拖动条
     dtimIntervalFun: true, // DTIM间隔
     segmentThreshFun: true, // 分片阈值
     ampduFun: true, // ampdu值
@@ -60,7 +60,7 @@ const funConfig = {
   },
   systemmaintenance: {
     poeOutFun: false,
-    voipFun: false,             // VOIP功能
+    voipFun: false, // VOIP功能
   },
 };
 
@@ -74,6 +74,4 @@ export default {
   routes,
   appConfig,
 };
-
-
 

@@ -25,10 +25,10 @@ const funConfig = {
   basic: {
     devicemodeOptions: [
       { value: 'ap', label: __('AP') },
-      // { value: 'sta', label: __('Station') },
-      // { value: 'repeater', label: __('Repeater') },
+      { value: 'sta', label: __('Station') },
+      { value: 'repeater', label: __('Repeater') },
     ],
-    radioMaxClientsLimit: false,    // 射频最大客户端限制
+    radioMaxClientsLimit: false, // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [
       'enable',
@@ -49,7 +49,7 @@ const funConfig = {
     ledThreshFun: false, // 信号强度控制LED灯功能
     beaconIntervalFun: true, // Beacon帧间间隔
     dtimIntervalFun: true, // DTIM间隔
-    distanceFun: false,          // 距离调整
+    distanceFun: false, // 距离调整
     segmentThreshFun: true, // 分片阈值
     ampduFun: true, // ampdu值
     rateSetFun: true, // 速率集
