@@ -69,6 +69,7 @@ NavLink.propTypes = {
   onClick: PropTypes.func,
   hasSubmenus: PropTypes.bool,
   hasTabs: PropTypes.bool,
+  label: PropTypes.string,
 };
 
 
@@ -84,11 +85,15 @@ const propTypes = {
     PropTypes.instanceOf(List),
   ]).isRequired,
   className: PropTypes.string,
-  location: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }),
   role: PropTypes.oneOf(['tree', 'menu']),
   onChange: PropTypes.func,
   onClick: PropTypes.func,
-  style: PropTypes.object,
+  style: PropTypes.shape({
+    display: PropTypes.string,
+  }),
 };
 
 const defaultProps = {

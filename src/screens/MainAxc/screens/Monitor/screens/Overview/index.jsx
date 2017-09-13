@@ -541,6 +541,11 @@ export default class GroupOverview extends React.Component {
     const curScreenId = store.get('curScreenId');
     const $$actionQuery = store.getIn([curScreenId, 'actionQuery']);
     const $$curListItem = store.getIn([curScreenId, 'curListItem']);
+    const helpIconStyle = {
+      color: '#0093dd',
+      marginLeft: '12px',
+      cursor: 'pointer',
+    };
 
     if (!$$curListItem.get('apMac')) {
       this.noApMac = true;
@@ -621,7 +626,7 @@ export default class GroupOverview extends React.Component {
                 title={msg.helpText}
                 placement="right"
               >
-                <Icon name="warning" style={{ color: '#ffc107', marginLeft: '12px' }} />
+                <Icon name="question-circle" style={helpIconStyle} />
               </Tooltip>
               <a href="#/main/group/safe/wips" className="link-more">{msg.goSetting}>></a>
             </h3>
@@ -641,7 +646,7 @@ export default class GroupOverview extends React.Component {
                 title={msg.helpText}
                 placement="right"
               >
-                <Icon name="warning" style={{ color: '#ffc107', marginLeft: '12px' }} />
+                <Icon name="question-circle" style={helpIconStyle} />
               </Tooltip>
               <a href="#/main/group/safe/wips" className="link-more">{msg.goSetting}>></a>
             </h3>

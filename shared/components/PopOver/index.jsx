@@ -10,7 +10,7 @@ const propTypes = {
   exit: PropTypes.bool,
   enter: PropTypes.bool,
   transitionName: PropTypes.string,
-  children: PropTypes.any,
+  children: PropTypes.node,
   onClose: PropTypes.func,
 };
 

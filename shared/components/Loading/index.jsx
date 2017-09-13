@@ -7,7 +7,6 @@ import './_index.scss';
 const propTypes = {
   size: PropTypes.oneOf(['default', 'sm', 'lg']),
   style: PropTypes.object,
-  key: PropTypes.string,
 
   // 类型 现在只支持 ‘heart’
   type: PropTypes.oneOf(['heart']),
@@ -74,7 +73,6 @@ class Loading extends React.Component {
             <div className="a-heart-piece-8" key="a-heart-piece-8" />,
           ] : null
         }
-
       </div>
     );
   }
