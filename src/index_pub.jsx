@@ -9,7 +9,11 @@ const appActions = require('shared/containers/app/actions');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const RouteSwitches = require('shared/components/Organism/RouterConfig').RouteSwitches;
+<<<<<<< 9c0ec8aaea2e0481786835524d7f1cef710b388e
 const prodConfig = require('./config/axc').default;
+=======
+const prodConfig = require('./config/ac').default;
+>>>>>>> ac: 隐藏portal按钮
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;

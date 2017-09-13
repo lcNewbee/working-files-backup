@@ -335,7 +335,7 @@ export class Guest extends PureComponent {
               onChange={this.onUpdate('downstream')}
             />
           </FormGroup>
-          <FormGroup
+          {/* <FormGroup
             type="checkbox"
             label={__('Enable Portal')}
             options={{
@@ -343,7 +343,7 @@ export class Guest extends PureComponent {
             }}
             checked={getCurrData('portalenable') == '1'}
             onChange={this.onUpdate('portalenable')}
-          />
+          /> */}
         </div>
 
         <FormGroup role="save">

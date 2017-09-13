@@ -131,12 +131,12 @@ const routes = [
                 text: __('Wireless'),
                 component: sWireless.Screen,
               },
-              {
-                id: 'portal',
-                path: '/main/settings/portal',
-                text: __(__('Portal')),
-                component: sPortal.Screen,
-              },
+              // {
+              //   id: 'portal',
+              //   path: '/main/settings/portal',
+              //   text: __(__('Portal')),
+              //   component: sPortal.Screen,
+              // },
               {
                 id: 'guest',
                 path: '/main/settings/guest',
