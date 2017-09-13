@@ -22,17 +22,7 @@ class Apbackup extends CI_Controller {
 	}
 	function onAction($data) {
 		$result = null;
-		$actionType = element('action', $data);
-		switch ($actionType) {
-			case 'add': $result = $this->Apbackup_Model->add($data);
-			    break;
-			case 'delete': $result = $this->Apbackup_Model->delete($data);
-                break;
-			case 'edit': $result = $this->Apbackup_Model->edit($data);
-			    break;
-			default: $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
-			    break;
-		}
-		return $result;
+		$result = $this->Apbackup_Model->config_import($data);
+		return $result;		
 	}
 }

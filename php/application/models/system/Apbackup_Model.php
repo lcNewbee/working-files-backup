@@ -9,9 +9,8 @@ class Apbackup_Model extends CI_Model {
         $this->load->library('DbSqlite');        
     }
     //excel下载
-	function get_list($data) {        	
-        $this->setApDb();
-        
+	function get_list($data) {                	
+        $this->setApDb();        
         $path = '/var/run/ap_config.db';
         if(!is_file($path)){
             return json_no('file null!');
@@ -19,7 +18,55 @@ class Apbackup_Model extends CI_Model {
         $db_info = $this->getAllTable($path);
         $this->getApConfig($db_info);
 	}
-    
+    function config_import($data){     
+        $up_ret = $this->fileUpload('/var/run','filename','ap_config.xls','xls');
+        if($up_ret['state']['code'] === 4000){
+            return json_encode($up_ret);
+        }             
+        $file = '/var/run/ap_config.xls';
+        if(is_file($file)){
+            $sql_data =  $this->excelImport($file);
+            $db = new DbSqlite('/var/run/ap_config.db');            
+            foreach($sql_data as $key=>$value){
+                //1.删除表
+                $db->exec("delete from {$key}");
+                //2.添加
+                $db->exec($value);
+            }
+            exec('cfgmng -m apconf');
+            exec('rm /var/run/ap_config.xls');
+        }        
+        return json_encode(json_ok());        
+    }
+    private function fileUpload($upload_path, $file_name, $save_name, $allowed_types = '*') {
+        $result = json_no();
+        $config['upload_path'] = $upload_path;//保存路径
+        $config['overwrite'] = true;//是否替换
+        $config['file_name'] = $save_name;//上传后文件名称
+        $config['max_size'] = 0;
+        $config['allowed_types'] = $allowed_types;
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload($file_name)) {
+            $result = array(
+                'state' => array(
+                    'code' => 4000,
+                    'msg' => $this->upload->display_errors()
+                )
+            );
+        } else {
+            $result = array(
+                'state' => array(
+                    'code' => 2000,
+                    'msg' => 'OK'
+                ) ,
+                'data' => array(
+                    'upload_data' => $this->upload->data()
+                )
+            );
+        }
+        return $result;
+    }
+
     private function setApDb(){
         axc_download_ap_radio();
     }
@@ -85,6 +132,64 @@ class Apbackup_Model extends CI_Model {
         header('Cache-Control: max-age=0'); 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');  //excel5为xls格式，excel2007为xlsx格式  
         $objWriter->save('php://output');
+    }
+    private function excelImport($file_path){
+        include '/usr/web/application/libraries/PHPExcel.php';
+        include '/usr/web/application/libraries/PHPExcel/IOFactory.php'; 
+        include '/usr/web/application/libraries/PHPExcel/Reader/Excel2007.php';
+
+        $arr = array();
+        $objReader = PHPExcel_IOFactory::createReader('Excel5');
+        //$file_path 可以是上传的表格，或者是指定的表格
+        $objPHPExcel = $objReader->load($file_path); 
+        //获取工作表的数目
+        $sheetCount = $objPHPExcel->getSheetCount();
+        //获取所有工作表名称
+        $sheet_name = $objPHPExcel->getSheetNames();
+        
+        foreach($sheet_name as $key=>$value){
+            $sql = "insert into {$value} select ";
+            $_currentSheet  = $objPHPExcel->getSheet($key); 
+            //获取Excel中信息的行数
+            $_allRow = $_currentSheet->getHighestRow(); 
+            //获取Excel的列数
+            $_allColumn = $_currentSheet->getHighestColumn();
+            $highestRow = intval($_allRow );
+            $highestColumn = PHPExcel_Cell::columnIndexFromString($_allColumn);//有效总列数
+            if($value === 'ap_list' && $highestRow > 1){
+                for($row = 2;$row <= $highestRow; $row++){                    
+                    if($row > 2){
+                        $sql .= ' union all select ';
+                    }
+                    //第一个字段id 为整形
+                    $sql .= $_currentSheet->getCellByColumnAndRow(0, $row)->getValue() . ',';                    
+                    for($j = 1; $j < $highestColumn; $j++){
+                        $sql .= "'" . $_currentSheet->getCellByColumnAndRow($j, $row)->getValue() . "',";
+                    }
+                    $sql = rtrim($sql, ",");
+                    
+                }                
+                $arr['ap_list'] = $sql;                
+            }
+            if($value === 'radio_conf'  && $highestRow > 1){
+                for($row = 2;$row <= $highestRow; $row++){
+                    if($row > 2){
+                        $sql .= ' union all select ';
+                    }                                                                             
+                    for($j = 0; $j < $highestColumn; $j++){
+                        //第二个字段radio_id 为整形
+                        if($j == 1){
+                            $sql .= $_currentSheet->getCellByColumnAndRow(1, $row)->getValue() . ",";
+                        }else{
+                            $sql .= "'" . $_currentSheet->getCellByColumnAndRow($j, $row)->getValue() . "',";
+                        }
+                    }
+                    $sql = rtrim($sql, ",");              
+                }
+                $arr['radio_conf'] = $sql;
+            }                        
+        }  
+        return $arr;   
     }
     //获取所有
     private function getAllTable($path){
