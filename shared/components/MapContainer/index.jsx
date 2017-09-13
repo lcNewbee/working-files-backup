@@ -9,6 +9,7 @@ const propTypes = {
   reinitialize: PropTypes.bool,
   onReady: PropTypes.func,
   onZoomChange: PropTypes.func,
+  onChange: PropTypes.func,
   backgroundImgUrl: PropTypes.string,
   children: PropTypes.node,
   className: PropTypes.string,
@@ -17,6 +18,7 @@ const propTypes = {
 const defaultProps = {
   onReady: utils.noop,
   onZoomChange: utils.noop,
+  onChange: utils.noop,
   backgroundImgUrl: '',
 };
 
@@ -29,7 +31,6 @@ export default class View extends React.PureComponent {
       'onMapMouseDown',
       'onMapMouseMove',
       'renderHeatMap',
-      'getImgNaturalSize',
       'handleZoomChange',
       'initialize',
     ]);
@@ -42,7 +43,7 @@ export default class View extends React.PureComponent {
     };
   }
   componentDidMount() {
-    this.getImgNaturalSize(this.state.backgroundImgUrl);
+    this.initialize(this.state.backgroundImgUrl, true);
 
     // 全局添加 mouseup 事件
     // 防止鼠标在 map元素外起来，内容还在拖动问题
@@ -51,18 +52,24 @@ export default class View extends React.PureComponent {
     });
   }
   componentWillReceiveProps(nextProps) {
+    // 同步 state 与 props 的backgroundImgUrl
     if (nextProps.backgroundImgUrl !== this.state.backgroundImgUrl) {
       this.setState({
         backgroundImgUrl: nextProps.backgroundImgUrl,
       });
     }
-    if (nextProps.reinitialize) {
-      this.initialize();
-    }
   }
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.backgroundImgUrl !== this.state.backgroundImgUrl) {
-      this.getImgNaturalSize(this.state.backgroundImgUrl);
+    if (this.props.reinitialize || prevState.backgroundImgUrl !== this.state.backgroundImgUrl) {
+      this.initialize(this.state.backgroundImgUrl);
+    }
+
+    if (prevState.zoom !== this.state.zoom) {
+      this.props.onZoomChange({
+        zoom: this.state.zoom,
+        width: (this.state.naturalWidth * this.state.zoom) / 100,
+        height: (this.state.naturalHeight * this.state.zoom) / 100,
+      });
     }
   }
 
@@ -82,66 +89,95 @@ export default class View extends React.PureComponent {
     }
   }
 
-  getImgNaturalSize(url) {
-    const image = new Image();
+  /**
+   * 初始化 zoom 等于 100 时图片的长宽
+   *
+   * @param {string} url 背景图片的URL
+   * @param {bool} init 是否为初始化
+   * @memberof View
+   */
+  initialize(url, init) {
+    let ret = null;
 
-    image.onload = () => {
-      if (image.width && this.mapElem) {
-        // 高度与宽度对比
-        const naturalRatio = image.height / image.width;
-        const width = this.mapElem.offsetWidth;
-        const height = width * naturalRatio;
+    // 如果背景图片 URL 发生改变
+    if (url && this.imageUrl !== url) {
+      ret = utils.dom.getImgNaturalSize(url)
+        .then((response) => {
+          let newWidth = this.state.naturalWidth;
+          let newRatio = this.state.naturalRatio;
 
-        this.initialize(naturalRatio);
+          if (this.mapElem) {
+            newWidth = this.mapElem.offsetWidth;
 
-        this.props.onReady({
-          width,
-          height,
+            if (response.width && response.height) {
+              newRatio = response.height / response.width;
+            } else {
+              newRatio = this.mapElem.offsetHeight / this.mapElem.offsetWidth;
+            }
+
+            newRatio = Number(newRatio).toFixed(6);
+
+            const newHeight = newWidth * newRatio;
+
+            // 只有在需要改变时，才修改 state值
+            if (
+              newRatio !== this.state.naturalRatio ||
+              newWidth !== this.state.naturalWidth ||
+              newHeight !== this.state.naturalHeight
+            ) {
+              this.setState({
+                naturalWidth: newWidth,
+                naturalHeight: newHeight,
+                naturalRatio: newRatio,
+              });
+
+              if (init) {
+                this.props.onReady({
+                  ratio: newRatio,
+                  width: newWidth,
+                  height: newHeight,
+                  contentElem: this.mapContent,
+                  zoom: this.state.zoom,
+                });
+              } else {
+                this.props.onChange({
+                  ratio: newRatio,
+                  width: newWidth,
+                  height: newHeight,
+                  contentElem: this.mapContent,
+                  zoom: this.state.zoom,
+                });
+              }
+            }
+          }
+        });
+
+      this.imageUrl = url;
+
+    // 如果背景图片URL没变
+    } else {
+      const { naturalRatio, naturalWidth } = this.state;
+
+      if (this.mapElem.offsetWidth !== naturalWidth) {
+        this.setState({
+          naturalWidth: this.mapElem.offsetWidth,
+          naturalHeight: this.mapElem.offsetWidth * naturalRatio,
+        });
+
+        this.props.onChange({
+          ratio: naturalRatio,
+          width: this.mapElem.offsetWidth,
+          height: this.mapElem.offsetWidth * naturalRatio,
           contentElem: this.mapContent,
           zoom: this.state.zoom,
         });
       }
-    };
-
-    // 图片加载失败
-    image.onerror = () => {
-      if (this.mapElem) {
-        const naturalRatio = this.mapElem.offsetHeight / this.mapElem.offsetWidth;
-
-        this.initialize(naturalRatio);
-      }
-    };
-    image.src = url;
-  }
-
-  /**
-   * 初始化 zoom 等于 100 时图片的长宽
-   *
-   * @param {any} naturalRatio
-   * @memberof View
-   */
-  initialize(newNaturalRatio) {
-    const { naturalRatio, naturalWidth, naturalHeight } = this.state;
-    const newRatio = newNaturalRatio || naturalRatio;
-    const newWidth = this.mapElem.offsetWidth;
-    const newHeight = newWidth * newRatio;
-
-    // 只有在需要改变时，才修改 state值
-    if (naturalRatio !== newRatio || newWidth !== naturalWidth || newHeight !== naturalHeight) {
-      this.setState({
-        naturalWidth: newWidth,
-        naturalHeight: newWidth * newRatio,
-        naturalRatio: newRatio,
-      });
     }
+
+    return ret;
   }
 
   handleZoomChange(zoom) {
-    this.props.onZoomChange({
-      zoom,
-      width: (this.state.naturalWidth * zoom) / 100,
-      height: (this.state.naturalHeight * zoom) / 100,
-    });
     this.setState({
       zoom,
     });
@@ -191,8 +227,8 @@ export default class View extends React.PureComponent {
           style={{
             left: this.state.mapOffsetX,
             top: this.state.mapOffsetY,
-            width: `${this.state.naturalWidth * zoomRatio}px`,
-            height: `${this.state.naturalHeight * zoomRatio}px`,
+            width: `${Math.floor(this.state.naturalWidth * zoomRatio)}px`,
+            height: `${Math.floor(this.state.naturalHeight * zoomRatio)}px`,
             backgroundColor: '#ccc',
             backgroundImage: `url(${backgroundImgUrl})`,
             backgroundRepeat: 'no-repeat',

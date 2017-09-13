@@ -119,11 +119,42 @@ function previewFile(file) {
   return retPromise;
 }
 
+/**
+ * 获取图片的原始大小
+ *
+ * @param {string} 图片路径
+ * @returns 对象包含 message, 如果图片正常加载则包含 width, height属性
+ */
+function getImgNaturalSize(url) {
+  return new Promise(function(resolve) {
+    var image = new Image();
+
+    image.onload = function() {
+      resolve({
+        message: 'loaded',
+        width: image.width,
+        height: image.height,
+      });
+      image = null;
+    };
+
+    // 图片加载失败
+    image.onerror = function() {
+      resolve({
+        message: 'error',
+      });
+      image = null;
+    };
+    image.src = url;
+  });
+}
+
 dom = {
   getAbsPoint: getAbsPoint,
   fragment: fragment,
   addClass: addClass,
   removeClass: removeClass,
+  getImgNaturalSize: getImgNaturalSize,
   previewFile: previewFile
 }
 // exports

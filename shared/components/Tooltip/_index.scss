@@ -38,9 +38,9 @@
     border-style: solid;
   }
 
-  &-arrow {
-    filter: drop-shadow(0px 3px 2px #bbb);
-  }
+  // &-arrow {
+  //   // filter: drop-shadow(0px 3px 2px #bbb);
+  // }
 
   /*********
    tooltip arrow 位置相关样式
@@ -55,6 +55,7 @@
       margin-left: -6px;
       border-width: 6px 6px 0;
       border-top-color: #fff;
+      filter: drop-shadow(0px 3px 2px #bbb);
     }
     .rw-tooltip-arrow-inner {
       bottom: 1px;
@@ -86,6 +87,7 @@
       margin-left: -6px;
       border-width: 0 6px 6px;
       border-bottom-color: #fff;
+      filter: drop-shadow(0px -3px 2px #bbb);
     }
     .rw-tooltip-arrow-inner {
       top: 1px;
@@ -122,6 +124,7 @@
       margin-top: -6px;
       border-width: 6px 6px 6px 0;
       border-right-color: #fff;
+      filter: drop-shadow(-3px 0px 2px #bbb)
     }
     .rw-tooltip-arrow-inner {
       left: 1px;
@@ -139,6 +142,7 @@
       margin-top: -6px;
       border-width: 6px 0 6px 6px;
       border-left-color: #fff;
+      filter: drop-shadow(3px 0px 2px #bbb);
     }
     .rw-tooltip-arrow-inner {
       right: 1px;
@@ -212,6 +216,56 @@
       background-color: #111;
       color: #fff;
       border: 1px solid #111;
+    }
+
+    &.rw-tooltip {
+      &-placement-top,
+      &-placement-topLeft,
+      &-placement-topRight {
+        .rw-tooltip-arrow {
+          border-top-color: #111;
+          filter: drop-shadow(0px 3px 2px #222);
+        }
+        .rw-tooltip-arrow-inner {
+          border-top-color: #111;
+        }
+      }
+
+      &-placement-bottom,
+      &-placement-bottomLeft,
+      &-placement-bottomRight {
+        .rw-tooltip-arrow {
+          border-bottom-color: #111;
+          filter: drop-shadow(0px -3px 2px #222);
+        }
+        .rw-tooltip-arrow-inner {
+          border-bottom-color: #111;
+        }
+      }
+
+      &-placement-right,
+      &-placement-rightTop,
+      &-placement-rightBottom {
+        .rw-tooltip-arrow {
+          border-right-color: #111;
+          filter: drop-shadow(0px 0px 2px #222)
+        }
+        .rw-tooltip-arrow-inner {
+          border-right-color: #111;
+        }
+      }
+
+      &-placement-left,
+      &-placement-leftTop,
+      &-placement-leftBottom {
+        .rw-tooltip-arrow {
+          border-left-color: #111;
+          filter: drop-shadow(3px 0px 2px #222);
+        }
+        .rw-tooltip-arrow-inner {
+          border-left-color: #111;
+        }
+      }
     }
   }
 }

@@ -1,5 +1,7 @@
-var str = {};
+var coreUtils = require('./core');
 
+var str = {};
+var classSplitReg = /\s+/;
 
 function getText(val) {
   var ret = '';
@@ -91,24 +93,67 @@ function isNumber(str) {
 
 function addClassName(oldClassNames, addClassNameStr) {
   var ret = oldClassNames || '';
+  var addClassNames = trim(addClassNameStr);
+  var i = 0;
+  var addLen = 0;
+  var curClass = '';
+  var curClassIndex = -1;
 
-  ret = trim(ret).split(' ');
-  ret.push(addClassNameStr);
+  if (addClassNames) {
+    addClassNames = addClassNames.split(classSplitReg);
+
+    ret = trim(ret).split(classSplitReg);
+    addLen = addClassNames.length;
+
+    for (i; i < addLen; i += 1) {
+      curClass = addClassNames[i];
+
+      curClassIndex = coreUtils.findIndex(ret, function(className) {
+        return className === curClass;
+      })
+
+      if(curClassIndex === -1) {
+        ret.push(curClass);
+      }
+    }
+
+  } else {
+    ret = [oldClassNames];
+  }
 
   return trim(ret.join(' '));
 }
 
 function removeClassName(oldClassNames, removeClassNameStr) {
-  var newClassName = oldClassNames || '';
-  var removeStr = trim(removeClassNameStr);
+  var orgClassNames = oldClassNames || '';
+  var removeClassNames = trim(removeClassNameStr);
+  var i = 0;
+  var len = 0;
+  var curClassname = '';
+  var curRemoveClassnameIndex = -1;
+  var ret = [];
 
-  if (removeStr) {
-    newClassName = newClassName.split(removeStr);
+  if (removeClassNames) {
+    removeClassNames = removeClassNames.split(classSplitReg);
+    orgClassNames = oldClassNames.split(classSplitReg);
+    len = orgClassNames.length;
+
+    for (i; i < len; i += 1) {
+      curClassname = orgClassNames[i];
+
+      curRemoveClassnameIndex = coreUtils.findIndex(removeClassNames, function(className) {
+        return className === curClassname;
+      })
+
+      if(curRemoveClassnameIndex === -1) {
+        ret.push(curClassname);
+      }
+    }
   } else {
-    newClassName = [newClassName];
+    ret = [orgClassNames];
   }
 
-  return trim(newClassName.join(' '));
+  return trim(ret.join(' '));
 }
 
 function changeMaskNumberToIp(num) {
