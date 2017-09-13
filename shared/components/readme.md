@@ -87,6 +87,7 @@ gulp pub productName  // productName产品名称如：ac, axc3.0
 ```shell
 gulp test
 ```
+[Writing Tests][http://redux.js.org/docs/recipes/WritingTests.html]
 
 ## Style guide
 

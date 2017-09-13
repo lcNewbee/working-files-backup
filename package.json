@@ -1,6 +1,6 @@
 {
   "name": "axilspot",
-  "version": "2.1.0.rc",
+  "version": "2.1.0-rc.1",
   "description": "Axilspot 前端开发平台",
   "main": "src/index.jsx",
   "repository": "http://192.168.100.240:5002/web_group/frontend.git",
@@ -18,7 +18,7 @@
   "scripts": {
     "serve:dev": "babel-node ./tools/srcServer.js --colors",
     "test:watch": "jest --watchAll --colors --notify",
-    "test": "jest --colors --noStackTrace",
+    "test": "jest --colors --noStackTrace ",
     "webpack:prod": "webpack --config webpack.config.production.js --display-optimization-bailout",
     "webpack": "webpack --display-optimization-bailout --config webpack.config.js"
   },
