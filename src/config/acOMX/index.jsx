@@ -22,7 +22,7 @@ window.CB = b28n.init({
 });
 window.guiConfig = guiConfig;
 
-bodyElem.className = `${bodyElem.className} ${b28n.getLang()}`;
+bodyElem.className = `${bodyElem.className} app-omx ${b28n.getLang()}`;
 
 /** ***********************************************************
  * 产品界面配置
