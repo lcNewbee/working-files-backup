@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no,maximum-scale=1">
+
+  <!-- 避免IE使用兼容模式 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+  <!-- 启用360浏览器的极速模式(webkit) -->
+  <meta name="renderer" content="webkit" />
+
+  <title>Smart Access</title>
+  <meta name="description" content="">
+  <meta name="author" content="taijisanfeng@yahoo.com">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body class="none">
+  <div class="phone-content">
+    <div class="banner slick-slider"></div>
+    <div class="content">
+      <button type="button" class="btn" id="online"></button>
+    </div>
+  </div>
+
+  <script src="scripts/jquery-1.12.4.min.js"></script>
+  <script src="scripts/slick.min.js"></script>
+  <script>
+    var currData;
+    var onlineMsg = {
+      en: 'Click on Internet',
+      cn: '点击上网'
+    };
+
+    function getPortalUrl() {
+      var ret = window.location.protocol + "//" + window.location.hostname +
+        ':2051/goform/getPortal?callback=?';
+
+      return ret;
+    }
+
+    function getPortalAuthUrl() {
+      var ret = window.location.protocol + "//" + window.location.hostname +
+        ':2050/auth_portal?callback=?';
+
+      return ret;
+    }
+
+    function createSlick(images) {
+      var ret = '';
+
+      $.each(images, function(i, item) {
+        if (item.url) {
+          ret += '<div><img src="' + item.url + '"></div>'
+        }
+      });
+
+      return ret;
+    }
+
+    function getLang() {
+      var special = {
+        "zh": "cn",
+        "zh-chs": "cn",
+        "zh-cn": "cn",
+        "zh-cht": "cn",
+        "zh-hk": "zh",
+        "zh-mo": "zh",
+        "zh-tw": "zh",
+        "zh-sg": "zh"
+      };
+      var nav = window.navigator;
+      var ret = 'en';
+
+      ret = (nav.language || nav.userLanguage ||
+        nav.browserLanguage || nav.systemLanguage ||
+        ret).toLowerCase();
+
+      ret = special[ret] || ret.split("-")[0].toString();
+
+      return ret;
+    }
+
+    function initPage(data) {
+      var bodyWidth = $(document).width();
+      var contentWidth = bodyWidth > 600 ? '600px' : bodyWidth + 'px';
+      currData = data;
+      document.title = data.title;
+      $('#portalTitle').text(data.title);
+      $('#online').text(onlineMsg[getLang()]);
+      $('.banner').html(createSlick(data.image));
+
+      setTimeout(function() {
+        $('.banner').slick({
+          lazyLoad: 'progressive',
+          autoplay: true,
+          dots: true,
+          arrows: false,
+          autoplaySpeed: (data.refreshtime || 3) * 1000,
+        });
+      }, 1)
+
+    }
+    $.ajaxSetup({
+      timeout: 3000,
+      cache: false
+    });
+
+    function authComplete() {
+      if (currData && currData.url) {
+        window.location.href = currData.url;
+      }
+      $('#online').removeClass('active');
+    }
+
+    $(function() {
+      var portalUrl = getPortalUrl();
+
+      // 本地测试代码
+      // portalUrl = '/goform/portalAuth';
+
+      $.getJSON(portalUrl, function(data) {
+        if (data.state.code === 2000) {
+          initPage(data.data)
+        }
+
+        $('body').removeClass('none');
+      });
+
+      $('#online').on('click', function() {
+        $(this).addClass('active');
+        $.getJSON(getPortalAuthUrl(), authComplete)
+          .fail(authComplete)
+          .always(authComplete);
+      });
+    });
+  </script>
+</body>
+
+</html>

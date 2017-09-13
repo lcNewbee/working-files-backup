@@ -9,7 +9,11 @@ const redux = require('redux');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
+<<<<<<< 505e27e5a2b98d80d8291a2972a2ed13d0c323ff
 const prodConfig = require('./config/axc').default;
+=======
+const prodConfig = require('./config/acOMX').default;
+>>>>>>> ac: 更改软件名称为OMX
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;
@@ -66,9 +70,15 @@ window.onload = () => {
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
+<<<<<<< 505e27e5a2b98d80d8291a2972a2ed13d0c323ff
   module.hot.accept('./config/axc', () => {
     /* eslint-disable global-require */
     const nextConfig = require('./config/axc').default;
+=======
+  module.hot.accept('./config/acOMX', () => {
+    /* eslint-disable global-require */
+    const nextConfig = require('./config/acOMX').default;
+>>>>>>> ac: 更改软件名称为OMX
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,
