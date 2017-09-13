@@ -102,15 +102,15 @@ gulp.task('default', ['serve:dev']);
 // 处理浏览器标题
 function changeTitle(name) {
   return gulp.src([`${paths.build}/index.html`])
-      .pipe($.replace('<title>Axilspot Access Manager</title>', `<title>Axilspot WIFI ${name}</title>`))
-      .pipe(gulp.dest(paths.build));
+    .pipe($.replace('<title>Axilspot Access Manager</title>', `<title>Axilspot WIFI ${name}</title>`))
+    .pipe(gulp.dest(paths.build));
 }
 
 function noBrandTitle() {
   return gulp.src([`${paths.build}/index.html`])
-      .pipe($.replace('<title>Axilspot Access Manager</title>', '<title>Access Point</title>'))
-      .pipe($.replace('<h3>Axilspot</h3>', '<h3>Loading</h3>'))
-      .pipe(gulp.dest(paths.build));
+    .pipe($.replace('<title>Axilspot Access Manager</title>', '<title>Access Point</title>'))
+    .pipe($.replace('<h3>Axilspot</h3>', '<h3>Loading</h3>'))
+    .pipe(gulp.dest(paths.build));
 }
 
 gulp.task('changeAIP3Title', () => changeTitle('Bridge'));
@@ -130,4 +130,3 @@ gulp.task('changeASW120Title', () => changeTitle('AP'));
 gulp.task('changeNHZYASW120Title', () => noBrandTitle());
 gulp.task('changeNHZYAEC120Title', () => noBrandTitle());
 gulp.task('changenoBrandAIP10LTitle', () => noBrandTitle());
-

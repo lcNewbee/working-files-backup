@@ -173,6 +173,11 @@ describe('utils string', () => {
       expect(addClassName('class1 ', 'ddd')).toBe('class1 ddd');
       expect(addClassName('class1 ', 'dd d')).toBe('class1 dd d');
     });
+
+    it('should not add at when class aleady exist', () => {
+      expect(addClassName('ddd abc', 'ddd')).toBe('ddd abc');
+      expect(addClassName('add abs bar', 'bar sss')).toBe('add abs bar sss');
+    });
   });
 
   describe('#removeClassName()', () => {
@@ -188,9 +193,14 @@ describe('utils string', () => {
       expect(removeClassName(' class1 classsd', 'classsd')).toBe('class1');
     });
 
-    it('should remove class correct', () => {
+    it('should remove single className correct', () => {
+      expect(removeClassName('class1 classsd', 'class1')).toBe('classsd');
       expect(removeClassName('class1 classsd', 'class1')).toBe('classsd');
       expect(removeClassName('class1 ', 'class1')).toBe('');
+    });
+    it('should remove multiple classNames correct', () => {
+      expect(removeClassName('class1 classsd class2', 'class1 class2')).toBe('classsd');
+      expect(removeClassName('class1 class2 classsd', 'class1 class2')).toBe('classsd');
     });
   });
 

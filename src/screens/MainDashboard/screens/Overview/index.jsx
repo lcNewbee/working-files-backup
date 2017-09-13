@@ -64,10 +64,6 @@ function getClientFlowEchartOption($$serverData) {
     return ret;
   }).toJS();
 
-  let dataMax = $$serverData.max((a, b) => (a - b));
-
-  dataMax += (50 - (dataMax % 10));
-
   data = data.toJS();
 
   const option = {
@@ -399,7 +395,7 @@ export default class DashboardOverview extends React.PureComponent {
   }
 
   componentDidMount() {
-    // this.fetchHeatMapData();
+    this.fetchHeatMapData();
   }
   componentWillReceiveProps(nextProps) {
     const { store } = this.props;
@@ -421,7 +417,7 @@ export default class DashboardOverview extends React.PureComponent {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (typeof this.state.heatmapMax !== 'undefined' && this.state.heatmapMax !== nextState.heatmapMax) {
+    if (nextState.heatmapMax && this.state.heatmapMax !== nextState.heatmapMax) {
       this.reinitializeHeatMap = true;
     } else {
       this.reinitializeHeatMap = false;
@@ -447,16 +443,12 @@ export default class DashboardOverview extends React.PureComponent {
 
     this.props.fetch('goform/dashboard/heatmap')
       .then((json) => {
-        let newIndex = this.state.heatMapImgIndex + 1;
-
-        if (newIndex > 4) {
-          newIndex = 1;
-        }
-        if (json && json.data && json.data.heatMap) {
+        if (json && json.data && json.data.list) {
           this.setState({
-            heatmapData: json.data.heatMap,
+            mapInfo: json.data.mapInfo,
+            mapBackgroundUrl: json.data.mapInfo.backgroundImg,
+            heatmapData: json.data.list,
             needUpdateHeatMap: Date.now(),
-            heatMapImgIndex: newIndex,
           });
         }
         this.fetchHeatMapTimeout = setTimeout(() => {
@@ -484,11 +476,11 @@ export default class DashboardOverview extends React.PureComponent {
 
   renderHeatMap() {
     const newData = [];
-    const data = createHeatMapPoints(400);
 
-    // const data = this.state.heatmapData;
+    if (this.heatMapContent && this.heatMapCanvasHeight > 0) {
+      // const newData = createHeatMapPoints(140, this.heatMapContent.offsetWidth, this.heatMapContent.offsetHeight);
+      const data = this.state.heatmapData;
 
-    if (this.heatMapContent && this.heatMapContent.offsetWidth > 0) {
       // this.removeHeatMap();
       this.heatMapContentWidth = this.heatMapContent.offsetWidth;
       this.heatMapContentHeight = this.heatMapContent.offsetHeight;
@@ -496,18 +488,27 @@ export default class DashboardOverview extends React.PureComponent {
       if (!this.heatmapInstance) {
         this.heatmapInstance = h337.create({
           container: this.heatMapContent,
-          radius: 24,
-          blur: 0.9,
-        });
-      } else {
-        data.forEach((item) => {
-          newData.push({
-            x: (item.x * this.heatmapInstance._renderer._width) / 100,
-            y: (item.y * this.heatmapInstance._renderer._height) / 100,
-            value: item.value,
-          });
+          radius: 28,
+          maxOpacity: 0.4,
+          minOpacity: 0.02,
+          blur: 0.92,
+          gradient: {
+            0.25: 'rgb(0,0,255)',
+            0.55: 'rgb(0,255,0)',
+            0.85: 'yellow',
+            1: 'orange',
+          },
         });
       }
+
+      data.forEach((item) => {
+        const point = utils.gps.getOffsetFromGpsPoint(item, this.state.mapInfo);
+        newData.push({
+          x: Math.floor((point.x * this.heatMapCanvasWidth) / 10000),
+          y: Math.floor((point.y * this.heatMapCanvasHeight) / 10000),
+          value: item.value,
+        });
+      });
 
       this.heatmapInstance.setData({
         data: newData,
@@ -926,9 +927,24 @@ export default class DashboardOverview extends React.PureComponent {
                   height: this.state.heatmapMax ? '100%' : '507px',
                 }}
                 className="rw-dashboard-card__content"
-                backgroundImgUrl={`images/${this.state.heatMapImgIndex}.jpg`}
-                reinitialize={this.reinitializeHeatMap}
-              />
+                backgroundImgUrl={this.state.mapBackgroundUrl}
+                onReady={(props) => {
+                  this.heatMapContent = props.contentElem;
+                  this.heatMapCanvasWidth = props.width;
+                  this.heatMapCanvasHeight = props.height;
+                }}
+                onChange={(props) => {
+                  this.heatMapContent = props.contentElem;
+                  this.heatMapCanvasWidth = props.width;
+                  this.heatMapCanvasHeight = props.height;
+
+                  this.setState({
+                    needUpdateHeatMap: Date.now(),
+                  });
+                }}
+              >
+                <img src={this.state.heatMapDataUrl} draggable="false" alt="heat map" />
+              </MapContainer>
             </div>
             <div className="rw-dashboard-card rw-dashboard-card--fixed-header">
               <h3 className="element rw-dashboard-card__header">
@@ -946,7 +962,7 @@ export default class DashboardOverview extends React.PureComponent {
               </h3>
               <MapContainer
                 className="rw-dashboard-card__content"
-                backgroundImgUrl="images/backgroundImg.jpg"
+                backgroundImgUrl={this.state.mapBackgroundUrl}
               >
                 <div className="rw-map-warning-icon" >
                   <div className="rw-map-warning-icon__warning" />
