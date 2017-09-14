@@ -129,7 +129,8 @@ class Apbackup_Model extends CI_Model {
         } 
         
         // excel头参数  
-        header('Content-Type: application/vnd.ms-excel');  
+        //header('Content-Type: application/vnd.ms-excel');  
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');  
         header('Content-Disposition: attachment;filename="'.$savename.'.xlsx"');  //日期为文件名后缀  
         header('Cache-Control: max-age=0'); 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');  //excel5为xls格式，excel2007为xlsx格式  
