@@ -18,12 +18,14 @@ class Apbackup_Model extends CI_Model {
         $db_info = $this->getAllTable($path);
         $this->getApConfig($db_info);
 	}
-    function config_import($data){     
-        $up_ret = $this->fileUpload('/var/run','filename','ap_config.xls','xls');
+    function config_import($data){  
+        $file_type = pathinfo($_FILES['filename']['name'], PATHINFO_EXTENSION);
+        $save_name = 'ap_config.' . $file_type;
+        $up_ret = $this->fileUpload('/var/run','filename',$save_name,'xls|xlsx');
         if($up_ret['state']['code'] === 4000){
             return json_encode($up_ret);
         }             
-        $file = '/var/run/ap_config.xls';
+        $file = '/var/run/' . $save_name;
         if(is_file($file)){
             $sql_data =  $this->excelImport($file);
             $db = new DbSqlite('/var/run/ap_config.db');            
@@ -34,9 +36,9 @@ class Apbackup_Model extends CI_Model {
                 $db->exec($value);
             }
             exec('cfgmng -m apconf');
-            exec('rm /var/run/ap_config.xls');
+            exec("rm {$file}");
         }        
-        return json_encode(json_ok());        
+        return json_encode(json_ok());   
     }
     private function fileUpload($upload_path, $file_name, $save_name, $allowed_types = '*') {
         $result = json_no();
@@ -128,18 +130,27 @@ class Apbackup_Model extends CI_Model {
         
         // excel头参数  
         header('Content-Type: application/vnd.ms-excel');  
-        header('Content-Disposition: attachment;filename="'.$savename.'.xls"');  //日期为文件名后缀  
+        header('Content-Disposition: attachment;filename="'.$savename.'.xlsx"');  //日期为文件名后缀  
         header('Cache-Control: max-age=0'); 
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');  //excel5为xls格式，excel2007为xlsx格式  
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');  //excel5为xls格式，excel2007为xlsx格式  
         $objWriter->save('php://output');
     }
     private function excelImport($file_path){
         include '/usr/web/application/libraries/PHPExcel.php';
         include '/usr/web/application/libraries/PHPExcel/IOFactory.php'; 
-        include '/usr/web/application/libraries/PHPExcel/Reader/Excel2007.php';
+        //include '/usr/web/application/libraries/PHPExcel/Reader/Excel2007.php';
 
         $arr = array();
-        $objReader = PHPExcel_IOFactory::createReader('Excel5');
+        $objReader = null;
+        $fileType = pathinfo($file_path, PATHINFO_EXTENSION);
+        if($fileType == 'xls'){
+            $objReader = PHPExcel_IOFactory::createReader('Excel5');
+        }else if($fileType == 'xlsx'){
+            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+        }else{
+            return $arr;
+        }
+        //$objReader = PHPExcel_IOFactory::createReader('Excel5');
         //$file_path 可以是上传的表格，或者是指定的表格
         $objPHPExcel = $objReader->load($file_path); 
         //获取工作表的数目

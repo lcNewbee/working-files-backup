@@ -173,7 +173,7 @@ class Heatmap_Model extends CI_Model {
             $lat_str = ($lat * 1000000) - ($i * 10000);  
             foreach($y as $j){
                 $lng_str = ($lng * 1000000) + ($j * 10000);
-                $index = 20;
+                $index = rand(0,5);
                 while($index > 0){
                     $cry['lat'] = rand($lat_str,($lat_str - 10000)) / 1000000;
                     $cry['lng'] = rand($lng_str,($lng_str + 10000)) / 1000000;
@@ -182,26 +182,7 @@ class Heatmap_Model extends CI_Model {
                     $index--;
                 }
             }   
-        }
-        //
-        /*
-        $x = [1,2,4,5,8,9];
-        $y = [0,2,3,4,6,7,9];
-        foreach($x as $i){
-            $lat_str = ($lat * 1000000) - ($i * 10000);  
-            foreach($y as $j){
-                $lng_str = ($lng * 1000000) + ($j * 10000);
-                $index = rand(3,20);
-                while($index > 0){
-                    $cry['lat'] = rand($lat_str,($lat_str - 10000)) / 1000000;
-                    $cry['lng'] = rand($lng_str,($lng_str + 10000)) / 1000000;;
-                    $cry['value'] = rand(2,30);
-                    $arr[] = $cry;
-                    $index--;
-                }
-            }   
-        }
-        */
+        }       
         /*
         for($i = 0; $i < 10; $i++ ){
             $lat_str = ($lat * 1000000) - ($i * 10000);            
