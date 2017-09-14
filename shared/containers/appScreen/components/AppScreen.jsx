@@ -7,6 +7,8 @@ import { ProcessContainer } from 'shared/components';
 import AppScreenList from './AppScreenList';
 import AppScreenSettings from './AppScreenSettings';
 
+function noop() { }
+
 function getLoadingStatus(props) {
   const { loading } = props;
   const $$store = props.store;
@@ -70,15 +72,15 @@ const propTypes = {
   customSettingForm: PropTypes.bool,
 };
 const defaultProps = {
-  onAfterSync: utils.noop,
+  onAfterSync: noop,
   noTitle: true,
   groupid: 'not',
 
   // AppScreenList Option
 
   // Settings Form
-  updateScreenSettings: utils.noop,
-  saveScreenSettings: utils.noop,
+  updateScreenSettings: noop,
+  saveScreenSettings: noop,
   hasSettingsSaveButton: false,
   customSettingForm: false,
   settingOnlyChanged: false,

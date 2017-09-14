@@ -17,14 +17,22 @@ const propTypes = {
   selected: PropTypes.bool,
   onSelect: PropTypes.func,
   onClick: PropTypes.func,
+  onRowMouseEnter: PropTypes.func,
+  onRowMouseLeave: PropTypes.func,
+  onHover: PropTypes.func,
+  hoverKey: PropTypes.string,
+  curRowHoverKey: PropTypes.string,
 };
 
 const defaultProps = {
   item: null,
   selectable: false,
   selected: false,
-  onSelect: utilsCore.emptyfunc,
-  onClick: utilsCore.emptyfunc,
+  onSelect: utilsCore.noop,
+  onClick: utilsCore.noop,
+  onHover: utilsCore.noop,
+  onRowMouseEnter: utilsCore.noop,
+  onRowMouseLeave: utilsCore.noop,
   index: -1,
 };
 
@@ -34,6 +42,8 @@ class Row extends PureComponent {
     utilsCore.binds(this, [
       'onSelect',
       'renderThList',
+      'onMouseEnter',
+      'onMouseLeave',
     ]);
   }
   onSelect(index_, e) {
@@ -41,6 +51,18 @@ class Row extends PureComponent {
       index: index_,
       selected: e.target.checked,
     });
+  }
+  onMouseEnter(event) {
+    const { item, index, onRowMouseEnter, onHover, hoverKey } = this.props;
+    onHover(true, hoverKey);
+    onRowMouseEnter(item, index, event);
+  }
+
+  onMouseLeave(event) {
+    const { item, index, onRowMouseLeave, onHover, hoverKey } = this.props;
+
+    onHover(false, hoverKey);
+    onRowMouseLeave(item, index, event);
   }
 
   renderTdList() {
@@ -62,9 +84,14 @@ class Row extends PureComponent {
   render() {
     const {
       columns, selected, selectable, curSelectable,
-      item, index, ...restProps
+      item, index, curRowHoverKey, hoverKey, ...restProps
     } = this.props;
     let rowChilren = [];
+    let rowClassNames = '';
+
+    if (curRowHoverKey === hoverKey) {
+      rowClassNames = 'rw-table-row-hover';
+    }
 
     if (!columns) {
       return null;
@@ -91,7 +118,12 @@ class Row extends PureComponent {
     // }
 
     return rowChilren ? (
-      <tr {...restProps}>
+      <tr
+        {...restProps}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        className={rowClassNames}
+      >
         { rowChilren }
       </tr>
     ) : null;

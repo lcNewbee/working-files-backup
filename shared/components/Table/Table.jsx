@@ -62,11 +62,17 @@ const propTypes = {
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   hiddenColumns: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   list: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  page: PropTypes.object,
+  page: PropTypes.shape({
+    total: PropTypes.number,
+  }),
   scroll: PropTypes.shape({
     x: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     y: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
+  rowKey: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
   paginationType: PropTypes.oneOf([
     // 无分页
     'none',
@@ -121,6 +127,7 @@ class Table extends PureComponent {
       'getTable',
       'getBodyRows',
       'handleBodyScroll',
+      'handleRowHover',
     ]);
     this.state = {
       myList: fromJS([]),
@@ -190,16 +197,25 @@ class Table extends PureComponent {
       hiddenColumns: $$newHidenColumns,
     });
   }
+  getRowKey(record, index) {
+    const rowKey = this.props.rowKey;
+    const key = (typeof rowKey === 'function') ?
+      rowKey(record, index) : record[rowKey];
+
+    return key === undefined ? `${index}` : key;
+  }
   getBodyRows(myList, $$columns) {
     const { selectable } = this.props;
     let ret = null;
 
     this.selectedList = [];
     this.unselectableList = [];
+
     if (myList && myList.size > 0) {
       ret = myList.map(($$item, i) => {
         const isSelected = $$item && !!$$item.get('__selected__');
         const curIndex = ($$item && $$item.get('__index__')) || i;
+        const key = this.getRowKey($$item.toJS(), curIndex);
         let curSelectable = selectable;
 
         if (isSelected) {
@@ -217,7 +233,10 @@ class Table extends PureComponent {
 
         return (
           <TableRow
-            key={`tableRow${curIndex}`}
+            key={key}
+            hoverKey={key}
+            curRowHoverKey={this.state.curRowHoverKey}
+            onHover={this.handleRowHover}
             columns={$$columns}
             item={$$item}
             index={curIndex}
@@ -410,6 +429,17 @@ class Table extends PureComponent {
       this.setScrollPosition('middle');
     }
   }
+  handleRowHover(isHover, hoverKey) {
+    if (isHover) {
+      this.setState({
+        curRowHoverKey: hoverKey,
+      });
+    } else {
+      this.setState({
+        curRowHoverKey: null,
+      });
+    }
+  }
   handleBodyScroll(e) {
     const target = e.target;
 
@@ -466,6 +496,7 @@ class Table extends PureComponent {
     if (selectable) {
       this.$$options = this.$$options.unshift(fromJS({
         id: '__selected__',
+        width: 50,
         fixed: 'left',
         render: (val, $$item, $$colnmn) => {
           const disabled = !$$colnmn.get('curSelectable');

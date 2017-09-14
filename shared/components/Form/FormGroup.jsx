@@ -15,6 +15,7 @@ function isValidateMyForm(validateAt, myForm) {
     validateForm === '__all__' || myForm === validateForm
   );
 }
+function noop() {}
 
 const propTypes = {
   onValidError: PropTypes.func,
@@ -52,8 +53,8 @@ const propTypes = {
 const defaultProps = {
   showLabel: true,
   validator: {
-    check: utils.noop,
-    checkClear: utils.noop,
+    check: noop,
+    checkClear: noop,
   },
 
   // 默认所有值为空， 防止在 controlled 与 uncontrolled 间切换
