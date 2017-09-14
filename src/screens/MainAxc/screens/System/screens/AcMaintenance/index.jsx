@@ -195,7 +195,8 @@ export default class View extends React.PureComponent {
   }
 
   render() {
-    const restoreUrl = '/goform/system/restore';
+    const acRestoreUrl = '/goform/system/restore';
+    const apRestoreUrl = '/goform/system/aprestore';
     const { store, route } = this.props;
     const configUpdateAt = store.getIn([
       route.id,
@@ -278,10 +279,10 @@ export default class View extends React.PureComponent {
               />
             </FormGroup>
             <FormGroup
-              label={__('Restore Configuration')}
+              label={__('Restore AC Configuration')}
             >
               <FileUpload
-                url={restoreUrl}
+                url={acRestoreUrl}
                 name="backupFile"
                 buttonIcon="undo"
                 buttonText={__('Restore Now')}
@@ -305,6 +306,34 @@ export default class View extends React.PureComponent {
                       },
                     });
                     this.checkSaveResult(true);
+                  }
+                }
+              />
+            </FormGroup>
+
+            <FormGroup
+              label={__('Restore AP Configuration')}
+            >
+              <FileUpload
+                url={apRestoreUrl}
+                name="backupFile"
+                buttonIcon="undo"
+                buttonText={__('Restore Now')}
+                disabled={!this.actionable}
+                acceptExt={['xls']}
+                createModal={this.props.createModal}
+                onBeforeUpload={
+                  () => {
+                    this.props.createModal({
+                      role: 'loading',
+                      title: '',
+                      loadingStep: 100,
+                      loadingTitle: __('Restoring..., Do not shutdown device'),
+                      onLoaded: () => {
+                        this.props.closeModal();
+                      },
+                    });
+                    // this.checkSaveResult(true);
                   }
                 }
               />
