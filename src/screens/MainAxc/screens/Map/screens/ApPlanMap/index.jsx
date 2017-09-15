@@ -425,7 +425,8 @@ export default class View extends React.PureComponent {
     const deviceListClassname = classnames('o-list o-devices-list', {
       active: !!curMapId && this.state.isUnplacedListShow,
     });
-    const isEmpty = !list || list.isEmpty();
+    const undeployDevices = list.filter($$device => $$device.getIn(['map', 'id']) === -100);
+    const isEmpty = !undeployDevices || undeployDevices.isEmpty();
 
     return (
       <div
@@ -466,9 +467,7 @@ export default class View extends React.PureComponent {
         </div>
         <div className="o-list__body">
           {
-            list ?
-              list.map(this.renderUndeployDevice) :
-              null
+            undeployDevices ? undeployDevices.map(this.renderUndeployDevice) : null
           }
         </div>
         <div className="o-list__footer o-devices-list__footer">

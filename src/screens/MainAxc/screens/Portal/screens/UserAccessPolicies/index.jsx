@@ -27,7 +27,7 @@ const PORTAL_RULE_KEY = 'portalRule';
 const PORTAL_LOCAL_RULE_KEY = 'portalLocalRule';
 
 function isAccSameWithAuth($$listItem) {
-  return $$listItem.getIn(['radius', 'authpri_ipaddr']) === $$listItem.getIn(['radius', 'acctpri_ipaddr']) ||
+  return $$listItem.getIn(['radius', 'authpri_ipaddr']) === $$listItem.getIn(['radius', 'acctpri_ipaddr']) &&
     $$listItem.getIn(['radius', 'authpri_key']) === $$listItem.getIn(['radius', 'acctpri_key']);
 }
 
