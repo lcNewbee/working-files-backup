@@ -90,7 +90,10 @@ export default class MainGroup extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { isShowUserPop: false };
+    this.state = {
+      isInitGroupList: true,
+      isShowUserPop: false,
+    };
     utils.binds(this, [
       'renderBreadcrumb',
       'onSelectManageGroup',
@@ -134,6 +137,9 @@ export default class MainGroup extends React.Component {
       .then(
         () => {
           this.initFromLocationQuery();
+          this.setState({
+            isInitGroupList: false,
+          });
         },
       );
 
@@ -1170,9 +1176,13 @@ export default class MainGroup extends React.Component {
           <Icon name="caret-left" />
         </div>
         <div className="t-main__content">
-          <RouteSwitches
-            routes={this.props.route.routes}
-          />
+          {
+            this.state.isInitGroupList ? null : (
+              <RouteSwitches
+                routes={this.props.route.routes}
+              />
+            )
+          }
         </div>
 
         <Modal

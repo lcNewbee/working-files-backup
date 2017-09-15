@@ -1,7 +1,7 @@
 {
   "name": "axilspot wireless lan access controller",
   "title": "Wireless LAN Access Controller Monitor",
-  "version": "3.9.1",
+  "version": "3.9.2",
   "noPortal": true,
   "noAAA": true,
   "hasUsername": true

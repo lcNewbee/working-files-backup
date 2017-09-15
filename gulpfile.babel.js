@@ -19,6 +19,8 @@ const paths = {
   pubWebPath: '/',
   pub: 'dist',
   pubAc: '../softac/software/web/',
+  pubAcOmx: '../softac-omx/software/web/',
+
   pubAxc: '../axc_r1/web/web',
   pubAxcR1: '../axc_r1/web/web',
   pubAxcIndia: '../axc_branch_india/ac/apps/web/web',

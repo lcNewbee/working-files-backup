@@ -28,9 +28,12 @@ gulp.task('config', (callback) => {
   }
   return ret;
 });
+
+gulp.task('config:ac', () => configProduct('ac'));
+gulp.task('config:acOMX', () => configProduct('acOMX'));
+
 gulp.task('config:axc', () => configProduct('axc'));
 gulp.task('config:ap', () => configProduct('ap'));
-gulp.task('config:ac', () => configProduct('ac'));
 gulp.task('config:AIP3', () => configProduct('AIP3'));
 gulp.task('config:AIP5', () => configProduct('AIP5'));
 gulp.task('config:AIP10', () => configProduct('AIP10'));

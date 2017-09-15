@@ -331,6 +331,9 @@ const routes = [
                     fetchUrl: 'goform/group/map/heatmap',
                     text: __('Heat Map'),
                     component: sHeatMap.Screen,
+                    screenConfig: {
+                      heatMapMaxPerMinute: 4,
+                    },
                   },
                   {
                     id: 'liveMap',

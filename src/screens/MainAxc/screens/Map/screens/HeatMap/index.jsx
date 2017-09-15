@@ -36,7 +36,15 @@ const propTypes = {
   changeScreenQuery: PropTypes.func,
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
-  groupid: PropTypes.any,
+  route: PropTypes.shape({
+    screenConfig: PropTypes.shape({
+      heatMapMaxPerMinute: PropTypes.number,
+    }),
+  }),
+  groupid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 };
 const defaultProps = {};
 
@@ -305,6 +313,7 @@ export default class View extends React.PureComponent {
     const curScreenId = this.props.store.get('curScreenId');
     const { startDate, startTime } = this.props.store.getIn([curScreenId, 'query']).toJS();
     const timeRangeM = moment().diff(moment(`${startDate} ${startTime}`), 'm') || 1;
+    const heatMapMaxPerMinute = this.props.route.screenConfig && this.props.route.screenConfig.heatMapMaxPerMinute;
 
     if (this.mapMouseDown) return null; // 移动图片时不重新计算绘图位置，因为坐标位置并没有改变
     let max = 0;
@@ -320,7 +329,10 @@ export default class View extends React.PureComponent {
       return { x, y, value: point.value };
     });
 
-    max = 4 * timeRangeM;
+    // 已经 screenConfig 中的 heatMapMaxPerMinute 来确定最大值
+    if (heatMapMaxPerMinute) {
+      max = heatMapMaxPerMinute * timeRangeM;
+    }
 
     const data = {
       max,
@@ -333,14 +345,14 @@ export default class View extends React.PureComponent {
         this.heatmapInstance = h337.create({
           container: this.mapContent,
           radius: Math.floor((26 * this.state.zoom) / 100),
-          maxOpacity: 0.2,
+          maxOpacity: 0.3,
           minOpacity: 0.02,
-          blur: 0.9,
+          blur: 0.92,
           gradient: {
-            '.1': 'blue',
-            '.4': 'green',
-            '.5': 'yellow',
-            '.7': 'orange',
+            0.25: 'rgb(0,0,255)',
+            0.55: 'rgb(0,255,0)',
+            0.85: 'yellow',
+            1: 'orange',
           },
         });
       }
