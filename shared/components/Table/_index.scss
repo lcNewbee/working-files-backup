@@ -31,8 +31,9 @@
     text-align: left;
     border-top: 1px solid #dedede;
     border-bottom: 1px solid #dedede;
-    vertical-align: top;
-    word-break: break-all;
+    vertical-align: middle;
+    word-break: keep-all;
+    white-space: nowrap;
 
     .a-checkbox--square {
       input[type=checkbox] + label {

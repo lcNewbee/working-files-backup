@@ -496,7 +496,7 @@ class Table extends PureComponent {
     if (selectable) {
       this.$$options = this.$$options.unshift(fromJS({
         id: '__selected__',
-        width: 50,
+        width: 28,
         fixed: 'left',
         render: (val, $$item, $$colnmn) => {
           const disabled = !$$colnmn.get('curSelectable');
@@ -600,6 +600,8 @@ class Table extends PureComponent {
           {scrollTable}
         </div>
       );
+    } else {
+      this.scrollTableElem = null;
     }
 
     return (

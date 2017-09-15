@@ -148,6 +148,7 @@ const listOptions = fromJS([
   },
   {
     id: 'status',
+    width: 120,
     text: __('Status'),
     defaultValue: 'unkown',
     options: apStatus,
