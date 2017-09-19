@@ -175,7 +175,7 @@ export default class AppScreen extends React.Component {
     }
 
     if (nextProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
-      this.fetchAppScreenData(true);
+      this.fetchAppScreenData();
     }
   }
 
@@ -223,39 +223,23 @@ export default class AppScreen extends React.Component {
       this.props.leaveScreen(this.props.route.id);
     }
   }
-  fetchAppScreenData(immediately) {
+  fetchAppScreenData() {
     const loaded = () => {
       clearTimeout(this.loadingTimeout);
-      this.setState({
-        loading: false,
-      });
+
+      if (!this.props.loading) {
+        this.setState({
+          loading: false,
+        });
+      }
     };
 
     if (this.props.fetchScreenData) {
-      // 当获取数据超过 200 ms 还没返回，显示加载中
-      if (immediately) {
-        this.setState({
-          loading: true,
-        });
-      } else {
-        this.loadingTimeout = setTimeout(() => {
-          this.setState({
-            loading: true,
-          });
-        }, 200);
-      }
+      this.setState({
+        loading: true,
+      });
 
-
-      // 默认非组管理界面，直接获取数据
-      if (this.props.groupid === 'not') {
-        this.props.fetchScreenData().then(loaded);
-
-        // 组管理界面，需要获取当前组id才能获取数据
-      } else if (this.props.groupid !== '') {
-        this.props.fetchScreenData().then(loaded);
-      } else {
-        this.props.fetchScreenData().then(loaded);
-      }
+      this.props.fetchScreenData().then(loaded);
 
       if (this.props.refreshInterval) {
         clearInterval(this.refreshTimer);
@@ -309,7 +293,8 @@ export default class AppScreen extends React.Component {
       <ProcessContainer
         className={screenClassName}
         loading={!noLoading && this.state.loading}
-        delay={1000}
+        delay={600}
+        forceLoadingTime={1200}
         style={{
           height: '100%',
         }}

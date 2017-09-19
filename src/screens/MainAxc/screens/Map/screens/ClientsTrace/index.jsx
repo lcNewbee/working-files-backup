@@ -124,6 +124,7 @@ export default class View extends React.PureComponent {
         queryFormOptions={this.queryFormOptions}
         paginationType="auto"
         noTitle={false}
+        loading={this.state.isGetApList}
         hasSettingsSaveButton
       />
     );

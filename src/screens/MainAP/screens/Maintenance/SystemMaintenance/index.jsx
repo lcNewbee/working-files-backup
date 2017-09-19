@@ -444,7 +444,7 @@ export default class SystemMaintenance extends Component {
             title={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'title'])}
             time={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'time'])}
             callback={() => {
-              window.location.href = '#';
+              window.location.href = '#/login';
               this.props.resetSelfState();
             }}
             start={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'start'])}
@@ -462,7 +462,7 @@ export default class SystemMaintenance extends Component {
             title={this.props.selfState.getIn(['progressBarInfo', 'title'])}
             time={this.props.selfState.getIn(['progressBarInfo', 'time'])}
             callback={() => {
-              window.location.href = '#';
+              window.location.href = '#/login';
               this.props.resetSelfState();
             }}
             start={this.props.selfState.getIn(['progressBarInfo', 'start'])}

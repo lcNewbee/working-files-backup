@@ -1,0 +1,36 @@
+@import "functions";
+@import "variables";
+@import "mixins";
+
+.rw-progress-bar {
+  .rw-progress-bar__title {
+    padding-top: 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    text-align: center;
+  }
+  .rw-progress-bar__body {
+    position: relative;
+    background-color: $a-progress-bg;
+    margin-bottom: 16px;
+    height: $g-distance-y;
+    @include border-radius($a-progress-border-radius);
+    overflow: hidden;
+
+    &__inner {
+      background-color: $a-progress-bar-color;
+      height: $g-distance-y;
+    }
+
+    &__text {
+      position: absolute;
+      width: 100%;
+      line-height: 1rem;
+      text-align: center;
+      left: 0;
+      top: 50%;
+      margin-top: -0.5rem;
+      color: #000;
+    }
+  }
+}

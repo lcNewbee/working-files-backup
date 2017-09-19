@@ -301,7 +301,6 @@ export default function (state = defaultState, action) {
     case ACTION_TYPES.INIT:
       return initScreenState(state, action, curScreenName);
     case ACTION_TYPES.UPDATE:
-      console.log(action.payload)
       return state.merge(action.payload);
 
     case ACTION_TYPES.LEAVE:

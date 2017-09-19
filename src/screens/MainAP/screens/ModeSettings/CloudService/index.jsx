@@ -207,7 +207,7 @@ export default class ModeSettings extends React.Component {
             time={60}
             callback={() => {
               this.props.updateItemSettings({ showProgressBar: false });
-              window.location.href = '#';
+              window.location.href = '#/login';
             }}
             start
             style={{

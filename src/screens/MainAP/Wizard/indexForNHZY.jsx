@@ -404,7 +404,7 @@ export default class SignUp extends React.Component {
             time={60}
             callback={() => {
               this.props.changeShowProgressBar(false);
-              window.location.href = '#';
+              window.location.href = '#/login';
             }}
             start
             style={{

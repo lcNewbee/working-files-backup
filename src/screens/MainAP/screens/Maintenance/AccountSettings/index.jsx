@@ -97,7 +97,7 @@ export default class AccountSettings extends Component {
                       const text = __('old password error.');
                       props.showValidMsg('1', text);
                     } else if (json.state && json.state.code === 2000) {
-                      window.location.href = '#';
+                      window.location.href = '#/login';
                     }
                   });
             }
