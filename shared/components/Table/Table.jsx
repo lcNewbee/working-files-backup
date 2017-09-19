@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fromJS, List } from 'immutable';
+import { fromJS, List, is } from 'immutable';
 import classnams from 'classnames';
+import utils from 'shared/utils';
+
+import createStore from './createStore';
 import PureComponent from '../Base/PureComponent';
-import utils from '../../utils';
 import Pagination from '../Pagination';
 import TableRow from './TableRow';
 import TableHeader from './TableHeader';
@@ -128,18 +130,37 @@ class Table extends PureComponent {
       'getBodyRows',
       'handleBodyScroll',
       'handleRowHover',
+      'handleWindowResize',
+      'syncFixedTableRowHeight',
+      'isHasFixedColumns',
     ]);
     this.state = {
       myList: fromJS([]),
       hiddenColumns: fromJS([]),
+      $$fixedColumnsHeadRowsHeight: fromJS([]),
+      $$fixedColumnsBodyRowsHeight: fromJS([]),
     };
     this.sortCalc = 1;
+    this.store = createStore({
+      fixedColumnsRowHeight: [],
+
+    });
   }
 
   componentWillMount() {
     this.refreshColumns(this.props, this.state);
     this.refreshListData(this.props);
   }
+
+  componentDidMount() {
+    if (this.isHasFixedColumns()) {
+      this.handleWindowResize();
+      this.resizeEvent = addEventListener(
+        window, 'resize', this.handleWindowResize,
+      );
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.list !== this.props.list) {
       this.refreshListData(nextProps);
@@ -155,11 +176,20 @@ class Table extends PureComponent {
   }
 
   componentDidUpdate() {
+    if (this.isHasFixedColumns()) {
+      this.handleWindowResize();
+    }
     if (this.scrollTableElem) {
       this.setScrollPositionClassName(this.scrollTableElem);
     }
   }
 
+  componentWillUnmount() {
+    if (this.resizeEvent && this.resizeEvent.remove) {
+      this.resizeEvent.remove();
+    }
+    clearTimeout(this.resizeTimeout);
+  }
 
   onRowSelect(data) {
     const actionData = data;
@@ -204,8 +234,9 @@ class Table extends PureComponent {
 
     return key === undefined ? `${index}` : key;
   }
-  getBodyRows(myList, $$columns) {
+  getBodyRows(myList, $$columns, fixed) {
     const { selectable } = this.props;
+    const isHasFixedColumns = this.isHasFixedColumns();
     let ret = null;
 
     this.selectedList = [];
@@ -216,6 +247,8 @@ class Table extends PureComponent {
         const isSelected = $$item && !!$$item.get('__selected__');
         const curIndex = ($$item && $$item.get('__index__')) || i;
         const key = this.getRowKey($$item.toJS(), curIndex);
+        const height = (fixed && isHasFixedColumns && this.state.$$fixedColumnsBodyRowsHeight.get(i)) ?
+          this.state.$$fixedColumnsBodyRowsHeight.get(i) : null;
         let curSelectable = selectable;
 
         if (isSelected) {
@@ -235,6 +268,7 @@ class Table extends PureComponent {
           <TableRow
             key={key}
             hoverKey={key}
+            height={height}
             curRowHoverKey={this.state.curRowHoverKey}
             onHover={this.handleRowHover}
             columns={$$columns}
@@ -264,7 +298,8 @@ class Table extends PureComponent {
     return ret;
   }
 
-  getTable($$myList, fixed) {
+  getTable(options = {}) {
+    const { $$myList, fixed } = options;
     const {
       className, selectable, onRowClick, scroll, prefixClass, theme,
     } = this.props;
@@ -294,7 +329,7 @@ class Table extends PureComponent {
       myTableClassName = `${myTableClassName} ${className}`;
     }
 
-    myBodyChildren = this.getBodyRows($$myList, $$columns);
+    myBodyChildren = this.getBodyRows($$myList, $$columns, fixed);
     unselectableLen = this.unselectableList.length;
 
     if ($$myList && $$myList.size > 0 && this.selectedList.length > 0 &&
@@ -330,6 +365,11 @@ class Table extends PureComponent {
         <div
           className={`${prefixClass}-header`}
           key="tableHeader"
+          ref={(elem) => {
+            if (!fixed) {
+              this.scrollHeadTable = elem;
+            }
+          }}
         >
           <table className={myTableClassName} >
             <ColumnGroup
@@ -368,7 +408,15 @@ class Table extends PureComponent {
           }
         }}
       >
-        <table className={myTableClassName}>
+        <table
+          className={myTableClassName}
+          ref={(elem) => {
+            this.bodyTable = elem;
+            if (!fixed) {
+              this.scrollBodyTable = elem;
+            }
+          }}
+        >
           <ColumnGroup
             columns={$$columns}
             selectable={selectable}
@@ -413,7 +461,7 @@ class Table extends PureComponent {
   }
 
   setScrollPositionClassName(target) {
-    const node = target;
+    const node = target || this.scrollTableElem;
     const scrollToLeft = node.scrollLeft === 0;
     const scrollToRight = node.scrollLeft + 1 >=
       node.children[0].children[0].getBoundingClientRect().width -
@@ -428,6 +476,53 @@ class Table extends PureComponent {
     } else if (this.scrollPosition !== 'middle') {
       this.setScrollPosition('middle');
     }
+  }
+  isHasFixedColumns() {
+    return this.$$columnsGroup.get('scroll') && this.$$columnsGroup.size > 1;
+  }
+  handleWindowResize() {
+    clearTimeout(this.resizeTimeout);
+
+    this.resizeTimeout = setTimeout(() => {
+      this.syncFixedTableRowHeight();
+      this.setScrollPositionClassName();
+    }, 150);
+  }
+
+  /**
+   * 同步 位置固定的 表格的高度
+   *
+   * @returns
+   * @memberof Table
+   */
+  syncFixedTableRowHeight() {
+    const tableRect = this.scrollTableElem.getBoundingClientRect();
+
+    if (tableRect.height !== undefined && tableRect.height <= 0) {
+      return;
+    }
+
+    const headRows = this.headTable ?
+      this.scrollHeadTable.querySelectorAll('thead') :
+      this.scrollBodyTable.querySelectorAll('thead');
+
+    const bodyRows = this.scrollBodyTable.querySelectorAll('tbody tr') || [];
+    const $$fixedColumnsHeadRowsHeight = fromJS([].map.call(
+      headRows, row => row.getBoundingClientRect().height || 'auto',
+    ));
+    const $$fixedColumnsBodyRowsHeight = fromJS([].map.call(
+      bodyRows, row => row.getBoundingClientRect().height || 'auto',
+    ));
+
+    // 对比高度是否改变
+    if (is(this.state.$$fixedColumnsHeadRowsHeight, $$fixedColumnsHeadRowsHeight) &&
+        is(this.state.$$fixedColumnsBodyRowsHeight, $$fixedColumnsBodyRowsHeight)) {
+      return;
+    }
+    this.setState({
+      $$fixedColumnsHeadRowsHeight,
+      $$fixedColumnsBodyRowsHeight,
+    });
   }
   handleRowHover(isHover, hoverKey) {
     if (isHover) {
@@ -497,7 +592,7 @@ class Table extends PureComponent {
       this.$$options = this.$$options.unshift(fromJS({
         id: '__selected__',
         width: 28,
-        fixed: 'left',
+        // fixed: 'left',
         render: (val, $$item, $$colnmn) => {
           const disabled = !$$colnmn.get('curSelectable');
           const curIndex = $$colnmn.get('__index__');
@@ -519,9 +614,7 @@ class Table extends PureComponent {
       }));
     }
 
-    this.$$columnsGroup = this.$$options.groupBy(($$item) => {
-      return $$item.get('fixed') || 'scroll';
-    });
+    this.$$columnsGroup = this.$$options.groupBy($$item => ($$item.get('fixed') || 'scroll'));
   }
 
   sortRowsById(id) {
@@ -559,7 +652,7 @@ class Table extends PureComponent {
       [`${prefixClass}-container`]: true,
       [`${prefixClass}-fixed-header`]: (scroll && scroll.y),
     });
-    const isTableScroll = this.$$columnsGroup.size > 1 || scroll.x || scroll.y;
+    const isTableScroll = this.isHasFixedColumns() || scroll.x || scroll.y;
     const isAnyFixedLeftColumns = this.$$columnsGroup.get('left');
     const isAnyFixedRightColumns = this.$$columnsGroup.get('right');
     let mySizeOptions = sizeOptions;
@@ -584,7 +677,7 @@ class Table extends PureComponent {
       mySizeOptions = null;
     }
 
-    scrollTable = this.getTable($$myList);
+    scrollTable = this.getTable({ $$myList });
 
     if (isTableScroll) {
       scrollTable = (
@@ -618,14 +711,24 @@ class Table extends PureComponent {
           {
             isAnyFixedLeftColumns ? (
               <div className={`${prefixClass}-fixed-left`}>
-                { this.getTable($$myList, 'left') }
+                {
+                  this.getTable({
+                    $$myList,
+                    fixed: 'left',
+                  })
+                }
               </div>
             ) : null
           }
           {
             isAnyFixedRightColumns ? (
               <div className={`${prefixClass}-fixed-right`}>
-                { this.getTable($$myList, 'right') }
+                {
+                  this.getTable({
+                    $$myList,
+                    fixed: 'right',
+                  })
+                }
               </div>
             ) : null
           }

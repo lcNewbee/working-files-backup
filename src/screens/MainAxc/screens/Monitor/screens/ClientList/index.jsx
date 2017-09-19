@@ -112,7 +112,9 @@ const listOptions = fromJS([
     },
   },
   {
-    id: '__action__',
+    id: '__actions__',
+    fixed: 'right',
+    width: 120,
     text: __('Actions'),
   },
 ]);

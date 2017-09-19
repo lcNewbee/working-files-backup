@@ -36,6 +36,7 @@
     white-space: nowrap;
 
     .a-checkbox--square {
+      margin-right: 0;
       input[type=checkbox] + label {
         background-color: #fff;
       }
@@ -45,14 +46,6 @@
     font-weight: 400;
     color: #fff;
     background: #1d2531;
-    .a-checkbox--square {
-      margin: 0 1px;
-    }
-  }
-  td {
-    .a-checkbox--square {
-      margin: 3px 1px;
-    }
   }
 
   tr.rw-table-row-hover,

@@ -22,6 +22,9 @@ const propTypes = {
   onHover: PropTypes.func,
   hoverKey: PropTypes.string,
   curRowHoverKey: PropTypes.string,
+  height: PropTypes.oneOfType([
+    PropTypes.string, PropTypes.number,
+  ]),
 };
 
 const defaultProps = {
@@ -84,10 +87,12 @@ class Row extends PureComponent {
   render() {
     const {
       columns, selected, selectable, curSelectable,
-      item, index, curRowHoverKey, hoverKey, ...restProps
+      onHover, onRowMouseEnter, onRowMouseLeave,
+      item, index, curRowHoverKey, hoverKey, height, ...restProps
     } = this.props;
     let rowChilren = [];
     let rowClassNames = '';
+    let style = null;
 
     if (curRowHoverKey === hoverKey) {
       rowClassNames = 'rw-table-row-hover';
@@ -96,6 +101,13 @@ class Row extends PureComponent {
     if (!columns) {
       return null;
     }
+
+    if (height) {
+      style = {
+        height,
+      };
+    }
+
 
     rowChilren = this.renderTdList();
 
@@ -123,6 +135,7 @@ class Row extends PureComponent {
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         className={rowClassNames}
+        style={style}
       >
         { rowChilren }
       </tr>
