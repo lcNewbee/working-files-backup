@@ -260,7 +260,6 @@ export default class SystemLogs extends Component {
                 />
               </div>
               <Table
-                className="table"
                 options={systemLogOptions}
                 list={this.props.selfState.get('tableList').reverse()}
                 page={this.props.selfState.get('logPage')}

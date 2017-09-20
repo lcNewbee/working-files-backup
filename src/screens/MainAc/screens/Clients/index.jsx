@@ -363,7 +363,6 @@ export class Clients extends PureComponent {
         </div>
 
         <Table
-          className="table"
           options={tableOptions}
           list={this.props.data.get('list')}
           page={this.props.data.get('page')}

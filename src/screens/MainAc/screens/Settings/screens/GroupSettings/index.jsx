@@ -300,7 +300,6 @@ export class GroupSettings extends PureComponent {
         {
           isLook ? (
             <Table
-              className="table"
               options={fromJS(devicesTableOptions).delete(-1)}
               list={this.props.seeDevices}
             />
@@ -325,7 +324,6 @@ export class GroupSettings extends PureComponent {
                 {...remarks}
               />
               <Table
-                className="table"
                 options={fromJS(devicesTableOptions)}
                 list={this.props.devices.get('list')}
                 page={this.props.page}
@@ -373,7 +371,6 @@ export class GroupSettings extends PureComponent {
           }
         </div>
         <Table
-          className="table"
           loading={this.props.fetching}
           options={fromJS(groupTableOptions)}
           list={this.props.data.get('list')}

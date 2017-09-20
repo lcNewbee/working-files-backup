@@ -243,7 +243,6 @@ export default class SsidDetails extends React.Component {
         </div>
         <div className="o-box__cell">
           <Table
-            className="table"
             options={vapInterfaceOptions}
             list={vapInterfacesList}
           />

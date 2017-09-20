@@ -59,9 +59,9 @@ const settingsFormOptions = radioBase
         case 'first5g':
         case 'switch11n':
           return $$item.set(
-              'label',
-              $$item.get('text'),
-            ).delete('text');
+            'label',
+            $$item.get('text'),
+          ).delete('text');
 
         default:
       }
@@ -97,7 +97,7 @@ if (window.guiConfig.versionCode >= 20500) {
 const listOptions = fromJS([
   {
     id: 'devicename',
-    width: 180,
+    width: 160,
     text: __('Name'),
     maxLength: '31',
     validator: validator({
@@ -106,20 +106,22 @@ const listOptions = fromJS([
   },
   {
     id: 'ip',
-    width: 160,
+    width: 140,
     text: __('IP Address'),
   },
   {
     id: 'mac',
-    width: 160,
+    width: 140,
     text: __('MAC Address'),
   },
   {
     id: 'model',
+    width: 100,
     text: __('AP Model'),
   },
   {
     id: 'softversion',
+    width: 120,
     text: __('Firmware Version'),
   },
   {
@@ -129,7 +131,7 @@ const listOptions = fromJS([
   },
   {
     id: 'bandwidth',
-    width: 80,
+    width: 160,
     text: __('Data'),
     render(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
@@ -146,6 +148,7 @@ const listOptions = fromJS([
   },
   {
     id: 'status',
+    width: 120,
     text: __('Status'),
     defaultValue: 'unkown',
     options: apStatus,

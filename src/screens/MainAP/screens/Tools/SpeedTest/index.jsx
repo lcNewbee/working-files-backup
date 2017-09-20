@@ -270,7 +270,6 @@ export default class SpeedTest extends React.Component {
           isShow={this.props.selfState.get('showScanResults')}
         >
           <Table
-            className="table"
             options={scanIpOptions}
             list={this.createIpTableList()}
           />

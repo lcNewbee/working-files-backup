@@ -1,0 +1,125 @@
+@import "functions";
+@import "variables";
+@import "mixins";
+
+.rw-table-container {
+  position: relative;
+  &--scroll-position-left {
+    .rw-table-fixed-left {
+      box-shadow: none;
+    }
+  }
+  &--scroll-position-right {
+    .rw-table-fixed-right {
+      box-shadow: none;
+    }
+  }
+}
+.rw-table {
+  min-width: 100%;
+  border-spacing: 1;
+  border-collapse: collapse;
+  background-color: #fff;
+
+  caption {
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: 4px 6px;
+    text-align: left;
+    border-top: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+    vertical-align: middle;
+    word-break: keep-all;
+    white-space: nowrap;
+
+    .a-checkbox--square {
+      margin-right: 0;
+      input[type=checkbox] + label {
+        background-color: #fff;
+      }
+    }
+  }
+  th {
+    font-weight: 400;
+    color: #fff;
+    background: #1d2531;
+  }
+
+  tr.rw-table-row-hover,
+  tr:hover {
+    background-color: #ecf6fd;
+  }
+
+  .empty {
+    padding: 16px 6px;
+    color: $g-gray-light;
+  }
+  .action-btns {
+    min-height: 22px;
+    //height: 22px;
+    .a-btn {
+      margin-right: 8px;
+    }
+  }
+  &--fixed {
+    td,
+    th {
+      @include ellipsis();
+    }
+  }
+  &--pionter {
+    tr {
+      cursor: pointer;
+    }
+  }
+
+  &--light {
+    background-color: #fff;
+    th {
+      border-top: none;
+      font-weight: bold;
+      background-color: #fff;
+      color: #333;
+    }
+
+    tr:hover {
+      background-color: #f3f3f3;
+    }
+  }
+}
+
+.rw-table-scroll {
+  overflow: auto;
+}
+.rw-table-fixed-left,
+.rw-table-fixed-right {
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  transition: box-shadow .3s ease-in-out;
+}
+.rw-table-fixed-right {
+  right: 0;
+  box-shadow: -4px 0 4px rgba(100, 100, 100, 0.1);
+}
+.rw-table-fixed-left {
+  left: 0;
+  box-shadow: 4px 0 4px rgba(100, 100, 100, 0.1);
+}
+
+.rw-table-config {
+  .a-checkbox--square {
+    display: block;
+    padding: 5px;
+    cursor: pointer;
+    margin-right: 0;
+
+    &:hover {
+      background-color: #ddd;
+    }
+  }
+}
+

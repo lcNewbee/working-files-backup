@@ -15,6 +15,12 @@ const msg = {
   goSetting: __('Go to Setting'),
   helpText: __('To enable Rogue AP and Interfering AP detection, please go to AP Group > WIPS/WIDS , enable the AP Monitor function and to collect information about neighbor APs.'),
 };
+const helpIconStyle = {
+  color: '#007bff',
+  marginLeft: '12px',
+  fontSize: '14px',
+  cursor: 'pointer',
+};
 const timeTypeSwitchs = fromJS([
   {
     value: 'today',
@@ -633,7 +639,7 @@ export default class GroupOverview extends React.Component {
           </div>
           <div className="element t-overview__section">
             <Table
-              className="table table--light"
+              theme="light"
               options={this.rogueSsidOptions}
               list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}
               page={serverData.getIn(['neighborsAps', 'page'])}
@@ -653,7 +659,7 @@ export default class GroupOverview extends React.Component {
           </div>
           <div className="element t-overview__section">
             <Table
-              className="table table--light"
+              theme="light"
               options={ssidTableOptions}
               list={serverData.getIn(['aroundAps', 'list']) || fromJS([])}
               page={serverData.getIn(['aroundAps', 'page'])}

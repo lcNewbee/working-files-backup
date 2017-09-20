@@ -48,7 +48,6 @@ class ProcessContainer extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     // 切换加载状态
     if (this.props.loading !== nextProps.loading) {
-
       // 加载
       if (nextProps.loading) {
         this.handleStartLoading(nextProps);

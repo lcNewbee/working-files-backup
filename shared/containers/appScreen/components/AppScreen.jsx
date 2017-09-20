@@ -7,6 +7,8 @@ import { ProcessContainer } from 'shared/components';
 import AppScreenList from './AppScreenList';
 import AppScreenSettings from './AppScreenSettings';
 
+function noop() { }
+
 function getLoadingStatus(props) {
   const { loading } = props;
   const $$store = props.store;
@@ -49,6 +51,7 @@ const propTypes = {
   updateScreen: PropTypes.func,
   loading: PropTypes.bool,
   noLoading: PropTypes.bool,
+  initNoFetch: PropTypes.bool,
 
   // List 相关属性list
   listOptions: PropTypes.oneOfType([
@@ -56,7 +59,10 @@ const propTypes = {
     PropTypes.array,
   ]),
   listId: PropTypes.string,
-  groupid: PropTypes.any,
+  groupid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 
   // Settings 相关属性
   settingsFormOptions: PropTypes.oneOfType([
@@ -66,15 +72,15 @@ const propTypes = {
   customSettingForm: PropTypes.bool,
 };
 const defaultProps = {
-  onAfterSync: utils.noop,
+  onAfterSync: noop,
   noTitle: true,
   groupid: 'not',
 
   // AppScreenList Option
 
   // Settings Form
-  updateScreenSettings: utils.noop,
-  saveScreenSettings: utils.noop,
+  updateScreenSettings: noop,
+  saveScreenSettings: noop,
   hasSettingsSaveButton: false,
   customSettingForm: false,
   settingOnlyChanged: false,

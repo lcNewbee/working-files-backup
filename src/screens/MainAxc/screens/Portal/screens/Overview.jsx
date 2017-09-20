@@ -191,7 +191,7 @@ export default class View extends PureComponent {
             <div className="element">
               <Table
                 options={recordOptions}
-                className="table table--light"
+                theme="light"
                 list={serverData.get('operationRecords')}
               />
             </div>

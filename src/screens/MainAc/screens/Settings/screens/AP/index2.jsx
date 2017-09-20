@@ -281,7 +281,6 @@ export class ApMaintenance extends PureComponent {
           }
         </div>
         <Table
-          className="table"
           loading={this.props.fetching}
           options={fromJS(tableOptions)}
           list={this.props.data.get('list')}
@@ -299,7 +298,6 @@ export class ApMaintenance extends PureComponent {
           {
             isLook ? (
               <Table
-                className="table"
                 options={fromJS(devicesTableOptions).delete(-1)}
                 list={this.props.seeDevices}
               />
@@ -324,7 +322,6 @@ export class ApMaintenance extends PureComponent {
                   {...remarks}
                 />
                 <Table
-                  className="table"
                   options={fromJS(devicesTableOptions)}
                   list={this.props.devices.get('list')}
                   page={this.props.page}

@@ -161,7 +161,6 @@ export default class ProtoInfo extends React.Component {
       <Table
         options={userModalOptions}
         list={store.getIn([curScreenId, 'data', 'protoClientList'])}
-        className="table"
         page={store.getIn([curScreenId, 'data', 'clientPage'])}
         pageQuery={{
           size: store.getIn([curScreenId, 'query', 'modalSize']),

@@ -210,7 +210,6 @@ export class Logs extends PureComponent {
         </div>
 
         <Table
-          className="table"
           options={options}
           list={data.get('list')}
           page={data.get('page')}

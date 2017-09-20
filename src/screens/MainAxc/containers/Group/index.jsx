@@ -625,7 +625,6 @@ export default class MainGroup extends React.Component {
                     { __('Auto AP List') }
                   </legend>
                   <Table
-                    className="table"
                     options={tableOption}
                     list={product.getIn(['defaultDevices'])}
                     onRowSelect={data => this.onSelectGroupAp(data)}
@@ -703,7 +702,6 @@ export default class MainGroup extends React.Component {
             <div className="o-list cols col-8">
               <h3 className="o-list__header">{__('Please Select AP')}</h3>
               <Table
-                className="table"
                 options={tableOption}
                 list={product.getIn(['group', 'devices'])}
                 onRowSelect={(data) => {
@@ -811,7 +809,6 @@ export default class MainGroup extends React.Component {
               <div className="o-list cols col-8">
                 <h3>{__('Select AP to group')}</h3>
                 <Table
-                  className="table"
                   options={tableOption}
                   list={product.getIn(['defaultDevices'])}
                   onRowSelect={data => this.onSelectGroupAp(data)}
@@ -946,7 +943,6 @@ export default class MainGroup extends React.Component {
             <div className="o-list cols col-8">
               <h3 className="o-list__header">{__('Group AP')}</h3>
               <Table
-                className="table"
                 options={tableOption}
                 selectable
                 list={$$mannageGroupAps}

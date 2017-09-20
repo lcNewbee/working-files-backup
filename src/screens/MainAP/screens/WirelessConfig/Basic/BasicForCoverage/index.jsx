@@ -943,7 +943,6 @@ export default class Basic extends React.Component {
           draggable
         >
           <Table
-            className="table"
             options={modalOptions}
             list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
           />
@@ -1882,7 +1881,6 @@ export default class Basic extends React.Component {
           this.props.selfState.get('showMultiSsid') ? (
             <div className="cols col-12 o-box__cell">
               <Table
-                className="table"
                 options={this.props.selfState.get('ssidTableOptions')}
                 list={(() => {
                   const list = fromJS([]);

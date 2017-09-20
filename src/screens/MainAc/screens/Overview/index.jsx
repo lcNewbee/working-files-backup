@@ -634,7 +634,6 @@ export class Status extends React.PureComponent {
           </div>
           <div className="element">
             <Table
-              className="table"
               options={clientsListOption}
               list={this.props.data.get('clientlist')}
             />
@@ -651,7 +650,6 @@ export class Status extends React.PureComponent {
           </div>
           <div className="element">
             <Table
-              className="table"
               options={apListOption}
               list={this.props.data.get('aplist')}
             />
@@ -674,7 +672,6 @@ export class Status extends React.PureComponent {
             />
           </div>
           <Table
-            className="table"
             options={offlineApOption}
             list={this.props.offlineAp.get('list')}
             page={this.props.offlineAp.get('page')}

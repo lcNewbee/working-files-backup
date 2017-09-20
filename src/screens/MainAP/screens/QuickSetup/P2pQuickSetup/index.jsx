@@ -939,7 +939,6 @@ export default class QuickSetup extends React.Component {
                       draggable
                     >
                       <Table
-                        className="table"
                         options={modalOptions}
                         list={store.getIn(['curData', 'scanResult', 'siteList'])}
                       />
@@ -1269,7 +1268,6 @@ export default class QuickSetup extends React.Component {
                       draggable
                     >
                       <Table
-                        className="table"
                         options={modalOptions}
                         list={store.getIn(['curData', 'scanResult', 'siteList'])}
                       />

@@ -103,7 +103,7 @@ const listOptions = fromJS([
 
       return (
         <span
-          title={`-${intVal}db`}
+          title={`-${intVal}dbm`}
           style={{ cursor: 'pointer' }}
           className={classNames}
         />
@@ -112,7 +112,9 @@ const listOptions = fromJS([
     },
   },
   {
-    id: '__action__',
+    id: '__actions__',
+    fixed: 'right',
+    width: 120,
     text: __('Actions'),
   },
 ]);

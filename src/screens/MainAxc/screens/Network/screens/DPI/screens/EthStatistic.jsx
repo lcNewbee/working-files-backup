@@ -378,7 +378,6 @@ export default class EthStatistic extends React.Component {
       <Table
         options={userModalOptions}
         list={store.getIn([curScreenId, 'data', 'ethxClientList'])}
-        className="table"
         pageQuery={{
           size: store.getIn([curScreenId, 'query', 'size']),
         }}

@@ -1045,7 +1045,6 @@ export default class SystemStatus extends React.Component {
           </div>
           <div className="o-box__cell">
             <Table
-              className="table"
               options={interfaceOptions}
               list={interfaces}
             />

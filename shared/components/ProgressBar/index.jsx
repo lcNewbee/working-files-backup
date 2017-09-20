@@ -116,7 +116,7 @@ export default class ProgressBar extends React.Component {
   }
 
   render() {
-    const { title, showText, unit, style, step } = this.props;
+    const { title, showText, unit, style } = this.props;
     let percentageValue = parseInt(this.state.n, 10);
     const bodyStyle = {};
 
