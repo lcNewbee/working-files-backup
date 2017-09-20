@@ -33,7 +33,12 @@ function onChangeLang(data) {
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
+  route: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }),
   save: PropTypes.func,
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
@@ -155,7 +160,7 @@ export default class View extends React.PureComponent {
               this.props.changeLoginState({
                 needReload: true,
               });
-              window.location.hash = '#';
+              this.props.history.push('/login');
             },
           });
 

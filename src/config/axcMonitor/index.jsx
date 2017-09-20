@@ -138,6 +138,12 @@ const sAcMaintenance =
 const sNetworkTimeProtocol =
     require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
+// dashboard
+const sMainDashboard = require('../../screens/MainDashboard/');
+const sMainDashboardOverview = require('../../screens/MainDashboard/screens/Overview');
+const sMainDashboardFlowAnalysis = require('../../screens/MainDashboard/screens/FlowAnalysis');
+const sMainDashboardEnvironment = require('../../screens/MainDashboard/screens/Environment');
+
 
 const routes = [
   {
@@ -537,6 +543,36 @@ const routes = [
         id: 'wizard',
         path: '/wizard',
         component: sWizard.Screen,
+      },
+      {
+        id: 'mainDashboard',
+        path: '/dashboard',
+        fetchUrl: 'goform/quicksetup',
+        mainPath: 'goform/dashboard/flowanalysis',
+        component: sMainDashboard.Screen,
+        routes: [
+          {
+            id: 'dashboardOverview',
+            path: '/dashboard/overview',
+            formUrl: 'goform/dashboard/overview',
+            text: __('Dashboard Overview'),
+            component: sMainDashboardOverview.Screen,
+          },
+          {
+            id: 'dashboardFlowAnalysis',
+            path: '/dashboard/flowanalysis',
+            formUrl: 'goform/dashboard/flowanalysis',
+            text: __('Flow Analysis'),
+            component: sMainDashboardFlowAnalysis.Screen,
+          },
+          {
+            id: 'dashboardEnvironment',
+            path: '/dashboard/environment',
+            formUrl: 'goform/dashboard/environment',
+            text: __('Environment Monitor'),
+            component: sMainDashboardEnvironment.Screen,
+          },
+        ],
       },
       {
         id: 'login',

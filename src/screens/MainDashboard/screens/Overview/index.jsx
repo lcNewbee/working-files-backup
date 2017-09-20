@@ -475,10 +475,10 @@ export default class DashboardOverview extends React.PureComponent {
   }
 
   renderHeatMap() {
-    const newData = [];
+    // const newData = [];
 
     if (this.heatMapContent && this.heatMapCanvasHeight > 0) {
-      // const newData = createHeatMapPoints(140, this.heatMapContent.offsetWidth, this.heatMapContent.offsetHeight);
+      const newData = createHeatMapPoints(120, this.heatMapContent.offsetWidth, this.heatMapContent.offsetHeight);
       const data = this.state.heatmapData;
 
       // this.removeHeatMap();
@@ -501,14 +501,14 @@ export default class DashboardOverview extends React.PureComponent {
         });
       }
 
-      data.forEach((item) => {
-        const point = utils.gps.getOffsetFromGpsPoint(item, this.state.mapInfo);
-        newData.push({
-          x: Math.floor((point.x * this.heatMapCanvasWidth) / 10000),
-          y: Math.floor((point.y * this.heatMapCanvasHeight) / 10000),
-          value: item.value,
-        });
-      });
+      // data.forEach((item) => {
+      //   const point = utils.gps.getOffsetFromGpsPoint(item, this.state.mapInfo);
+      //   newData.push({
+      //     x: Math.floor((point.x * this.heatMapCanvasWidth) / 10000),
+      //     y: Math.floor((point.y * this.heatMapCanvasHeight) / 10000),
+      //     value: item.value,
+      //   });
+      // });
 
       this.heatmapInstance.setData({
         data: newData,

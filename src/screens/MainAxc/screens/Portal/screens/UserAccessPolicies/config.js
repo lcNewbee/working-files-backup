@@ -607,7 +607,11 @@ export const $$potalServerOptions = fromJS([
     },
     formProps: {
       type: 'text',
+      maxLength: '128',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 128]',
+      }),
     },
   },
   {
@@ -628,7 +632,7 @@ export const $$potalServerOptions = fromJS([
     label: __('AC IP'),
     fieldset: 'other',
     formProps: {
-      type: 'select',
+      type: 'text',
       required: true,
       validator: validator({
         rules: 'ip',
