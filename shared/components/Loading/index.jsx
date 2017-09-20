@@ -8,9 +8,6 @@ const propTypes = {
   size: PropTypes.oneOf(['default', 'sm', 'lg']),
   style: PropTypes.object,
 
-  // 类型 现在只支持 ‘heart’
-  type: PropTypes.oneOf(['heart']),
-
   // ms
   delay: PropTypes.number,
 };

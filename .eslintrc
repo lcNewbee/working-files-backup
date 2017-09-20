@@ -74,6 +74,12 @@
     "jsx-a11y/no-noninteractive-element-interactions": 0,
 
     // 不需要验证默认属性
-    "react/require-default-props": 0
+    "react/require-default-props": 0,
+    "react/forbid-prop-types": [
+      1,
+      {
+        "forbid": ["any"]
+      }
+    ]
   }
 }

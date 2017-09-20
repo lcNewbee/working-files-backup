@@ -49,6 +49,7 @@ const propTypes = {
   updateScreen: PropTypes.func,
   loading: PropTypes.bool,
   noLoading: PropTypes.bool,
+  initNoFetch: PropTypes.bool,
 
   // List 相关属性list
   listOptions: PropTypes.oneOfType([
@@ -56,7 +57,10 @@ const propTypes = {
     PropTypes.array,
   ]),
   listId: PropTypes.string,
-  groupid: PropTypes.any,
+  groupid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 
   // Settings 相关属性
   settingsFormOptions: PropTypes.oneOfType([
