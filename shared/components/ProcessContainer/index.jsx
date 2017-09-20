@@ -105,8 +105,7 @@ class ProcessContainer extends React.PureComponent {
   }
 
   render() {
-    const { size, delay, className, forceLoadingTime, ...rest } = this.props;
-    const { loading } = this.state;
+    const { size, delay, className, loading, forceLoadingTime, ...rest } = this.props;
     let myClassnames = classnames(className, {
       'rw-process-container': true,
     });
@@ -116,7 +115,7 @@ class ProcessContainer extends React.PureComponent {
       myClassnames = `${myClassnames} rw-process-container--${size}`;
     }
 
-    if (loading) {
+    if (this.state.loading) {
       loadingNode = [
         <div className="rw-process-container__backdrop" key="loadingBackdrop" />,
         (
