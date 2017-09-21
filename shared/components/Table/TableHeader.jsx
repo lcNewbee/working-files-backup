@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import utilsCore from 'shared/utils/lib/core';
 import RcTooltip from 'rc-tooltip';
+import classnams from 'classnames';
 import Checkbox from '../Form/Checkbox';
 import Icon from '../Icon';
 import PureComponent from '../Base/PureComponent';
@@ -75,10 +76,16 @@ class TableHeader extends PureComponent {
             const curThOption = typeof $$curThOption.toJS === 'function' ? $$curThOption.toJS() : $$curThOption;
             const checked = showColumns.find($$item => $$item.get('id') === curThOption.id);
             const isAction = curThOption.id === '__actions__';
+            const onlyOne = showColumns.size === 1;
+            const disabled = onlyOne && checked;
+            const myClassnames = classnams('rw-table-config__list', {
+              disabled,
+            });
 
             return isAction ? null : (
               <div
                 key={curThOption.id || i}
+                className={myClassnames}
               >
                 <Checkbox
                   theme="square"
@@ -86,7 +93,7 @@ class TableHeader extends PureComponent {
                   onChange={(e) => {
                     this.props.onColumnsConfig(curThOption.id, e.target.checked);
                   }}
-                  disabled={isAction}
+                  disabled={disabled}
                   checked={!!checked}
                 />
               </div>

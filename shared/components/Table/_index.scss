@@ -124,14 +124,27 @@ $hoverColor: #ecf6fd;
 }
 
 .rw-table-config {
-  .a-checkbox--square {
-    display: block;
-    padding: 5px;
-    cursor: pointer;
-    margin-right: 0;
+  &__list {
+    .a-checkbox--square {
+      display: block;
+      padding: 5px;
+      cursor: pointer;
+      margin-right: 0;
 
-    &:hover {
-      background-color: $hoverColor;
+      &:hover {
+        background-color: $hoverColor;
+      }
+    }
+
+    // disable
+    &.disabled {
+      .a-checkbox--square {
+        cursor: not-allowed;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
     }
   }
 }
