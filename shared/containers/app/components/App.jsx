@@ -142,6 +142,7 @@ export default class App extends Component {
           noClose={isLoadingModal}
           okText={__('OK')}
           cancelText={__('Cancel')}
+          zIndex={1688}
           customBackdrop
         >
           {

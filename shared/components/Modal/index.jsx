@@ -80,7 +80,7 @@ function renderBackdrop(isShow, enter, exit) {
 
 const propTypes = {
   isShow: PropTypes.bool,
-  title: PropTypes.any,
+  title: PropTypes.string,
   id: PropTypes.string,
   style: PropTypes.object,
   size: PropTypes.oneOf(['min', 'md', 'lg', 'xlg', 'max']),
@@ -96,7 +96,12 @@ const propTypes = {
   customBackdrop: PropTypes.bool,
   onClose: PropTypes.func,
   onOk: PropTypes.func,
-  children: PropTypes.any,
+  children: PropTypes.node,
+
+  zIndex: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 };
 const defaultProps = {
   title: '',
@@ -222,17 +227,23 @@ class Modal extends PureComponent {
     );
   }
   render() {
-    const { role, id, exit, enter,
+    const {
+      role, id, exit, enter, zIndex,
       isShow, title, cancelText, okButton, okText, draggable,
       customBackdrop,
     } = this.props;
     const size = this.state.modalSize;
+    const containerStyle = {};
     let noFooter = this.props.noFooter;
     let contentClassNames;
     let keyVal = this.modalKey;
     let hasCloseBtn = true;
     let { cancelButton } = this.props;
     let modalClassName = 'o-modal';
+
+    if (zIndex) {
+      containerStyle.zIndex = zIndex;
+    }
 
     // role is shown in contentClassNames
     if (role) {
@@ -298,6 +309,7 @@ class Modal extends PureComponent {
                 });
               }
             }}
+            style={containerStyle}
           >
             {
               customBackdrop && isShow ? (
