@@ -38,6 +38,7 @@ class TableCell extends PureComponent {
     const filterObj = $$colnmn.get('filterObj');
     const thisKey = `tableCell${index}.${id}`;
     const getTitle = $$colnmn.get('getTitle');
+    const restProps = {};
     let title;
     let currNode = $$record.get(id);
     let currItemArr = [];
@@ -157,8 +158,12 @@ class TableCell extends PureComponent {
       }));
     }
 
+    if ($$colnmn.get('fixed')) {
+      restProps.className = `rw-table-cell-fixed-${$$colnmn.get('fixed')}`;
+    }
     return (
       <td
+        {...restProps}
         key={thisKey}
         title={title}
         onClick={(e) => {

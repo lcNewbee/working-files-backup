@@ -901,7 +901,7 @@ export default class MainGroup extends React.Component {
                   })
                 }
               </ul>
-              <div className="o-list__footer action-btns">
+              <div className="o-list__footer m-action-bar">
                 <Button
                   icon="plus"
                   text={__('Add')}
@@ -958,7 +958,7 @@ export default class MainGroup extends React.Component {
               />
               {
                 noMannageAp ? null : (
-                  <div className="o-list__footer action-btns">
+                  <div className="o-list__footer m-action-bar">
                     <Button
                       icon="plus"
                       text={__('Add AP')}

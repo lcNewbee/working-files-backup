@@ -22,6 +22,7 @@ const propTypes = {
   onSelect: PropTypes.func,
   onColumnSort: PropTypes.func,
   onColumnsConfig: PropTypes.func,
+  fixedRowsHeight: PropTypes.array,
 };
 
 const defaultProps = {
@@ -179,15 +180,21 @@ class TableHeader extends PureComponent {
   render() {
     const {
       columns, selected, selectable, curSelectable,
-      item, onColumnSort, index, ...restProps
+      item, onColumnSort, index, fixedRowsHeight, fixed, ...restProps
     } = this.props;
+    let trStyle = null;
     let rowChilren = null;
 
     rowChilren = this.renderThList();
 
+    if (fixedRowsHeight && fixed && fixedRowsHeight[0]) {
+      trStyle = {
+        height: `${fixedRowsHeight[0]}px`,
+      };
+    }
     return rowChilren ? (
       <thead>
-        <tr>
+        <tr style={trStyle}>
           {rowChilren}
         </tr>
       </thead>

@@ -17,7 +17,7 @@
 }
 .rw-table {
   min-width: 100%;
-  border-spacing: 1;
+  border-spacing: 0;
   border-collapse: collapse;
   background-color: #fff;
 
@@ -60,8 +60,24 @@
   .action-btns {
     min-height: 22px;
     //height: 22px;
+
     .a-btn {
       margin-right: 8px;
+      color: #0070d2;
+      background-color: transparent;
+      border: 0;
+      padding: 2px 4px;
+      line-height: 16px;
+      transition: opacity .2s ease-in-out;
+
+      .icon {
+        font-size: 16px;
+        vertical-align: bottom;
+      }
+
+      &:hover {
+        opacity: .8;
+      }
     }
   }
   &--fixed {
@@ -77,16 +93,11 @@
   }
 
   &--light {
-    background-color: #fff;
     th {
       border-top: none;
       font-weight: bold;
       background-color: #fff;
       color: #333;
-    }
-
-    tr:hover {
-      background-color: #f3f3f3;
     }
   }
 }

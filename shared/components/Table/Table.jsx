@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { fromJS, List, is } from 'immutable';
 import classnams from 'classnames';
 import utils from 'shared/utils';
+import addEventListener from 'add-dom-event-listener';
 
-import createStore from './createStore';
 import PureComponent from '../Base/PureComponent';
 import Pagination from '../Pagination';
 import TableRow from './TableRow';
@@ -54,6 +54,23 @@ function getPageObject($$list, pageQuery) {
   ret.$$newList = $$newList;
 
   return ret;
+}
+function shallowArrayEqual(arr1, arr2) {
+  const len1 = arr1.length;
+  const len2 = arr2.length;
+  let i = 0;
+
+  if (len1 !== len2) {
+    return false;
+  }
+
+  for (i; i < len1; i += 1) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 const propTypes = {
@@ -131,20 +148,18 @@ class Table extends PureComponent {
       'handleBodyScroll',
       'handleRowHover',
       'handleWindowResize',
-      'syncFixedTableRowHeight',
+      'syncFixedTableRowCellSize',
       'isHasFixedColumns',
     ]);
     this.state = {
       myList: fromJS([]),
       hiddenColumns: fromJS([]),
-      $$fixedColumnsHeadRowsHeight: fromJS([]),
-      $$fixedColumnsBodyRowsHeight: fromJS([]),
+      fixedColumnsHeadRowsHeight: [],
+      fixedColumnsBodyRowsHeight: [],
+      fixedLeftTableColumnsWidth: [],
+      fixedRightTableColumnsWidth: [],
     };
     this.sortCalc = 1;
-    this.store = createStore({
-      fixedColumnsRowHeight: [],
-
-    });
   }
 
   componentWillMount() {
@@ -177,11 +192,12 @@ class Table extends PureComponent {
 
   componentDidUpdate() {
     if (this.isHasFixedColumns()) {
-      this.handleWindowResize();
+      this.syncFixedTableRowCellSize();
+      this.setScrollPositionClassName();
     }
-    if (this.scrollTableElem) {
-      this.setScrollPositionClassName(this.scrollTableElem);
-    }
+    // if (this.scrollTableElem) {
+    //   this.setScrollPositionClassName(this.scrollTableElem);
+    // }
   }
 
   componentWillUnmount() {
@@ -247,8 +263,8 @@ class Table extends PureComponent {
         const isSelected = $$item && !!$$item.get('__selected__');
         const curIndex = ($$item && $$item.get('__index__')) || i;
         const key = this.getRowKey($$item.toJS(), curIndex);
-        const height = (fixed && isHasFixedColumns && this.state.$$fixedColumnsBodyRowsHeight.get(i)) ?
-          this.state.$$fixedColumnsBodyRowsHeight.get(i) : null;
+        const height = (fixed && isHasFixedColumns && this.state.fixedColumnsBodyRowsHeight[i]) ?
+          this.state.fixedColumnsBodyRowsHeight[i] : null;
         let curSelectable = selectable;
 
         if (isSelected) {
@@ -312,9 +328,25 @@ class Table extends PureComponent {
     let myTableClassName = prefixClass;
     let isSelectAll = false;
     let tableBodyStyle = null;
+    let fixedColumnsWidth = [];
 
     if (fixed) {
-      $$columns = this.$$columnsGroup.get(fixed);
+      if (fixed === 'left') {
+        fixedColumnsWidth = this.state.fixedLeftTableColumnsWidth;
+      } else if (fixed === 'right') {
+        fixedColumnsWidth = this.state.fixedRightTableColumnsWidth;
+      }
+
+      $$columns = this.$$columnsGroup.get(fixed).map(($$column, index) => {
+        const curColWidth = fixedColumnsWidth[index];
+        let $$ret = $$column;
+
+        if (curColWidth && curColWidth !== $$column.get('width')) {
+          $$ret = $$ret.set('width', curColWidth);
+        }
+
+        return $$ret;
+      });
     }
 
     if (onRowClick) {
@@ -381,6 +413,8 @@ class Table extends PureComponent {
               columns={$$columns}
               selectable={selectable}
               selected={isSelectAll}
+              fixed={fixed}
+              fixedRowsHeight={this.state.fixedColumnsHeadRowsHeight}
               index={THEAD_INDEX}
               onColumnSort={this.onColumnSort}
               onColumnsConfig={this.onColumnsConfig}
@@ -428,6 +462,8 @@ class Table extends PureComponent {
                 columns={$$columns}
                 selectable={selectable}
                 selected={isSelectAll}
+                fixedRowsHeight={this.state.fixedColumnsHeadRowsHeight}
+                fixed={fixed}
                 index={THEAD_INDEX}
                 onColumnSort={this.onColumnSort}
                 onColumnsConfig={this.onColumnsConfig}
@@ -484,9 +520,9 @@ class Table extends PureComponent {
     clearTimeout(this.resizeTimeout);
 
     this.resizeTimeout = setTimeout(() => {
-      this.syncFixedTableRowHeight();
+      this.syncFixedTableRowCellSize();
       this.setScrollPositionClassName();
-    }, 150);
+    }, 120);
   }
 
   /**
@@ -495,7 +531,7 @@ class Table extends PureComponent {
    * @returns
    * @memberof Table
    */
-  syncFixedTableRowHeight() {
+  syncFixedTableRowCellSize() {
     const tableRect = this.scrollTableElem.getBoundingClientRect();
 
     if (tableRect.height !== undefined && tableRect.height <= 0) {
@@ -507,21 +543,34 @@ class Table extends PureComponent {
       this.scrollBodyTable.querySelectorAll('thead');
 
     const bodyRows = this.scrollBodyTable.querySelectorAll('tbody tr') || [];
-    const $$fixedColumnsHeadRowsHeight = fromJS([].map.call(
+    const bodyFixedLeftColumns = bodyRows[0].querySelectorAll('.rw-table-cell-fixed-left');
+    const bodyFixedRightColumns = bodyRows[0].querySelectorAll('.rw-table-cell-fixed-right');
+    const fixedColumnsHeadRowsHeight = [].map.call(
       headRows, row => row.getBoundingClientRect().height || 'auto',
-    ));
-    const $$fixedColumnsBodyRowsHeight = fromJS([].map.call(
+    ) || [];
+    const fixedColumnsBodyRowsHeight = [].map.call(
       bodyRows, row => row.getBoundingClientRect().height || 'auto',
-    ));
+    ) || [];
+    const fixedLeftTableColumnsWidth = [].map.call(
+      bodyFixedLeftColumns, row => row.getBoundingClientRect().width || 'auto',
+    ) || [];
+    const fixedRightTableColumnsWidth = [].map.call(
+      bodyFixedRightColumns, row => row.getBoundingClientRect().width || 'auto',
+    ) || [];
+
 
     // 对比高度是否改变
-    if (is(this.state.$$fixedColumnsHeadRowsHeight, $$fixedColumnsHeadRowsHeight) &&
-        is(this.state.$$fixedColumnsBodyRowsHeight, $$fixedColumnsBodyRowsHeight)) {
+    if (shallowArrayEqual(this.state.fixedColumnsHeadRowsHeight, fixedColumnsHeadRowsHeight) &&
+        shallowArrayEqual(this.state.fixedColumnsBodyRowsHeight, fixedColumnsBodyRowsHeight) &&
+        shallowArrayEqual(this.state.fixedLeftTableColumnsWidth, fixedLeftTableColumnsWidth) &&
+        shallowArrayEqual(this.state.fixedRightTableColumnsWidth, fixedRightTableColumnsWidth)) {
       return;
     }
     this.setState({
-      $$fixedColumnsHeadRowsHeight,
-      $$fixedColumnsBodyRowsHeight,
+      fixedColumnsHeadRowsHeight,
+      fixedColumnsBodyRowsHeight,
+      fixedLeftTableColumnsWidth,
+      fixedRightTableColumnsWidth,
     });
   }
   handleRowHover(isHover, hoverKey) {
@@ -592,7 +641,7 @@ class Table extends PureComponent {
       this.$$options = this.$$options.unshift(fromJS({
         id: '__selected__',
         width: 28,
-        // fixed: 'left',
+        fixed: 'left',
         render: (val, $$item, $$colnmn) => {
           const disabled = !$$colnmn.get('curSelectable');
           const curIndex = $$colnmn.get('__index__');

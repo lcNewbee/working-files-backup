@@ -589,6 +589,7 @@ class AppScreenList extends React.PureComponent {
   }
   initListTableOptions(props, editable) {
     const { actionable, deleteable, tableOptions } = props;
+    let actionColumnIndex = -1;
     let actionsOption = null;
     let btnsNum = 0;
     let btnList = List([]);
@@ -627,7 +628,9 @@ class AppScreenList extends React.PureComponent {
             text: __('Actions'),
           }));
         }
-        this.listTableOptions = this.listTableOptions.setIn([-1, 'render'],
+        actionColumnIndex = this.listTableOptions.findIndex($$column => $$column.get('id') === '__actions__');
+
+        this.listTableOptions = this.listTableOptions.setIn([actionColumnIndex, 'render'],
           (val, $$item, $$option) => {
             const index = $$option.get('__index__');
             let editableResult = editable;
@@ -744,8 +747,9 @@ class AppScreenList extends React.PureComponent {
         );
       }
 
-      if (btnsNum !== 'auto' && btnsNum > 0) {
-        this.listTableOptions = this.listTableOptions.setIn([-1, 'width'], btnsNum * 90);
+      // 只有在
+      if (!this.listTableOptions.getIn([actionColumnIndex, 'width']) && btnsNum !== 'auto' && btnsNum > 0) {
+        this.listTableOptions = this.listTableOptions.setIn([actionColumnIndex, 'width'], btnsNum * 80);
       }
     }
 
@@ -845,7 +849,7 @@ class AppScreenList extends React.PureComponent {
       store, app, fetchUrl,
       selectable, deleteable, searchable, searchProps, addable, actionable,
       editFormId, queryFormOptions, actionBarButtons,
-      actionBarChildren, maxListSize, id,
+      actionBarChildren, maxListSize,
     } = this.props;
     const $$curList = store.getIn(['data', 'list']) || List([]);
     const query = store.getIn(['query']);
@@ -1086,7 +1090,7 @@ class AppScreenList extends React.PureComponent {
 
   render() {
     const {
-      store, listTitle, selectable, customTable, paginationType, id,
+      store, listTitle, selectable, customTable, paginationType,
     } = this.props;
     const { pageDataKey, listDataKey } = this.state.listKeyMap;
     const query = store.getIn(['query']);

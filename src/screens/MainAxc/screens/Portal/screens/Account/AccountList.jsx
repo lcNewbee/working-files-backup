@@ -63,7 +63,7 @@ const listOptions = fromJS([
       const accountType = $$data.get('state');
       let ret = val;
 
-       // 禁用
+      // 禁用
       if (accountType === '0' || accountType === '2') {
         ret = '--';
 
@@ -264,6 +264,7 @@ const listOptions = fromJS([
   {
     id: '__actions__',
     text: __('Actions'),
+    width: 260,
     render(val, $$item) {
       return (
         <span>

@@ -444,13 +444,15 @@ export default class GroupOverview extends React.Component {
           }
 
           return (
-            <Button
-              text={btnText}
-              disabled={isCounter === 1}
-              onClick={
-                () => this.handleCounterAp($$data)
-              }
-            />
+            <div className="action-btns">
+              <Button
+                text={btnText}
+                disabled={isCounter === 1}
+                onClick={
+                  () => this.handleCounterAp($$data)
+                }
+              />
+            </div>
           );
         },
       }),

@@ -281,6 +281,11 @@ const listOptions = fromJS([
       return $$curItem ? $$curItem.get('label') : '-';
     },
   },
+  {
+    id: '__actions__',
+    text: __('Actions'),
+    fixed: 'right',
+  },
 ]);
 
 const $$baseFormOptions = utils.immutableUtils.getFormOptions(listOptions);

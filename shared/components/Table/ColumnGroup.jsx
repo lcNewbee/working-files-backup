@@ -36,7 +36,7 @@ class ColumnGroup extends PureComponent {
         <col
           key={i}
           style={{
-            maxWidth: widthString,
+            minWidth: widthString,
             width: widthString,
           }}
         />

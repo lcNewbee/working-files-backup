@@ -58,7 +58,7 @@ acorn@^5.0.0, acorn@^5.1.1:
   version "5.1.2"
   resolved "http://registry.npm.taobao.org/acorn/download/acorn-5.1.2.tgz#911cb53e036807cf0fa778dc5d370fbd864246d7"
 
-add-dom-event-listener@1.x:
+add-dom-event-listener@1.x, add-dom-event-listener@^1.0.2:
   version "1.0.2"
   resolved "http://registry.npm.taobao.org/add-dom-event-listener/download/add-dom-event-listener-1.0.2.tgz#8faed2c41008721cf111da1d30d995b85be42bed"
   dependencies:
