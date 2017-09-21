@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fromJS, List, is } from 'immutable';
+import { fromJS, List } from 'immutable';
 import classnams from 'classnames';
 import utils from 'shared/utils';
 import addEventListener from 'add-dom-event-listener';
@@ -410,6 +410,7 @@ class Table extends PureComponent {
             />
             <TableHeader
               allColumns={this.props.options}
+              showColumns={this.$$columnsGroup.get('scroll')}
               columns={$$columns}
               selectable={selectable}
               selected={isSelectAll}
@@ -459,6 +460,7 @@ class Table extends PureComponent {
             isFixedHeader ? null : (
               <TableHeader
                 allColumns={this.props.options}
+                showColumns={this.$$columnsGroup.get('scroll')}
                 columns={$$columns}
                 selectable={selectable}
                 selected={isSelectAll}

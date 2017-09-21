@@ -671,7 +671,6 @@ class AppScreenList extends React.PureComponent {
                   deleteableResult ? (
                     <Popconfirm
                       title={__('Are you sure to %s the selected row %s?', __('delete'), (index + 1))}
-
                       onOk={
                         () => {
                           this.handleItemAction({

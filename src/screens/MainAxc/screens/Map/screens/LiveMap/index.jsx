@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  Icon, FormGroup, Button, Loading, FormContainer, Table, Modal, Switchs,
+  Icon, FormGroup, Button, Loading, FormContainer, Table, Modal, Switchs, Popconfirm,
 } from 'shared/components';
 import { getActionable } from 'shared/axc';
 
@@ -157,7 +157,7 @@ export default class LiveMap extends React.PureComponent {
 
     if (this.actionable) {
       this.listTableOptions = listTableOptions.push(fromJS({
-        id: 'actions',
+        id: '__actions__',
         text: __('Actions'),
         width: 180,
         render: (val, $$item, $$option) => (
@@ -172,14 +172,20 @@ export default class LiveMap extends React.PureComponent {
                 });
               }}
             />
-            <Button
-              icon="trash"
-              text={__('Delete')}
-              size="sm"
-              onClick={() => {
-                this.onRemoveItem($$item.get('id'));
-              }}
-            />
+            <Popconfirm
+              title={__('Are you sure to %s the selected row %s?', __('delete'), ($$option.get('__index__') + 1))}
+              onOk={
+                () => {
+                  this.onRemoveItem($$item.get('id'));
+                }
+              }
+            >
+              <Button
+                icon="trash"
+                text={__('Delete')}
+                size="sm"
+              />
+            </Popconfirm>
           </div>
         ),
       }));
@@ -293,8 +299,7 @@ export default class LiveMap extends React.PureComponent {
           {
             timeout: 9000,
           },
-        )
-        .then(
+        ).then(
           (error) => {
             if (error) {
               this.props.updateScreenCustomProps({
@@ -338,8 +343,7 @@ export default class LiveMap extends React.PureComponent {
             timeout: 15000,
             id: 'baidu',
           },
-        )
-        .then(
+        ).then(
           (error) => {
             if (error) {
               this.props.updateScreenCustomProps({
@@ -464,10 +468,10 @@ export default class LiveMap extends React.PureComponent {
         </div>
         <div class="m-map__marker-infowindow-footer">
         ${this.actionable ? (
-          `<button class="a-btn a-btn--primary" id="editBulid${markerId}">
+    `<button class="a-btn a-btn--primary" id="editBulid${markerId}">
             ${__('Edit')}
           </button>`
-        ) : ''}
+  ) : ''}
         <button class="a-btn a-btn--info" id="viewBulid${markerId}">
           ${__('View')}
         </button>
@@ -477,7 +481,7 @@ export default class LiveMap extends React.PureComponent {
     const infoWindow = new BMap.InfoWindow(contentString, {
       maxWidth: 500,
       offset: new BMap.Size(-2, -18),
-    });  // 创建信息窗口对象
+    }); // 创建信息窗口对象
     const geoc = new BMap.Geocoder();
     let editButtonElem = document.getElementById(`editBulid${markerId}`);
     let viewButtonElem = document.getElementById(`viewBulid${markerId}`);
@@ -633,13 +637,15 @@ export default class LiveMap extends React.PureComponent {
     } else {
       curMap = this.map;
 
-      geolocation.getCurrentPosition(function(r) {
+      /* eslint-disable func-names, no-undef */
+      geolocation.getCurrentPosition(function (r) {
         if (this.getStatus() === BMAP_STATUS_SUCCESS) {
           curMap.centerAndZoom(new BMap.Point(r.point.lng, r.point.lat), 13);
         } else {
           curMap.centerAndZoom(new BMap.Point(center.lng, center.lat), 13);
         }
       });
+      /* eslint-enable */
     }
 
 
@@ -655,7 +661,7 @@ export default class LiveMap extends React.PureComponent {
 
   // Google Map
   renderMarkerToGoogleMap(item, map, index) {
-    const service = new google.maps.places.PlacesService(map);
+    // const service = new google.maps.places.PlacesService(map);
     const apIcon = {
       path: google.maps.SymbolPath.CIRCLE,
       scale: 10,
@@ -675,7 +681,7 @@ export default class LiveMap extends React.PureComponent {
         lng: item.get('lng'),
       },
       icon: item.get('markerType') === 'ap' ?
-          apIcon : buildingIcon,
+        apIcon : buildingIcon,
       title: item.get('markerTitle') || '',
       // label: {
       //   text: item.get('markerTitle') || `${index}`,
@@ -699,10 +705,10 @@ export default class LiveMap extends React.PureComponent {
         </div>
         <div class="m-map__marker-infowindow-footer">
         ${this.actionable ? (
-          `<button class="a-btn a-btn--primary" id="editBulid${markerId}">
+    `<button class="a-btn a-btn--primary" id="editBulid${markerId}">
             ${__('Edit')}
           </button>`
-          ) : ''}
+  ) : ''}
         <button class="a-btn a-btn--info" id="viewBulid${markerId}">
           ${__('View')}
         </button>
@@ -735,7 +741,7 @@ export default class LiveMap extends React.PureComponent {
     );
 
     marker.addListener('dragend', (e) => {
-      const geocoder = new google.maps.Geocoder;
+      const geocoder = new google.maps.Geocoder();
       geocoder.geocode(
         {
           location: e.latLng,

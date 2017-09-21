@@ -10,19 +10,14 @@ import './_index.scss';
 
 const propTypes = {
   allColumns: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+  showColumns: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   columns: PropTypes.object.isRequired,
-  item: PropTypes.object,
-  index: PropTypes.number,
-  selectable: PropTypes.oneOfType([
-    PropTypes.bool, PropTypes.func,
-  ]),
-  curSelectable: PropTypes.bool,
-  selected: PropTypes.bool,
   configurable: PropTypes.bool,
   onSelect: PropTypes.func,
   onColumnSort: PropTypes.func,
   onColumnsConfig: PropTypes.func,
   fixedRowsHeight: PropTypes.array,
+  fixed: PropTypes.string,
 };
 
 const defaultProps = {
@@ -72,18 +67,18 @@ class TableHeader extends PureComponent {
   }
 
   renderColumnsConfig() {
-    const { columns, allColumns } = this.props;
+    const { showColumns, allColumns } = this.props;
     const popOverlay = (
       <div className="rw-table-config">
         {
-          allColumns.map(($$curThOption) => {
+          allColumns.map(($$curThOption, i) => {
             const curThOption = typeof $$curThOption.toJS === 'function' ? $$curThOption.toJS() : $$curThOption;
-            const checked = columns.find($$item => $$item.get('id') === curThOption.id);
+            const checked = showColumns.find($$item => $$item.get('id') === curThOption.id);
             const isAction = curThOption.id === '__actions__';
 
             return isAction ? null : (
               <div
-                key={curThOption.id}
+                key={curThOption.id || i}
               >
                 <Checkbox
                   theme="square"
@@ -127,12 +122,12 @@ class TableHeader extends PureComponent {
   }
 
   renderThList() {
-    const { columns, configurable } = this.props;
+    const { columns, configurable, fixed } = this.props;
     const columnsLen = columns.size;
 
     return columns.map(
       ($$curThOption, index) => {
-        const isLast = index === columnsLen - 1;
+        const isLast = fixed !== 'left' && index === columnsLen - 1;
         const myOption = typeof $$curThOption.toJS === 'function' ? $$curThOption.toJS() : $$curThOption;
         const dataIndex = myOption.id;
 
@@ -169,7 +164,7 @@ class TableHeader extends PureComponent {
               ) : null
             }
             {
-              // isLast && configurable ? this.renderColumnsConfig() : null
+              isLast && configurable ? this.renderColumnsConfig() : null
             }
           </th>
         ) : null;
@@ -178,10 +173,7 @@ class TableHeader extends PureComponent {
   }
 
   render() {
-    const {
-      columns, selected, selectable, curSelectable,
-      item, onColumnSort, index, fixedRowsHeight, fixed, ...restProps
-    } = this.props;
+    const { fixedRowsHeight, fixed } = this.props;
     let trStyle = null;
     let rowChilren = null;
 

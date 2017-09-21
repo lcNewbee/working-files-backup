@@ -2,6 +2,8 @@
 @import "variables";
 @import "mixins";
 
+$hoverColor: #ecf6fd;
+
 .rw-table-container {
   position: relative;
   &--scroll-position-left {
@@ -50,7 +52,7 @@
 
   tr.rw-table-row-hover,
   tr:hover {
-    background-color: #ecf6fd;
+    background-color: $hoverColor;
   }
 
   .empty {
@@ -129,7 +131,7 @@
     margin-right: 0;
 
     &:hover {
-      background-color: #ddd;
+      background-color: $hoverColor;
     }
   }
 }

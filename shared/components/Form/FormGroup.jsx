@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
-import utils from 'shared/utils';
 import PureComponent from '../Base/PureComponent';
 import FormInput from './FormInput';
 
@@ -25,7 +24,10 @@ const propTypes = {
     PropTypes.node,
   ]),
   label: PropTypes.string,
-  value: PropTypes.any,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   id: PropTypes.string,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
@@ -225,7 +227,11 @@ class FormGroup extends PureComponent {
           type="hidden"
           name={name}
           value={value}
-          ref={ref => (this.myRef = ref)}
+          ref={
+            (elem) => {
+              this.myRef = elem;
+            }
+          }
         />
       );
     }
@@ -234,7 +240,11 @@ class FormGroup extends PureComponent {
       <div
         className={groupClassName}
         style={style}
-        ref={ref => (this.myRef = ref)}
+        ref={
+          (elem) => {
+            this.myRef = elem;
+          }
+        }
       >
         {
           label && showLabel ? (

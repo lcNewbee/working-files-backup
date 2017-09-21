@@ -15,12 +15,6 @@ const msg = {
   goSetting: __('Go to Setting'),
   helpText: __('To enable Rogue AP and Interfering AP detection, please go to AP Group > WIPS/WIDS , enable the AP Monitor function and to collect information about neighbor APs.'),
 };
-const helpIconStyle = {
-  color: '#007bff',
-  marginLeft: '12px',
-  fontSize: '14px',
-  cursor: 'pointer',
-};
 const timeTypeSwitchs = fromJS([
   {
     value: 'today',
@@ -636,7 +630,7 @@ export default class GroupOverview extends React.Component {
               >
                 <Icon name="question-circle" style={helpIconStyle} />
               </Tooltip>
-              <a href="#/main/group/safe/wips" className="link-more">{msg.goSetting}>></a>
+              <a href="#/main/group/safe/wips" className="link-more">{`${msg.goSetting}>>`}</a>
             </h3>
           </div>
           <div className="element t-overview__section">
@@ -656,7 +650,7 @@ export default class GroupOverview extends React.Component {
               >
                 <Icon name="question-circle" style={helpIconStyle} />
               </Tooltip>
-              <a href="#/main/group/safe/wips" className="link-more">{msg.goSetting}>></a>
+              <a href="#/main/group/safe/wips" className="link-more">{`${msg.goSetting}>>`}</a>
             </h3>
           </div>
           <div className="element t-overview__section">

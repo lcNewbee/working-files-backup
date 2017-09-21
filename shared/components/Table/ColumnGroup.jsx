@@ -6,6 +6,7 @@ import { getSizeStyleUnit } from './utils';
 
 import './_index.scss';
 
+
 const propTypes = {
   columns: PropTypes.object.isRequired,
 };
@@ -31,10 +32,11 @@ class ColumnGroup extends PureComponent {
     myCols = columns.map(($$column, i) => {
       const myOption = typeof $$column.toJS === 'function' ? $$column.toJS() : $$column;
       const widthString = getSizeStyleUnit(myOption.width);
+      const key = $$column.get('id') || i;
 
       return (
         <col
-          key={i}
+          key={key}
           style={{
             minWidth: widthString,
             width: widthString,

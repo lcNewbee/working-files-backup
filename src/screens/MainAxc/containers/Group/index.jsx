@@ -536,7 +536,7 @@ export default class MainGroup extends React.Component {
                     <Icon
                       name="cog"
                       size="2x"
-                      onClick={(e) => {
+                      onClick={() => {
                         this.props.fetchGroupAps(manageGroupId);
                         this.props.showMainModal({
                           title: __('Manage AP Groups'),
@@ -564,7 +564,7 @@ export default class MainGroup extends React.Component {
     const modelListOptions = product.getIn(['model', 'options']);
     let noMannageAp = false;
 
-     // validate const
+    // validate const
     const {
       groupname, remark, apmac, name, model,
     } = this.props.validateOption;
@@ -1011,18 +1011,7 @@ export default class MainGroup extends React.Component {
   renderBreadcrumb() {
     const { product, app } = this.props;
     const groupData = product.get('group');
-    const selectGroupId = product.getIn(['group', 'selected', 'id']);
-    const manageGroupId = product.getIn(['group', 'manageSelected', 'id']);
-    const $$groupList = product.getIn(['group', 'list']);
     const curRoutes = app.getIn(['router', 'routes']).toJS();
-    const selectOptions = $$groupList.map(
-      $$item => (
-        {
-          value: $$item.get('id'),
-          label: $$item.get('groupname'),
-        }
-      ),
-    ).toJS();
     let breadcrumbList = fromJS([]);
     const len = curRoutes.length;
     let i = 2;
@@ -1083,44 +1072,6 @@ export default class MainGroup extends React.Component {
               renderNode = (
                 <a className="m-breadcrumb__link" >
                   {__('All Group')}
-                  {/* <Button
-                    style={{
-                      marginLeft: '4px',
-                    }}
-                    theme="primary"
-                    icon="plus"
-                    size="sm"
-                    onClick={() => {
-                      this.props.fetchGroupAps();
-                      this.props.updateAddApGroup({
-                        groupname: '',
-                        remark: '',
-                      });
-                      this.props.showMainModal({
-                        title: __('Add AP Group'),
-                        isShow: true,
-                        size: 'lg',
-                        name: 'groupAdd',
-                      });
-                    }}
-                  />
-                  <Button
-                    style={{
-                      marginLeft: '4px',
-                    }}
-                    theme="primary"
-                    icon="cog"
-                    size="sm"
-                    onClick={() => {
-                      this.props.fetchGroupAps(manageGroupId);
-                      this.props.showMainModal({
-                        title: __('Manage AP Groups'),
-                        isShow: true,
-                        size: 'lg',
-                        name: 'groupManage',
-                      });
-                    }}
-                  />*/}
                 </a>
 
               );
