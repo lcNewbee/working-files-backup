@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { fromJS, List } from 'immutable';
-import classnams from 'classnames';
+import classnames from 'classnames';
 import utils from 'shared/utils';
 import addEventListener from 'add-dom-event-listener';
 
@@ -76,7 +76,7 @@ function shallowArrayEqual(arr1, arr2) {
 const propTypes = {
   prefixClass: PropTypes.string,
   theme: PropTypes.oneOf([
-    'light', '',
+    'light', 'dark', '',
   ]),
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   hiddenColumns: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
@@ -320,12 +320,16 @@ class Table extends PureComponent {
       className, selectable, onRowClick, scroll, prefixClass, theme,
     } = this.props;
     const isFixedHeader = (scroll && scroll.y);
+    const myTableClassName = classnames(prefixClass, {
+      [`${prefixClass}--pionter`]: onRowClick,
+      [`${prefixClass}--${theme}`]: theme,
+      [className]: className,
+    });
     let $$columns = this.$$options;
-    let headTable = null;
+    let headerTable = null;
     let bodyTable = null;
     let myBodyChildren = null;
     let unselectableLen = 0;
-    let myTableClassName = prefixClass;
     let isSelectAll = false;
     let tableBodyStyle = null;
     let fixedColumnsWidth = [];
@@ -337,6 +341,7 @@ class Table extends PureComponent {
         fixedColumnsWidth = this.state.fixedRightTableColumnsWidth;
       }
 
+      // 处理 fixed 列的宽度
       $$columns = this.$$columnsGroup.get(fixed).map(($$column, index) => {
         const curColWidth = fixedColumnsWidth[index];
         let $$ret = $$column;
@@ -349,27 +354,21 @@ class Table extends PureComponent {
       });
     }
 
-    if (onRowClick) {
-      myTableClassName = `${myTableClassName} ${prefixClass}--pionter`;
-    }
-
-    if (theme) {
-      myTableClassName = `${myTableClassName} ${prefixClass}--${theme}`;
-    }
-
-    if (className) {
-      myTableClassName = `${myTableClassName} ${className}`;
-    }
-
+    // 优先处理，需要获取计算 this.unselectableList
     myBodyChildren = this.getBodyRows($$myList, $$columns, fixed);
+
+    /* Start ***************************
+     * 选择项相关逻辑
+     */
     unselectableLen = this.unselectableList.length;
 
+    // 判断是否为全选
     if ($$myList && $$myList.size > 0 && this.selectedList.length > 0 &&
         ((this.selectedList.length + unselectableLen) === $$myList.size)) {
       isSelectAll = true;
     }
 
-    // 需要处理 选择 列
+    // 需要处理头部选择 列 checkbox 状态
     if (fixed !== 'right') {
       $$columns = $$columns.map(($$column) => {
         let ret = $$column;
@@ -391,19 +390,25 @@ class Table extends PureComponent {
         return ret;
       });
     }
+    /*
+     * 选择项相关逻辑
+     End **************************** */
 
+    // header Table
     if (isFixedHeader) {
-      headTable = (
+      headerTable = (
         <div
           className={`${prefixClass}-header`}
           key="tableHeader"
-          ref={(elem) => {
-            if (!fixed) {
-              this.scrollHeadTable = elem;
-            }
-          }}
         >
-          <table className={myTableClassName} >
+          <table
+            className={myTableClassName}
+            ref={(elem) => {
+              if (!fixed) {
+                this.scrollHeadTableElem = elem;
+              }
+            }}
+          >
             <ColumnGroup
               columns={$$columns}
               selectable={selectable}
@@ -431,24 +436,19 @@ class Table extends PureComponent {
       };
     }
 
+    // Body Table 内容
     bodyTable = (
       <div
         className={`${prefixClass}-body`}
         style={tableBodyStyle}
         key="tableBody"
         onScroll={this.handleBodyScroll}
-        ref={(elem) => {
-          if (!fixed && elem) {
-            this.scrollBodyTableElem = elem;
-          }
-        }}
       >
         <table
           className={myTableClassName}
           ref={(elem) => {
-            this.bodyTable = elem;
             if (!fixed) {
-              this.scrollBodyTable = elem;
+              this.scrollBodyTableElem = elem;
             }
           }}
         >
@@ -480,7 +480,7 @@ class Table extends PureComponent {
       </div>
     );
 
-    return [headTable, bodyTable];
+    return [headerTable, bodyTable];
   }
   setScrollPosition(position) {
     const { prefixClass } = this.props;
@@ -540,11 +540,11 @@ class Table extends PureComponent {
       return;
     }
 
-    const headRows = this.headTable ?
-      this.scrollHeadTable.querySelectorAll('thead') :
-      this.scrollBodyTable.querySelectorAll('thead');
+    const headRows = this.scrollHeadTableElem ?
+      this.scrollHeadTableElem.querySelectorAll('thead') :
+      this.scrollBodyTableElem.querySelectorAll('thead');
 
-    const bodyRows = this.scrollBodyTable.querySelectorAll('tbody tr') || [];
+    const bodyRows = this.scrollBodyTableElem.querySelectorAll('tbody tr') || [];
     const bodyFixedLeftColumns = bodyRows[0].querySelectorAll('.rw-table-cell-fixed-left');
     const bodyFixedRightColumns = bodyRows[0].querySelectorAll('.rw-table-cell-fixed-right');
     const fixedColumnsHeadRowsHeight = [].map.call(
@@ -699,7 +699,7 @@ class Table extends PureComponent {
       page, loading, paginationType, pageQuery, sizeOptions, scroll,
       prefixClass,
     } = this.props;
-    const tableContainerClassNames = classnams({
+    const tableContainerClassNames = classnames({
       [`${prefixClass}-container`]: true,
       [`${prefixClass}-fixed-header`]: (scroll && scroll.y),
     });

@@ -711,7 +711,7 @@ class AppScreenList extends React.PureComponent {
                     if (needconfirm) {
                       actionNode = (
                         <Popconfirm
-                          title={__('Are you sure to %s the selected row %s?', __(actionName), (index + 1))}
+                          title={__('Are you sure to %s the selected row %s?', __($$btnItem.get('text') || actionName), (index + 1))}
                           onOk={onClickFunc}
                         >
                           <Button
@@ -935,6 +935,7 @@ class AppScreenList extends React.PureComponent {
               ($$subButton) => {
                 const butProps = $$subButton.remove('needConfirm').toJS();
                 const actionName = $$subButton.get('actionName');
+                const actionText = $$subButton.get('text') || actionName;
                 let onClickFuc = () => {
                   this.onSelectedItemsAction(butProps);
                 };
@@ -942,10 +943,10 @@ class AppScreenList extends React.PureComponent {
                 let confirmText = '';
                 let retNode = null;
                 if (selectNumber < 1) {
-                  confirmText = __('Please select %s rows', __(actionName));
+                  confirmText = __('Please select %s rows', __(actionText));
                   popType = 'message';
                 } else if ($$subButton.get('needConfirm')) {
-                  confirmText = __('Are you sure to %s selected %s rows?', __(actionName), selectNumber);
+                  confirmText = __('Are you sure to %s selected %s rows?', __(actionText), selectNumber);
                 }
 
                 if (typeof $$subButton.get('onClick') === 'function') {

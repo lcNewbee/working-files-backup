@@ -62,7 +62,6 @@ const listOptions = fromJS([
     },
   }, {
     id: 'userName',
-    width: 200,
     text: __('User Name'),
     defaultValue: '',
     formProps: {
