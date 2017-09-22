@@ -6,6 +6,7 @@ $hoverColor: #ecf6fd;
 
 .rw-table-container {
   position: relative;
+
   &--scroll-position-left {
     .rw-table-fixed-left {
       box-shadow: none;
@@ -16,7 +17,21 @@ $hoverColor: #ecf6fd;
       box-shadow: none;
     }
   }
+  &-fixed-header {
+    .rw-table-body {
+      tbody {
+        tr:first-child {
+          td {
+
+            // 消除 第一条线与 header Table 叠加问题
+            border-top: none;
+          }
+        }
+      }
+    }
+  }
 }
+
 .rw-table {
   min-width: 100%;
   border-spacing: 0;
@@ -102,25 +117,28 @@ $hoverColor: #ecf6fd;
       color: #333;
     }
   }
-}
 
-.rw-table-scroll {
-  overflow: auto;
-}
-.rw-table-fixed-left,
-.rw-table-fixed-right {
-  position: absolute;
-  top: 0;
-  overflow: hidden;
-  transition: box-shadow .3s ease-in-out;
-}
-.rw-table-fixed-right {
-  right: 0;
-  box-shadow: -4px 0 4px rgba(100, 100, 100, 0.1);
-}
-.rw-table-fixed-left {
-  left: 0;
-  box-shadow: 4px 0 4px rgba(100, 100, 100, 0.1);
+  &-scroll {
+    overflow: auto;
+  }
+
+  &-fixed-left,
+  &-fixed-right {
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+    transition: box-shadow .3s ease-in-out;
+  }
+
+  &-fixed-right {
+    right: 0;
+    box-shadow: -4px 0 4px rgba(100, 100, 100, 0.1);
+  }
+
+  &-fixed-left {
+    left: 0;
+    box-shadow: 4px 0 4px rgba(100, 100, 100, 0.1);
+  }
 }
 
 .rw-table-config {

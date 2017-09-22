@@ -2,7 +2,7 @@
 var warning = require('./warning');
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var utils = {};
-
+var warned = {};
 
 function toObject(val, callerMsg) {
   var showCallerMsg = callerMsg || (this && this.caller) || '';
@@ -282,9 +282,16 @@ utils.extend({
   },
 
   noop: function(){},
-  warning: warning
+  warning: warning,
+  warningOnce: function (condition, format, args) {
+    if (!warned[format]) {
+      warning(condition, format, args);
+      warned[format] = !condition;
+    }
+  }
 });
 
+// requestAnimationFrame shim
 (function () {
   var lastTime = 0;
   var vendors = ['webkit', 'moz', 'ms'];

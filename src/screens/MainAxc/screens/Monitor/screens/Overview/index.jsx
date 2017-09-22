@@ -41,23 +41,22 @@ const ssidTableOptions = fromJS([
   {
     id: 'time',
     text: __('Time'),
-    width: '20%',
+    width: 140,
   }, {
     id: 'mac',
     text: __('MAC'),
-    width: '20%',
+    width: 140,
   }, {
     id: 'ssid',
     text: __('SSID'),
-    width: '20%',
   }, {
     id: 'channel',
     text: __('Channel'),
-    width: '20%',
+    width: 140,
   }, {
     id: 'rssi',
     text: __('RSSI'),
-    width: '20%',
+    width: 140,
   },
 ]);
 const chartStyle = {
@@ -425,6 +424,8 @@ export default class GroupOverview extends React.Component {
       fromJS({
         id: '__actions__',
         text: __('Actions'),
+        fixed: 'right',
+        width: 140,
         render: (val, $$data) => {
           const isCounter = $$data.get('isCounter');
           let btnText = __('Counter This AP');
@@ -640,6 +641,10 @@ export default class GroupOverview extends React.Component {
               options={this.rogueSsidOptions}
               list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}
               page={serverData.getIn(['neighborsAps', 'page'])}
+              configurable={false}
+              scroll={{
+                y: 240,
+              }}
             />
           </div>
           <div className="element">
@@ -660,6 +665,10 @@ export default class GroupOverview extends React.Component {
               options={ssidTableOptions}
               list={serverData.getIn(['aroundAps', 'list']) || fromJS([])}
               page={serverData.getIn(['aroundAps', 'page'])}
+              configurable={false}
+              scroll={{
+                y: 240,
+              }}
             />
           </div>
 
