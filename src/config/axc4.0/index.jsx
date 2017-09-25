@@ -58,6 +58,8 @@ const sWizard = require('../../screens/Wizard');
 //
 const sMainAxc = require('../../screens/MainAxc');
 
+// main dashboard
+const sMaindashboard = require('../../screens/MainAxc/screens/MainDashboard');
 /**
  * 网络设置
  */
@@ -301,6 +303,15 @@ const routes = [
         path: '/main/',
         component: sMainAxc.Screen,
         routes: [
+          {
+            id: 'maindashboard',
+            path: '/main/dashboard',
+            icon: 'group',
+            text: __('Dashboard'),
+            formUrl: 'goform/main/dashboard',
+            // indexPath: '/main/dashboard',
+            component: sMaindashboard.Screen,
+          },
           {
             path: '/main/network',
             component: cNetwork.Screen,
