@@ -66,6 +66,9 @@ body {
     > * {
       min-width: 680px;
     }
+    .t-app-screen {
+      height: 100%;
+    }
     h2,
     .t-main__content-title {
       margin-bottom: .4em;
@@ -273,7 +276,7 @@ body {
       }
     }
     .t-main__content {
-      top: $g-navbar-height + $g-main-bar-height + ($g-distance * 0.25);
+      top: $g-navbar-height + $g-main-bar-height;
       bottom: 0;
       left: $sidebar-width + $t-main-top-menu-size;
       width: 100vw;

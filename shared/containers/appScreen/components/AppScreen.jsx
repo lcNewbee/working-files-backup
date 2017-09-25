@@ -301,9 +301,6 @@ export default class AppScreen extends React.Component {
         loading={!noLoading && this.state.loading}
         delay={600}
         forceLoadingTime={1200}
-        style={{
-          height: '100%',
-        }}
       >
         {
           noTitle ? null : (
