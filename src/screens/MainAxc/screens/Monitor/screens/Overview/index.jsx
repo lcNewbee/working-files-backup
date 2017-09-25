@@ -92,6 +92,7 @@ function getTerminalTypeOption(serverData) {
         formatter: (params) => {
           let str = '';
           if (typeof params.name === 'undefined') return str;
+          // console.log('params.name', params.name);
           const arr = params.name.split('\n');
           arr.forEach((item, index) => {
             if (index === arr.length - 1) str += `${item}`;
