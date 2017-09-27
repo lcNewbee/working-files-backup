@@ -77,6 +77,11 @@ $route['goform/network/dpi/dpisettings'] = 'network/dpiSettings';
 $route['goform/network/firewall/attackdefense'] = 'network/networkFirewallAttackDefense';
 $route['goform/network/firewall/balcklist'] = 'network/networkFirewallBlackList';
 $route['goform/network/dashboard'] = 'network/netwirkDashboard';
+    /*AXC 4.0*/
+$route['goform/network/general'] = 'network/general';    
+$route['goform/network/ipinterface'] = 'network/ipInterface';
+$route['goform/network/portsettings'] = 'network/portSettings';
+$route['goform/network/vlanlist'] = 'network/vlanlist';
 
 // AP组管理
 $route['goform/group'] = 'group/group';
@@ -135,7 +140,6 @@ $route['goform/system/aprestore'] = 'system/apbackup';
 //dashboard
 $route['goform/dashboard/overview'] = 'dashboard/overview';//环境监测概览
 $route['goform/dashboard/heatmap'] = 'dashboard/heatmap';//热力图
-//$route['goform/dashboard/clientsPaths'] = 'dashboard/clientsPaths';//轨迹图
 $route['goform/dashboard/flowanalysis'] = 'dashboard/flowanalysis';//客流详情
 $route['goform/dashboard/environment'] = 'dashboard/environment';//环境详情
 
