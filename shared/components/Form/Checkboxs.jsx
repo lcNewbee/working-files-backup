@@ -71,6 +71,7 @@ class Checkboxs extends PureComponent {
           optionsList.map(
             ($$item, i) => {
               const thisVal = $$item.get('value');
+              const checkedVal = $$item.get('checked');
               const isChecked = valueArr.indexOf(thisVal) !== -1;
 
               if (isChecked) {

@@ -290,6 +290,18 @@ function addScreen(state, action) {
   return $$ret.set('curScreenId', curScreenId);
 }
 
+function updateSettings(state, curScreenName, action) {
+  let $$ret = state;
+
+  if (action.meta && action.meta.replace) {
+    $$ret = $$ret.setIn([curScreenName, 'curSettings'], fromJS(action.payload));
+  } else {
+    $$ret = $$ret.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
+  }
+
+
+  return $$ret;
+}
 
 export default function (state = defaultState, action) {
   const curScreenName = (action.meta && action.meta.name) || state.get('curScreenId');
@@ -333,7 +345,7 @@ export default function (state = defaultState, action) {
 
       // Screen Setting相关
     case ACTION_TYPES.UPDATE_SETTINGS:
-      return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
+      return updateSettings(state, curScreenName, action);
 
     // 对列表中某项的操作
     case ACTION_TYPES.ADD_LIST_ITEM:
@@ -354,6 +366,12 @@ export default function (state = defaultState, action) {
     // 更新列表正在操作的项
     case ACTION_TYPES.UPDATE_CUR_EDIT_LIST_ITEM:
       return updateCurListItem(curScreenName, state, action);
+
+    case ACTION_TYPES.CLEAR_CUR_LIST_ITEM:
+      return state.setIn(
+        [curScreenName, 'curListItem'],
+        fromJS({}),
+      );
 
     case ACTION_TYPES.CLOSE_LIST_ITEM_MODAL:
       return state.setIn([curScreenName, 'actionQuery', 'action'], '');

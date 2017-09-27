@@ -53,6 +53,8 @@ const propTypes = {
   noLoading: PropTypes.bool,
   initNoFetch: PropTypes.bool,
 
+  onDataReady: PropTypes.func,
+
   // List 相关属性list
   listOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List),
@@ -157,7 +159,11 @@ export default class AppScreen extends React.Component {
   }
   componentDidMount() {
     if (!this.props.initNoFetch) {
-      this.fetchAppScreenData();
+      this.fetchAppScreenData().then((json) => {
+        if (typeof this.props.onDataReady === 'function') {
+          this.props.onDataReady(json);
+        }
+      });
     }
   }
   componentWillReceiveProps(nextProps) {
@@ -230,7 +236,7 @@ export default class AppScreen extends React.Component {
     }
   }
   fetchAppScreenData() {
-    const loaded = () => {
+    const loaded = (json) => {
       clearTimeout(this.loadingTimeout);
 
       if (!this.props.loading) {
@@ -238,14 +244,16 @@ export default class AppScreen extends React.Component {
           loading: false,
         });
       }
+      return json;
     };
+    let ret = new Promise((resolve) => {
+      resolve('ok');
+    });
 
     if (this.props.fetchScreenData) {
       this.setState({
         loading: true,
       });
-
-      this.props.fetchScreenData().then(loaded);
 
       if (this.props.refreshInterval) {
         clearInterval(this.refreshTimer);
@@ -254,7 +262,11 @@ export default class AppScreen extends React.Component {
           this.props.refreshInterval,
         );
       }
+
+      ret = this.props.fetchScreenData().then(loaded);
     }
+
+    return ret;
   }
   refreshListOptions(props) {
     const { route, listOptions } = props;

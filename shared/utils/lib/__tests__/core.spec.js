@@ -92,6 +92,35 @@ describe('utils core', () => {
     });
   });
 
+  describe('#getIn()', () => {
+    it('should return undefined when not target and path', () => {
+      expect(core.getIn()).toBe(undefined);
+    });
+    it('should return undefined when not target', () => {
+      expect(core.getIn(undefined, '')).toBe(undefined);
+      expect(core.getIn(undefined, [1, 2] )).toBe(undefined);
+    });
+    it('should return undefined when path is not array', () => {
+      expect(core.getIn({a: '222'}, '')).toBe(undefined);
+      expect(core.getIn({a: '222'})).toBe(undefined);
+    });
+    it('should return correct when has target and path is array', () => {
+      expect(core.getIn({a: '222'}, ['a'])).toBe('222');
+      expect(core.getIn('123123', [2])).toBe('3');
+      expect(core.getIn({
+        a: '222',
+        bar: {
+          far: [
+            {
+              bar: 1
+            }
+          ]
+        }
+      }, ['bar', 'far', 0, 'bar'])).toBe(1);
+    });
+  });
+
+
   describe('#binds()', () => {
     let sandbox;
 

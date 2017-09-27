@@ -281,6 +281,24 @@ utils.extend({
     return uuid;
   },
 
+  getIn: function(target, path) {
+    var ret;
+    var len = 0;
+    var i = 0;
+
+    if (target && utils.isArray(path)) {
+      ret = target;
+      len = path.length;
+
+      while (i < len && ret) {
+        ret = ret[path[i]];
+        i += 1;
+      }
+    }
+
+    return ret;
+  },
+
   noop: function(){},
   warning: warning,
   warningOnce: function (condition, format, args) {

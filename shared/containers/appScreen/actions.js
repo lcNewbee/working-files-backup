@@ -147,11 +147,18 @@ export function fetchScreenData(option) {
             dispatch(fetchScreenData());
           }, curFetchIntervalTime);
         }
+
+        return json;
       });
   };
 }
 
 // SCREEN list actions
+export function clearCurListItem() {
+  return {
+    type: ACTION_TYPES.CLEAR_CUR_LIST_ITEM,
+  };
+}
 export function updateCurListItem(data, sync) {
   return {
     type: ACTION_TYPES.UPDATE_CUR_EDIT_LIST_ITEM,
@@ -161,6 +168,7 @@ export function updateCurListItem(data, sync) {
     },
   };
 }
+
 export function updateListItemByIndex(index, data) {
   return {
     type: ACTION_TYPES.UPDATE_LIST_ITEM_BY_INDEX,

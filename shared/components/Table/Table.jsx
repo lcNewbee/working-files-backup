@@ -301,7 +301,9 @@ class Table extends PureComponent {
           />
         );
       });
-    } else {
+
+    // 必须为 非固定 列的table 才需要渲染
+    } else if (!fixed) {
       ret = (
         <tr>
           <td
