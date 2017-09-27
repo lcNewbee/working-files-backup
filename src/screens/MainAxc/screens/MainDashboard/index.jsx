@@ -5,11 +5,21 @@ import { fromJS, Map, List } from 'immutable';
 import echarts from 'echarts/lib/echarts';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import { Icon, FormInput, EchartReact, Table } from 'shared/components';
+import { Icon, FormInput, EchartReact, Table, MapContainer } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import onportimg from './OnPort@2x.png';
 import offportimg from './OffPort@2x.png';
+import apoffline from './ap_offline.png';
+import aponline from './ap_online.png';
+import mapViewBg from './map_bg.jpg';
+import visitorimg from './visitor.png';
+import sendingimg from './sending.png';
+import statisticimg from './statistic.png';
+import bookimg from './book.png';
+import dropdownimg from './dropdown.png';
+import droprightimg from './dropright.png';
+import timeimg from './time.png';
 import './index.scss';
 
 const flowRateFilter = utils.filter('flowRate');
@@ -67,7 +77,7 @@ function generateAlarmTableOption() {
     {
       id: 'type',
       text: 'Name',
-      transform(val) {
+      render(val) {
         const item = alarmInfo.find(it => it.get('type') === val);
         return item.get('name');
       },
@@ -75,9 +85,9 @@ function generateAlarmTableOption() {
     {
       id: 'severity',
       text: 'Severity',
-      transform(val) {
-        const item = alarmInfo.find(it => it.get('type') === val);
-        return item.get('severity');
+      render(val, item) {
+        const destItem = alarmInfo.find(it => it.get('type') === item.get('type'));
+        return destItem.get('severity');
       },
     },
     {
@@ -102,6 +112,20 @@ export default class MainDashboard extends Component {
       'onSsidAnalysisGroupChange',
     ]);
     this.state = {
+      show: {
+        mapView: true,
+        mapViewBody: true,
+        wirelessTrend: true,
+        wirelessTrendBody: true,
+        wiredStatus: true,
+        wiredStatusBody: true,
+        clientAnalysis: true,
+        clientAnalysisBody: true,
+        ssidAnalysis: true,
+        ssidAnalysisBody: true,
+        alarm: true,
+        alarmBody: true,
+      },
       mapViewQuery: {
         groupid: '1',
         section: 'mapView',
@@ -567,8 +591,10 @@ export default class MainDashboard extends Component {
           <div className="top-card cols col-12">
             <div className="top-card-left cols col-5">
               <div className="card-left-img">
-                <Icon
-                  name="user-o"
+                <img
+                  className="card-left-icon"
+                  alt="usr-icon"
+                  src={visitorimg}
                 />
               </div>
             </div>
@@ -590,8 +616,10 @@ export default class MainDashboard extends Component {
           <div className="top-card cols col-12">
             <div className="top-card-left cols col-5">
               <div className="card-left-img">
-                <Icon
-                  name="user-o"
+                <img
+                  className="card-left-icon"
+                  alt="usr-icon"
+                  src={statisticimg}
                 />
               </div>
             </div>
@@ -613,8 +641,10 @@ export default class MainDashboard extends Component {
           <div className="top-card cols col-12">
             <div className="top-card-left cols col-5">
               <div className="card-left-img">
-                <Icon
-                  name="user-o"
+                <img
+                  className="card-left-icon"
+                  alt="usr-icon"
+                  src={sendingimg}
                 />
               </div>
             </div>
@@ -636,8 +666,10 @@ export default class MainDashboard extends Component {
           <div className="top-card cols col-12">
             <div className="top-card-left cols col-5">
               <div className="card-left-img">
-                <Icon
-                  name="user-o"
+                <img
+                  className="card-left-icon"
+                  alt="usr-icon"
+                  src={bookimg}
                 />
               </div>
             </div>
@@ -665,6 +697,63 @@ export default class MainDashboard extends Component {
     const { aps = [], usr5g = '0', clients5g = '0', usr2g = '0', clients2g = '0' } = mapView.toJS();
     const onLineApNum = fromJS(aps).count(item => item.get('enable') === '0');
     const offLineApNum = aps.length - onLineApNum;
+    const children = aps.map(item => (
+      <div
+        className="m-dsb-map-view-ap"
+        style={{
+          left: item.x,
+          top: item.y,
+        }}
+        onMouseEnter={() => {
+          const mapViewQuery = utils.extend(
+            {}, this.state.mapViewQuery, { onHoverMac: item.mac },
+          );
+          this.setState({ mapViewQuery });
+        }}
+        onMouseLeave={() => {
+          const mapViewQuery = utils.extend(
+            {}, this.state.mapViewQuery, { onHoverMac: undefined },
+          );
+          this.setState({ mapViewQuery });
+        }}
+      >
+        {
+          item.status === '1' ? (
+            <img src={aponline} alt="online" />
+          ) : (
+            <img src={apoffline} alt="offline" />
+          )
+        }
+        {
+          this.state.mapViewQuery.onHoverMac &&
+          this.state.mapViewQuery.onHoverMac === item.mac && (
+            <div className="m-dsb-map-view-hover row">
+              <div className="m-dsb-hover-head">
+                AP Information
+              </div>
+              <div className="cols col-5 m-dsb-hover-left">
+                MAC
+              </div>
+              <div className="cols col-7 m-dsb-hover-right">
+                {`[ ${item.mac} ]`}
+              </div>
+              <div className="cols col-5 m-dsb-hover-left">
+                AP Group
+              </div>
+              <div className="cols col-7 m-dsb-hover-right">
+                {`[ ${item.group} ]`}
+              </div>
+              <div className="cols col-5 m-dsb-hover-left">
+                IP Addr
+              </div>
+              <div className="cols col-7 m-dsb-hover-right">
+                {`[ ${item.ip} ]`}
+              </div>
+            </div>
+          )
+        }
+      </div>
+    ));
 
     return (
       <div>
@@ -702,19 +791,27 @@ export default class MainDashboard extends Component {
             </div>
           </div>
           <div className="head-bar-right cols col-1">
-            <Icon
-              name="chevron-down"
-              className="cols col-3 col-offset-2"
+            <img
+              src={this.state.show.mapViewBody ? dropdownimg : droprightimg}
+              alt="dropdown-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
-            <Icon
-              name="times"
-              className="cols col-3 col-offset-2"
+            <img
+              src={timeimg}
+              alt="dropright-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
           </div>
         </div>
 
         {/* Map View body */}
-        <div className="m-dsb-map-view" />
+        <div className="m-dsb-map-view m-dsb-body-wrap">
+          <MapContainer
+            backgroundImgUrl={mapViewBg}
+            style={{ width: '100%', height: '100%' }}
+            children={children}
+          />
+        </div>
       </div>
     );
   }
@@ -754,13 +851,15 @@ export default class MainDashboard extends Component {
             </div>
           </div>
           <div className="head-bar-right cols col-1">
-            <Icon
-              name="chevron-down"
-              className="cols col-3 col-offset-2"
+            <img
+              src={this.state.show.wirelessTrendBody ? dropdownimg : droprightimg}
+              alt="dropdown-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
-            <Icon
-              name="times"
-              className="cols col-3 col-offset-2"
+            <img
+              src={timeimg}
+              alt="dropright-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
           </div>
         </div>
@@ -806,13 +905,15 @@ export default class MainDashboard extends Component {
             </div>
           </div>
           <div className="head-bar-right cols col-1">
-            <Icon
-              name="chevron-down"
-              className="cols col-3 col-offset-2"
+            <img
+              src={this.state.show.wiredStatusBody ? dropdownimg : droprightimg}
+              alt="dropdown-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
-            <Icon
-              name="times"
-              className="cols col-3 col-offset-2"
+            <img
+              src={timeimg}
+              alt="dropright-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
           </div>
         </div>
@@ -937,8 +1038,6 @@ export default class MainDashboard extends Component {
   }
 
   renderClientAnalysis() {
-    const store = this.props.store;
-    const curScreenId = store.get('curScreenId');
     return (
       <div>
         <div className="m-dsb-head-bar row">
@@ -957,13 +1056,15 @@ export default class MainDashboard extends Component {
             </div>
           </div>
           <div className="head-bar-right cols col-1">
-            <Icon
-              name="chevron-down"
-              className="cols col-3 col-offset-2"
+            <img
+              src={this.state.show.clientAnalysisBody ? dropdownimg : droprightimg}
+              alt="dropdown-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
-            <Icon
-              name="times"
-              className="cols col-3 col-offset-2"
+            <img
+              src={timeimg}
+              alt="dropright-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
           </div>
         </div>
@@ -1010,13 +1111,15 @@ export default class MainDashboard extends Component {
             </div>
           </div>
           <div className="head-bar-right cols col-1">
-            <Icon
-              name="chevron-down"
-              className="cols col-3 col-offset-2"
+            <img
+              src={this.state.show.ssidAnalysisBody ? dropdownimg : droprightimg}
+              alt="dropdown-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
-            <Icon
-              name="times"
-              className="cols col-3 col-offset-2"
+            <img
+              src={timeimg}
+              alt="dropright-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
             />
           </div>
         </div>
@@ -1047,30 +1150,33 @@ export default class MainDashboard extends Component {
     const curScreenId = store.get('curScreenId');
     const tableList = store.getIn([curScreenId, 'data', 'alarms', 'list']) || fromJS([]);
     return (
-      <div className="m-dsb-head-bar row">
-        <div className="head-bar-left cols col-11">
-          <div className="bar-left-left cols col-3">
-            Alarms
+      <div>
+        <div className="m-dsb-head-bar row">
+          <div className="head-bar-left cols col-11">
+            <div className="bar-left-left cols col-3">
+              Alarms
+            </div>
+            <div className="bar-left-middle cols col-5" />
+            <div className="bar-left-right cols col-4" />
           </div>
-          <div className="bar-left-middle cols col-5" />
-          <div className="bar-left-right cols col-4" />
-        </div>
-        <div className="head-bar-right cols col-1">
-          <Icon
-            name="chevron-down"
-            className="cols col-3 col-offset-2"
-          />
-          <Icon
-            name="times"
-            className="cols col-3 col-offset-2"
-          />
-        </div>
+          <div className="head-bar-right cols col-1">
+            <img
+              src={this.state.show.alarmBody ? dropdownimg : droprightimg}
+              alt="dropdown-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
+            />
+            <img
+              src={timeimg}
+              alt="dropright-icon"
+              className="bar-right-icon cols col-3 col-offset-2"
+            />
+          </div>
 
+        </div>
         <div className="m-dsb-body-wrap">
           <Table
             options={generateAlarmTableOption()}
             list={tableList.toJS()}
-            style={{ height: '400px' }}
           />
         </div>
       </div>

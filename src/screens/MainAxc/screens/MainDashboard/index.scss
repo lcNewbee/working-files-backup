@@ -13,6 +13,7 @@
 .m-dsb-wrap {
   padding: 15px 20px;
   min-height: 100%;
+  background-color: #f5f5f5;
   overflow: hidden;
 
   .m-dsb-cards-row {
@@ -58,9 +59,8 @@
             height: 85px;
             // border: 1px solid black;
 
-            .icon {
-              font-size: 40px;
-              margin: 20px;
+            .card-left-icon {
+              margin-top: 12px;
             }
           }
         }
@@ -139,8 +139,12 @@
 
     .head-bar-right {
       padding-top: 15px;
-      font-size: 30px;
-      color: #aaa;
+
+      .bar-right-icon {
+        min-width: 28px;
+        min-height: 28px;
+        cursor: pointer;
+      }
     }
   }
 
@@ -148,6 +152,42 @@
     height: 500px;
     background-color: #fff;
     margin-top: 22px;
+
+    .m-dsb-map-view-ap {
+      position: relative;
+      display: inline-block;
+
+      .m-dsb-map-view-hover {
+        position: absolute;
+        bottom: 50px;
+        width: 300px;
+        background-color: #fff;
+        margin-left: -130px;
+        padding-bottom: 15px;
+
+        .m-dsb-hover-head {
+          height: 40px;
+          line-height: 40px;
+          background-color: #000;
+          color: #fff;
+          font-size: bold;
+          padding-left: 10px;
+          margin-bottom: 10px;
+        }
+
+        .m-dsb-hover-left {
+          padding-left: 15px;
+          height: 20px;
+          line-height: 20px;
+          font-weight: bold;
+        }
+        .m-dsb-hover-right {
+          text-align: left;
+          height: 20px;
+          line-height: 20px;
+        }
+      }
+    }
   }
 
   .m-dsb-body-wrap,
