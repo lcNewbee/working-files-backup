@@ -2,9 +2,9 @@ import React from 'react'; import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import utils from 'shared/utils';
-import { FormContainer, Icon, Button } from 'shared/components';
-import { radioBase, radioAdvance, radioQos, numberKeys } from 'shared/config/axcRadio';
+import utils, { config } from 'shared/utils';
+import { FormContainer } from 'shared/components';
+import { numberKeys } from 'shared/config/axcRadio';
 import { apStatus } from 'shared/config/axcAp';
 import validator from 'shared/validator';
 
@@ -13,69 +13,12 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 
+import copyRadioSsidsData from './utils';
+
 const EDIT_LIST_ACTION = 'editList';
 const AP_MONITOR_ACTION = 'monitor';
 const flowRateFilter = utils.filter('flowRate');
 
-// const settingsFormOptions = radioBase
-//   // 添加自动功率
-//   .map(
-//     ($$item) => {
-//       const curId = $$item.get('id');
-
-//       switch (curId) {
-//         // 功率添加自动选项
-//         case 'phymode':
-//           return $$item.updateIn(
-//             ['options'],
-//             $$options => $$options.unshift(Map({
-//               value: 'auto',
-//               label: __('Automatic'),
-//             })),
-//           ).set('disabled', true);
-
-//         // 功率添加自动选项
-//         case 'txpower':
-//           return $$item.updateIn(
-//             ['options'],
-//             $$options => $$options.unshift(Map({
-//               value: 'auto',
-//               label: __('Automatic'),
-//             })),
-//           ).set('disabled', true);
-
-//         // 信道只支持自动
-//         case 'channel':
-//           return $$item.set(
-//             'options',
-//             fromJS([
-//               {
-//                 value: 0,
-//                 label: __('Automatic'),
-//               },
-//             ]),
-//           ).set('disabled', true);
-
-//         // 5G优先,  11n优先
-//         case 'first5g':
-//         case 'switch11n':
-//           return $$item.set(
-//               'label',
-//               $$item.get('text'),
-//             ).delete('text');
-
-//         default:
-//       }
-
-//       return $$item;
-//     },
-//   )
-//   .rest()
-//   .butLast()
-//   .groupBy(
-//     item => item.get('fieldset'),
-//   )
-//   .toList();
 
 const apMonitorSettingsOptions = fromJS([
   // {
@@ -222,7 +165,7 @@ const apMonitorSettingsOptions = fromJS([
 function createSettingsFormOptions() {
   const settingsFormOptions = fromJS([
     {
-      id: 'radioEnable_2g',
+      id: 'radioenable_2g',
       form: 'modalsetting',
       fieldset: 'radiosettingof2g',
       legend: __('2.4G Settings'),
@@ -231,7 +174,7 @@ function createSettingsFormOptions() {
       defaultValue: '1',
     },
     {
-      id: 'radioPower_2g',
+      id: 'txpower_2g',
       fieldset: 'radiosettingof2g',
       form: 'modalsetting',
       label: __('Tx Power'),
@@ -266,10 +209,20 @@ function createSettingsFormOptions() {
       type: 'checkboxs',
       defaultValue: '',
       required: true,
-      options: this.state.ssidOptions,
+      options: this.state.ssidOptions2g,
+      onChange: (data) => {
+        const ret = data;
+        const ssidIndex = data.ssidIndex;
+
+        ret.mergeData = {
+          [`wan_${ssidIndex}_enable2g`]: data.checked ? 1 : 0,
+        };
+
+        return ret;
+      },
     },
     {
-      id: 'radioEnable_5g',
+      id: 'radioenable_5g',
       form: 'modalsetting',
       fieldset: 'radiosettingof5g',
       legend: __('5G Settings'),
@@ -278,7 +231,7 @@ function createSettingsFormOptions() {
       defaultValue: '1',
     },
     {
-      id: 'radioPower_5g',
+      id: 'txpower_5g',
       form: 'modalsetting',
       fieldset: 'radiosettingof5g',
       label: __('Tx Power'),
@@ -312,7 +265,17 @@ function createSettingsFormOptions() {
       label: __('SSID'),
       type: 'checkboxs',
       required: true,
-      options: this.state.ssidOptions,
+      options: this.state.ssidOptions5g,
+      onChange: (data) => {
+        const ret = data;
+        const ssidIndex = data.ssidIndex;
+
+        ret.mergeData = {
+          [`wan_${ssidIndex}_enable5g`]: data.checked ? 1 : 0,
+        };
+
+        return ret;
+      },
     },
   ]);
   return settingsFormOptions;
@@ -398,7 +361,10 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func,
   onListAction: PropTypes.func,
   createModal: PropTypes.func,
-  groupid: PropTypes.any,
+  groupid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 };
 const defaultProps = {};
 
@@ -415,7 +381,8 @@ export default class View extends React.Component {
         channelwidth: 40,
         groupid: props.groupid,
       },
-      ssidOptions: [],
+      ssidOptions2g: [],
+      ssidOptions5g: [],
     };
 
     this.createSettingsFormOptions = createSettingsFormOptions.bind(this);
@@ -434,20 +401,6 @@ export default class View extends React.Component {
       groupid: this.props.groupid,
       size: 99,
     };
-    this.props.fetch('goform/group/ssidSetting', query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          const list = fromJS(json.data.list);
-          const ssidOptions = list.map((item) => {
-            const ssid = item.get('ssid');
-            return fromJS({
-              value: ssid,
-              label: ssid,
-            });
-          });
-          this.setState({ ssidOptions: ssidOptions.toJS() });
-        }
-      });
   }
 
   onAction(type, item) {
@@ -474,19 +427,87 @@ export default class View extends React.Component {
     const $$listData = $$myScreenStore.getIn(['data', 'list']);
 
     if ($$selectedList.size > 1) {
+      const firstMac = $$listData.getIn([$$selectedList.get(0), 'mac']);
       this.props.changeScreenActionQuery({
         action: EDIT_LIST_ACTION,
         myTitle: __('Edit Selected AP'),
       });
       const screenSettings = fromJS({
-        radioEnable_2g: '1',
-        radioPower_2g: '100%',
+        radioenable_2g: '1',
+        txpower_2g: '50%',
         ssid_2g: '',
-        radioEnable_5g: '1',
-        radioPower_5g: '100%',
+        radioenable_5g: '1',
+        txpower_5g: '50%',
         ssid_5g: '',
       });
-      this.props.updateScreenSettings(screenSettings);
+      this.props.updateScreenSettings(screenSettings, {
+        replace: true,
+      });
+      this.props.fetch('goform/group/ap', {
+        mac: firstMac,
+        groupid: this.props.groupid,
+      }).then((json) => {
+        const radiosData = utils.getIn(json, ['data', 'radios']);
+        const newSettings = {};
+        let len = 0;
+        let srcData = null;
+        let otions2g = null;
+        let otions5g = null;
+        let ssidOptions = null;
+
+        if (radiosData && radiosData.length > 0) {
+          len = radiosData.length;
+
+          for (let n = 0; n < len; n += 1) {
+            srcData = radiosData[n];
+            if (srcData) {
+              // 5G
+              if (srcData.phymodesupport < 8) {
+                otions2g = [];
+                for (let i = 0; i < 16; i += 1) {
+                  newSettings[`wlan_${i}_enable2g`] = srcData[`wlan${i}enable`] || 0;
+                  newSettings.radioenable_2g = srcData.radioenable || 0;
+                  newSettings.txpower_2g = srcData.txpower;
+                  if (srcData[`wlan${i}`]) {
+                    otions2g.push({
+                      value: `wlan${i}`,
+                      label: srcData[`wlan${i}`],
+                      ssidIndex: i,
+                    });
+                  }
+                }
+                newSettings.ssid_2g = otions2g.map((item, index) => `wlan${index}`).join(',');
+
+              // 2.4G
+              } else {
+                otions5g = [];
+                for (let i = 0; i < 16; i += 1) {
+                  newSettings[`wlan_${i}_enable5g`] = srcData[`wlan${i}enable`] || 0;
+                  newSettings.radioenable_5g = srcData.radioenable || 0;
+                  newSettings.txpower_5g = srcData.txpower;
+                  if (srcData[`wlan${i}`]) {
+                    otions5g.push({
+                      value: `wlan${i}`,
+                      label: srcData[`wlan${i}`],
+                      ssidIndex: i,
+                    });
+                  }
+                }
+                newSettings.ssid_5g = otions2g.map((item, index) => `wlan${index}`).join(',');
+              }
+            }
+
+            if (n === 0) {
+              ssidOptions = otions2g || otions5g;
+            }
+          }
+          this.setState({
+            ssidOptions2g: otions2g || ssidOptions,
+            ssidOptions5g: otions5g || ssidOptions,
+          });
+          this.props.updateScreenSettings(newSettings);
+        }
+      });
     } else if ($$selectedList.size === 1) {
       this.onAction('edit', $$listData.get($$selectedList.get(0)));
     }
@@ -533,15 +554,8 @@ export default class View extends React.Component {
             const radioSettings = this.props.store.getIn([curScreenId, 'curSettings']).toJS();
             const action = this.props.store.getIn([curScreenId, 'actionQuery', 'action']);
             if (action === EDIT_LIST_ACTION) {
-              if (!radioSettings.ssid_2g || !radioSettings.ssid_5g) {
-                this.props.createModal({
-                  role: 'alert',
-                  text: __('Please at least select one ssid per radio!'),
-                });
-                return;
-              }
               this.props.saveScreenSettings({
-                url: 'goform/group/ap/radiogroupcfg',
+                url: 'goform/group/apsRadio',
                 onlyChanged: true,
                 numberKeys: fromJS(numberKeys),
                 data: {
@@ -604,44 +618,42 @@ export default class View extends React.Component {
     }
 
     return (
-      <div className="o-box row">
-        <div className="o-box__cell">
-          {
-            isEditList && (
-              <FormContainer
-                id="radioBase"
-                options={this.createSettingsFormOptions()}
-                data={$$curData}
-                onChangeData={this.props.updateScreenSettings}
-                onSave={() => this.onSave('modalsetting')}
-                invalidMsg={app.get('invalid')}
-                validateAt={app.get('validateAt')}
-                isSaving={app.get('saving')}
-                saveText={__('Apply')}
-                savingText={__('Applying')}
-                savedText={__('Applied')}
-                hasSaveButton
-              />
-            )
-          }
-          {
-            isApMonitor && (
-              <FormContainer
-                options={apMonitorSettingsOptions}
-                data={$$curData}
-                onChangeData={this.props.updateScreenSettings}
-                onSave={() => this.onSave('modalmonitor')}
-                invalidMsg={app.get('invalid')}
-                validateAt={app.get('validateAt')}
-                isSaving={app.get('saving')}
-                saveText={__('Apply')}
-                savingText={__('Applying')}
-                savedText={__('Applied')}
-                hasSaveButton
-              />
-            )
-          }
-        </div>
+      <div>
+        {
+          isEditList && (
+            <FormContainer
+              id="radioBase"
+              options={this.createSettingsFormOptions()}
+              data={$$curData}
+              onChangeData={this.props.updateScreenSettings}
+              onSave={() => this.onSave('modalsetting')}
+              invalidMsg={app.get('invalid')}
+              validateAt={app.get('validateAt')}
+              isSaving={app.get('saving')}
+              saveText={__('Apply')}
+              savingText={__('Applying')}
+              savedText={__('Applied')}
+              hasSaveButton
+            />
+          )
+        }
+        {
+          isApMonitor && (
+            <FormContainer
+              options={apMonitorSettingsOptions}
+              data={$$curData}
+              onChangeData={this.props.updateScreenSettings}
+              onSave={() => this.onSave('modalmonitor')}
+              invalidMsg={app.get('invalid')}
+              validateAt={app.get('validateAt')}
+              isSaving={app.get('saving')}
+              saveText={__('Apply')}
+              savingText={__('Applying')}
+              savedText={__('Applied')}
+              hasSaveButton
+            />
+          )
+        }
       </div>
     );
   }
@@ -687,12 +699,12 @@ export default class View extends React.Component {
         icon: 'cog',
         onClick: () => this.onSettingSelected(),
       },
-      {
-        actionName: 'monitor',
-        text: __('Monitor'),
-        icon: 'cog',
-        onClick: () => this.onMonitorBtnClick(),
-      },
+      // {
+      //   actionName: 'monitor',
+      //   text: __('Monitor'),
+      //   icon: 'cog',
+      //   onClick: () => this.onMonitorBtnClick(),
+      // },
     ];
 
     // 如果是所有组不支持对AP的操作

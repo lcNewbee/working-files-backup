@@ -216,9 +216,15 @@ export default class GeneralSettings extends React.Component {
     this.ipv6EditFormOptions = immutableUtils.getTableOptions(ipv6ListOptions);
     return (
       <div className="t-app t-overview">
-        <div className="t-overview__section">
+        <div
+          className="t-overview__section"
+          style={{
+            paddingTop: '12px',
+          }}
+        >
           <AppScreenSettings
             {...this.props}
+
             store={curStore}
             settingsFormOptions={settingsFormOptions}
             hasSettingsSaveButton
