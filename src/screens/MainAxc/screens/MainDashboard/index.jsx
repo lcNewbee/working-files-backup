@@ -8,6 +8,7 @@ import utils from 'shared/utils';
 import { Icon, FormInput, EchartReact, Table, MapContainer } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
+import { colors, $$commonPieOption } from 'shared/config/axc';
 import onportimg from './OnPort@2x.png';
 import offportimg from './OffPort@2x.png';
 import apoffline from './ap_offline.png';
@@ -109,7 +110,7 @@ export default class MainDashboard extends Component {
       'onWirelessTrendQueryChange', 'generateWirelessTrendEchartOption', 'renderWiredStatus',
       'onWiredStatusInterfaceChange', 'generateWiredStatusEchartOption', 'onClientAnalysisGroupChange',
       'renderClientAnalysis', 'generateClientAnalysisChartOption', 'generateClientTypeChartOption',
-      'onSsidAnalysisGroupChange',
+      'onSsidAnalysisGroupChange', 'onDropOrTimeIconClick',
     ]);
     this.state = {
       show: {
@@ -199,6 +200,14 @@ export default class MainDashboard extends Component {
     this.setState({ ssidAnalysis });
     this.props.changeScreenQuery(ssidAnalysis);
     this.props.fetchScreenData();
+  }
+
+  onDropOrTimeIconClick(section) {
+    return () => {
+      const sectionShow = !this.state.show[section];
+      const show = utils.extend({}, this.state.show, { [section]: sectionShow });
+      this.setState({ show });
+    };
   }
 
   generateWirelessTrendEchartOption() {
@@ -404,170 +413,340 @@ export default class MainDashboard extends Component {
     const curScreenId = store.get('curScreenId');
     const clientType = store.getIn([curScreenId, 'data', 'usrAnalysis', 'clientType']);
     if (!clientType) return null;
-    const apClientsTop7List = List(clientType.sort((a, b) => {
-      const a1 = parseInt(a, 10);
-      const b1 = parseInt(b, 10);
-      if (a1 < b1) { return -1; }
-      if (a1 > b1) { return 1; }
-      return 0;
-    }));
-    const typeData = apClientsTop7List.map(item => item[0]).toJS();
-    const numData = apClientsTop7List.map(item => ({ value: item[1], name: item[0] })).toJS();
-
-    const option = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)',
+    const apClientsTop7List = List(clientType);
+    let dataList = apClientsTop7List.map(item => fromJS({ value: item[1], name: item[0] }));
+    const ret = $$commonPieOption.mergeDeep({
+      title: {
+        text: __('Online'),
+        subtext: `${store.getIn([curScreenId, 'data', 'usrAnalysis', 'online']) || 0}`,
+        left: '34%',
+        top: '43%',
       },
       legend: {
-        orient: 'vertical',
-        x: 'left',
-        data: typeData,
+        left: '60%',
+        top: '50%',
+        formatter: (name) => {
+          const num = dataList
+            .find($$item => $$item.get('name') === name)
+            .get('value') || 0;
+          if (!name) return null;
+          if ((name.split('\n')).length > 1) {
+            return `others: ${num}`;
+          }
+          return `${name}: ${num}`;
+        },
+        tooltip: {
+          show: true,
+          formatter: (params) => {
+            let str = '';
+            if (typeof params.name === 'undefined') return str;
+            // console.log('params.name', params.name);
+            const arr = params.name.split('\n');
+            arr.forEach((item, index) => {
+              if (index === arr.length - 1) str += `${item}`;
+              else str += `${item}<br />`;
+            });
+            return str;
+          },
+          textStyle: {
+            fontSize: 10,
+          },
+        },
       },
       series: [
         {
-          name: 'Client Type',
-          type: 'pie',
-          radius: ['50%', '70%'],
-          avoidLabelOverlap: false,
-          label: {
-            normal: {
-              show: false,
-              position: 'center',
-            },
-            emphasis: {
-              show: true,
-              textStyle: {
-                fontSize: '30',
-                fontWeight: 'bold',
-              },
-            },
-          },
-          labelLine: {
-            normal: {
-              show: false,
-            },
-          },
-          data: numData,
+          name: __('Type'),
+          center: ['35%', '50%'],
+          radius: ['40%', '75%'],
         },
       ],
-    };
+      tooltip: {
+        show: true,
+        formatter: (params) => {
+          if (typeof params.name === 'undefined') return null;
+          const arr = params.name.split('\n');
+          if (arr.length > 1) return `Type:<br /> others: ${params.value}`;
+          return `Type:<br /> ${params.name}: ${params.value}`;
+        },
+      },
+    }).toJS();
 
-    return option;
+    if (List.isList(dataList)) {
+      if (dataList.size < 1) {
+        dataList = fromJS([{
+          name: __('None'),
+          value: 0,
+        }]);
+      } else {
+        dataList = dataList.sort(($$a, $$b) => {
+          const a = parseInt($$a.get('value'), 10);
+          const b = parseInt($$b.get('value'), 10);
+          let result = 0;
+
+          if (a < b) {
+            result = 1;
+          } else if (a > b) {
+            result = -1;
+          }
+
+          return result;
+        });
+      }
+      // 客户端类别如果超过itemCount个，则从itemCount第个开始，个数相加，统称为others
+      const size = dataList.size;
+      const itemCount = 12;
+      let num = 0;
+      let othermap = fromJS({});
+      let otherNameStr = '';
+      if (size > itemCount) {
+        let i = itemCount - 1;
+        while (i < size) {
+          const name = dataList.getIn([i, 'name']);
+          const value = parseInt(dataList.getIn([i, 'value']), 10);
+          otherNameStr += `${name}: ${value}\n`;
+          num += value;
+          i += 1;
+        }
+        othermap = othermap.set('name', otherNameStr);
+        othermap = othermap.set('value', num);
+        dataList = dataList.slice(0, itemCount - 1);
+        dataList = dataList.push(othermap);
+      }
+
+      ret.legend.data = dataList.map(item => item.get('name')).toJS();
+      ret.series[0].data = dataList.toJS();
+    }
+
+    return ret;
   }
 
   generateSsidFlowChartOption() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
-    const ssidFlow = store.getIn([curScreenId, 'data', 'ssidAnalysis', 'ssidFlow']) || fromJS({});
-    const ssidFlowList = List(ssidFlow.sort((a, b) => {
-      const a1 = parseInt(a, 10);
-      const b1 = parseInt(b, 10);
-      if (a1 < b1) { return -1; }
-      if (a1 > b1) { return 1; }
-      return 0;
-    }));
-    const typeData = ssidFlowList.map(item => item[0]).toJS();
-    const numData = ssidFlowList.map(item => ({ value: item[1], name: item[0] })).toJS();
-
-    const option = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)',
+    const ssidFlow = store.getIn([curScreenId, 'data', 'ssidAnalysis', 'ssidFlow']);
+    if (!ssidFlow) return null;
+    const ssidFlowList = List(ssidFlow);
+    let dataList = ssidFlowList.map(item => fromJS({ value: item[1], name: item[0] }));
+    const totalFlow = flowRateFilter.transform(dataList.reduce((pre, cur) => pre + parseInt(cur.get('value'), 10), 0));
+    const ret = $$commonPieOption.mergeDeep({
+      title: {
+        text: __('Total Flow'),
+        subtext: totalFlow,
+        left: '34%',
+        top: '43%',
       },
       legend: {
-        orient: 'vertical',
-        x: 'left',
-        data: typeData,
+        left: '60%',
+        top: '50%',
+        formatter: (name) => {
+          const num = dataList
+            .find($$item => $$item.get('name') === name)
+            .get('value') || 0;
+          if (!name) return null;
+          if ((name.split('\n')).length > 1) {
+            return `others: ${flowRateFilter.transform(num)}`;
+          }
+          return `${name}: ${flowRateFilter.transform(num)}`;
+        },
+        tooltip: {
+          show: true,
+          formatter: (params) => {
+            let str = '';
+            if (typeof params.name === 'undefined') return str;
+            // console.log('params.name', params.name);
+            const arr = params.name.split('\n');
+            arr.forEach((item, index) => {
+              if (index === arr.length - 1) str += `${item}`;
+              else str += `${item}<br />`;
+            });
+            return str;
+          },
+          textStyle: {
+            fontSize: 10,
+          },
+        },
       },
       series: [
         {
-          name: 'Flow',
-          type: 'pie',
-          radius: ['50%', '70%'],
-          avoidLabelOverlap: false,
-          label: {
-            normal: {
-              show: false,
-              position: 'center',
-            },
-            emphasis: {
-              show: true,
-              textStyle: {
-                fontSize: '30',
-                fontWeight: 'bold',
-              },
-            },
-          },
-          labelLine: {
-            normal: {
-              show: false,
-            },
-          },
-          data: numData,
+          name: __('Type'),
+          center: ['35%', '50%'],
+          radius: ['40%', '75%'],
         },
       ],
-    };
+      tooltip: {
+        show: true,
+        formatter: (params) => {
+          if (typeof params.name === 'undefined') return null;
+          const arr = params.name.split('\n');
+          if (arr.length > 1) return `Type:<br /> others: ${params.value}`;
+          return `Flow:<br /> ${params.name}: ${flowRateFilter.transform(params.value)}`;
+        },
+      },
+    }).toJS();
 
-    return option;
+    if (List.isList(dataList)) {
+      if (dataList.size < 1) {
+        dataList = fromJS([{
+          name: __('None'),
+          value: 0,
+        }]);
+      } else {
+        dataList = dataList.sort(($$a, $$b) => {
+          const a = parseInt($$a.get('value'), 10);
+          const b = parseInt($$b.get('value'), 10);
+          let result = 0;
+
+          if (a < b) {
+            result = 1;
+          } else if (a > b) {
+            result = -1;
+          }
+
+          return result;
+        });
+      }
+      // 客户端类别如果超过itemCount个，则从itemCount第个开始，个数相加，统称为others
+      const size = dataList.size;
+      const itemCount = 12;
+      let num = 0;
+      let othermap = fromJS({});
+      let otherNameStr = '';
+      if (size > itemCount) {
+        let i = itemCount - 1;
+        while (i < size) {
+          const name = dataList.getIn([i, 'name']);
+          const value = parseInt(dataList.getIn([i, 'value']), 10);
+          otherNameStr += `${name}: ${value}\n`;
+          num += value;
+          i += 1;
+        }
+        othermap = othermap.set('name', otherNameStr);
+        othermap = othermap.set('value', num);
+        dataList = dataList.slice(0, itemCount - 1);
+        dataList = dataList.push(othermap);
+      }
+
+      ret.legend.data = dataList.map(item => item.get('name')).toJS();
+      ret.series[0].data = dataList.toJS();
+    }
+
+    return ret;
   }
   generateSsidClientsChartOption() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
-    const ssidClients = store.getIn([curScreenId, 'data', 'ssidAnalysis', 'ssidClients']) || fromJS({});
-    const ssidClientsList = List(ssidClients.sort((a, b) => {
-      const a1 = parseInt(a, 10);
-      const b1 = parseInt(b, 10);
-      if (a1 < b1) { return -1; }
-      if (a1 > b1) { return 1; }
-      return 0;
-    }));
-    const typeData = ssidClientsList.map(item => item[0]).toJS();
-    const numData = ssidClientsList.map(item => ({ value: item[1], name: item[0] })).toJS();
-
-    const option = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)',
+    const ssidClients = store.getIn([curScreenId, 'data', 'ssidAnalysis', 'ssidClients']);
+    if (!ssidClients) return null;
+    const ssidClientsList = List(ssidClients);
+    let dataList = ssidClientsList.map(item => fromJS({ value: item[1], name: item[0] }));
+    const totalClients = dataList.reduce((pre, cur) => pre + parseInt(cur.get('value'), 10), 0);
+    const ret = $$commonPieOption.mergeDeep({
+      title: {
+        text: __('Total Clients'),
+        subtext: totalClients,
+        left: '34%',
+        top: '43%',
       },
       legend: {
-        orient: 'vertical',
-        x: 'left',
-        data: typeData,
+        left: '60%',
+        top: '50%',
+        formatter: (name) => {
+          const num = dataList
+            .find($$item => $$item.get('name') === name)
+            .get('value') || 0;
+          if (!name) return null;
+          if ((name.split('\n')).length > 1) {
+            return `others: ${num}`;
+          }
+          return `${name}: ${num}`;
+        },
+        tooltip: {
+          show: true,
+          formatter: (params) => {
+            let str = '';
+            if (typeof params.name === 'undefined') return str;
+            // console.log('params.name', params.name);
+            const arr = params.name.split('\n');
+            arr.forEach((item, index) => {
+              if (index === arr.length - 1) str += `${item}`;
+              else str += `${item}<br />`;
+            });
+            return str;
+          },
+          textStyle: {
+            fontSize: 10,
+          },
+        },
       },
       series: [
         {
-          name: 'Clients',
-          type: 'pie',
-          radius: ['50%', '70%'],
-          avoidLabelOverlap: false,
-          label: {
-            normal: {
-              show: false,
-              position: 'center',
-            },
-            emphasis: {
-              show: true,
-              textStyle: {
-                fontSize: '30',
-                fontWeight: 'bold',
-              },
-            },
-          },
-          labelLine: {
-            normal: {
-              show: false,
-            },
-          },
-          data: numData,
+          name: __('Type'),
+          center: ['35%', '50%'],
+          radius: ['40%', '75%'],
         },
       ],
-    };
+      tooltip: {
+        show: true,
+        formatter: (params) => {
+          if (typeof params.name === 'undefined') return null;
+          const arr = params.name.split('\n');
+          if (arr.length > 1) return `Type:<br /> others: ${params.value}`;
+          return `Type:<br /> ${params.name}: ${params.value}`;
+        },
+      },
+    }).toJS();
 
-    return option;
+    if (List.isList(dataList)) {
+      if (dataList.size < 1) {
+        dataList = fromJS([{
+          name: __('None'),
+          value: 0,
+        }]);
+      } else {
+        dataList = dataList.sort(($$a, $$b) => {
+          const a = parseInt($$a.get('value'), 10);
+          const b = parseInt($$b.get('value'), 10);
+          let result = 0;
+
+          if (a < b) {
+            result = 1;
+          } else if (a > b) {
+            result = -1;
+          }
+
+          return result;
+        });
+      }
+      // 客户端类别如果超过itemCount个，则从itemCount第个开始，个数相加，统称为others
+      const size = dataList.size;
+      const itemCount = 12;
+      let num = 0;
+      let othermap = fromJS({});
+      let otherNameStr = '';
+      if (size > itemCount) {
+        let i = itemCount - 1;
+        while (i < size) {
+          const name = dataList.getIn([i, 'name']);
+          const value = parseInt(dataList.getIn([i, 'value']), 10);
+          otherNameStr += `${name}: ${value}\n`;
+          num += value;
+          i += 1;
+        }
+        othermap = othermap.set('name', otherNameStr);
+        othermap = othermap.set('value', num);
+        dataList = dataList.slice(0, itemCount - 1);
+        dataList = dataList.push(othermap);
+      }
+
+      ret.legend.data = dataList.map(item => item.get('name')).toJS();
+      ret.series[0].data = dataList.toJS();
+    }
+
+    return ret;
   }
 
   generateGroupOptions() {
+    if (this.groupOptions) return this.groupOptions;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const groups = store.getIn([curScreenId, 'data', 'common', 'groups']) || fromJS([]);
@@ -576,6 +755,7 @@ export default class MainDashboard extends Component {
       const value = item.get('id');
       return { label, value };
     }).toJS();
+    this.groupOptions = groupOptions.length > 0 ? groupOptions : null;
     return groupOptions;
   }
 
@@ -697,63 +877,69 @@ export default class MainDashboard extends Component {
     const { aps = [], usr5g = '0', clients5g = '0', usr2g = '0', clients2g = '0' } = mapView.toJS();
     const onLineApNum = fromJS(aps).count(item => item.get('enable') === '0');
     const offLineApNum = aps.length - onLineApNum;
-    const children = aps.map(item => (
-      <div
-        className="m-dsb-map-view-ap"
-        style={{
-          left: item.x,
-          top: item.y,
-        }}
-        onMouseEnter={() => {
-          const mapViewQuery = utils.extend(
-            {}, this.state.mapViewQuery, { onHoverMac: item.mac },
-          );
-          this.setState({ mapViewQuery });
-        }}
-        onMouseLeave={() => {
-          const mapViewQuery = utils.extend(
-            {}, this.state.mapViewQuery, { onHoverMac: undefined },
-          );
-          this.setState({ mapViewQuery });
-        }}
-      >
-        {
-          item.status === '1' ? (
-            <img src={aponline} alt="online" />
-          ) : (
-            <img src={apoffline} alt="offline" />
-          )
-        }
-        {
-          this.state.mapViewQuery.onHoverMac &&
-          this.state.mapViewQuery.onHoverMac === item.mac && (
-            <div className="m-dsb-map-view-hover row">
-              <div className="m-dsb-hover-head">
-                AP Information
+    const children = aps.map((item) => {
+      const groupitem = fromJS(this.groupOptions || []).find(it => it.get('value') === item.group);
+      const groupname = groupitem ? groupitem.get('label') : '';
+      return (
+        <div
+          className="m-dsb-map-view-ap"
+          key={item.mac}
+          style={{
+            left: item.x,
+            top: item.y,
+          }}
+          onMouseEnter={() => {
+            const mapViewQuery = utils.extend(
+              {}, this.state.mapViewQuery, { onHoverMac: item.mac },
+            );
+            this.setState({ mapViewQuery });
+          }}
+          onMouseLeave={() => {
+            const mapViewQuery = utils.extend(
+              {}, this.state.mapViewQuery, { onHoverMac: undefined },
+            );
+            this.setState({ mapViewQuery });
+          }}
+        >
+          {
+            item.status === '1' ? (
+              <img src={aponline} alt="online" />
+            ) : (
+              <img src={apoffline} alt="offline" />
+            )
+          }
+          {
+            this.state.mapViewQuery.onHoverMac &&
+            this.state.mapViewQuery.onHoverMac === item.mac && (
+              <div className="m-dsb-map-view-hover row">
+                <div className="m-dsb-hover-head">
+                  AP Information
+                </div>
+                <div className="cols col-5 m-dsb-hover-left">
+                  MAC
+                </div>
+                <div className="cols col-7 m-dsb-hover-right">
+                  {`[ ${item.mac} ]`}
+                </div>
+                <div className="cols col-5 m-dsb-hover-left">
+                  AP Group
+                </div>
+                <div className="cols col-7 m-dsb-hover-right">
+                  {`[ ${groupname} ]`}
+                </div>
+                <div className="cols col-5 m-dsb-hover-left">
+                  IP Addr
+                </div>
+                <div className="cols col-7 m-dsb-hover-right">
+                  {`[ ${item.ip} ]`}
+                </div>
               </div>
-              <div className="cols col-5 m-dsb-hover-left">
-                MAC
-              </div>
-              <div className="cols col-7 m-dsb-hover-right">
-                {`[ ${item.mac} ]`}
-              </div>
-              <div className="cols col-5 m-dsb-hover-left">
-                AP Group
-              </div>
-              <div className="cols col-7 m-dsb-hover-right">
-                {`[ ${item.group} ]`}
-              </div>
-              <div className="cols col-5 m-dsb-hover-left">
-                IP Addr
-              </div>
-              <div className="cols col-7 m-dsb-hover-right">
-                {`[ ${item.ip} ]`}
-              </div>
-            </div>
-          )
-        }
-      </div>
-    ));
+            )
+          }
+        </div>
+      );
+    },
+    );
 
     return (
       <div>
@@ -783,7 +969,8 @@ export default class MainDashboard extends Component {
             <div className="bar-left-right cols col-3">
               <FormInput
                 type="select"
-                options={this.generateGroupOptions()}
+                className="fr"
+                options={this.groupOptions || this.generateGroupOptions()}
                 value={this.state.mapViewQuery.groupid}
                 onChange={this.onMapViewGroupChange}
               />
@@ -794,23 +981,29 @@ export default class MainDashboard extends Component {
               src={this.state.show.mapViewBody ? dropdownimg : droprightimg}
               alt="dropdown-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('mapViewBody')}
             />
             <img
               src={timeimg}
               alt="dropright-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('mapView')}
             />
           </div>
         </div>
 
         {/* Map View body */}
-        <div className="m-dsb-map-view m-dsb-body-wrap">
-          <MapContainer
-            backgroundImgUrl={mapViewBg}
-            style={{ width: '100%', height: '100%' }}
-            children={children}
-          />
-        </div>
+        {
+          this.state.show.mapViewBody && (
+            <div className="m-dsb-map-view m-dsb-body-wrap">
+              <MapContainer
+                backgroundImgUrl={mapViewBg}
+                style={{ width: '100%', height: '100%' }}
+                children={children}
+              />
+            </div>
+          )
+        }
       </div>
     );
   }
@@ -842,7 +1035,7 @@ export default class MainDashboard extends Component {
               <FormInput
                 type="select"
                 style={{ width: '120px' }}
-                options={this.generateGroupOptions()}
+                options={this.groupOptions || this.generateGroupOptions()}
                 value={this.state.wirelessTrendQuery.groupid}
                 onChange={this.onWirelessTrendQueryChange('groupid')}
               />
@@ -853,25 +1046,30 @@ export default class MainDashboard extends Component {
               src={this.state.show.wirelessTrendBody ? dropdownimg : droprightimg}
               alt="dropdown-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('wirelessTrendBody')}
             />
             <img
               src={timeimg}
               alt="dropright-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('wirelessTrend')}
             />
           </div>
         </div>
         {/* Wireless Trend body */}
-        <div className="m-dsb-wireless-trend t-overview__section">
-          <div className="element">
-            <EchartReact
-              option={this.generateWirelessTrendEchartOption()}
-              className="o-box__canvas m-dsb-throughput-echart"
-              style={{ width: '100%', height: '300px' }}
-            />
-          </div>
-        </div>
-
+        {
+          this.state.show.wirelessTrendBody && (
+            <div className="m-dsb-wireless-trend t-overview__section">
+              <div className="element">
+                <EchartReact
+                  option={this.generateWirelessTrendEchartOption()}
+                  className="o-box__canvas m-dsb-throughput-echart"
+                  style={{ width: '100%', height: '300px' }}
+                />
+              </div>
+            </div>
+          )
+        }
       </div>
     );
   }
@@ -906,130 +1104,136 @@ export default class MainDashboard extends Component {
               src={this.state.show.wiredStatusBody ? dropdownimg : droprightimg}
               alt="dropdown-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('wiredStatusBody')}
             />
             <img
               src={timeimg}
               alt="dropright-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('wiredStatus')}
             />
           </div>
         </div>
         {/* body */}
-        <div className="m-dsb-body-wrap m-dsb-wired-status row">
-          <div className="cols col-6">
-            <div
-              className="m-dsb-interface-wrap cols col-10 col-offset-1"
-              ref={(wrap) => { this.wrap = wrap; }}
-            >
-              <div className="cols col-10 col-offset-1">
-                {
-                  interfaceList.map((item, index) => {
-                    const status = item.get('enable');
-                    return (
-                      <div
-                        className="fl"
-                        key={item.get('name')}
-                        style={{ width: widthPercent }}
-                      >
-                        <div className="m-dsb-interface-name">
-                          {item.get('name')}
+        {
+          this.state.show.wiredStatusBody && (
+            <div className="m-dsb-body-wrap m-dsb-wired-status row">
+              <div className="cols col-6">
+                <div
+                  className="m-dsb-interface-wrap cols col-10 col-offset-1"
+                  ref={(wrap) => { this.wrap = wrap; }}
+                >
+                  <div className="cols col-10 col-offset-1">
+                    {
+                      interfaceList.map((item, index) => {
+                        const status = item.get('enable');
+                        return (
+                          <div
+                            className="fl"
+                            key={item.get('name')}
+                            style={{ width: widthPercent }}
+                          >
+                            <div className="m-dsb-interface-name">
+                              {item.get('name')}
+                            </div>
+                            <div className="m-dsb-interface">
+                              <img
+                                src={status === '1' ? onportimg : offportimg}
+                                alt="interface"
+                                onMouseEnter={(e) => {
+                                  const position = utils.dom.getAbsPoint(e.target);
+                                  const wrapPosition = utils.dom.getAbsPoint(this.wrap);
+                                  const mergeData = utils.extend({}, this.state.wiredStatus, {
+                                    onHoverId: index,
+                                    flowLeft: (position.x - wrapPosition.x) + e.target.offsetWidth,
+                                    flowTop: (position.y - wrapPosition.y) + e.target.offsetHeight,
+                                  });
+                                  this.setState({ wiredStatus: mergeData });
+                                }}
+                                onMouseLeave={() => {
+                                  const mergeData = utils.extend({}, this.state.wiredStatus, {
+                                    onHoverId: '',
+                                    flowLeft: '',
+                                    flowTop: '',
+                                  });
+                                  this.setState({ wiredStatus: mergeData });
+                                }}
+                              />
+                            </div>
+                            <div className="m-dsb-interface-status">
+                              {
+                                item.get('enable') === '1' ? `${item.get('negoSpeed')} Mbps` : __('DOWN')
+                              }
+                            </div>
+                          </div>
+                        );
+                      }).toJS()
+                    }
+                    {
+                      this.state.wiredStatus.onHoverId !== '' && interfaceList &&
+                      interfaceList.getIn([this.state.wiredStatus.onHoverId, 'enable']) === '1' && (
+                        <div
+                          className="m-dsb-flowboard o-description-list o-description-list--lg"
+                          style={{
+                            left: this.state.wiredStatus.flowLeft,
+                            top: this.state.wiredStatus.flowTop,
+                          }}
+                        >
+                          <dl className="o-description-list-row">
+                            <dt>IP</dt>
+                            <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'ip'])}</dd>
+                          </dl>
+                          <dl className="o-description-list-row">
+                            <dt>MAC</dt>
+                            <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'mac'])}</dd>
+                          </dl>
+                          <dl className="o-description-list-row">
+                            <dt>{__('Upload Rate')}</dt>
+                            <dd>{`${flowRateFilter.transform(interfaceList.getIn([this.state.wiredStatus.onHoverId, 'upRate']))}/s`}</dd>
+                          </dl>
+                          <dl className="o-description-list-row">
+                            <dt>{__('Download Rate')}</dt>
+                            <dd>{`${flowRateFilter.transform(interfaceList.getIn([this.state.wiredStatus.onHoverId, 'downRate']))}/s`}</dd>
+                          </dl>
+                          <dl className="o-description-list-row">
+                            <dt>{__('Sessions')}</dt>
+                            <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'users'])}</dd>
+                          </dl>
                         </div>
-                        <div className="m-dsb-interface">
-                          <img
-                            src={status === '1' ? onportimg : offportimg}
-                            alt="interface"
-                            onMouseEnter={(e) => {
-                              const position = utils.dom.getAbsPoint(e.target);
-                              const wrapPosition = utils.dom.getAbsPoint(this.wrap);
-                              const mergeData = utils.extend({}, this.state.wiredStatus, {
-                                onHoverId: index,
-                                flowLeft: (position.x - wrapPosition.x) + e.target.offsetWidth,
-                                flowTop: (position.y - wrapPosition.y) + e.target.offsetHeight,
-                              });
-                              this.setState({ wiredStatus: mergeData });
-                            }}
-                            onMouseLeave={() => {
-                              const mergeData = utils.extend({}, this.state.wiredStatus, {
-                                onHoverId: '',
-                                flowLeft: '',
-                                flowTop: '',
-                              });
-                              this.setState({ wiredStatus: mergeData });
-                            }}
-                          />
+                      )
+                    }
+                    {
+                      this.state.wiredStatus.onHoverId !== '' && interfaceList &&
+                      interfaceList.getIn([this.state.wiredStatus.onHoverId, 'enable']) === '0' && (
+                        <div
+                          className="m-dsb-flowboard o-description-list o-description-list--lg"
+                          style={{
+                            left: this.state.flowLeft,
+                            top: this.state.flowTop,
+                          }}
+                        >
+                          <dl className="o-description-list-row">
+                            <dt>{__('Status')}</dt>
+                            <dd>{__('Down')}</dd>
+                          </dl>
                         </div>
-                        <div className="m-dsb-interface-status">
-                          {
-                            item.get('enable') === '1' ? `${item.get('negoSpeed')} Mbps` : __('DOWN')
-                          }
-                        </div>
-                      </div>
-                    );
-                  }).toJS()
-                }
-                {
-                  this.state.wiredStatus.onHoverId !== '' && interfaceList &&
-                  interfaceList.getIn([this.state.wiredStatus.onHoverId, 'enable']) === '1' && (
-                    <div
-                      className="m-dsb-flowboard o-description-list o-description-list--lg"
-                      style={{
-                        left: this.state.wiredStatus.flowLeft,
-                        top: this.state.wiredStatus.flowTop,
-                      }}
-                    >
-                      <dl className="o-description-list-row">
-                        <dt>IP</dt>
-                        <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'ip'])}</dd>
-                      </dl>
-                      <dl className="o-description-list-row">
-                        <dt>MAC</dt>
-                        <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'mac'])}</dd>
-                      </dl>
-                      <dl className="o-description-list-row">
-                        <dt>{__('Upload Rate')}</dt>
-                        <dd>{`${flowRateFilter.transform(interfaceList.getIn([this.state.wiredStatus.onHoverId, 'upRate']))}/s`}</dd>
-                      </dl>
-                      <dl className="o-description-list-row">
-                        <dt>{__('Download Rate')}</dt>
-                        <dd>{`${flowRateFilter.transform(interfaceList.getIn([this.state.wiredStatus.onHoverId, 'downRate']))}/s`}</dd>
-                      </dl>
-                      <dl className="o-description-list-row">
-                        <dt>{__('Sessions')}</dt>
-                        <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'users'])}</dd>
-                      </dl>
-                    </div>
-                  )
-                }
-                {
-                  this.state.wiredStatus.onHoverId !== '' && interfaceList &&
-                  interfaceList.getIn([this.state.wiredStatus.onHoverId, 'enable']) === '0' && (
-                    <div
-                      className="m-dsb-flowboard o-description-list o-description-list--lg"
-                      style={{
-                        left: this.state.flowLeft,
-                        top: this.state.flowTop,
-                      }}
-                    >
-                      <dl className="o-description-list-row">
-                        <dt>{__('Status')}</dt>
-                        <dd>{__('Down')}</dd>
-                      </dl>
-                    </div>
-                  )
-                }
+                      )
+                    }
+                  </div>
+                </div>
+              </div>
+              <div className="t-overview__section cols col-6">
+                <div className="element">
+                  <EchartReact
+                    option={this.generateWiredStatusEchartOption()}
+                    className="o-box__canvas m-dsb-throughput-echart"
+                    style={{ width: '100%', height: '300px' }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="t-overview__section cols col-6">
-            <div className="element">
-              <EchartReact
-                option={this.generateWiredStatusEchartOption()}
-                className="o-box__canvas m-dsb-throughput-echart"
-                style={{ width: '100%', height: '300px' }}
-              />
-            </div>
-          </div>
-        </div>
+          )
+        }
       </div>
     );
   }
@@ -1045,7 +1249,7 @@ export default class MainDashboard extends Component {
             <div className="bar-left-right cols col-9">
               <FormInput
                 type="select"
-                options={this.generateGroupOptions()}
+                options={this.groupOptions || this.generateGroupOptions()}
                 value={this.state.clientAnalysis.groupid}
                 onChange={this.onClientAnalysisGroupChange}
               />
@@ -1056,33 +1260,39 @@ export default class MainDashboard extends Component {
               src={this.state.show.clientAnalysisBody ? dropdownimg : droprightimg}
               alt="dropdown-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('clientAnalysisBody')}
             />
             <img
               src={timeimg}
               alt="dropright-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('clientAnalysis')}
             />
           </div>
         </div>
 
-        <div className="m-dsb-body-wrap row">
-          <div className="t-overview__section">
-            <div className="element cols col-6">
-              <EchartReact
-                option={this.generateClientAnalysisChartOption()}
-                className="o-box__canvas m-dsb-throughput-echart"
-                style={{ width: '100%', height: '300px' }}
-              />
+        {
+          this.state.show.clientAnalysisBody && (
+            <div className="m-dsb-body-wrap row">
+              <div className="t-overview__section">
+                <div className="element cols col-6">
+                  <EchartReact
+                    option={this.generateClientAnalysisChartOption()}
+                    className="o-box__canvas m-dsb-throughput-echart"
+                    style={{ width: '100%', height: '300px' }}
+                  />
+                </div>
+                <div className="element cols col-6">
+                  <EchartReact
+                    option={this.generateClientTypeChartOption()}
+                    className="o-box__canvas m-dsb-throughput-echart"
+                    style={{ width: '100%', height: '300px' }}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="element cols col-6">
-              <EchartReact
-                option={this.generateClientTypeChartOption()}
-                className="o-box__canvas m-dsb-throughput-echart"
-                style={{ width: '100%', height: '300px' }}
-              />
-            </div>
-          </div>
-        </div>
+          )
+        }
       </div>
     );
   }
@@ -1098,7 +1308,8 @@ export default class MainDashboard extends Component {
             <div className="bar-left-right cols col-9">
               <FormInput
                 type="select"
-                options={this.generateGroupOptions()}
+                className="fr"
+                options={this.groupOptions || this.generateGroupOptions()}
                 value={this.state.ssidAnalysis.groupid}
                 onChange={this.onSsidAnalysisGroupChange}
               />
@@ -1109,32 +1320,39 @@ export default class MainDashboard extends Component {
               src={this.state.show.ssidAnalysisBody ? dropdownimg : droprightimg}
               alt="dropdown-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('ssidAnalysisBody')}
             />
             <img
               src={timeimg}
               alt="dropright-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('ssidAnalysis')}
             />
           </div>
         </div>
-        <div className="m-dsb-body-wrap row">
-          <div className="t-overview__section">
-            <div className="element cols col-6">
-              <EchartReact
-                option={this.generateSsidFlowChartOption()}
-                className="o-box__canvas m-dsb-throughput-echart"
-                style={{ width: '100%', height: '300px' }}
-              />
+
+        {
+          this.state.show.ssidAnalysisBody && (
+            <div className="m-dsb-body-wrap row">
+              <div className="t-overview__section">
+                <div className="element cols col-6">
+                  <EchartReact
+                    option={this.generateSsidFlowChartOption()}
+                    className="o-box__canvas m-dsb-throughput-echart"
+                    style={{ width: '100%', height: '300px' }}
+                  />
+                </div>
+                <div className="element cols col-6">
+                  <EchartReact
+                    option={this.generateSsidClientsChartOption()}
+                    className="o-box__canvas m-dsb-throughput-echart"
+                    style={{ width: '100%', height: '300px' }}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="element cols col-6">
-              <EchartReact
-                option={this.generateSsidClientsChartOption()}
-                className="o-box__canvas m-dsb-throughput-echart"
-                style={{ width: '100%', height: '300px' }}
-              />
-            </div>
-          </div>
-        </div>
+          )
+        }
       </div>
     );
   }
@@ -1158,21 +1376,28 @@ export default class MainDashboard extends Component {
               src={this.state.show.alarmBody ? dropdownimg : droprightimg}
               alt="dropdown-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('alarmBody')}
             />
             <img
               src={timeimg}
               alt="dropright-icon"
               className="bar-right-icon cols col-3 col-offset-2"
+              onClick={this.onDropOrTimeIconClick('alarm')}
             />
           </div>
 
         </div>
-        <div className="m-dsb-body-wrap">
-          <Table
-            options={generateAlarmTableOption()}
-            list={tableList.toJS()}
-          />
-        </div>
+
+        {
+          this.state.show.alarmBody && (
+            <div className="m-dsb-body-wrap">
+              <Table
+                options={generateAlarmTableOption()}
+                list={tableList.toJS()}
+              />
+            </div>
+          )
+        }
       </div>
     );
   }
@@ -1190,27 +1415,27 @@ export default class MainDashboard extends Component {
           }
 
           {
-            this.renderMapView()
+            this.state.show.mapView && this.renderMapView()
           }
 
           {
-            this.renderWirelessTrend()
+            this.state.show.wirelessTrend && this.renderWirelessTrend()
           }
 
           {
-            this.renderWiredStatus()
+            this.state.show.wiredStatus && this.renderWiredStatus()
           }
 
           {
-            this.renderClientAnalysis()
+            this.state.show.clientAnalysis && this.renderClientAnalysis()
           }
 
           {
-            this.renderSsidAnalysis()
+            this.state.show.ssidAnalysis && this.renderSsidAnalysis()
           }
 
           {
-            this.renderAlarmChart()
+            this.state.show.alarm && this.renderAlarmChart()
           }
 
         </div>

@@ -134,6 +134,9 @@
 			}
 		},
 		"usrAnalysis": {
+      "clientsNumber": "12",
+			"online": "693",
+			"offline": "293",
 			"apClientsTop7": {
 				"Axilspot1": "10",
 				"Axilspot2": "80",
@@ -146,7 +149,37 @@
 			"clientType": {
 				"HuaWei": "50",
 				"XiaoMi": "30",
-				"iPhone": "40"
+				"iPhone": "40",
+				"HuaWei1": "50",
+				"XiaoMi1": "30",
+				"iPhone1": "40",
+				"HuaWei2": "50",
+				"XiaoMi2": "30",
+				"iPhone2": "40",
+				"HuaWei3": "50",
+				"XiaoMi3": "30",
+				"iPhone3": "40",
+				"HuaWei4": "50",
+				"XiaoMi4": "30",
+				"iPhone4": "40",
+				"HuaWei5": "50",
+				"XiaoMi5": "30",
+				"iPhone5": "40",
+				"HuaWei6": "50",
+				"XiaoMi6": "30",
+				"iPhone6": "40",
+				"HuaWei7": "50",
+				"XiaoMi7": "30",
+				"iPhone7": "40",
+				"HuaWei8": "50",
+				"XiaoMi8": "30",
+				"iPhone8": "40",
+				"HuaWei9": "50",
+				"XiaoMi9": "30",
+				"iPhone9": "40",
+				"HuaWei0": "50",
+				"XiaoMi0": "30",
+				"iPhone0": "40"
 			}
 		},
 		"ssidAnalysis": {
