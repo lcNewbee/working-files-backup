@@ -140,7 +140,8 @@
         "wlan14":	"",
         "wlan15enable":	0,
         "wlan15":	""
-      }, {
+      },
+      {
         "radioID":   2,
         "enable": 0,
         "phymodesupport": 18,

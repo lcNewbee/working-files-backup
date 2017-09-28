@@ -220,7 +220,7 @@ function createSettingsFormOptions() {
         const ssidIndex = data.ssidIndex;
 
         ret.mergeData = {
-          [`wan_${ssidIndex}_enable2g`]: data.checked ? '1' : '0',
+          [`wlan_${ssidIndex}_enable2g`]: data.checked ? '1' : '0',
         };
 
         return ret;
@@ -276,7 +276,7 @@ function createSettingsFormOptions() {
         const ssidIndex = data.ssidIndex;
 
         ret.mergeData = {
-          [`wan_${ssidIndex}_enable5g`]: data.checked ? '1' : '0',
+          [`wlan_${ssidIndex}_enable5g`]: data.checked ? '1' : '0',
         };
 
         return ret;
@@ -456,11 +456,12 @@ export default class View extends React.Component {
       }).then((json) => {
         const radiosData = utils.getIn(json, ['data', 'radios']);
         const newSettings = {};
+        const ssidOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
         let len = 0;
         let srcData = null;
         let otions2g = null;
         let otions5g = null;
-        let ssidOptions = null;
+        let enableArr = [];
 
         if (radiosData && radiosData.length > 0) {
           len = radiosData.length;
@@ -471,6 +472,7 @@ export default class View extends React.Component {
               // 5G
               if (srcData.phymodesupport < 8) {
                 otions2g = [];
+                enableArr = [];
                 for (let i = 0; i < 16; i += 1) {
                   newSettings[`wlan_${i}_enable2g`] = numberToString(srcData[`wlan${i}enable`]) || '0';
                   newSettings.radioenable_2g = numberToString(srcData.radioenable) || '0';
@@ -480,14 +482,19 @@ export default class View extends React.Component {
                       value: `wlan${i}`,
                       label: srcData[`wlan${i}`],
                       ssidIndex: i,
+                      enable: numberToString(srcData[`wlan${i}enable`]),
                     });
+                    if (parseInt(srcData[`wlan${i}enable`], 10) === 1) {
+                      enableArr.push(`wlan${i}`);
+                    }
                   }
                 }
-                newSettings.ssid_2g = otions2g.map((item, index) => `wlan${index}`).join(',');
+                newSettings.ssid_2g = enableArr.join(',');
 
               // 2.4G
               } else {
                 otions5g = [];
+                enableArr = [];
                 for (let i = 0; i < 16; i += 1) {
                   newSettings[`wlan_${i}_enable5g`] = numberToString(srcData[`wlan${i}enable`]) || '0';
                   newSettings.radioenable_5g = numberToString(srcData.radioenable) || '0';
@@ -497,20 +504,40 @@ export default class View extends React.Component {
                       value: `wlan${i}`,
                       label: srcData[`wlan${i}`],
                       ssidIndex: i,
+                      enable: numberToString(srcData[`wlan${i}enable`]),
                     });
+                    if (parseInt(srcData[`wlan${i}enable`], 10) === 1) {
+                      enableArr.push(`wlan${i}`);
+                    }
                   }
                 }
-                newSettings.ssid_5g = otions2g.map((item, index) => `wlan${index}`).join(',');
+                newSettings.ssid_5g = enableArr.join(',');
               }
             }
-
-            if (n === 0) {
-              ssidOptions = otions2g || otions5g;
-            }
           }
+
+          // 如果只有单频，拷贝另一频段数据,
+          // 只有 5G
+          if (!otions2g && otions5g) {
+            otions2g = otions5g;
+            enableArr = [];
+            ssidOptions.forEach((val, i) => {
+              newSettings[`wlan_${i}_enable2g`] = newSettings[`wlan_${i}_enable5g`];
+            });
+            newSettings.ssid_2g = newSettings.ssid_5g;
+
+          // 只有 2.4 G
+          } else if (!otions5g && otions2g) {
+            otions5g = otions2g;
+            ssidOptions.forEach((val, i) => {
+              newSettings[`wlan_${i}_enable5g`] = newSettings[`wlan_${i}_enable2g`];
+            });
+            newSettings.ssid_5g = newSettings.ssid_2g;
+          }
+
           this.setState({
-            ssidOptions2g: otions2g || ssidOptions,
-            ssidOptions5g: otions5g || ssidOptions,
+            ssidOptions2g: otions2g,
+            ssidOptions5g: otions5g,
           });
           this.props.updateScreenSettings(newSettings);
         }
