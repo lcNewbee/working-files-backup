@@ -10,12 +10,65 @@
   bottom: 0px;
   overflow: auto;
 }
+
+// label
+.rw-label {
+  font-size: 14px;
+  display: inline-block;
+  min-width: 36px;
+  text-align: center;
+  padding: 4px 6px;
+  margin-left: 8px;
+  color: #fff;
+  border-radius: 4px;
+
+  &.rw-label--on {
+    background-color: #409eff;
+  }
+  &.rw-label--off {
+    background-color: #ff6d6d;
+  }
+}
 .m-dsb-wrap {
   padding: 15px 20px;
   min-height: 100%;
   background-color: #f5f5f5;
   overflow: hidden;
 
+  .Select {
+    margin-right: 12px;
+    float: right;
+
+    .Select-control {
+      border-color: #eee;
+      background-color: #eee;
+    }
+
+    &-menu {
+      background-color: #eee;
+      border: none;
+    }
+    &-option {
+      background-color: #eee;
+      &:hover {
+        background-color: #ecf6fd;
+      }
+    }
+    &.is-open {
+      .Select-control {
+        border-color: brand-color();
+      }
+      .Select-menu-outer {
+        border-color: brand-color();
+        border-top-color: #ccc;
+        overflow: hidden;
+      }
+    }
+  }
+
+  .Select-arrow {
+    border-color: #888 transparent transparent;
+  }
   .m-dsb-cards-row {
 
     > .top-card-wrap:not(:last-child) {
@@ -36,7 +89,6 @@
     }
 
     .top-card-wrap {
-
       .top-card {
         height: 140px;
         background-color: #ffffff;
@@ -66,7 +118,7 @@
         }
 
         .top-card-right {
-
+          font-weight: 200;
           .card-right-title {
             font-size: 21px;
             height: 70px;
@@ -91,40 +143,19 @@
   }
 
   .m-dsb-head-bar {
-
-    height: 60px;
     background-color: #fff;
     margin-top: 22px;
     box-shadow: 0px 2px #ccc;
 
     .head-bar-left {
-      padding: 14px 0;
+      padding: 15px 0;
       border-right: 2px solid #ccc;
 
       .bar-left-left {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: normal;
+        line-height: 1.14;
         padding-left: 15px;
-      }
-
-      .bar-left-middle {
-
-        .middle-map-view div {
-          font-size: 16px;
-          // display: inline-block;
-          text-align: center;
-          border-radius: 4px;
-
-          &:nth-child(1) {
-            text-align: right;
-          }
-          &:nth-child(2) {
-            background-color: #409eff;
-          }
-          &:nth-child(3) {
-            background-color: #ff6d6d;
-          }
-        }
       }
 
       .bar-left-right {
@@ -194,7 +225,9 @@
   .m-dsb-wireless-trend {
     background-color: #ffffff;
     box-shadow: 0px 2px #ccc;
-    margin-top: 15px;
+    margin-top: 10px;
+    padding-bottom: 1px;
+    margin-bottom: -1px;
   }
 }
 

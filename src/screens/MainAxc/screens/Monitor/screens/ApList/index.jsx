@@ -13,13 +13,18 @@ import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 
-import copyRadioSsidsData from './utils';
-
 const EDIT_LIST_ACTION = 'editList';
 const AP_MONITOR_ACTION = 'monitor';
 const flowRateFilter = utils.filter('flowRate');
 
+function numberToString(num) {
+  let ret = num;
 
+  if (typeof num === 'number') {
+    ret = `${num}`;
+  }
+  return ret;
+}
 const apMonitorSettingsOptions = fromJS([
   // {
   //   id: 'enable',
@@ -215,7 +220,7 @@ function createSettingsFormOptions() {
         const ssidIndex = data.ssidIndex;
 
         ret.mergeData = {
-          [`wan_${ssidIndex}_enable2g`]: data.checked ? 1 : 0,
+          [`wan_${ssidIndex}_enable2g`]: data.checked ? '1' : '0',
         };
 
         return ret;
@@ -271,7 +276,7 @@ function createSettingsFormOptions() {
         const ssidIndex = data.ssidIndex;
 
         ret.mergeData = {
-          [`wan_${ssidIndex}_enable5g`]: data.checked ? 1 : 0,
+          [`wan_${ssidIndex}_enable5g`]: data.checked ? '1' : '0',
         };
 
         return ret;
@@ -433,9 +438,11 @@ export default class View extends React.Component {
         myTitle: __('Edit Selected AP'),
       });
       const screenSettings = fromJS({
+        radioID_2g: '1',
         radioenable_2g: '1',
         txpower_2g: '50%',
         ssid_2g: '',
+        radioID_5g: '2',
         radioenable_5g: '1',
         txpower_5g: '50%',
         ssid_5g: '',
@@ -465,8 +472,8 @@ export default class View extends React.Component {
               if (srcData.phymodesupport < 8) {
                 otions2g = [];
                 for (let i = 0; i < 16; i += 1) {
-                  newSettings[`wlan_${i}_enable2g`] = srcData[`wlan${i}enable`] || 0;
-                  newSettings.radioenable_2g = srcData.radioenable || 0;
+                  newSettings[`wlan_${i}_enable2g`] = numberToString(srcData[`wlan${i}enable`]) || '0';
+                  newSettings.radioenable_2g = numberToString(srcData.radioenable) || '0';
                   newSettings.txpower_2g = srcData.txpower;
                   if (srcData[`wlan${i}`]) {
                     otions2g.push({
@@ -482,8 +489,8 @@ export default class View extends React.Component {
               } else {
                 otions5g = [];
                 for (let i = 0; i < 16; i += 1) {
-                  newSettings[`wlan_${i}_enable5g`] = srcData[`wlan${i}enable`] || 0;
-                  newSettings.radioenable_5g = srcData.radioenable || 0;
+                  newSettings[`wlan_${i}_enable5g`] = numberToString(srcData[`wlan${i}enable`]) || '0';
+                  newSettings.radioenable_5g = numberToString(srcData.radioenable) || '0';
                   newSettings.txpower_5g = srcData.txpower;
                   if (srcData[`wlan${i}`]) {
                     otions5g.push({

@@ -763,27 +763,26 @@ export default class MainDashboard extends Component {
             <div className="bar-left-left cols col-3">
               Map View
             </div>
-            <div className="bar-left-middle cols col-5">
-              <div className="middle-map-view cols col-3">
-                <div className="cols col-3">On/Off APs</div>
-                <div className="cols col-3 col-offset-1">{ onLineApNum }</div>
-                <div className="cols col-3 col-offset-1">{ offLineApNum }</div>
+            <div className="bar-left-middle cols col-6">
+              <div className="middle-map-view cols col-4">
+                <span>On/Off APs</span>
+                <span className="rw-label rw-label--on">{ onLineApNum }</span>
+                <span className="rw-label rw-label--off">{ offLineApNum }</span>
               </div>
-              <div className="middle-map-view cols col-3 col-offset-1">
-                <div className="cols col-3">2.4G</div>
-                <div className="cols col-3 col-offset-1">{ clients2g }</div>
-                <div className="cols col-3 col-offset-1">{ usr2g }</div>
+              <div className="middle-map-view cols col-4">
+                <span>2.4G</span>
+                <span className="rw-label rw-label--on">{ clients2g }</span>
+                <span className="rw-label rw-label--off">{ usr2g }</span>
               </div>
-              <div className="middle-map-view cols col-3 col-offset-1">
-                <div className="cols col-3">5G</div>
-                <div className="cols col-3 col-offset-1">{ clients5g }</div>
-                <div className="cols col-3 col-offset-1">{ usr5g }</div>
+              <div className="middle-map-view cols col-4">
+                <span>5G</span>
+                <span className="rw-label rw-label--on">{ clients5g }</span>
+                <span className="rw-label rw-label--off">{ usr5g }</span>
               </div>
             </div>
-            <div className="bar-left-right cols col-4">
+            <div className="bar-left-right cols col-3">
               <FormInput
                 type="select"
-                className="fr"
                 options={this.generateGroupOptions()}
                 value={this.state.mapViewQuery.groupid}
                 onChange={this.onMapViewGroupChange}
@@ -825,8 +824,7 @@ export default class MainDashboard extends Component {
             <div className="bar-left-left cols col-3">
               Wireless Trend
             </div>
-            <div className="bar-left-middle cols col-5" />
-            <div className="bar-left-right cols col-4">
+            <div className="bar-left-right cols col-9">
               <FormInput
                 type="select"
                 style={{ width: '120px' }}
@@ -894,8 +892,7 @@ export default class MainDashboard extends Component {
             <div className="bar-left-left cols col-3">
               Wired  Status
             </div>
-            <div className="bar-left-middle cols col-5" />
-            <div className="bar-left-right cols col-4">
+            <div className="bar-left-right cols col-9">
               <FormInput
                 type="select"
                 options={options.toJS()}
@@ -1045,8 +1042,7 @@ export default class MainDashboard extends Component {
             <div className="bar-left-left cols col-3">
               Client Analysis
             </div>
-            <div className="bar-left-middle cols col-5" />
-            <div className="bar-left-right cols col-4">
+            <div className="bar-left-right cols col-9">
               <FormInput
                 type="select"
                 options={this.generateGroupOptions()}
@@ -1099,11 +1095,9 @@ export default class MainDashboard extends Component {
             <div className="bar-left-left cols col-3">
               SSIDs Analysis
             </div>
-            <div className="bar-left-middle cols col-5" />
-            <div className="bar-left-right cols col-4">
+            <div className="bar-left-right cols col-9">
               <FormInput
                 type="select"
-                className="fr"
                 options={this.generateGroupOptions()}
                 value={this.state.ssidAnalysis.groupid}
                 onChange={this.onSsidAnalysisGroupChange}
