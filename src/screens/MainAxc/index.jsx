@@ -264,6 +264,9 @@ export default class Main extends React.PureComponent {
             {
               fromJS(this.props.route.routes).map(($$item) => {
                 const keyVal = `${$$item.get('path')}`;
+                if ($$item.get('noNav')) {
+                  return null;
+                }
                 return $$item.get('text') ? (<li key={keyVal}>
                   <NavLink
                     to={$$item.get('path')}
