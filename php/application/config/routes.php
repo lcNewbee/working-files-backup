@@ -96,6 +96,7 @@ $route['goform/group/flow/app'] = 'group/monitorFlow/app';
 $route['goform/group/flow/user'] = 'group/monitorFlow/user';
 $route['goform/group/ssid'] = 'group/monitorSsid';
 $route['goform/group/aps'] = 'group/monitorAps';
+$route['goform/group/apsRadio'] = 'group/monitorApsRadio';
 $route['goform/group/ssidSetting'] = 'group/wirelessSsid';
 $route['goform/group/wireless/acl'] = 'group/wirelessAcl';
 $route['goform/group/smartRf'] = 'group/wirelessSmart';
@@ -136,6 +137,9 @@ $route['goform/system/license'] = 'system/systemLicense';
 $route['goform/system/networktimeprotocol'] = 'system/systemNtp';
 $route['goform/system/apbackup'] = 'system/apbackup';
 $route['goform/system/aprestore'] = 'system/apbackup';
+
+//总览dashboard
+$route['goform/main/dashboard'] = 'dashboard/totalOverview';
 
 //dashboard
 $route['goform/dashboard/overview'] = 'dashboard/overview';//环境监测概览

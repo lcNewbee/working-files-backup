@@ -673,8 +673,7 @@ class AaaServer_Model extends CI_Model {
                     }
                 }
                 //2. AAA 需要修改
-                $aaa_ary = $this->getDomainParams($data);  
-                $aaa_ary['radius_template'] = 'local';//使用本地radius                                      
+                $aaa_ary = $this->getDomainParams($data);                                                      
                 if($cfginfo[0]['domain_name'] != 'local'){                        
                     if( !$this->editAaaTemplate($aaa_ary)){
                         return json_encode(json_no('edit aaa error!',6405));
@@ -748,8 +747,7 @@ class AaaServer_Model extends CI_Model {
                     }
                 }
                 //2. AAA 需要修改
-                $aaa_ary = $this->getDomainParams($data);  
-                $aaa_ary['radius_template'] = 'local';//使用本地radius                                      
+                $aaa_ary = $this->getDomainParams($data);                                    
                 if($cfginfo[0]['domain_name'] != 'local'){                        
                     if( !$this->editAaaTemplate($aaa_ary)){
                         return json_encode(json_no('edit aaa error!',6405));
