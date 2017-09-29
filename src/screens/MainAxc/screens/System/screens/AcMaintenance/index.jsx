@@ -21,8 +21,8 @@ const languageOptions = List(b28n.getOptions().supportLang).map(item => (
     label: b28n.langMap[item] || 'English',
   }
 )).toJS();
-const AXC1000_REBOOT_TIME = 8600;
-const AXC3000_REBOOT_TIME = 3600;
+const AXC1000_REBOOT_TIME = 10600;
+const AXC3000_REBOOT_TIME = 3800;
 
 function onChangeLang(data) {
   if (b28n.getLang() !== data.value) {

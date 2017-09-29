@@ -14,12 +14,20 @@ const propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   style: PropTypes.object,
+  drag: PropTypes.bool,
+  minZoom: PropTypes.number,
+  maxZoom: PropTypes.number,
+  dragInner: PropTypes.bool,
 };
 const defaultProps = {
   onReady: utils.noop,
   onZoomChange: utils.noop,
   onChange: utils.noop,
   backgroundImgUrl: '',
+  drag: true,
+  dragInner: true,
+  minZoom: 10,
+  maxZoom: 200,
 };
 
 export default class View extends React.PureComponent {
@@ -79,10 +87,32 @@ export default class View extends React.PureComponent {
     this.mapClientY = e.clientY;
   }
   onMapMouseMove(e) {
-    if (this.mapMouseDown) {
+    const { dragInner } = this.props;
+    const zoomRatio = this.state.zoom / 100;
+
+    if (this.mapMouseDown && this.props.drag) {
+      const width = Math.floor(this.state.naturalWidth * zoomRatio);
+      const height = Math.floor(this.state.naturalHeight * zoomRatio);
+      let mapOffsetX = (this.state.mapOffsetX + e.clientX) - this.mapClientX;
+      let mapOffsetY = (this.state.mapOffsetY + e.clientY) - this.mapClientY;
+
+      if (dragInner) {
+        if (mapOffsetX > 0 || this.mapElem.offsetWidth > width) {
+          mapOffsetX = 0;
+        } else if (this.mapElem.offsetWidth - mapOffsetX > width) {
+          mapOffsetX = this.mapElem.offsetWidth - width;
+        }
+
+        if (mapOffsetY > 0 || this.mapElem.offsetHeight > height) {
+          mapOffsetY = 0;
+        } else if (this.mapElem.offsetHeight - mapOffsetY > height) {
+          mapOffsetY = this.mapElem.offsetHeight - height;
+        }
+      }
+
       this.setState({
-        mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
-        mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
+        mapOffsetX,
+        mapOffsetY,
       });
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
@@ -178,9 +208,11 @@ export default class View extends React.PureComponent {
   }
 
   handleZoomChange(zoom) {
-    this.setState({
-      zoom,
-    });
+    if (zoom >= this.props.minZoom && zoom <= this.props.maxZoom) {
+      this.setState({
+        zoom,
+      });
+    }
   }
   render() {
     const { zoom, backgroundImgUrl } = this.state;

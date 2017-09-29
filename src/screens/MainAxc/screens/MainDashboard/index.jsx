@@ -1077,17 +1077,15 @@ export default class MainDashboard extends Component {
         </div>
 
         {/* Map View body */}
-        {
-          this.state.show.mapViewBody && (
-            <div className="m-dsb-map-view m-dsb-body-wrap">
-              <MapContainer
-                backgroundImgUrl={this.state.mapViewQuery.map === '1' ? mapViewBg1 : mapViewBg2}
-                style={{ width: '100%', height: '100%' }}
-                children={children}
-              />
-            </div>
-          )
-        }
+        <div className="m-dsb-map-view m-dsb-body-wrap">
+          <MapContainer
+            backgroundImgUrl={mapViewBg}
+            style={{ width: '100%', height: '100%' }}
+            minZoom={40}
+          >
+            {children}
+          </MapContainer>
+        </div>
       </div>
     );
   }
