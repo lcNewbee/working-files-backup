@@ -97,9 +97,9 @@ class ProcessContainer extends React.PureComponent {
     // 非强制显示 loading 状态下直接关闭
     if (!this.forceLoading) {
       clearTimeout(this.loadingTimeout);
-      this.state = {
+      this.setState({
         loading: false,
-      };
+      });
     }
   }
 
