@@ -13,7 +13,10 @@ import onportimg from './OnPort@2x.png';
 import offportimg from './OffPort@2x.png';
 import apoffline from './ap_offline.png';
 import aponline from './ap_online.png';
-import mapViewBg from './map_bg.jpg';
+import mapViewBg1 from './map1.jpg';
+import mapViewBg2 from './map2.jpg';
+// import mapViewBg1_sate from './map1_sate.jpg';
+// import mapViewBg2_sate from './map2_sate.jpg';
 import visitorimg from './visitor.png';
 import sendingimg from './sending.png';
 import statisticimg from './statistic.png';
@@ -128,6 +131,7 @@ export default class MainDashboard extends Component {
         alarmBody: true,
       },
       mapViewQuery: {
+        map: mapViewBg2,
         groupid: '1',
         section: 'mapView',
       },
@@ -156,8 +160,19 @@ export default class MainDashboard extends Component {
     };
   }
 
+  componentWillMount() {
+    this.props.changeScreenQuery({
+      section: 'all',
+      groupid: 'not',
+    });
+  }
+
   onMapViewGroupChange(data) {
-    const mapViewQuery = utils.extend({}, this.state.mapViewQuery, { groupid: data.value });
+    const curGroup = this.state.mapViewQuery.groupid;
+    if (curGroup === data.value) return;
+    const map = this.state.mapViewQuery.map === mapViewBg1 ? mapViewBg2 : mapViewBg1;
+    const mapViewQuery = utils.extend({}, this.state.mapViewQuery,
+      { groupid: data.value, map });
     this.setState({ mapViewQuery });
     this.props.changeScreenQuery(mapViewQuery);
     this.props.fetchScreenData();
@@ -240,20 +255,48 @@ export default class MainDashboard extends Component {
       },
       toolbox: {},
       grid: {
-        right: '4%',
-        left: '4%',
+        right: '0',
+        left: '0.5%',
+        top: '10%',
+        bottom: '0',
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
         data: date,
         name: __('Time'),
+        axisLabel: {
+          show: true,
+          inside: true,
+          color: '#555',
+          margin: 12,
+          showMinLabel: false,
+          showMaxLabel: false,
+        },
+        axisLine: {
+          show: false,
+          lineStyle: {
+            color: '#ccc',
+          },
+        },
       },
       yAxis: {
         type: 'value',
         boundaryGap: [0, '100%'],
         max: 'dataMax',
         name: `${unit.str}`,
+        axisLabel: {
+          show: true,
+          inside: true,
+          color: '#555',
+          showMinLabel: false,
+        },
+        axisLine: {
+          show: false,
+          lineStyle: {
+            color: '#ccc',
+          },
+        },
       },
       series: [
         {
@@ -264,17 +307,17 @@ export default class MainDashboard extends Component {
           sampling: 'average',
           itemStyle: {
             normal: {
-              color: 'rgb(255, 70, 131)',
+              color: '#5cacff',
             },
           },
           areaStyle: {
             normal: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgb(255, 158, 68)',
+                color: '#ecf5ff',
               }, {
                 offset: 1,
-                color: 'rgb(255, 70, 131)',
+                color: '#81bfff',
               }]),
             },
           },
@@ -302,9 +345,9 @@ export default class MainDashboard extends Component {
       return data;
     });
     const option = {
-      title: {
-        text: name,
-      },
+      // title: {
+      //   text: name,
+      // },
       tooltip: {
         trigger: 'axis',
       },
@@ -327,10 +370,40 @@ export default class MainDashboard extends Component {
         boundaryGap: false,
         data: timeData,
         name: __('Time'),
+        axisLabel: {
+          show: true,
+          inside: false,
+          color: '#555',
+          showMinLabel: false,
+        },
+        axisLine: {
+          show: false,
+          lineStyle: {
+            color: '#ccc',
+          },
+        },
       },
       yAxis: {
         type: 'value',
         name: `${unit.str}`,
+        axisLabel: {
+          show: true,
+          inside: false,
+          color: '#555',
+        },
+        axisLine: {
+          show: false,
+          lineStyle: {
+            color: '#ccc',
+          },
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            type: 'dotted',
+            opacity: 0.7,
+          },
+        },
       },
       series: [
         {
@@ -366,6 +439,7 @@ export default class MainDashboard extends Component {
     const clientData = apClientsTop7List.map(item => item[1]).toJS();
 
     const option = {
+      color: ['#409eff'],
       tooltip: {
         trigger: 'axis',
         axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -380,6 +454,7 @@ export default class MainDashboard extends Component {
       },
       xAxis: [
         {
+          show: false,
           type: 'value',
         },
       ],
@@ -388,6 +463,11 @@ export default class MainDashboard extends Component {
           type: 'category',
           axisTick: { show: false },
           data: legendData,
+          axisLine: {
+            lineStyle: {
+              color: '#888',
+            },
+          },
         },
       ],
       series: [
@@ -457,7 +537,7 @@ export default class MainDashboard extends Component {
         {
           name: __('Type'),
           center: ['35%', '50%'],
-          radius: ['40%', '75%'],
+          radius: ['45%', '75%'],
         },
       ],
       tooltip: {
@@ -570,7 +650,7 @@ export default class MainDashboard extends Component {
         {
           name: __('Type'),
           center: ['35%', '50%'],
-          radius: ['40%', '75%'],
+          radius: ['45%', '75%'],
         },
       ],
       tooltip: {
@@ -682,7 +762,7 @@ export default class MainDashboard extends Component {
         {
           name: __('Type'),
           center: ['35%', '50%'],
-          radius: ['40%', '75%'],
+          radius: ['45%', '75%'],
         },
       ],
       tooltip: {
@@ -997,7 +1077,7 @@ export default class MainDashboard extends Component {
           this.state.show.mapViewBody && (
             <div className="m-dsb-map-view m-dsb-body-wrap">
               <MapContainer
-                backgroundImgUrl={mapViewBg}
+                backgroundImgUrl={this.state.mapViewQuery.map}
                 style={{ width: '100%', height: '100%' }}
                 children={children}
               />
@@ -1082,13 +1162,14 @@ export default class MainDashboard extends Component {
       .map(item => ({ label: item.get('name').toUpperCase(), value: item.get('name') })) || fromJS([]);
     const interfaceNum = interfaceList.size;
     const widthPercent = `${((1 / interfaceNum) * 100)}%`;
+
     return (
       <div>
         {/* Wired  Status head */}
         <div className="m-dsb-head-bar row">
           <div className="head-bar-left cols col-11">
             <div className="bar-left-left cols col-3">
-              Wired  Status
+              Wired Status
             </div>
             <div className="bar-left-right cols col-9">
               <FormInput
@@ -1129,7 +1210,7 @@ export default class MainDashboard extends Component {
                         const status = item.get('enable');
                         return (
                           <div
-                            className="fl"
+                            className="fl m-dsb-interface-img"
                             key={item.get('name')}
                             style={{ width: widthPercent }}
                           >
@@ -1173,32 +1254,45 @@ export default class MainDashboard extends Component {
                       this.state.wiredStatus.onHoverId !== '' && interfaceList &&
                       interfaceList.getIn([this.state.wiredStatus.onHoverId, 'enable']) === '1' && (
                         <div
-                          className="m-dsb-flowboard o-description-list o-description-list--lg"
+                          className="m-dsb-flowboard row"
                           style={{
                             left: this.state.wiredStatus.flowLeft,
-                            top: this.state.wiredStatus.flowTop,
+                            bottom: `${parseInt(this.state.wiredStatus.flowTop, 10) + 50}px`,
                           }}
                         >
-                          <dl className="o-description-list-row">
-                            <dt>IP</dt>
-                            <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'ip'])}</dd>
-                          </dl>
-                          <dl className="o-description-list-row">
-                            <dt>MAC</dt>
-                            <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'mac'])}</dd>
-                          </dl>
-                          <dl className="o-description-list-row">
-                            <dt>{__('Upload Rate')}</dt>
-                            <dd>{`${flowRateFilter.transform(interfaceList.getIn([this.state.wiredStatus.onHoverId, 'upRate']))}/s`}</dd>
-                          </dl>
-                          <dl className="o-description-list-row">
-                            <dt>{__('Download Rate')}</dt>
-                            <dd>{`${flowRateFilter.transform(interfaceList.getIn([this.state.wiredStatus.onHoverId, 'downRate']))}/s`}</dd>
-                          </dl>
-                          <dl className="o-description-list-row">
-                            <dt>{__('Sessions')}</dt>
-                            <dd>{interfaceList.getIn([this.state.wiredStatus.onHoverId, 'users'])}</dd>
-                          </dl>
+                          <div className="m-dsb-hover-head">
+                            Interface Information
+                          </div>
+                          <div className="cols col-5 m-dsb-hover-left">
+                            IP
+                          </div>
+                          <div className="cols col-7 m-dsb-hover-right">
+                            {interfaceList.getIn([this.state.wiredStatus.onHoverId, 'ip'])}
+                          </div>
+                          <div className="cols col-5 m-dsb-hover-left">
+                            MAC
+                          </div>
+                          <div className="cols col-7 m-dsb-hover-right">
+                            {interfaceList.getIn([this.state.wiredStatus.onHoverId, 'mac'])}
+                          </div>
+                          <div className="cols col-5 m-dsb-hover-left">
+                            {__('Upload Rate')}
+                          </div>
+                          <div className="cols col-7 m-dsb-hover-right">
+                            {`${flowRateFilter.transform(interfaceList.getIn([this.state.wiredStatus.onHoverId, 'upRate']))}/s`}
+                          </div>
+                          <div className="cols col-5 m-dsb-hover-left">
+                            {__('Download Rate')}
+                          </div>
+                          <div className="cols col-7 m-dsb-hover-right">
+                            {`${flowRateFilter.transform(interfaceList.getIn([this.state.wiredStatus.onHoverId, 'downRate']))}/s`}
+                          </div>
+                          <div className="cols col-5 m-dsb-hover-left">
+                            {__('Sessions')}
+                          </div>
+                          <div className="cols col-7 m-dsb-hover-right">
+                            {interfaceList.getIn([this.state.wiredStatus.onHoverId, 'users'])}
+                          </div>
                         </div>
                       )
                     }
@@ -1206,16 +1300,21 @@ export default class MainDashboard extends Component {
                       this.state.wiredStatus.onHoverId !== '' && interfaceList &&
                       interfaceList.getIn([this.state.wiredStatus.onHoverId, 'enable']) === '0' && (
                         <div
-                          className="m-dsb-flowboard o-description-list o-description-list--lg"
+                          className="m-dsb-flowboard row"
                           style={{
-                            left: this.state.flowLeft,
-                            top: this.state.flowTop,
+                            left: this.state.wiredStatus.flowLeft,
+                            bottom: `${parseInt(this.state.wiredStatus.flowTop, 10) + 50}px`,
                           }}
                         >
-                          <dl className="o-description-list-row">
-                            <dt>{__('Status')}</dt>
-                            <dd>{__('Down')}</dd>
-                          </dl>
+                          <div className="m-dsb-hover-head">
+                            Interface Information
+                          </div>
+                          <div className="cols col-5 m-dsb-hover-left">
+                            {__('Status')}
+                          </div>
+                          <div className="cols col-7 m-dsb-hover-right">
+                            {__('Down')}
+                          </div>
                         </div>
                       )
                     }
