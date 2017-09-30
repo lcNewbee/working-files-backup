@@ -35,4 +35,28 @@ class TotalOverview extends CI_Controller {
 		}
 		return $result;
 	}
+
+	function download(){
+		$path = '/usr/web/public/';
+		$filename = element('fileName', $_GET, 0);
+		switch($filename){
+            case 'wirelessTrend' : $filename = 'Wireless Trend.pdf';
+                break;
+            case 'wiredStatus' : $filename = 'wired status.pdf';
+                break;
+            case 'clientAnalysis' : $filename = 'Clients.pdf';
+                break;
+            case 'ssidAnalysis' : $filename = 'SSIDs.pdf';
+                break;            
+			default : 
+				echo json_encode(json_no('error'));
+                break;
+        }
+		if(is_file($path.$filename)){
+			$this->load->helper('download');		
+			$data = file_get_contents($path.$filename);
+			//$name = 'backup.zip';
+			force_download($filename, $data);
+		}
+	}
 }

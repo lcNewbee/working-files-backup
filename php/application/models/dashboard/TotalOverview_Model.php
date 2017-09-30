@@ -361,6 +361,6 @@ class TotalOverview_Model extends CI_Model {
             )                            
         );
         return $arr;
-    }
+    }        
 }
 

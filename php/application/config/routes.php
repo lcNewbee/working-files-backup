@@ -140,6 +140,7 @@ $route['goform/system/aprestore'] = 'system/apbackup';
 
 //总览dashboard
 $route['goform/main/dashboard'] = 'dashboard/totalOverview';
+$route['goform/main/dashboard/download'] = 'dashboard/totalOverview/download';
 
 //dashboard
 $route['goform/dashboard/overview'] = 'dashboard/overview';//环境监测概览
