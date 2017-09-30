@@ -1099,12 +1099,12 @@ export default class MainDashboard extends Component {
               >
                 {children}
               </MapContainer>
-              <Icon
+              {/* <Icon
                 name="file-pdf-o"
                 className="pdf-download-icon"
                 title="Download Report PDF"
                 onClick={() => { onDownloadReportPDF('mapView'); }}
-              />
+              /> */}
             </div>
           )
         }
