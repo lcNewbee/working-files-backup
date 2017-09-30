@@ -45,11 +45,11 @@ class TotalOverview_Model extends CI_Model {
     private function getCommon($data){
         $arr = array(
             'groups' => array(
-                array('id'=>'1','name'=>'大族创新大厦A栋'),
-                array('id'=>'2','name'=>'龙岗冈贝小区'),
-                array('id'=>'3','name'=>'仙湖植物园')                        
+                array('id'=>'1','name'=>'Group A'),
+                array('id'=>'2','name'=>'Group B'),
+                array('id'=>'3','name'=>'Group C')                        
             ),
-            'onlineAp' => ''.rand(16,23),
+            'onlineAp' => '3',
             'totalAp' => '26',
             'clients' => ''.rand(150,300),
             'alarms' => ''.rand(7,25)
@@ -57,7 +57,15 @@ class TotalOverview_Model extends CI_Model {
         return $arr;
     }
 
-    private function getMapView($data){
+    private function getMapView($data){        
+        $mac = array(
+            array('4A:6F:A1:2F:54:54','8F:30:A3:FE:44:79','10:CE:A4:31:1B:94','2F:8B:42:42:39:1D'),
+            array('A3:E8:CB:92:79:52','FC:6D:82:3C:68:FD','C5:48:FB:60:28:1E','A0:54:59:FA:B0:8E'),
+            array('FC:FA:73:35:A2:99','6B:A7:AE:3F:3F:8F','C4:FB:D0:98:8E:82','33:8D:6F:88:F2:51'),
+            array('2F:8B:42:42:39:1D','ef:6D:DA:F4:3E:82','99:C0:A0:54:4B:B6','ac:D9:37:F4:18:D8')
+        );
+        $groupid = element('groupid', $data, 1);  
+        $groupid = $groupid == 'not' ? 1 : $groupid;              
         $arr = array(
             'clients2g' => '79', // 2.4G关联用户数
             'usr2g' => '36', // 2.4G认证用户数
@@ -65,32 +73,32 @@ class TotalOverview_Model extends CI_Model {
             'usr5g' => '29', // 5G认证用户数
             'aps' => array(
                 array(
-                    'status' => '1', // or '1' 表示在线或离线
-                    'mac' => '00:11:22:33:44:55',
+                    'enable' => '1', // or '1' 表示在线或离线
+                    'mac' => $mac[$groupid][0],
                     'group' => '1', // 所属组
                     'ip' => '192.168.10.1',
                     'x' => '20%', // 横坐标
                     'y' => '30%', // 纵坐标
                 ),
                 array(
-                    'status' => '1', // or '1' 表示在线或离线
-                    'mac' => 'e2:45:21:bd:3a:b9',
+                    'enable' => '1', // or '1' 表示在线或离线
+                    'mac' => $mac[$groupid][1],
                     'group' => '1', // 所属组
                     'ip' => '192.168.10.2',
                     'x' => '50%', // 横坐标
                     'y' => '55%', // 纵坐标
                 ),
                 array(
-                    'status' => '1', // or '1' 表示在线或离线
-                    'mac' => 'ac:11:b3:33:4f:55',
+                    'enable' => '1', // or '1' 表示在线或离线
+                    'mac' => $mac[$groupid][2],
                     'group' => '1', // 所属组
                     'ip' => '192.168.10.3',
                     'x' => '40%', // 横坐标
                     'y' => '20%', // 纵坐标
                 ),
                 array(
-                    'status' => '0', // or '1' 表示在线或离线
-                    'mac' => '6c:21:b5:b3:bf:55',
+                    'enable' => '0', // or '1' 表示在线或离线
+                    'mac' => $mac[$groupid][3],
                     'group' => '1', // 所属组
                     'ip' => '192.168.10.23',
                     'x' => '64%', // 横坐标
@@ -98,7 +106,7 @@ class TotalOverview_Model extends CI_Model {
                 )        
             )
             
-        );
+        );        
         /*
         $index = rand(5,8);
         while($index > 0){
@@ -112,7 +120,7 @@ class TotalOverview_Model extends CI_Model {
             );
             $index--;
         }
-        */
+        */        
         return $arr;
     }
 
@@ -121,26 +129,26 @@ class TotalOverview_Model extends CI_Model {
         $direction = element('direction', $data, 'tx');        
         //时间段 默认1小时
         $timeRange = element('timeRange', $data, 1);
-        $timeRange = $timeRange == 1 ? 20 : $timeRange;
+        $timeRange = $timeRange == 1 ? 60 : $timeRange;
         $arr = array(
             'flowData' => array(),
             'timeData' => array()
         );
 
-        $str = 5000;
-        $end = 8000;
+        $str = 500 * 1024 * 1024;
+        $end = 800 * 1024 * 1024;
         if($direction === 'rx'){
-            $str = 2000;
-            $end = 3000;
+            $str = 200 * 1024 * 1024;
+            $end = 300 * 1024 * 1024;
         }else if( $direction === 'tx+rx'){
-            $str = 8000;
-            $end = 15000;
+            $str = 600 * 1024 * 1024;
+            $end = 1000 * 1024 * 1024;
         }
 
         $index = 0;        
         while($index < $timeRange){
-            if($timeRange == 20){
-                $j = ($timeRange - $index) * 3;
+            if($timeRange == 60){
+                $j = ($timeRange - $index) * 1;
                 $arr['flowData'][] = ''.rand($str,$end);
                 $arr['timeData'][] = ''.date("Y-m-d H:i:s",strtotime("-{$j} minute"));
             }else{
@@ -234,9 +242,15 @@ class TotalOverview_Model extends CI_Model {
         $index = 0;
         while($index < 24){
             $j = 24 - $index;
-            $arr['flowData']['downloadFlow'][] = rand(20000,50000);
-            $arr['flowData']['uploadFlow'][] = rand(10000,30000);
-            $arr['flowData']['timeData'][] = date('Y-m-d H:i:s',strtotime("-{$j} hour"));
+            if($j < 6 || $j > 22 ){
+                $arr['flowData']['uploadFlow'][] = rand(50,100) * 1024 * 1024;
+                $arr['flowData']['downloadFlow'][] = rand(100,250) * 1024 * 1024;                
+                $arr['flowData']['timeData'][] = date('Y-m-d H:i:s',strtotime("-{$j} hour"));
+            }else{             
+                $arr['flowData']['uploadFlow'][] = rand(100,200) * 1024 * 1024;   
+                $arr['flowData']['downloadFlow'][] = rand(200,500) * 1024 * 1024;                
+                $arr['flowData']['timeData'][] = date('Y-m-d H:i:s',strtotime("-{$j} hour"));
+            }
             $index++;
         }
         return $arr;
@@ -247,13 +261,13 @@ class TotalOverview_Model extends CI_Model {
 			'online' => 121,
 			'offline' => 29,
 			'apClientsTop7' => array( // AP用户数top 7
-                'A栋-1区' => rand(3,16),
-                'A栋-2区' => rand(3,16),
-                'A栋-10区' => rand(3,16),
-                'A栋-4区' => rand(3,16),
-                'A栋-8区' => rand(3,16),
-                'A栋-展览区' => rand(3,16),
-                'A栋-大厅' => rand(3,16),
+                'Building A-Floor1' => rand(3,16),
+                'Building A-Floor2' => rand(3,16),
+                'Building A-Floor3' => rand(3,16),
+                'Building B-Floor1' => rand(3,16),
+                'Building B-Floor2' => rand(3,16),
+                'Building B-Floor3' => rand(3,16),
+                'Building C-Floor1' => rand(3,16),
             ),
 			'clientType' => array(
 				'HuaWei' => 24,
@@ -271,20 +285,16 @@ class TotalOverview_Model extends CI_Model {
     private function getSsidAnalysis($data){
         $arr = array(
             'ssidFlow' => array( // 每个ssid的流量(ssid名称： 流量)
-                'hotspot' => rand(20000,50000),
-                'guest' => rand(20000,50000),
-                'asc2.4' => rand(20000,50000),
-                'AIP3.0-5.8' => rand(20000,50000),
-                'wwv' => rand(20000,50000),
-                'rst' => rand(20000,50000)
+                'Hotspot' => rand(2000,5000) * 1024, 
+                'Guest' => rand(2000,5000) * 1024,
+                'Staff' => rand(2000,5000) * 1024,
+                'VIP' => rand(2000,5000)  * 1024
             ),
             'ssidClients' => array( // 每个ssid的客户端个数
-                'hotspot' => rand(5,20),
-                'guest' => rand(5,20),
-                'asc2.4' => rand(5,20),
-                'AIP3.0-5.8' => rand(5,20),
-                'wwv' => rand(5,20),
-                'rst' => rand(5,20)
+                'Hotspot' => rand(5,20),
+                'Guest' => rand(5,20),
+                'Staff' => rand(5,20),
+                'VIP' => rand(5,20)
             )
         );
         return $arr;
