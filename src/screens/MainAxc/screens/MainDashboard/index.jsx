@@ -5,7 +5,7 @@ import { fromJS, Map, List } from 'immutable';
 import echarts from 'echarts/lib/echarts';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import { Icon, FormInput, EchartReact, Table, MapContainer } from 'shared/components';
+import { FormInput, EchartReact, Table, MapContainer } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { colors, $$commonPieOption } from 'shared/config/axc';
@@ -17,10 +17,10 @@ import mapViewBg1 from './map1.jpg';
 import mapViewBg2 from './map2.jpg';
 // import mapViewBg1_sate from './map1_sate.jpg';
 // import mapViewBg2_sate from './map2_sate.jpg';
-import visitorimg from './visitor.png';
-import sendingimg from './sending.png';
-import statisticimg from './statistic.png';
-import bookimg from './book.png';
+import groupimg from './group.png';
+import usrimg from './usr.png';
+import apimg from './ap.png';
+import alarmimg from './alarm.png';
 import dropdownimg from './dropdown.png';
 import droprightimg from './dropright.png';
 import timeimg from './time.png';
@@ -131,7 +131,7 @@ export default class MainDashboard extends Component {
         alarmBody: true,
       },
       mapViewQuery: {
-        map: mapViewBg2,
+        map: '2',
         groupid: '1',
         section: 'mapView',
       },
@@ -170,9 +170,9 @@ export default class MainDashboard extends Component {
   onMapViewGroupChange(data) {
     const curGroup = this.state.mapViewQuery.groupid;
     if (curGroup === data.value) return;
-    const map = this.state.mapViewQuery.map === mapViewBg1 ? mapViewBg2 : mapViewBg1;
+    const mapid = this.state.mapViewQuery.map === '1' ? '2' : '1';
     const mapViewQuery = utils.extend({}, this.state.mapViewQuery,
-      { groupid: data.value, map });
+      { groupid: data.value, map: mapid });
     this.setState({ mapViewQuery });
     this.props.changeScreenQuery(mapViewQuery);
     this.props.fetchScreenData();
@@ -411,12 +411,16 @@ export default class MainDashboard extends Component {
           type: 'line',
           stack: '总量',
           data: downloadData,
+          showAllSymbol: true,
+          symbol: 'triangle',
+          symbolSize: '5',
         },
         {
           name: 'Upload',
           type: 'line',
           stack: '总量',
           data: uploadData,
+          showAllSymbol: true,
         },
       ],
     };
@@ -854,7 +858,7 @@ export default class MainDashboard extends Component {
                 <img
                   className="card-left-icon"
                   alt="usr-icon"
-                  src={visitorimg}
+                  src={groupimg}
                 />
               </div>
             </div>
@@ -879,7 +883,7 @@ export default class MainDashboard extends Component {
                 <img
                   className="card-left-icon"
                   alt="usr-icon"
-                  src={statisticimg}
+                  src={apimg}
                 />
               </div>
             </div>
@@ -904,7 +908,7 @@ export default class MainDashboard extends Component {
                 <img
                   className="card-left-icon"
                   alt="usr-icon"
-                  src={sendingimg}
+                  src={usrimg}
                 />
               </div>
             </div>
@@ -929,7 +933,7 @@ export default class MainDashboard extends Component {
                 <img
                   className="card-left-icon"
                   alt="usr-icon"
-                  src={bookimg}
+                  src={alarmimg}
                 />
               </div>
             </div>
@@ -1037,13 +1041,13 @@ export default class MainDashboard extends Component {
               </div>
               <div className="middle-map-view cols col-4">
                 <span>2.4G</span>
-                <span className="rw-label rw-label--on">{ clients2g }</span>
-                <span className="rw-label rw-label--off">{ usr2g }</span>
+                <span className="rw-label rw-label--on" title="2.4GHz Clients">{ clients2g }</span>
+                <span className="rw-label rw-label--off" title="2.4GHz Users">{ usr2g }</span>
               </div>
               <div className="middle-map-view cols col-4">
                 <span>5G</span>
-                <span className="rw-label rw-label--on">{ clients5g }</span>
-                <span className="rw-label rw-label--off">{ usr5g }</span>
+                <span className="rw-label rw-label--on" title="5GHz Clients">{ clients5g }</span>
+                <span className="rw-label rw-label--off" title="5GHz Users">{ usr5g }</span>
               </div>
             </div>
             <div className="bar-left-right cols col-3">
@@ -1077,7 +1081,7 @@ export default class MainDashboard extends Component {
           this.state.show.mapViewBody && (
             <div className="m-dsb-map-view m-dsb-body-wrap">
               <MapContainer
-                backgroundImgUrl={this.state.mapViewQuery.map}
+                backgroundImgUrl={this.state.mapViewQuery.map === '1' ? mapViewBg1 : mapViewBg2}
                 style={{ width: '100%', height: '100%' }}
                 children={children}
               />
@@ -1343,7 +1347,7 @@ export default class MainDashboard extends Component {
         <div className="m-dsb-head-bar row">
           <div className="head-bar-left cols col-11">
             <div className="bar-left-left cols col-3">
-              Client Analysis
+              Client
             </div>
             <div className="bar-left-right cols col-9">
               <FormInput
@@ -1402,7 +1406,7 @@ export default class MainDashboard extends Component {
         <div className="m-dsb-head-bar row">
           <div className="head-bar-left cols col-11">
             <div className="bar-left-left cols col-3">
-              SSIDs Analysis
+              SSIDs
             </div>
             <div className="bar-left-right cols col-9">
               <FormInput
