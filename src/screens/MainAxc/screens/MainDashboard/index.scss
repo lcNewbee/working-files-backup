@@ -241,6 +241,7 @@
     margin-top: 10px;
     padding-bottom: 1px;
     margin-bottom: -1px;
+    position: relative;
   }
 }
 
@@ -306,3 +307,14 @@
   }
 }
 
+.pdf-download-icon {
+  position: absolute;
+  font-size: 18px;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+
+  &:hover {
+    filter: drop-shadow(0px 3px 2px #888);
+  }
+}

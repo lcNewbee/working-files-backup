@@ -5,7 +5,7 @@ import { fromJS, Map, List } from 'immutable';
 import echarts from 'echarts/lib/echarts';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import { FormInput, EchartReact, Table, MapContainer } from 'shared/components';
+import { FormInput, EchartReact, Table, MapContainer, Icon } from 'shared/components';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { colors, $$commonPieOption } from 'shared/config/axc';
@@ -101,6 +101,11 @@ function generateAlarmTableOption() {
   ];
 
   return options;
+}
+
+function onDownloadReportPDF(name) {
+  if (typeof name === 'undefined') return;
+  window.location.href = `goform/main/dashboard/download?fileName=${name}`;
 }
 
 const defaultProps = {};
@@ -232,7 +237,10 @@ export default class MainDashboard extends Component {
 
     const { flowData, timeData } = wirelessTrend.toJS();
     // // 时间轴数据
-    const date = timeData.map(val => val.replace(/-/g, '/'));
+    const date = timeData.map((val) => {
+      const arr = val.split('-');
+      return `${arr[1]}.${arr[2]}`;
+    });
     const maxData = Math.max.apply(null, flowData); // 速率最大值
     const unit = getUnit(maxData);
     // 速率统一为最大值对应的单位
@@ -256,7 +264,7 @@ export default class MainDashboard extends Component {
       toolbox: {},
       grid: {
         right: '0',
-        left: '0.5%',
+        left: '0.6%',
         top: '10%',
         bottom: '0',
       },
@@ -334,6 +342,10 @@ export default class MainDashboard extends Component {
     const curScreenId = store.get('curScreenId');
     const flowData = store.getIn([curScreenId, 'data', 'wiredStatus', 'flowData']) || fromJS({});
     const { name = '', downloadFlow = [], uploadFlow = [], timeData = [] } = flowData.toJS();
+    const time = timeData.map((val) => {
+      const arr = val.split('-');
+      return `${arr[1]}.${arr[2]}`;
+    });
     const maxData = Math.max.apply(null, downloadFlow.concat(uploadFlow));
     const unit = getUnit(maxData);
     const downloadData = downloadFlow.map((val) => {
@@ -368,7 +380,7 @@ export default class MainDashboard extends Component {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: timeData,
+        data: time,
         name: __('Time'),
         axisLabel: {
           show: true,
@@ -409,7 +421,7 @@ export default class MainDashboard extends Component {
         {
           name: 'Download',
           type: 'line',
-          stack: '总量',
+          // stack: '总量',
           data: downloadData,
           showAllSymbol: true,
           symbol: 'triangle',
@@ -418,7 +430,7 @@ export default class MainDashboard extends Component {
         {
           name: 'Upload',
           type: 'line',
-          stack: '总量',
+          // stack: '总量',
           data: uploadData,
           showAllSymbol: true,
         },
@@ -889,7 +901,7 @@ export default class MainDashboard extends Component {
             </div>
             <div className="top-card-right cols col-7">
               <div className="card-right-title">
-                Online AP
+                APs
               </div>
               <div className="card-right-data clearfix">
                 <div className="right-data-num fl">
@@ -959,7 +971,7 @@ export default class MainDashboard extends Component {
     const curScreenId = store.get('curScreenId');
     const mapView = store.getIn([curScreenId, 'data', 'mapView']) || fromJS({});
     const { aps = [], usr5g = '0', clients5g = '0', usr2g = '0', clients2g = '0' } = mapView.toJS();
-    const onLineApNum = fromJS(aps).count(item => item.get('enable') === '0');
+    const onLineApNum = fromJS(aps).count(item => item.get('enable') === '1');
     const offLineApNum = aps.length - onLineApNum;
     const children = aps.map((item) => {
       const groupitem = fromJS(this.groupOptions || []).find(it => it.get('value') === item.group);
@@ -986,7 +998,7 @@ export default class MainDashboard extends Component {
           }}
         >
           {
-            item.status === '1' ? (
+            item.enable === '1' ? (
               <img src={aponline} alt="online" />
             ) : (
               <img src={apoffline} alt="offline" />
@@ -1036,8 +1048,8 @@ export default class MainDashboard extends Component {
             <div className="bar-left-middle cols col-6">
               <div className="middle-map-view cols col-4">
                 <span>On/Off APs</span>
-                <span className="rw-label rw-label--on">{ onLineApNum }</span>
-                <span className="rw-label rw-label--off">{ offLineApNum }</span>
+                <span className="rw-label rw-label--on" title="On Line AP">{ onLineApNum }</span>
+                <span className="rw-label rw-label--off" title="Off Line AP">{ offLineApNum }</span>
               </div>
               <div className="middle-map-view cols col-4">
                 <span>2.4G</span>
@@ -1077,15 +1089,25 @@ export default class MainDashboard extends Component {
         </div>
 
         {/* Map View body */}
-        <div className="m-dsb-map-view m-dsb-body-wrap">
-          <MapContainer
-            backgroundImgUrl={mapViewBg}
-            style={{ width: '100%', height: '100%' }}
-            minZoom={40}
-          >
-            {children}
-          </MapContainer>
-        </div>
+        {
+          this.state.show.mapViewBody && (
+            <div className="m-dsb-map-view m-dsb-body-wrap">
+              <MapContainer
+                backgroundImgUrl={this.state.mapViewQuery.map === '1' ? mapViewBg1 : mapViewBg2}
+                style={{ width: '100%', height: '100%' }}
+                minZoom={100}
+              >
+                {children}
+              </MapContainer>
+              <Icon
+                name="file-pdf-o"
+                className="pdf-download-icon"
+                title="Download Report PDF"
+                onClick={() => { onDownloadReportPDF('mapView'); }}
+              />
+            </div>
+          )
+        }
       </div>
     );
   }
@@ -1141,7 +1163,7 @@ export default class MainDashboard extends Component {
         {/* Wireless Trend body */}
         {
           this.state.show.wirelessTrendBody && (
-            <div className="m-dsb-wireless-trend t-overview__section">
+            <div className="m-dsb-body-wrap m-dsb-wireless-trend t-overview__section">
               <div className="element">
                 <EchartReact
                   option={this.generateWirelessTrendEchartOption()}
@@ -1149,6 +1171,12 @@ export default class MainDashboard extends Component {
                   style={{ width: '100%', height: '300px' }}
                 />
               </div>
+              <Icon
+                name="file-pdf-o"
+                className="pdf-download-icon"
+                title="Download Report PDF"
+                onClick={() => { onDownloadReportPDF('wirelessTrend'); }}
+              />
             </div>
           )
         }
@@ -1217,7 +1245,7 @@ export default class MainDashboard extends Component {
                             style={{ width: widthPercent }}
                           >
                             <div className="m-dsb-interface-name">
-                              {item.get('name')}
+                              {item.get('name').toUpperCase()}
                             </div>
                             <div className="m-dsb-interface">
                               <img
@@ -1332,6 +1360,12 @@ export default class MainDashboard extends Component {
                   />
                 </div>
               </div>
+              <Icon
+                name="file-pdf-o"
+                className="pdf-download-icon"
+                title="Download Report PDF"
+                onClick={() => { onDownloadReportPDF('wiredStatus'); }}
+              />
             </div>
           )
         }
@@ -1345,7 +1379,7 @@ export default class MainDashboard extends Component {
         <div className="m-dsb-head-bar row">
           <div className="head-bar-left cols col-11">
             <div className="bar-left-left cols col-3">
-              Client
+              Clients
             </div>
             <div className="bar-left-right cols col-9">
               <FormInput
@@ -1391,6 +1425,12 @@ export default class MainDashboard extends Component {
                   />
                 </div>
               </div>
+              <Icon
+                name="file-pdf-o"
+                className="pdf-download-icon"
+                title="Download Report PDF"
+                onClick={() => { onDownloadReportPDF('clientAnalysis'); }}
+              />
             </div>
           )
         }
@@ -1451,6 +1491,12 @@ export default class MainDashboard extends Component {
                   />
                 </div>
               </div>
+              <Icon
+                name="file-pdf-o"
+                className="pdf-download-icon"
+                title="Download Report PDF"
+                onClick={() => { onDownloadReportPDF('ssidAnalysis'); }}
+              />
             </div>
           )
         }
