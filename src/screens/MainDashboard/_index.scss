@@ -56,7 +56,8 @@ $warningSize: 10px;
     }
   }
 
-  .table {
+  .rw-table {
+    background-color: transparent;
     tr {
       &:hover {
         background-color: transparent;

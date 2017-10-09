@@ -794,10 +794,11 @@ export default class DashboardOverview extends React.PureComponent {
             },
           ]}
           scroll={{
-            y: '180px',
+            y: '200px',
           }}
           list={$$serverData.getIn(['clientsAnalysis'])}
           paginationType="none"
+          configurable={false}
         />
       </div>
     );
@@ -878,10 +879,11 @@ export default class DashboardOverview extends React.PureComponent {
                     },
                   ]}
                   scroll={{
-                    y: '180px',
+                    y: '200px',
                   }}
                   list={$$serverData.getIn(['parking', 'list'])}
                   paginationType="none"
+                  configurable={false}
                 />
               </div>
             </div>

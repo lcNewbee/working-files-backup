@@ -271,7 +271,7 @@ export default class View extends React.PureComponent {
                 disabled={!this.actionable}
               />
               <span className="help">
-                {'Download the current AP configuration in readable form'}
+                {__('Download the current AP configuration in readable form')}
               </span>
             </FormGroup>
             <FormGroup label={__('Restore To Factory')}>
@@ -284,7 +284,7 @@ export default class View extends React.PureComponent {
               />
             </FormGroup>
             <FormGroup
-              label={__('Restore AC Configuration')}
+              label={__('AC Configuration Restore')}
             >
               <FileUpload
                 url={acRestoreUrl}
@@ -317,7 +317,7 @@ export default class View extends React.PureComponent {
             </FormGroup>
 
             <FormGroup
-              label={__('Restore AP Configuration')}
+              label={__('APs Configuration Restore')}
             >
               <FileUpload
                 url={apRestoreUrl}
