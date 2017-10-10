@@ -18,7 +18,7 @@
   "scripts": {
     "serve:dev": "babel-node ./tools/srcServer.js --colors",
     "test:watch": "jest --watchAll --colors --notify",
-    "test": "jest --colors --noStackTrace --coverage",
+    "test": "jest --colors --noStackTrace",
     "webpack:prod": "webpack --config webpack.config.production.js --display-optimization-bailout",
     "webpack": "webpack --display-optimization-bailout --config webpack.config.js"
   },

@@ -20,7 +20,7 @@ const propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
   placeholder: PropTypes.string,
-  value: PropTypes.any,
+  value: PropTypes.string,
   onChange: PropTypes.func,
   onRef: PropTypes.func,
   disabled: PropTypes.bool,

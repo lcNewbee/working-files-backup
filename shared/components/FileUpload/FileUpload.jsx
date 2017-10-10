@@ -4,7 +4,7 @@ import utils from 'shared/utils';
 import Button from '../Button/Button';
 import InputFile from '../Form/File';
 
-import './_FileUpload.scss';
+import './FileUpload.scss';
 
 const MSG = {
   shouldSelectFile: __('Please select a upload file'),

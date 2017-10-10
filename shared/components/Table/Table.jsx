@@ -13,6 +13,8 @@ import ProcessContainer from '../ProcessContainer';
 import ColumnGroup from './ColumnGroup';
 import Checkbox from '../Form/Checkbox';
 
+import './Table.scss';
+
 const THEAD_INDEX = -1;
 
 const defaultSizeOptions = [
@@ -171,10 +173,15 @@ class Table extends PureComponent {
   }
 
   componentDidMount() {
+    // Has fixed columns need handle window resize
     if (this.isHasFixedColumns()) {
-      this.handleWindowResize();
+      this.debounceWindowResize = utils.debounce(() => {
+        this.handleWindowResize();
+      }, 120, true);
+
+      this.debounceWindowResize();
       this.resizeEvent = addEventListener(
-        window, 'resize', this.handleWindowResize,
+        window, 'resize', this.debounceWindowResize,
       );
     }
   }
@@ -204,10 +211,12 @@ class Table extends PureComponent {
   }
 
   componentWillUnmount() {
-    if (this.resizeEvent && this.resizeEvent.remove) {
+    if (utils.getIn(this, ['resizeEvent', 'remove'])) {
       this.resizeEvent.remove();
     }
-    clearTimeout(this.resizeTimeout);
+    if (utils.getIn(this, ['debounceWindowResize', 'cancel'])) {
+      this.debounceWindowResize.cancel();
+    }
   }
 
   onRowSelect(data) {
@@ -539,12 +548,8 @@ class Table extends PureComponent {
     return this.$$columnsGroup.get('scroll') && this.$$columnsGroup.size > 1;
   }
   handleWindowResize() {
-    clearTimeout(this.resizeTimeout);
-
-    this.resizeTimeout = setTimeout(() => {
-      this.syncFixedTableRowCellSize();
-      this.setScrollPositionClassName();
-    }, 120);
+    this.syncFixedTableRowCellSize();
+    this.setScrollPositionClassName();
   }
 
   /**

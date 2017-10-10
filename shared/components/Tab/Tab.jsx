@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { fromJS } from 'immutable';
 import { NavLink as Link } from 'react-router-dom';
+
 import PureComponent from '../Base/PureComponent';
 import Icon from '../Icon';
-import './_index.scss';
+import './Tab.scss';
 
 const propTypes = {
   menus: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   onChange: PropTypes.func,
-  children: PropTypes.any,
+  children: PropTypes.node,
 };
 
 const defaultProps = {

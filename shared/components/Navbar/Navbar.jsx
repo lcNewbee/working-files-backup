@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './_index.scss';
+
+import './Navbar.scss';
 
 const propTypes = {
   title: PropTypes.string,

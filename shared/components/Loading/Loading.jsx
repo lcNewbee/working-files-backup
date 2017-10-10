@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 
-import './_index.scss';
+import './Loading.scss';
 
 const propTypes = {
   size: PropTypes.oneOf(['default', 'sm', 'lg']),

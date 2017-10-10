@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import 'react-select/scss/default.scss';
-import './_index.scss';
+
 import PureComponent from '../Base/PureComponent';
+import './Select.scss';
 
 const propTypes = {
   isAsync: PropTypes.bool,
   autoWidth: PropTypes.bool,
   onChange: PropTypes.func,
-  readOnly: PropTypes.any,
+  readOnly: PropTypes.bool,
   className: PropTypes.string,
 };
 

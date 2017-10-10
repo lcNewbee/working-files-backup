@@ -81,6 +81,70 @@ describe('utils core', () => {
     // });
   });
 
+  describe('#debounce()', () => {
+    jest.useFakeTimers();
+    it('debounce', () => {
+      const callback = jest.fn();
+      const debouncer = core.debounce(callback, 1000);
+
+      debouncer();
+      debouncer();
+
+      // At this point in time, the callback should not have been called yet
+      expect(callback).not.toBeCalled();
+      expect(setTimeout.mock.calls.length).toBe(2);
+      expect(setTimeout.mock.calls[1][1]).toBe(1000);
+
+      jest.runOnlyPendingTimers();
+
+      // Now our callback should have been called!
+      expect(callback).toBeCalled();
+      expect(callback.mock.calls.length).toBe(1);
+    })
+
+    it('cancel', () => {
+      const callback = jest.fn();
+      const debouncer = core.debounce(callback, 1000);
+
+      debouncer();
+
+      // At this point in time, the callback should not have been called yet
+      expect(callback).not.toBeCalled();
+
+      debouncer.cancel();
+
+      jest.runAllTimers();
+
+      // should not been called
+      expect(callback).not.toBeCalled();
+    })
+    it('debounce asap', () => {
+      const callback = jest.fn();
+      const debouncer = core.debounce(callback, 1000, true);
+
+      debouncer();
+      debouncer();
+
+      // At this point in time, the callback should have been called immediate
+      expect(callback).toBeCalled();
+
+      // should have been called once
+      expect(callback.mock.calls.length).toBe(1);
+    })
+    it('debounce asap cancel', () => {
+      const callback = jest.fn();
+      const debouncer = core.debounce(callback, 1000, true);
+
+      const a = debouncer('cancel');
+      debouncer.cancel();
+      const b = debouncer('cancel');
+
+      // should not been called twice
+      expect(callback.mock.calls.length).toBe(2);
+    })
+
+  });
+
   describe('#isArray()', () => {
     it('should return true when call with array', () => {
       expect(core.isArray([])).toBe(true);
@@ -152,6 +216,7 @@ describe('utils core', () => {
       };
       // targetObj.click = targetObj.click.bind(targetObj);
       core.binds(targetObj, ['click']);
+      jest.useRealTimers();
       setTimeout(targetObj.click, 1);
     });
 

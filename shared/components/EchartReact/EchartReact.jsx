@@ -1,6 +1,8 @@
 import React from 'react';
+import utils from 'shared/utils';
 import PropTypes from 'prop-types';
 import echarts from 'echarts/lib/echarts';
+import addEventListener from 'add-dom-event-listener';
 
 /**
  * echarts图标按需引入
@@ -43,10 +45,12 @@ const defaultProps = {
 class ReactEchart extends React.Component {
   constructor(props) {
     super(props);
-
-    this.renderEchartDom = this.renderEchartDom.bind(this);
-    this.getEchartsInstance = this.getEchartsInstance.bind(this);
-    this.initEvents = this.initEvents.bind(this);
+    utils.binds(this, [
+      'renderEchartDom',
+      'getEchartsInstance',
+      'initEvents',
+      'onWindowResize',
+    ]);
     this.state = {
       needDispose: false,
     };
@@ -68,6 +72,16 @@ class ReactEchart extends React.Component {
         needDispose: true,
       });
     }, 60000);
+
+    // Listener window resize from
+    this.debounceWindowResize = utils.debounce(() => {
+      this.onWindowResize();
+    }, 120);
+
+    this.debounceWindowResize();
+    this.resizeEvent = addEventListener(
+      window, 'resize', this.debounceWindowResize,
+    );
   }
 
   // cache size
@@ -91,6 +105,19 @@ class ReactEchart extends React.Component {
   componentWillUnmount() {
     echarts.dispose(this.myRef);
     clearInterval(this.disposeInterval);
+    if (utils.getIn(this, ['resizeEvent', 'remove'])) {
+      this.resizeEvent.remove();
+    }
+    if (utils.getIn(this, ['debounceWindowResize', 'cancel'])) {
+      this.debounceWindowResize.cancel();
+    }
+  }
+
+  onWindowResize() {
+    const echartObj = this.getEchartsInstance();
+    if (typeof utils.getIn(echartObj, ['resize']) === 'function') {
+      echartObj.resize();
+    }
   }
 
   getEchartsInstance() {

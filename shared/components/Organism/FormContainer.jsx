@@ -71,6 +71,9 @@ class FormContainer extends PureComponent {
     this.syncData = {};
     this.inited = false;
     this.hasFile = props.hasFile;
+    this.debounceSave = utils.debounce(() => {
+      this.onSave();
+    }, 280, true);
   }
   componentWillMount() {
     this.onOptionsChange(this.props);
@@ -97,6 +100,10 @@ class FormContainer extends PureComponent {
       }
     }
   }
+  componentWillUnmount() {
+    this.debounceSave.cancel();
+  }
+
   onOptionsChange(targetProps) {
     this.options = targetProps.options;
 
@@ -141,10 +148,7 @@ class FormContainer extends PureComponent {
     }
 
     if (saveOnChange) {
-      clearTimeout(this.saveOnChangeTimeout);
-      this.saveOnChangeTimeout = setTimeout(() => {
-        this.onSave();
-      }, 250);
+      this.debounceSave();
     }
   }
   changeFormGoupData(option) {

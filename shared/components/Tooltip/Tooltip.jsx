@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RcTooltip from 'rc-tooltip';
 
-import './_index.scss';
+import './Tooltip.scss';
 
 const propTypes = {
   children: PropTypes.node,

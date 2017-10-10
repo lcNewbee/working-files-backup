@@ -33,6 +33,7 @@ export function refreshAll() {
 
     refreshAllTimeout = setTimeout(
       () => {
+        refreshAllTimeout = null;
         dispatch(doRefresh());
       },
       240,

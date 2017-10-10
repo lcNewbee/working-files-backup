@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
 import 'rc-time-picker/assets/index.css';
+
 import PureComponent from '../Base/PureComponent';
-import './_index.scss';
+import './TimePicker.scss';
 
 const propTypes = {
   showSecond: PropTypes.bool,

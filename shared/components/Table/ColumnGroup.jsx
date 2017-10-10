@@ -4,9 +4,6 @@ import utilsCore from 'shared/utils/lib/core';
 import PureComponent from '../Base/PureComponent';
 import { getSizeStyleUnit } from './utils';
 
-import './_index.scss';
-
-
 const propTypes = {
   columns: PropTypes.object.isRequired,
 };

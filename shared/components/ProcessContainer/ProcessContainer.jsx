@@ -4,7 +4,7 @@ import utils from 'shared/utils';
 import classnames from 'classnames';
 import Loading from '../Loading';
 
-import './_index.scss';
+import './ProcessContainer.scss';
 
 const propTypes = {
   size: PropTypes.oneOf(['default', 'sm', 'lg']),

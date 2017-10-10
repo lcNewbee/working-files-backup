@@ -4,7 +4,7 @@ import utils from 'shared/utils';
 import Select from '../Select';
 import PureComponent from '../Base/PureComponent';
 
-import './index.scss';
+import './Pagination.scss';
 
 const sizeOptions = [
   { value: 20, label: '20' },

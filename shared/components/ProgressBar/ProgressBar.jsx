@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './_index.scss';
+import './ProgressBar.scss';
 
 const propTypes = {
   // 进度条上方显示的提示文字

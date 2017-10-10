@@ -6,7 +6,7 @@ import utils from 'shared/utils';
 
 import Button from '../Button/Button';
 import Icon from '../Icon';
-import './_index.scss';
+import './Popconfirm.scss';
 
 const propTypes = {
   children: PropTypes.node,

@@ -180,6 +180,9 @@ class AppScreenList extends React.PureComponent {
     this.state = {
       listKeyMap: getDataListKeys(props.id),
     };
+    this.debounceFetchList = utils.debounce(() => {
+      this.onFetchList();
+    }, 240);
   }
   componentWillMount() {
     this.initListTableOptions(this.props, this.props.editable);
@@ -199,6 +202,9 @@ class AppScreenList extends React.PureComponent {
         listKeyMap: getDataListKeys(nextProps.id),
       });
     }
+  }
+  componentWillUnmount() {
+    this.debounceFetchList.cancel();
   }
 
   onFetchList() {
@@ -345,10 +351,7 @@ class AppScreenList extends React.PureComponent {
     }
 
     if (needRefresh) {
-      clearTimeout(this.querySaveTimeout);
-      this.querySaveTimeout = setTimeout(() => {
-        this.onFetchList();
-      }, 200);
+      this.debounceFetchList();
     }
   }
   onSelectedItemsAction(option) {

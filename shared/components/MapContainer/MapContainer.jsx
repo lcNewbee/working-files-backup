@@ -2,7 +2,7 @@ import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { Icon } from 'shared/components';
 
-import './_index.scss';
+import './MapContainer.scss';
 
 const propTypes = {
   noResize: PropTypes.bool,

@@ -7,8 +7,6 @@ import Checkbox from '../Form/Checkbox';
 import Icon from '../Icon';
 import PureComponent from '../Base/PureComponent';
 
-import './_index.scss';
-
 const propTypes = {
   allColumns: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   showColumns: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
