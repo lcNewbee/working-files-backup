@@ -27,19 +27,15 @@ const defaultProps = {
 };
 
 class Button extends PureComponent {
-  constructor(props) {
-    super(props);
+  state = {
+    clicked: false,
+  };
 
-    utils.binds(this, ['onClick']);
-    this.state = {
-      clicked: false,
-    };
-  }
   componentWillUnmount() {
     clearTimeout(this.clickTimeout);
   }
 
-  onClick(e) {
+  onClick = (e) => {
     // loading 状态不响应点击事件
     if (!this.props.loading && this.props.onClick) {
       this.props.onClick(e);
@@ -52,7 +48,7 @@ class Button extends PureComponent {
         });
       }, 500);
     }
-  }
+  };
 
   render() {
     const { Component, icon, size, theme, className, loading, text, type, inverse } = this.props;

@@ -162,10 +162,6 @@ module.exports = {
           {
             loader: "babel-loader",
             options: {
-              presets: [
-                ["es2015", { "modules": false }]
-              ],
-              plugins: ['syntax-dynamic-import'],
               cacheDirectory: true,
             }
           },
@@ -214,7 +210,7 @@ module.exports = {
       filename: "styles/axilspot.css",
       allChunks: true
     }),
-    new webpack.optimize.UglifyJsPlugin(),
+    //new webpack.optimize.UglifyJsPlugin(),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['scripts/vendors.bundle.js'],
       append: false,

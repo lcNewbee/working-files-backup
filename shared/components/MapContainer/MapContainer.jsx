@@ -1,6 +1,7 @@
 import React from 'react'; import PropTypes from 'prop-types';
 import utils from 'shared/utils';
 import { Icon } from 'shared/components';
+import addEventListener from 'add-dom-event-listener';
 
 import './MapContainer.scss';
 
@@ -38,6 +39,8 @@ export default class View extends React.PureComponent {
       'onMapMouseUp',
       'onMapMouseDown',
       'onMapMouseMove',
+      'onMapMouseLeave',
+      'onMapMouseOver',
       'renderHeatMap',
       'handleZoomChange',
       'initialize',
@@ -55,9 +58,10 @@ export default class View extends React.PureComponent {
 
     // 全局添加 mouseup 事件
     // 防止鼠标在 map元素外起来，内容还在拖动问题
-    document.addEventListener('mouseup', () => {
+    this.mouseupEvent = addEventListener(document, 'mouseup', () => {
       this.mapMouseDown = false;
     });
+
   }
   componentWillReceiveProps(nextProps) {
     // 同步 state 与 props 的backgroundImgUrl
@@ -78,6 +82,11 @@ export default class View extends React.PureComponent {
         width: (this.state.naturalWidth * this.state.zoom) / 100,
         height: (this.state.naturalHeight * this.state.zoom) / 100,
       });
+    }
+  }
+  componentWillUnmount() {
+    if (utils.getIn(this, ['mouseupEvent', 'remove'])) {
+      this.mouseupEvent.remove();
     }
   }
 

@@ -19,14 +19,8 @@
     "react",
     "flow"
   ],
-  "env": {
-    "development": {
-      "presets": [
-        // "es2015-loose"
-      ]
-    }
-  },
   "plugins": [
+    "transform-class-properties",
     //["transform-replace-object-assign", "object.assign"],
     ["transform-runtime", {
       "helpers": true, // defaults to true
@@ -42,5 +36,12 @@
         "src": "./src"
       }
     }]
-  ]
+  ],
+  "env": {
+    "development": {
+      "presets": [
+        // "es2015-loose"
+      ]
+    }
+  }
 }

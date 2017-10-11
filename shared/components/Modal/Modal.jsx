@@ -285,7 +285,6 @@ class Modal extends PureComponent {
           exit={exit}
           timeout={500}
           onExited={this.onExited}
-          appear
           mountOnEnter
           unmountOnExit
         >
