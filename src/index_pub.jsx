@@ -7,19 +7,15 @@ const ReactRouterDom = require('react-router-dom');
 const redux = require('redux');
 const appActions = require('shared/containers/app/actions');
 const thunkMiddleware = require('redux-thunk').default;
-const Provider = require('react-redux').Provider;
-const RouteSwitches = require('shared/components/Organism/RouterConfig').RouteSwitches;
+const { Provider } = require('react-redux');
+const { RouteSwitches } = require('shared/components/Organism/RouterConfig');
 const prodConfig = require('./config/axc4.0').default;
 
-const combineReducers = redux.combineReducers;
-const applyMiddleware = redux.applyMiddleware;
-const createStore = redux.createStore;
-const HashRouter = ReactRouterDom.HashRouter;
+const { combineReducers, applyMiddleware, createStore } = redux;
+const { HashRouter } = ReactRouterDom;
 const mountNode = document.getElementById('app');
 
-const remoteActionMiddleware = applyMiddleware(
-  thunkMiddleware,
-)(createStore);
+const remoteActionMiddleware = applyMiddleware(thunkMiddleware)(createStore);
 
 // Store
 const stores = remoteActionMiddleware(

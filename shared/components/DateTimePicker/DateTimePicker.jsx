@@ -39,7 +39,9 @@ export default class DateTimePicker extends React.Component {
   }
 
   renderCalendar() {
-    const { placeholder, showTime, showDateInput, disablePastDays } = this.props;
+    const {
+      placeholder, showTime, showDateInput, disablePastDays,
+    } = this.props;
     return (
       <Calendar
         style={{ zIndex: 1000 }}

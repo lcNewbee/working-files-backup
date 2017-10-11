@@ -1,5 +1,9 @@
 var sinon = require('sinon');
 var string = require('shared/utils/lib/string');
+var enzyme = require('enzyme');
+var Adapter = require('enzyme-adapter-react-16');
+
+enzyme.configure({ adapter: new Adapter() });
 
 // Register babel so that it will transpile ES6 to ES5
 // before our tests run.

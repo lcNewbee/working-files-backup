@@ -335,9 +335,12 @@ class FormInput extends PureComponent {
         );
 
       case 'date':
-        if (!moment.isMoment(timeValue)) {
+        if (timeValue && !moment.isMoment(timeValue)) {
           timeValue = moment(timeValue);
+        } else if (!timeValue) {
+          timeValue = moment();
         }
+
         if (!inputProps.id) {
           inputProps.id = `date${Math.random()}`;
         }
@@ -351,7 +354,6 @@ class FormInput extends PureComponent {
             onFocusChange={this.onDateFocusChange}
             onDateChange={this.onDateChange}
             focused={!!this.state.focusedInput}
-            showDefaultInputIcon
           />
         );
 
@@ -360,6 +362,7 @@ class FormInput extends PureComponent {
         if (!inputProps.id) {
           inputProps.id = `date${Math.random()}`;
         }
+        delete inputProps.value;
         // value属性是一个字符串数组，代表起始时间
         return (
           <DateRangePicker
