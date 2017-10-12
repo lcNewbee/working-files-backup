@@ -18,6 +18,7 @@ const propTypes = {
   loading: PropTypes.bool,
   text: PropTypes.string,
   onClick: PropTypes.func,
+  role: PropTypes.string,
 };
 
 const defaultProps = {
@@ -51,7 +52,9 @@ class Button extends PureComponent {
   };
 
   render() {
-    const { Component, icon, size, theme, className, loading, text, type, inverse } = this.props;
+    const {
+      Component, icon, size, theme, className, loading, text, type, inverse,
+    } = this.props;
     const componentProps = utils.extend({}, this.props);
     const myIcon = icon ? <Icon name={icon} /> : null;
 

@@ -34,12 +34,6 @@ class ProcessContainer extends React.PureComponent {
     const { loading } = props;
     super(props);
 
-    utils.binds(this, [
-      'renderHeart',
-      'handleStartLoading',
-      'handleEndLoading',
-    ]);
-
     this.state = {
       loading,
     };
@@ -63,7 +57,7 @@ class ProcessContainer extends React.PureComponent {
     clearTimeout(this.loadingTimeout);
   }
 
-  handleStartLoading(props) {
+  handleStartLoading = (props) => {
     const { delay, forceLoadingTime } = props;
 
     this.forceLoading = false;
@@ -93,7 +87,7 @@ class ProcessContainer extends React.PureComponent {
     }
   }
 
-  handleEndLoading() {
+  handleEndLoading = () => {
     // 非强制显示 loading 状态下直接关闭
     if (!this.forceLoading) {
       clearTimeout(this.loadingTimeout);

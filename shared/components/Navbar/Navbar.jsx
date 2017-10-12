@@ -7,7 +7,7 @@ const propTypes = {
   title: PropTypes.string,
   version: PropTypes.string,
   slogan: PropTypes.string,
-  children: PropTypes.any,
+  children: PropTypes.node,
   theme: PropTypes.oneOf(['metro']),
 };
 

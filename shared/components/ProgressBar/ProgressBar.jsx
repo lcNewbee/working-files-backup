@@ -34,7 +34,6 @@ const propTypes = {
 
 const defaultProps = {
   unit: '%',
-  isShow: false,
   start: false,
   initStep: 0,
 
@@ -51,7 +50,6 @@ export default class ProgressBar extends React.Component {
     super(props);
     this.startMove = this.startMove.bind(this);
     this.state = {
-      width: 0,
       n: props.initStep,
     };
   }
@@ -98,7 +96,7 @@ export default class ProgressBar extends React.Component {
     clearInterval(this.barChangeInterval);
 
     this.barChangeInterval = setInterval(() => {
-      const n = this.state.n;
+      const { n } = this.state;
 
       if (n <= 100) {
         this.setState({
@@ -116,7 +114,9 @@ export default class ProgressBar extends React.Component {
   }
 
   render() {
-    const { title, showText, unit, style } = this.props;
+    const {
+      title, showText, unit, style,
+    } = this.props;
     let percentageValue = parseInt(this.state.n, 10);
     const bodyStyle = {};
 

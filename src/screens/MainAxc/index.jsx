@@ -36,33 +36,18 @@ const propTypes = {
   properties: PropTypes.instanceOf(Map),
 };
 
-const defaultProps = {
-  Component: 'button',
-  role: 'default',
-};
+const defaultProps = {};
+
 export default class Main extends React.PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = { isShowUserPop: false };
-    utils.binds(this, [
-      'onSelectManageGroup',
-      'showUserPopOver',
-      'onRefresh',
-      'onLogout',
-      'onClickNav',
-      'onHiddenPopOver',
-      'onToggleMainPopOver',
-      'renderPopOverContent',
-      'onRefreshProductInfo',
-      'onSaveConfiguration',
-    ]);
 
     document.onkeydown = (e) => {
       if (e.keyCode === 116) {
         this.onRefresh(e);
       }
     };
+    this.state = {};
   }
 
   componentWillMount() {
@@ -109,7 +94,7 @@ export default class Main extends React.PureComponent {
    *
    * @memberof Main
    */
-  onRefreshProductInfo(props) {
+  onRefreshProductInfo = (props) => {
     this.companyTitle = props.app.get('title') || '';
     this.companyName = props.app.get('companyname') || '';
 
@@ -119,28 +104,29 @@ export default class Main extends React.PureComponent {
     document.title = `${this.companyTitle} Access Controller`;
   }
 
-  onRefresh(e) {
+  onRefresh = (e) => {
     e.preventDefault();
     this.props.refreshAll();
   }
-  onLogout(e) {
+
+  onLogout = (e) => {
     e.preventDefault();
     this.props.changeLoginStatus('0');
     this.onHiddenPopOver();
     this.props.history.push('/login');
   }
 
-  onToggleMainPopOver(option) {
+  onToggleMainPopOver = (option) => {
     this.props.toggleMainPopOver(option);
   }
 
-  onHiddenPopOver() {
+  onHiddenPopOver = () => {
     this.onToggleMainPopOver({
       isShow: false,
     });
   }
 
-  onClickTopMenu(path) {
+  onClickTopMenu = (path) => {
     if (path === '/main/group') {
       // this.onToggleMainPopOver({
       //   name: 'groupAsider',
@@ -153,7 +139,7 @@ export default class Main extends React.PureComponent {
       });
     }
   }
-  onSaveConfiguration() {
+  onSaveConfiguration = () => {
     let ret = null;
 
     if (this.actionable) {
@@ -171,7 +157,7 @@ export default class Main extends React.PureComponent {
     return ret;
   }
 
-  showUserPopOver() {
+  showUserPopOver = () => {
     this.onToggleMainPopOver({
       name: 'userOverview',
       isShow: true,
@@ -179,7 +165,7 @@ export default class Main extends React.PureComponent {
     });
   }
 
-  renderPopOverContent(popOver) {
+  renderPopOverContent = (popOver) => {
     switch (popOver.name) {
       case 'userOverview':
         return (
@@ -267,20 +253,22 @@ export default class Main extends React.PureComponent {
                 if ($$item.get('noNav')) {
                   return null;
                 }
-                return $$item.get('text') ? (<li key={keyVal}>
-                  <NavLink
-                    to={$$item.get('path')}
-                    key={$$item.get('id')}
-                    activeClassName="active"
-                    data-title={$$item.get('text')}
-                    onClick={() => {
-                      this.onClickTopMenu($$item.get('path'));
-                    }}
-                  >
-                    <Icon name={$$item.get('icon')} />
-                    <div>{$$item.get('text')}</div>
-                  </NavLink>
-                </li>) : null;
+                return $$item.get('text') ? (
+                  <li key={keyVal}>
+                    <NavLink
+                      to={$$item.get('path')}
+                      key={$$item.get('id')}
+                      activeClassName="active"
+                      data-title={$$item.get('text')}
+                      onClick={() => {
+                        this.onClickTopMenu($$item.get('path'));
+                      }}
+                    >
+                      <Icon name={$$item.get('icon')} />
+                      <div>{$$item.get('text')}</div>
+                    </NavLink>
+                  </li>
+                ) : null;
               })
             }
           </ul>
@@ -335,7 +323,8 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(utils.extend({},
+  return bindActionCreators(utils.extend(
+    {},
     appActions,
     actions,
     propertiesActions,

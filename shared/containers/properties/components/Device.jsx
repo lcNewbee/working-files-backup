@@ -37,7 +37,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-  menus: [],
 };
 
 function DevicesProperties(props) {

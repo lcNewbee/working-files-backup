@@ -23,20 +23,20 @@ function renderBackdrop(isShow, enter, exit) {
     curModelShowNum -= 1;
     modalBackdropHtml = '<div id="modalBackdrop" class="o-modal__backdrop in"></div>';
   }
+
   // 如果是显示
   if (curModelShowNum > 0) {
     if (enter) {
       clearTimeout(backdropTimeout);
-      backdropTimeout = setTimeout(
-        () => {
-          document.getElementById('modalBackdrop').className = classNames(
-            'o-modal__backdrop',
-            {
-              in: isShow,
-              fade: !isShow,
-            },
-          );
-        }, 10);
+      backdropTimeout = setTimeout(() => {
+        document.getElementById('modalBackdrop').className = classNames(
+          'o-modal__backdrop',
+          {
+            in: isShow,
+            fade: !isShow,
+          },
+        );
+      }, 10);
     } else {
       document.getElementById('modalBackdrop').className = classNames(
         'o-modal__backdrop',
@@ -47,30 +47,28 @@ function renderBackdrop(isShow, enter, exit) {
       );
     }
 
-    // 隐藏Backdrop, 并显示动画
+  // 隐藏Backdrop, 并显示动画
   } else if (exit) {
-    setTimeout(
-      () => {
-        if (document.getElementById('modalBackdrop')) {
-          document.getElementById('modalBackdrop').className = classNames(
-            'o-modal__backdrop',
-            {
-              in: isShow,
-              fade: !isShow,
-            },
-          );
-        }
-      }, 10);
+    setTimeout(() => {
+      if (document.getElementById('modalBackdrop')) {
+        document.getElementById('modalBackdrop').className = classNames(
+          'o-modal__backdrop',
+          {
+            in: isShow,
+            fade: !isShow,
+          },
+        );
+      }
+    }, 10);
 
     // 定时删除Backdrop元素
     clearTimeout(backdropTimeout);
-    backdropTimeout = setTimeout(
-      () => {
-        const newElem = document.getElementById('modalBackdrop');
-        if (newElem) {
-          document.body.removeChild(newElem);
-        }
-      }, 500);
+    backdropTimeout = setTimeout(() => {
+      const newElem = document.getElementById('modalBackdrop');
+      if (newElem) {
+        document.body.removeChild(newElem);
+      }
+    }, 500);
 
     // 隐藏并无动画
   } else if (modalBackdropElem) {

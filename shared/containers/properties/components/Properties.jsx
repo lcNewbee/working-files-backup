@@ -20,9 +20,11 @@ const propTypes = {
   resetVaildateMsg: PropTypes.func,
   save: PropTypes.func,
   validateAll: PropTypes.func,
-  groupid: PropTypes.any,
+  groupid: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   refreshAll: PropTypes.func,
   route: PropTypes.object,
+  createModal: PropTypes.func,
+  closeModal: PropTypes.func,
 
   data: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
@@ -135,7 +137,9 @@ class PropertyPanel extends React.Component {
   }
 
   render() {
-    const { isShow, data, app, reportValidError, resetVaildateMsg, groupid } = this.props;
+    const {
+      isShow, data, app, reportValidError, resetVaildateMsg, groupid
+    } = this.props;
     const { activeIndex } = data.toJS();
     let propertyPanelClassName = 'o-property-panel';
     let actionAable = this.actionable;
@@ -152,7 +156,7 @@ class PropertyPanel extends React.Component {
     }
 
     return (
-      <asider className={propertyPanelClassName}>
+      <aside className={propertyPanelClassName}>
         <div
           className="o-property-panel__toggle-button"
           onClick={this.props.onToggle}
@@ -211,13 +215,11 @@ class PropertyPanel extends React.Component {
                   onSave={(option) => {
                     if (!option || typeof option === 'string') {
                       this.props.validateAll(option)
-                        .then(
-                          ($$msg) => {
-                            if ($$msg.isEmpty()) {
-                              this.onSave();
-                            }
-                          },
-                        );
+                        .then(($$msg) => {
+                          if ($$msg.isEmpty()) {
+                            this.onSave();
+                          }
+                        });
                     } else {
                       this.onSave(option);
                     }
@@ -234,7 +236,7 @@ class PropertyPanel extends React.Component {
             }
           </div>
         </div>
-      </asider>
+      </aside>
     );
   }
 }

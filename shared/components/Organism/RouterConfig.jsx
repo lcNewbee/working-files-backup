@@ -6,7 +6,7 @@ import { Router, Route, Switch, matchPath } from 'react-router';
 // ensure we're using the exact code for default root match
 const { computeMatch } = Router.prototype;
 
-export const matchRoutes = (routes, pathname, /* not public API*/branch = []) => {
+export const matchRoutes = (routes, pathname, /* not public API */branch = []) => {
   routes.some((route) => {
     const match = route.path
       ? matchPath(pathname, route)
@@ -45,7 +45,7 @@ export default function renderRoutesTree(routes) {
           <Route
             path={route.path}
             key={key}
-            children={({ match, ...rest }) => (
+            render={({ match, ...rest }) => (
               <RouteComponent
                 key={key}
                 route={route}
@@ -55,7 +55,6 @@ export default function renderRoutesTree(routes) {
               </RouteComponent>
             )}
           />
-
         );
       } else {
         retComponent = renderRoutesTree(subRoutes);
@@ -105,42 +104,38 @@ export function renderRoutesList(routes) {
 
   routeList = [];
 
-  routes.forEach(
-    (route) => {
-      const retNodes = [];
-      const subRoutes = route.routes;
-      const curKey = route.id || route.path;
-      const indexPath = route.indexPath ||
-        (subRoutes && subRoutes[0] && subRoutes[0].path);
+  routes.forEach((route) => {
+    const retNodes = [];
+    const subRoutes = route.routes;
+    const curKey = route.id || route.path;
+    const indexPath = route.indexPath ||
+      (subRoutes && subRoutes[0] && subRoutes[0].path);
 
-      if (indexPath) {
-        routeList.push(
-          <Route
-            key={`${curKey}Redirect`}
-            path={route.path}
-            render={() => <Redirect to={indexPath} />}
-            exact
-          />,
-        );
-      }
+    if (indexPath) {
+      routeList.push(<Route
+        key={`${curKey}Redirect`}
+        path={route.path}
+        render={() => <Redirect to={indexPath} />}
+        exact
+      />);
+    }
 
-      if (route.component) {
-        routeList.push(<Route
-          key={curKey}
-          path={route.path}
-          render={
-            routeProps => <route.component {...routeProps} route={route} />
-          }
-        />);
+    if (route.component) {
+      routeList.push(<Route
+        key={curKey}
+        path={route.path}
+        render={
+          routeProps => <route.component {...routeProps} route={route} />
+        }
+      />);
 
-      // 如果无 component 又有子路由
-      } else if (subRoutes.length > 0) {
-        routeList = routeList.concat(renderRoutesList(subRoutes));
-      }
+    // 如果无 component 又有子路由
+    } else if (subRoutes && subRoutes.length > 0) {
+      routeList = routeList.concat(renderRoutesList(subRoutes));
+    }
 
-      return retNodes;
-    },
-  );
+    return retNodes;
+  });
 
   return routeList;
 }

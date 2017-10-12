@@ -20,8 +20,7 @@ import './_index.scss';
 function calcValueWithinCircle(dataList, centerPoint, radius) {
   let totalValue = 0;
   dataList.forEach((item) => {
-    const x = item.x;
-    const y = item.y;
+    const { x, y } = item;
     const ox = centerPoint.x;
     const oy = centerPoint.y;
     if (radius > Math.sqrt(((x - ox) * (x - ox)) + ((y - oy) * (y - oy)))) {
@@ -48,7 +47,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.PureComponent {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.markers = [];
@@ -59,7 +58,6 @@ export default class View extends React.PureComponent {
       curMapId: '',
       zoom: 100,
       observeRadius: 5,
-      observeValue: 0,
       loading: true,
       actionBarShow: true,
     };
@@ -95,7 +93,7 @@ export default class View extends React.PureComponent {
 
   componentWillMount() {
     // console.log('this.props.store', this.props.store.get('curScreenId'));
-    const groupid = this.props.groupid;
+    const { groupid } = this.props;
 
     this.props.fetch('goform/group/map/building', { groupid }).then((json) => {
       if (json.state && json.state.code === 2000) {
@@ -106,7 +104,7 @@ export default class View extends React.PureComponent {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const store = this.props.store;
+    const { store } = this.props;
     const curScreenId = store.get('curScreenId');
     if (store.getIn([curScreenId, 'data']) !== nextProps.store.getIn([curScreenId, 'data'])) {
       return true;
@@ -368,7 +366,7 @@ export default class View extends React.PureComponent {
     // 找到已经存在的空画布并删除，防止多张画布存在
     const blankCanvas = parentNode.querySelectorAll('.blankCanvas');
     const len = blankCanvas.length;
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i += 1) {
       parentNode.removeChild(blankCanvas[i]);
     }
     // 重新绘制空画布
@@ -384,7 +382,7 @@ export default class View extends React.PureComponent {
 
   render() {
     const myZoom = this.state.zoom;
-    const store = this.props.store;
+    const { store } = this.props;
     const curScreenId = store.get('curScreenId');
     const barClassname = classnames('o-form o-form--flow h-action-bar', {
       active: this.state.actionBarShow,
@@ -608,7 +606,8 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(utils.extend({},
+  return bindActionCreators(utils.extend(
+    {},
     appActions,
     screenActions,
     propertiesActions,

@@ -7,13 +7,6 @@ const uptimeFilter = utils.filter('connectTime');
 const flowRateFilter = utils.filter('flowRate');
 
 const propTypes = {
-  onCollapse: PropTypes.func,
-  onChangeData: PropTypes.func,
-  onChangeItem: PropTypes.func,
-  onRemove: PropTypes.func,
-
-  isCollapsed: PropTypes.bool,
-  item: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
 };
 
