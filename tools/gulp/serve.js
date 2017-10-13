@@ -1,14 +1,14 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable const/no-extraneous-dependencies */
 
-import browserSync from 'browser-sync';
-import historyApiFallback from 'connect-history-api-fallback';
-import gulp from 'gulp';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import serverApiMiddleware from '../middleware/api';
-import config from '../../webpack.config.dev';
-import getCurAppName from '../shared/getCurAppName';
+const browserSync = require('browser-sync');
+const historyApiFallback = require('connect-history-api-fallback');
+const gulp = require('gulp');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const serverApiMiddleware = require('../middleware/api');
+const config = require('../../webpack.config.dev');
+const getCurAppName = require('../shared/getCurAppName');
 
 gulp.task('serve:build', ['build'], (callback) => {
   // Run Browsersync

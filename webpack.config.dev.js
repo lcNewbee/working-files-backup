@@ -1,6 +1,19 @@
 let webpack = require('webpack');
 let path = require('path');
 let autoprefixer = require('autoprefixer');
+let HappyPack = require('happypack');
+var happyThreadPool = HappyPack.ThreadPool({ size: 25 });
+
+function createHappyPlugin(id, loaders) {
+  return new HappyPack({
+    id: id,
+    loaders: loaders,
+    threadPool: happyThreadPool,
+
+    // disable happy caching with HAPPY_CACHE=0
+    cache: true,
+  });
+}
 let GLOBALS = {
   DEFINE_OBJ: {
     'process.env.NODE_ENV': JSON.stringify('development'),
@@ -15,6 +28,7 @@ let GLOBALS = {
     NPM: path.resolve(__dirname, 'node_modules'),
   },
 };
+
 
 let config = {
 
@@ -82,36 +96,24 @@ let config = {
         test: /\.css$/,
         use: [
           {
-            loader: "style-loader"
+            loader: "happypack/loader",
+            options: {
+              id: 'css'
+            }
           },
-          {
-            loader: "css-loader"
-          },
-          {
-            loader: "postcss-loader",
-          },
-        ]
+        ],
       },
 
       {
         test: /\.scss$/,
         use: [
           {
-            loader: "style-loader"
-          },
-          {
-            loader: "css-loader"
-          },
-          {
-            loader: "postcss-loader",
-          },
-          {
-            loader: "sass-loader",
+            loader: "happypack/loader",
             options: {
-              includePaths: ['shared/scss']
+              id: 'scss'
             }
-          }
-        ]
+          },
+        ],
       },
 
       {
@@ -123,9 +125,9 @@ let config = {
         ],
         use: [
           {
-            loader: "babel-loader",
+            loader: "happypack/loader",
             options: {
-              cacheDirectory: true,
+              id: 'js'
             }
           },
         ]
@@ -153,6 +155,33 @@ let config = {
       // set to false to see a list of every file being bundled.
       noInfo: true,
     }),
+    new webpack.DllReferencePlugin({
+      context: "dll",
+      manifest: require("./src/config/scripts/vendors-manifest.json")
+    }),
+    createHappyPlugin('css', [
+      "style-loader",
+      "css-loader",
+      "postcss-loader",
+    ]),
+    createHappyPlugin('scss', [
+      {
+        loader: "style-loader"
+      },
+      {
+        loader: "css-loader"
+      },
+      {
+        loader: "postcss-loader",
+      },
+      {
+        loader: "sass-loader",
+        options: {
+          includePaths: ['shared/scss']
+        }
+      }
+    ]),
+    createHappyPlugin('js', ["babel-loader"]),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

@@ -8,8 +8,8 @@
 // Allowing console calls below since this is a build file.
 /* eslint-disable no-console */
 
-import fs from 'fs';
-import cheerio from 'cheerio';
+const fs = require('fs');
+const cheerio = require('cheerio');
 
 const styleLink = '  <link rel="stylesheet" href="styles/axilspot.css">\n';
 

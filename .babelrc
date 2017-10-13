@@ -13,9 +13,10 @@
           "ie >= 9"
         ]
       },
+      // "modules": false
       "uglify": true
     }],
-    "stage-3",
+    "stage-2",
     "react",
     "flow"
   ],

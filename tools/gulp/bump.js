@@ -1,5 +1,5 @@
-import gulp from 'gulp';
-import bump from 'gulp-bump';
+const gulp = require('gulp');
+const bump = require('gulp-bump');
 
 /**
  * 更新前端开发平台主版本号

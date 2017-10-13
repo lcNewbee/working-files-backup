@@ -63,32 +63,30 @@ export default class View extends React.Component {
     };
     this.datas = fromJS([]);
     this.totalValue = 0;
-    utils.binds(this,
-      [
-        'onSave',
-        'onDrop',
-        'viewLiveData',
-        'renderUndeployDevice',
-        'onMapMouseUp',
-        'onMapMouseDown',
-        'onMapMouseMove',
-        'renderMapList',
-        'removeHeatMap',
-        'renderCurMap',
-        'updateState',
-        'renderHeatMap',
-        'savePlaceDevice',
-        'renderBulidList',
-        'renderBulidMapList',
-        'onViewBuild',
-        'onChangeBuilding',
-        'onChangeMapId',
-        'renderBackgroundImg',
-        'bindCanvasEvent',
-        'renderBlankCanvas',
-        'removeShowerDiv',
-      ],
-    );
+    utils.binds(this, [
+      'onSave',
+      'onDrop',
+      'viewLiveData',
+      'renderUndeployDevice',
+      'onMapMouseUp',
+      'onMapMouseDown',
+      'onMapMouseMove',
+      'renderMapList',
+      'removeHeatMap',
+      'renderCurMap',
+      'updateState',
+      'renderHeatMap',
+      'savePlaceDevice',
+      'renderBulidList',
+      'renderBulidMapList',
+      'onViewBuild',
+      'onChangeBuilding',
+      'onChangeMapId',
+      'renderBackgroundImg',
+      'bindCanvasEvent',
+      'renderBlankCanvas',
+      'removeShowerDiv',
+    ]);
   }
 
   componentWillMount() {

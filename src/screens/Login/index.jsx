@@ -90,7 +90,6 @@ export default class Login extends React.PureComponent {
   onChangeData(name) {
     return (data) => {
       const subData = {};
-      console.log(name)
       subData[name] = data.value;
 
       if (this.props.status) {

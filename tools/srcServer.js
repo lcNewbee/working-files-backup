@@ -1,20 +1,20 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable const/no-extraneous-dependencies */
 
 // This file configures the development web server
 // which supports hot reloading and synchronized testing.
 
 // Require Browsersync along with webpack and middleware for it
-import browserSync from 'browser-sync';
+const browserSync = require('browser-sync');
 
 // Required for react-router browserHistory
 // see https://github.com/BrowserSync/browser-sync/issues/204#issuecomment-102623643
-import historyApiFallback from 'connect-history-api-fallback';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware';
-import webpackHotMiddleware from 'webpack-hot-middleware';
-import serverApiMiddleware from './middleware/api';
-import config from '../webpack.config.dev';
-import getCurAppName from './shared/getCurAppName';
+const historyApiFallback = require('connect-history-api-fallback');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const serverApiMiddleware = require('./middleware/api');
+const config = require('../webpack.config.dev');
+const getCurAppName = require('./shared/getCurAppName');
 
 const bundler = webpack(config);
 

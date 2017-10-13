@@ -4,6 +4,19 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+let HappyPack = require('happypack');
+var happyThreadPool = HappyPack.ThreadPool({ size: 25 });
+
+function createHappyPlugin(id, loaders) {
+  return new HappyPack({
+    id: id,
+    loaders: loaders,
+    threadPool: happyThreadPool,
+
+    // disable happy caching with HAPPY_CACHE=0
+    //cache: true,
+  });
+}
 
 var GLOBALS = {
   DEFINE_OBJ: {
@@ -73,13 +86,11 @@ module.exports = {
         test: /\.png$/,
         use: [
           {
-            loader: 'url-loader',
+            loader: "happypack/loader",
             options: {
-              mimetype: 'image/png',
-              limit: 11000,
-              name: 'images/[name].[ext]',
-            },
-          }
+              id: 'png'
+            }
+          },
         ]
       },
 
@@ -87,11 +98,11 @@ module.exports = {
         test: /\.(jpg|gif)$/,
         use: [
           {
-            loader: 'url-loader',
+            loader: "happypack/loader",
             options: {
-              name: 'images/[hash].[ext]',
-            },
-          }
+              id: 'jpg_gif'
+            }
+          },
         ]
       },
 
@@ -113,11 +124,11 @@ module.exports = {
         test: /\.(ttf|eot|svg|cur)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "happypack/loader",
             options: {
-              name: 'font/[hash].[ext]',
+              id: 'ttf'
             }
-          }
+          },
         ]
       },
 
@@ -125,8 +136,12 @@ module.exports = {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           use: [
-            "css-loader",
-            "postcss-loader",
+            {
+              loader: "happypack/loader",
+              options: {
+                id: 'css'
+              }
+            },
           ],
         })
       },
@@ -136,17 +151,12 @@ module.exports = {
         use: ExtractTextPlugin.extract({
           use: [
             {
-              loader: "css-loader"
-            },
-            {
-              loader: "postcss-loader",
-            },
-            {
-              loader: "sass-loader",
+              loader: "happypack/loader",
               options: {
-                includePaths: ['shared/scss']
+                id: 'scss'
               }
-            }
+            },
+
           ],
         })
       },
@@ -160,9 +170,9 @@ module.exports = {
         ],
         use: [
           {
-            loader: "babel-loader",
+            loader: "happypack/loader",
             options: {
-              cacheDirectory: true,
+              id: 'js_jsx'
             }
           },
         ]
@@ -210,7 +220,61 @@ module.exports = {
       filename: "styles/axilspot.css",
       allChunks: true
     }),
-    //new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      parallel: true,
+    }),
+    createHappyPlugin('png', [
+      {
+        loader: 'url-loader',
+        options: {
+          mimetype: 'image/png',
+          limit: 11000,
+          name: 'images/[name].[ext]',
+        },
+      }
+    ]),
+    createHappyPlugin('jpg_gif', [
+      {
+        loader: 'url-loader',
+        options: {
+          name: 'images/[hash].[ext]',
+        },
+      }
+    ]),
+    createHappyPlugin('ttf', [
+      {
+        loader: 'file-loader',
+        options: {
+          name: 'font/[hash].[ext]',
+        }
+      }
+    ]),
+    createHappyPlugin('css', [
+      "css-loader",
+      "postcss-loader",
+    ]),
+    createHappyPlugin('scss', [
+      {
+        loader: "css-loader"
+      },
+      {
+        loader: "postcss-loader",
+      },
+      {
+        loader: "sass-loader",
+        options: {
+          includePaths: ['shared/scss']
+        }
+      }
+    ]),
+    createHappyPlugin('js_jsx', [
+      {
+        loader: "babel-loader",
+        options: {
+          cacheDirectory: true,
+        }
+      },
+    ]),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['scripts/vendors.bundle.js'],
       append: false,

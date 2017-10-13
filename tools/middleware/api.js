@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import mime from 'mime';
-import changeCase from 'change-case';
+const fs = require('fs');
+const path = require('path');
+const mime = require('mime');
+const changeCase = require('change-case');
 
 function tansformPath(url) {
   let ret = url.split('?')[0];
@@ -29,7 +29,7 @@ function tansformPath(url) {
  * @param  {[object]} options   初始化选项
  * @return {[function]}         处理函数
  */
-export default function serverApi() {
+function serverApi() {
   return (req, res) => {
     // handle any requests at /api
     const rootUrl = 'tools/data';
@@ -106,3 +106,5 @@ export default function serverApi() {
     readFile(rootUrl, readDone);
   };
 }
+
+module.exports = serverApi;

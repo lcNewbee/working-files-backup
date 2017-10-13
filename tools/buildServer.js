@@ -1,9 +1,9 @@
 // This file configures a web server for testing the production build
 // on your local machine.
 
-import browserSync from 'browser-sync';
-import historyApiFallback from 'connect-history-api-fallback';
-import serverApiMiddleware from './middleware/api';
+const browserSync = require('browser-sync');
+const historyApiFallback = require('connect-history-api-fallback');
+const serverApiMiddleware = require('./middleware/api');
 
 // Run Browsersync
 browserSync({
