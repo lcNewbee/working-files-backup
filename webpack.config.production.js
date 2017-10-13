@@ -4,7 +4,6 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
-var HappyPack = require('happypack');
 
 var GLOBALS = {
   DEFINE_OBJ: {
@@ -161,7 +160,10 @@ module.exports = {
         ],
         use: [
           {
-            loader: "happypack/loader?id=jsx",
+            loader: "babel-loader",
+            options: {
+              cacheDirectory: true,
+            }
           },
         ]
       },
@@ -213,16 +215,6 @@ module.exports = {
       uglifyOptions: {
         ecma: 8,
       }
-    }),
-    new HappyPack({
-      id: 'jsx',
-      threads: 4,
-      loaders: [{
-        loader: "babel-loader",
-        options: {
-          cacheDirectory: true,
-        }
-      }]
     }),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['scripts/vendors.bundle.js'],

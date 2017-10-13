@@ -1,7 +1,6 @@
 let webpack = require('webpack');
 let path = require('path');
 let autoprefixer = require('autoprefixer');
-var HappyPack = require('happypack');
 let GLOBALS = {
   DEFINE_OBJ: {
     'process.env.NODE_ENV': JSON.stringify('development'),
@@ -124,7 +123,10 @@ let config = {
         ],
         use: [
           {
-            loader: "happypack/loader?id=jsx",
+            loader: "babel-loader",
+            options: {
+              cacheDirectory: true,
+            }
           },
         ]
       },
@@ -154,16 +156,6 @@ let config = {
     new webpack.DllReferencePlugin({
       context: "dll",
       manifest: require("./src/config/scripts/vendors-manifest.json")
-    }),
-    new HappyPack({
-      id: 'jsx',
-      threads: 4,
-      loaders: [{
-        loader: "babel-loader",
-        options: {
-          cacheDirectory: true,
-        }
-      }]
     }),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.HotModuleReplacementPlugin(),
