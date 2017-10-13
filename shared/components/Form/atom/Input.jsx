@@ -57,13 +57,11 @@ class Input extends PureComponent {
     const inputProps = {};
     let ThisComponent = 'input';
 
-    Object.keys(props).forEach(
-      (curKey) => {
-        if (supportAttr.indexOf(`${curKey},`) !== -1) {
-          inputProps[curKey] = props[curKey];
-        }
-      },
-    );
+    Object.keys(props).forEach((curKey) => {
+      if (supportAttr.indexOf(`${curKey},`) !== -1) {
+        inputProps[curKey] = props[curKey];
+      }
+    });
 
     if (inputProps.type === 'textarea') {
       ThisComponent = 'textarea';

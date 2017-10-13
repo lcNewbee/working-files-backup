@@ -72,7 +72,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.PureComponent {
+export default class ApMaintenance extends React.PureComponent {
   constructor(props) {
     super(props);
   }
@@ -89,8 +89,9 @@ export default class View extends React.PureComponent {
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+
+ApMaintenance.propTypes = propTypes;
+ApMaintenance.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -110,4 +111,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(View);
+)(ApMaintenance);

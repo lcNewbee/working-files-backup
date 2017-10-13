@@ -212,9 +212,6 @@ module.exports = {
     }),
     new webpack.optimize.UglifyJsPlugin({
       parallel: true,
-      uglifyOptions: {
-        ecma: 8,
-      }
     }),
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['scripts/vendors.bundle.js'],
