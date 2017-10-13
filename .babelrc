@@ -12,9 +12,7 @@
           // "Safari >= 6",
           "ie >= 9"
         ]
-      },
-      // "modules": false
-      "uglify": true
+      }
     }],
     "stage-2",
     "react",

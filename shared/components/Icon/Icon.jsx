@@ -89,7 +89,6 @@ function Icon(props) {
   if (className) {
     classNames = `${classNames} ${className}`;
   }
-
   return <Component {...iconProps} className={classNames} />;
 }
 

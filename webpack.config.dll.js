@@ -80,6 +80,10 @@ module.exports = {
         context: __dirname,
       }
     }),
+    new webpack.DllReferencePlugin({
+      context: "dll",
+      manifest: require("./src/config/scripts/vendors-manifest.json")
+    }),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
