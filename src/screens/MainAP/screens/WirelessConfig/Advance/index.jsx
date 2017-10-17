@@ -475,7 +475,6 @@ export default class Advance extends React.Component {
                   type="number"
                   label={__('Distance Value')}
                   min="0"
-                  max="10"
                   step="0.1"
                   value={distance}
                   hasTextInput
@@ -483,7 +482,7 @@ export default class Advance extends React.Component {
                   onChange={(data) => {
                     this.changeFormValue(radioId, 'distance', data.value);
                   }}
-                  help={`${__('Range: ')}0~10 km`}
+                  // help={`${__('Range: ')}0~10 km`}
                   // inputStyle={{
                   //   backgroundColor: '#f2f2f2',
                   // }}

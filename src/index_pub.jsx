@@ -9,7 +9,7 @@ const appActions = require('shared/containers/app/actions');
 const thunkMiddleware = require('redux-thunk').default;
 const { Provider } = require('react-redux');
 const { RouteSwitches } = require('shared/components/Organism/RouterConfig');
-const prodConfig = require('./config/axc3.0').default;
+const prodConfig = require('./config/AIP5').default;
 
 const { combineReducers, applyMiddleware, createStore } = redux;
 const { HashRouter } = ReactRouterDom;
