@@ -284,6 +284,7 @@ const listOptions = fromJS([
   {
     id: '__actions__',
     text: __('Actions'),
+    noForm: true,
     fixed: 'right',
   },
 ]);

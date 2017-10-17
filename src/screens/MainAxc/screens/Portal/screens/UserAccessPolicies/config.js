@@ -577,9 +577,10 @@ export const $$potalServerOptions = fromJS([
     },
     formProps: {
       type: 'text',
+      maxLength: '128',
       required: true,
       validator: validator({
-        rules: 'ip',
+        rules: 'utf8Len:[1, 128]',
       }),
       // visible(data) {
       //   return data.get('address_type') === '1';

@@ -905,8 +905,6 @@ const routes = [
       {
         id: 'mainDashboard',
         path: '/dashboard',
-        fetchUrl: 'goform/quicksetup',
-        mainPath: 'goform/dashboard/flowanalysis',
         component: sMainDashboard.Screen,
         routes: [
           {
