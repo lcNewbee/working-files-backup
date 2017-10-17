@@ -135,6 +135,12 @@ class TableHeader extends PureComponent {
         const isLast = fixed !== 'left' && index === columnsLen - 1;
         const myOption = typeof $$curThOption.toJS === 'function' ? $$curThOption.toJS() : $$curThOption;
         const dataIndex = myOption.id;
+        const textStyle = {};
+
+        if (isLast && configurable) {
+          console.log(22)
+          textStyle.float = 'left';
+        }
 
         /* ******************************************************
           width:调整表格项的宽度。
@@ -149,7 +155,7 @@ class TableHeader extends PureComponent {
             }}
           >
             <span
-              style={{ marginLeft: myOption.marginLeft }}
+              style={textStyle}
             >
               {myOption.text || myOption.label}
             </span>

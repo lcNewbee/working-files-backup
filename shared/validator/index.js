@@ -7,10 +7,10 @@ var combineValidate = require('./validates/combine');
 var validator = function(options) {
   return new validator.fn.init(options);
 };
-var _ = window._;
+var __ = window.__;
 
-if(!_) {
-  _ = string.format;
+if(!__) {
+  __ = string.format;
 }
 
 var msg = {
