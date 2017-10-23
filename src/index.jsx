@@ -10,7 +10,7 @@ const { RouteSwitches } = require('shared/components/Organism/RouterConfig');
 const thunkMiddleware = require('redux-thunk').default;
 const { Provider } = require('react-redux');
 const { AppContainer } = require('react-hot-loader');
-const prodConfig = require('./config/AIP5').default;
+const prodConfig = require('./config/axc4.0').default;
 
 const { combineReducers, applyMiddleware, createStore } = redux;
 const { HashRouter } = ReactRouterDom;
@@ -54,9 +54,9 @@ window.onload = () => {
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/AIP5', () => {
+  module.hot.accept('./config/axc4.0', () => {
     /* eslint-disable global-require */
-    const nextConfig = require('./config/AIP5').default;
+    const nextConfig = require('./config/axc4.0').default;
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,

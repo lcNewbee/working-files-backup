@@ -248,6 +248,24 @@ function generateListOptions() {
           { label: __('ON'), value: '1' },
           { label: __('OFF'), value: '0' },
         ],
+        onChange: this.onDhcpServerEnableChange,
+      },
+    },
+    {
+      id: 'dhcpSnoopingEnable',
+      text: __('DHCP Snooping'),
+      noTable: true,
+      defaultValue: '0',
+      render(val) {
+        return val === '1' ? __('Enabled') : __('Disabled');
+      },
+      formProps: {
+        type: 'checkbox',
+        options: [
+          { label: __('ON'), value: '1' },
+          { label: __('OFF'), value: '0' },
+        ],
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
       },
     },
     {
@@ -271,6 +289,26 @@ function generateListOptions() {
       },
     },
     {
+      id: 'dhcpGateway',
+      text: __('Gateway'),
+      noTable: true,
+      formProps: {
+        required: true,
+        type: 'text',
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+      },
+    },
+    {
+      id: 'acIp',
+      text: __('AC IP'),
+      noTable: true,
+      formProps: {
+        required: true,
+        type: 'text',
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
+      },
+    },
+    {
       id: 'dhcpPoolMask',
       text: __('Subnet Mask'),
       noTable: true,
@@ -278,6 +316,16 @@ function generateListOptions() {
         visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
         required: true,
         type: 'text',
+      },
+    },
+    {
+      id: 'leaseTime',
+      text: __('Lease Time'),
+      noTable: true,
+      formProps: {
+        required: true,
+        type: 'number',
+        visible: item => item.get('ipType') === 'static' && item.get('dhcpServerEnable') === '1',
       },
     },
     {
@@ -298,7 +346,63 @@ function generateListOptions() {
         type: 'text',
       },
     },
-    /* ***DHCP Server Over******* */
+    /* ***DHCP Server Over***DHCP Relay Start**** */
+    {
+      id: 'dhcpRelayEnable',
+      text: __('DHCP Relay'),
+      defaultValue: '0',
+      render(val) {
+        return val === '1' ? __('Enabled') : __('Disabled');
+      },
+      formProps: {
+        type: 'checkbox',
+        options: [
+          { label: __('ON'), value: '1' },
+          { label: __('OFF'), value: '0' },
+        ],
+        onChange: this.onDhcpRelayEnableChange,
+      },
+    },
+    {
+      id: 'relayDhcpServer',
+      text: __('DHCP Server'),
+      noTable: true,
+      formProps: {
+        required: true,
+        type: 'text',
+        visible: item => item.get('dhcpRelayEnable') === '1',
+      },
+    },
+    {
+      id: 'referralServer',
+      text: __('Referral Server'),
+      noTable: true,
+      formProps: {
+        type: 'text',
+        visible: item => item.get('dhcpRelayEnable') === '1',
+      },
+    },
+    {
+      id: 'option82_1',
+      text: __('Option82 field1'),
+      noTable: true,
+      formProps: {
+        required: true,
+        type: 'text',
+        visible: item => item.get('dhcpRelayEnable') === '1',
+      },
+    },
+    {
+      id: 'option82_2',
+      text: __('Option82 field2'),
+      noTable: true,
+      formProps: {
+        required: true,
+        type: 'text',
+        visible: item => item.get('dhcpRelayEnable') === '1',
+      },
+    },
+    /* ***DHCP Relay Over*** */
     {
       id: 'natEnable',
       text: __('NAT Enable'),
@@ -380,6 +484,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   fetch: PropTypes.func,
+  updateCurListItem: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -410,6 +515,8 @@ export default class IpInterface extends React.Component {
     this.onPageChange = this.onPageChange.bind(this);
     this.onPageSizeChange = this.onPageSizeChange.bind(this);
     this.generateListOptions = generateListOptions.bind(this);
+    this.onDhcpRelayEnableChange = this.onDhcpRelayEnableChange.bind(this);
+    this.onDhcpServerEnableChange = this.onDhcpServerEnableChange.bind(this);
   }
 
   componentWillMount() {
@@ -444,6 +551,30 @@ export default class IpInterface extends React.Component {
     // });
     // console.log('out setState', this.state.pageQuery.toJS());
     // this.fetchClientListByName(this.name);
+  }
+
+  onDhcpRelayEnableChange(obj, item) {
+    const dhcpRelayEnable = obj.value;
+    if (dhcpRelayEnable === '0') {
+      this.props.updateCurListItem({ dhcpRelayEnable });
+    } else if (dhcpRelayEnable === '1' && item.dhcpServerEnable === '1') {
+      this.props.updateCurListItem({
+        dhcpServerEnable: '0',
+        dhcpRelayEnable,
+      });
+    }
+  }
+
+  onDhcpServerEnableChange(obj, item) {
+    const dhcpServerEnable = obj.value;
+    if (dhcpServerEnable === '0') {
+      this.props.updateCurListItem({ dhcpServerEnable });
+    } else if (dhcpServerEnable === '1' && item.dhcpRelayEnable === '1') {
+      this.props.updateCurListItem({
+        dhcpServerEnable,
+        dhcpRelayEnable: '0',
+      });
+    }
   }
 
   onPageSizeChange(size) {
