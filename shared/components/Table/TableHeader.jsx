@@ -20,13 +20,9 @@ const propTypes = {
 };
 
 const defaultProps = {
-  item: null,
-  selectable: false,
-  selected: false,
   configurable: true,
   onSelect: utilsCore.emptyfunc,
   onColumnSort: utilsCore.emptyfunc,
-  index: -1,
 };
 
 class TableHeader extends PureComponent {
@@ -130,57 +126,54 @@ class TableHeader extends PureComponent {
     const { columns, configurable, fixed } = this.props;
     const columnsLen = columns.size;
 
-    return columns.map(
-      ($$curThOption, index) => {
-        const isLast = fixed !== 'left' && index === columnsLen - 1;
-        const myOption = typeof $$curThOption.toJS === 'function' ? $$curThOption.toJS() : $$curThOption;
-        const dataIndex = myOption.id;
-        const textStyle = {};
+    return columns.map(($$curThOption, index) => {
+      const isLast = fixed !== 'left' && index === columnsLen - 1;
+      const myOption = typeof $$curThOption.toJS === 'function' ? $$curThOption.toJS() : $$curThOption;
+      const dataIndex = myOption.id;
+      const textStyle = {};
 
-        if (isLast && configurable) {
-          console.log(22)
-          textStyle.float = 'left';
-        }
+      if (isLast && configurable) {
+        textStyle.float = 'left';
+      }
 
-        /* ******************************************************
-          width:调整表格项的宽度。
-          paddingLeft：调整表头标题的位置
-          marginLeft：调整表头标题的位置，相当于paddingLeft的负值
-        ******************************************************* */
-        return myOption ? (
-          <th
-            key={`tableRow${dataIndex}`}
-            style={{
-              paddingLeft: myOption.paddingLeft,
-            }}
+      /* ******************************************************
+        width:调整表格项的宽度。
+        paddingLeft：调整表头标题的位置
+        marginLeft：调整表头标题的位置，相当于paddingLeft的负值
+      ******************************************************* */
+      return myOption ? (
+        <th
+          key={`tableRow${dataIndex}`}
+          style={{
+            paddingLeft: myOption.paddingLeft,
+          }}
+        >
+          <span
+            style={textStyle}
           >
-            <span
-              style={textStyle}
-            >
-              {myOption.text || myOption.label}
-            </span>
-            {
-              myOption.sortable ? (
-                <Icon
-                  name="sort"
-                  style={{
-                    marginLeft: '5px',
-                    cursor: 'pointer',
-                  }}
-                  id={`${dataIndex}SortIcon`}
-                  onClick={() => {
-                    this.onColumnSort(dataIndex);
-                  }}
-                />
-              ) : null
-            }
-            {
-              isLast && configurable ? this.renderColumnsConfig() : null
-            }
-          </th>
-        ) : null;
-      },
-    );
+            {myOption.text || myOption.label}
+          </span>
+          {
+            myOption.sortable ? (
+              <Icon
+                name="sort"
+                style={{
+                  marginLeft: '5px',
+                  cursor: 'pointer',
+                }}
+                id={`${dataIndex}SortIcon`}
+                onClick={() => {
+                  this.onColumnSort(dataIndex);
+                }}
+              />
+            ) : null
+          }
+          {
+            isLast && configurable ? this.renderColumnsConfig() : null
+          }
+        </th>
+      ) : null;
+    });
   }
 
   render() {

@@ -37,9 +37,9 @@ class AaaServer_Model extends CI_Model {
                     if(count($webquery) > 0) {
                         $webquery[0]['web'] = (int)$webquery[0]['web'];
                         $row['portalTemplate'] = $webquery[0];
-                        
+
                     }
-                }                
+                }
                 $domain_data = $this->getDomainState($row['domain_name']);
                 $row['auth_accesstype'] = $domain_data['auth_accesstype'];
                 $row['auth_schemetype'] = $domain_data['auth_schemetype'];
@@ -72,7 +72,7 @@ class AaaServer_Model extends CI_Model {
         $portal_server_type = element('portal_server_type', $data, NULL);//portal 服务类型 local | remote
         $ac_ip = $this->getInterface();
         //802.1x 认证
-        if($auth_accesstype === '8021x-access'){            
+        if($auth_accesstype === '8021x-access'){
             //802.1x 认证 -> 远程Radius服务器
             if ($radius_server_type === 'remote') {
                 //1.创建 Radius 模板
@@ -190,7 +190,7 @@ class AaaServer_Model extends CI_Model {
                 }
                 //选择 根据端口弹portal 需要创建aaa模版
                 if($portal_rule_type === 'port'){
-                    //2.创建AAA    
+                    //2.创建AAA
                     $aaa_ary = $this->getDomainParams($data);
                     $aaa_ary['radius_template'] = 'local';//使用本地radius
                     if(!$this->addAaaTemplate($aaa_ary)){
@@ -281,7 +281,7 @@ class AaaServer_Model extends CI_Model {
                 $radius_ary = $this->getRadiusParams($data);
                 if(!$this->addRadiusTemplate($radius_ary)){
                     return json_encode(json_no('add remote Radius error!'));
-                }                
+                }
                 //2.创建 AAA
                 $aaa_ary = $this->getDomainParams($data);
                 if(!$this->addAaaTemplate($aaa_ary)){
@@ -296,10 +296,10 @@ class AaaServer_Model extends CI_Model {
                     'server_url' => $ac_ip . ':8080',
                     'template_name' => $domain,
                     'auth_domain' => $domain
-                );                
+                );
                 if(!$this->addPortalTemplate($portal_tp)){
                     return json_encode(json_no('add portal template errot!'));
-                }                
+                }
                 //4.创建 Portal 规则
                 $portal_rule_ary = $this->getPortalRuleParams($data);
                 if(!$this->addPortalRule($portal_rule_ary)){
@@ -320,7 +320,7 @@ class AaaServer_Model extends CI_Model {
                     'mac' => ''
                 );
                 $this->db->insert('portal_config', $config_ary);
-                
+
             }
 
             //portal认证 -> 远程radius服务器 + 远程Portal服务器 该环境只能使用端口认证
@@ -387,10 +387,10 @@ class AaaServer_Model extends CI_Model {
         }
         $cfginfo = $this->db->query("select * from portal_config where id={$data['id']}")->result_array();
         //802
-        if($auth_accesstype === '8021x-access'){            
+        if($auth_accesstype === '8021x-access'){
             //1.操作Radius模板
             if($cfginfo[0]['radius_template'] != 'local'){
-                //不是本地radius就修改              
+                //不是本地radius就修改
                 $radius_ary = $this->getRadiusParams($data);
                 if(!$this->editRadiusTemplate($radius_ary)){
                     return json_encode(json_no('edit 802.1x && remote Radius error!'));
@@ -410,11 +410,11 @@ class AaaServer_Model extends CI_Model {
                 if(!$this->editAaaTemplate($aaa_ary)){
                     return json_encode(json_no('add aaa error!',6405));
                 }
-            }else{                
+            }else{
                 if(!$this->addAaaTemplate($aaa_ary)){
                     return json_encode(json_no('add aaa error!',6405));
                 }
-            }            
+            }
             //3.删除 Portal 模板
             if($cfginfo[0]['portal_template'] != 'local'){
                 $this->delPortalTemplate( array('portal_list'=>array( $cfginfo[0]['portal_template'] )) );
@@ -427,7 +427,7 @@ class AaaServer_Model extends CI_Model {
                 }
             }
             //5.删除 Portal 认证 ssid和网页模板
-            $ret = $this->delWebTemplate($cfginfo[0]['name']);            
+            $ret = $this->delWebTemplate($cfginfo[0]['name']);
             //6.修改配置信息
             $config_ary = array(
                 'auth_accesstype' => $auth_accesstype,
@@ -447,11 +447,11 @@ class AaaServer_Model extends CI_Model {
         if($auth_accesstype === 'portal'){
             //portal认证 -> 本地radius服务器 + 本地Portal服务器
             if($radius_server_type === 'local' && $portal_server_type === 'local'){
-                if($portal_rule_type === 'ssid'){  
+                if($portal_rule_type === 'ssid'){
                     $ssid = element('ssid', $data['portalTemplate'], '');
                     $apmac = element('apmac', $data['portalTemplate'], '');
                     $web = element('web', $data['portalTemplate'], '');
-                    $des = element('des', $data['portalTemplate'], '');                  
+                    $des = element('des', $data['portalTemplate'], '');
                     //1 radius 需要删除
                     if($cfginfo[0]['radius_template'] != 'local'){
                         if( $this->isRadiusTemplate( $cfginfo[0]['radius_template'] )) {
@@ -475,7 +475,7 @@ class AaaServer_Model extends CI_Model {
                     if($data_rule['interface_bind'] != '') {
                         $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
                     }
-                    //5 web ssid 设置                      
+                    //5 web ssid 设置
                     if( $this->isWebTemplate($domain) ){
                         $web_template = array(
                             'ssid' => $ssid,
@@ -494,7 +494,7 @@ class AaaServer_Model extends CI_Model {
                             'des' => $des
                         );
                         $this->portalsql->insert('portal_ssid', $web_template);
-                    }                    
+                    }
                     //6.修改配置信息
                     $config_ary = array(
                         'name' => $domain,
@@ -526,18 +526,18 @@ class AaaServer_Model extends CI_Model {
                         }
                     }
                     //2 aaa 需要修改
-                    $aaa_ary = $this->getDomainParams($data);  
-                    $aaa_ary['radius_template'] = 'local';//使用本地radius                                      
-                    if($cfginfo[0]['domain_name'] != 'local'){                        
+                    $aaa_ary = $this->getDomainParams($data);
+                    $aaa_ary['radius_template'] = 'local';//使用本地radius
+                    if($cfginfo[0]['domain_name'] != 'local'){
                         if( !$this->editAaaTemplate($aaa_ary)){
                             return json_encode(json_no('edit aaa error!',6405));
                         }
-                    }else{                                                
+                    }else{
                         if(!$this->addAaaTemplate($aaa_ary)){
                             return json_encode(json_no('add aaa error!',6405));
                         }
-                    }                    
-                    //3 portal模版 需要修改                    
+                    }
+                    //3 portal模版 需要修改
                     $portal_tp = array(
                         'ac_ip' => $ac_ip,
                         'server_ipaddr' => $ac_ip,
@@ -546,23 +546,23 @@ class AaaServer_Model extends CI_Model {
                         'server_url' => $ac_ip . ':8080',
                         'template_name' => $domain,
                         'auth_domain' => $domain
-                    );                   
+                    );
                     if($cfginfo[0]['portal_template'] != 'local' && $cfginfo[0]['portal_template'] != null){
                         if( !$this->editPortalTemplate($portal_tp)){
                             return json_encode(json_no('edit portal template errot!'));
                         }
-                    }else{                                                                        
+                    }else{
                         if(!$this->addPortalTemplate($portal_tp)){
                             return json_encode(json_no('add portal template errot!'));
                         }
-                    }                    
+                    }
                     //4.Portal 规则修改
                     $portal_rule_ary = $this->getPortalRuleParams($data);
                     if($cfginfo[0]['portal_rule'] != '' && $cfginfo[0]['portal_rule'] != null){
                         if(!$this->editPortalRule($portal_rule_ary)){
                             return json_encode(json_no('edit portal rule error!'));
                         }
-                    }else{                        
+                    }else{
                         if(!$this->addPortalRule($portal_rule_ary)){
                             return json_encode(json_no('add portal rule error!'));
                         }
@@ -582,11 +582,11 @@ class AaaServer_Model extends CI_Model {
                         'portal_server_type' => $portal_server_type,
                         'portal_rule' => $data['portalRule']['interface_bind'],
                         'ssid' => '',
-                        'mac' => '' 
+                        'mac' => ''
                     );
                     $this->db->where('name', $domain);
                     $this->db->update('portal_config', $config_ary);
-                    
+
                 }
             }
             //portal认证 -> 本地radius服务器 + 远程Portal服务器 该环境只能使用端口认证
@@ -598,18 +598,18 @@ class AaaServer_Model extends CI_Model {
                     }
                 }
                 //2. AAA 需要修改
-                $aaa_ary = $this->getDomainParams($data);  
-                $aaa_ary['radius_template'] = 'local';//使用本地radius                                      
-                if($cfginfo[0]['domain_name'] != 'local'){                        
+                $aaa_ary = $this->getDomainParams($data);
+                $aaa_ary['radius_template'] = 'local';//使用本地radius
+                if($cfginfo[0]['domain_name'] != 'local'){
                     if( !$this->editAaaTemplate($aaa_ary)){
                         return json_encode(json_no('edit aaa error!',6405));
                     }
-                }else{                                                
+                }else{
                     if(!$this->addAaaTemplate($aaa_ary)){
                         return json_encode(json_no('add aaa error!',6405));
                     }
                 }
-                //3 portal模版 需要修改                    
+                //3 portal模版 需要修改
                 $portal_tp = array(
                     'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
@@ -618,12 +618,12 @@ class AaaServer_Model extends CI_Model {
                     'server_url' => element('server_url', $data['portalServer']),
                     'template_name' => $domain,
                     'auth_domain' => $domain
-                );                   
+                );
                 if($cfginfo[0]['portal_template'] != 'local' && $cfginfo[0]['portal_template'] != null){
                     if( !$this->editPortalTemplate($portal_tp)){
                         return json_encode(json_no('edit portal template errot!'));
                     }
-                }else{                                                                        
+                }else{
                     if(!$this->addPortalTemplate($portal_tp)){
                         return json_encode(json_no('add portal template errot!'));
                     }
@@ -634,7 +634,7 @@ class AaaServer_Model extends CI_Model {
                     if(!$this->editPortalRule($portal_rule_ary)){
                         return json_encode(json_no('edit portal rule error!'));
                     }
-                }else{                        
+                }else{
                     if(!$this->addPortalRule($portal_rule_ary)){
                         return json_encode(json_no('add portal rule error!'));
                     }
@@ -654,7 +654,7 @@ class AaaServer_Model extends CI_Model {
                     'portal_server_type' => $portal_server_type,
                     'portal_rule' => $data['portalRule']['interface_bind'],
                     'ssid' => '',
-                    'mac' => '' 
+                    'mac' => ''
                 );
                 $this->db->where('name', $domain);
                 $this->db->update('portal_config', $config_ary);
@@ -667,23 +667,23 @@ class AaaServer_Model extends CI_Model {
                     if(!$this->editRadiusTemplate($radius_ary)){
                         return json_encode(json_no('edit remote Radius error!'));
                     }
-                }else{                                        
+                }else{
                     if(!$this->addRadiusTemplate($radius_ary)){
                         return json_encode(json_no('add remote Radius error!'));
                     }
                 }
                 //2. AAA 需要修改
-                $aaa_ary = $this->getDomainParams($data);                                                      
-                if($cfginfo[0]['domain_name'] != 'local'){                        
+                $aaa_ary = $this->getDomainParams($data);
+                if($cfginfo[0]['domain_name'] != 'local'){
                     if( !$this->editAaaTemplate($aaa_ary)){
                         return json_encode(json_no('edit aaa error!',6405));
                     }
-                }else{                                                
+                }else{
                     if(!$this->addAaaTemplate($aaa_ary)){
                         return json_encode(json_no('add aaa error!',6405));
                     }
                 }
-                //3 portal模版 需要修改                    
+                //3 portal模版 需要修改
                 $portal_tp = array(
                     'ac_ip' => $ac_ip,
                     'server_ipaddr' => $ac_ip,
@@ -692,12 +692,12 @@ class AaaServer_Model extends CI_Model {
                     'server_url' => $ac_ip . ':8080',
                     'template_name' => $domain,
                     'auth_domain' => $domain
-                );                   
+                );
                 if($cfginfo[0]['portal_template'] != 'local' && $cfginfo[0]['portal_template'] != null){
                     if( !$this->editPortalTemplate($portal_tp)){
                         return json_encode(json_no('edit portal template errot!'));
                     }
-                }else{                                                                        
+                }else{
                     if(!$this->addPortalTemplate($portal_tp)){
                         return json_encode(json_no('add portal template errot!'));
                     }
@@ -708,7 +708,7 @@ class AaaServer_Model extends CI_Model {
                     if(!$this->editPortalRule($portal_rule_ary)){
                         return json_encode(json_no('edit portal rule error!'));
                     }
-                }else{                        
+                }else{
                     if(!$this->addPortalRule($portal_rule_ary)){
                         return json_encode(json_no('add portal rule error!'));
                     }
@@ -728,7 +728,7 @@ class AaaServer_Model extends CI_Model {
                     'portal_server_type' => $portal_server_type,
                     'portal_rule' => $data['portalRule']['interface_bind'],
                     'ssid' => '',
-                    'mac' => '' 
+                    'mac' => ''
                 );
                 $this->db->where('name', $domain);
                 $this->db->update('portal_config', $config_ary);
@@ -741,23 +741,23 @@ class AaaServer_Model extends CI_Model {
                     if(!$this->editRadiusTemplate($radius_ary)){
                         return json_encode(json_no('edit remote Radius error!'));
                     }
-                }else{                                        
+                }else{
                     if(!$this->addRadiusTemplate($radius_ary)){
                         return json_encode(json_no('add remote Radius error!'));
                     }
                 }
                 //2. AAA 需要修改
-                $aaa_ary = $this->getDomainParams($data);                                    
-                if($cfginfo[0]['domain_name'] != 'local'){                        
+                $aaa_ary = $this->getDomainParams($data);
+                if($cfginfo[0]['domain_name'] != 'local'){
                     if( !$this->editAaaTemplate($aaa_ary)){
                         return json_encode(json_no('edit aaa error!',6405));
                     }
-                }else{                                                
+                }else{
                     if(!$this->addAaaTemplate($aaa_ary)){
                         return json_encode(json_no('add aaa error!',6405));
                     }
                 }
-                //3 portal模版 需要修改                    
+                //3 portal模版 需要修改
                 $portal_tp = array(
                     'ac_ip' => element('ac_ip', $data['portalServer']),
                     'server_ipaddr' => element('server_ipaddr', $data['portalServer']),
@@ -766,12 +766,12 @@ class AaaServer_Model extends CI_Model {
                     'server_url' => element('server_url', $data['portalServer']),
                     'template_name' => $domain,
                     'auth_domain' => $domain
-                );                  
+                );
                 if($cfginfo[0]['portal_template'] != 'local' && $cfginfo[0]['portal_template'] != null){
                     if( !$this->editPortalTemplate($portal_tp)){
                         return json_encode(json_no('edit portal template errot!'));
                     }
-                }else{                                                                        
+                }else{
                     if(!$this->addPortalTemplate($portal_tp)){
                         return json_encode(json_no('add portal template errot!'));
                     }
@@ -782,7 +782,7 @@ class AaaServer_Model extends CI_Model {
                     if(!$this->editPortalRule($portal_rule_ary)){
                         return json_encode(json_no('edit portal rule error!'));
                     }
-                }else{                        
+                }else{
                     if(!$this->addPortalRule($portal_rule_ary)){
                         return json_encode(json_no('add portal rule error!'));
                     }
@@ -802,13 +802,13 @@ class AaaServer_Model extends CI_Model {
                     'portal_server_type' => $portal_server_type,
                     'portal_rule' => $data['portalRule']['interface_bind'],
                     'ssid' => '',
-                    'mac' => '' 
+                    'mac' => ''
                 );
                 $this->db->where('name', $domain);
                 $this->db->update('portal_config', $config_ary);
             }
         }
-        return json_encode(json_ok());        
+        return json_encode(json_ok());
     }
 
     function del($data) {
@@ -842,8 +842,8 @@ class AaaServer_Model extends CI_Model {
                 if($data_rule['interface_bind'] != '') {
                     $this->delPortalRule( array('portal_list'=>array($data_rule['interface_bind']))  );
                 }
-                //5.删除web 网页模板                
-                $this->delWebTemplate($query[0]['name']);                
+                //5.删除web 网页模板
+                $this->delWebTemplate($query[0]['name']);
                 //6.删除portal 配置
                 $this->db->where('name',$res);
                 $this->db->delete('portal_config');
@@ -1019,7 +1019,8 @@ class AaaServer_Model extends CI_Model {
         $data = $this->db->query($sqlcmd)->result_array();
         foreach($data as $row){
             switch($row['attr_name']){
-                case 'server_ip' : $arr['server_ipaddr'] = $row['attr_value']; break;
+                // case 'server_ip' : $arr['server_ipaddr'] = $row['attr_value']; break;
+                case 'domain_name' : $arr['server_ipaddr'] = $row['attr_value']; break;
                 case 'server_port' : $arr['server_port'] = $row['attr_value']; break;
                 case 'server_key' : $arr['server_key'] = $row['attr_value']; break;
                 case 'redirect_url' : $arr['server_url'] = $row['attr_value']; break;
@@ -1150,7 +1151,7 @@ class AaaServer_Model extends CI_Model {
     }
     // 5. web 网页模板
     private function delWebTemplate($name) {
-        $sqlcmd = "DELETE FROM portal_ssid WHERE BINARY name='{$name}'";        
+        $sqlcmd = "DELETE FROM portal_ssid WHERE BINARY name='{$name}'";
         if( $this->portalsql->query($sqlcmd) ){
             return TRUE;
         }

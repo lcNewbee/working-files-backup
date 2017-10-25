@@ -19,7 +19,7 @@ let GLOBALS = {
 let config = {
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-  devtool: 'cheap-eval-source-map',
+  devtool: 'cheap-module-source-map',
 
   entry: {
     index: [

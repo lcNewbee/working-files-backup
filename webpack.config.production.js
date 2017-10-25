@@ -4,6 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+const WebpackMonitor = require('webpack-monitor');
 
 var GLOBALS = {
   DEFINE_OBJ: {
@@ -230,5 +231,11 @@ module.exports = {
         collapseWhitespace: true //删除空白符与换行符
       }
     }),
+    // new WebpackMonitor({
+    //   capture: true, // -> default 'true'
+    //   target: '../.tmp/monitor/myStatsStore.json', // default -> '../monitor/stats.json'
+    //   launch: true, // -> default 'false'
+    //   port: 3030, // default -> 8081
+    // }),
   ],
 };

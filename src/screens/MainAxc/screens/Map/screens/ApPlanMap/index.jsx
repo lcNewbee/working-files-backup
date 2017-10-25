@@ -19,7 +19,10 @@ import '../../shared/_map.scss';
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   groupDevice: PropTypes.instanceOf(List),
-  groupid: PropTypes.any,
+  groupid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   route: PropTypes.object,
   history: PropTypes.object,
   match: PropTypes.shape({
@@ -29,7 +32,7 @@ const propTypes = {
   addPropertyPanel: PropTypes.func,
   updateCurListItem: PropTypes.func,
   validateAll: PropTypes.func,
-  activeListItemByIndex: PropTypes.func,
+  activeListItemByKeyValue: PropTypes.func,
   onListAction: PropTypes.func,
   updateListItemByIndex: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
@@ -58,31 +61,9 @@ export default class View extends React.PureComponent {
       mapOffsetX: 0,
       mapOffsetY: 0,
       isUnplacedListShow: true,
-      backgroundImgUrl: '',
       curShowOptionDeviceMac: -100,
       zoom: 100,
     };
-    utils.binds(this,
-      [
-        'onSave',
-        'onDrop',
-        'renderUndeployDevice',
-        'renderDeployedDevice',
-        'onMapMouseUp',
-        'onMapMouseDown',
-        'onMapMouseMove',
-        'renderMapList',
-        'renderCurMap',
-        'updateState',
-        'onToggleUnplacedList',
-        'onSaveMap',
-        'transformServerData',
-        'savePlaceDevice',
-        'onUppaceDrop',
-        'fetchMapList',
-        'renderDevicesList',
-      ],
-    );
     this.curBuildId = parseInt(props.match.params.id, 10);
     this.curScreenId = props.route.id;
     this.curMapItem = {};
@@ -119,7 +100,7 @@ export default class View extends React.PureComponent {
   }
 
 
-  onToggleUnplacedList(active) {
+  onToggleUnplacedList = (active) => {
     let isUnplacedListShow = !this.state.isUnplacedListShow;
 
     if (active !== undefined) {
@@ -130,7 +111,7 @@ export default class View extends React.PureComponent {
       isUnplacedListShow,
     });
   }
-  onSave() {
+  onSave = () => {
     this.props.validateAll()
       .then((errMsg) => {
         if (errMsg.isEmpty()) {
@@ -138,7 +119,7 @@ export default class View extends React.PureComponent {
         }
       });
   }
-  onDrop(ev, curMapId) {
+  onDrop = (ev, curMapId) => {
     const mapOffset = dom.getAbsPoint(this.mapContent);
     const offsetX = (ev.clientX - mapOffset.x - 13);
     const offsetY = (ev.clientY - mapOffset.y - 13);
@@ -158,7 +139,7 @@ export default class View extends React.PureComponent {
 
     this.savePlaceDevice('place');
   }
-  onUppaceDrop() {
+  onUppaceDrop = () => {
     const myScreenId = this.props.route.id;
     const deviceMac = this.props.store.getIn([
       myScreenId, 'curListItem', 'mac',
@@ -187,17 +168,17 @@ export default class View extends React.PureComponent {
   //   });
   //   this.savePlaceDevice('unplace');
   // }
-  onMapMouseUp() {
+  onMapMouseUp = () => {
     this.mapMouseDown = false;
   }
-  onMapMouseDown(e) {
+  onMapMouseDown = (e) => {
     if (e.target.className.indexOf('o-map-container') !== -1) {
       this.mapMouseDown = true;
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
     }
   }
-  onMapMouseMove(e) {
+  onMapMouseMove = (e) => {
     if (this.mapMouseDown) {
       this.updateState({
         mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
@@ -207,14 +188,15 @@ export default class View extends React.PureComponent {
       this.mapClientY = e.clientY;
     }
   }
-  startDrag(ev, i) {
+  startDrag = (ev, mac) => {
     ev.dataTransfer.setData('Text', ev.target.id);
-    this.props.activeListItemByIndex({
-      val: i,
+    this.props.activeListItemByKeyValue({
+      keyName: 'mac',
+      val: mac,
       action: 'move',
     });
   }
-  savePlaceDevice(type) {
+  savePlaceDevice = (type) => {
     this.props.changeScreenActionQuery({
       action: type,
     });
@@ -225,18 +207,16 @@ export default class View extends React.PureComponent {
       });
     }
   }
-  updateState(data) {
+  updateState = (data) => {
     this.setState(utils.extend({}, data));
   }
-  transformServerData($$newStore) {
+  transformServerData = ($$newStore) => {
     const $$list = $$newStore.getIn([this.curScreenId, 'data', 'list']);
     const curMapId = $$newStore.getIn([this.curScreenId, 'curSettings', 'curMapId']);
 
     if ($$newStore.getIn([this.curScreenId, 'data', 'maps', 'list'])) {
       this.$$mapList = $$newStore.getIn([this.curScreenId, 'data', 'maps', 'list']);
-      this.curMapItem = this.$$mapList.find(
-        $$item => $$item.get('id') === curMapId,
-      );
+      this.curMapItem = this.$$mapList.find($$item => $$item.get('id') === curMapId);
 
       if (this.curMapItem && typeof this.curMapItem.toJS === 'function') {
         this.curMapItem = this.curMapItem.toJS();
@@ -246,17 +226,14 @@ export default class View extends React.PureComponent {
     if ($$list) {
       this.$$mapApList = $$list
         .map((item, i) => item.set('_index', i))
-        .filter(
-          item => item.getIn(['map', 'buildId']) === this.curBuildId,
-        )
+        .filter(item => item.getIn(['map', 'buildId']) === this.curBuildId)
         .groupBy(item => item.getIn(['map', 'id']))
         .toMap();
     }
   }
-  renderDeployedDevice($$device, i, curMapId) {
-    const deivceOffset = gps.getOffsetFromGpsPoint(
-      $$device.get('map').toJS(), this.curMapItem,
-    );
+
+  renderDeployedDevice = ($$device, i, curMapId) => {
+    const deivceOffset = gps.getOffsetFromGpsPoint($$device.get('map').toJS(), this.curMapItem);
     const coverage = $$device.getIn(['map', 'coverage']);
     const isLocked = $$device.getIn(['map', 'locked']) === '1';
     const deviceMac = $$device.get('mac');
@@ -271,6 +248,14 @@ export default class View extends React.PureComponent {
     let ret = null;
     let deviceClassName = 'm-device';
     let avatarClass = 'm-device__avatar';
+
+    const handleAvatarActive = () => {
+      if (curMapId) {
+        this.setState({
+          curShowOptionDeviceMac: isOpen ? -100 : deviceMac,
+        });
+      }
+    };
 
     // 只在渲染当前 Map 里的 AP
     if (isCur) {
@@ -317,6 +302,7 @@ export default class View extends React.PureComponent {
       if (isOpen) {
         deviceClassName = `${deviceClassName} m-device--open`;
       }
+
       ret = [
         <div
           id={`deivce${i}`}
@@ -330,24 +316,14 @@ export default class View extends React.PureComponent {
           <div
             className={avatarClass}
             draggable={!isLocked}
-            onDragStart={ev => this.startDrag(ev, i)}
-            onClick={() => {
-              if (curMapId) {
-                this.setState({
-                  curShowOptionDeviceMac: isOpen ? -100 : deviceMac,
-                });
-              }
-            }}
+            onDragStart={ev => this.startDrag(ev, deviceMac)}
+            onClick={handleAvatarActive}
+            onKeyDown={handleAvatarActive}
           />
           <span
             className="m-device__name"
-            onClick={() => {
-              if (curMapId) {
-                this.setState({
-                  curShowOptionDeviceMac: isOpen ? -100 : deviceMac,
-                });
-              }
-            }}
+            onClick={handleAvatarActive}
+            onKeyDown={handleAvatarActive}
           >
             {$$device.get('devicename') || deviceMac}
           </span>
@@ -363,6 +339,7 @@ export default class View extends React.PureComponent {
                     top: isOpen ? (Math.cos((ahd * index)) * radius) : 13,
                   }}
                   onClick={() => info.onClick(deviceMac)}
+                  onKeyDown={() => info.onClick(deviceMac)}
                 >
                   <Icon name={info.icon} />
                 </div>
@@ -387,7 +364,7 @@ export default class View extends React.PureComponent {
 
     return ret;
   }
-  renderUndeployDevice($$device, i) {
+  renderUndeployDevice = ($$device, i) => {
     const deviceClassName = 'm-device';
     const deviceMac = $$device.get('mac');
     let avatarClass = 'm-device__avatar';
@@ -406,7 +383,7 @@ export default class View extends React.PureComponent {
           <div
             className={avatarClass}
             draggable="true"
-            onDragStart={ev => this.startDrag(ev, i)}
+            onDragStart={ev => this.startDrag(ev, deviceMac)}
           />
           <span className="m-device__name">
             {$$device.get('devicename') || deviceMac}
@@ -417,7 +394,7 @@ export default class View extends React.PureComponent {
 
     return ret;
   }
-  renderDevicesList() {
+  renderDevicesList = () => {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
     const curMapId = store.getIn([myScreenId, 'curSettings', 'curMapId']);
@@ -439,6 +416,7 @@ export default class View extends React.PureComponent {
             <div
               className="toggle-button"
               onClick={() => this.onToggleUnplacedList()}
+              onKeyDown={() => this.onToggleUnplacedList()}
             >
               <Icon
                 title={__('Unplaced AP List')}
@@ -454,7 +432,11 @@ export default class View extends React.PureComponent {
           ) : null
         }
 
-        <div className="o-list__header" onClick={() => this.onToggleUnplacedList()}>
+        <div
+          className="o-list__header"
+          onClick={() => this.onToggleUnplacedList()}
+          onKeyDown={() => this.onToggleUnplacedList()}
+        >
           {__('Unplaced AP List')}
           <Icon
             className="fr"
@@ -500,7 +482,7 @@ export default class View extends React.PureComponent {
       </div>
     );
   }
-  renderCurMap($$list, curMapId, myZoom) {
+  renderCurMap = ($$list, curMapId, myZoom) => {
     const backgroundImgUrl = this.curMapItem && this.curMapItem.backgroundImg;
     const mapName = this.curMapItem && this.curMapItem.mapName;
 
@@ -539,9 +521,7 @@ export default class View extends React.PureComponent {
         />
         {
           $$list ?
-            $$list.map(
-              (device, i) => this.renderDeployedDevice(device, i, curMapId),
-            ) : null
+            $$list.map((device, i) => this.renderDeployedDevice(device, i, curMapId)) : null
         }
       </div>
     );
@@ -577,14 +557,16 @@ export default class View extends React.PureComponent {
             groupid={this.props.groupid}
             buildId={this.props.match.params.id}
             onSelectMap={($$mapItem) => {
-              const mapId = $$mapItem.getIn(['id']);
-              const $$mapAps = this.$$mapApList.get(mapId);
+              if ($$mapItem) {
+                const mapId = $$mapItem.getIn(['id']);
+                const $$mapAps = this.$$mapApList.get(mapId);
 
-              this.curMapItem = $$mapItem.toJS();
-              this.props.updateScreenSettings({
-                curMapId: mapId,
-                curList: $$mapAps,
-              });
+                this.curMapItem = $$mapItem.toJS();
+                this.props.updateScreenSettings({
+                  curMapId: mapId,
+                  curList: $$mapAps,
+                });
+              }
             }}
             activeId={curMapId}
             validateAll={this.props.validateAll}
@@ -657,7 +639,8 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(utils.extend({},
+  return bindActionCreators(utils.extend(
+    {},
     appActions,
     screenActions,
     propertiesActions,

@@ -17,6 +17,7 @@ const mountNode = document.getElementById('app');
 
 const remoteActionMiddleware = applyMiddleware(thunkMiddleware)(createStore);
 
+
 // Store
 const stores = remoteActionMiddleware(
   combineReducers({
