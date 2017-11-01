@@ -1,9 +1,5 @@
-![Logo](src/assets/images/logo.png)
 
-# 科蓝前端开发平台
 > Webpack，ES6, React, Redux, Immutable.js
-
-简单，跨平台，复用，持续优化的产品前端开发平台。
 
 ## Installing / Getting started
 使用git下载平台代码
